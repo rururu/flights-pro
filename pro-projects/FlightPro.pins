@@ -1,0 +1,580 @@
+; Tue Nov 01 21:39:15 MSK 2016
+; 
+;+ (version "3.5")
+;+ (build "Build 663")
+
+([FlightPro_Class0] of  CloVar
+
+	(source "(volatile! {:view \"FORWARD\"\n                        :pitch 0\n                        :roll 0})")
+	(title "CAMERA"))
+
+([FlightPro_Class1] of  CloNamespace
+
+	(source "(:require\n  [calc.dynamic :as dyn])")
+	(title "czm.core"))
+
+([FlightPro_Class10000] of  ShareOnto
+
+	(but-deep-copy "Deep Copy Instance/share.onto/deep-copy")
+	(but-del-fil "Delete Filtered Instances/share.onto/delfil")
+	(but-del-unref "Delete Unreferenced/share.onto/delete-unref")
+	(but-find-unref "Find Unreferenced/share.onto/find-unref")
+	(but-load-prj "Load Source Project/share.onto/load-src-prj")
+	(but-shal-copy "Shallow Copy Instances/share.onto/shal-copy")
+	(source-project "DefaultKnowledgeBase(ProServer)"))
+
+([FlightPro_Class100000] of  WorkingPrograms
+
+	(cloPrograms
+		[FlightPro_Class70002]
+		[FlightPro_Class20025]
+		[FlightPro_Class20000])
+	(title "FlightPro Programs"))
+
+([FlightPro_Class100001] of  CloFuncall
+
+	(source "(pro.server/start-server)"))
+
+([FlightPro_Class100009] of  CloFuncall
+
+	(source "(cesium.core/send-event \"czml\" (cesium.core/doc))"))
+
+([FlightPro_Class10001] of  CloFunction
+
+	(source "(let [pitch (condp = (:view @CAMERA)\n                \"UP\" 90\n                \"DOWN\" -90\n                (:pitch @CAMERA))\n        roll (:roll @CAMERA)\n        head (dyn/norm-crs (condp = (:view @CAMERA)\n                         \"BACKWARD\" (+ crs 180)\n                         \"RIGHT\" (+ crs 90)\n                         \"LEFT\" (- crs 90)\n                         \"FORWARD-RIGHT\" (+ crs 45)\n                         \"FORWARD-LEFT\" (- crs 45)\n                         \"BACKWARD-RIGHT\" (+ crs 135)\n                         \"BACKWARD-LEFT\" (- crs 135)\n                         crs))]\n    (fly-control lat lon alt head pitch roll per))")
+	(title "fly-to [lat lon alt crs per]"))
+
+([FlightPro_Class10002] of  CloFunction
+
+	(source "(cond\n   (> x 360) (- x 360)\n   (< x 0) (+ x 360)\n   true x)")
+	(title "norm-crs [x]"))
+
+([FlightPro_Class100023] of  ClsRequired
+
+	(cloFunctions
+		[FlightPro_Class100026]
+		[FlightPro_Class100027]
+		[FlightPro_Class100028]
+		[FlightPro_Class30026]
+		[FlightPro_Class30027])
+	(cloNamespace [FlightPro_Class100024])
+	(cloVars [FlightPro_Class100029])
+	(title "Carrier Movement"))
+
+([FlightPro_Class100024] of  CloNamespace
+
+	(source "(:require\n  [calc.dynamic :as dyn])")
+	(title "carr.move"))
+
+([FlightPro_Class100025] of  CloVar
+
+	(source "(volatile! {:coord [0 0]\n               :altitude 0\n               :speed 0\n               :course 0\n               :step 0\n               :rudder {:target 0\n                            :status (volatile! \"STOP\")\n                            :step 4\n                            :time-out 1000}\n               :engine {:target 0\n                            :status (volatile! \"STOP\")\n                            :step 0.25\n                            :time-out 1000}})")
+	(title "CARRIER"))
+
+([FlightPro_Class100026] of  CloFunction
+
+	(source "(let [cosphi1 (js/Math.cos phi1)\n       sinphi1 (js/Math.sin phi1)\n       cosaz (js/Math.cos az)\n       sinaz (js/Math.sin az)\n       sinc (js/Math.sin c)\n       cosc (js/Math.cos c)\n       phi2 (js/Math.asin (+ (* sinphi1 cosc) (* cosphi1 sinc cosaz)))\n       lam2 (+ (js/Math.atan2 (* sinc sinaz) (- (* cosphi1 cosc) (* sinphi1 sinc cosaz))) lambda0)]\n  [phi2 lam2])")
+	(title "spherical-between [phi1 lambda0 c az]"))
+
+([FlightPro_Class100027] of  CloFunction
+
+	(source "(let [phi (* PID180 lat)\n       lam (* PID180 lon)\n       dir (* PID180 crs)\n       way (* spd tim)\n       way (* PID180 (/ way 60))\n       [phi2 lam2] (spherical-between phi lam way dir)]\n  [(/ phi2 PID180) (/ lam2 PID180)])")
+	(title "future-pos [[lat lon] crs spd tim]"))
+
+([FlightPro_Class100028] of  CloFunction
+
+	(source "(let [car @carr]\n  (vswap! carr assoc :coord\n    (future-pos (:coord car) \n                       (:course car)\n                       (:speed car)\n                       (:step car))))")
+	(title "move [carr]"))
+
+([FlightPro_Class100029] of  CloVar
+
+	(source "(/ Math.PI 180)")
+	(title "PID180"))
+
+([FlightPro_Class10003] of  CloFunction
+
+	(source "(enable-console-print!)\n(if (= terra :terrain)\n  (set! (.-terrainProvider VIEWER) TERR-PROV))\n(.add (.-dataSources VIEWER) CZM-SRC)\n(.addEventListener (js/EventSource. (str base-url \"czml/\")) \"czml\" cz-processor false)\n(println [:INIT-3D-VIEW :BASE base-url :TERRA terra])")
+	(title "init-3D-view [base-url terra]"))
+
+([FlightPro_Class100030] of  CloVar
+
+	(source "1000")
+	(title "CAR-TIO"))
+
+([FlightPro_Class100031] of  CloFunction
+
+	(source "(let [car @carr\n       [lat lon] (:coord car)\n       crs (:course car)\n       alt (:altitude car)]\n    (czm/fly-to lat lon alt crs (/ CAM-TIO 1000)))")
+	(title "camera-move [carr]"))
+
+([FlightPro_Class100032] of  CloVar
+
+	(source "4000")
+	(title "CAM-TIO"))
+
+([FlightPro_Class110001] of  CloFuncall
+
+	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :carrier :coord [60 30] :altitude 10000 :course 270 :speed 100})"))
+
+([FlightPro_Class120001] of  %3AINSTANCE-ANNOTATION
+
+	(%3AANNOTATED-INSTANCE [FlightPro_Class100000])
+	(%3ACREATION-TIMESTAMP "2016.10.31 20:54:06.155 MSK")
+	(%3ACREATOR "ru"))
+
+([FlightPro_Class120002] of  CloProgram
+
+	(cloFunctions [Clojure_Class300000])
+	(cloNamespace [Clojure_Class300001])
+	(title "Clojure Work"))
+
+([FlightPro_Class2] of  ClsMain
+
+	(asset-path "js/out")
+	(butt-build "Build/cljs.compile/build")
+	(cloFunctions
+		[FlightPro_Class80004]
+		[FlightPro_Class80002]
+		[FlightPro_Class80003]
+		[FlightPro_Class80001]
+		[FlightPro_Class100031]
+		[FlightPro_Class70001])
+	(cloNamespace [FlightPro_Class60001])
+	(cloVars
+		[FlightPro_Class100025]
+		[FlightPro_Class6]
+		[FlightPro_Class80000]
+		[FlightPro_Class70000]
+		[FlightPro_Class100030]
+		[FlightPro_Class100032])
+	(epilogue "(set! (.-onload js/window) (on-load))")
+	(html [FlightPro_Class40000])
+	(options "{:verbose false}")
+	(output-dir "resources/public/js/out")
+	(output-to "resources/public/js/main.js")
+	(required
+		[FlightPro_Class70008]
+		[FlightPro_Class50001]
+		[FlightPro_Class100023]
+		[FlightPro_Class30001])
+	(store-in "src/cljs")
+	(title "View 3D Client"))
+
+([FlightPro_Class20000] of  CloProgram
+
+	(cloFunctions
+		[FlightPro_Class20009]
+		[FlightPro_Class20013]
+		[FlightPro_Class20014]
+		[FlightPro_Class20017]
+		[FlightPro_Class20021]
+		[FlightPro_Class20022]
+		[FlightPro_Class20023]
+		[FlightPro_Class20024])
+	(cloNamespace [FlightPro_Class20001])
+	(cloVars
+		[FlightPro_Class20002]
+		[FlightPro_Class20003]
+		[FlightPro_Class20004]
+		[FlightPro_Class20005]
+		[FlightPro_Class20006]
+		[FlightPro_Class20007])
+	(title "Pro Server"))
+
+([FlightPro_Class20001] of  CloNamespace
+
+	(source "(:use protege.core)\n(:require [ring.adapter.jetty :as jetty]\n              [ring.util.response :as r]\n              [compojure.core :refer [defroutes GET]]\n              [compojure.handler :as handler]\n              [compojure.route :as route]\n              [cognitect.transit :as t]\n              [async.proc :as asp]\n              [cesium.core :as cz])\n(:import java.io.ByteArrayOutputStream)")
+	(title "pro.server"))
+
+([FlightPro_Class20002] of  CloVar
+
+	(source "(str (System/getProperty \"user.dir\") \"/resources/public/\")")
+	(title "ROOT"))
+
+([FlightPro_Class20003] of  CloVar
+
+	(source "(asp/mk-chan)")
+	(title "DIR-CHN"))
+
+([FlightPro_Class20004] of  CloVar
+
+	(source "(asp/mk-chan)")
+	(title "ANS-CHN"))
+
+([FlightPro_Class20005] of  CloVar
+
+	(source "4444")
+	(title "PORT"))
+
+([FlightPro_Class20006] of  CloVar
+
+	(source "nil")
+	(title "APP"))
+
+([FlightPro_Class20007] of  CloVar
+
+	(source "nil")
+	(title "SERV"))
+
+([FlightPro_Class20009] of  CloFunction
+
+	(source "(slurp (str ROOT \"cezium.html\"))")
+	(title "index-page []"))
+
+([FlightPro_Class20010] of  CloFunction
+
+	(source "(loop [[bit ch] (alts!! [chn] :default :none) bits []]\n  (if (= bit :none)\n    bits\n    (recur (alts!! [chn] :default :none) (conj bits bit))))")
+	(title "pump-out [chn]"))
+
+([FlightPro_Class20013] of  CloFunction
+
+	(source "(let [baos (ByteArrayOutputStream.)\n        w    (t/writer baos :json)\n        _    (t/write w x)\n        ret  (.toString baos)]\n    (.reset baos)\n    ret)")
+	(title "write-transit [x]"))
+
+([FlightPro_Class20014] of  CloFunction
+
+	(source "(-> (r/response (write-transit (deref (future (asp/pump-out DIR-CHN)))))\n       (r/header \"Access-Control-Allow-Origin\" \"*\"))")
+	(title "directives []"))
+
+([FlightPro_Class20017] of  CloFunction
+
+	(source "(-> (r/response (write-transit (deref (future (asp/one-out ANS-CHN)))))\n       (r/header \"Access-Control-Allow-Origin\" \"*\"))")
+	(title "answer []"))
+
+([FlightPro_Class20021] of  CloFunction
+
+	(source "(defroutes app-routes\n  (GET \"/\" [] (index-page))\n  (GET \"/answer/\" [] (answer))\n  (GET \"/directives/\" [] (directives))\n  (GET \"/czml/\" [] (cz/events))\n  (route/files \"/\" (do (println [:ROOT-FILES ROOT]) {:root ROOT}))\n  (route/resources \"/\")\n  (route/not-found \"Not Found\"))\n\n(def APP\n  (handler/site app-routes))")
+	(title "init-server []"))
+
+([FlightPro_Class20022] of  CloFunction
+
+	(source "([]\n    (start-server PORT))\n([port]\n  (if (nil? APP)\n    (init-server))\n  (def SERV (jetty/run-jetty APP {:port port :join? false})))")
+	(title "start-server"))
+
+([FlightPro_Class20023] of  CloFunction
+
+	(source "(when-let [serv SERV]\n  (.stop serv)\n  (def SERV nil)\n  (println \"Server stopped!\"))")
+	(title "stop-server []"))
+
+([FlightPro_Class20024] of  CloFunction
+
+	(source "(let [address (str \"http://localhost:\" PORT)]\n  (println \"Location:\" address)\n  (when (java.awt.Desktop/isDesktopSupported)\n    (.browse (java.awt.Desktop/getDesktop) (java.net.URI. address))))")
+	(title "view3D-in-browser []"))
+
+([FlightPro_Class20025] of  CloProgram
+
+	(cloFunctions
+		[FlightPro_Class20029]
+		[FlightPro_Class20031]
+		[FlightPro_Class20032]
+		[FlightPro_Class20033]
+		[FlightPro_Class20034]
+		[FlightPro_Class20035]
+		[FlightPro_Class20036]
+		[FlightPro_Class20037])
+	(cloNamespace [FlightPro_Class20026])
+	(cloVars
+		[FlightPro_Class20027]
+		[FlightPro_Class20028])
+	(title "Cesium Server"))
+
+([FlightPro_Class20026] of  CloNamespace
+
+	(source "(:require\n    [ring.util.response :as r]\n    [async.proc :as asp])\n(:import java.util.Calendar)")
+	(title "cesium.core"))
+
+([FlightPro_Class20027] of  CloVar
+
+	(source "(asp/mk-chan)")
+	(title "CZ-CHAN"))
+
+([FlightPro_Class20028] of  CloVar
+
+	(source "true")
+	(title "DOC-SND"))
+
+([FlightPro_Class20029] of  CloFunction
+
+	(source "(asp/pump-in CZ-CHAN [typ (.trim dat)])")
+	(title "send-event [typ dat]"))
+
+([FlightPro_Class20031] of  CloFunction
+
+	(source "(let [evt-hr (fn [[typ dat]]\n                   (str \"event: \" typ \"\\ndata: \" dat \"\\n\\n\"))\n       ee (deref (future (asp/pump-out CZ-CHAN)))\n       resp (if (seq ee)\n                 (apply str (map evt-hr ee))\n                 \"\")]\n  (-> (r/response resp)\n         (r/header \"Access-Control-Allow-Origin\" \"*\")\n         (r/header \"Content-Type\" \"text/event-stream;charset=utf-8\")))")
+	(title "events []"))
+
+([FlightPro_Class20032] of  CloFunction
+
+	(source "(let [cld (Calendar/getInstance)\n       yar (.get cld Calendar/YEAR )\n       mon (inc (.get cld Calendar/MONTH))\n       dat (.get cld Calendar/DATE)\n       hor (.get cld Calendar/HOUR_OF_DAY)\n       min (.get cld Calendar/MINUTE)\n       sec (.get cld Calendar/SECOND)]\n    (format \"%04d-%02d-%02dT%02d:%02d:%02dZ\" yar mon dat hor min sec))")
+	(title "iso8601curt []"))
+
+([FlightPro_Class20033] of  CloFunction
+
+	(source "(let [cld (Calendar/getInstance)\n       mil (.getTimeInMillis cld)\n       _ (.setTimeInMillis cld (+ mil (* sec 1000)))\n        yar (.get cld Calendar/YEAR )\n        mon (inc (.get cld Calendar/MONTH))\n        dat (.get cld Calendar/DATE)\n        hor (.get cld Calendar/HOUR_OF_DAY)\n        min (.get cld Calendar/MINUTE)\n        sec (.get cld Calendar/SECOND)]\n    (format \"%04d-%02d-%02dT%02d:%02d:%02dZ\" yar mon dat hor min sec))")
+	(title "iso8601futt [sec]"))
+
+([FlightPro_Class20034] of  CloFunction
+
+	(source "(str \"{\\\"id\\\":\\\"document\\\",\\\"version\\\":\\\"1.0\\\",\\\"clock\\\":{\\\"currentTime\\\":\\\"\" (iso8601curt) \"\\\"}}\")")
+	(title "doc []"))
+
+([FlightPro_Class20035] of  CloFunction
+
+	(source "(when DOC-SND\n    (send-event \"czml\" (doc))\n    (def DOC-SND false))\n  (let [p (str \"{\\\"id\\\":\\\"\"\n               label\n               \"\\\",\\\"availability\\\":\\\"\"\n               (iso8601curt) \"/\" (iso8601futt span-sec)\n               \"\\\",\\\"label\\\":{\\\"scale\\\":\" \n               scale\n               \" ,\\\"pixelOffset\\\":{\\\"cartesian2\\\":[8, -24]},\\\"text\\\":\\\"\"\n               label\n               \"\\\"},\\\"billboard\\\":{\\\"scale\\\":\"\n               scale\n               \",\\\"image\\\":\\\"\"\n               img-url\n               \"\\\"},\\\"position\\\":{\\\"cartographicDegrees\\\":[\"\n               lon\n               \", \"\n               lat\n               \", \"\n               alt\n               \"]}}\")]\n    (send-event \"czml\" p))")
+	(title "location [label scale img-url lat lon alt span-sec]"))
+
+([FlightPro_Class20036] of  CloFunction
+
+	(source "(when DOC-SND\n    (send-event \"czml\" (doc))\n    (def DOC-SND false))\n  (let [p (str \"{\\\"id\\\":\\\"\"\n               label\n               \"\\\",\\\"label\\\":{\\\"scale\\\":\"\n               (/ scale 2)\n               \",\\\"pixelOffset\\\":{\\\"cartesian2\\\":[8, -8]},\\\"text\\\":\\\"\"\n               label\n               \"\\\"},\\\"billboard\\\":{\\\"scale\\\":\"\n               scale\n               \",\\\"image\\\":\\\"\"\n               img-url\n               \"\\\"},\\\"position\\\":{\\\"cartographicDegrees\\\":[\\\"\"\n               tim1\n               \"\\\", \"\n               lon1\n               \", \"\n               lat1\n               \", \"\n               alt1\n               \",\\\"\"\n               tim2\n               \"\\\", \"\n               lon2\n               \", \"\n               lat2\n               \", \"\n               alt2\n               \"]}}\")]\n    (send-event \"czml\" p))")
+	(title "leg [label img-url scale [lat1 lon1 alt1 tim1] [lat2 lon2 alt2 tim2]]"))
+
+([FlightPro_Class20037] of  CloFunction
+
+	(source "(let [min-scl 0.25\n       scl (+ min-scl (* (- 1 min-scl) (- 1 (/ dist max-dist))))]\n  (location txt scl \"img/arrdn.png\" lat lon 100 40))")
+	(title "point-out [txt [lat lon] dist max-dist]"))
+
+([FlightPro_Class3] of  CloVar
+
+	(source "(js/Cesium.CesiumTerrainProvider.\n  #js{:url \"//assets.agi.com/stk-terrain/world\"\n        :requestWaterMask false\n        :requestVertexNormals false})")
+	(title "TERR-PROV"))
+
+([FlightPro_Class30000] of  CloFunction
+
+	(source "(let [proc-fn (fn [cr]\n                      (let [c @cr\n                             g (get c gear)\n                             status (:status g)\n                             target (:target g)\n                             step (:step g)]\n                        (if (approx= (param c) target step)\n                            (do (vswap! cr assoc param target)\n                                  false)\n                            (do (vswap! cr assoc param \n                                    (closer (param c) target step))\n                                  true))))\n       g (get @carr gear)]\n  (asp/start-process (:status g) \n                                 proc-fn\n                                 carr \n                                 (:time-out g)))")
+	(title "equalize [carr gear param closer]"))
+
+([FlightPro_Class30001] of  ClsRequired
+
+	(cloFunctions
+		[FlightPro_Class30025]
+		[FlightPro_Class30003]
+		[FlightPro_Class30004]
+		[FlightPro_Class30005]
+		[FlightPro_Class30006]
+		[FlightPro_Class10002]
+		[FlightPro_Class30007]
+		[FlightPro_Class30011]
+		[FlightPro_Class30000])
+	(cloNamespace [FlightPro_Class30002])
+	(title "Dynamic"))
+
+([FlightPro_Class30002] of  CloNamespace
+
+	(source "(:require\n  [csasync.proc :as asp])")
+	(title "calc.dynamic"))
+
+([FlightPro_Class30003] of  CloFunction
+
+	(source "(float (+ y1 (/ (* (- y2 y1) (- x x1)) (- x2 x1))))")
+	(title "linint [x [x1 y1] [x2 y2]]"))
+
+([FlightPro_Class30004] of  CloFunction
+
+	(source ";; left and right borders in table are exclusive\n(let [[lo hi] (split-with #(< (first %) x) table)]\n  (if (seq lo)\n    (if (seq hi)\n      (linint x (last lo) (first hi))\n      [:UB (second (last table))])\n    [:LB (second (first table))]))")
+	(title "tabfun [x table]"))
+
+([FlightPro_Class30005] of  CloFunction
+
+	(source ";; inverse function, only for monotone(!!!) functions\n(tabfun y (map #(vector (second %)(first %)) table))")
+	(title "i-mono-tabfun [y table]"))
+
+([FlightPro_Class30006] of  CloFunction
+
+	(source "(let [res (tabfun x table)]\n  (if (vector? res) (second res) res))")
+	(title "smooth-tabfun [x table]"))
+
+([FlightPro_Class30007] of  CloFunction
+
+	(source "(let [dif (- to from)]\n  (cond \n    (> dif 0) (+ from step)\n    (< dif 0) (- from step)\n    true to))")
+	(title "step-closer [from to step]"))
+
+([FlightPro_Class30011] of  CloFunction
+
+	(source "(let [dif (- to from)]\n  (cond \n    (> dif 0)\n      (if (<= dif 180)\n        (+ from step)\n        (norm-crs (- from step)))\n    (< dif 0) \n      (if (>= dif -180)\n        (- from step)\n        (norm-crs (+ from step)))\n    true to))")
+	(title "course-closer [from to step]"))
+
+([FlightPro_Class30025] of  CloFunction
+
+	(source "(cond\n  (> x y) (< (- x y) eps)\n  (< x y) (< (- y x) eps)\n  true true)")
+	(title "approx= [x y eps]"))
+
+([FlightPro_Class30026] of  CloFunction
+
+	(source "(vswap! carr assoc-in [:rudder :target] course)\n(dyn/equalize carr :rudder :course dyn/course-closer)")
+	(title "turn [carr course]"))
+
+([FlightPro_Class30027] of  CloFunction
+
+	(source "(vswap! carr assoc-in [:engine :target] speed)\n(dyn/equalize carr :engine :speed dyn/step-closer)")
+	(title "accel [carr speed]"))
+
+([FlightPro_Class4] of  CloVar
+
+	(source "(js/Cesium.Viewer. \n  \"cesiumContainer\" \n  #js{:animation false})")
+	(title "VIEWER"))
+
+([FlightPro_Class40000] of  HTML
+
+	(source "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <title>Cockpit View</title>\n    <script src=\"Cesium/Cesium.js\"></script>\n    <style>\n      @import url(Cesium/Widgets/widgets.css);\n      #cesiumContainer {\n        position: absolute;\n        top: 0;\n        left: 0;\n        height: 100%;\n        width: 100%;\n        margin: 0;\n        overflow: hidden;\n        padding: 0;\n        font-family: sans-serif;\n      }\n      html {\n        height: 100%;\n      }\n      body {\n        padding: 0;\n        margin: 0;\n        overflow: hidden;\n        height: 100%;\n      }\n    </style>\n  </head>\n  <body>\n    <div id=\"cesiumContainer\"></div>\n    <script>\n      Cesium.BingMapsApi.defaultKey = 'Au5mRx6ODcM1h4EAWNyK8wWoyaTjeLuvGkacr7WRZgmAt4QtmyV03OrN1TYb-cr7';\n    </script>\n    <script type=\"text/javascript\" src=\"js/main.js\"></script>\n  </body>\n</html>")
+	(store-in "resources/public")
+	(title "cezium"))
+
+([FlightPro_Class5] of  CloVar
+
+	(source "(js/Cesium.CzmlDataSource.)")
+	(title "CZM-SRC"))
+
+([FlightPro_Class50000] of  CloFunction
+
+	(source "(vswap! CAMERA key val)")
+	(title "camera [key val]"))
+
+([FlightPro_Class50001] of  ClsRequired
+
+	(cloFunctions
+		[FlightPro_Class10002]
+		[FlightPro_Class8]
+		[FlightPro_Class9]
+		[FlightPro_Class10001]
+		[FlightPro_Class50000]
+		[FlightPro_Class10003])
+	(cloNamespace [FlightPro_Class1])
+	(cloVars
+		[FlightPro_Class3]
+		[FlightPro_Class4]
+		[FlightPro_Class5]
+		[FlightPro_Class0])
+	(documentation [FlightPro_Class60000])
+	(title "Cezium Client"))
+
+([FlightPro_Class6] of  CloVar
+
+	(source "\"http://localhost:4444/\"")
+	(title "BSE-URL"))
+
+([FlightPro_Class60000] of  CloDocumentation
+
+	(source "<html>\n  <head>\n    <style type=\"text/css\">\n      <!--\n        body { font-family: arial; font-size: 12pt }\n        p { font-family: arial; margin-top: 2; margin-right: 2; margin-bottom: 2; margin-left: 2 }\n      -->\n    </style>\n    \n  </head>\n  <body>\n    <b>Cesium Client<br></b><br>API<br><br>1. fly-to [lat lon alt crs per]<br>2. camera [key val], keys: :view, :altitude, :pitch, :roll<br><br>CZML rendering support<br><br>Initialization: (init-3D-view)</body>\n</html>"))
+
+([FlightPro_Class60001] of  CloNamespace
+
+	(source "(:require\n  [csasync.proc :as asp]\n  [czm.core :as czm]\n  [carr.move :as mov]\n  [cognitect.transit :as t]\n  [ajax.core :refer (GET)]\n  [nightlight.repl-server])")
+	(title "view3d.client"))
+
+([FlightPro_Class7] of  CloVar
+
+	(source "(js/EventSource. (str BSE-URL \"czml/\"))")
+	(title "EVT-SRC"))
+
+([FlightPro_Class70000] of  CloVar
+
+	(source "1000")
+	(title "DIR-TIO"))
+
+([FlightPro_Class70001] of  CloFunction
+
+	(source "(czm/init-3D-view BSE-URL :terrain)\n(vswap! CARRIER assoc :step (double (/ CAR-TIO 3600000)))\n(asp/repeater mov/move CARRIER CAR-TIO)\n(asp/repeater camera-move CARRIER CAM-TIO)\n(asp/repeater receive-directives DIR-TIO)")
+	(title "on-load []"))
+
+([FlightPro_Class70002] of  CloProgram
+
+	(cloFunctions
+		[FlightPro_Class70007]
+		[FlightPro_Class70004]
+		[FlightPro_Class70005]
+		[FlightPro_Class70006]
+		[FlightPro_Class70010]
+		[FlightPro_Class20010]
+		[FlightPro_Class90000]
+		[FlightPro_Class70011])
+	(cloNamespace [FlightPro_Class70003])
+	(title "Async Processing"))
+
+([FlightPro_Class70003] of  CloNamespace
+
+	(source "(:require \n  [clojure.core.async :refer [chan alts!! put! <! go timeout]])")
+	(title "async.proc"))
+
+([FlightPro_Class70004] of  CloFunction
+
+	(source "([status proc-fn time-out]\n  (when (= @status \"STOP\") \n    (vreset! status \"RUN\")\n    (go (do \n          (while (and (= @status \"RUN\")\n                            (proc-fn))\n                (<! (timeout time-out)))\n          (vreset! status \"STOP\")))\n    @status))\n([status proc-fn param time-out]\n  (when (= @status \"STOP\") \n    (vreset! status \"RUN\")\n    (go (do \n          (while (and (= @status \"RUN\")\n                            (proc-fn param))\n                (<! (timeout time-out)))\n          (vreset! status \"STOP\")))\n    @status))")
+	(title "start-process"))
+
+([FlightPro_Class70005] of  CloFunction
+
+	(source "(vreset! status \"STOP\")")
+	(title "stop-process [status]"))
+
+([FlightPro_Class70006] of  CloFunction
+
+	(source "(= @status \"RUN\")")
+	(title "running? [status]"))
+
+([FlightPro_Class70007] of  CloFunction
+
+	(source "([func time-out]\n  (go (while true\n           (func)\n           (<! (timeout time-out)))))\n([func param time-out]\n  (go (while true\n           (func param)\n           (<! (timeout time-out)))))")
+	(title "repeater"))
+
+([FlightPro_Class70008] of  ClsRequired
+
+	(cloFunctions
+		[FlightPro_Class70007]
+		[FlightPro_Class70004]
+		[FlightPro_Class70005]
+		[FlightPro_Class70006])
+	(cloNamespace [FlightPro_Class70009])
+	(title "CS Async Processing"))
+
+([FlightPro_Class70009] of  CloNamespace
+
+	(source "(:require \n  [cljs.core.async :refer [<! timeout]])\n(:require-macros \n  [cljs.core.async.macros :refer [go]])")
+	(title "csasync.proc"))
+
+([FlightPro_Class70010] of  CloFunction
+
+	(source "(put! chn val)")
+	(title "pump-in [chn val]"))
+
+([FlightPro_Class70011] of  CloFunction
+
+	(source "(chan)")
+	(title "mk-chan []"))
+
+([FlightPro_Class8] of  CloFunction
+
+	(source "(let [data (.-data e)\n       data (js/JSON.parse data)]\n  (.process CZM-SRC data))")
+	(title "cz-processor [e]"))
+
+([FlightPro_Class80000] of  CloVar
+
+	(source "\"http://localhost:4444/directives/\"")
+	(title "DIR-URL"))
+
+([FlightPro_Class80001] of  CloFunction
+
+	(source "(GET DIR-URL {:handler directives-handler\n                       :error-handler error-handler})")
+	(title "receive-directives []"))
+
+([FlightPro_Class80002] of  CloFunction
+
+	(source "(let [{:keys [status status-text]} response]\n  (println (str \"AJAX ERROR: \" status \" \" status-text)))")
+	(title "error-handler [response]"))
+
+([FlightPro_Class80003] of  CloFunction
+
+	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :fly (let [{:keys [lat lon crs alt period]} dir]\n            (czm/fly-to lat lon alt crs period))\n    :carrier (vreset! CARRIER (merge @CARRIER dir))\n    :camera (vreset! czm/CAMERA (merge @czm/CAMERA dir))\n    :turn (let [{:keys [course]} dir]\n              (mov/turn CARRIER course))\n    :accel (let [{:keys [speed]} dir]\n              (mov/accel CARRIER speed))\n    (println (str \"Unknown directive: \" [directive dir]))))")
+	(title "directives-handler [response]"))
+
+([FlightPro_Class80004] of  CloFunction
+
+	(source "(t/read (t/reader :json) x)")
+	(title "read-transit [x]"))
+
+([FlightPro_Class9] of  CloFunction
+
+	(source "(let [dest (js/Cesium.Cartesian3.fromDegrees lon lat alt)]\n  (.flyTo (.-camera VIEWER)\n            #js{:destination dest\n                  :orientation #js{:heading (js/Cesium.Math.toRadians hea)\n                                           :pitch   (js/Cesium.Math.toRadians pit)\n                                           :roll    (js/Cesium.Math.toRadians rol)}\n                  :duration per\n                  :easingFunction (fn [time] time)}))")
+	(title "fly-control [lat lon alt hea pit rol per]"))
+
+([FlightPro_Class90000] of  CloFunction
+
+	(source "(alts!! chn)")
+	(title "one-out [chn]"))

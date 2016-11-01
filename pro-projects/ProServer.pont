@@ -1,0 +1,307 @@
+; Sun Oct 23 21:00:04 MSK 2016
+; 
+;+ (version "3.5")
+;+ (build "Build 663")
+
+
+(defclass %3ACLIPS_TOP_LEVEL_SLOT_CLASS "Fake class to save top-level slot information"
+	(is-a USER)
+	(role abstract)
+	(single-slot course
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot amenity
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot polar
+		(type FLOAT)
+		(create-accessor read-write))
+	(multislot butt-retr-inss
+;+		(type ANY)
+		(create-accessor read-write))
+	(single-slot predicate
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot object-value
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot natural
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot subject-value
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot object
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot sector
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot accum
+		(type STRING)
+		(create-accessor read-write))
+	(multislot place-list
+		(type STRING)
+		(create-accessor read-write))
+	(single-slot radius
+		(type FLOAT)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot side
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot coord
+		(type FLOAT)
+		(create-accessor read-write))
+	(multislot amenity-list
+		(type STRING)
+		(create-accessor read-write))
+	(multislot butt-reset
+;+		(type ANY)
+		(create-accessor read-write))
+	(single-slot time
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot natural-list
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot volume
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot speed
+		(type FLOAT)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot trace
+;+		(type ANY)
+		(create-accessor read-write))
+	(multislot list
+		(type STRING)
+		(create-accessor read-write))
+	(single-slot subject
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass Geo
+	(is-a USER)
+	(role abstract))
+
+(defclass Island
+	(is-a Geo)
+	(role concrete)
+	(single-slot time
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot side
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot title
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot polar
+		(type FLOAT)
+		(create-accessor read-write))
+	(multislot coord
+		(type FLOAT)
+		(create-accessor read-write))
+	(single-slot sector
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass NearbyObjects
+	(is-a Geo)
+	(role concrete)
+	(single-slot time
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot natural-list
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot amenity-list
+		(type STRING)
+		(create-accessor read-write))
+	(multislot place-list
+		(type STRING)
+		(create-accessor read-write)))
+
+(defclass NamedObject
+	(is-a Geo)
+	(role concrete)
+	(single-slot time
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot side
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot title
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot polar
+		(type FLOAT)
+		(create-accessor read-write))
+	(multislot coord
+		(type FLOAT)
+		(create-accessor read-write))
+	(single-slot amenity
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot place
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot natural
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass NearbyIslands
+	(is-a Geo)
+	(role concrete)
+	(single-slot time
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot list
+		(type STRING)
+		(create-accessor read-write)))
+
+(defclass OSM+Onto
+	(is-a USER)
+	(role abstract))
+
+(defclass OSMData
+	(is-a OSM+Onto)
+	(role concrete)
+	(single-slot time
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot radius
+		(type FLOAT)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot coord
+		(type FLOAT)
+		(create-accessor read-write))
+	(single-slot volume
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass Advisor+Skipper
+	(is-a USER)
+	(role abstract))
+
+(defclass History
+	(is-a Advisor+Skipper)
+	(role concrete)
+	(single-slot time
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass Boat
+	(is-a Advisor+Skipper)
+	(role concrete)
+	(single-slot course
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot speed
+		(type FLOAT)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot coord
+		(type FLOAT)
+		(create-accessor read-write)))
+
+(defclass Question
+	(is-a Boat)
+	(role concrete)
+	(single-slot time
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot object-value
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot subject-value
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot predicate
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot object
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot subject
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass Answer
+	(is-a Advisor+Skipper)
+	(role concrete)
+	(single-slot time
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot accum
+		(type STRING)
+		(create-accessor read-write)))
+
+(defclass StartPoint
+	(is-a Advisor+Skipper)
+	(role concrete)
+	(single-slot title
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot coord
+		(type FLOAT)
+		(create-accessor read-write)))
+
+(defclass Answer2
+	(is-a Advisor+Skipper)
+	(role concrete)
+	(single-slot time
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot natural-list
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot amenity-list
+		(type STRING)
+		(create-accessor read-write))
+	(multislot place-list
+		(type STRING)
+		(create-accessor read-write)))
