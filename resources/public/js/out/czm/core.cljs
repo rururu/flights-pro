@@ -52,11 +52,10 @@
     (fly-control lat lon alt head pitch roll per)))
 
 (defn camera [key val]
-  (vswap! CAMERA key val))
+  (vswap! CAMERA assoc key val))
 
 (defn init-3D-view [base-url terra]
-  (enable-console-print!)
-(if (= terra :terrain)
+  (if (= terra :terrain)
   (set! (.-terrainProvider VIEWER) TERR-PROV))
 (.add (.-dataSources VIEWER) CZM-SRC)
 (.addEventListener (js/EventSource. (str base-url "czml/")) "czml" cz-processor false)

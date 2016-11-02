@@ -13,32 +13,30 @@
            (<! (timeout time-out))))))
 
 (defn start-process
-  ([status-vol proc-fn cond-fn time-out]
-  (when (not= @status-vol "RUNNING") 
-    (vreset! status-vol "RUNNING")
+  ([status proc-fn time-out]
+  (when (= @status "STOP") 
+    (vreset! status "RUN")
     (go (do 
-          (while (and (= @status-vol "RUNNING")
-                          (or (nil? cond-fn) (not (cond-fn))))
-                (proc-fn)
+          (while (and (= @status "RUN")
+                            (proc-fn))
                 (<! (timeout time-out)))
-          (vreset! status-vol "STOPPED")))
-    @status-vol))
-([status-vol proc-fn proc-prm cond-fn cond-prm time-out]
-  (when (not= @status-vol "RUNNING") 
-    (vreset! status-vol "RUNNING")
+          (vreset! status "STOP")))
+    @status))
+([status proc-fn param time-out]
+  (when (= @status "STOP") 
+    (vreset! status "RUN")
     (go (do 
-          (while (and (= @status-vol "RUNNING")
-                          (or (nil? cond-fn) (not (cond-fn cond-prm))))
-                (proc-fn proc-prm)
+          (while (and (= @status "RUN")
+                            (proc-fn param))
                 (<! (timeout time-out)))
-          (vreset! status-vol "STOPPED")))
-    @status-vol)))
+          (vreset! status "STOP")))
+    @status)))
 
-(defn stop-process [status-vol]
-  (vreset! status-vol "STOP"))
+(defn stop-process [status]
+  (vreset! status "STOP"))
 
-(defn running? [status-vol]
-  (= @status-vol "RUNNING"))
+(defn running? [status]
+  (= @status "RUN"))
 
 (defn pump-in [chn val]
   (put! chn val))

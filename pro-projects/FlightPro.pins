@@ -1,4 +1,4 @@
-; Tue Nov 01 21:39:15 MSK 2016
+; Wed Nov 02 21:48:59 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -31,14 +31,6 @@
 		[FlightPro_Class20000])
 	(title "FlightPro Programs"))
 
-([FlightPro_Class100001] of  CloFuncall
-
-	(source "(pro.server/start-server)"))
-
-([FlightPro_Class100009] of  CloFuncall
-
-	(source "(cesium.core/send-event \"czml\" (cesium.core/doc))"))
-
 ([FlightPro_Class10001] of  CloFunction
 
 	(source "(let [pitch (condp = (:view @CAMERA)\n                \"UP\" 90\n                \"DOWN\" -90\n                (:pitch @CAMERA))\n        roll (:roll @CAMERA)\n        head (dyn/norm-crs (condp = (:view @CAMERA)\n                         \"BACKWARD\" (+ crs 180)\n                         \"RIGHT\" (+ crs 90)\n                         \"LEFT\" (- crs 90)\n                         \"FORWARD-RIGHT\" (+ crs 45)\n                         \"FORWARD-LEFT\" (- crs 45)\n                         \"BACKWARD-RIGHT\" (+ crs 135)\n                         \"BACKWARD-LEFT\" (- crs 135)\n                         crs))]\n    (fly-control lat lon alt head pitch roll per))")
@@ -56,6 +48,7 @@
 		[FlightPro_Class100027]
 		[FlightPro_Class100028]
 		[FlightPro_Class30026]
+		[FlightPro_Class130001]
 		[FlightPro_Class30027])
 	(cloNamespace [FlightPro_Class100024])
 	(cloVars [FlightPro_Class100029])
@@ -63,12 +56,12 @@
 
 ([FlightPro_Class100024] of  CloNamespace
 
-	(source "(:require\n  [calc.dynamic :as dyn])")
+	(source "(:require\n  [calc.dynamic :as dyn]\n  [czm.core :as czm])")
 	(title "carr.move"))
 
 ([FlightPro_Class100025] of  CloVar
 
-	(source "(volatile! {:coord [0 0]\n               :altitude 0\n               :speed 0\n               :course 0\n               :step 0\n               :rudder {:target 0\n                            :status (volatile! \"STOP\")\n                            :step 4\n                            :time-out 1000}\n               :engine {:target 0\n                            :status (volatile! \"STOP\")\n                            :step 0.25\n                            :time-out 1000}})")
+	(source "(volatile! {:coord [0 0]\n               :altitude 0\n               :speed 0\n               :course 0\n               :step 0\n               :bank-right 20\n               :rudder {:target 0\n                            :step 3\n                            :time-out 1000}\n               :engine {:target 0\n                            :step 0.25\n                            :time-out 1000}})")
 	(title "CARRIER"))
 
 ([FlightPro_Class100026] of  CloFunction
@@ -93,7 +86,7 @@
 
 ([FlightPro_Class10003] of  CloFunction
 
-	(source "(enable-console-print!)\n(if (= terra :terrain)\n  (set! (.-terrainProvider VIEWER) TERR-PROV))\n(.add (.-dataSources VIEWER) CZM-SRC)\n(.addEventListener (js/EventSource. (str base-url \"czml/\")) \"czml\" cz-processor false)\n(println [:INIT-3D-VIEW :BASE base-url :TERRA terra])")
+	(source "(if (= terra :terrain)\n  (set! (.-terrainProvider VIEWER) TERR-PROV))\n(.add (.-dataSources VIEWER) CZM-SRC)\n(.addEventListener (js/EventSource. (str base-url \"czml/\")) \"czml\" cz-processor false)\n(println [:INIT-3D-VIEW :BASE base-url :TERRA terra])")
 	(title "init-3D-view [base-url terra]"))
 
 ([FlightPro_Class100030] of  CloVar
@@ -111,9 +104,10 @@
 	(source "4000")
 	(title "CAM-TIO"))
 
-([FlightPro_Class110001] of  CloFuncall
+([FlightPro_Class110000] of  CloFunction
 
-	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :carrier :coord [60 30] :altitude 10000 :course 270 :speed 100})"))
+	(source "(let [dif (- to from)]\n  (cond\n    (> dif 0)\n      (<= dif 180)\n    (< dif 0) \n      (< dif -180)))")
+	(title "turn-right? [from to]"))
 
 ([FlightPro_Class120001] of  %3AINSTANCE-ANNOTATION
 
@@ -126,6 +120,25 @@
 	(cloFunctions [Clojure_Class300000])
 	(cloNamespace [Clojure_Class300001])
 	(title "Clojure Work"))
+
+([FlightPro_Class130001] of  CloFunction
+
+	(source "(let [arc (dyn/abs (-  (:course @carr) course))]\n  (if (< arc 10)\n    (turn carr course 1)\n    (let [bank (if (dyn/turn-right? (:course @carr) course)\n                      (:bank-right @carr)\n                      (- (:bank-right @carr)))\n           [bank temp] (if (> arc 70) \n                                 [(* 2 bank) 2]\n                                 [bank 1])]\n      (turn carr course temp)\n      (dyn/check-diff-and-do carr\n        [:rudder :target]\n        [:course]\n        (* 2 (get-in @carr [:rudder :step]))\n        [:rudder :time-out]\n        #(czm/camera :roll 0))\n      (czm/camera :roll bank))))")
+	(title "turn-and-bank [carr course]"))
+
+([FlightPro_Class130003] of  CloFunction
+
+	(source "(if (< x 0) (- x) x)")
+	(title "abs [x]"))
+
+([FlightPro_Class130004] of  CloFunction
+
+	(source "(letfn [(proc-fn [cr]\n             (let [c @cr]\n               (if (< (abs (- (get-in c path1)\n                                   (get-in c path2))) limit)\n                 (do (final-fn) false)\n                  true)))]\n  (vswap! carr assoc :cdad-status (volatile! \"STOP\"))\n  (asp/start-process (:cdad-status @carr) \n                                 proc-fn\n                                 carr\n                                 (get-in @carr tio-pth)))")
+	(title "check-diff-and-do [carr path1 path2 limit tio-pth final-fn]"))
+
+([FlightPro_Class140031] of  CloFuncall
+
+	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :turn :course 96})"))
 
 ([FlightPro_Class2] of  ClsMain
 
@@ -146,7 +159,7 @@
 		[FlightPro_Class70000]
 		[FlightPro_Class100030]
 		[FlightPro_Class100032])
-	(epilogue "(set! (.-onload js/window) (on-load))")
+	(epilogue "(set! (.-onload js/window) (on-load))\n(vreset! CARRIER \n(merge @CARRIER {\n:coord [60 30] :altitude 10000 :course 270 :speed 100\n}))")
 	(html [FlightPro_Class40000])
 	(options "{:verbose false}")
 	(output-dir "resources/public/js/out")
@@ -339,13 +352,14 @@
 
 ([FlightPro_Class30000] of  CloFunction
 
-	(source "(let [proc-fn (fn [cr]\n                      (let [c @cr\n                             g (get c gear)\n                             status (:status g)\n                             target (:target g)\n                             step (:step g)]\n                        (if (approx= (param c) target step)\n                            (do (vswap! cr assoc param target)\n                                  false)\n                            (do (vswap! cr assoc param \n                                    (closer (param c) target step))\n                                  true))))\n       g (get @carr gear)]\n  (asp/start-process (:status g) \n                                 proc-fn\n                                 carr \n                                 (:time-out g)))")
-	(title "equalize [carr gear param closer]"))
+	(source "(letfn [(proc-fn [cr]\n                      (let [c @cr\n                             g (get c gear)\n                             target (:target g)\n                             step (* temp (:step g))]\n                        (if (approx= (param c) target step)\n                            (do (vswap! cr assoc param target)\n                                  false)\n                            (do (vswap! cr assoc param \n                                    (closer (param c) target step))\n                                  true))))]\n  (vswap! carr assoc-in [gear :eqz-status] (volatile! \"STOP\"))\n  (let [g (get @carr gear)]\n    (asp/start-process (:eqz-status g) \n                                   proc-fn\n                                   carr \n                                   (:time-out g))))")
+	(title "equalize [carr gear param closer temp]"))
 
 ([FlightPro_Class30001] of  ClsRequired
 
 	(cloFunctions
 		[FlightPro_Class30025]
+		[FlightPro_Class130003]
 		[FlightPro_Class30003]
 		[FlightPro_Class30004]
 		[FlightPro_Class30005]
@@ -353,7 +367,9 @@
 		[FlightPro_Class10002]
 		[FlightPro_Class30007]
 		[FlightPro_Class30011]
-		[FlightPro_Class30000])
+		[FlightPro_Class30000]
+		[FlightPro_Class110000]
+		[FlightPro_Class130004])
 	(cloNamespace [FlightPro_Class30002])
 	(title "Dynamic"))
 
@@ -399,13 +415,13 @@
 
 ([FlightPro_Class30026] of  CloFunction
 
-	(source "(vswap! carr assoc-in [:rudder :target] course)\n(dyn/equalize carr :rudder :course dyn/course-closer)")
-	(title "turn [carr course]"))
+	(source "(vswap! carr assoc-in [:rudder :target] course)\n(dyn/equalize carr :rudder :course dyn/course-closer temp)")
+	(title "turn [carr course temp]"))
 
 ([FlightPro_Class30027] of  CloFunction
 
-	(source "(vswap! carr assoc-in [:engine :target] speed)\n(dyn/equalize carr :engine :speed dyn/step-closer)")
-	(title "accel [carr speed]"))
+	(source "(vswap! carr assoc-in [:engine :target] speed)\n(dyn/equalize carr :engine :speed dyn/step-closer temp)")
+	(title "accel [carr speed temp]"))
 
 ([FlightPro_Class4] of  CloVar
 
@@ -425,7 +441,7 @@
 
 ([FlightPro_Class50000] of  CloFunction
 
-	(source "(vswap! CAMERA key val)")
+	(source "(vswap! CAMERA assoc key val)")
 	(title "camera [key val]"))
 
 ([FlightPro_Class50001] of  ClsRequired
@@ -472,7 +488,7 @@
 
 ([FlightPro_Class70001] of  CloFunction
 
-	(source "(czm/init-3D-view BSE-URL :terrain)\n(vswap! CARRIER assoc :step (double (/ CAR-TIO 3600000)))\n(asp/repeater mov/move CARRIER CAR-TIO)\n(asp/repeater camera-move CARRIER CAM-TIO)\n(asp/repeater receive-directives DIR-TIO)")
+	(source "(enable-console-print!)\n(czm/init-3D-view BSE-URL :terrain)\n(vswap! CARRIER assoc :step (double (/ CAR-TIO 3600000)))\n(asp/repeater mov/move CARRIER CAR-TIO)\n(asp/repeater camera-move CARRIER CAM-TIO)\n(asp/repeater receive-directives DIR-TIO)")
 	(title "on-load []"))
 
 ([FlightPro_Class70002] of  CloProgram
@@ -561,7 +577,7 @@
 
 ([FlightPro_Class80003] of  CloFunction
 
-	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :fly (let [{:keys [lat lon crs alt period]} dir]\n            (czm/fly-to lat lon alt crs period))\n    :carrier (vreset! CARRIER (merge @CARRIER dir))\n    :camera (vreset! czm/CAMERA (merge @czm/CAMERA dir))\n    :turn (let [{:keys [course]} dir]\n              (mov/turn CARRIER course))\n    :accel (let [{:keys [speed]} dir]\n              (mov/accel CARRIER speed))\n    (println (str \"Unknown directive: \" [directive dir]))))")
+	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :fly (let [{:keys [lat lon crs alt period]} dir]\n            (czm/fly-to lat lon alt crs period))\n    :carrier (vreset! CARRIER (merge @CARRIER dir))\n    :camera (vreset! czm/CAMERA (merge @czm/CAMERA dir))\n    :turn (let [{:keys [course]} dir]\n              (mov/turn-and-bank CARRIER course))\n    :accel (let [{:keys [speed temp]} dir]\n              (mov/accel CARRIER speed temp))\n    (println (str \"Unknown directive: \" [directive dir]))))")
 	(title "directives-handler [response]"))
 
 ([FlightPro_Class80004] of  CloFunction

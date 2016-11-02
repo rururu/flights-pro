@@ -25,8 +25,8 @@ goog.addDependency("../cljs/core/async/impl/timers.js", ['cljs.core.async.impl.t
 goog.addDependency("../cljs/core/async.js", ['cljs.core.async'], ['cljs.core.async.impl.channels', 'cljs.core.async.impl.dispatch', 'cljs.core', 'cljs.core.async.impl.buffers', 'cljs.core.async.impl.protocols', 'cljs.core.async.impl.ioc_helpers', 'cljs.core.async.impl.timers']);
 goog.addDependency("../csasync/proc.js", ['csasync.proc'], ['cljs.core', 'cljs.core.async']);
 goog.addDependency("../calc/dynamic.js", ['calc.dynamic'], ['cljs.core', 'csasync.proc']);
-goog.addDependency("../carr/move.js", ['carr.move'], ['calc.dynamic', 'cljs.core']);
 goog.addDependency("../czm/core.js", ['czm.core'], ['calc.dynamic', 'cljs.core']);
+goog.addDependency("../carr/move.js", ['carr.move'], ['czm.core', 'calc.dynamic', 'cljs.core']);
 goog.addDependency("../cljs/tools/reader/impl/utils.js", ['cljs.tools.reader.impl.utils'], ['goog.string', 'cljs.core', 'clojure.string']);
 goog.addDependency("../cljs/tools/reader/reader_types.js", ['cljs.tools.reader.reader_types'], ['goog.string', 'cljs.core', 'goog.string.StringBuffer', 'cljs.tools.reader.impl.utils']);
 goog.addDependency("../cljs/tools/reader/impl/commons.js", ['cljs.tools.reader.impl.commons'], ['cljs.core', 'cljs.tools.reader.reader_types', 'cljs.tools.reader.impl.utils']);

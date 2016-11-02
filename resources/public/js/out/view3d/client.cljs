@@ -12,12 +12,11 @@
                :speed 0
                :course 0
                :step 0
+               :bank-right 20
                :rudder {:target 0
-                            :status (volatile! "STOP")
                             :step 4
                             :time-out 1000}
                :engine {:target 0
-                            :status (volatile! "STOP")
                             :step 0.25
                             :time-out 1000}}))
 (def BSE-URL "http://localhost:4444/")
@@ -41,9 +40,9 @@
     :carrier (vreset! CARRIER (merge @CARRIER dir))
     :camera (vreset! czm/CAMERA (merge @czm/CAMERA dir))
     :turn (let [{:keys [course]} dir]
-              (mov/turn CARRIER course))
-    :accel (let [{:keys [speed]} dir]
-              (mov/accel CARRIER speed))
+              (mov/turn-and-bank CARRIER course))
+    :accel (let [{:keys [speed temp]} dir]
+              (mov/accel CARRIER speed temp))
     (println (str "Unknown directive: " [directive dir])))))
 
 (defn receive-directives []
@@ -58,7 +57,8 @@
     (czm/fly-to lat lon alt crs (/ CAM-TIO 1000))))
 
 (defn on-load []
-  (czm/init-3D-view BSE-URL :terrain)
+  (enable-console-print!)
+(czm/init-3D-view BSE-URL :terrain)
 (vswap! CARRIER assoc :step (double (/ CAR-TIO 3600000)))
 (asp/repeater mov/move CARRIER CAR-TIO)
 (asp/repeater camera-move CARRIER CAM-TIO)
@@ -66,3 +66,7 @@
 
 
 (set! (.-onload js/window) (on-load))
+(vreset! CARRIER 
+(merge @CARRIER {
+:coord [60 30] :altitude 10000 :course 270 :speed 100
+}))
