@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <title>Cockpit View</title>
+    <link rel="stylesheet" href="css/cesium.css" />
     <script src="Cesium/Cesium.js"></script>
     <style>
       @import url(Cesium/Widgets/widgets.css);
@@ -29,6 +30,17 @@
   </head>
   <body>
     <div id="cesiumContainer"></div>
+    <div id="autopilot"></div>
+    <div id="course"></div><div id="course-fld"></div>
+    <div id="speed"></div><div id="speed-fld"></div>
+    <div id="altitude"></div><div id="altitude-fld"></div>
+    <div id="lat"></div>
+    <div id="lon"></div>
+    <div id="camera"></div>
+    <div id="onboard"></div><div id="onboard-fld"></div>
+    <div id="view"></div><div id="view-fld"></div>
+    <div id="pitch"></div><div id="pitch-fld"></div>
+    <div id="roll"></div><div id="roll-fld"></div>
     <script>
       Cesium.BingMapsApi.defaultKey = 'Au5mRx6ODcM1h4EAWNyK8wWoyaTjeLuvGkacr7WRZgmAt4QtmyV03OrN1TYb-cr7';
     </script>

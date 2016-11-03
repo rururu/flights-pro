@@ -59,3 +59,7 @@
   (vswap! carr assoc-in [:engine :target] speed)
 (dyn/equalize carr :engine :speed dyn/step-closer temp))
 
+(defn elevate [carr altitude temp]
+  (vswap! carr assoc-in [:elevator :target] altitude)
+(dyn/equalize carr :elevator :altitude dyn/step-closer temp))
+

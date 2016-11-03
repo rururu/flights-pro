@@ -27,6 +27,7 @@ goog.addDependency("../csasync/proc.js", ['csasync.proc'], ['cljs.core', 'cljs.c
 goog.addDependency("../calc/dynamic.js", ['calc.dynamic'], ['cljs.core', 'csasync.proc']);
 goog.addDependency("../czm/core.js", ['czm.core'], ['calc.dynamic', 'cljs.core']);
 goog.addDependency("../carr/move.js", ['carr.move'], ['czm.core', 'calc.dynamic', 'cljs.core']);
+goog.addDependency("../view3d/controls.js", ['view3d.controls'], ['goog.string', 'cljs.core', 'goog.string.format']);
 goog.addDependency("../cljs/tools/reader/impl/utils.js", ['cljs.tools.reader.impl.utils'], ['goog.string', 'cljs.core', 'clojure.string']);
 goog.addDependency("../cljs/tools/reader/reader_types.js", ['cljs.tools.reader.reader_types'], ['goog.string', 'cljs.core', 'goog.string.StringBuffer', 'cljs.tools.reader.impl.utils']);
 goog.addDependency("../cljs/tools/reader/impl/commons.js", ['cljs.tools.reader.impl.commons'], ['cljs.core', 'cljs.tools.reader.reader_types', 'cljs.tools.reader.impl.utils']);
@@ -45,4 +46,4 @@ goog.addDependency("../cljs/core$macros.js", ['cljs.core$macros'], ['cljs.compil
 goog.addDependency("../cljs/js.js", ['cljs.js'], ['cljs.compiler', 'cljs.tools.reader', 'cljs.core', 'goog.crypt.base64', 'cljs.tools.reader.reader_types', 'cljs.env', 'goog.string.StringBuffer', 'cljs.tagged_literals', 'cljs.analyzer', 'cljs.source_map', 'clojure.string', 'clojure.walk', 'cljs.core$macros']);
 goog.addDependency("../eval_soup/core.js", ['eval_soup.core'], ['goog.net.XhrIo', 'cljs.js', 'cljs.core', 'cljs.core.async', 'clojure.string', 'cljs.reader', 'clojure.walk']);
 goog.addDependency("../nightlight/repl_server.js", ['nightlight.repl_server'], ['eval_soup.core', 'cljs.core']);
-goog.addDependency("../view3d/client.js", ['view3d.client'], ['ajax.core', 'carr.move', 'czm.core', 'cljs.core', 'cognitect.transit', 'csasync.proc', 'nightlight.repl_server']);
+goog.addDependency("../view3d/client.js", ['view3d.client'], ['ajax.core', 'carr.move', 'czm.core', 'view3d.controls', 'cljs.core', 'cognitect.transit', 'csasync.proc', 'nightlight.repl_server']);

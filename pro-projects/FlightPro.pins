@@ -1,4 +1,4 @@
-; Wed Nov 02 21:48:59 MSK 2016
+; Thu Nov 03 22:23:59 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -49,7 +49,8 @@
 		[FlightPro_Class100028]
 		[FlightPro_Class30026]
 		[FlightPro_Class130001]
-		[FlightPro_Class30027])
+		[FlightPro_Class30027]
+		[FlightPro_Class140027])
 	(cloNamespace [FlightPro_Class100024])
 	(cloVars [FlightPro_Class100029])
 	(title "Carrier Movement"))
@@ -61,7 +62,7 @@
 
 ([FlightPro_Class100025] of  CloVar
 
-	(source "(volatile! {:coord [0 0]\n               :altitude 0\n               :speed 0\n               :course 0\n               :step 0\n               :bank-right 20\n               :rudder {:target 0\n                            :step 3\n                            :time-out 1000}\n               :engine {:target 0\n                            :step 0.25\n                            :time-out 1000}})")
+	(source "(volatile! {:coord [0 0]\n               :altitude 0\n               :speed 0\n               :course 0\n               :step 0\n               :bank-right 20\n               :rudder {:target 0\n                            :step 3\n                            :time-out 1011}\n               :elevator {:target 0\n                            :step 7\n                            :time-out 997}\n               :engine {:target 0\n                            :step 6\n                            :time-out 1003}})")
 	(title "CARRIER"))
 
 ([FlightPro_Class100026] of  CloFunction
@@ -109,6 +110,12 @@
 	(source "(let [dif (- to from)]\n  (cond\n    (> dif 0)\n      (<= dif 180)\n    (< dif 0) \n      (< dif -180)))")
 	(title "turn-right? [from to]"))
 
+([FlightPro_Class120000] of  CSS
+
+	(source "#autopilot {\n  position:fixed;\n  bottom:290px;\n  right:40px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#course {\n  position:fixed;\n  bottom:280px;\n  right:70px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#speed {\n  position:fixed;\n  bottom:260px;\n  right:70px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#altitude {\n  position:fixed;\n  bottom:240px;\n  right:70px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#course-fld {\n  position:fixed;\n  bottom:280px;\n  right:20px;\n  padding:5px;\n  z-index:100;\n}\n#speed-fld {\n  position:fixed;\n  bottom:260px;\n  right:20px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#altitude-fld {\n  position:fixed;\n  bottom:240px;\n  right:20px;\n  padding:5px;\n  z-index:100;\n}\n#lat {\n  position:fixed;\n  bottom:220px;\n  right:20px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#lon {\n  position:fixed;\n  bottom:200px;\n  right:20px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#camera {\n  position:fixed;\n  bottom:140px;\n  right:40px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#onboard {\n  position:fixed;\n  bottom:130px;\n  right:120px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#onboard-fld {\n  position:fixed;\n  bottom:130px;\n  right:20px;\n  padding:5px;\n  z-index:100;\n}\n#view {\n  position:fixed;\n  bottom:110px;\n  right:120px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#view-fld {\n  position:fixed;\n  bottom:110px;\n  right:20px;\n  padding:5px;\n  z-index:100;\n}\n#pitch {\n  position:fixed;\n  bottom:90px;\n  right:120px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#pitch-fld {\n  position:fixed;\n  bottom:90px;\n  right:20px;\n  padding:5px;\n  z-index:100;\n}\n#roll {\n  position:fixed;\n  bottom:70px;\n  right:120px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#roll-fld {\n  position:fixed;\n  bottom:70px;\n  right:20px;\n  padding:5px;\n  z-index:100;\n}\n#hud {\n  position:fixed;\n  bottom:50px;\n  right:120px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#hud-fld {\n  position:fixed;\n  bottom:50px;\n  right:20px;\n  padding:5px;\n  z-index:100;\n}")
+	(store-in "resources/public/css")
+	(title "cesium"))
+
 ([FlightPro_Class120001] of  %3AINSTANCE-ANNOTATION
 
 	(%3AANNOTATED-INSTANCE [FlightPro_Class100000])
@@ -136,6 +143,135 @@
 	(source "(letfn [(proc-fn [cr]\n             (let [c @cr]\n               (if (< (abs (- (get-in c path1)\n                                   (get-in c path2))) limit)\n                 (do (final-fn) false)\n                  true)))]\n  (vswap! carr assoc :cdad-status (volatile! \"STOP\"))\n  (asp/start-process (:cdad-status @carr) \n                                 proc-fn\n                                 carr\n                                 (get-in @carr tio-pth)))")
 	(title "check-diff-and-do [carr path1 path2 limit tio-pth final-fn]"))
 
+([FlightPro_Class140001] of  ClsRequired
+
+	(cloFunctions
+		[FlightPro_Class140008]
+		[FlightPro_Class140005]
+		[FlightPro_Class140004]
+		[FlightPro_Class140003]
+		[FlightPro_Class140007])
+	(cloNamespace [FlightPro_Class140002])
+	(title "Controls"))
+
+([FlightPro_Class140002] of  CloNamespace
+
+	(source "(:require\n [goog.string :as gstring]\n [goog.string.format])")
+	(title "view3d.controls"))
+
+([FlightPro_Class140003] of  CloFunction
+
+	(source "(set-html! \"autopilot\" \"<h4>Autopilot</h4>\")\n(set-html! \"course\" \"Course: 000\")\n(set-html! \"speed\" \"Speed: 000\")\n(set-html! \"altitude\" \"Altitude: 00000\")\n(set-html! \"lat\" \"Latitude: 00.0000\")\n(set-html! \"lon\" \"Longitude: 00.0000\")\n(set-html! \"camera\" \"<h4>Camera</h4>\")\n(set-html! \"onboard\" \"Onboard:\")\n(set-html! \"onboard-fld\" \n  \"<input value='callsign' style='width:90px'\n               onchange='javascript:view3d.client.onboard(this.value)'>\")\n(set-html! \"view\" \"View:\")\n(set-html! \"view-fld\" \n  \"<select onchange='javascript:view3d.client.view(this.value)' style='width:96px'>\n   <option value='FORWARD'>FORWARD</option>\n   <option value='BACKWARD'>BACKWARD</option>\n   <option value='RIGHT'>RIGHT</option>\n   <option value='LEFT'>LEFT</option>\n   <option value='UP'>UP</option>\n   <option value='DOWN'>DOWN</option>\n   <option value='FORWARD-RIGHT'>FORWARD-RIGHT</option>\n   <option value='FORWARD'>FORWARD</option>\n   <option value='BACKWARD-RIGHT'>BACKWARD-RIGHT</option>\n   <option value='BACKWARD-LEFT'>BACKWARD-LEFT</option>\n   </select>\")\n(set-html! \"pitch\" \"Pitch:\")\n(set-html! \"pitch-fld\" \n  \"<input value='0' style='width:90px'\n               onchange='javascript:view3d.client.pitch(this.value)'>\")\n(set-html! \"roll\" \"Roll:\")\n(set-html! \"roll-fld\" \n  \"<input value='0' style='width:90px'\n               onchange='javascript:view3d.client.roll(this.value)'>\")\n(set-html! \"course-fld\" \n  \"<input value='0' style='width:40px'\n                     onchange='javascript:view3d.client.course(this.value)'>\")\n(set-html! \"speed-fld\" \n  \"<input value='0' style='width:40px'\n               onchange='javascript:view3d.client.speed(this.value)'>\")\n(set-html! \"altitude-fld\" \n  \"<input value='0' style='width:40px'\n               onchange='javascript:view3d.client.altitude(this.value)'>\")")
+	(title "show-controls []"))
+
+([FlightPro_Class140004] of  CloFunction
+
+	(source "(set! (.-innerHTML (by-id id)) msg)")
+	(title "set-html! [id msg]"))
+
+([FlightPro_Class140005] of  CloFunction
+
+	(source "(.getElementById js/document id)")
+	(title "by-id  [id]"))
+
+([FlightPro_Class140006] of  CloFuncall
+
+	(source "(pro.server/start-server)"))
+
+([FlightPro_Class140007] of  CloFunction
+
+	(source "(let [{:keys [coord course speed altitude]} @carr]\n  (set-html! \"course\" (str \"Course: \" course))\n  (set-html! \"speed\" (str \"Speed: \" speed))\n  (set-html! \"altitude\" (str \"Altitude: \" altitude))\n  (set-html! \"lat\" (str \"Latitude: \" (format \"%.4f\" (first coord))))\n  (set-html! \"lon\" (str \"Longitude: \" (format \"%.4f\" (second coord)))))")
+	(title "show-flight-data [carr]"))
+
+([FlightPro_Class140008] of  CloFunction
+
+	(source "(apply gstring/format fmt args)")
+	(title "format [fmt & args]"))
+
+([FlightPro_Class140009] of  CloFuncall
+
+	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :accel :speed 2000 :temp 4})"))
+
+([FlightPro_Class140010] of  CloFuncall
+
+	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :turn :course 315})"))
+
+([FlightPro_Class140011] of  CloFuncall
+
+	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :carrier :altitude 100})"))
+
+([FlightPro_Class140012] of  CloFuncall
+
+	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :camera :pitch -20})"))
+
+([FlightPro_Class140013] of  CloFuncall
+
+	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :carrier :altitude 20000})"))
+
+([FlightPro_Class140014] of  CloFuncall
+
+	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :accel :speed 4000 :temp 100})"))
+
+([FlightPro_Class140015] of  CloFuncall
+
+	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :turn :course 274})"))
+
+([FlightPro_Class140016] of  CloFuncall
+
+	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :turn :course 180})"))
+
+([FlightPro_Class140017] of  CloFuncall
+
+	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :carrier :altitude 1000})"))
+
+([FlightPro_Class140018] of  CloFuncall
+
+	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :accel :speed 100 :temp 100})"))
+
+([FlightPro_Class140019] of  CloFunction
+
+	(source "(if (<= 0 crs 360)\n  (mov/turn-and-bank CARRIER crs))")
+	(title "course [crs]"))
+
+([FlightPro_Class140020] of  CloFunction
+
+	(title "onboard [call]"))
+
+([FlightPro_Class140021] of  CloFunction
+
+	(source "(czm/camera :view dir)")
+	(title "view [dir]"))
+
+([FlightPro_Class140022] of  CloFunction
+
+	(source "(if (<= -180 deg 180)\n  (czm/camera :pitch deg))")
+	(title "pitch [deg]"))
+
+([FlightPro_Class140023] of  CloFunction
+
+	(source "(if (<= -180 deg 180)\n  (czm/camera :roll deg))")
+	(title "roll [deg]"))
+
+([FlightPro_Class140024] of  CloFunction
+
+	(source "(let [tmp (if (< (:speed @CARRIER) 150) 2 1)]\n  (mov/accel CARRIER spd tmp))")
+	(title "speed [spd]"))
+
+([FlightPro_Class140025] of  CloFunction
+
+	(source "(let [tmp (if (< (:altitude @CARRIER) 1000) 1 3)]\n  (mov/elevate CARRIER alt tmp))")
+	(title "altitude [alt]"))
+
+([FlightPro_Class140026] of  CloVar
+
+	(source "831")
+	(title "HUD-TIO"))
+
+([FlightPro_Class140027] of  CloFunction
+
+	(source "(vswap! carr assoc-in [:elevator :target] altitude)\n(dyn/equalize carr :elevator :altitude dyn/step-closer temp)")
+	(title "elevate [carr altitude temp]"))
+
 ([FlightPro_Class140031] of  CloFuncall
 
 	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :turn :course 96})"))
@@ -150,7 +286,14 @@
 		[FlightPro_Class80003]
 		[FlightPro_Class80001]
 		[FlightPro_Class100031]
-		[FlightPro_Class70001])
+		[FlightPro_Class70001]
+		[FlightPro_Class140020]
+		[FlightPro_Class140021]
+		[FlightPro_Class140022]
+		[FlightPro_Class140023]
+		[FlightPro_Class140019]
+		[FlightPro_Class140024]
+		[FlightPro_Class140025])
 	(cloNamespace [FlightPro_Class60001])
 	(cloVars
 		[FlightPro_Class100025]
@@ -158,7 +301,9 @@
 		[FlightPro_Class80000]
 		[FlightPro_Class70000]
 		[FlightPro_Class100030]
-		[FlightPro_Class100032])
+		[FlightPro_Class100032]
+		[FlightPro_Class140026])
+	(css [FlightPro_Class120000])
 	(epilogue "(set! (.-onload js/window) (on-load))\n(vreset! CARRIER \n(merge @CARRIER {\n:coord [60 30] :altitude 10000 :course 270 :speed 100\n}))")
 	(html [FlightPro_Class40000])
 	(options "{:verbose false}")
@@ -168,7 +313,8 @@
 		[FlightPro_Class70008]
 		[FlightPro_Class50001]
 		[FlightPro_Class100023]
-		[FlightPro_Class30001])
+		[FlightPro_Class30001]
+		[FlightPro_Class140001])
 	(store-in "src/cljs")
 	(title "View 3D Client"))
 
@@ -352,7 +498,7 @@
 
 ([FlightPro_Class30000] of  CloFunction
 
-	(source "(letfn [(proc-fn [cr]\n                      (let [c @cr\n                             g (get c gear)\n                             target (:target g)\n                             step (* temp (:step g))]\n                        (if (approx= (param c) target step)\n                            (do (vswap! cr assoc param target)\n                                  false)\n                            (do (vswap! cr assoc param \n                                    (closer (param c) target step))\n                                  true))))]\n  (vswap! carr assoc-in [gear :eqz-status] (volatile! \"STOP\"))\n  (let [g (get @carr gear)]\n    (asp/start-process (:eqz-status g) \n                                   proc-fn\n                                   carr \n                                   (:time-out g))))")
+	(source "(letfn [(proc-fn [cr]\n                      (let [c @cr\n                             g (get c gear)\n                             target (:target g)\n                             step (* temp (:step g))]\n                        (println [:P-F gear target step (approx= (param c) target step)])\n                        (if (approx= (param c) target step)\n                            (do (vswap! cr assoc param target)\n                                  false)\n                            (do (vswap! cr assoc param \n                                    (closer (param c) target step))\n                                  true))))]\n  (println [:EQZ gear param temp])\n  (vswap! carr assoc-in [gear :eqz-status] (volatile! \"STOP\"))\n  (let [g (get @carr gear)]\n    (asp/start-process (:eqz-status g) \n                                   proc-fn\n                                   carr \n                                   (:time-out g))))")
 	(title "equalize [carr gear param closer temp]"))
 
 ([FlightPro_Class30001] of  ClsRequired
@@ -400,7 +546,7 @@
 
 ([FlightPro_Class30007] of  CloFunction
 
-	(source "(let [dif (- to from)]\n  (cond \n    (> dif 0) (+ from step)\n    (< dif 0) (- from step)\n    true to))")
+	(source "(println [:SC from to step :A (< from to) (+ from step) :B (> from to) (- from step)])\n(let [res\n(cond\n (< from to) (+ from step)\n (> from to) (- from step)\n true to))]\n(println [:RES res])\nres)")
 	(title "step-closer [from to step]"))
 
 ([FlightPro_Class30011] of  CloFunction
@@ -430,7 +576,7 @@
 
 ([FlightPro_Class40000] of  HTML
 
-	(source "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <title>Cockpit View</title>\n    <script src=\"Cesium/Cesium.js\"></script>\n    <style>\n      @import url(Cesium/Widgets/widgets.css);\n      #cesiumContainer {\n        position: absolute;\n        top: 0;\n        left: 0;\n        height: 100%;\n        width: 100%;\n        margin: 0;\n        overflow: hidden;\n        padding: 0;\n        font-family: sans-serif;\n      }\n      html {\n        height: 100%;\n      }\n      body {\n        padding: 0;\n        margin: 0;\n        overflow: hidden;\n        height: 100%;\n      }\n    </style>\n  </head>\n  <body>\n    <div id=\"cesiumContainer\"></div>\n    <script>\n      Cesium.BingMapsApi.defaultKey = 'Au5mRx6ODcM1h4EAWNyK8wWoyaTjeLuvGkacr7WRZgmAt4QtmyV03OrN1TYb-cr7';\n    </script>\n    <script type=\"text/javascript\" src=\"js/main.js\"></script>\n  </body>\n</html>")
+	(source "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <title>Cockpit View</title>\n    <link rel=\"stylesheet\" href=\"css/cesium.css\" />\n    <script src=\"Cesium/Cesium.js\"></script>\n    <style>\n      @import url(Cesium/Widgets/widgets.css);\n      #cesiumContainer {\n        position: absolute;\n        top: 0;\n        left: 0;\n        height: 100%;\n        width: 100%;\n        margin: 0;\n        overflow: hidden;\n        padding: 0;\n        font-family: sans-serif;\n      }\n      html {\n        height: 100%;\n      }\n      body {\n        padding: 0;\n        margin: 0;\n        overflow: hidden;\n        height: 100%;\n      }\n    </style>\n  </head>\n  <body>\n    <div id=\"cesiumContainer\"></div>\n    <div id=\"autopilot\"></div>\n    <div id=\"course\"></div><div id=\"course-fld\"></div>\n    <div id=\"speed\"></div><div id=\"speed-fld\"></div>\n    <div id=\"altitude\"></div><div id=\"altitude-fld\"></div>\n    <div id=\"lat\"></div>\n    <div id=\"lon\"></div>\n    <div id=\"camera\"></div>\n    <div id=\"onboard\"></div><div id=\"onboard-fld\"></div>\n    <div id=\"view\"></div><div id=\"view-fld\"></div>\n    <div id=\"pitch\"></div><div id=\"pitch-fld\"></div>\n    <div id=\"roll\"></div><div id=\"roll-fld\"></div>\n    <script>\n      Cesium.BingMapsApi.defaultKey = 'Au5mRx6ODcM1h4EAWNyK8wWoyaTjeLuvGkacr7WRZgmAt4QtmyV03OrN1TYb-cr7';\n    </script>\n    <script type=\"text/javascript\" src=\"js/main.js\"></script>\n  </body>\n</html>")
 	(store-in "resources/public")
 	(title "cezium"))
 
@@ -473,7 +619,7 @@
 
 ([FlightPro_Class60001] of  CloNamespace
 
-	(source "(:require\n  [csasync.proc :as asp]\n  [czm.core :as czm]\n  [carr.move :as mov]\n  [cognitect.transit :as t]\n  [ajax.core :refer (GET)]\n  [nightlight.repl-server])")
+	(source "(:require\n  [csasync.proc :as asp]\n  [czm.core :as czm]\n  [view3d.controls :as ctl]\n  [carr.move :as mov]\n  [cognitect.transit :as t]\n  [ajax.core :refer (GET)]\n  [nightlight.repl-server])")
 	(title "view3d.client"))
 
 ([FlightPro_Class7] of  CloVar
@@ -488,7 +634,7 @@
 
 ([FlightPro_Class70001] of  CloFunction
 
-	(source "(enable-console-print!)\n(czm/init-3D-view BSE-URL :terrain)\n(vswap! CARRIER assoc :step (double (/ CAR-TIO 3600000)))\n(asp/repeater mov/move CARRIER CAR-TIO)\n(asp/repeater camera-move CARRIER CAM-TIO)\n(asp/repeater receive-directives DIR-TIO)")
+	(source "(enable-console-print!)\n(czm/init-3D-view BSE-URL :terrain)\n(vswap! CARRIER assoc :step (double (/ CAR-TIO 3600000)))\n(asp/repeater mov/move CARRIER CAR-TIO)\n(asp/repeater ctl/show-flight-data CARRIER HUD-TIO)\n(asp/repeater camera-move CARRIER CAM-TIO)\n(asp/repeater receive-directives DIR-TIO)\n(ctl/show-controls)")
 	(title "on-load []"))
 
 ([FlightPro_Class70002] of  CloProgram
@@ -512,7 +658,7 @@
 
 ([FlightPro_Class70004] of  CloFunction
 
-	(source "([status proc-fn time-out]\n  (when (= @status \"STOP\") \n    (vreset! status \"RUN\")\n    (go (do \n          (while (and (= @status \"RUN\")\n                            (proc-fn))\n                (<! (timeout time-out)))\n          (vreset! status \"STOP\")))\n    @status))\n([status proc-fn param time-out]\n  (when (= @status \"STOP\") \n    (vreset! status \"RUN\")\n    (go (do \n          (while (and (= @status \"RUN\")\n                            (proc-fn param))\n                (<! (timeout time-out)))\n          (vreset! status \"STOP\")))\n    @status))")
+	(source "([status proc-fn time-out]\n  (when (= @status \"STOP\") \n    (vreset! status \"RUN\")\n    (go (do \n          (while (and (= @status \"RUN\")\n                            (proc-fn))\n                (<! (timeout time-out)))\n          (vreset! status \"STOP\")))\n    @status))\n([status proc-fn param time-out]\n  (println [:SP @status time-out])\n  (when (= @status \"STOP\") \n    (vreset! status \"RUN\")\n    (go (do \n          (while (and (= @status \"RUN\")\n                            (proc-fn param))\n                (<! (timeout time-out)))\n          (vreset! status \"STOP\")))\n    @status))")
 	(title "start-process"))
 
 ([FlightPro_Class70005] of  CloFunction

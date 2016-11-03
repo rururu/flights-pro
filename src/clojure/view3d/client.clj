@@ -2,6 +2,7 @@
 (:require
   [csasync.proc :as asp]
   [czm.core :as czm]
+  [view3d.controls :as ctl]
   [carr.move :as mov]
   [cognitect.transit :as t]
   [ajax.core :refer (GET)]
@@ -14,7 +15,7 @@
                :step 0
                :bank-right 20
                :rudder {:target 0
-                            :step 4
+                            :step 3
                             :time-out 1000}
                :engine {:target 0
                             :step 0.25
@@ -41,8 +42,8 @@
     :camera (vreset! czm/CAMERA (merge @czm/CAMERA dir))
     :turn (let [{:keys [course]} dir]
               (mov/turn-and-bank CARRIER course))
-    :accel (let [{:keys [speed]} dir]
-              (mov/accel CARRIER speed))
+    :accel (let [{:keys [speed temp]} dir]
+              (mov/accel CARRIER speed temp))
     (println (str "Unknown directive: " [directive dir])))))
 
 (defn receive-directives []
@@ -62,5 +63,6 @@
 (vswap! CARRIER assoc :step (double (/ CAR-TIO 3600000)))
 (asp/repeater mov/move CARRIER CAR-TIO)
 (asp/repeater camera-move CARRIER CAM-TIO)
-(asp/repeater receive-directives DIR-TIO))
+(asp/repeater receive-directives DIR-TIO)
+(ctl/show-controls))
 
