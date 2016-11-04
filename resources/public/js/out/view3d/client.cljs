@@ -6,6 +6,7 @@
   [carr.move :as mov]
   [cognitect.transit :as t]
   [ajax.core :refer (GET)]
+  [cljs.reader :as rdr]
   [nightlight.repl-server]))
 
 (def CARRIER (volatile! {:coord [0 0]
@@ -78,24 +79,29 @@
   (czm/camera :view dir))
 
 (defn pitch [deg]
+  (let [deg (rdr/read-string deg)]
   (if (<= -180 deg 180)
-  (czm/camera :pitch deg)))
+    (czm/camera :pitch deg))))
 
 (defn roll [deg]
+  (let [deg (rdr/read-string deg)]
   (if (<= -180 deg 180)
-  (czm/camera :roll deg)))
+    (czm/camera :roll deg))))
 
 (defn course [crs]
+  (let [crs (rdr/read-string crs)]
   (if (<= 0 crs 360)
-  (mov/turn-and-bank CARRIER crs)))
+    (mov/turn-and-bank CARRIER crs))))
 
 (defn speed [spd]
+  (let [spd (rdr/read-string spd)]
   (let [tmp (if (< (:speed @CARRIER) 150) 2 1)]
-  (mov/accel CARRIER spd tmp)))
+    (mov/accel CARRIER spd tmp))))
 
 (defn altitude [alt]
+  (let [alt (rdr/read-string alt)]
   (let [tmp (if (< (:altitude @CARRIER) 1000) 1 3)]
-  (mov/elevate CARRIER alt tmp)))
+    (mov/elevate CARRIER alt tmp))))
 
 
 (set! (.-onload js/window) (on-load))

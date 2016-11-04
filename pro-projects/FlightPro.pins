@@ -1,4 +1,4 @@
-; Thu Nov 03 22:23:59 MSK 2016
+; Fri Nov 04 19:22:49 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -230,7 +230,7 @@
 
 ([FlightPro_Class140019] of  CloFunction
 
-	(source "(if (<= 0 crs 360)\n  (mov/turn-and-bank CARRIER crs))")
+	(source "(let [crs (rdr/read-string crs)]\n  (if (<= 0 crs 360)\n    (mov/turn-and-bank CARRIER crs)))")
 	(title "course [crs]"))
 
 ([FlightPro_Class140020] of  CloFunction
@@ -244,22 +244,22 @@
 
 ([FlightPro_Class140022] of  CloFunction
 
-	(source "(if (<= -180 deg 180)\n  (czm/camera :pitch deg))")
+	(source "(let [deg (rdr/read-string deg)]\n  (if (<= -180 deg 180)\n    (czm/camera :pitch deg)))")
 	(title "pitch [deg]"))
 
 ([FlightPro_Class140023] of  CloFunction
 
-	(source "(if (<= -180 deg 180)\n  (czm/camera :roll deg))")
+	(source "(let [deg (rdr/read-string deg)]\n  (if (<= -180 deg 180)\n    (czm/camera :roll deg)))")
 	(title "roll [deg]"))
 
 ([FlightPro_Class140024] of  CloFunction
 
-	(source "(let [tmp (if (< (:speed @CARRIER) 150) 2 1)]\n  (mov/accel CARRIER spd tmp))")
+	(source "(let [spd (rdr/read-string spd)]\n  (let [tmp (if (< (:speed @CARRIER) 150) 2 1)]\n    (mov/accel CARRIER spd tmp)))")
 	(title "speed [spd]"))
 
 ([FlightPro_Class140025] of  CloFunction
 
-	(source "(let [tmp (if (< (:altitude @CARRIER) 1000) 1 3)]\n  (mov/elevate CARRIER alt tmp))")
+	(source "(let [alt (rdr/read-string alt)]\n  (let [tmp (if (< (:altitude @CARRIER) 1000) 1 3)]\n    (mov/elevate CARRIER alt tmp)))")
 	(title "altitude [alt]"))
 
 ([FlightPro_Class140026] of  CloVar
@@ -498,7 +498,7 @@
 
 ([FlightPro_Class30000] of  CloFunction
 
-	(source "(letfn [(proc-fn [cr]\n                      (let [c @cr\n                             g (get c gear)\n                             target (:target g)\n                             step (* temp (:step g))]\n                        (println [:P-F gear target step (approx= (param c) target step)])\n                        (if (approx= (param c) target step)\n                            (do (vswap! cr assoc param target)\n                                  false)\n                            (do (vswap! cr assoc param \n                                    (closer (param c) target step))\n                                  true))))]\n  (println [:EQZ gear param temp])\n  (vswap! carr assoc-in [gear :eqz-status] (volatile! \"STOP\"))\n  (let [g (get @carr gear)]\n    (asp/start-process (:eqz-status g) \n                                   proc-fn\n                                   carr \n                                   (:time-out g))))")
+	(source "(letfn [(proc-fn [cr]\n                      (let [c @cr\n                             g (get c gear)\n                             target (:target g)\n                             step (* temp (:step g))]\n                        (if (approx= (param c) target step)\n                            (do (vswap! cr assoc param target)\n                                  false)\n                            (do (vswap! cr assoc param \n                                    (closer (param c) target step))\n                                  true))))]\n  (vswap! carr assoc-in [gear :eqz-status] (volatile! \"STOP\"))\n  (let [g (get @carr gear)]\n    (asp/start-process (:eqz-status g) \n                                   proc-fn\n                                   carr \n                                   (:time-out g))))")
 	(title "equalize [carr gear param closer temp]"))
 
 ([FlightPro_Class30001] of  ClsRequired
@@ -546,7 +546,7 @@
 
 ([FlightPro_Class30007] of  CloFunction
 
-	(source "(println [:SC from to step :A (< from to) (+ from step) :B (> from to) (- from step)])\n(let [res\n(cond\n (< from to) (+ from step)\n (> from to) (- from step)\n true to))]\n(println [:RES res])\nres)")
+	(source "(cond\n (< from to) (+ from step)\n (> from to) (- from step)\n true to)")
 	(title "step-closer [from to step]"))
 
 ([FlightPro_Class30011] of  CloFunction
@@ -619,7 +619,7 @@
 
 ([FlightPro_Class60001] of  CloNamespace
 
-	(source "(:require\n  [csasync.proc :as asp]\n  [czm.core :as czm]\n  [view3d.controls :as ctl]\n  [carr.move :as mov]\n  [cognitect.transit :as t]\n  [ajax.core :refer (GET)]\n  [nightlight.repl-server])")
+	(source "(:require\n  [csasync.proc :as asp]\n  [czm.core :as czm]\n  [view3d.controls :as ctl]\n  [carr.move :as mov]\n  [cognitect.transit :as t]\n  [ajax.core :refer (GET)]\n  [cljs.reader :as rdr]\n  [nightlight.repl-server])")
 	(title "view3d.client"))
 
 ([FlightPro_Class7] of  CloVar
@@ -658,7 +658,7 @@
 
 ([FlightPro_Class70004] of  CloFunction
 
-	(source "([status proc-fn time-out]\n  (when (= @status \"STOP\") \n    (vreset! status \"RUN\")\n    (go (do \n          (while (and (= @status \"RUN\")\n                            (proc-fn))\n                (<! (timeout time-out)))\n          (vreset! status \"STOP\")))\n    @status))\n([status proc-fn param time-out]\n  (println [:SP @status time-out])\n  (when (= @status \"STOP\") \n    (vreset! status \"RUN\")\n    (go (do \n          (while (and (= @status \"RUN\")\n                            (proc-fn param))\n                (<! (timeout time-out)))\n          (vreset! status \"STOP\")))\n    @status))")
+	(source "([status proc-fn time-out]\n  (when (= @status \"STOP\") \n    (vreset! status \"RUN\")\n    (go (do \n          (while (and (= @status \"RUN\")\n                            (proc-fn))\n                (<! (timeout time-out)))\n          (vreset! status \"STOP\")))\n    @status))\n([status proc-fn param time-out]\n  (when (= @status \"STOP\") \n    (vreset! status \"RUN\")\n    (go (do \n          (while (and (= @status \"RUN\")\n                            (proc-fn param))\n                (<! (timeout time-out)))\n          (vreset! status \"STOP\")))\n    @status))")
 	(title "start-process"))
 
 ([FlightPro_Class70005] of  CloFunction

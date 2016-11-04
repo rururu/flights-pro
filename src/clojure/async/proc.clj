@@ -23,6 +23,7 @@
           (vreset! status "STOP")))
     @status))
 ([status proc-fn param time-out]
+  (println [:SP @status time-out])
   (when (= @status "STOP") 
     (vreset! status "RUN")
     (go (do 
