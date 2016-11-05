@@ -1,6 +1,6 @@
 (ns csasync.proc
 (:require 
-  [cljs.core.async :refer [<! timeout]])
+  [cljs.core.async :refer [<! timeout close!]])
 (:require-macros 
   [cljs.core.async.macros :refer [go]]))
 
@@ -39,4 +39,7 @@
 
 (defn running? [status]
   (= @status "RUN"))
+
+(defn close-chan [chn]
+  (close! chn))
 

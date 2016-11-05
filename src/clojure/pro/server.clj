@@ -19,6 +19,9 @@
 (defn index-page []
   (slurp (str ROOT "cezium.html")))
 
+(defn chart-page []
+  (slurp (str ROOT "leaflet.html")))
+
 (defn write-transit [x]
   (let [baos (ByteArrayOutputStream.)
         w    (t/writer baos :json)
@@ -38,6 +41,7 @@
 (defn init-server []
   (defroutes app-routes
   (GET "/" [] (index-page))
+  (GET "/chart" [] (chart-page))
   (GET "/answer/" [] (answer))
   (GET "/directives/" [] (directives))
   (GET "/czml/" [] (cz/events))

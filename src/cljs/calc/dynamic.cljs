@@ -2,14 +2,14 @@
 (:require
   [csasync.proc :as asp]))
 
+(defn abs [x]
+  (if (< x 0) (- x) x))
+
 (defn approx= [x y eps]
   (cond
   (> x y) (< (- x y) eps)
   (< x y) (< (- y x) eps)
   true true))
-
-(defn abs [x]
-  (if (< x 0) (- x) x))
 
 (defn linint [x [x1 y1] [x2 y2]]
   (float (+ y1 (/ (* (- y2 y1) (- x x1)) (- x2 x1)))))
@@ -75,14 +75,6 @@
                                    carr 
                                    (:time-out g)))))
 
-(defn turn-right? [from to]
-  (let [dif (- to from)]
-  (cond
-    (> dif 0)
-      (<= dif 180)
-    (< dif 0) 
-      (< dif -180))))
-
 (defn check-diff-and-do [carr path1 path2 limit tio-pth final-fn]
   (letfn [(proc-fn [cr]
              (let [c @cr]
@@ -95,4 +87,12 @@
                                  proc-fn
                                  carr
                                  (get-in @carr tio-pth))))
+
+(defn turn-right? [from to]
+  (let [dif (- to from)]
+  (cond
+    (> dif 0)
+      (<= dif 180)
+    (< dif 0) 
+      (< dif -180))))
 

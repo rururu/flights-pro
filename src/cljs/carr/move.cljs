@@ -1,7 +1,6 @@
 (ns carr.move
 (:require
-  [calc.dynamic :as dyn]
-  [czm.core :as czm]))
+  [calc.dynamic :as dyn]))
 
 (def PID180 (/ Math.PI 180))
 (defn spherical-between [phi1 lambda0 c az]
@@ -35,25 +34,6 @@
 (defn turn [carr course temp]
   (vswap! carr assoc-in [:rudder :target] course)
 (dyn/equalize carr :rudder :course dyn/course-closer temp))
-
-(defn turn-and-bank [carr course]
-  (let [arc (dyn/abs (-  (:course @carr) course))]
-  (if (< arc 10)
-    (turn carr course 1)
-    (let [bank (if (dyn/turn-right? (:course @carr) course)
-                      (:bank-right @carr)
-                      (- (:bank-right @carr)))
-           [bank temp] (if (> arc 70) 
-                                 [(* 2 bank) 2]
-                                 [bank 1])]
-      (turn carr course temp)
-      (dyn/check-diff-and-do carr
-        [:rudder :target]
-        [:course]
-        (* 2 (get-in @carr [:rudder :step]))
-        [:rudder :time-out]
-        #(czm/camera :roll 0))
-      (czm/camera :roll bank)))))
 
 (defn accel [carr speed temp]
   (vswap! carr assoc-in [:engine :target] speed)

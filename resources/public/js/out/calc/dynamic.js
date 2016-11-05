@@ -2,6 +2,13 @@
 goog.provide('calc.dynamic');
 goog.require('cljs.core');
 goog.require('csasync.proc');
+calc.dynamic.abs = (function calc$dynamic$abs(x){
+if((x < (0))){
+return (- x);
+} else {
+return x;
+}
+});
 calc.dynamic.approx_EQ_ = (function calc$dynamic$approx_EQ_(x,y,eps){
 if((x > y)){
 return ((x - y) < eps);
@@ -14,28 +21,21 @@ return true;
 }
 }
 });
-calc.dynamic.abs = (function calc$dynamic$abs(x){
-if((x < (0))){
-return (- x);
-} else {
-return x;
-}
-});
-calc.dynamic.linint = (function calc$dynamic$linint(x,p__25687,p__25688){
-var vec__25695 = p__25687;
-var x1 = cljs.core.nth.call(null,vec__25695,(0),null);
-var y1 = cljs.core.nth.call(null,vec__25695,(1),null);
-var vec__25698 = p__25688;
-var x2 = cljs.core.nth.call(null,vec__25698,(0),null);
-var y2 = cljs.core.nth.call(null,vec__25698,(1),null);
+calc.dynamic.linint = (function calc$dynamic$linint(x,p__22034,p__22035){
+var vec__22042 = p__22034;
+var x1 = cljs.core.nth.call(null,vec__22042,(0),null);
+var y1 = cljs.core.nth.call(null,vec__22042,(1),null);
+var vec__22045 = p__22035;
+var x2 = cljs.core.nth.call(null,vec__22045,(0),null);
+var y2 = cljs.core.nth.call(null,vec__22045,(1),null);
 return (y1 + (((y2 - y1) * (x - x1)) / (x2 - x1)));
 });
 calc.dynamic.tabfun = (function calc$dynamic$tabfun(x,table){
-var vec__25705 = cljs.core.split_with.call(null,(function (p1__25701_SHARP_){
-return (cljs.core.first.call(null,p1__25701_SHARP_) < x);
+var vec__22052 = cljs.core.split_with.call(null,(function (p1__22048_SHARP_){
+return (cljs.core.first.call(null,p1__22048_SHARP_) < x);
 }),table);
-var lo = cljs.core.nth.call(null,vec__25705,(0),null);
-var hi = cljs.core.nth.call(null,vec__25705,(1),null);
+var lo = cljs.core.nth.call(null,vec__22052,(0),null);
+var hi = cljs.core.nth.call(null,vec__22052,(1),null);
 if(cljs.core.seq.call(null,lo)){
 if(cljs.core.seq.call(null,hi)){
 return calc.dynamic.linint.call(null,x,cljs.core.last.call(null,lo),cljs.core.first.call(null,hi));
@@ -47,8 +47,8 @@ return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMP
 }
 });
 calc.dynamic.i_mono_tabfun = (function calc$dynamic$i_mono_tabfun(y,table){
-return calc.dynamic.tabfun.call(null,y,cljs.core.map.call(null,(function (p1__25708_SHARP_){
-return (new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[cljs.core.second.call(null,p1__25708_SHARP_),cljs.core.first.call(null,p1__25708_SHARP_)],null));
+return calc.dynamic.tabfun.call(null,y,cljs.core.map.call(null,(function (p1__22055_SHARP_){
+return (new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[cljs.core.second.call(null,p1__22055_SHARP_),cljs.core.first.call(null,p1__22055_SHARP_)],null));
 }),table));
 });
 calc.dynamic.smooth_tabfun = (function calc$dynamic$smooth_tabfun(x,table){
@@ -125,18 +125,6 @@ cljs.core._vreset_BANG_.call(null,carr,cljs.core.assoc_in.call(null,cljs.core._d
 var g = cljs.core.get.call(null,cljs.core.deref.call(null,carr),gear);
 return csasync.proc.start_process.call(null,new cljs.core.Keyword(null,"eqz-status","eqz-status",-1614399120).cljs$core$IFn$_invoke$arity$1(g),proc_fn,carr,new cljs.core.Keyword(null,"time-out","time-out",-125288146).cljs$core$IFn$_invoke$arity$1(g));
 });
-calc.dynamic.turn_right_QMARK_ = (function calc$dynamic$turn_right_QMARK_(from,to){
-var dif = (to - from);
-if((dif > (0))){
-return (dif <= (180));
-} else {
-if((dif < (0))){
-return (dif < (-180));
-} else {
-return null;
-}
-}
-});
 calc.dynamic.check_diff_and_do = (function calc$dynamic$check_diff_and_do(carr,path1,path2,limit,tio_pth,final_fn){
 var proc_fn = (function calc$dynamic$check_diff_and_do_$_proc_fn(cr){
 var c = cljs.core.deref.call(null,cr);
@@ -151,6 +139,18 @@ return true;
 cljs.core._vreset_BANG_.call(null,carr,cljs.core.assoc.call(null,cljs.core._deref.call(null,carr),new cljs.core.Keyword(null,"cdad-status","cdad-status",964701852),cljs.core.volatile_BANG_.call(null,"STOP")));
 
 return csasync.proc.start_process.call(null,new cljs.core.Keyword(null,"cdad-status","cdad-status",964701852).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,carr)),proc_fn,carr,cljs.core.get_in.call(null,cljs.core.deref.call(null,carr),tio_pth));
+});
+calc.dynamic.turn_right_QMARK_ = (function calc$dynamic$turn_right_QMARK_(from,to){
+var dif = (to - from);
+if((dif > (0))){
+return (dif <= (180));
+} else {
+if((dif < (0))){
+return (dif < (-180));
+} else {
+return null;
+}
+}
 });
 
 //# sourceMappingURL=dynamic.js.map

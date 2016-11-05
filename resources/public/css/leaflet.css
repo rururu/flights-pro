@@ -1,0 +1,70 @@
+#map {
+    position: absolute;
+    top: 0px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+#mousepos {
+  position:fixed;
+  bottom:10px;
+  left:10px;
+  padding:5px;
+  z-index:100;
+}
+#commands {
+  position:fixed;
+  bottom:30px;
+  left:10px;
+  padding:5px;
+  z-index:100;
+}
+#callsign {
+  position:fixed;
+  bottom:120px;
+  left:190px;
+  padding:5px;
+  z-index:100;
+}
+#hour {
+  position:fixed;
+  bottom:90px;
+  left:190px;
+  padding:5px;
+  z-index:100;
+}
+#minute {
+  position:fixed;
+  bottom:90px;
+  left:240px;
+  padding:5px;
+  z-index:100;
+}
+#from-country {
+  position:fixed;
+  bottom:70px;
+  left:190px;
+  padding:5px;
+  z-index:100;
+}
+#from-airport {
+  position:fixed;
+  bottom:50px;
+  left:190px;
+  padding:5px;
+  z-index:100;
+}
+#to-country {
+  position:fixed;
+  bottom:30px;
+  left:190px;
+  padding:5px;
+  z-index:100;
+}
+#to-airport {
+  position:fixed;
+  bottom:10px;
+  left:190px;
+  padding:5px;
+  z-index:100;
+}

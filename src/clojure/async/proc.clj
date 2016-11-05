@@ -1,6 +1,6 @@
 (ns async.proc
 (:require 
-  [clojure.core.async :refer [chan alts!! put! <! go timeout]]))
+  [clojure.core.async :refer [chan alts!! put! <! go timeout close!]]))
 
 (defn repeater
   ([func time-out]
@@ -23,7 +23,6 @@
           (vreset! status "STOP")))
     @status))
 ([status proc-fn param time-out]
-  (println [:SP @status time-out])
   (when (= @status "STOP") 
     (vreset! status "RUN")
     (go (do 
@@ -53,4 +52,7 @@
 
 (defn mk-chan []
   (chan))
+
+(defn close-chan [chn]
+  (close! chn))
 
