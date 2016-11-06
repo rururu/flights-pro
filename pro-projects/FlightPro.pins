@@ -1,4 +1,4 @@
-; Sat Nov 05 22:01:48 MSK 2016
+; Sun Nov 06 21:33:22 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -198,46 +198,6 @@
 	(source "(apply gstring/format fmt args)")
 	(title "format [fmt & args]"))
 
-([FlightPro_Class140009] of  CloFuncall
-
-	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :accel :speed 2000 :temp 4})"))
-
-([FlightPro_Class140010] of  CloFuncall
-
-	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :turn :course 315})"))
-
-([FlightPro_Class140011] of  CloFuncall
-
-	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :carrier :altitude 100})"))
-
-([FlightPro_Class140012] of  CloFuncall
-
-	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :camera :pitch -20})"))
-
-([FlightPro_Class140013] of  CloFuncall
-
-	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :carrier :altitude 20000})"))
-
-([FlightPro_Class140014] of  CloFuncall
-
-	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :accel :speed 4000 :temp 100})"))
-
-([FlightPro_Class140015] of  CloFuncall
-
-	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :turn :course 274})"))
-
-([FlightPro_Class140016] of  CloFuncall
-
-	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :turn :course 180})"))
-
-([FlightPro_Class140017] of  CloFuncall
-
-	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :carrier :altitude 1000})"))
-
-([FlightPro_Class140018] of  CloFuncall
-
-	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :accel :speed 100 :temp 100})"))
-
 ([FlightPro_Class140019] of  CloFunction
 
 	(source "(let [crs (rdr/read-string crs)]\n  (if (<= 0 crs 360)\n    (turn-and-bank CARRIER crs)))")
@@ -282,10 +242,6 @@
 	(source "(vswap! carr assoc-in [:elevator :target] altitude)\n(dyn/equalize carr :elevator :altitude dyn/step-closer temp)")
 	(title "elevate [carr altitude temp]"))
 
-([FlightPro_Class140031] of  CloFuncall
-
-	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :turn :course 96})"))
-
 ([FlightPro_Class150001] of  CSS
 
 	(source "#map {\n    position: absolute;\n    top: 0px;\n    bottom: 0;\n    left: 0;\n    right: 0;\n}\n#mousepos {\n  position:fixed;\n  bottom:10px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#commands {\n  position:fixed;\n  bottom:30px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#callsign {\n  position:fixed;\n  bottom:120px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}\n#hour {\n  position:fixed;\n  bottom:90px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}\n#minute {\n  position:fixed;\n  bottom:90px;\n  left:240px;\n  padding:5px;\n  z-index:100;\n}\n#from-country {\n  position:fixed;\n  bottom:70px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}\n#from-airport {\n  position:fixed;\n  bottom:50px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}\n#to-country {\n  position:fixed;\n  bottom:30px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}\n#to-airport {\n  position:fixed;\n  bottom:10px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}")
@@ -300,29 +256,28 @@
 		[FlightPro_Class140005]
 		[FlightPro_Class140004]
 		[FlightPro_Class140008]
-		[FlightPro_Class80004]
 		[FlightPro_Class160012]
-		[FlightPro_Class80002]
+		[FlightPro_Class80004]
 		[FlightPro_Class160003]
 		[FlightPro_Class160007]
 		[FlightPro_Class160010]
 		[FlightPro_Class160008]
 		[FlightPro_Class160004]
+		[FlightPro_Class80002]
+		[FlightPro_Class170005]
+		[FlightPro_Class170004]
 		[FlightPro_Class160011]
 		[FlightPro_Class160002])
 	(cloNamespace [FlightPro_Class150003])
 	(cloVars
 		[FlightPro_Class20005]
 		[FlightPro_Class160001]
+		[FlightPro_Class170002]
+		[FlightPro_Class170003]
 		[FlightPro_Class160005]
 		[FlightPro_Class140000]
 		[FlightPro_Class160006]
-		[FlightPro_Class160009]
-		[FlightPro_Class160013]
-		[FlightPro_Class160014]
-		[FlightPro_Class160015]
-		[FlightPro_Class160016]
-		[FlightPro_Class160017])
+		[FlightPro_Class160009])
 	(css [FlightPro_Class150001])
 	(epilogue "(set! (.-onload js/window) (on-load-chart))")
 	(html [FlightPro_Class130000])
@@ -348,17 +303,17 @@
 
 ([FlightPro_Class160002] of  CloFunction
 
-	(source "(enable-console-print!)\n(init-chart)")
+	(source "(enable-console-print!)\n(init-chart)\n(asp/repeater receive-instructions INS-TIO)")
 	(title "on-load-chart []"))
 
 ([FlightPro_Class160003] of  CloFunction
 
-	(source "(mov/move mp)\n(let [mrk (:marker mp)\n         [lat lon] (:coord mp)\n         pos (js/L.LatLng. lat lon)]\n    (.setLatLng mrk pos))")
-	(title "move-vehicle [mp]"))
+	(source "(let [vmp (@VEHICLES id)]\n  (mov/move vmp)\n  (let [mp @vmp\n         mrk (:marker mp)\n         [lat lon] (:coord mp)\n         pos (js/L.LatLng. lat lon)]\n    (.setLatLng mrk pos))\n  (vswap! VEHICLES assoc id vmp))")
+	(title "move-vehicle [id]"))
 
 ([FlightPro_Class160004] of  CloFunction
 
-	(source "(if (@VEHICLES id)\n  (delete-vehicle id))\n(let [mrk (create-marker mp)]\n  (vswap! VEHICLES assoc-in [id :marker] mrk)\n  (.addTo mrk @CHART)\n  (set! (.. mrk -options -angle) (:course mp))\n  (vswap! VEHICLES assoc-in [id :mover]\n           (asp/repeater move-vehicle mp MOV-TIO)))")
+	(source "(if (@VEHICLES id)\n  (delete-vehicle id))\n(let [mrk (create-marker mp)\n       mp (assoc mp :marker mrk\n                              :step (/ MOV-TIO 3600000)\n                              :mover (asp/repeater #(move-vehicle id) MOV-TIO))]\n  (.addTo mrk @CHART)\n  (set! (.. mrk -options -angle) (:course mp))\n  (vswap! VEHICLES assoc id (volatile! mp)))")
 	(title "create-vehicle [id mp]"))
 
 ([FlightPro_Class160005] of  CloVar
@@ -368,12 +323,12 @@
 
 ([FlightPro_Class160006] of  CloVar
 
-	(source "200")
+	(source "300")
 	(title "MOV-TIO"))
 
 ([FlightPro_Class160007] of  CloFunction
 
-	(source "(when-let [veh (@VEHICLES id)]\n  (asp/close-chan (:mover veh))\n  (.removeLayer @CHART (:marker veh))\n  (vswap! VEHICLES dissoc id))")
+	(source "(when-let [veh (@VEHICLES id)]\n  (asp/close-chan (:mover @veh))\n  (.removeLayer @CHART (:marker @veh))\n  (vswap! VEHICLES dissoc id))")
 	(title "delete-vehicle [id]"))
 
 ([FlightPro_Class160008] of  CloFunction
@@ -393,38 +348,13 @@
 
 ([FlightPro_Class160011] of  CloFunction
 
-	(source "(println :INIT-CHART)\n(let [m (-> js/L\n              (.map \"map\")\n              (.setView (array 60.0, 30.0) 10)) ;; SPb\n        tile1 (-> js/L (.tileLayer URL-OSM\n                                   #js{:maxZoom 16\n                                       :attribution \"Ru, OpenStreetMap &copy;\"}))\n        tile2 (-> js/L (.tileLayer URL-GSA\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile3 (-> js/L (.tileLayer URL-GST\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile4 (-> js/L (.tileLayer URL-GHB\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile5 (-> js/L (.tileLayer URL-GTR\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        base (clj->js {\"OpenStreetMap\" tile1\n                       \"Google Satellite\" tile2\n                       \"Google Streets\" tile3\n                       \"Google Hybrid\" tile4\n                       \"Google Terrain\" tile5})\n        ctrl (-> js/L (.control.layers base nil))]\n  (.addTo tile1 m)\n  (.addTo ctrl m)\n  (.on m \"mousemove\"\n         (fn [e] (mouse-move (.. e -latlng -lat) (.. e -latlng -lng))))\n  (vreset! CHART m))")
+	(source "(println :INIT-CHART)\n(let [m (-> js/L\n              (.map \"map\")\n              (.setView (array 60.0, 30.0) 10)) ;; SPb\n        tile1 (-> js/L (.tileLayer \"http://{s}.tile.osm.org/{z}/{x}/{y}.png\"\n                                   #js{:maxZoom 16\n                                       :attribution \"Ru, OpenStreetMap &copy;\"}))\n        tile2 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile3 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile4 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile5 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        base (clj->js {\"OpenStreetMap\" tile1\n                       \"Google Satellite\" tile2\n                       \"Google Streets\" tile3\n                       \"Google Hybrid\" tile4\n                       \"Google Terrain\" tile5})\n        ctrl (-> js/L (.control.layers base nil))]\n  (.addTo tile1 m)\n  (.addTo ctrl m)\n  (.on m \"mousemove\"\n         (fn [e] (mouse-move (.. e -latlng -lat) (.. e -latlng -lng))))\n  (vreset! CHART m))")
 	(title "init-chart []"))
 
 ([FlightPro_Class160012] of  CloFunction
 
 	(source "(set-html! \"mousepos\" (str \"lat \" (format \"%.4f\" lat) \" lon \" (format \"%.4f\" lng)))")
 	(title "mouse-move [lat lng]"))
-
-([FlightPro_Class160013] of  CloVar
-
-	(source "\"http://{s}.tile.osm.org/{z}/{x}/{y}.png\"")
-	(title "URL-OSM"))
-
-([FlightPro_Class160014] of  CloVar
-
-	(source "\"http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}\"")
-	(title "URL-GSA"))
-
-([FlightPro_Class160015] of  CloVar
-
-	(source "\"http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}\"")
-	(title "URL-GST"))
-
-([FlightPro_Class160016] of  CloVar
-
-	(source "\"http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}\"")
-	(title "URL-GHB"))
-
-([FlightPro_Class160017] of  CloVar
-
-	(source "\"http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}\"")
-	(title "URL-GTR"))
 
 ([FlightPro_Class160018] of  CloFunction
 
@@ -435,6 +365,39 @@
 
 	(source "(slurp (str ROOT \"leaflet.html\"))")
 	(title "chart-page []"))
+
+([FlightPro_Class170001] of  CloVar
+
+	(source "(asp/mk-chan)")
+	(title "INS-CHN"))
+
+([FlightPro_Class170002] of  CloVar
+
+	(source "(str \"http://localhost:\" PORT \"/instructions/\")")
+	(title "INS-URL"))
+
+([FlightPro_Class170003] of  CloVar
+
+	(source "1000")
+	(title "INS-TIO"))
+
+([FlightPro_Class170004] of  CloFunction
+
+	(source "(GET INS-URL {:handler instructions-handler\n                       :error-handler error-handler})")
+	(title "receive-instructions []"))
+
+([FlightPro_Class170005] of  CloFunction
+
+	(source "(doseq [{:keys [instruct] :as ins} (read-transit response)]\n  ;;(println [:INSTRUCT ins])\n  (condp = instruct\n    :create (let [{:keys [id vehicle]} ins]\n            (create-vehicle id vehicle))\n    :delete (let [{:keys [id]} ins]\n            (delete-vehicle id))\n    (println (str \"Unknown instruction: \" [instruct ins]))))")
+	(title "instructions-handler [response]"))
+
+([FlightPro_Class180004] of  CloFuncall
+
+	(source "(async.proc/pump-in pro.server/INS-CHN {:instruct :create :id \"r15\" :vehicle {:coord [60 30] :course 225 :speed 120 :status \"CLIMB\"}})"))
+
+([FlightPro_Class180005] of  CloFuncall
+
+	(source "(async.proc/pump-in pro.server/INS-CHN {:instruct :delete :id \"r15\"})"))
 
 ([FlightPro_Class2] of  ClsMain
 
@@ -496,6 +459,7 @@
 	(cloVars
 		[FlightPro_Class20002]
 		[FlightPro_Class20003]
+		[FlightPro_Class170001]
 		[FlightPro_Class20004]
 		[FlightPro_Class20005]
 		[FlightPro_Class20006]
@@ -554,8 +518,8 @@
 
 ([FlightPro_Class20014] of  CloFunction
 
-	(source "(-> (r/response (write-transit (deref (future (asp/pump-out DIR-CHN)))))\n       (r/header \"Access-Control-Allow-Origin\" \"*\"))")
-	(title "directives []"))
+	(source "(-> (r/response (write-transit (deref (future (asp/pump-out chn)))))\n       (r/header \"Access-Control-Allow-Origin\" \"*\"))")
+	(title "directives [chn]"))
 
 ([FlightPro_Class20017] of  CloFunction
 
@@ -564,7 +528,7 @@
 
 ([FlightPro_Class20021] of  CloFunction
 
-	(source "(defroutes app-routes\n  (GET \"/\" [] (index-page))\n  (GET \"/chart\" [] (chart-page))\n  (GET \"/answer/\" [] (answer))\n  (GET \"/directives/\" [] (directives))\n  (GET \"/czml/\" [] (cz/events))\n  (route/files \"/\" (do (println [:ROOT-FILES ROOT]) {:root ROOT}))\n  (route/resources \"/\")\n  (route/not-found \"Not Found\"))\n\n(def APP\n  (handler/site app-routes))")
+	(source "(defroutes app-routes\n  (GET \"/\" [] (index-page))\n  (GET \"/chart\" [] (chart-page))\n  (GET \"/answer/\" [] (answer))\n  (GET \"/directives/\" [] (directives DIR-CHN))\n  (GET \"/instructions/\" [] (directives INS-CHN))\n  (GET \"/czml/\" [] (cz/events))\n  (route/files \"/\" (do (println [:ROOT-FILES ROOT]) {:root ROOT}))\n  (route/resources \"/\")\n  (route/not-found \"Not Found\"))\n\n(def APP\n  (handler/site app-routes))")
 	(title "init-server []"))
 
 ([FlightPro_Class20022] of  CloFunction
@@ -873,7 +837,7 @@
 
 ([FlightPro_Class80000] of  CloVar
 
-	(source "\"http://localhost:4444/directives/\"")
+	(source "\"http://localhost:\" PORT \"/directives/\"")
 	(title "DIR-URL"))
 
 ([FlightPro_Class80001] of  CloFunction

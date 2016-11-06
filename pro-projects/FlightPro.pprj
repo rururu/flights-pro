@@ -1,4 +1,4 @@
-; Sat Nov 05 22:01:48 MSK 2016
+; Sun Nov 06 21:33:22 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -81,22 +81,22 @@
 ([FlightPro_ProjectKB_Class618] of  Property_List
 )
 
-([FlightPro_ProjectKB_Class623] of  Map
+([FlightPro_ProjectKB_Class637] of  Map
 
-	(entries [FlightPro_ProjectKB_Class624]))
+	(entries [FlightPro_ProjectKB_Class638]))
 
-([FlightPro_ProjectKB_Class624] of  Map_Entry
+([FlightPro_ProjectKB_Class638] of  Map_Entry
 
 	(key "FlightPro_Class120001")
 	(key_class "edu.stanford.smi.protege.model.Frame")
 	(value "-2 340 224 146")
 	(value_class "java.awt.Rectangle"))
 
-([FlightPro_ProjectKB_Class625] of  Map_Entry
+([FlightPro_ProjectKB_Class639] of  Map_Entry
 
 	(key "InstanceDisplay.yellow_stickies")
 	(key_class "java.lang.String")
-	(value "FlightPro_ProjectKB_Class623")
+	(value "FlightPro_ProjectKB_Class637")
 	(value_class "java.util.Map"))
 
 ([FORMS_TAB] of  Widget
@@ -136,8 +136,8 @@
 
 ([KB_102576_Class1] of  Map
 
-	(entries [FlightPro_ProjectKB_Class625])
-	(referenced_maps [FlightPro_ProjectKB_Class623]))
+	(entries [FlightPro_ProjectKB_Class639])
+	(referenced_maps [FlightPro_ProjectKB_Class637]))
 
 ([KB_102576_Class11] of  Property_List
 
@@ -231,28 +231,28 @@
 	(name "instances_file_name")
 	(string_value "FlightPro.pins"))
 
-([KB_735463_Class616] of  Map
+([KB_423572_Class616] of  Map
 
 	(entries
-		[KB_735463_Class617]
-		[KB_735463_Class618]
-		[KB_735463_Class619]))
+		[KB_423572_Class617]
+		[KB_423572_Class618]
+		[KB_423572_Class619]))
 
-([KB_735463_Class617] of  Map_Entry
+([KB_423572_Class617] of  Map_Entry
 
 	(key "suppress_instance_counting")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_735463_Class618] of  Map_Entry
+([KB_423572_Class618] of  Map_Entry
 
 	(key "add_name_on_instance_form")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_735463_Class619] of  Map_Entry
+([KB_423572_Class619] of  Map_Entry
 
 	(key "change_tracking_active")
 	(key_class "java.lang.String")

@@ -12,6 +12,7 @@
 
 (def ROOT (str (System/getProperty "user.dir") "/resources/public/"))
 (def DIR-CHN (asp/mk-chan))
+(def INS-CHN (asp/mk-chan))
 (def ANS-CHN (asp/mk-chan))
 (def PORT 4444)
 (def APP nil)
@@ -30,8 +31,8 @@
     (.reset baos)
     ret))
 
-(defn directives []
-  (-> (r/response (write-transit (deref (future (asp/pump-out DIR-CHN)))))
+(defn directives [chn]
+  (-> (r/response (write-transit (deref (future (asp/pump-out chn)))))
        (r/header "Access-Control-Allow-Origin" "*")))
 
 (defn answer []
@@ -43,7 +44,8 @@
   (GET "/" [] (index-page))
   (GET "/chart" [] (chart-page))
   (GET "/answer/" [] (answer))
-  (GET "/directives/" [] (directives))
+  (GET "/directives/" [] (directives DIR-CHN))
+  (GET "/instructions/" [] (directives INS-CHN))
   (GET "/czml/" [] (cz/events))
   (route/files "/" (do (println [:ROOT-FILES ROOT]) {:root ROOT}))
   (route/resources "/")

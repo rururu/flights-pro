@@ -4,23 +4,23 @@ goog.require('cljs.core');
 goog.require('goog.string');
 goog.require('goog.string.format');
 view3d.controls.format = (function view3d$controls$format(var_args){
-var args__21133__auto__ = [];
-var len__21126__auto___26506 = arguments.length;
-var i__21127__auto___26507 = (0);
+var args__19547__auto__ = [];
+var len__19540__auto___29863 = arguments.length;
+var i__19541__auto___29864 = (0);
 while(true){
-if((i__21127__auto___26507 < len__21126__auto___26506)){
-args__21133__auto__.push((arguments[i__21127__auto___26507]));
+if((i__19541__auto___29864 < len__19540__auto___29863)){
+args__19547__auto__.push((arguments[i__19541__auto___29864]));
 
-var G__26508 = (i__21127__auto___26507 + (1));
-i__21127__auto___26507 = G__26508;
+var G__29865 = (i__19541__auto___29864 + (1));
+i__19541__auto___29864 = G__29865;
 continue;
 } else {
 }
 break;
 }
 
-var argseq__21134__auto__ = ((((1) < args__21133__auto__.length))?(new cljs.core.IndexedSeq(args__21133__auto__.slice((1)),(0),null)):null);
-return view3d.controls.format.cljs$core$IFn$_invoke$arity$variadic((arguments[(0)]),argseq__21134__auto__);
+var argseq__19548__auto__ = ((((1) < args__19547__auto__.length))?(new cljs.core.IndexedSeq(args__19547__auto__.slice((1)),(0),null)):null);
+return view3d.controls.format.cljs$core$IFn$_invoke$arity$variadic((arguments[(0)]),argseq__19548__auto__);
 });
 
 view3d.controls.format.cljs$core$IFn$_invoke$arity$variadic = (function (fmt,args){
@@ -29,10 +29,10 @@ return cljs.core.apply.call(null,goog.string.format,fmt,args);
 
 view3d.controls.format.cljs$lang$maxFixedArity = (1);
 
-view3d.controls.format.cljs$lang$applyTo = (function (seq26504){
-var G__26505 = cljs.core.first.call(null,seq26504);
-var seq26504__$1 = cljs.core.next.call(null,seq26504);
-return view3d.controls.format.cljs$core$IFn$_invoke$arity$variadic(G__26505,seq26504__$1);
+view3d.controls.format.cljs$lang$applyTo = (function (seq29861){
+var G__29862 = cljs.core.first.call(null,seq29861);
+var seq29861__$1 = cljs.core.next.call(null,seq29861);
+return view3d.controls.format.cljs$core$IFn$_invoke$arity$variadic(G__29862,seq29861__$1);
 });
 
 view3d.controls.by_id = (function view3d$controls$by_id(id){
@@ -79,12 +79,12 @@ view3d.controls.set_html_BANG_.call(null,"speed-fld","<input value='0' style='wi
 return view3d.controls.set_html_BANG_.call(null,"altitude-fld","<input value='0' style='width:40px'\n               onchange='javascript:view3d.client.altitude(this.value)'>");
 });
 view3d.controls.show_flight_data = (function view3d$controls$show_flight_data(carr__$1){
-var map__26511 = cljs.core.deref.call(null,carr__$1);
-var map__26511__$1 = ((((!((map__26511 == null)))?((((map__26511.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__26511.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__26511):map__26511);
-var coord = cljs.core.get.call(null,map__26511__$1,new cljs.core.Keyword(null,"coord","coord",-1453656639));
-var course = cljs.core.get.call(null,map__26511__$1,new cljs.core.Keyword(null,"course","course",1455432948));
-var speed = cljs.core.get.call(null,map__26511__$1,new cljs.core.Keyword(null,"speed","speed",1257663751));
-var altitude = cljs.core.get.call(null,map__26511__$1,new cljs.core.Keyword(null,"altitude","altitude",463588637));
+var map__29868 = cljs.core.deref.call(null,carr__$1);
+var map__29868__$1 = ((((!((map__29868 == null)))?((((map__29868.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__29868.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__29868):map__29868);
+var coord = cljs.core.get.call(null,map__29868__$1,new cljs.core.Keyword(null,"coord","coord",-1453656639));
+var course = cljs.core.get.call(null,map__29868__$1,new cljs.core.Keyword(null,"course","course",1455432948));
+var speed = cljs.core.get.call(null,map__29868__$1,new cljs.core.Keyword(null,"speed","speed",1257663751));
+var altitude = cljs.core.get.call(null,map__29868__$1,new cljs.core.Keyword(null,"altitude","altitude",463588637));
 view3d.controls.set_html_BANG_.call(null,"course",[cljs.core.str("Course: "),cljs.core.str(course)].join(''));
 
 view3d.controls.set_html_BANG_.call(null,"speed",[cljs.core.str("Speed: "),cljs.core.str(speed)].join(''));
