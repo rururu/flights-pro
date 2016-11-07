@@ -3,6 +3,7 @@
   [goog.string :as gstring]
   [goog.string.format]
   [csasync.proc :as asp]
+  [chart.controls :as ctl]
   [carr.move :as mov]
   [cognitect.transit :as t]
   [ajax.core :refer (GET)]))
@@ -19,23 +20,11 @@
  "CLIMB" 	(str "http://localhost:" PORT "/img/bluepln32.png")
  "LEVEL" 	(str "http://localhost:" PORT "/img/purplepln32.png")
  "GROUND" 	(str "http://localhost:" PORT "/img/greypln32.png")})
-(defn by-id  [id]
-  (.getElementById js/document id))
-
-(defn set-html! [id msg]
-  (set! (.-innerHTML (by-id id)) msg))
-
-(defn format [fmt & args]
-  (apply gstring/format fmt args))
-
-(defn mouse-move [lat lng]
-  (set-html! "mousepos" (str "lat " (format "%.4f" lat) " lon " (format "%.4f" lng))))
-
 (defn read-transit [x]
   (t/read (t/reader :json) x))
 
 (defn move-vehicle [id]
-  (let [vmp (@VEHICLES id)]
+  (when-let [vmp (@VEHICLES id)]
   (mov/move vmp)
   (let [mp @vmp
          mrk (:marker mp)
@@ -51,7 +40,7 @@
   (vswap! VEHICLES dissoc id)))
 
 (defn info [id]
-  id)
+  (println [:INFO id]))
 
 (defn create-marker [mp]
   (let [[lat lon] (:coord mp)
@@ -63,7 +52,8 @@
        mk (-> js/L (.rotatedMarker pos opt))]
     (.on mk "click"
          (fn [e]
-           (info (ffirst (filter #(= (:marker (second %)) (.-target e)) (seq @VEHICLES))))))
+           (info (ffirst (filter #(= (:marker @(second %)) (.-target e)) 
+                                      (seq @VEHICLES))))))
     mk))
 
 (defn create-vehicle [id mp]
@@ -83,7 +73,7 @@
 
 (defn instructions-handler [response]
   (doseq [{:keys [instruct] :as ins} (read-transit response)]
-  (println [:INSTRUCT ins])
+  ;;(println [:INSTRUCT ins])
   (condp = instruct
     :create (let [{:keys [id vehicle]} ins]
             (create-vehicle id vehicle))
@@ -128,7 +118,7 @@
   (.addTo tile1 m)
   (.addTo ctrl m)
   (.on m "mousemove"
-         (fn [e] (mouse-move (.. e -latlng -lat) (.. e -latlng -lng))))
+         (fn [e] (ctl/mouse-move (.. e -latlng -lat) (.. e -latlng -lng))))
   (vreset! CHART m)))
 
 (defn on-load-chart []

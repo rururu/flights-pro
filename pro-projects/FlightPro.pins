@@ -1,4 +1,4 @@
-; Sun Nov 06 21:33:22 MSK 2016
+; Mon Nov 07 21:17:08 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -184,10 +184,6 @@
 	(source "(.getElementById js/document id)")
 	(title "by-id  [id]"))
 
-([FlightPro_Class140006] of  CloFuncall
-
-	(source "(pro.server/start-server)"))
-
 ([FlightPro_Class140007] of  CloFunction
 
 	(source "(let [{:keys [coord course speed altitude]} @carr]\n  (set-html! \"course\" (str \"Course: \" course))\n  (set-html! \"speed\" (str \"Speed: \" speed))\n  (set-html! \"altitude\" (str \"Altitude: \" altitude))\n  (set-html! \"lat\" (str \"Latitude: \" (format \"%.4f\" (first coord))))\n  (set-html! \"lon\" (str \"Longitude: \" (format \"%.4f\" (second coord)))))")
@@ -242,6 +238,16 @@
 	(source "(vswap! carr assoc-in [:elevator :target] altitude)\n(dyn/equalize carr :elevator :altitude dyn/step-closer temp)")
 	(title "elevate [carr altitude temp]"))
 
+([FlightPro_Class150000] of  ClsRequired
+
+	(cloFunctions
+		[FlightPro_Class140008]
+		[FlightPro_Class140005]
+		[FlightPro_Class140004]
+		[FlightPro_Class160012])
+	(cloNamespace [FlightPro_Class180001])
+	(title "Chart Controls"))
+
 ([FlightPro_Class150001] of  CSS
 
 	(source "#map {\n    position: absolute;\n    top: 0px;\n    bottom: 0;\n    left: 0;\n    right: 0;\n}\n#mousepos {\n  position:fixed;\n  bottom:10px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#commands {\n  position:fixed;\n  bottom:30px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#callsign {\n  position:fixed;\n  bottom:120px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}\n#hour {\n  position:fixed;\n  bottom:90px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}\n#minute {\n  position:fixed;\n  bottom:90px;\n  left:240px;\n  padding:5px;\n  z-index:100;\n}\n#from-country {\n  position:fixed;\n  bottom:70px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}\n#from-airport {\n  position:fixed;\n  bottom:50px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}\n#to-country {\n  position:fixed;\n  bottom:30px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}\n#to-airport {\n  position:fixed;\n  bottom:10px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}")
@@ -253,10 +259,6 @@
 	(asset-path "js/out")
 	(butt-build "Build/cljs.compile/build")
 	(cloFunctions
-		[FlightPro_Class140005]
-		[FlightPro_Class140004]
-		[FlightPro_Class140008]
-		[FlightPro_Class160012]
 		[FlightPro_Class80004]
 		[FlightPro_Class160003]
 		[FlightPro_Class160007]
@@ -287,14 +289,20 @@
 	(required
 		[FlightPro_Class70008]
 		[FlightPro_Class100023]
-		[FlightPro_Class30001])
+		[FlightPro_Class30001]
+		[FlightPro_Class150000])
 	(store-in "src/cljs")
 	(title "Chart Client"))
 
 ([FlightPro_Class150003] of  CloNamespace
 
-	(source "(:require\n  [goog.string :as gstring]\n  [goog.string.format]\n  [csasync.proc :as asp]\n  [carr.move :as mov]\n  [cognitect.transit :as t]\n  [ajax.core :refer (GET)])")
+	(source "(:require\n  [goog.string :as gstring]\n  [goog.string.format]\n  [csasync.proc :as asp]\n  [chart.controls :as ctl]\n  [carr.move :as mov]\n  [cognitect.transit :as t]\n  [ajax.core :refer (GET)])")
 	(title "chart.client"))
+
+([FlightPro_Class160000] of  CloFunction
+
+	(source "(let [[n s w e] @BBX]\n  (when-let [ff (json-web-data (str URL-FLS \"?bounds=\" n \",\" s \",\" w \",\" e))]\n    (vreset! FLIGHTS ff)\n    ff))")
+	(title "flights-in-bbx []"))
 
 ([FlightPro_Class160001] of  CloVar
 
@@ -308,7 +316,7 @@
 
 ([FlightPro_Class160003] of  CloFunction
 
-	(source "(let [vmp (@VEHICLES id)]\n  (mov/move vmp)\n  (let [mp @vmp\n         mrk (:marker mp)\n         [lat lon] (:coord mp)\n         pos (js/L.LatLng. lat lon)]\n    (.setLatLng mrk pos))\n  (vswap! VEHICLES assoc id vmp))")
+	(source "(when-let [vmp (@VEHICLES id)]\n  (mov/move vmp)\n  (let [mp @vmp\n         mrk (:marker mp)\n         [lat lon] (:coord mp)\n         pos (js/L.LatLng. lat lon)]\n    (.setLatLng mrk pos))\n  (vswap! VEHICLES assoc id vmp))")
 	(title "move-vehicle [id]"))
 
 ([FlightPro_Class160004] of  CloFunction
@@ -333,7 +341,7 @@
 
 ([FlightPro_Class160008] of  CloFunction
 
-	(source "(let [[lat lon] (:coord mp)\n       pos (js/L.LatLng. lat lon)\n       ico (js/L.icon #js{:iconUrl (URL-ICO (:status mp)) \n                                  :iconSize #js[32, 32]})\n       opt #js{:icon ico \n                   :draggable true}\n       mk (-> js/L (.rotatedMarker pos opt))]\n    (.on mk \"click\"\n         (fn [e]\n           (info (ffirst (filter #(= (:marker (second %)) (.-target e)) (seq @VEHICLES))))))\n    mk)")
+	(source "(let [[lat lon] (:coord mp)\n       pos (js/L.LatLng. lat lon)\n       ico (js/L.icon #js{:iconUrl (URL-ICO (:status mp)) \n                                  :iconSize #js[32, 32]})\n       opt #js{:icon ico \n                   :draggable true}\n       mk (-> js/L (.rotatedMarker pos opt))]\n    (.on mk \"click\"\n         (fn [e]\n           (info (ffirst (filter #(= (:marker @(second %)) (.-target e)) \n                                      (seq @VEHICLES))))))\n    mk)")
 	(title "create-marker [mp]"))
 
 ([FlightPro_Class160009] of  CloVar
@@ -343,12 +351,12 @@
 
 ([FlightPro_Class160010] of  CloFunction
 
-	(source "id")
+	(source "(println [:INFO id])")
 	(title "info [id]"))
 
 ([FlightPro_Class160011] of  CloFunction
 
-	(source "(println :INIT-CHART)\n(let [m (-> js/L\n              (.map \"map\")\n              (.setView (array 60.0, 30.0) 10)) ;; SPb\n        tile1 (-> js/L (.tileLayer \"http://{s}.tile.osm.org/{z}/{x}/{y}.png\"\n                                   #js{:maxZoom 16\n                                       :attribution \"Ru, OpenStreetMap &copy;\"}))\n        tile2 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile3 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile4 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile5 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        base (clj->js {\"OpenStreetMap\" tile1\n                       \"Google Satellite\" tile2\n                       \"Google Streets\" tile3\n                       \"Google Hybrid\" tile4\n                       \"Google Terrain\" tile5})\n        ctrl (-> js/L (.control.layers base nil))]\n  (.addTo tile1 m)\n  (.addTo ctrl m)\n  (.on m \"mousemove\"\n         (fn [e] (mouse-move (.. e -latlng -lat) (.. e -latlng -lng))))\n  (vreset! CHART m))")
+	(source "(println :INIT-CHART)\n(let [m (-> js/L\n              (.map \"map\")\n              (.setView (array 60.0, 30.0) 10)) ;; SPb\n        tile1 (-> js/L (.tileLayer \"http://{s}.tile.osm.org/{z}/{x}/{y}.png\"\n                                   #js{:maxZoom 16\n                                       :attribution \"Ru, OpenStreetMap &copy;\"}))\n        tile2 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile3 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile4 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile5 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        base (clj->js {\"OpenStreetMap\" tile1\n                       \"Google Satellite\" tile2\n                       \"Google Streets\" tile3\n                       \"Google Hybrid\" tile4\n                       \"Google Terrain\" tile5})\n        ctrl (-> js/L (.control.layers base nil))]\n  (.addTo tile1 m)\n  (.addTo ctrl m)\n  (.on m \"mousemove\"\n         (fn [e] (ctl/mouse-move (.. e -latlng -lat) (.. e -latlng -lng))))\n  (vreset! CHART m))")
 	(title "init-chart []"))
 
 ([FlightPro_Class160012] of  CloFunction
@@ -391,13 +399,69 @@
 	(source "(doseq [{:keys [instruct] :as ins} (read-transit response)]\n  ;;(println [:INSTRUCT ins])\n  (condp = instruct\n    :create (let [{:keys [id vehicle]} ins]\n            (create-vehicle id vehicle))\n    :delete (let [{:keys [id]} ins]\n            (delete-vehicle id))\n    (println (str \"Unknown instruction: \" [instruct ins]))))")
 	(title "instructions-handler [response]"))
 
-([FlightPro_Class180004] of  CloFuncall
+([FlightPro_Class180001] of  CloNamespace
 
-	(source "(async.proc/pump-in pro.server/INS-CHN {:instruct :create :id \"r15\" :vehicle {:coord [60 30] :course 225 :speed 120 :status \"CLIMB\"}})"))
+	(source "(:require\n [goog.string :as gstring]\n [goog.string.format])")
+	(title "chart.controls"))
 
-([FlightPro_Class180005] of  CloFuncall
+([FlightPro_Class180002] of  CloProgram
 
-	(source "(async.proc/pump-in pro.server/INS-CHN {:instruct :delete :id \"r15\"})"))
+	(cloFunctions
+		[FlightPro_Class190007]
+		[FlightPro_Class160000]
+		[FlightPro_Class200007]
+		[FlightPro_Class200010]
+		[FlightPro_Class200011]
+		[FlightPro_Class200012]
+		[FlightPro_Class200013]
+		[FlightPro_Class200014]
+		[FlightPro_Class200015]
+		[FlightPro_Class200016]
+		[FlightPro_Class200017]
+		[FlightPro_Class210008]
+		[FlightPro_Class210009]
+		[FlightPro_Class210012]
+		[FlightPro_Class210013])
+	(cloNamespace [FlightPro_Class180003])
+	(cloVars
+		[FlightPro_Class190004]
+		[FlightPro_Class190005]
+		[FlightPro_Class190006]
+		[FlightPro_Class190001]
+		[FlightPro_Class210007]
+		[FlightPro_Class210010]
+		[FlightPro_Class210011])
+	(title "FlightRadar24 Client"))
+
+([FlightPro_Class180003] of  CloNamespace
+
+	(source "(:require\n  [org.httpkit.client :as client]\n  [clj-json.core :as json]\n  [async.proc :as asp])")
+	(title "fr24.client"))
+
+([FlightPro_Class190001] of  CloVar
+
+	(source "(volatile! {})")
+	(title "FLIGHTS"))
+
+([FlightPro_Class190004] of  CloVar
+
+	(source "\"http://www.flightradar24.com/_json/airports.php\"")
+	(title "URL-ARP"))
+
+([FlightPro_Class190005] of  CloVar
+
+	(source "\"http://data-live.flightradar24.com/zones/fcgi/feed.js\"")
+	(title "URL-FLS"))
+
+([FlightPro_Class190006] of  CloVar
+
+	(source "\"http://data-live.flightradar24.com/clickhandler/?version=1.5&flight=\"")
+	(title "URL-FLT"))
+
+([FlightPro_Class190007] of  CloFunction
+
+	(source "(let [r @(client/get url)\n       s (:status r)]\n  (if (= s 200)\n    (try\n      (json/parse-string (:body r))\n      (catch Exception e\n        (println [:EXCEPTION e])\n        nil))\n    (do\n      (println [:STATUS s])\n      nil)))")
+	(title "json-web-data [url]"))
 
 ([FlightPro_Class2] of  ClsMain
 
@@ -466,10 +530,55 @@
 		[FlightPro_Class20007])
 	(title "Pro Server"))
 
+([FlightPro_Class200007] of  CloFunction
+
+	(source "(if (string? iod)\n  (@FLIGHTS iod)\n  iod)")
+	(title "dat [iod]"))
+
 ([FlightPro_Class20001] of  CloNamespace
 
 	(source "(:use protege.core)\n(:require [ring.adapter.jetty :as jetty]\n              [ring.util.response :as r]\n              [compojure.core :refer [defroutes GET]]\n              [compojure.handler :as handler]\n              [compojure.route :as route]\n              [cognitect.transit :as t]\n              [async.proc :as asp]\n              [cesium.core :as cz])\n(:import java.io.ByteArrayOutputStream)")
 	(title "pro.server"))
+
+([FlightPro_Class200010] of  CloFunction
+
+	(source "(let [dd (dat iod)]\n  [(nth dd 1) (nth dd 2)])")
+	(title "coord [iod]"))
+
+([FlightPro_Class200011] of  CloFunction
+
+	(source "(nth (dat iod) 3)")
+	(title "course [iod]"))
+
+([FlightPro_Class200012] of  CloFunction
+
+	(source "(nth (dat iod) 5)")
+	(title "speed [iod]"))
+
+([FlightPro_Class200013] of  CloFunction
+
+	(source "(nth (dat iod) 4)")
+	(title "altitude [iod]"))
+
+([FlightPro_Class200014] of  CloFunction
+
+	(source "(nth (dat iod) 16)")
+	(title "callsign [iod]"))
+
+([FlightPro_Class200015] of  CloFunction
+
+	(source "(if-let [flt (filter #(and (vector? (second %)) \n                                   (= cs (callsign (second %)))) \n                         (seq @FLIGHTS))]\n  (first flt))")
+	(title "by-call [cs]"))
+
+([FlightPro_Class200016] of  CloFunction
+
+	(source "(if-let [[id dat] (by-call cs)]\n  id)")
+	(title "id-by-call [cs]"))
+
+([FlightPro_Class200017] of  CloFunction
+
+	(source "(if-let [[id dat] (by-call cs)]\n  dat)")
+	(title "dat-by-call [cs]"))
 
 ([FlightPro_Class20002] of  CloVar
 
@@ -617,6 +726,41 @@
 
 	(source "(let [min-scl 0.25\n       scl (+ min-scl (* (- 1 min-scl) (- 1 (/ dist max-dist))))]\n  (location txt scl \"img/arrdn.png\" lat lon 100 40))")
 	(title "point-out [txt [lat lon] dist max-dist]"))
+
+([FlightPro_Class210007] of  CloVar
+
+	(source "(volatile! [0 0 0 0])")
+	(title "BBX"))
+
+([FlightPro_Class210008] of  CloFunction
+
+	(source "(vreset! BBX [n s w e])")
+	(title "set-bbx [n s w e]"))
+
+([FlightPro_Class210009] of  CloFunction
+
+	(source "(asp/start-process STATUS \n                               #(do (flights-in-bbx) (process-fn) true)\n                               F24-TIO)")
+	(title "start [process-fn]"))
+
+([FlightPro_Class210010] of  CloVar
+
+	(source "(volatile! \"STOP\")")
+	(title "STATUS"))
+
+([FlightPro_Class210011] of  CloVar
+
+	(source "2000")
+	(title "F24-TIO"))
+
+([FlightPro_Class210012] of  CloFunction
+
+	(source "(asp/stop-process STATUS)")
+	(title "stop []"))
+
+([FlightPro_Class210013] of  CloFunction
+
+	(source "(asp/running? STATUS)")
+	(title "running? []"))
 
 ([FlightPro_Class3] of  CloVar
 

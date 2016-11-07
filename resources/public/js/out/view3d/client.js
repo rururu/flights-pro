@@ -27,68 +27,68 @@ if((arc < (10))){
 return carr.move.turn.call(null,carr__$1,course,(1));
 } else {
 var bank = (cljs.core.truth_(calc.dynamic.turn_right_QMARK_.call(null,new cljs.core.Keyword(null,"course","course",1455432948).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,carr__$1)),course))?new cljs.core.Keyword(null,"bank-right","bank-right",-1820955485).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,carr__$1)):(- new cljs.core.Keyword(null,"bank-right","bank-right",-1820955485).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,carr__$1))));
-var vec__22014 = (((arc > (70)))?new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [((2) * bank),(2)], null):new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [bank,(1)], null));
-var bank__$1 = cljs.core.nth.call(null,vec__22014,(0),null);
-var temp = cljs.core.nth.call(null,vec__22014,(1),null);
+var vec__23932 = (((arc > (70)))?new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [((2) * bank),(2)], null):new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [bank,(1)], null));
+var bank__$1 = cljs.core.nth.call(null,vec__23932,(0),null);
+var temp = cljs.core.nth.call(null,vec__23932,(1),null);
 carr.move.turn.call(null,carr__$1,course,temp);
 
-calc.dynamic.check_diff_and_do.call(null,carr__$1,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"rudder","rudder",1071257290),new cljs.core.Keyword(null,"target","target",253001721)], null),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"course","course",1455432948)], null),((2) * cljs.core.get_in.call(null,cljs.core.deref.call(null,carr__$1),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"rudder","rudder",1071257290),new cljs.core.Keyword(null,"step","step",1288888124)], null))),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"rudder","rudder",1071257290),new cljs.core.Keyword(null,"time-out","time-out",-125288146)], null),((function (bank,vec__22014,bank__$1,temp,arc){
+calc.dynamic.check_diff_and_do.call(null,carr__$1,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"rudder","rudder",1071257290),new cljs.core.Keyword(null,"target","target",253001721)], null),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"course","course",1455432948)], null),((2) * cljs.core.get_in.call(null,cljs.core.deref.call(null,carr__$1),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"rudder","rudder",1071257290),new cljs.core.Keyword(null,"step","step",1288888124)], null))),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"rudder","rudder",1071257290),new cljs.core.Keyword(null,"time-out","time-out",-125288146)], null),((function (bank,vec__23932,bank__$1,temp,arc){
 return (function (){
 return czm.core.camera.call(null,new cljs.core.Keyword(null,"roll","roll",11266999),(0));
-});})(bank,vec__22014,bank__$1,temp,arc))
+});})(bank,vec__23932,bank__$1,temp,arc))
 );
 
 return czm.core.camera.call(null,new cljs.core.Keyword(null,"roll","roll",11266999),bank__$1);
 }
 });
 view3d.client.error_handler = (function view3d$client$error_handler(response){
-var map__22019 = response;
-var map__22019__$1 = ((((!((map__22019 == null)))?((((map__22019.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__22019.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__22019):map__22019);
-var status = cljs.core.get.call(null,map__22019__$1,new cljs.core.Keyword(null,"status","status",-1997798413));
-var status_text = cljs.core.get.call(null,map__22019__$1,new cljs.core.Keyword(null,"status-text","status-text",-1834235478));
+var map__23937 = response;
+var map__23937__$1 = ((((!((map__23937 == null)))?((((map__23937.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__23937.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__23937):map__23937);
+var status = cljs.core.get.call(null,map__23937__$1,new cljs.core.Keyword(null,"status","status",-1997798413));
+var status_text = cljs.core.get.call(null,map__23937__$1,new cljs.core.Keyword(null,"status-text","status-text",-1834235478));
 return cljs.core.println.call(null,[cljs.core.str("AJAX ERROR: "),cljs.core.str(status),cljs.core.str(" "),cljs.core.str(status_text)].join(''));
 });
 view3d.client.directives_handler = (function view3d$client$directives_handler(response){
-var seq__22047 = cljs.core.seq.call(null,view3d.client.read_transit.call(null,response));
-var chunk__22048 = null;
-var count__22049 = (0);
-var i__22050 = (0);
+var seq__23965 = cljs.core.seq.call(null,view3d.client.read_transit.call(null,response));
+var chunk__23966 = null;
+var count__23967 = (0);
+var i__23968 = (0);
 while(true){
-if((i__22050 < count__22049)){
-var map__22051 = cljs.core._nth.call(null,chunk__22048,i__22050);
-var map__22051__$1 = ((((!((map__22051 == null)))?((((map__22051.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__22051.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__22051):map__22051);
-var dir = map__22051__$1;
-var directive = cljs.core.get.call(null,map__22051__$1,new cljs.core.Keyword(null,"directive","directive",793559132));
-var pred__22053_22073 = cljs.core._EQ_;
-var expr__22054_22074 = directive;
-if(cljs.core.truth_(pred__22053_22073.call(null,new cljs.core.Keyword(null,"fly","fly",-1804296463),expr__22054_22074))){
-var map__22056_22075 = dir;
-var map__22056_22076__$1 = ((((!((map__22056_22075 == null)))?((((map__22056_22075.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__22056_22075.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__22056_22075):map__22056_22075);
-var lat_22077 = cljs.core.get.call(null,map__22056_22076__$1,new cljs.core.Keyword(null,"lat","lat",-580793929));
-var lon_22078 = cljs.core.get.call(null,map__22056_22076__$1,new cljs.core.Keyword(null,"lon","lon",522068437));
-var crs_22079 = cljs.core.get.call(null,map__22056_22076__$1,new cljs.core.Keyword(null,"crs","crs",-1720579893));
-var alt_22080 = cljs.core.get.call(null,map__22056_22076__$1,new cljs.core.Keyword(null,"alt","alt",-3214426));
-var period_22081 = cljs.core.get.call(null,map__22056_22076__$1,new cljs.core.Keyword(null,"period","period",-352129191));
-czm.core.fly_to.call(null,lat_22077,lon_22078,alt_22080,crs_22079,period_22081);
+if((i__23968 < count__23967)){
+var map__23969 = cljs.core._nth.call(null,chunk__23966,i__23968);
+var map__23969__$1 = ((((!((map__23969 == null)))?((((map__23969.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__23969.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__23969):map__23969);
+var dir = map__23969__$1;
+var directive = cljs.core.get.call(null,map__23969__$1,new cljs.core.Keyword(null,"directive","directive",793559132));
+var pred__23971_23991 = cljs.core._EQ_;
+var expr__23972_23992 = directive;
+if(cljs.core.truth_(pred__23971_23991.call(null,new cljs.core.Keyword(null,"fly","fly",-1804296463),expr__23972_23992))){
+var map__23974_23993 = dir;
+var map__23974_23994__$1 = ((((!((map__23974_23993 == null)))?((((map__23974_23993.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__23974_23993.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__23974_23993):map__23974_23993);
+var lat_23995 = cljs.core.get.call(null,map__23974_23994__$1,new cljs.core.Keyword(null,"lat","lat",-580793929));
+var lon_23996 = cljs.core.get.call(null,map__23974_23994__$1,new cljs.core.Keyword(null,"lon","lon",522068437));
+var crs_23997 = cljs.core.get.call(null,map__23974_23994__$1,new cljs.core.Keyword(null,"crs","crs",-1720579893));
+var alt_23998 = cljs.core.get.call(null,map__23974_23994__$1,new cljs.core.Keyword(null,"alt","alt",-3214426));
+var period_23999 = cljs.core.get.call(null,map__23974_23994__$1,new cljs.core.Keyword(null,"period","period",-352129191));
+czm.core.fly_to.call(null,lat_23995,lon_23996,alt_23998,crs_23997,period_23999);
 } else {
-if(cljs.core.truth_(pred__22053_22073.call(null,new cljs.core.Keyword(null,"carrier","carrier",1085800622),expr__22054_22074))){
+if(cljs.core.truth_(pred__23971_23991.call(null,new cljs.core.Keyword(null,"carrier","carrier",1085800622),expr__23972_23992))){
 cljs.core.vreset_BANG_.call(null,view3d.client.CARRIER,cljs.core.merge.call(null,cljs.core.deref.call(null,view3d.client.CARRIER),dir));
 } else {
-if(cljs.core.truth_(pred__22053_22073.call(null,new cljs.core.Keyword(null,"camera","camera",-1190348585),expr__22054_22074))){
+if(cljs.core.truth_(pred__23971_23991.call(null,new cljs.core.Keyword(null,"camera","camera",-1190348585),expr__23972_23992))){
 cljs.core.vreset_BANG_.call(null,czm.core.CAMERA,cljs.core.merge.call(null,cljs.core.deref.call(null,czm.core.CAMERA),dir));
 } else {
-if(cljs.core.truth_(pred__22053_22073.call(null,new cljs.core.Keyword(null,"turn","turn",75759344),expr__22054_22074))){
-var map__22058_22082 = dir;
-var map__22058_22083__$1 = ((((!((map__22058_22082 == null)))?((((map__22058_22082.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__22058_22082.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__22058_22082):map__22058_22082);
-var course_22084 = cljs.core.get.call(null,map__22058_22083__$1,new cljs.core.Keyword(null,"course","course",1455432948));
-view3d.client.turn_and_bank.call(null,view3d.client.CARRIER,course_22084);
+if(cljs.core.truth_(pred__23971_23991.call(null,new cljs.core.Keyword(null,"turn","turn",75759344),expr__23972_23992))){
+var map__23976_24000 = dir;
+var map__23976_24001__$1 = ((((!((map__23976_24000 == null)))?((((map__23976_24000.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__23976_24000.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__23976_24000):map__23976_24000);
+var course_24002 = cljs.core.get.call(null,map__23976_24001__$1,new cljs.core.Keyword(null,"course","course",1455432948));
+view3d.client.turn_and_bank.call(null,view3d.client.CARRIER,course_24002);
 } else {
-if(cljs.core.truth_(pred__22053_22073.call(null,new cljs.core.Keyword(null,"accel","accel",-2118422974),expr__22054_22074))){
-var map__22060_22085 = dir;
-var map__22060_22086__$1 = ((((!((map__22060_22085 == null)))?((((map__22060_22085.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__22060_22085.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__22060_22085):map__22060_22085);
-var speed_22087 = cljs.core.get.call(null,map__22060_22086__$1,new cljs.core.Keyword(null,"speed","speed",1257663751));
-var temp_22088 = cljs.core.get.call(null,map__22060_22086__$1,new cljs.core.Keyword(null,"temp","temp",1791541284));
-carr.move.accel.call(null,view3d.client.CARRIER,speed_22087,temp_22088);
+if(cljs.core.truth_(pred__23971_23991.call(null,new cljs.core.Keyword(null,"accel","accel",-2118422974),expr__23972_23992))){
+var map__23978_24003 = dir;
+var map__23978_24004__$1 = ((((!((map__23978_24003 == null)))?((((map__23978_24003.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__23978_24003.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__23978_24003):map__23978_24003);
+var speed_24005 = cljs.core.get.call(null,map__23978_24004__$1,new cljs.core.Keyword(null,"speed","speed",1257663751));
+var temp_24006 = cljs.core.get.call(null,map__23978_24004__$1,new cljs.core.Keyword(null,"temp","temp",1791541284));
+carr.move.accel.call(null,view3d.client.CARRIER,speed_24005,temp_24006);
 } else {
 cljs.core.println.call(null,[cljs.core.str("Unknown directive: "),cljs.core.str(new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [directive,dir], null))].join(''));
 }
@@ -97,65 +97,65 @@ cljs.core.println.call(null,[cljs.core.str("Unknown directive: "),cljs.core.str(
 }
 }
 
-var G__22089 = seq__22047;
-var G__22090 = chunk__22048;
-var G__22091 = count__22049;
-var G__22092 = (i__22050 + (1));
-seq__22047 = G__22089;
-chunk__22048 = G__22090;
-count__22049 = G__22091;
-i__22050 = G__22092;
+var G__24007 = seq__23965;
+var G__24008 = chunk__23966;
+var G__24009 = count__23967;
+var G__24010 = (i__23968 + (1));
+seq__23965 = G__24007;
+chunk__23966 = G__24008;
+count__23967 = G__24009;
+i__23968 = G__24010;
 continue;
 } else {
-var temp__4657__auto__ = cljs.core.seq.call(null,seq__22047);
+var temp__4657__auto__ = cljs.core.seq.call(null,seq__23965);
 if(temp__4657__auto__){
-var seq__22047__$1 = temp__4657__auto__;
-if(cljs.core.chunked_seq_QMARK_.call(null,seq__22047__$1)){
-var c__19248__auto__ = cljs.core.chunk_first.call(null,seq__22047__$1);
-var G__22093 = cljs.core.chunk_rest.call(null,seq__22047__$1);
-var G__22094 = c__19248__auto__;
-var G__22095 = cljs.core.count.call(null,c__19248__auto__);
-var G__22096 = (0);
-seq__22047 = G__22093;
-chunk__22048 = G__22094;
-count__22049 = G__22095;
-i__22050 = G__22096;
+var seq__23965__$1 = temp__4657__auto__;
+if(cljs.core.chunked_seq_QMARK_.call(null,seq__23965__$1)){
+var c__19252__auto__ = cljs.core.chunk_first.call(null,seq__23965__$1);
+var G__24011 = cljs.core.chunk_rest.call(null,seq__23965__$1);
+var G__24012 = c__19252__auto__;
+var G__24013 = cljs.core.count.call(null,c__19252__auto__);
+var G__24014 = (0);
+seq__23965 = G__24011;
+chunk__23966 = G__24012;
+count__23967 = G__24013;
+i__23968 = G__24014;
 continue;
 } else {
-var map__22062 = cljs.core.first.call(null,seq__22047__$1);
-var map__22062__$1 = ((((!((map__22062 == null)))?((((map__22062.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__22062.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__22062):map__22062);
-var dir = map__22062__$1;
-var directive = cljs.core.get.call(null,map__22062__$1,new cljs.core.Keyword(null,"directive","directive",793559132));
-var pred__22064_22097 = cljs.core._EQ_;
-var expr__22065_22098 = directive;
-if(cljs.core.truth_(pred__22064_22097.call(null,new cljs.core.Keyword(null,"fly","fly",-1804296463),expr__22065_22098))){
-var map__22067_22099 = dir;
-var map__22067_22100__$1 = ((((!((map__22067_22099 == null)))?((((map__22067_22099.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__22067_22099.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__22067_22099):map__22067_22099);
-var lat_22101 = cljs.core.get.call(null,map__22067_22100__$1,new cljs.core.Keyword(null,"lat","lat",-580793929));
-var lon_22102 = cljs.core.get.call(null,map__22067_22100__$1,new cljs.core.Keyword(null,"lon","lon",522068437));
-var crs_22103 = cljs.core.get.call(null,map__22067_22100__$1,new cljs.core.Keyword(null,"crs","crs",-1720579893));
-var alt_22104 = cljs.core.get.call(null,map__22067_22100__$1,new cljs.core.Keyword(null,"alt","alt",-3214426));
-var period_22105 = cljs.core.get.call(null,map__22067_22100__$1,new cljs.core.Keyword(null,"period","period",-352129191));
-czm.core.fly_to.call(null,lat_22101,lon_22102,alt_22104,crs_22103,period_22105);
+var map__23980 = cljs.core.first.call(null,seq__23965__$1);
+var map__23980__$1 = ((((!((map__23980 == null)))?((((map__23980.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__23980.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__23980):map__23980);
+var dir = map__23980__$1;
+var directive = cljs.core.get.call(null,map__23980__$1,new cljs.core.Keyword(null,"directive","directive",793559132));
+var pred__23982_24015 = cljs.core._EQ_;
+var expr__23983_24016 = directive;
+if(cljs.core.truth_(pred__23982_24015.call(null,new cljs.core.Keyword(null,"fly","fly",-1804296463),expr__23983_24016))){
+var map__23985_24017 = dir;
+var map__23985_24018__$1 = ((((!((map__23985_24017 == null)))?((((map__23985_24017.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__23985_24017.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__23985_24017):map__23985_24017);
+var lat_24019 = cljs.core.get.call(null,map__23985_24018__$1,new cljs.core.Keyword(null,"lat","lat",-580793929));
+var lon_24020 = cljs.core.get.call(null,map__23985_24018__$1,new cljs.core.Keyword(null,"lon","lon",522068437));
+var crs_24021 = cljs.core.get.call(null,map__23985_24018__$1,new cljs.core.Keyword(null,"crs","crs",-1720579893));
+var alt_24022 = cljs.core.get.call(null,map__23985_24018__$1,new cljs.core.Keyword(null,"alt","alt",-3214426));
+var period_24023 = cljs.core.get.call(null,map__23985_24018__$1,new cljs.core.Keyword(null,"period","period",-352129191));
+czm.core.fly_to.call(null,lat_24019,lon_24020,alt_24022,crs_24021,period_24023);
 } else {
-if(cljs.core.truth_(pred__22064_22097.call(null,new cljs.core.Keyword(null,"carrier","carrier",1085800622),expr__22065_22098))){
+if(cljs.core.truth_(pred__23982_24015.call(null,new cljs.core.Keyword(null,"carrier","carrier",1085800622),expr__23983_24016))){
 cljs.core.vreset_BANG_.call(null,view3d.client.CARRIER,cljs.core.merge.call(null,cljs.core.deref.call(null,view3d.client.CARRIER),dir));
 } else {
-if(cljs.core.truth_(pred__22064_22097.call(null,new cljs.core.Keyword(null,"camera","camera",-1190348585),expr__22065_22098))){
+if(cljs.core.truth_(pred__23982_24015.call(null,new cljs.core.Keyword(null,"camera","camera",-1190348585),expr__23983_24016))){
 cljs.core.vreset_BANG_.call(null,czm.core.CAMERA,cljs.core.merge.call(null,cljs.core.deref.call(null,czm.core.CAMERA),dir));
 } else {
-if(cljs.core.truth_(pred__22064_22097.call(null,new cljs.core.Keyword(null,"turn","turn",75759344),expr__22065_22098))){
-var map__22069_22106 = dir;
-var map__22069_22107__$1 = ((((!((map__22069_22106 == null)))?((((map__22069_22106.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__22069_22106.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__22069_22106):map__22069_22106);
-var course_22108 = cljs.core.get.call(null,map__22069_22107__$1,new cljs.core.Keyword(null,"course","course",1455432948));
-view3d.client.turn_and_bank.call(null,view3d.client.CARRIER,course_22108);
+if(cljs.core.truth_(pred__23982_24015.call(null,new cljs.core.Keyword(null,"turn","turn",75759344),expr__23983_24016))){
+var map__23987_24024 = dir;
+var map__23987_24025__$1 = ((((!((map__23987_24024 == null)))?((((map__23987_24024.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__23987_24024.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__23987_24024):map__23987_24024);
+var course_24026 = cljs.core.get.call(null,map__23987_24025__$1,new cljs.core.Keyword(null,"course","course",1455432948));
+view3d.client.turn_and_bank.call(null,view3d.client.CARRIER,course_24026);
 } else {
-if(cljs.core.truth_(pred__22064_22097.call(null,new cljs.core.Keyword(null,"accel","accel",-2118422974),expr__22065_22098))){
-var map__22071_22109 = dir;
-var map__22071_22110__$1 = ((((!((map__22071_22109 == null)))?((((map__22071_22109.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__22071_22109.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__22071_22109):map__22071_22109);
-var speed_22111 = cljs.core.get.call(null,map__22071_22110__$1,new cljs.core.Keyword(null,"speed","speed",1257663751));
-var temp_22112 = cljs.core.get.call(null,map__22071_22110__$1,new cljs.core.Keyword(null,"temp","temp",1791541284));
-carr.move.accel.call(null,view3d.client.CARRIER,speed_22111,temp_22112);
+if(cljs.core.truth_(pred__23982_24015.call(null,new cljs.core.Keyword(null,"accel","accel",-2118422974),expr__23983_24016))){
+var map__23989_24027 = dir;
+var map__23989_24028__$1 = ((((!((map__23989_24027 == null)))?((((map__23989_24027.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__23989_24027.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__23989_24027):map__23989_24027);
+var speed_24029 = cljs.core.get.call(null,map__23989_24028__$1,new cljs.core.Keyword(null,"speed","speed",1257663751));
+var temp_24030 = cljs.core.get.call(null,map__23989_24028__$1,new cljs.core.Keyword(null,"temp","temp",1791541284));
+carr.move.accel.call(null,view3d.client.CARRIER,speed_24029,temp_24030);
 } else {
 cljs.core.println.call(null,[cljs.core.str("Unknown directive: "),cljs.core.str(new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [directive,dir], null))].join(''));
 }
@@ -164,14 +164,14 @@ cljs.core.println.call(null,[cljs.core.str("Unknown directive: "),cljs.core.str(
 }
 }
 
-var G__22113 = cljs.core.next.call(null,seq__22047__$1);
-var G__22114 = null;
-var G__22115 = (0);
-var G__22116 = (0);
-seq__22047 = G__22113;
-chunk__22048 = G__22114;
-count__22049 = G__22115;
-i__22050 = G__22116;
+var G__24031 = cljs.core.next.call(null,seq__23965__$1);
+var G__24032 = null;
+var G__24033 = (0);
+var G__24034 = (0);
+seq__23965 = G__24031;
+chunk__23966 = G__24032;
+count__23967 = G__24033;
+i__23968 = G__24034;
 continue;
 }
 } else {
@@ -186,9 +186,9 @@ return ajax.core.GET.call(null,view3d.client.DIR_URL,new cljs.core.PersistentArr
 });
 view3d.client.camera_move = (function view3d$client$camera_move(carr__$1){
 var car = cljs.core.deref.call(null,carr__$1);
-var vec__22120 = new cljs.core.Keyword(null,"coord","coord",-1453656639).cljs$core$IFn$_invoke$arity$1(car);
-var lat = cljs.core.nth.call(null,vec__22120,(0),null);
-var lon = cljs.core.nth.call(null,vec__22120,(1),null);
+var vec__24038 = new cljs.core.Keyword(null,"coord","coord",-1453656639).cljs$core$IFn$_invoke$arity$1(car);
+var lat = cljs.core.nth.call(null,vec__24038,(0),null);
+var lon = cljs.core.nth.call(null,vec__24038,(1),null);
 var crs = new cljs.core.Keyword(null,"course","course",1455432948).cljs$core$IFn$_invoke$arity$1(car);
 var alt = new cljs.core.Keyword(null,"altitude","altitude",463588637).cljs$core$IFn$_invoke$arity$1(car);
 return czm.core.fly_to.call(null,lat,lon,alt,crs,(view3d.client.CAM_TIO / (1000)));

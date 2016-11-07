@@ -14,18 +14,18 @@ var phi2 = Math.asin(((sinphi1 * cosc) + ((cosphi1 * sinc) * cosaz)));
 var lam2 = (Math.atan2((sinc * sinaz),((cosphi1 * cosc) - ((sinphi1 * sinc) * cosaz))) + lambda0);
 return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [phi2,lam2], null);
 });
-carr.move.future_pos = (function carr$move$future_pos(p__21982,crs,spd,tim){
-var vec__21989 = p__21982;
-var lat = cljs.core.nth.call(null,vec__21989,(0),null);
-var lon = cljs.core.nth.call(null,vec__21989,(1),null);
+carr.move.future_pos = (function carr$move$future_pos(p__23893,crs,spd,tim){
+var vec__23900 = p__23893;
+var lat = cljs.core.nth.call(null,vec__23900,(0),null);
+var lon = cljs.core.nth.call(null,vec__23900,(1),null);
 var phi = (carr.move.PID180 * lat);
 var lam = (carr.move.PID180 * lon);
 var dir = (carr.move.PID180 * crs);
 var way = (spd * tim);
 var way__$1 = (carr.move.PID180 * (way / (60)));
-var vec__21992 = carr.move.spherical_between.call(null,phi,lam,way__$1,dir);
-var phi2 = cljs.core.nth.call(null,vec__21992,(0),null);
-var lam2 = cljs.core.nth.call(null,vec__21992,(1),null);
+var vec__23903 = carr.move.spherical_between.call(null,phi,lam,way__$1,dir);
+var phi2 = cljs.core.nth.call(null,vec__23903,(0),null);
+var lam2 = cljs.core.nth.call(null,vec__23903,(1),null);
 return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [(phi2 / carr.move.PID180),(lam2 / carr.move.PID180)], null);
 });
 carr.move.move = (function carr$move$move(carr__$1){

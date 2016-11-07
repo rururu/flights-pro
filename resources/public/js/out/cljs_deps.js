@@ -26,7 +26,8 @@ goog.addDependency("../cljs/core/async.js", ['cljs.core.async'], ['cljs.core.asy
 goog.addDependency("../csasync/proc.js", ['csasync.proc'], ['cljs.core', 'cljs.core.async']);
 goog.addDependency("../calc/dynamic.js", ['calc.dynamic'], ['cljs.core', 'csasync.proc']);
 goog.addDependency("../carr/move.js", ['carr.move'], ['calc.dynamic', 'cljs.core']);
-goog.addDependency("../chart/client.js", ['chart.client'], ['ajax.core', 'carr.move', 'goog.string', 'cljs.core', 'cognitect.transit', 'goog.string.format', 'csasync.proc']);
+goog.addDependency("../chart/controls.js", ['chart.controls'], ['goog.string', 'cljs.core', 'goog.string.format']);
+goog.addDependency("../chart/client.js", ['chart.client'], ['ajax.core', 'carr.move', 'goog.string', 'cljs.core', 'cognitect.transit', 'chart.controls', 'goog.string.format', 'csasync.proc']);
 goog.addDependency("../cljs/tools/reader/impl/utils.js", ['cljs.tools.reader.impl.utils'], ['goog.string', 'cljs.core', 'clojure.string']);
 goog.addDependency("../cljs/tools/reader/reader_types.js", ['cljs.tools.reader.reader_types'], ['goog.string', 'cljs.core', 'goog.string.StringBuffer', 'cljs.tools.reader.impl.utils']);
 goog.addDependency("../cljs/source_map/base64.js", ['cljs.source_map.base64'], ['cljs.core']);

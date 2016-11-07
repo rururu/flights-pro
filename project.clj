@@ -19,8 +19,10 @@
                  [compojure "1.4.0"]
                  [com.cognitect/transit-clj "0.8.290"]
                  [cljs-ajax "0.5.8"]
-                 [com.cognitect/transit-cljs "0.8.239"]]
+                 [com.cognitect/transit-cljs "0.8.239"]
+                 [http-kit "2.2.0"]
+                 [clj-json "0.5.3"]]
   :javac-options ["-target" "1.7" "-source" "1.7" "-Xlint:-options"]
   :repositories {"local" ~(str (.toURI (java.io.File. "repo")))}
   :profiles {:uberjar {:aot :all}}
-  :main fligts-pro.core)
+  :main fligts-pro.core) 
