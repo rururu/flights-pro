@@ -10,7 +10,9 @@
 (def FLIGHTS (volatile! {}))
 (def BBX (volatile! [0 0 0 0]))
 (def STATUS (volatile! "STOP"))
-(def F24-TIO 2000)
+(def F24-TIO 10000)
+(def AIRPORTS (volatile! nil))
+(def FL-INFOS (volatile! {}))
 (defn json-web-data [url]
   (let [r @(client/get url)
        s (:status r)]
@@ -61,6 +63,27 @@
   (if-let [[id dat] (by-call cs)]
   id))
 
+(defn airports-by-ctrs []
+  (letfn [(mk-airports [rows]
+            (reduce #(assoc %1
+                            (get %2 "country")
+                            (assoc (or (get %1 (get %2 "country")) {})
+                              (get %2 "name") 
+                              %2)) 
+                        {} 
+                        rows))]
+  (or @AIRPORTS
+       (let [aps (json-web-data URL-ARP)
+              aps (mk-airports (get aps "rows"))]
+         (vreset! AIRPORTS aps)
+         aps))))
+
+(defn fl-info [id]
+  (or (@FL-INFOS id)
+     (let [info (json-web-data (str URL-FLT id))]
+       (vswap! FL-INFOS assoc id info)
+       info)))
+
 (defn dat-by-call [cs]
   (if-let [[id dat] (by-call cs)]
   dat))
@@ -70,7 +93,7 @@
 
 (defn start [process-fn]
   (asp/start-process STATUS 
-                               #(do (flights-in-bbx) (process-fn) true)
+                               #(do (flights-in-bbx) (process-fn FLIGHTS) true)
                                F24-TIO))
 
 (defn stop []

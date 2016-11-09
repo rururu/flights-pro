@@ -1,4 +1,4 @@
-; Mon Nov 07 21:17:08 MSK 2016
+; Wed Nov 09 22:42:23 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -28,6 +28,7 @@
 	(cloPrograms
 		[FlightPro_Class70002]
 		[FlightPro_Class20025]
+		[FlightPro_Class180002]
 		[FlightPro_Class20000])
 	(title "FlightPro Programs"))
 
@@ -129,7 +130,7 @@
 
 ([FlightPro_Class130000] of  HTML
 
-	(source "<!DOCTYPE html>\n<html>\n<head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n  <link rel=\"stylesheet\" href=\"css/leaflet.css\" />\n  <link rel=\"stylesheet\" href=\"leaflet/leaflet.css\"/>\n  <script src=\"leaflet/leaflet.js\"></script>\n  <script src=\"js/RotatedMarker.js\"></script>\n</head>\n<body>\n  <div id=\"map\"></div>\n  <div id=\"mousepos\"></div>\n  <div id=\"commands\"></div>\n  <div id=\"callsign\"></div>\n  <div id=\"hour\"></div>\n  <div id=\"minute\"></div>\n  <div id=\"from-country\"></div>\n  <div id=\"from-airport\"></div>\n  <div id=\"to-country\"></div>\n  <div id=\"to-airport\"></div>\n  <script src=\"js/chart.js\"></script>\n</body>\n</html>")
+	(source "<!DOCTYPE html>\n<html>\n<head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n  <link rel=\"stylesheet\" href=\"css/leaflet.css\" />\n  <link rel=\"stylesheet\" href=\"leaflet/leaflet.css\"/>\n  <script src=\"leaflet/leaflet.js\"></script>\n  <script src=\"js/RotatedMarker.js\"></script>\n</head>\n<body>\n  <div id=\"map\"></div>\n  <div id=\"mousepos\"></div>\n  <div id=\"commands-header\"></div>\n  <div id=\"commands\"></div>\n  <div id=\"callsign\"></div>\n  <div id=\"hour\"></div>\n  <div id=\"minute\"></div>\n  <div id=\"from-country\"></div>\n  <div id=\"from-airport\"></div>\n  <div id=\"to-country\"></div>\n  <div id=\"to-airport\"></div>\n  <script src=\"js/chart.js\"></script>\n</body>\n</html>")
 	(store-in "resources/public")
 	(title "leaflet"))
 
@@ -244,13 +245,14 @@
 		[FlightPro_Class140008]
 		[FlightPro_Class140005]
 		[FlightPro_Class140004]
-		[FlightPro_Class160012])
+		[FlightPro_Class160012]
+		[FlightPro_Class220026])
 	(cloNamespace [FlightPro_Class180001])
 	(title "Chart Controls"))
 
 ([FlightPro_Class150001] of  CSS
 
-	(source "#map {\n    position: absolute;\n    top: 0px;\n    bottom: 0;\n    left: 0;\n    right: 0;\n}\n#mousepos {\n  position:fixed;\n  bottom:10px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#commands {\n  position:fixed;\n  bottom:30px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#callsign {\n  position:fixed;\n  bottom:120px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}\n#hour {\n  position:fixed;\n  bottom:90px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}\n#minute {\n  position:fixed;\n  bottom:90px;\n  left:240px;\n  padding:5px;\n  z-index:100;\n}\n#from-country {\n  position:fixed;\n  bottom:70px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}\n#from-airport {\n  position:fixed;\n  bottom:50px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}\n#to-country {\n  position:fixed;\n  bottom:30px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}\n#to-airport {\n  position:fixed;\n  bottom:10px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}")
+	(source "#map {\n    position: absolute;\n    top: 0px;\n    bottom: 0;\n    left: 0;\n    right: 0;\n}\n#mousepos {\n  position:fixed;\n  bottom:10px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#commands-header {\n  position:fixed;\n  bottom:50px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#commands {\n  position:fixed;\n  bottom:40px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#callsign {\n  position:fixed;\n  bottom:120px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}\n#hour {\n  position:fixed;\n  bottom:90px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}\n#minute {\n  position:fixed;\n  bottom:90px;\n  left:240px;\n  padding:5px;\n  z-index:100;\n}\n#from-country {\n  position:fixed;\n  bottom:70px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}\n#from-airport {\n  position:fixed;\n  bottom:50px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}\n#to-country {\n  position:fixed;\n  bottom:30px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}\n#to-airport {\n  position:fixed;\n  bottom:10px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}")
 	(store-in "resources/public/css")
 	(title "leaflet"))
 
@@ -268,6 +270,8 @@
 		[FlightPro_Class80002]
 		[FlightPro_Class170005]
 		[FlightPro_Class170004]
+		[FlightPro_Class220029]
+		[FlightPro_Class220027]
 		[FlightPro_Class160011]
 		[FlightPro_Class160002])
 	(cloNamespace [FlightPro_Class150003])
@@ -275,6 +279,7 @@
 		[FlightPro_Class20005]
 		[FlightPro_Class160001]
 		[FlightPro_Class170002]
+		[FlightPro_Class220028]
 		[FlightPro_Class170003]
 		[FlightPro_Class160005]
 		[FlightPro_Class140000]
@@ -311,7 +316,7 @@
 
 ([FlightPro_Class160002] of  CloFunction
 
-	(source "(enable-console-print!)\n(init-chart)\n(asp/repeater receive-instructions INS-TIO)")
+	(source "(enable-console-print!)\n(init-chart)\n(asp/repeater receive-instructions INS-TIO)\n(ctl/show-chart-controls)")
 	(title "on-load-chart []"))
 
 ([FlightPro_Class160003] of  CloFunction
@@ -374,6 +379,11 @@
 	(source "(slurp (str ROOT \"leaflet.html\"))")
 	(title "chart-page []"))
 
+([FlightPro_Class170000] of  CloVar
+
+	(source "(volatile! nil)")
+	(title "AIRPORTS"))
+
 ([FlightPro_Class170001] of  CloVar
 
 	(source "(asp/mk-chan)")
@@ -399,6 +409,10 @@
 	(source "(doseq [{:keys [instruct] :as ins} (read-transit response)]\n  ;;(println [:INSTRUCT ins])\n  (condp = instruct\n    :create (let [{:keys [id vehicle]} ins]\n            (create-vehicle id vehicle))\n    :delete (let [{:keys [id]} ins]\n            (delete-vehicle id))\n    (println (str \"Unknown instruction: \" [instruct ins]))))")
 	(title "instructions-handler [response]"))
 
+([FlightPro_Class180000] of  CloFuncall
+
+	(source "(pro.server/start-server)"))
+
 ([FlightPro_Class180001] of  CloNamespace
 
 	(source "(:require\n [goog.string :as gstring]\n [goog.string.format])")
@@ -417,6 +431,8 @@
 		[FlightPro_Class200014]
 		[FlightPro_Class200015]
 		[FlightPro_Class200016]
+		[FlightPro_Class200002]
+		[FlightPro_Class220007]
 		[FlightPro_Class200017]
 		[FlightPro_Class210008]
 		[FlightPro_Class210009]
@@ -430,7 +446,9 @@
 		[FlightPro_Class190001]
 		[FlightPro_Class210007]
 		[FlightPro_Class210010]
-		[FlightPro_Class210011])
+		[FlightPro_Class210011]
+		[FlightPro_Class170000]
+		[FlightPro_Class220008])
 	(title "FlightRadar24 Client"))
 
 ([FlightPro_Class180003] of  CloNamespace
@@ -515,6 +533,7 @@
 		[FlightPro_Class20013]
 		[FlightPro_Class20014]
 		[FlightPro_Class20017]
+		[FlightPro_Class220030]
 		[FlightPro_Class20021]
 		[FlightPro_Class20022]
 		[FlightPro_Class20023]
@@ -530,6 +549,31 @@
 		[FlightPro_Class20007])
 	(title "Pro Server"))
 
+([FlightPro_Class200001] of  CloFuncall
+
+	(source "(in-ns 'pro.server)"))
+
+([FlightPro_Class200002] of  CloFunction
+
+	(source "(letfn [(mk-airports [rows]\n            (reduce #(assoc %1\n                            (get %2 \"country\")\n                            (assoc (or (get %1 (get %2 \"country\")) {})\n                              (get %2 \"name\") \n                              %2)) \n                        {} \n                        rows))]\n  (or @AIRPORTS\n       (let [aps (json-web-data URL-ARP)\n              aps (mk-airports (get aps \"rows\"))]\n         (vreset! AIRPORTS aps)\n         aps)))")
+	(title "airports-by-ctrs []"))
+
+([FlightPro_Class200003] of  CloFuncall
+
+	(source "(count (fr24.client/airports))"))
+
+([FlightPro_Class200004] of  CloFuncall
+
+	(source "(first (seq (fr24.client/airports)))"))
+
+([FlightPro_Class200005] of  CloFuncall
+
+	(source "(ffirst (seq (fr24.client/airports)))"))
+
+([FlightPro_Class200006] of  CloFuncall
+
+	(source "(keys (fr24.client/airports))"))
+
 ([FlightPro_Class200007] of  CloFunction
 
 	(source "(if (string? iod)\n  (@FLIGHTS iod)\n  iod)")
@@ -537,7 +581,7 @@
 
 ([FlightPro_Class20001] of  CloNamespace
 
-	(source "(:use protege.core)\n(:require [ring.adapter.jetty :as jetty]\n              [ring.util.response :as r]\n              [compojure.core :refer [defroutes GET]]\n              [compojure.handler :as handler]\n              [compojure.route :as route]\n              [cognitect.transit :as t]\n              [async.proc :as asp]\n              [cesium.core :as cz])\n(:import java.io.ByteArrayOutputStream)")
+	(source "(:use protege.core)\n(:require [ring.adapter.jetty :as jetty]\n              [ring.util.response :as r]\n              [compojure.core :refer [defroutes GET]]\n              [compojure.handler :as handler]\n              [compojure.route :as route]\n              [cognitect.transit :as t]\n              [async.proc :as asp]\n              [cesium.core :as cz]\n              [fr24.client :as fr24])\n(:import java.io.ByteArrayOutputStream)")
 	(title "pro.server"))
 
 ([FlightPro_Class200010] of  CloFunction
@@ -637,7 +681,7 @@
 
 ([FlightPro_Class20021] of  CloFunction
 
-	(source "(defroutes app-routes\n  (GET \"/\" [] (index-page))\n  (GET \"/chart\" [] (chart-page))\n  (GET \"/answer/\" [] (answer))\n  (GET \"/directives/\" [] (directives DIR-CHN))\n  (GET \"/instructions/\" [] (directives INS-CHN))\n  (GET \"/czml/\" [] (cz/events))\n  (route/files \"/\" (do (println [:ROOT-FILES ROOT]) {:root ROOT}))\n  (route/resources \"/\")\n  (route/not-found \"Not Found\"))\n\n(def APP\n  (handler/site app-routes))")
+	(source "(defroutes app-routes\n  (GET \"/\" [] (index-page))\n  (GET \"/chart\" [] (chart-page))\n  (GET \"/answer/\" [] (answer))\n  (GET \"/directives/\" [] (directives DIR-CHN))\n  (GET \"/instructions/\" [] (directives INS-CHN))\n  (GET \"/command/:cmd\" [cmd & params] \n    ((resolve (symbol (str \"pro.server/\" cmd))) params))\n  (GET \"/czml/\" [] (cz/events))\n  (route/files \"/\" (do (println [:ROOT-FILES ROOT]) {:root ROOT}))\n  (route/resources \"/\")\n  (route/not-found \"Not Found\"))\n\n(def APP\n  (handler/site app-routes))")
 	(title "init-server []"))
 
 ([FlightPro_Class20022] of  CloFunction
@@ -727,6 +771,22 @@
 	(source "(let [min-scl 0.25\n       scl (+ min-scl (* (- 1 min-scl) (- 1 (/ dist max-dist))))]\n  (location txt scl \"img/arrdn.png\" lat lon 100 40))")
 	(title "point-out [txt [lat lon] dist max-dist]"))
 
+([FlightPro_Class210002] of  CloFuncall
+
+	(source "(resolve 'watch-visible)"))
+
+([FlightPro_Class210003] of  CloFuncall
+
+	(source "(resolve (symbol \"watch-visible\"))"))
+
+([FlightPro_Class210004] of  CloFuncall
+
+	(source "((resolve (symbol \"watch-visible\")) {:a 5})"))
+
+([FlightPro_Class210005] of  CloFuncall
+
+	(source "(apply (resolve (symbol \"watch-visible\")) {:a 5})"))
+
 ([FlightPro_Class210007] of  CloVar
 
 	(source "(volatile! [0 0 0 0])")
@@ -739,7 +799,7 @@
 
 ([FlightPro_Class210009] of  CloFunction
 
-	(source "(asp/start-process STATUS \n                               #(do (flights-in-bbx) (process-fn) true)\n                               F24-TIO)")
+	(source "(asp/start-process STATUS \n                               #(do (flights-in-bbx) (process-fn FLIGHTS) true)\n                               F24-TIO)")
 	(title "start [process-fn]"))
 
 ([FlightPro_Class210010] of  CloVar
@@ -749,7 +809,7 @@
 
 ([FlightPro_Class210011] of  CloVar
 
-	(source "2000")
+	(source "10000")
 	(title "F24-TIO"))
 
 ([FlightPro_Class210012] of  CloFunction
@@ -761,6 +821,105 @@
 
 	(source "(asp/running? STATUS)")
 	(title "running? []"))
+
+([FlightPro_Class220007] of  CloFunction
+
+	(source "(or (@FL-INFOS id)\n     (let [info (json-web-data (str URL-FLT id))]\n       (vswap! FL-INFOS assoc id info)\n       info))")
+	(title "fl-info [id]"))
+
+([FlightPro_Class220008] of  CloVar
+
+	(source "(volatile! {})")
+	(title "FL-INFOS"))
+
+([FlightPro_Class220009] of  CloFuncall
+
+	(source "(fr24.client/airports))"))
+
+([FlightPro_Class220010] of  CloFuncall
+
+	(source "(fr24.client/set-bbx 60 59 29 31)"))
+
+([FlightPro_Class220011] of  CloFuncall
+
+	(source "(fr24.client/start (fn [fs] (println (keys @fs))))"))
+
+([FlightPro_Class220012] of  CloFuncall
+
+	(source "(fr24.client/stop)"))
+
+([FlightPro_Class220013] of  CloFuncall
+
+	(source "(fr24.client/start (fn [fs] (protege.core/ctpl (keys @fs))))"))
+
+([FlightPro_Class220014] of  CloFuncall
+
+	(source "(fr24.client/flt-info \"b8fd82b\")"))
+
+([FlightPro_Class220015] of  CloFuncall
+
+	(source "(:iata (fr24.client/flt-info \"b8fd82b\"))"))
+
+([FlightPro_Class220016] of  CloFuncall
+
+	(source "(def i (fr24.client/flt-info \"b8fd82b\"))"))
+
+([FlightPro_Class220017] of  CloFuncall
+
+	(source "(keys i)"))
+
+([FlightPro_Class220018] of  CloFuncall
+
+	(source "(:airport (fr24.client/flt-info \"b8fd82b\"))"))
+
+([FlightPro_Class220019] of  CloFuncall
+
+	(source "(:airport (fr24.client/flt-info \"b8fc7a1\"))"))
+
+([FlightPro_Class220020] of  CloFuncall
+
+	(source "(:aircraft (fr24.client/flt-info \"b8fc7a1\"))"))
+
+([FlightPro_Class220021] of  CloFuncall
+
+	(source "(keys (fr24.client/flt-info \"b8fc7a1\"))"))
+
+([FlightPro_Class220022] of  CloFuncall
+
+	(source "(\"airport\" (fr24.client/flt-info \"b8fc7a1\"))"))
+
+([FlightPro_Class220023] of  CloFuncall
+
+	(source "(get (fr24.client/flt-info \"b8fc7a1\") \"airport\")"))
+
+([FlightPro_Class220024] of  CloFuncall
+
+	(source "(get (fr24.client/flt-info \"b8fdfb7\") \"airport\")"))
+
+([FlightPro_Class220026] of  CloFunction
+
+	(source "(set-html! \"commands-header\" \"<h4>Commands</h4>\")\n(set-html! \"commands\"\n  \"<select onchange='javascript:chart.client.command(this.value)'>\n   <option value='commands'>Commands</option>\n   <option value='watch-visible'>Watch visible area</option>\n   <option value='intersect'>Intersections</option>\n   <option value='move-to'>Move to Airport</option>\n   <option value='schedule'>Schedule Flight</option>\n   <option value='camera'>Camera</option>\n   <option value='manual'>Manual Control</option>\n   <option value='wikipedia'>Wikipedia</option>\n   <option value='clear'>Clear</option>\n   </select>\")")
+	(title "show-chart-controls []"))
+
+([FlightPro_Class220027] of  CloFunction
+
+	(source "(GET (str CMD-URL\n  (condp = cmd\n    \"watch-visible\" (watch-visible)\n    cmd))\n  {:handler (fn [response])\n   :error-handler error-handler})")
+	(title "command [cmd]"))
+
+([FlightPro_Class220028] of  CloVar
+
+	(source "(str \"http://localhost:\" PORT \"/command/\")")
+	(title "CMD-URL"))
+
+([FlightPro_Class220029] of  CloFunction
+
+	(source "\"watch-visible?n=60&s=59&w=29&e=31\"")
+	(title "watch-visible []"))
+
+([FlightPro_Class220030] of  CloFunction
+
+	(source "(println [:PP params])\n(let [{:keys [n s w e]} params]\n  (println [n s w e]))")
+	(title "watch-visible [params]"))
 
 ([FlightPro_Class3] of  CloVar
 

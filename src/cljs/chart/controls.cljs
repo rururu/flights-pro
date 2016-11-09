@@ -15,3 +15,18 @@
 (defn mouse-move [lat lng]
   (set-html! "mousepos" (str "lat " (format "%.4f" lat) " lon " (format "%.4f" lng))))
 
+(defn show-chart-controls []
+  (set-html! "commands-header" "<h4>Commands</h4>")
+(set-html! "commands"
+  "<select onchange='javascript:chart.client.command(this.value)'>
+   <option value='commands'>Commands</option>
+   <option value='watch-visible'>Watch visible area</option>
+   <option value='intersect'>Intersections</option>
+   <option value='move-to'>Move to Airport</option>
+   <option value='schedule'>Schedule Flight</option>
+   <option value='camera'>Camera</option>
+   <option value='manual'>Manual Control</option>
+   <option value='wikipedia'>Wikipedia</option>
+   <option value='clear'>Clear</option>
+   </select>"))
+

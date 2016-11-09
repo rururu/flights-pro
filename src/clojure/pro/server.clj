@@ -7,7 +7,8 @@
               [compojure.route :as route]
               [cognitect.transit :as t]
               [async.proc :as asp]
-              [cesium.core :as cz])
+              [cesium.core :as cz]
+              [fr24.client :as fr24])
 (:import java.io.ByteArrayOutputStream))
 
 (def ROOT (str (System/getProperty "user.dir") "/resources/public/"))
@@ -39,6 +40,11 @@
   (-> (r/response (write-transit (deref (future (asp/one-out ANS-CHN)))))
        (r/header "Access-Control-Allow-Origin" "*")))
 
+(defn watch-visible [params]
+  (println [:PP params])
+(let [{:keys [n s w e]} params]
+  (println [n s w e])))
+
 (defn init-server []
   (defroutes app-routes
   (GET "/" [] (index-page))
@@ -46,6 +52,8 @@
   (GET "/answer/" [] (answer))
   (GET "/directives/" [] (directives DIR-CHN))
   (GET "/instructions/" [] (directives INS-CHN))
+  (GET "/command/:cmd" [cmd & params] 
+    ((resolve (symbol (str "pro.server/" cmd))) params))
   (GET "/czml/" [] (cz/events))
   (route/files "/" (do (println [:ROOT-FILES ROOT]) {:root ROOT}))
   (route/resources "/")

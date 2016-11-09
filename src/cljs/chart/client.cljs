@@ -11,6 +11,7 @@
 (def PORT 4444)
 (def CHR-URL (str "http://localhost:" PORT "/chart/"))
 (def INS-URL (str "http://localhost:" PORT "/instructions/"))
+(def CMD-URL (str "http://localhost:" PORT "/command/"))
 (def INS-TIO 1000)
 (def CHART (volatile! {}))
 (def VEHICLES (volatile! {}))
@@ -85,6 +86,17 @@
   (GET INS-URL {:handler instructions-handler
                        :error-handler error-handler}))
 
+(defn watch-visible []
+  "watch-visible?n=60&s=59&w=29&e=31")
+
+(defn command [cmd]
+  (GET (str CMD-URL
+  (condp = cmd
+    "watch-visible" (watch-visible)
+    cmd))
+  {:handler (fn [response])
+   :error-handler error-handler}))
+
 (defn init-chart []
   (println :INIT-CHART)
 (let [m (-> js/L
@@ -124,7 +136,8 @@
 (defn on-load-chart []
   (enable-console-print!)
 (init-chart)
-(asp/repeater receive-instructions INS-TIO))
+(asp/repeater receive-instructions INS-TIO)
+(ctl/show-chart-controls))
 
 
 (set! (.-onload js/window) (on-load-chart))
