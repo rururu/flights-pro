@@ -40,10 +40,41 @@
   (-> (r/response (write-transit (deref (future (asp/one-out ANS-CHN)))))
        (r/header "Access-Control-Allow-Origin" "*")))
 
-(defn watch-visible [params]
-  (println [:PP params])
-(let [{:keys [n s w e]} params]
-  (println [n s w e])))
+(defn process-flights [fls]
+  (println [:FLIGHTS-IN-BBX (count @fls)])
+(doseq [[k v] (seq @fls)]
+  (asp/pump-in INS-CHN
+    {:instruct :create
+     :id k
+     :vehicle {:coord   (fr24/coord v)
+                   :course  (fr24/course v)
+                   :speed   (fr24/speed v)
+                   :altitude (fr24/altitude v)
+                   :status "LEVEL"}})))
+
+(defn clear
+  ([params]
+  (clear))
+([]
+  (fr24/stop)
+  (asp/pump-in INS-CHN
+      {:instruct :clear})))
+
+(defn watch-visible
+  ([]
+  (let [[n s w e] @fr24/BBX]
+    (watch-visible {:n n :s s :w w :e e})))
+([params]
+  (let [{:keys [n s w e]} params]
+    (clear)
+    (fr24/set-bbx n s w e)
+    (fr24/start process-flights))))
+
+(defn update-watch-area []
+  (if (= @fr24/STATUS "RUN")
+  (do (println :update-watch-area)
+    ;;(watch-visible)
+    )))
 
 (defn init-server []
   (defroutes app-routes
@@ -60,7 +91,9 @@
   (route/not-found "Not Found"))
 
 (def APP
-  (handler/site app-routes)))
+  (handler/site app-routes))
+
+(asp/repeater update-watch-area (* 2 fr24/F24-TIO)))
 
 (defn start-server
   ([]

@@ -1,4 +1,4 @@
-; Wed Nov 09 22:42:23 MSK 2016
+; Thu Nov 10 21:56:33 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -264,6 +264,7 @@
 		[FlightPro_Class80004]
 		[FlightPro_Class160003]
 		[FlightPro_Class160007]
+		[FlightPro_Class220000]
 		[FlightPro_Class160010]
 		[FlightPro_Class160008]
 		[FlightPro_Class160004]
@@ -306,7 +307,7 @@
 
 ([FlightPro_Class160000] of  CloFunction
 
-	(source "(let [[n s w e] @BBX]\n  (when-let [ff (json-web-data (str URL-FLS \"?bounds=\" n \",\" s \",\" w \",\" e))]\n    (vreset! FLIGHTS ff)\n    ff))")
+	(source "(let [[n s w e] @BBX]\n  (if-let [ff (json-web-data (str URL-FLS \"?bounds=\" n \",\" s \",\" w \",\" e))]\n    (let [ff (filter #(vector? (second %)) ff)]\n      (vreset! FLIGHTS ff)\n      ff)))")
 	(title "flights-in-bbx []"))
 
 ([FlightPro_Class160001] of  CloVar
@@ -326,7 +327,7 @@
 
 ([FlightPro_Class160004] of  CloFunction
 
-	(source "(if (@VEHICLES id)\n  (delete-vehicle id))\n(let [mrk (create-marker mp)\n       mp (assoc mp :marker mrk\n                              :step (/ MOV-TIO 3600000)\n                              :mover (asp/repeater #(move-vehicle id) MOV-TIO))]\n  (.addTo mrk @CHART)\n  (set! (.. mrk -options -angle) (:course mp))\n  (vswap! VEHICLES assoc id (volatile! mp)))")
+	(source "(println [:CV id mp])\n(if (@VEHICLES id)\n  (delete-vehicle id))\n(let [mrk (create-marker mp)\n       mp (assoc mp :marker mrk\n                              :step (double (/ MOV-TIO 3600000))\n                              :mover (asp/repeater #(move-vehicle id) MOV-TIO))]\n  (println [:M MOV-TIO :ST (double (/ MOV-TIO 3600000)) :V (:speed mp)])\n  (.addTo mrk @CHART)\n  (set! (.. mrk -options -angle) (:course mp))\n  (vswap! VEHICLES assoc id (volatile! mp)))")
 	(title "create-vehicle [id mp]"))
 
 ([FlightPro_Class160005] of  CloVar
@@ -406,7 +407,7 @@
 
 ([FlightPro_Class170005] of  CloFunction
 
-	(source "(doseq [{:keys [instruct] :as ins} (read-transit response)]\n  ;;(println [:INSTRUCT ins])\n  (condp = instruct\n    :create (let [{:keys [id vehicle]} ins]\n            (create-vehicle id vehicle))\n    :delete (let [{:keys [id]} ins]\n            (delete-vehicle id))\n    (println (str \"Unknown instruction: \" [instruct ins]))))")
+	(source "(doseq [{:keys [instruct] :as ins} (read-transit response)]\n  ;;(println [:INSTRUCT ins])\n  (condp = instruct\n    :create (let [{:keys [id vehicle]} ins]\n            (create-vehicle id vehicle))\n    :delete (let [{:keys [id]} ins]\n            (delete-vehicle id))\n    :clear (clear-vehicles)\n    (println (str \"Unknown instruction: \" [instruct ins]))))")
 	(title "instructions-handler [response]"))
 
 ([FlightPro_Class180000] of  CloFuncall
@@ -455,6 +456,11 @@
 
 	(source "(:require\n  [org.httpkit.client :as client]\n  [clj-json.core :as json]\n  [async.proc :as asp])")
 	(title "fr24.client"))
+
+([FlightPro_Class190000] of  CloFunction
+
+	(source "(println [:FLIGHTS-IN-BBX (count @fls)])\n(doseq [[k v] (seq @fls)]\n  (asp/pump-in INS-CHN\n    {:instruct :create\n     :id k\n     :vehicle {:coord   (fr24/coord v)\n                   :course  (fr24/course v)\n                   :speed   (fr24/speed v)\n                   :altitude (fr24/altitude v)\n                   :status \"LEVEL\"}}))")
+	(title "process-flights [fls]"))
 
 ([FlightPro_Class190001] of  CloVar
 
@@ -533,7 +539,10 @@
 		[FlightPro_Class20013]
 		[FlightPro_Class20014]
 		[FlightPro_Class20017]
+		[FlightPro_Class190000]
+		[FlightPro_Class210001]
 		[FlightPro_Class220030]
+		[FlightPro_Class230005]
 		[FlightPro_Class20021]
 		[FlightPro_Class20022]
 		[FlightPro_Class20023]
@@ -548,6 +557,10 @@
 		[FlightPro_Class20006]
 		[FlightPro_Class20007])
 	(title "Pro Server"))
+
+([FlightPro_Class200000] of  CloFuncall
+
+	(source "f24.client/FLIGHTS"))
 
 ([FlightPro_Class200001] of  CloFuncall
 
@@ -681,7 +694,7 @@
 
 ([FlightPro_Class20021] of  CloFunction
 
-	(source "(defroutes app-routes\n  (GET \"/\" [] (index-page))\n  (GET \"/chart\" [] (chart-page))\n  (GET \"/answer/\" [] (answer))\n  (GET \"/directives/\" [] (directives DIR-CHN))\n  (GET \"/instructions/\" [] (directives INS-CHN))\n  (GET \"/command/:cmd\" [cmd & params] \n    ((resolve (symbol (str \"pro.server/\" cmd))) params))\n  (GET \"/czml/\" [] (cz/events))\n  (route/files \"/\" (do (println [:ROOT-FILES ROOT]) {:root ROOT}))\n  (route/resources \"/\")\n  (route/not-found \"Not Found\"))\n\n(def APP\n  (handler/site app-routes))")
+	(source "(defroutes app-routes\n  (GET \"/\" [] (index-page))\n  (GET \"/chart\" [] (chart-page))\n  (GET \"/answer/\" [] (answer))\n  (GET \"/directives/\" [] (directives DIR-CHN))\n  (GET \"/instructions/\" [] (directives INS-CHN))\n  (GET \"/command/:cmd\" [cmd & params] \n    ((resolve (symbol (str \"pro.server/\" cmd))) params))\n  (GET \"/czml/\" [] (cz/events))\n  (route/files \"/\" (do (println [:ROOT-FILES ROOT]) {:root ROOT}))\n  (route/resources \"/\")\n  (route/not-found \"Not Found\"))\n\n(def APP\n  (handler/site app-routes))\n\n(asp/repeater update-watch-area (* 2 fr24/F24-TIO))")
 	(title "init-server []"))
 
 ([FlightPro_Class20022] of  CloFunction
@@ -771,6 +784,15 @@
 	(source "(let [min-scl 0.25\n       scl (+ min-scl (* (- 1 min-scl) (- 1 (/ dist max-dist))))]\n  (location txt scl \"img/arrdn.png\" lat lon 100 40))")
 	(title "point-out [txt [lat lon] dist max-dist]"))
 
+([FlightPro_Class210000] of  CloFuncall
+
+	(source "(doseq [[k v] @fr24.client/FLIGHTS] (println [k v])"))
+
+([FlightPro_Class210001] of  CloFunction
+
+	(source "([params]\n  (clear))\n([]\n  (fr24/stop)\n  (asp/pump-in INS-CHN\n      {:instruct :clear}))")
+	(title "clear"))
+
 ([FlightPro_Class210002] of  CloFuncall
 
 	(source "(resolve 'watch-visible)"))
@@ -821,6 +843,23 @@
 
 	(source "(asp/running? STATUS)")
 	(title "running? []"))
+
+([FlightPro_Class220000] of  CloFunction
+
+	(source "(doseq [veh (vals @VEHICLES)]\n  (asp/close-chan (:mover @veh))\n  (.removeLayer @CHART (:marker @veh)))\n(vreset! VEHICLES {})")
+	(title "clear-vehicles []"))
+
+([FlightPro_Class220001] of  CloFuncall
+
+	(source "fr24.client/FLIGHTS"))
+
+([FlightPro_Class220002] of  CloFuncall
+
+	(source "(first @fr24.client/FLIDHTS)"))
+
+([FlightPro_Class220003] of  CloFuncall
+
+	(source "(first @fr24.client/FLIGHTS)"))
 
 ([FlightPro_Class220007] of  CloFunction
 
@@ -918,8 +957,25 @@
 
 ([FlightPro_Class220030] of  CloFunction
 
-	(source "(println [:PP params])\n(let [{:keys [n s w e]} params]\n  (println [n s w e]))")
-	(title "watch-visible [params]"))
+	(source "([]\n  (let [[n s w e] @fr24/BBX]\n    (watch-visible {:n n :s s :w w :e e})))\n([params]\n  (let [{:keys [n s w e]} params]\n    (clear)\n    (fr24/set-bbx n s w e)\n    (fr24/start process-flights)))")
+	(title "watch-visible"))
+
+([FlightPro_Class230000] of  CloFuncall
+
+	(source "(pro.server/clear)"))
+
+([FlightPro_Class230001] of  CloFuncall
+
+	(source "(doseq [[k v] @fr24.client/FLIGHTS] (println [k v]))"))
+
+([FlightPro_Class230002] of  CloFuncall
+
+	(source "(map println @fr24.client/FLIGHTS)"))
+
+([FlightPro_Class230005] of  CloFunction
+
+	(source "(if (= @fr24/STATUS \"RUN\")\n  (do (println :update-watch-area)\n    ;;(watch-visible)\n    ))")
+	(title "update-watch-area []"))
 
 ([FlightPro_Class3] of  CloVar
 

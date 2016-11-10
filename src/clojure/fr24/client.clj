@@ -28,9 +28,10 @@
 
 (defn flights-in-bbx []
   (let [[n s w e] @BBX]
-  (when-let [ff (json-web-data (str URL-FLS "?bounds=" n "," s "," w "," e))]
-    (vreset! FLIGHTS ff)
-    ff)))
+  (if-let [ff (json-web-data (str URL-FLS "?bounds=" n "," s "," w "," e))]
+    (let [ff (filter #(vector? (second %)) ff)]
+      (vreset! FLIGHTS ff)
+      ff))))
 
 (defn dat [iod]
   (if (string? iod)

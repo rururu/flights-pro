@@ -40,12 +40,6 @@
   (.removeLayer @CHART (:marker @veh))
   (vswap! VEHICLES dissoc id)))
 
-(defn clear-vehicles []
-  (doseq [veh (vals @VEHICLES)]
-  (asp/close-chan (:mover @veh))
-  (.removeLayer @CHART (:marker @veh)))
-(vreset! VEHICLES {}))
-
 (defn info [id]
   (println [:INFO id]))
 
@@ -64,14 +58,12 @@
     mk))
 
 (defn create-vehicle [id mp]
-  (println [:CV id mp])
-(if (@VEHICLES id)
+  (if (@VEHICLES id)
   (delete-vehicle id))
 (let [mrk (create-marker mp)
        mp (assoc mp :marker mrk
-                              :step (double (/ MOV-TIO 3600000))
+                              :step (/ MOV-TIO 3600000)
                               :mover (asp/repeater #(move-vehicle id) MOV-TIO))]
-  (println [:M MOV-TIO :ST (double (/ MOV-TIO 3600000)) :V (:speed mp)])
   (.addTo mrk @CHART)
   (set! (.. mrk -options -angle) (:course mp))
   (vswap! VEHICLES assoc id (volatile! mp))))
@@ -88,7 +80,6 @@
             (create-vehicle id vehicle))
     :delete (let [{:keys [id]} ins]
             (delete-vehicle id))
-    :clear (clear-vehicles)
     (println (str "Unknown instruction: " [instruct ins])))))
 
 (defn receive-instructions []
@@ -148,5 +139,9 @@
 (asp/repeater receive-instructions INS-TIO)
 (ctl/show-chart-controls))
 
+(defn clear-vehicles []
+  (doseq [veh (vals @VEHICLES)]
+  (asp/close-chan (:mover @veh))
+  (.removeLayer @CHART (:marker @veh)))
+(vreset! VEHICLES {}))
 
-(set! (.-onload js/window) (on-load-chart))
