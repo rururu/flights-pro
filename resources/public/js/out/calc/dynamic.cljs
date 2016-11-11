@@ -56,17 +56,16 @@
         (norm-crs (+ from step)))
     true to)))
 
-(defn equalize [carr gear param closer temp]
+(defn equalize [carr gear param-fn param closer temp]
   (letfn [(proc-fn [cr]
                       (let [c @cr
                              g (get c gear)
                              target (:target g)
                              step (* temp (:step g))]
                         (if (approx= (param c) target step)
-                            (do (vswap! cr assoc param target)
+                            (do (param-fn cr target)
                                   false)
-                            (do (vswap! cr assoc param 
-                                    (closer (param c) target step))
+                            (do (param-fn cr (closer (param c) target step))
                                   true))))]
   (vswap! carr assoc-in [gear :eqz-status] (volatile! "STOP"))
   (let [g (get @carr gear)]

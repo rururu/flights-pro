@@ -18,6 +18,7 @@
 (def PORT 4444)
 (def APP nil)
 (def SERV nil)
+(def CALLS (volatile! []))
 (defn index-page []
   (slurp (str ROOT "cezium.html")))
 
@@ -41,16 +42,17 @@
        (r/header "Access-Control-Allow-Origin" "*")))
 
 (defn process-flights [fls]
-  (println [:FLIGHTS-IN-BBX (count @fls)])
-(doseq [[k v] (seq @fls)]
+  (doseq [[k v] @fls]
   (asp/pump-in INS-CHN
-    {:instruct :create
+    {:instruct :create-update
      :id k
      :vehicle {:coord   (fr24/coord v)
                    :course  (fr24/course v)
                    :speed   (fr24/speed v)
                    :altitude (fr24/altitude v)
-                   :status "LEVEL"}})))
+                   :status "LEVEL"}}))
+(if (empty? @CALLS)
+  (vreset! CALLS (map fr24/callsign (keys @fls)))))
 
 (defn clear
   ([params]
@@ -58,7 +60,8 @@
 ([]
   (fr24/stop)
   (asp/pump-in INS-CHN
-      {:instruct :clear})))
+      {:instruct :clear})
+  ""))
 
 (defn watch-visible
   ([]
@@ -68,13 +71,14 @@
   (let [{:keys [n s w e]} params]
     (clear)
     (fr24/set-bbx n s w e)
-    (fr24/start process-flights))))
+    (fr24/start process-flights)
+    (vreset! CALLS [])
+    "")))
 
 (defn update-watch-area []
   (if (= @fr24/STATUS "RUN")
   (do (println :update-watch-area)
-    ;;(watch-visible)
-    )))
+    (watch-visible))))
 
 (defn init-server []
   (defroutes app-routes
@@ -91,9 +95,7 @@
   (route/not-found "Not Found"))
 
 (def APP
-  (handler/site app-routes))
-
-(asp/repeater update-watch-area (* 2 fr24/F24-TIO)))
+  (handler/site app-routes)))
 
 (defn start-server
   ([]

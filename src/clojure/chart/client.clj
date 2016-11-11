@@ -15,7 +15,7 @@
 (def INS-TIO 1000)
 (def CHART (volatile! {}))
 (def VEHICLES (volatile! {}))
-(def MOV-TIO 300)
+(def MOV-TIO 200)
 (def URL-ICO {"INTERSECT" 	(str "http://localhost:" PORT "/img/redpln32.png")
  "DESCEND" 	(str "http://localhost:" PORT "/img/greenpln32.png")
  "CLIMB" 	(str "http://localhost:" PORT "/img/bluepln32.png")
@@ -40,33 +40,46 @@
   (.removeLayer @CHART (:marker @veh))
   (vswap! VEHICLES dissoc id)))
 
+(defn clear-vehicles []
+  (doseq [veh (vals @VEHICLES)]
+  (asp/close-chan (:mover @veh))
+  (.removeLayer @CHART (:marker @veh)))
+(vreset! VEHICLES {}))
+
 (defn info [id]
   (println [:INFO id]))
 
-(defn create-marker [mp]
-  (let [[lat lon] (:coord mp)
+(defn create-update-marker [mrk mp]
+  (if mrk
+  (.removeLayer @CHART mrk))
+(let [[lat lon] (:coord mp)
        pos (js/L.LatLng. lat lon)
        ico (js/L.icon #js{:iconUrl (URL-ICO (:status mp)) 
                                   :iconSize #js[32, 32]})
        opt #js{:icon ico 
                    :draggable true}
-       mk (-> js/L (.rotatedMarker pos opt))]
-    (.on mk "click"
+       mrk (-> js/L (.rotatedMarker pos opt))]
+    (.on mrk "click"
          (fn [e]
            (info (ffirst (filter #(= (:marker @(second %)) (.-target e)) 
                                       (seq @VEHICLES))))))
-    mk))
+    (.addTo mrk @CHART)
+    (set! (.. mrk -options -angle) (:course mp))
+    mrk))
 
-(defn create-vehicle [id mp]
-  (if (@VEHICLES id)
-  (delete-vehicle id))
-(let [mrk (create-marker mp)
-       mp (assoc mp :marker mrk
-                              :step (/ MOV-TIO 3600000)
-                              :mover (asp/repeater #(move-vehicle id) MOV-TIO))]
-  (.addTo mrk @CHART)
-  (set! (.. mrk -options -angle) (:course mp))
-  (vswap! VEHICLES assoc id (volatile! mp))))
+(defn create-update-vehicle [id mp]
+  (if-let [veh (@VEHICLES id)]
+  (let [old @veh
+         mp (merge old mp)
+         mp (if (or (not= (:course old) (:course mp))
+                        (not= (:state old) (:state mp)))
+                 (assoc mp :marker (create-update-marker (:marker old) mp))
+                 mp)]
+    (vreset! veh mp))
+  (let [mp (assoc mp :marker (create-update-marker nil mp)
+                                :step (double (/ MOV-TIO 3600000))
+                                :mover (asp/repeater #(move-vehicle id) MOV-TIO))]
+    (vswap! VEHICLES assoc id (volatile! mp)))))
 
 (defn error-handler [response]
   (let [{:keys [status status-text]} response]
@@ -76,10 +89,11 @@
   (doseq [{:keys [instruct] :as ins} (read-transit response)]
   ;;(println [:INSTRUCT ins])
   (condp = instruct
-    :create (let [{:keys [id vehicle]} ins]
-            (create-vehicle id vehicle))
+    :create-update (let [{:keys [id vehicle]} ins]
+            (create-update-vehicle id vehicle))
     :delete (let [{:keys [id]} ins]
             (delete-vehicle id))
+    :clear (clear-vehicles)
     (println (str "Unknown instruction: " [instruct ins])))))
 
 (defn receive-instructions []
@@ -87,7 +101,11 @@
                        :error-handler error-handler}))
 
 (defn watch-visible []
-  "watch-visible?n=60&s=59&w=29&e=31")
+  (let [bnd (.getBounds @CHART)]
+  (str "watch-visible?n=" (.getNorth bnd)
+                             "&s=" (.getSouth bnd)
+                             "&w=" (.getWest bnd)
+                             "&e=" (.getEast bnd))))
 
 (defn command [cmd]
   (GET (str CMD-URL
@@ -138,10 +156,4 @@
 (init-chart)
 (asp/repeater receive-instructions INS-TIO)
 (ctl/show-chart-controls))
-
-(defn clear-vehicles []
-  (doseq [veh (vals @VEHICLES)]
-  (asp/close-chan (:mover @veh))
-  (.removeLayer @CHART (:marker @veh)))
-(vreset! VEHICLES {}))
 

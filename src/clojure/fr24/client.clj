@@ -10,7 +10,7 @@
 (def FLIGHTS (volatile! {}))
 (def BBX (volatile! [0 0 0 0]))
 (def STATUS (volatile! "STOP"))
-(def F24-TIO 10000)
+(def F24-TIO 20000)
 (def AIRPORTS (volatile! nil))
 (def FL-INFOS (volatile! {}))
 (defn json-web-data [url]
@@ -35,7 +35,7 @@
 
 (defn dat [iod]
   (if (string? iod)
-  (@FLIGHTS iod)
+  (second (first (filter #(= (first %) iod) @FLIGHTS)))
   iod))
 
 (defn coord [iod]
@@ -55,9 +55,8 @@
   (nth (dat iod) 16))
 
 (defn by-call [cs]
-  (if-let [flt (filter #(and (vector? (second %)) 
-                                   (= cs (callsign (second %)))) 
-                         (seq @FLIGHTS))]
+  (if-let [flt (filter #(= cs (callsign (second %)))
+                         @FLIGHTS)]
   (first flt)))
 
 (defn id-by-call [cs]
