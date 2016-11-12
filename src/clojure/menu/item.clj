@@ -9,5 +9,7 @@
     (when (seq pins)
       (println (str " 1." i " " (sv (first pins) "title") " = " (ClojureTab/loadProgram (first pins)) ))
       (recur (inc i) (rest pins))))
-  (println "  Annotated instance of WorkingPrograms not found!")))
+  (println "  Annotated instance of WorkingPrograms not found!"))
+(println"Starting Pro Server...")
+(eval '(pro.server/start-server)))
 

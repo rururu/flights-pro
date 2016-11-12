@@ -44,8 +44,8 @@
        elt (+ (:clk tur) hrs)
        way (* (:rdh tur) elt)
        [phi lam] (spherical-between (:phi tur) (:lam tur) way (:dir tur))]
-  (vswap! carr assoc-in [:turn-point :clk] elt)
-  [(/ phi PID180) (/ lam PID180)]))
+  (vswap! carr assoc :coord [(/ phi PID180) (/ lam PID180)]
+                                :turn-point (assoc tur :clk elt))))
 
 (defn turn [carr course temp]
   (vswap! carr assoc-in [:rudder :target] course)

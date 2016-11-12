@@ -12,7 +12,10 @@
 
 (def PORT 4444)
 (def BSE-URL (str "http://localhost:" PORT "/"))
-(def CARRIER (volatile! {:coord [0 0]
+(def DIR-URL (str "http://localhost:" PORT "/directives/"))
+(def CMD-URL (str "http://localhost:" PORT "/command/"))
+(def CARRIER (volatile! {:name "-"
+               :coord [0 0]
                :altitude 0
                :speed 0
                :course 0
@@ -27,7 +30,6 @@
                :engine {:target 0
                             :step 6
                             :time-out 1003}}))
-(def DIR-URL "http://localhost:4444/directives/")
 (def DIR-TIO 1000)
 (def CAR-TIO 1000)
 (def CAM-TIO 4000)
@@ -58,10 +60,25 @@
   (let [{:keys [status status-text]} response]
   (println (str "AJAX ERROR: " status " " status-text))))
 
+(defn onboard [call]
+  (GET (str CMD-URL "onboard?callsign=" call)
+  {:handler (fn [response])
+   :error-handler error-handler}))
+
+(defn carrier [callsign vehicle]
+  (if (not= callsign (:name @CARRIER))
+  (vswap! CARRIER assoc :name callsign))
+(vswap! CARRIER merge vehicle)
+(mov/set-turn-point CARRIER))
+
 (defn directives-handler [response]
   (doseq [{:keys [directive] :as dir} (read-transit response)]
   ;;(println [:DIRECTIVE dir])
   (condp = directive
+    :callsigns (let [{:keys [list]} dir]
+            (ctl/callsigns list))
+    :carrier (let [{:keys [callsign vehicle]} dir]
+            (carrier callsign vehicle))
     :fly (let [{:keys [lat lon crs alt period]} dir]
             (czm/fly-to lat lon alt crs period))
     :carrier (vreset! CARRIER (merge @CARRIER dir))
@@ -82,9 +99,6 @@
        crs (:course car)
        alt (:altitude car)]
     (czm/fly-to lat lon alt crs (/ CAM-TIO 1000))))
-
-(defn onboard [call]
-)
 
 (defn view [dir]
   (czm/camera :view dir))
@@ -117,7 +131,7 @@
 (defn on-load []
   (enable-console-print!)
 (czm/init-3D-view BSE-URL :terrain)
-(vswap! CARRIER assoc :step (double (/ CAR-TIO 3600000)))
+(vswap! CARRIER assoc :step-hrs (double (/ CAR-TIO 3600000)))
 (asp/repeater mov/move CARRIER CAR-TIO)
 (asp/repeater ctl/show-flight-data CARRIER HUD-TIO)
 (asp/repeater camera-move CARRIER CAM-TIO)
@@ -126,7 +140,3 @@
 
 
 (set! (.-onload js/window) (on-load))
-(vreset! CARRIER 
-(merge @CARRIER {
-:coord [60 30] :altitude 10000 :course 270 :speed 100
-}))

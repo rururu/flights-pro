@@ -19,6 +19,7 @@
 (def APP nil)
 (def SERV nil)
 (def CALLS (volatile! []))
+(def ONBOARD (volatile! "select"))
 (defn index-page []
   (slurp (str ROOT "cezium.html")))
 
@@ -42,17 +43,29 @@
        (r/header "Access-Control-Allow-Origin" "*")))
 
 (defn process-flights [fls]
-  (doseq [[k v] @fls]
-  (asp/pump-in INS-CHN
-    {:instruct :create-update
-     :id k
-     :vehicle {:coord   (fr24/coord v)
-                   :course  (fr24/course v)
-                   :speed   (fr24/speed v)
+  (let [cal @CALLS
+       onb @ONBOARD]
+  (doseq [[k v] (seq @fls)]
+    (let [cls (fr24/callsign v)
+           veh {:coord (fr24/coord v)
+                   :course (fr24/course v)
+                   :speed (fr24/speed v)
                    :altitude (fr24/altitude v)
-                   :status "LEVEL"}}))
-(if (empty? @CALLS)
-  (vreset! CALLS (map fr24/callsign (keys @fls)))))
+                   :status "LEVEL"}]
+      (if (= cls onb)
+        (asp/pump-in DIR-CHN
+          {:directive :carrier
+           :callsign cls
+           :vehicle veh}))
+      (asp/pump-in INS-CHN
+        {:instruct :create-update
+         :id k
+         :vehicle veh})))
+  (if (and (empty? cal) (= onb "select"))
+    (let [cal (map fr24/callsign (keys @fls))]
+      (vreset! CALLS cal)
+      (async.proc/pump-in DIR-CHN 
+        {:directive :callsigns :list cal})))))
 
 (defn clear
   ([params]
@@ -77,8 +90,7 @@
 
 (defn update-watch-area []
   (if (= @fr24/STATUS "RUN")
-  (do (println :update-watch-area)
-    (watch-visible))))
+  (watch-visible)))
 
 (defn init-server []
   (defroutes app-routes
@@ -95,7 +107,9 @@
   (route/not-found "Not Found"))
 
 (def APP
-  (handler/site app-routes)))
+  (handler/site app-routes))
+
+(asp/repeater update-watch-area (* 3 fr24/F24-TIO)))
 
 (defn start-server
   ([]
@@ -116,4 +130,8 @@
   (println "Location:" address)
   (when (java.awt.Desktop/isDesktopSupported)
     (.browse (java.awt.Desktop/getDesktop) (java.net.URI. address)))))
+
+(defn onboard [params]
+  (println [:PARAMS params])
+(vreset! ONBOARD (:callsign params)))
 

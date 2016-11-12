@@ -29,13 +29,14 @@
 (defn flights-in-bbx []
   (let [[n s w e] @BBX]
   (if-let [ff (json-web-data (str URL-FLS "?bounds=" n "," s "," w "," e))]
-    (let [ff (filter #(vector? (second %)) ff)]
+    (let [ff (filter #(vector? (second %)) ff)
+           ff (apply hash-map  (apply concat ff))]
       (vreset! FLIGHTS ff)
       ff))))
 
 (defn dat [iod]
   (if (string? iod)
-  (second (first (filter #(= (first %) iod) @FLIGHTS)))
+  (@FLIGHTS iod)
   iod))
 
 (defn coord [iod]

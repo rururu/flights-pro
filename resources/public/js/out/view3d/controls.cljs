@@ -64,3 +64,11 @@
   (set-html! "lat" (str "Latitude: " (format "%.4f" (first coord))))
   (set-html! "lon" (str "Longitude: " (format "%.4f" (second coord))))))
 
+(defn callsigns [list]
+  (set-html! "onboard-fld" 
+  (str "<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>"
+        "<option value='select'>select</option>"
+          (apply str (for [e list]
+                            (str "<option value='" e "'>" e "</option>")))
+        "</select>")))
+
