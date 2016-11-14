@@ -68,8 +68,15 @@
 (defn carrier [callsign vehicle]
   (if (not= callsign (:name @CARRIER))
   (vswap! CARRIER assoc :name callsign))
-(vswap! CARRIER merge vehicle)
-(mov/set-turn-point CARRIER))
+(let [old-crs (:course @CARRIER)
+       new-crs (:course vehicle)
+       veh (if (< (:altitude vehicle) 20)
+                (assoc vehicle :altitude 20)
+                vehicle)]
+  (vswap! CARRIER merge veh)
+  (mov/set-turn-point CARRIER)
+  (if (> (dyn/abs (- old-crs new-crs)) 10)
+    (turn-and-bank CARRIER new-crs))))
 
 (defn directives-handler [response]
   (doseq [{:keys [directive] :as dir} (read-transit response)]
@@ -81,7 +88,6 @@
             (carrier callsign vehicle))
     :fly (let [{:keys [lat lon crs alt period]} dir]
             (czm/fly-to lat lon alt crs period))
-    :carrier (vreset! CARRIER (merge @CARRIER dir))
     :camera (vreset! czm/CAMERA (merge @czm/CAMERA dir))
     :turn (let [{:keys [course]} dir]
               (turn-and-bank CARRIER course))

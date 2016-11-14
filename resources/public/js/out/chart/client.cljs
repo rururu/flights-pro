@@ -46,8 +46,14 @@
   (.removeLayer @CHART (:marker @veh)))
 (vreset! VEHICLES {}))
 
+(defn error-handler [response]
+  (let [{:keys [status status-text]} response]
+  (println (str "AJAX ERROR: " status " " status-text))))
+
 (defn info [id]
-  (println [:INFO id]))
+  (GET (str CMD-URL "info?id=" id)
+  {:handler (fn [response])
+   :error-handler error-handler}))
 
 (defn create-update-marker [mrk mp]
   (if mrk
@@ -83,19 +89,33 @@
     (mov/set-turn-point carr)
     (vswap! VEHICLES assoc id carr))))
 
-(defn error-handler [response]
-  (let [{:keys [status status-text]} response]
-  (println (str "AJAX ERROR: " status " " status-text))))
+(defn popup
+  ([id html time]
+  (let [vmp (@VEHICLES id)
+         [lat lon] (:coord @vmp)]
+    (popup lat lon html time)))
+([lat lon html time]
+  (let [pop (-> js/L (.popup {:maxWidth 600 :maxHeight 800 })
+                (.setLatLng (array lat lon))
+                (.setContent html))]
+    (.addLayer @CHART pop)
+    (if (> time 0)
+        (asp/delayer #(.removeLayer @CHART pop)
+                            time)))))
 
 (defn instructions-handler [response]
   (doseq [{:keys [instruct] :as ins} (read-transit response)]
   ;;(println [:INSTRUCT ins])
   (condp = instruct
     :create-update (let [{:keys [id vehicle]} ins]
-            (create-update-vehicle id vehicle))
+              (create-update-vehicle id vehicle))
     :delete (let [{:keys [id]} ins]
-            (delete-vehicle id))
+              (delete-vehicle id))
     :clear (clear-vehicles)
+    :popup (let [{:keys [id lat lon html time]} ins]
+             (cond
+               id (popup id html time)
+               (and lat lon) (popup lat lon html time)))
     (println (str "Unknown instruction: " [instruct ins])))))
 
 (defn receive-instructions []
@@ -121,7 +141,7 @@
   (println :INIT-CHART)
 (let [m (-> js/L
               (.map "map")
-              (.setView (array 60.0, 30.0) 10)) ;; SPb
+              (.setView (array 60.3, 25.0) 10)) ;; HEL
         tile1 (-> js/L (.tileLayer "http://{s}.tile.osm.org/{z}/{x}/{y}.png"
                                    #js{:maxZoom 16
                                        :attribution "Ru, OpenStreetMap &copy;"}))

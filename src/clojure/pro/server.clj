@@ -20,6 +20,7 @@
 (def SERV nil)
 (def CALLS (volatile! []))
 (def ONBOARD (volatile! "select"))
+(def POP-TIM 30000)
 (defn index-page []
   (slurp (str ROOT "cezium.html")))
 
@@ -76,6 +77,49 @@
       {:instruct :clear})
   ""))
 
+(defn make-info-html [call img dat]
+  (let [head (str "<h3>" call "</h3>")
+       itag (str "<img src=\"" img "\">")
+       rows (for [[k v] dat]
+                 (str "<tr><td>" k "</td><td>" v "</td></tr>"))
+      rows (apply str rows)]
+  (str head itag "<table>" rows "</table>")))
+
+(defn info [params]
+  (let [id (:id params)]
+  (if-let [inf (fr24/fl-info id)]
+    (let [cal (fr24/callsign id)
+           apt (inf "airport")
+           acr (inf "aircraft")
+           tim (inf "time")
+           img (get (first (get-in acr ["images" "thumbnails"])) "src")
+           [lat lon] (fr24/coord id)
+           dat [["from" (or (get-in apt ["origin" "name"]) "-")]
+                  ["to" (or (get-in apt ["destination" "name"]) "-")]
+                  ["airline" (or (get-in inf ["airline" "short"]) "-")]
+                  ["real-departure" (or (get-in tim ["real" "departure"]) "-")]
+                  ["scheduled-arrival" (or (get-in tim ["scheduled" "arrival"]) "-")]
+                  ["aircraft" (or (get-in acr ["model" "text"]) "-")]
+                  ["latitude" (or lat "-")]
+                  ["longitude" (or lon "-")]
+                  ["course" (or (fr24/course id) "-")]
+                  ["speed" (or (fr24/speed id) "-")]
+                  ["altitude" (or (fr24/altitude id) "-")]
+                  [(str "<input type='button' style='color:purple' value='Trail'
+                             onclick='chart.client.trail(\"" id "\")' >")
+                   (str "<input type='button' style='color:blue' value='Follow'
+                             onclick='chart.client.follow(\"" id "\")' >")]
+                  [""
+                   "<input type='button' style='color:red' value='Stop'
+                       onclick='chart.client.stopfollow()' >"]]
+           htm (make-info-html cal img dat)]
+      (asp/pump-in INS-CHN
+        {:instruct :popup
+         :id (:id params)
+         :html htm
+         :time POP-TIM}))))
+"")
+
 (defn watch-visible
   ([]
   (let [[n s w e] @fr24/BBX]
@@ -107,9 +151,7 @@
   (route/not-found "Not Found"))
 
 (def APP
-  (handler/site app-routes))
-
-(asp/repeater update-watch-area (* 3 fr24/F24-TIO)))
+  (handler/site app-routes)))
 
 (defn start-server
   ([]

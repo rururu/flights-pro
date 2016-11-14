@@ -1,4 +1,4 @@
-; Sat Nov 12 22:11:36 MSK 2016
+; Mon Nov 14 21:02:06 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -231,34 +231,6 @@
 	(name "instances_file_name")
 	(string_value "FlightPro.pins"))
 
-([KB_188989_Class616] of  Map
-
-	(entries
-		[KB_188989_Class617]
-		[KB_188989_Class618]
-		[KB_188989_Class619]))
-
-([KB_188989_Class617] of  Map_Entry
-
-	(key "suppress_instance_counting")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([KB_188989_Class618] of  Map_Entry
-
-	(key "add_name_on_instance_form")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([KB_188989_Class619] of  Map_Entry
-
-	(key "change_tracking_active")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
 ([KB_786132_Class212] of  Widget
 
 	(is_hidden FALSE)
@@ -350,6 +322,34 @@
 
 ([KB_932737_Class275] of  Property_List
 )
+
+([KB_969271_Class616] of  Map
+
+	(entries
+		[KB_969271_Class617]
+		[KB_969271_Class618]
+		[KB_969271_Class619]))
+
+([KB_969271_Class617] of  Map_Entry
+
+	(key "suppress_instance_counting")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([KB_969271_Class618] of  Map_Entry
+
+	(key "add_name_on_instance_form")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([KB_969271_Class619] of  Map_Entry
+
+	(key "change_tracking_active")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
 
 ([LAYOUT_PROPERTIES] of  Property_List
 

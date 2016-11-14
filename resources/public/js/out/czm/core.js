@@ -32,12 +32,12 @@ return time;
 }));
 });
 czm.core.fly_to = (function czm$core$fly_to(lat,lon,alt,crs,per){
-var pitch = (function (){var pred__23388 = cljs.core._EQ_;
-var expr__23389 = new cljs.core.Keyword(null,"view","view",1247994814).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
-if(cljs.core.truth_(pred__23388.call(null,"UP",expr__23389))){
+var pitch = (function (){var pred__21439 = cljs.core._EQ_;
+var expr__21440 = new cljs.core.Keyword(null,"view","view",1247994814).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
+if(cljs.core.truth_(pred__21439.call(null,"UP",expr__21440))){
 return (90);
 } else {
-if(cljs.core.truth_(pred__23388.call(null,"DOWN",expr__23389))){
+if(cljs.core.truth_(pred__21439.call(null,"DOWN",expr__21440))){
 return (-90);
 } else {
 return new cljs.core.Keyword(null,"pitch","pitch",1495126700).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
@@ -45,27 +45,27 @@ return new cljs.core.Keyword(null,"pitch","pitch",1495126700).cljs$core$IFn$_inv
 }
 })();
 var roll = new cljs.core.Keyword(null,"roll","roll",11266999).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
-var head = calc.dynamic.norm_crs.call(null,(function (){var pred__23391 = cljs.core._EQ_;
-var expr__23392 = new cljs.core.Keyword(null,"view","view",1247994814).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
-if(cljs.core.truth_(pred__23391.call(null,"BACKWARD",expr__23392))){
+var head = calc.dynamic.norm_crs.call(null,(function (){var pred__21442 = cljs.core._EQ_;
+var expr__21443 = new cljs.core.Keyword(null,"view","view",1247994814).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
+if(cljs.core.truth_(pred__21442.call(null,"BACKWARD",expr__21443))){
 return (crs + (180));
 } else {
-if(cljs.core.truth_(pred__23391.call(null,"RIGHT",expr__23392))){
+if(cljs.core.truth_(pred__21442.call(null,"RIGHT",expr__21443))){
 return (crs + (90));
 } else {
-if(cljs.core.truth_(pred__23391.call(null,"LEFT",expr__23392))){
+if(cljs.core.truth_(pred__21442.call(null,"LEFT",expr__21443))){
 return (crs - (90));
 } else {
-if(cljs.core.truth_(pred__23391.call(null,"FORWARD-RIGHT",expr__23392))){
+if(cljs.core.truth_(pred__21442.call(null,"FORWARD-RIGHT",expr__21443))){
 return (crs + (45));
 } else {
-if(cljs.core.truth_(pred__23391.call(null,"FORWARD-LEFT",expr__23392))){
+if(cljs.core.truth_(pred__21442.call(null,"FORWARD-LEFT",expr__21443))){
 return (crs - (45));
 } else {
-if(cljs.core.truth_(pred__23391.call(null,"BACKWARD-RIGHT",expr__23392))){
+if(cljs.core.truth_(pred__21442.call(null,"BACKWARD-RIGHT",expr__21443))){
 return (crs + (135));
 } else {
-if(cljs.core.truth_(pred__23391.call(null,"BACKWARD-LEFT",expr__23392))){
+if(cljs.core.truth_(pred__21442.call(null,"BACKWARD-LEFT",expr__21443))){
 return (crs - (135));
 } else {
 return crs;

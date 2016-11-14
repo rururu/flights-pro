@@ -43,3 +43,7 @@
 (defn close-chan [chn]
   (close! chn))
 
+(defn delayer [func time]
+  (go (<! (timeout time))
+  (func)))
+

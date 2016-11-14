@@ -1,4 +1,4 @@
-; Sat Nov 12 22:11:36 MSK 2016
+; Mon Nov 14 21:02:06 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -271,10 +271,11 @@
 		[FlightPro_Class160003]
 		[FlightPro_Class160007]
 		[FlightPro_Class220000]
+		[FlightPro_Class80002]
 		[FlightPro_Class160010]
 		[FlightPro_Class160008]
 		[FlightPro_Class160004]
-		[FlightPro_Class80002]
+		[FlightPro_Class310002]
 		[FlightPro_Class170005]
 		[FlightPro_Class170004]
 		[FlightPro_Class220029]
@@ -363,12 +364,12 @@
 
 ([FlightPro_Class160010] of  CloFunction
 
-	(source "(println [:INFO id])")
+	(source "(GET (str CMD-URL \"info?id=\" id)\n  {:handler (fn [response])\n   :error-handler error-handler})")
 	(title "info [id]"))
 
 ([FlightPro_Class160011] of  CloFunction
 
-	(source "(println :INIT-CHART)\n(let [m (-> js/L\n              (.map \"map\")\n              (.setView (array 60.0, 30.0) 10)) ;; SPb\n        tile1 (-> js/L (.tileLayer \"http://{s}.tile.osm.org/{z}/{x}/{y}.png\"\n                                   #js{:maxZoom 16\n                                       :attribution \"Ru, OpenStreetMap &copy;\"}))\n        tile2 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile3 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile4 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile5 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        base (clj->js {\"OpenStreetMap\" tile1\n                       \"Google Satellite\" tile2\n                       \"Google Streets\" tile3\n                       \"Google Hybrid\" tile4\n                       \"Google Terrain\" tile5})\n        ctrl (-> js/L (.control.layers base nil))]\n  (.addTo tile1 m)\n  (.addTo ctrl m)\n  (.on m \"mousemove\"\n         (fn [e] (ctl/mouse-move (.. e -latlng -lat) (.. e -latlng -lng))))\n  (vreset! CHART m))")
+	(source "(println :INIT-CHART)\n(let [m (-> js/L\n              (.map \"map\")\n              (.setView (array 60.3, 25.0) 10)) ;; HEL\n        tile1 (-> js/L (.tileLayer \"http://{s}.tile.osm.org/{z}/{x}/{y}.png\"\n                                   #js{:maxZoom 16\n                                       :attribution \"Ru, OpenStreetMap &copy;\"}))\n        tile2 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile3 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile4 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile5 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        base (clj->js {\"OpenStreetMap\" tile1\n                       \"Google Satellite\" tile2\n                       \"Google Streets\" tile3\n                       \"Google Hybrid\" tile4\n                       \"Google Terrain\" tile5})\n        ctrl (-> js/L (.control.layers base nil))]\n  (.addTo tile1 m)\n  (.addTo ctrl m)\n  (.on m \"mousemove\"\n         (fn [e] (ctl/mouse-move (.. e -latlng -lat) (.. e -latlng -lng))))\n  (vreset! CHART m))")
 	(title "init-chart []"))
 
 ([FlightPro_Class160012] of  CloFunction
@@ -413,7 +414,7 @@
 
 ([FlightPro_Class170005] of  CloFunction
 
-	(source "(doseq [{:keys [instruct] :as ins} (read-transit response)]\n  ;;(println [:INSTRUCT ins])\n  (condp = instruct\n    :create-update (let [{:keys [id vehicle]} ins]\n            (create-update-vehicle id vehicle))\n    :delete (let [{:keys [id]} ins]\n            (delete-vehicle id))\n    :clear (clear-vehicles)\n    (println (str \"Unknown instruction: \" [instruct ins]))))")
+	(source "(doseq [{:keys [instruct] :as ins} (read-transit response)]\n  ;;(println [:INSTRUCT ins])\n  (condp = instruct\n    :create-update (let [{:keys [id vehicle]} ins]\n              (create-update-vehicle id vehicle))\n    :delete (let [{:keys [id]} ins]\n              (delete-vehicle id))\n    :clear (clear-vehicles)\n    :popup (let [{:keys [id lat lon html time]} ins]\n             (cond\n               id (popup id html time)\n               (and lat lon) (popup lat lon html time)))\n    (println (str \"Unknown instruction: \" [instruct ins]))))")
 	(title "instructions-handler [response]"))
 
 ([FlightPro_Class180000] of  CloFuncall
@@ -549,6 +550,8 @@
 		[FlightPro_Class20017]
 		[FlightPro_Class190000]
 		[FlightPro_Class210001]
+		[FlightPro_Class310005]
+		[FlightPro_Class310000]
 		[FlightPro_Class220030]
 		[FlightPro_Class230005]
 		[FlightPro_Class20021]
@@ -566,7 +569,8 @@
 		[FlightPro_Class20006]
 		[FlightPro_Class20007]
 		[FlightPro_Class230000]
-		[FlightPro_Class290001])
+		[FlightPro_Class290001]
+		[FlightPro_Class310001])
 	(title "Pro Server"))
 
 ([FlightPro_Class200000] of  CloFuncall
@@ -705,7 +709,7 @@
 
 ([FlightPro_Class20021] of  CloFunction
 
-	(source "(defroutes app-routes\n  (GET \"/\" [] (index-page))\n  (GET \"/chart\" [] (chart-page))\n  (GET \"/answer/\" [] (answer))\n  (GET \"/directives/\" [] (directives DIR-CHN))\n  (GET \"/instructions/\" [] (directives INS-CHN))\n  (GET \"/command/:cmd\" [cmd & params] \n    ((resolve (symbol (str \"pro.server/\" cmd))) params))\n  (GET \"/czml/\" [] (cz/events))\n  (route/files \"/\" (do (println [:ROOT-FILES ROOT]) {:root ROOT}))\n  (route/resources \"/\")\n  (route/not-found \"Not Found\"))\n\n(def APP\n  (handler/site app-routes))\n\n(asp/repeater update-watch-area (* 3 fr24/F24-TIO))")
+	(source "(defroutes app-routes\n  (GET \"/\" [] (index-page))\n  (GET \"/chart\" [] (chart-page))\n  (GET \"/answer/\" [] (answer))\n  (GET \"/directives/\" [] (directives DIR-CHN))\n  (GET \"/instructions/\" [] (directives INS-CHN))\n  (GET \"/command/:cmd\" [cmd & params] \n    ((resolve (symbol (str \"pro.server/\" cmd))) params))\n  (GET \"/czml/\" [] (cz/events))\n  (route/files \"/\" (do (println [:ROOT-FILES ROOT]) {:root ROOT}))\n  (route/resources \"/\")\n  (route/not-found \"Not Found\"))\n\n(def APP\n  (handler/site app-routes))")
 	(title "init-server []"))
 
 ([FlightPro_Class20022] of  CloFunction
@@ -1052,7 +1056,7 @@
 
 ([FlightPro_Class300006] of  CloFunction
 
-	(source "(if (not= callsign (:name @CARRIER))\n  (vswap! CARRIER assoc :name callsign))\n(vswap! CARRIER merge vehicle)\n(mov/set-turn-point CARRIER)")
+	(source "(if (not= callsign (:name @CARRIER))\n  (vswap! CARRIER assoc :name callsign))\n(let [old-crs (:course @CARRIER)\n       new-crs (:course vehicle)\n       veh (if (< (:altitude vehicle) 20)\n                (assoc vehicle :altitude 20)\n                vehicle)]\n  (vswap! CARRIER merge veh)\n  (mov/set-turn-point CARRIER)\n  (if (> (dyn/abs (- old-crs new-crs)) 10)\n    (turn-and-bank CARRIER new-crs)))")
 	(title "carrier [callsign vehicle]"))
 
 ([FlightPro_Class30001] of  ClsRequired
@@ -1122,6 +1126,31 @@
 
 	(source "(vswap! carr assoc-in [:engine :target] speed)\n(dyn/equalize carr :engine set-speed :speed dyn/step-closer temp)")
 	(title "accel [carr speed temp]"))
+
+([FlightPro_Class310000] of  CloFunction
+
+	(source "(let [id (:id params)]\n  (if-let [inf (fr24/fl-info id)]\n    (let [cal (fr24/callsign id)\n           apt (inf \"airport\")\n           acr (inf \"aircraft\")\n           tim (inf \"time\")\n           img (get (first (get-in acr [\"images\" \"thumbnails\"])) \"src\")\n           [lat lon] (fr24/coord id)\n           dat [[\"from\" (or (get-in apt [\"origin\" \"name\"]) \"-\")]\n                  [\"to\" (or (get-in apt [\"destination\" \"name\"]) \"-\")]\n                  [\"airline\" (or (get-in inf [\"airline\" \"short\"]) \"-\")]\n                  [\"real-departure\" (or (get-in tim [\"real\" \"departure\"]) \"-\")]\n                  [\"scheduled-arrival\" (or (get-in tim [\"scheduled\" \"arrival\"]) \"-\")]\n                  [\"aircraft\" (or (get-in acr [\"model\" \"text\"]) \"-\")]\n                  [\"latitude\" (or lat \"-\")]\n                  [\"longitude\" (or lon \"-\")]\n                  [\"course\" (or (fr24/course id) \"-\")]\n                  [\"speed\" (or (fr24/speed id) \"-\")]\n                  [\"altitude\" (or (fr24/altitude id) \"-\")]\n                  [(str \"<input type='button' style='color:purple' value='Trail'\n                             onclick='chart.client.trail(\\\"\" id \"\\\")' >\")\n                   (str \"<input type='button' style='color:blue' value='Follow'\n                             onclick='chart.client.follow(\\\"\" id \"\\\")' >\")]\n                  [\"\"\n                   \"<input type='button' style='color:red' value='Stop'\n                       onclick='chart.client.stopfollow()' >\"]]\n           htm (make-info-html cal img dat)]\n      (asp/pump-in INS-CHN\n        {:instruct :popup\n         :id (:id params)\n         :html htm\n         :time POP-TIM}))))\n\"\"")
+	(title "info [params]"))
+
+([FlightPro_Class310001] of  CloVar
+
+	(source "30000")
+	(title "POP-TIM"))
+
+([FlightPro_Class310002] of  CloFunction
+
+	(source "([id html time]\n  (let [vmp (@VEHICLES id)\n         [lat lon] (:coord @vmp)]\n    (popup lat lon html time)))\n([lat lon html time]\n  (let [pop (-> js/L (.popup {:maxWidth 600 :maxHeight 800 })\n                (.setLatLng (array lat lon))\n                (.setContent html))]\n    (.addLayer @CHART pop)\n    (if (> time 0)\n        (asp/delayer #(.removeLayer @CHART pop)\n                            time))))")
+	(title "popup"))
+
+([FlightPro_Class310003] of  CloFunction
+
+	(source "(go (<! (timeout time))\n  (func))")
+	(title "delayer [func time]"))
+
+([FlightPro_Class310005] of  CloFunction
+
+	(source "(let [head (str \"<h3>\" call \"</h3>\")\n       itag (str \"<img src=\\\"\" img \"\\\">\")\n       rows (for [[k v] dat]\n                 (str \"<tr><td>\" k \"</td><td>\" v \"</td></tr>\"))\n      rows (apply str rows)]\n  (str head itag \"<table>\" rows \"</table>\"))")
+	(title "make-info-html [call img dat]"))
 
 ([FlightPro_Class4] of  CloVar
 
@@ -1238,7 +1267,8 @@
 		[FlightPro_Class70004]
 		[FlightPro_Class70005]
 		[FlightPro_Class70006]
-		[FlightPro_Class160018])
+		[FlightPro_Class160018]
+		[FlightPro_Class310003])
 	(cloNamespace [FlightPro_Class70009])
 	(title "CS Async Processing"))
 
@@ -1279,7 +1309,7 @@
 
 ([FlightPro_Class80003] of  CloFunction
 
-	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :callsigns (let [{:keys [list]} dir]\n            (ctl/callsigns list))\n    :carrier (let [{:keys [callsign vehicle]} dir]\n            (carrier callsign vehicle))\n    :fly (let [{:keys [lat lon crs alt period]} dir]\n            (czm/fly-to lat lon alt crs period))\n    :carrier (vreset! CARRIER (merge @CARRIER dir))\n    :camera (vreset! czm/CAMERA (merge @czm/CAMERA dir))\n    :turn (let [{:keys [course]} dir]\n              (turn-and-bank CARRIER course))\n    :accel (let [{:keys [speed temp]} dir]\n              (mov/accel CARRIER speed temp))\n    (println (str \"Unknown directive: \" [directive dir]))))")
+	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :callsigns (let [{:keys [list]} dir]\n            (ctl/callsigns list))\n    :carrier (let [{:keys [callsign vehicle]} dir]\n            (carrier callsign vehicle))\n    :fly (let [{:keys [lat lon crs alt period]} dir]\n            (czm/fly-to lat lon alt crs period))\n    :camera (vreset! czm/CAMERA (merge @czm/CAMERA dir))\n    :turn (let [{:keys [course]} dir]\n              (turn-and-bank CARRIER course))\n    :accel (let [{:keys [speed temp]} dir]\n              (mov/accel CARRIER speed temp))\n    (println (str \"Unknown directive: \" [directive dir]))))")
 	(title "directives-handler [response]"))
 
 ([FlightPro_Class80004] of  CloFunction
