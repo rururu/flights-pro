@@ -1,4 +1,4 @@
-; Mon Nov 14 21:02:06 MSK 2016
+; Wed Nov 23 21:37:36 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -29,6 +29,7 @@
 		[FlightPro_Class70002]
 		[FlightPro_Class20025]
 		[FlightPro_Class180002]
+		[RuleEngine_Class30000]
 		[FlightPro_Class20000])
 	(title "FlightPro Programs"))
 
@@ -98,16 +99,6 @@
 
 	(source "1000")
 	(title "CAR-TIO"))
-
-([FlightPro_Class100031] of  CloFunction
-
-	(source "(let [car @carr\n       [lat lon] (:coord car)\n       crs (:course car)\n       alt (:altitude car)]\n    (czm/fly-to lat lon alt crs (/ CAM-TIO 1000)))")
-	(title "camera-move [carr]"))
-
-([FlightPro_Class100032] of  CloVar
-
-	(source "4000")
-	(title "CAM-TIO"))
 
 ([FlightPro_Class110000] of  CloFunction
 
@@ -466,7 +457,7 @@
 
 ([FlightPro_Class190000] of  CloFunction
 
-	(source "(let [cal @CALLS\n       onb @ONBOARD]\n  (doseq [[k v] (seq @fls)]\n    (let [cls (fr24/callsign v)\n           veh {:coord (fr24/coord v)\n                   :course (fr24/course v)\n                   :speed (fr24/speed v)\n                   :altitude (fr24/altitude v)\n                   :status \"LEVEL\"}]\n      (if (= cls onb)\n        (asp/pump-in DIR-CHN\n          {:directive :carrier\n           :callsign cls\n           :vehicle veh}))\n      (asp/pump-in INS-CHN\n        {:instruct :create-update\n         :id k\n         :vehicle veh})))\n  (if (and (empty? cal) (= onb \"select\"))\n    (let [cal (map fr24/callsign (keys @fls))]\n      (vreset! CALLS cal)\n      (async.proc/pump-in DIR-CHN \n        {:directive :callsigns :list cal}))))")
+	(source "(let [crt (current-time)]\n  (rete/assert-frame ['Current 'time crt])\n  (doseq [[k v] (seq @fls)]\n    (let [alt (fr24/altitude v)]\n      (rete/assert-frame \n	['Flight\n	'id k\n	'callsign (fr24/callsign v)\n	'coord (fr24/coord v)\n	'course (fr24/course v)\n	'speed (fr24/speed v)\n	'altitude alt\n	'time crt\n	'status (if (> alt 0)\n                                     \"LEVEL\"\n                                     \"GROUND\")])))\n  (rete/fire))")
 	(title "process-flights [fls]"))
 
 ([FlightPro_Class190001] of  CloVar
@@ -506,7 +497,6 @@
 		[FlightPro_Class300006]
 		[FlightPro_Class80003]
 		[FlightPro_Class80001]
-		[FlightPro_Class100031]
 		[FlightPro_Class140021]
 		[FlightPro_Class140022]
 		[FlightPro_Class140023]
@@ -523,7 +513,6 @@
 		[FlightPro_Class100025]
 		[FlightPro_Class70000]
 		[FlightPro_Class100030]
-		[FlightPro_Class100032]
 		[FlightPro_Class140026])
 	(css [FlightPro_Class120000])
 	(epilogue "(set! (.-onload js/window) (on-load))")
@@ -548,7 +537,9 @@
 		[FlightPro_Class20013]
 		[FlightPro_Class20014]
 		[FlightPro_Class20017]
+		[FlightPro_Class320022]
 		[FlightPro_Class190000]
+		[FlightPro_Class320005]
 		[FlightPro_Class210001]
 		[FlightPro_Class310005]
 		[FlightPro_Class310000]
@@ -570,7 +561,8 @@
 		[FlightPro_Class20007]
 		[FlightPro_Class230000]
 		[FlightPro_Class290001]
-		[FlightPro_Class310001])
+		[FlightPro_Class310001]
+		[FlightPro_Class320006])
 	(title "Pro Server"))
 
 ([FlightPro_Class200000] of  CloFuncall
@@ -609,7 +601,7 @@
 
 ([FlightPro_Class20001] of  CloNamespace
 
-	(source "(:use protege.core)\n(:require [ring.adapter.jetty :as jetty]\n              [ring.util.response :as r]\n              [compojure.core :refer [defroutes GET]]\n              [compojure.handler :as handler]\n              [compojure.route :as route]\n              [cognitect.transit :as t]\n              [async.proc :as asp]\n              [cesium.core :as cz]\n              [fr24.client :as fr24])\n(:import java.io.ByteArrayOutputStream)")
+	(source "(:use protege.core)\n(:require [ring.adapter.jetty :as jetty]\n              [ring.util.response :as r]\n              [compojure.core :refer [defroutes GET]]\n              [compojure.handler :as handler]\n              [compojure.route :as route]\n              [cognitect.transit :as t]\n              [async.proc :as asp]\n              [cesium.core :as cz]\n              [fr24.client :as fr24]\n              [rete.core :as rete])\n(:import java.io.ByteArrayOutputStream)")
 	(title "pro.server"))
 
 ([FlightPro_Class200010] of  CloFunction
@@ -805,7 +797,7 @@
 
 ([FlightPro_Class210001] of  CloFunction
 
-	(source "([params]\n  (clear))\n([]\n  (fr24/stop)\n  (asp/pump-in INS-CHN\n      {:instruct :clear})\n  \"\")")
+	(source "([params]\n  (clear))\n([]\n  (fr24/stop)\n  (reset&start-es)\n  (asp/pump-in INS-CHN\n      {:instruct :clear})\n  \"\")")
 	(title "clear"))
 
 ([FlightPro_Class210002] of  CloFuncall
@@ -958,7 +950,7 @@
 
 ([FlightPro_Class260000] of  CloFunction
 
-	(source "(println \"Loading Clojure Programs...\")\n(if-let [wps (ClojureTab/findAnnotated (cls-instances \"WorkingPrograms\") nil)]\n  (loop [i 1 pins (svs wps \"cloPrograms\")]\n    (when (seq pins)\n      (println (str \" 1.\" i \" \" (sv (first pins) \"title\") \" = \" (ClojureTab/loadProgram (first pins)) ))\n      (recur (inc i) (rest pins))))\n  (println \"  Annotated instance of WorkingPrograms not found!\"))\n(println\"Starting Pro Server...\")\n(eval '(pro.server/start-server))")
+	(source "(println \"Loading Clojure Programs...\")\n(if-let [wps (ClojureTab/findAnnotated (cls-instances \"WorkingPrograms\") nil)]\n  (loop [i 1 pins (svs wps \"cloPrograms\")]\n    (when (seq pins)\n      (println (str \" 1.\" i \" \" (sv (first pins) \"title\") \" = \" (ClojureTab/loadProgram (first pins)) ))\n      (recur (inc i) (rest pins))))\n  (println \"  Annotated instance of WorkingPrograms not found!\"))\n(println\"Starting Pro Server...\")\n(eval '(pro.server/start-server))\n(println\"Starting Expert System...\")\n(eval '(ru.rules/run-engine \"Flights Pro Run\"))")
 	(title "clojure-work []"))
 
 ([FlightPro_Class260001] of  CloFuncall
@@ -977,42 +969,6 @@
 
 	(source "(fr24.client/callsign \"b955e65\")"))
 
-([FlightPro_Class260005] of  CloFuncall
-
-	(source "(fr24.client/dat \"b955e65\")"))
-
-([FlightPro_Class260006] of  CloFuncall
-
-	(source "(fr24.client/dat \"b957ad5\")"))
-
-([FlightPro_Class260007] of  CloFuncall
-
-	(source "(fr24.client/callsign \"b957ad5\")"))
-
-([FlightPro_Class260008] of  CloFuncall
-
-	(source "(fr24.client/callsign \"b951601\")"))
-
-([FlightPro_Class260009] of  CloFuncall
-
-	(source "(fr24.client/course \"b951601\")"))
-
-([FlightPro_Class260010] of  CloFuncall
-
-	(source "(fr24.client/speed \"b951601\")"))
-
-([FlightPro_Class260011] of  CloFuncall
-
-	(source "(fr24.client/speed \"b955e65\")"))
-
-([FlightPro_Class260012] of  CloFuncall
-
-	(source "(fr24.client/speed \"b957652\")"))
-
-([FlightPro_Class260013] of  CloFuncall
-
-	(source "(fr24.client/speed \"b957ad5\")"))
-
 ([FlightPro_Class270000] of  CloFunction
 
 	(source "(println [:PARAMS params])\n(vreset! ONBOARD (:callsign params))")
@@ -1023,13 +979,12 @@
 	(source "(set-html! \"onboard-fld\" \n  (str \"<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>\"\n        \"<option value='select'>select</option>\"\n          (apply str (for [e list]\n                            (str \"<option value='\" e \"'>\" e \"</option>\")))\n        \"</select>\"))")
 	(title "callsigns [list]"))
 
-([FlightPro_Class280000] of  CloFuncall
+([FlightPro_Class280002] of  Rule
 
-	(source "pro.server/ONBOARD"))
-
-([FlightPro_Class290000] of  CloFuncall
-
-	(source "(reduce-kv assoc {} [[:a b][:c d]])"))
+	(lhs "?old (Current time ?t1)\n(Current time ?t2\n	(> ?t2 ?t1))")
+	(rhs "(println [:CT ?t2])\n(retract ?old)")
+	(salience 1)
+	(title "af:MoveTime"))
 
 ([FlightPro_Class290001] of  CloVar
 
@@ -1045,14 +1000,6 @@
 
 	(source "(letfn [(proc-fn [cr]\n                      (let [c @cr\n                             g (get c gear)\n                             target (:target g)\n                             step (* temp (:step g))]\n                        (if (approx= (param c) target step)\n                            (do (param-fn cr target)\n                                  false)\n                            (do (param-fn cr (closer (param c) target step))\n                                  true))))]\n  (vswap! carr assoc-in [gear :eqz-status] (volatile! \"STOP\"))\n  (let [g (get @carr gear)]\n    (asp/start-process (:eqz-status g) \n                                   proc-fn\n                                   carr \n                                   (:time-out g))))")
 	(title "equalize [carr gear param-fn param closer temp]"))
-
-([FlightPro_Class300000] of  CloFuncall
-
-	(source "(flatten [[a [b c]] [d [e f]]])"))
-
-([FlightPro_Class300001] of  CloFuncall
-
-	(source "(reduce-kv assoc {} [[:a 1][:c 2]])"))
 
 ([FlightPro_Class300006] of  CloFunction
 
@@ -1152,6 +1099,102 @@
 	(source "(let [head (str \"<h3>\" call \"</h3>\")\n       itag (str \"<img src=\\\"\" img \"\\\">\")\n       rows (for [[k v] dat]\n                 (str \"<tr><td>\" k \"</td><td>\" v \"</td></tr>\"))\n      rows (apply str rows)]\n  (str head itag \"<table>\" rows \"</table>\"))")
 	(title "make-info-html [call img dat]"))
 
+([FlightPro_Class320000] of  CloFuncall
+
+	(source "(ru.rules/f 1)"))
+
+([FlightPro_Class320001] of  CloFuncall
+
+	(source "(ru.rules/sp :all)"))
+
+([FlightPro_Class320002] of  CloFuncall
+
+	(source "(rete.core/fire)"))
+
+([FlightPro_Class320003] of  CloFuncall
+
+	(source "(rete.core/assert-frame ['Current 'time 22])"))
+
+([FlightPro_Class320004] of  CloFuncall
+
+	(source "(rete.core/assert-frame ['Flight 'id \"r1\" 'time 22])"))
+
+([FlightPro_Class320005] of  CloFunction
+
+	(source "(rete/reset)\n(rete/assert-frame ['History 'time HISTORY-SEC])")
+	(title "reset&start-es []"))
+
+([FlightPro_Class320006] of  CloVar
+
+	(source "80")
+	(title "HISTORY-SEC"))
+
+([FlightPro_Class320010] of  RuleSet
+
+	(rules
+		[FlightPro_Class280002]
+		[FlightPro_Class320011]
+		[FlightPro_Class320013]
+		[FlightPro_Class320012])
+	(templates
+		[Flight]
+		[Current]
+		[History])
+	(title "All Flights"))
+
+([FlightPro_Class320011] of  Rule
+
+	(lhs "(History time ?ht)\n?old (Flight id ?id time ?ft)\n(Current time ?ct\n	(> (- ?ct ?ft) ?ht))")
+	(rhs "(retract ?old)")
+	(salience 1)
+	(title "af:ForegetPast"))
+
+([FlightPro_Class320012] of  Rule
+
+	(lhs "(Flight id ?id altitude ?a1 time ?t1)\n(Flight id ?id altitude ?a2 time ?t2)\n?fl (Flight id ?id altitude ?a3 time ?t3 status ?s3\n	((not= ?s3 \"DESCEND\")\n                         (< ?t1 ?t2 ?t3)\n	 (> ?a1 ?a2 ?a3)))")
+	(rhs "(println [:DESCEND ?id])\n(modify ?fl status \"DESCEND\")")
+	(salience 0)
+	(title "af:Descending"))
+
+([FlightPro_Class320013] of  Rule
+
+	(lhs "(Flight id ?id altitude ?a1 time ?t1)\n(Flight id ?id altitude ?a2 time ?t2)\n?fl (Flight id ?id altitude ?a3 time ?t3 status ?s3\n	((not= ?s3 \"CLIMB\")\n                         (< ?t1 ?t2 ?t3)\n	 (< ?a1 ?a2 ?a3)))")
+	(rhs "(println [:CLIMB ?id])\n(modify ?fl status \"CLIMB\")")
+	(salience 0)
+	(title "af:Climbing"))
+
+([FlightPro_Class320014] of  Run
+
+	(butt-ass-inss "Assert Instances/ru.rules/ass-inss")
+	(butt-fire "Fire/ru.rules/fire-all-rules")
+	(butt-run "Run/ru.rules/run-engine")
+	(butt-step "Step/ru.rules/step-engine")
+	(facts [FlightPro_Class320025])
+	(mode run)
+	(rule-sets [FlightPro_Class320010])
+	(steps 1)
+	(title "Flights Pro Run"))
+
+([FlightPro_Class320015] of  %3AINSTANCE-ANNOTATION
+
+	(%3AANNOTATED-INSTANCE [FlightPro_Class320014])
+	(%3ACREATION-TIMESTAMP "2016.11.23 17:10:20.165 MSK")
+	(%3ACREATOR "ru"))
+
+([FlightPro_Class320016] of  CloFunction
+
+	(source "(let [cal @CALLS\n       onb @ONBOARD]\n  (doseq [[k v] (seq @fls)]\n    (let [cls (fr24/callsign v)\n           veh {:coord (fr24/coord v)\n                   :course (fr24/course v)\n                   :speed (fr24/speed v)\n                   :altitude (fr24/altitude v)\n                   :status \"LEVEL\"}]\n      (if (= cls onb)\n        (asp/pump-in DIR-CHN\n          {:directive :carrier\n           :callsign cls\n           :vehicle veh}))\n      (asp/pump-in INS-CHN\n        {:instruct :create-update\n         :id k\n         :vehicle veh})))\n  (if (and (empty? cal) (= onb \"select\"))\n    (let [cal (map fr24/callsign (keys @fls))]\n      (vreset! CALLS cal)\n      (async.proc/pump-in DIR-CHN \n        {:directive :callsigns :list cal}))))")
+	(title "process-flights0 [fls]"))
+
+([FlightPro_Class320022] of  CloFunction
+
+	(source "(int (/ (System/currentTimeMillis) 1000))")
+	(title "current-time []"))
+
+([FlightPro_Class320025] of  History
+
+	(time "80"))
+
 ([FlightPro_Class4] of  CloVar
 
 	(source "(js/Cesium.Viewer. \n  \"cesiumContainer\" \n  #js{:animation false})")
@@ -1217,7 +1260,7 @@
 
 ([FlightPro_Class70001] of  CloFunction
 
-	(source "(enable-console-print!)\n(czm/init-3D-view BSE-URL :terrain)\n(vswap! CARRIER assoc :step-hrs (double (/ CAR-TIO 3600000)))\n(asp/repeater mov/move CARRIER CAR-TIO)\n(asp/repeater ctl/show-flight-data CARRIER HUD-TIO)\n(asp/repeater camera-move CARRIER CAM-TIO)\n(asp/repeater receive-directives DIR-TIO)\n(ctl/show-controls)")
+	(source "(enable-console-print!)\n(czm/init-3D-view BSE-URL :terrain)\n(vswap! CARRIER assoc :step-hrs (double (/ CAR-TIO 3600000)))\n(asp/repeater mov/move CARRIER CAR-TIO)\n(asp/repeater ctl/show-flight-data CARRIER HUD-TIO)\n(asp/repeater receive-directives DIR-TIO)\n(ctl/show-controls)")
 	(title "on-load []"))
 
 ([FlightPro_Class70002] of  CloProgram

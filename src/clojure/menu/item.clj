@@ -11,5 +11,7 @@
       (recur (inc i) (rest pins))))
   (println "  Annotated instance of WorkingPrograms not found!"))
 (println"Starting Pro Server...")
-(eval '(pro.server/start-server)))
+(eval '(pro.server/start-server))
+(println"Starting Expert System...")
+(eval '(ru.rules/run-engine "Flights Pro Run")))
 

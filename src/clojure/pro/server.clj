@@ -8,7 +8,8 @@
               [cognitect.transit :as t]
               [async.proc :as asp]
               [cesium.core :as cz]
-              [fr24.client :as fr24])
+              [fr24.client :as fr24]
+              [rete.core :as rete])
 (:import java.io.ByteArrayOutputStream))
 
 (def ROOT (str (System/getProperty "user.dir") "/resources/public/"))
@@ -21,6 +22,7 @@
 (def CALLS (volatile! []))
 (def ONBOARD (volatile! "select"))
 (def POP-TIM 30000)
+(def HISTORY-SEC 80)
 (defn index-page []
   (slurp (str ROOT "cezium.html")))
 
@@ -43,36 +45,38 @@
   (-> (r/response (write-transit (deref (future (asp/one-out ANS-CHN)))))
        (r/header "Access-Control-Allow-Origin" "*")))
 
+(defn current-time []
+  (int (/ (System/currentTimeMillis) 1000)))
+
 (defn process-flights [fls]
-  (let [cal @CALLS
-       onb @ONBOARD]
+  (let [crt (current-time)]
+  (rete/assert-frame ['Current 'time crt])
   (doseq [[k v] (seq @fls)]
-    (let [cls (fr24/callsign v)
-           veh {:coord (fr24/coord v)
-                   :course (fr24/course v)
-                   :speed (fr24/speed v)
-                   :altitude (fr24/altitude v)
-                   :status "LEVEL"}]
-      (if (= cls onb)
-        (asp/pump-in DIR-CHN
-          {:directive :carrier
-           :callsign cls
-           :vehicle veh}))
-      (asp/pump-in INS-CHN
-        {:instruct :create-update
-         :id k
-         :vehicle veh})))
-  (if (and (empty? cal) (= onb "select"))
-    (let [cal (map fr24/callsign (keys @fls))]
-      (vreset! CALLS cal)
-      (async.proc/pump-in DIR-CHN 
-        {:directive :callsigns :list cal})))))
+    (let [alt (fr24/altitude v)]
+      (rete/assert-frame 
+	['Flight
+	'id k
+	'callsign (fr24/callsign v)
+	'coord (fr24/coord v)
+	'course (fr24/course v)
+	'speed (fr24/speed v)
+	'altitude alt
+	'time crt
+	'status (if (> alt 0)
+                                     "LEVEL"
+                                     "GROUND")])))
+  (rete/fire)))
+
+(defn reset&start-es []
+  (rete/reset)
+(rete/assert-frame ['History 'time HISTORY-SEC]))
 
 (defn clear
   ([params]
   (clear))
 ([]
   (fr24/stop)
+  (reset&start-es)
   (asp/pump-in INS-CHN
       {:instruct :clear})
   ""))
