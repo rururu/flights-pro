@@ -70,8 +70,7 @@
   (vswap! carr assoc-in [gear :eqz-status] (volatile! "STOP"))
   (let [g (get @carr gear)]
     (asp/start-process (:eqz-status g) 
-                                   proc-fn
-                                   carr 
+                                   #(proc-fn carr) 
                                    (:time-out g)))))
 
 (defn check-diff-and-do [carr path1 path2 limit tio-pth final-fn]
@@ -83,8 +82,7 @@
                   true)))]
   (vswap! carr assoc :cdad-status (volatile! "STOP"))
   (asp/start-process (:cdad-status @carr) 
-                                 proc-fn
-                                 carr
+                                 #(proc-fn carr)
                                  (get-in @carr tio-pth))))
 
 (defn turn-right? [from to]

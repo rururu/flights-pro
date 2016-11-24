@@ -36,7 +36,7 @@
 
 (defn delete-vehicle [id]
   (when-let [veh (@VEHICLES id)]
-  (asp/close-chan (:mover @veh))
+  (asp/stop-process (:movst @veh))
   (.removeLayer @CHART (:marker @veh))
   (vswap! VEHICLES dissoc id)))
 
@@ -74,20 +74,15 @@
     mrk))
 
 (defn create-update-vehicle [id mp]
-  (if-let [veh (@VEHICLES id)]
-  (let [old @veh
-         mp (merge old mp)
-         mp (if (or (not= (:course old) (:course mp))
-                        (not= (:state old) (:state mp)))
-                 (assoc mp :marker (create-update-marker (:marker old) mp))
-                 mp)]
-    (vreset! veh mp))
-  (let [mp (assoc mp :marker (create-update-marker nil mp)
-                                :step-hrs (double (/ MOV-TIO 3600000))
-                                :mover (asp/repeater #(move-vehicle id) MOV-TIO))
+  (delete-vehicle id)
+(let [ms (volatile! "START")
+       mp (assoc mp :marker (create-update-marker nil mp)
+                              :step-hrs (double (/ MOV-TIO 3600000))
+	      :movst ms
+                              :mover (asp/start-process ms #(move-vehicle id) MOV-TIO))
          carr (volatile! mp)]
     (mov/set-turn-point carr)
-    (vswap! VEHICLES assoc id carr))))
+    (vswap! VEHICLES assoc id carr)))
 
 (defn popup
   ([id html time]
