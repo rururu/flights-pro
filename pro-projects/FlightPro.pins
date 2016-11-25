@@ -1,4 +1,4 @@
-; Thu Nov 24 20:52:43 MSK 2016
+; Fri Nov 25 22:16:10 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -26,6 +26,7 @@
 ([FlightPro_Class100000] of  WorkingPrograms
 
 	(cloPrograms
+		[FlightPro_Class230004]
 		[FlightPro_Class70002]
 		[FlightPro_Class20025]
 		[FlightPro_Class180002]
@@ -74,7 +75,7 @@
 ([FlightPro_Class100026] of  CloFunction
 
 	(source "(let [cosphi1 (js/Math.cos phi1)\n       sinphi1 (js/Math.sin phi1)\n       cosaz (js/Math.cos az)\n       sinaz (js/Math.sin az)\n       sinc (js/Math.sin c)\n       cosc (js/Math.cos c)\n       phi2 (js/Math.asin (+ (* sinphi1 cosc) (* cosphi1 sinc cosaz)))\n       lam2 (+ (js/Math.atan2 (* sinc sinaz) (- (* cosphi1 cosc) (* sinphi1 sinc cosaz))) lambda0)]\n  [phi2 lam2])")
-	(title "spherical-between [phi1 lambda0 c az]"))
+	(title "spherical-between-js [phi1 lambda0 c az]"))
 
 ([FlightPro_Class100027] of  CloFunction
 
@@ -83,7 +84,7 @@
 
 ([FlightPro_Class100028] of  CloFunction
 
-	(source "(let [car @carr\n       tur (:turn-point car)\n       hrs (:step-hrs car)\n       elt (+ (:clk tur) hrs)\n       way (* (:rdh tur) elt)\n       [phi lam] (spherical-between (:phi tur) (:lam tur) way (:dir tur))]\n  (vswap! carr assoc :coord [(/ phi PID180) (/ lam PID180)]\n                                :turn-point (assoc tur :clk elt)))")
+	(source "(let [car @carr\n       tur (:turn-point car)\n       hrs (:step-hrs car)\n       elt (+ (:clk tur) hrs)\n       way (* (:rdh tur) elt)\n       [phi lam] (spherical-between-js (:phi tur) (:lam tur) way (:dir tur))]\n  (vswap! carr assoc :coord [(/ phi PID180) (/ lam PID180)]\n                                :turn-point (assoc tur :clk elt)))")
 	(title "move [carr]"))
 
 ([FlightPro_Class100029] of  CloVar
@@ -403,6 +404,13 @@
 	(source "(doseq [{:keys [instruct] :as ins} (read-transit response)]\n  ;;(println [:INSTRUCT ins])\n  (condp = instruct\n    :create-update (let [{:keys [id vehicle]} ins]\n              (create-update-vehicle id vehicle))\n    :delete (let [{:keys [id]} ins]\n              (delete-vehicle id))\n    :clear (clear-vehicles)\n    :popup (let [{:keys [id lat lon html time]} ins]\n             (cond\n               id (popup id html time)\n               (and lat lon) (popup lat lon html time)))\n    (println (str \"Unknown instruction: \" [instruct ins]))))")
 	(title "instructions-handler [response]"))
 
+([FlightPro_Class180000] of  Rule
+
+	(lhs "(History time ?ht)\n?old (Flight id ?id time ?ft)\n(Current time ?ct\n	(> (- ?ct ?ft) ?ht))\n(not Flight id ?id)")
+	(rhs "(es/put-off-map ?id)")
+	(salience 2)
+	(title "af:PutFlightOffMap"))
+
 ([FlightPro_Class180001] of  CloNamespace
 
 	(source "(:require\n [goog.string :as gstring]\n [goog.string.format])")
@@ -555,6 +563,15 @@
 		[FlightPro_Class310001]
 		[FlightPro_Class320006])
 	(title "Pro Server"))
+
+([FlightPro_Class200000] of  CloFuncall
+
+	(source "fr24/STATUS"))
+
+([FlightPro_Class200001] of  CloFunction
+
+	(source "(asp/pump-in serv/INS-CHN\n	{:instruct :delete\n	 :id id})")
+	(title "put-off-map [id]"))
 
 ([FlightPro_Class200002] of  CloFunction
 
@@ -758,6 +775,11 @@
 	(source "(let [min-scl 0.25\n       scl (+ min-scl (* (- 1 min-scl) (- 1 (/ dist max-dist))))]\n  (location txt scl \"img/arrdn.png\" lat lon 100 40))")
 	(title "point-out [txt [lat lon] dist max-dist]"))
 
+([FlightPro_Class210000] of  CloFunction
+
+	(source "(let [cosphi1 (Math/cos phi1)\n       sinphi1 (Math/sin phi1)\n       cosaz (Math/cos az)\n       sinaz (Math/sin az)\n       sinc (Math/sin c)\n       cosc (Math/cos c)\n       phi2 (Math/asin (+ (* sinphi1 cosc) (* cosphi1 sinc cosaz)))\n       lam2 (+ (Math/atan2 (* sinc sinaz) (- (* cosphi1 cosc) (* sinphi1 sinc cosaz))) lambda0)]\n   [phi2 lam2])")
+	(title "spherical-between [^double phi1 ^double lambda0 ^double c ^double az]"))
+
 ([FlightPro_Class210001] of  CloFunction
 
 	(source "([params]\n  (clear))\n([]\n  (fr24/stop)\n  (reset&start-es)\n  (asp/pump-in INS-CHN\n      {:instruct :clear})\n  \"\")")
@@ -780,7 +802,7 @@
 
 ([FlightPro_Class210010] of  CloVar
 
-	(source "(volatile! \"STOP\")")
+	(source "(volatile! \"START\")")
 	(title "STATUS"))
 
 ([FlightPro_Class210011] of  CloVar
@@ -802,6 +824,10 @@
 
 	(source "(doseq [veh (vals @VEHICLES)]\n  (asp/close-chan (:mover @veh))\n  (.removeLayer @CHART (:marker @veh)))\n(vreset! VEHICLES {})")
 	(title "clear-vehicles []"))
+
+([FlightPro_Class220001] of  CloFuncall
+
+	(source "fr24.client/STATUS"))
 
 ([FlightPro_Class220007] of  CloFunction
 
@@ -835,13 +861,49 @@
 
 ([FlightPro_Class220030] of  CloFunction
 
-	(source "([]\n  (let [[n s w e] @fr24/BBX]\n    (watch-visible {:n n :s s :w w :e e})))\n([params]\n  (let [{:keys [n s w e]} params]\n    (clear)\n    (fr24/set-bbx n s w e)\n    (fr24/start process-flights)\n    (vreset! CALLS [])\n    \"\"))")
+	(source "([]\n  (let [[n s w e] @fr24/BBX]\n    (watch-visible {:n n :s s :w w :e e})))\n([params]\n  (println [:WATCH-VISIBLE params])\n  (let [{:keys [n s w e]} params]\n    (clear)\n    (fr24/set-bbx n s w e)\n    (fr24/start process-flights)\n    (vreset! CALLS [])\n    \"\"))")
 	(title "watch-visible"))
 
 ([FlightPro_Class230000] of  CloVar
 
 	(source "(volatile! [])")
 	(title "CALLS"))
+
+([FlightPro_Class230001] of  CloFunction
+
+	(source "(let [ldiff (- lambda lambda0)\n       cosphi (Math/cos phi)]\n  (Math/atan2 (* cosphi (Math/sin ldiff))\n                      (- (* (Math/cos phi1) (Math/sin phi)) \n                          (* (Math/sin phi1) cosphi (Math/cos ldiff)))))")
+	(title "spherical-azimuth [^double phi1 ^double lambda0 ^double phi ^double lambda]"))
+
+([FlightPro_Class230002] of  Rule
+
+	(lhs "?ob1 (Onboard time ?t1)\n?ob2 (Onboard time ?t2\n	(> ?t2 ?t1))")
+	(rhs "(retract ?ob1)")
+	(salience 1)
+	(title "af:RefereshOnboard"))
+
+([FlightPro_Class230003] of  Rule
+
+	(lhs "(Onboard id ?id1 time ?t1)\n(Onboard id ?id2 time ?t2\n	((not= ?id1 ?id2)\n	 (> ?t2 ?t1)))\n(Flight id ?id1 coord ?c1)\n(Flight id ?id2 coord ?c2 speed ?s2 altitude ?a2 callsign ?cs2)")
+	(rhs "(let [bea (geo/bear-deg ?c2 ?c1)]\n  (es/onboard ?c2 bea ?s2 ?a2 ?cs2)))")
+	(salience 2)
+	(title "af:SwitchOnboard"))
+
+([FlightPro_Class230004] of  ClsRequired
+
+	(cloFunctions
+		[FlightPro_Class210000]
+		[FlightPro_Class240006]
+		[FlightPro_Class230001]
+		[FlightPro_Class250002]
+		[FlightPro_Class250003]
+		[FlightPro_Class250004]
+		[FlightPro_Class250005]
+		[FlightPro_Class250006]
+		[FlightPro_Class250007]
+		[FlightPro_Class250008]
+		[FlightPro_Class250009])
+	(cloNamespace [FlightPro_Class240005])
+	(title "Geo"))
 
 ([FlightPro_Class230005] of  CloFunction
 
@@ -863,10 +925,92 @@
 	(source "(let [car @carr]\n  (set-turn-point carr (:coord car) (:course car) spd)\n  (vswap! carr assoc :speed spd))")
 	(title "set-speed [carr spd]"))
 
+([FlightPro_Class240005] of  CloNamespace
+
+	(title "geo"))
+
+([FlightPro_Class240006] of  CloFunction
+
+	(source "(let [pdiff (Math/sin (/ (- phi phi1) 2.0))\n       ldiff (Math/sin (/ (- lambda lambda0) 2.0))\n       rval (Math/sqrt (+ (* pdiff pdiff) (* (Math/cos phi1) (Math/cos phi) ldiff ldiff)))]\n   (* 2.0 (Math/asin rval)))")
+	(title "spherical-distance [^double phi1 ^double lambda0 ^double phi ^double lambda]"))
+
+([FlightPro_Class250000] of  CloFuncall
+
+	(source "(ru.rules/pp :all)"))
+
+([FlightPro_Class250001] of  CloFuncall
+
+	(source "(rete.core/assert-frame ['Camera 'onboard \"bb6e61b\" 'time 0])"))
+
+([FlightPro_Class250002] of  CloFunction
+
+	(source "(let [phi (Math/toRadians lat)\n       lam (Math/toRadians lon)\n       dir (Math/toRadians crs)\n       way (* spd tim)\n       way (Math/toRadians (/ way 60))\n       [phi2 lam2] (spherical-between phi lam way dir)]\n   [(Math/toDegrees phi2) (Math/toDegrees lam2)])")
+	(title "future-pos [[lat lon] crs spd tim]"))
+
+([FlightPro_Class250003] of  CloFunction
+
+	(source "(let [fi1 (Math/toRadians la1)\n       ld1 (Math/toRadians lo1)\n       fi2 (Math/toRadians la2)\n       ld2 (Math/toRadians lo2)\n       rad (spherical-distance fi1 ld1 fi2 ld2)]\n   (* (Math/toDegrees rad) 60))")
+	(title "distance-nm [[la1 lo1] [la2 lo2]]"))
+
+([FlightPro_Class250004] of  CloFunction
+
+	(source "(let [fi1 (Math/toRadians la1)\n       ld1 (Math/toRadians lo1)\n       fi2 (Math/toRadians la2)\n       ld2 (Math/toRadians lo2)\n       rad (spherical-azimuth fi1 ld1 fi2 ld2)\n       deg (Math/toDegrees rad)]\n  (cond\n    (< deg 0) (+ deg 360.0)\n    (> deg 360.0) (- deg 360.0)\n    true deg))")
+	(title "bear-deg [[la1 lo1] [la2 lo2]]"))
+
+([FlightPro_Class250005] of  CloFunction
+
+	(source "(let [denom (- (* (- y4 y3) (- x2 x1)) (* (- x4 x3) (- y2 y1)))]\n  (if (not (== denom 0.0))\n      (let [ua (/ (- (* (- x4 x3) (- y1 y3)) (* (- y4 y3) (- x1 x3))) denom)\n             ub (/ (- (* (- x2 x1) (- y1 y3)) (* (- y2 y1) (- x1 x3))) denom)]\n        (if (and (<= 0.0 ua 1.0) (<= 0.0 ub 1.0))\n            [(+ y1 (* ua (- y2 y1))) (+ x1 (* ua (- x2 x1)))]))))")
+	(title "seg-intersect [x1 y1 x2 y2 x3 y3 x4 y4]"))
+
+([FlightPro_Class250006] of  CloFunction
+
+	(source "(let [[la3 lo3] (future-pos [la1 lo1] crs1 spd1 tim)\n       [la4 lo4] (future-pos [la2 lo2] crs2 spd2 tim)]\n   (seg-intersect lo1 la1 lo3 la3 lo2 la2 lo4 la4))")
+	(title "future-intersect [[la1 lo1] crs1 spd1 [la2 lo2] crs2 spd2 tim]"))
+
+([FlightPro_Class250007] of  CloFunction
+
+	(source "(let [rb (+ b 180)]\n  (if (> rb 360) (- rb 360) rb))")
+	(title "rev-bear [b]"))
+
+([FlightPro_Class250008] of  CloFunction
+
+	(source "(let [bea (bear-deg [lat1 lon1] [lat2 lon2])\n       ca1 (- bea crs)]\n  (cond\n    (> ca1 180) (- ca1 360)\n    (< ca1 -180) (+ ca1 360)\n    true ca1))")
+	(title "course-angle [crs [lat1 lon1] [lat2 lon2]]"))
+
+([FlightPro_Class250009] of  CloFunction
+
+	(source "(let [ca (course-angle crs crd1 crd2)]\n   (or (> ca 90) (< ca -90)))")
+	(title "abaft [crs crd1 crd2]"))
+
+([FlightPro_Class250010] of  Rule
+
+	(lhs "(Onboard id ?id1)\n(Flight id ?id1 coord ?c1 time ?t1)\n(Flight id ?id1 coord ?c2 speed ?s2 altitude ?a2 time ?t2)\n(Current time ?t2)\n(not Flight id ?id1 time ?t3\n	(< ?t1 ?t3 ?t2))")
+	(rhs "(let [bea (geo/bear-deg ?c1 ?c2)]\n  (es/fly-to bea ?s2 ?a2))")
+	(salience 0)
+	(title "af:FlyTo"))
+
+([FlightPro_Class250011] of  CloFunction
+
+	(source "(asp/pump-in serv/DIR-CHN\n	{:directive :fly\n	 :course crs\n	 :speed spd\n	 :altitude alt})")
+	(title "fly-to [crs spd alt]"))
+
 ([FlightPro_Class260000] of  CloFunction
 
 	(source "(println \"Loading Clojure Programs...\")\n(if-let [wps (ClojureTab/findAnnotated (cls-instances \"WorkingPrograms\") nil)]\n  (loop [i 1 pins (svs wps \"cloPrograms\")]\n    (when (seq pins)\n      (println (str \" 1.\" i \" \" (sv (first pins) \"title\") \" = \" (ClojureTab/loadProgram (first pins)) ))\n      (recur (inc i) (rest pins))))\n  (println \"  Annotated instance of WorkingPrograms not found!\"))\n(println\"Starting Pro Server...\")\n(eval '(pro.server/start-server))\n(println\"Starting Expert System...\")\n(eval '(ru.rules/run-engine \"Flights Pro Run\"))")
 	(title "clojure-work []"))
+
+([FlightPro_Class260002] of  CloFuncall
+
+	(source "(rete.core/assert-frame ['Camera 'onboard \"bb6cc6e\" 'time 0])"))
+
+([FlightPro_Class260003] of  CloFunction
+
+	(source "(asp/pump-in serv/DIR-CHN\n	{:directive :carrier\n	 :callsign csg\n	 :vehicle {:coord crd\n	               :course crs\n	               :speed spd\n	               :altitude alt}})")
+	(title "onboard [crd crs spd alt csg]"))
+
+([FlightPro_Class260004] of  CloFuncall
+
+	(source "(rete.core/assert-frame ['Camera 'onboard \"bb778c2\" 'time 0])"))
 
 ([FlightPro_Class270000] of  CloFunction
 
@@ -880,7 +1024,11 @@
 
 ([FlightPro_Class280000] of  CloProgram
 
-	(cloFunctions [FlightPro_Class290006])
+	(cloFunctions
+		[FlightPro_Class290006]
+		[FlightPro_Class200001]
+		[FlightPro_Class250011]
+		[FlightPro_Class260003])
 	(cloNamespace [FlightPro_Class280001])
 	(title "ES Functions"))
 
@@ -1053,11 +1201,16 @@
 		[FlightPro_Class320011]
 		[FlightPro_Class320013]
 		[FlightPro_Class320012]
-		[FlightPro_Class290005])
+		[FlightPro_Class290005]
+		[FlightPro_Class180000]
+		[FlightPro_Class230002]
+		[FlightPro_Class230003]
+		[FlightPro_Class250010])
 	(templates
 		[Flight]
 		[Current]
-		[History])
+		[History]
+		[Onboard])
 	(title "All Flights"))
 
 ([FlightPro_Class320011] of  Rule
@@ -1070,14 +1223,14 @@
 ([FlightPro_Class320012] of  Rule
 
 	(lhs "(Flight id ?id altitude ?a1 time ?t1)\n(Flight id ?id altitude ?a2 time ?t2)\n?fl (Flight id ?id altitude ?a3 time ?t3 status ?s3\n	((not= ?s3 \"DESCEND\")\n                         (< ?t1 ?t2 ?t3)\n	 (> ?a1 ?a2 ?a3)))")
-	(rhs "(println [:DESCEND ?id])\n(modify ?fl status \"DESCEND\")")
+	(rhs "(modify ?fl status \"DESCEND\")")
 	(salience 0)
 	(title "af:Descending"))
 
 ([FlightPro_Class320013] of  Rule
 
 	(lhs "(Flight id ?id altitude ?a1 time ?t1)\n(Flight id ?id altitude ?a2 time ?t2)\n?fl (Flight id ?id altitude ?a3 time ?t3 status ?s3\n	((not= ?s3 \"CLIMB\")\n                         (< ?t1 ?t2 ?t3)\n	 (< ?a1 ?a2 ?a3)))")
-	(rhs "(println [:CLIMB ?id])\n(modify ?fl status \"CLIMB\")")
+	(rhs "(modify ?fl status \"CLIMB\")")
 	(salience 0)
 	(title "af:Climbing"))
 
@@ -1203,7 +1356,7 @@
 
 ([FlightPro_Class70004] of  CloFunction
 
-	(source "(when (= @status \"START\") \n  (vreset! status \"RUN\")\n  (go (do \n          (while (and (= @status \"RUN\")\n                            (proc-fn))\n                (<! (timeout time-out)))\n          (vreset! status \"STOP\")))\n  @status)")
+	(source "(when (not= @status \"RUN\") \n  (vreset! status \"RUN\")\n  (go (do \n          (while (and (= @status \"RUN\")\n                            (proc-fn))\n                (<! (timeout time-out)))\n          (vreset! status \"STOP\")))\n  @status)")
 	(title "start-process [status proc-fn time-out]"))
 
 ([FlightPro_Class70005] of  CloFunction
@@ -1270,7 +1423,7 @@
 
 ([FlightPro_Class80003] of  CloFunction
 
-	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :callsigns (let [{:keys [list]} dir]\n            (ctl/callsigns list))\n    :carrier (let [{:keys [callsign vehicle]} dir]\n            (carrier callsign vehicle))\n    :fly (let [{:keys [lat lon crs alt period]} dir]\n            (czm/fly-to lat lon alt crs period))\n    :camera (vreset! czm/CAMERA (merge @czm/CAMERA dir))\n    :turn (let [{:keys [course]} dir]\n              (turn-and-bank CARRIER course))\n    :accel (let [{:keys [speed temp]} dir]\n              (mov/accel CARRIER speed temp))\n    (println (str \"Unknown directive: \" [directive dir]))))")
+	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :callsigns (let [{:keys [list]} dir]\n            (ctl/callsigns list))\n    :carrier (let [{:keys [callsign vehicle]} dir]\n            (carrier callsign vehicle))\n    :fly (let [{:keys [course speed altitude]} dir]\n            (course course)\n            (speed speed)\n            (altitude altitude))\n    :camera (vreset! czm/CAMERA (merge @czm/CAMERA dir))\n    :turn (let [{:keys [course]} dir]\n              (turn-and-bank CARRIER course))\n    :accel (let [{:keys [speed temp]} dir]\n              (mov/accel CARRIER speed temp))\n    (println (str \"Unknown directive: \" [directive dir]))))")
 	(title "directives-handler [response]"))
 
 ([FlightPro_Class80004] of  CloFunction

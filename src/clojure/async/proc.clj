@@ -12,28 +12,18 @@
            (func param)
            (<! (timeout time-out))))))
 
-(defn start-process
-  ([status proc-fn time-out]
-  (when (= @status "STOP") 
-    (vreset! status "RUN")
-    (go (do 
+(defn start-process [status proc-fn time-out]
+  (when (not= @status "RUN") 
+  (vreset! status "RUN")
+  (go (do 
           (while (and (= @status "RUN")
                             (proc-fn))
                 (<! (timeout time-out)))
           (vreset! status "STOP")))
-    @status))
-([status proc-fn param time-out]
-  (when (= @status "STOP") 
-    (vreset! status "RUN")
-    (go (do 
-          (while (and (= @status "RUN")
-                            (proc-fn param))
-                (<! (timeout time-out)))
-          (vreset! status "STOP")))
-    @status)))
+  @status))
 
 (defn stop-process [status]
-  (vreset! status "STOP"))
+  (vreset! status "FINISH"))
 
 (defn running? [status]
   (= @status "RUN"))

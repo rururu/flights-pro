@@ -9,7 +9,7 @@
 (def URL-FLT "http://data-live.flightradar24.com/clickhandler/?version=1.5&flight=")
 (def FLIGHTS (volatile! {}))
 (def BBX (volatile! [0 0 0 0]))
-(def STATUS (volatile! "STOP"))
+(def STATUS (volatile! "START"))
 (def F24-TIO 20000)
 (def AIRPORTS (volatile! nil))
 (def FL-INFOS (volatile! {}))

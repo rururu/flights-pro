@@ -32,7 +32,6 @@
                             :time-out 1003}}))
 (def DIR-TIO 1000)
 (def CAR-TIO 1000)
-(def CAM-TIO 4000)
 (def HUD-TIO 831)
 (defn read-transit [x]
   (t/read (t/reader :json) x))
@@ -86,8 +85,10 @@
             (ctl/callsigns list))
     :carrier (let [{:keys [callsign vehicle]} dir]
             (carrier callsign vehicle))
-    :fly (let [{:keys [lat lon crs alt period]} dir]
-            (czm/fly-to lat lon alt crs period))
+    :fly (let [{:keys [course speed altitude]} dir]
+            (course course)
+            (speed speed)
+            (altitude altitude))
     :camera (vreset! czm/CAMERA (merge @czm/CAMERA dir))
     :turn (let [{:keys [course]} dir]
               (turn-and-bank CARRIER course))
@@ -98,13 +99,6 @@
 (defn receive-directives []
   (GET DIR-URL {:handler directives-handler
                        :error-handler error-handler}))
-
-(defn camera-move [carr]
-  (let [car @carr
-       [lat lon] (:coord car)
-       crs (:course car)
-       alt (:altitude car)]
-    (czm/fly-to lat lon alt crs (/ CAM-TIO 1000))))
 
 (defn view [dir]
   (czm/camera :view dir))
@@ -140,7 +134,6 @@
 (vswap! CARRIER assoc :step-hrs (double (/ CAR-TIO 3600000)))
 (asp/repeater mov/move CARRIER CAR-TIO)
 (asp/repeater ctl/show-flight-data CARRIER HUD-TIO)
-(asp/repeater camera-move CARRIER CAM-TIO)
 (asp/repeater receive-directives DIR-TIO)
 (ctl/show-controls))
 

@@ -85,3 +85,21 @@
 2016.11.24 17:45:14.211 MSK INFO: *** SYSTEM START ***
 2016.11.24 17:45:15.383 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
 2016.11.24 17:45:23.503 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 4 sec (ui) -- ProjectManager$3.run()
+2016.11.25 12:43:26.516 MSK INFO: *** SYSTEM START ***
+2016.11.25 12:43:28.130 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2016.11.25 12:43:44.805 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 4 sec (ui) -- ProjectManager$3.run()
+2016.11.25 13:17:27.729 MSK INFO: *** SYSTEM START ***
+2016.11.25 13:17:28.690 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2016.11.25 13:17:35.523 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 2 sec (ui) -- ProjectManager$3.run()
+2016.11.25 13:26:45.356 MSK INFO: *** SYSTEM START ***
+2016.11.25 13:26:46.115 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2016.11.25 13:26:50.959 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 2 sec (ui) -- ProjectManager$3.run()
+2016.11.25 14:36:10.130 MSK INFO: *** SYSTEM START ***
+2016.11.25 14:36:11.122 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2016.11.25 14:36:18.624 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 2 sec (ui) -- ProjectManager$3.run()
+2016.11.25 14:41:21.402 MSK INFO: *** SYSTEM START ***
+2016.11.25 14:41:22.169 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2016.11.25 14:41:27.607 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 2 sec (ui) -- ProjectManager$3.run()
+2016.11.25 16:04:03.864 MSK INFO: *** SYSTEM START ***
+2016.11.25 16:04:05.052 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2016.11.25 16:04:11.384 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 2 sec (ui) -- ProjectManager$3.run()

@@ -4,7 +4,7 @@
 
 (def PID180 (/ Math.PI 180))
 (def NMRAD (/ Math.PI 10800))
-(defn spherical-between [phi1 lambda0 c az]
+(defn spherical-between-js [phi1 lambda0 c az]
   (let [cosphi1 (js/Math.cos phi1)
        sinphi1 (js/Math.sin phi1)
        cosaz (js/Math.cos az)
@@ -43,7 +43,7 @@
        hrs (:step-hrs car)
        elt (+ (:clk tur) hrs)
        way (* (:rdh tur) elt)
-       [phi lam] (spherical-between (:phi tur) (:lam tur) way (:dir tur))]
+       [phi lam] (spherical-between-js (:phi tur) (:lam tur) way (:dir tur))]
   (vswap! carr assoc :coord [(/ phi PID180) (/ lam PID180)]
                                 :turn-point (assoc tur :clk elt))))
 

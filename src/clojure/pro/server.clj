@@ -129,6 +129,7 @@
   (let [[n s w e] @fr24/BBX]
     (watch-visible {:n n :s s :w w :e e})))
 ([params]
+  (println [:WATCH-VISIBLE params])
   (let [{:keys [n s w e]} params]
     (clear)
     (fr24/set-bbx n s w e)
