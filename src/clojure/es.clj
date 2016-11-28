@@ -20,12 +20,13 @@
 (defn fly-to [crs spd alt]
   (asp/pump-in serv/DIR-CHN
 	{:directive :fly
-	 :course crs
-	 :speed spd
-	 :altitude alt}))
+	 :crs crs
+	 :spd spd
+	 :alt alt}))
 
 (defn onboard [crd crs spd alt csg]
-  (asp/pump-in serv/DIR-CHN
+  (println [:ONBOARD csg])
+(asp/pump-in serv/DIR-CHN
 	{:directive :carrier
 	 :callsign csg
 	 :vehicle {:coord crd

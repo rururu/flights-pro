@@ -20,7 +20,6 @@
 (def APP nil)
 (def SERV nil)
 (def CALLS (volatile! []))
-(def ONBOARD (volatile! "select"))
 (def POP-TIM 30000)
 (def HISTORY-SEC 80)
 (defn index-page []
@@ -180,5 +179,6 @@
 
 (defn onboard [params]
   (println [:PARAMS params])
-(vreset! ONBOARD (:callsign params)))
+(rete/assert-frame ['Onboard 'callsign (:callsign params)])
+"")
 

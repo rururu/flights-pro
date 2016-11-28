@@ -1,4 +1,4 @@
-; Fri Nov 25 22:16:10 MSK 2016
+; Mon Nov 28 21:57:15 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -127,7 +127,7 @@
 
 ([FlightPro_Class130001] of  CloFunction
 
-	(source "(let [arc (dyn/abs (-  (:course @carr) course))]\n  (if (< arc 10)\n    (mov/turn carr course 1)\n    (let [bank (if (dyn/turn-right? (:course @carr) course)\n                      (:bank-right @carr)\n                      (- (:bank-right @carr)))\n           [bank temp] (if (> arc 70) \n                                 [(* 2 bank) 2]\n                                 [bank 1])]\n      (mov/turn carr course temp)\n      (dyn/check-diff-and-do carr\n        [:rudder :target]\n        [:course]\n        (* 2 (get-in @carr [:rudder :step]))\n        [:rudder :time-out]\n        #(czm/camera :roll 0))\n      (czm/camera :roll bank))))")
+	(source "(let [arc (dyn/abs (-  (:course @carr) course))\n       alt (:altitude @carr)]\n  (if (or (< alt 90) (< arc 8))\n    (mov/turn carr course 1)\n    (let [bank (if (dyn/turn-right? (:course @carr) course)\n                      (:bank-right @carr)\n                      (- (:bank-right @carr)))\n           [bank temp] (if (> arc 70) \n                                 [(* 2 bank) 2]\n                                 [bank 1])]\n      (mov/turn carr course temp)\n      (dyn/check-diff-and-do carr\n        [:rudder :target]\n        [:course]\n        (* 2 (get-in @carr [:rudder :step]))\n        [:rudder :time-out]\n        #(czm/camera :roll 0))\n      (czm/camera :roll bank))))")
 	(title "turn-and-bank [carr course]"))
 
 ([FlightPro_Class130003] of  CloFunction
@@ -164,7 +164,7 @@
 
 ([FlightPro_Class140003] of  CloFunction
 
-	(source "(set-html! \"autopilot\" \"<h4>Autopilot</h4>\")\n(set-html! \"course\" \"Course: 000\")\n(set-html! \"speed\" \"Speed: 000\")\n(set-html! \"altitude\" \"Altitude: 00000\")\n(set-html! \"lat\" \"Latitude: 00.0000\")\n(set-html! \"lon\" \"Longitude: 00.0000\")\n(set-html! \"camera\" \"<h4>Camera</h4>\")\n(set-html! \"onboard\" \"Onboard:\")\n(set-html! \"onboard-fld\" \n  \"<input value='callsign' style='width:90px'\n               onchange='javascript:view3d.client.onboard(this.value)'>\")\n(set-html! \"view\" \"View:\")\n(set-html! \"view-fld\" \n  \"<select onchange='javascript:view3d.client.view(this.value)' style='width:96px'>\n   <option value='FORWARD'>FORWARD</option>\n   <option value='BACKWARD'>BACKWARD</option>\n   <option value='RIGHT'>RIGHT</option>\n   <option value='LEFT'>LEFT</option>\n   <option value='UP'>UP</option>\n   <option value='DOWN'>DOWN</option>\n   <option value='FORWARD-RIGHT'>FORWARD-RIGHT</option>\n   <option value='FORWARD'>FORWARD</option>\n   <option value='BACKWARD-RIGHT'>BACKWARD-RIGHT</option>\n   <option value='BACKWARD-LEFT'>BACKWARD-LEFT</option>\n   </select>\")\n(set-html! \"pitch\" \"Pitch:\")\n(set-html! \"pitch-fld\" \n  \"<input value='0' style='width:90px'\n               onchange='javascript:view3d.client.pitch(this.value)'>\")\n(set-html! \"roll\" \"Roll:\")\n(set-html! \"roll-fld\" \n  \"<input value='0' style='width:90px'\n               onchange='javascript:view3d.client.roll(this.value)'>\")\n(set-html! \"course-fld\" \n  \"<input value='0' style='width:40px'\n                     onchange='javascript:view3d.client.course(this.value)'>\")\n(set-html! \"speed-fld\" \n  \"<input value='0' style='width:40px'\n               onchange='javascript:view3d.client.speed(this.value)'>\")\n(set-html! \"altitude-fld\" \n  \"<input value='0' style='width:40px'\n               onchange='javascript:view3d.client.altitude(this.value)'>\")")
+	(source "(set-html! \"autopilot\" \"<h4>Autopilot</h4>\")\n(set-html! \"course\" \"Course: 000\")\n(set-html! \"speed\" \"Speed: 000\")\n(set-html! \"altitude\" \"Altitude: 00000\")\n(set-html! \"lat\" \"Latitude: 00.0000\")\n(set-html! \"lon\" \"Longitude: 00.0000\")\n(set-html! \"camera\" \"<h4>Camera</h4>\")\n(set-html! \"onboard\" \"Onboard:\")\n(set-html! \"onboard-fld\" \n  \"<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>\n   <option value='callsign'>callsign</option>\n   <option value='select'>select</option>\")\n(set-html! \"view\" \"View:\")\n(set-html! \"view-fld\" \n  \"<select onchange='javascript:view3d.client.view(this.value)' style='width:96px'>\n   <option value='FORWARD'>FORWARD</option>\n   <option value='BACKWARD'>BACKWARD</option>\n   <option value='RIGHT'>RIGHT</option>\n   <option value='LEFT'>LEFT</option>\n   <option value='UP'>UP</option>\n   <option value='DOWN'>DOWN</option>\n   <option value='FORWARD-RIGHT'>FORWARD-RIGHT</option>\n   <option value='FORWARD'>FORWARD</option>\n   <option value='BACKWARD-RIGHT'>BACKWARD-RIGHT</option>\n   <option value='BACKWARD-LEFT'>BACKWARD-LEFT</option>\n   </select>\")\n(set-html! \"pitch\" \"Pitch:\")\n(set-html! \"pitch-fld\" \n  \"<input value='0' style='width:90px'\n               onchange='javascript:view3d.client.pitch(this.value)'>\")\n(set-html! \"roll\" \"Roll:\")\n(set-html! \"roll-fld\" \n  \"<input value='0' style='width:90px'\n               onchange='javascript:view3d.client.roll(this.value)'>\")\n(set-html! \"course-fld\" \n  \"<input value='0' style='width:40px'\n                     onchange='javascript:view3d.client.course(this.value)'>\")\n(set-html! \"speed-fld\" \n  \"<input value='0' style='width:40px'\n               onchange='javascript:view3d.client.speed(this.value)'>\")\n(set-html! \"altitude-fld\" \n  \"<input value='0' style='width:40px'\n               onchange='javascript:view3d.client.altitude(this.value)'>\")")
 	(title "show-controls []"))
 
 ([FlightPro_Class140004] of  CloFunction
@@ -189,7 +189,7 @@
 
 ([FlightPro_Class140019] of  CloFunction
 
-	(source "(let [crs (rdr/read-string crs)]\n  (if (<= 0 crs 360)\n    (turn-and-bank CARRIER crs)))")
+	(source "(let [crs (num-val crs)]\n  (if (<= 0 crs 360)\n    (turn-and-bank CARRIER crs)))")
 	(title "course [crs]"))
 
 ([FlightPro_Class140020] of  CloFunction
@@ -204,22 +204,22 @@
 
 ([FlightPro_Class140022] of  CloFunction
 
-	(source "(let [deg (rdr/read-string deg)]\n  (if (<= -180 deg 180)\n    (czm/camera :pitch deg)))")
+	(source "(let [deg (num-val deg)]\n  (if (<= -180 deg 180)\n    (czm/camera :pitch deg)))")
 	(title "pitch [deg]"))
 
 ([FlightPro_Class140023] of  CloFunction
 
-	(source "(let [deg (rdr/read-string deg)]\n  (if (<= -180 deg 180)\n    (czm/camera :roll deg)))")
+	(source "(let [deg (num-val deg)]\n  (if (<= -180 deg 180)\n    (czm/camera :roll deg)))")
 	(title "roll [deg]"))
 
 ([FlightPro_Class140024] of  CloFunction
 
-	(source "(let [spd (rdr/read-string spd)]\n  (let [tmp (if (< (:speed @CARRIER) 150) 2 1)]\n    (mov/accel CARRIER spd tmp)))")
+	(source "(let [spd (num-val spd)]\n  (let [tmp (if (< (:speed @CARRIER) 150) 2 1)]\n    (mov/accel CARRIER spd tmp)))")
 	(title "speed [spd]"))
 
 ([FlightPro_Class140025] of  CloFunction
 
-	(source "(let [alt (rdr/read-string alt)]\n  (let [tmp (if (< (:altitude @CARRIER) 1000) 1 3)]\n    (mov/elevate CARRIER alt tmp)))")
+	(source "(let [alt (num-val alt)]\n  (let [tmp (if (< (:altitude @CARRIER) 1500) 1 3)]\n    (mov/elevate CARRIER alt tmp)))")
 	(title "altitude [alt]"))
 
 ([FlightPro_Class140026] of  CloVar
@@ -489,19 +489,21 @@
 	(asset-path "js/out")
 	(butt-build "Build/cljs.compile/build")
 	(cloFunctions
+		[FlightPro_Class310006]
 		[FlightPro_Class80004]
 		[FlightPro_Class130001]
 		[FlightPro_Class80002]
 		[FlightPro_Class140020]
 		[FlightPro_Class300006]
-		[FlightPro_Class80003]
-		[FlightPro_Class80001]
 		[FlightPro_Class140021]
 		[FlightPro_Class140022]
 		[FlightPro_Class140023]
 		[FlightPro_Class140019]
 		[FlightPro_Class140024]
 		[FlightPro_Class140025]
+		[FlightPro_Class80003]
+		[FlightPro_Class80001]
+		[FlightPro_Class290000]
 		[FlightPro_Class70001])
 	(cloNamespace [FlightPro_Class60001])
 	(cloVars
@@ -512,9 +514,10 @@
 		[FlightPro_Class100025]
 		[FlightPro_Class70000]
 		[FlightPro_Class100030]
-		[FlightPro_Class140026])
+		[FlightPro_Class140026]
+		[FlightPro_Class300001])
 	(css [FlightPro_Class120000])
-	(epilogue "(set! (.-onload js/window) (on-load))")
+	(epilogue "(set! (.-onload js/window) (on-load))\n(carrier \"R1\"\n {:coord [60 30]\n  :course 270\n  :speed 315\n  :altitude 3000})")
 	(html [FlightPro_Class40000])
 	(options "{:verbose false}")
 	(output-dir "resources/public/js/out")
@@ -559,14 +562,13 @@
 		[FlightPro_Class20006]
 		[FlightPro_Class20007]
 		[FlightPro_Class230000]
-		[FlightPro_Class290001]
 		[FlightPro_Class310001]
 		[FlightPro_Class320006])
 	(title "Pro Server"))
 
 ([FlightPro_Class200000] of  CloFuncall
 
-	(source "fr24/STATUS"))
+	(source "(ru.rules/f 30)"))
 
 ([FlightPro_Class200001] of  CloFunction
 
@@ -822,12 +824,20 @@
 
 ([FlightPro_Class220000] of  CloFunction
 
-	(source "(doseq [veh (vals @VEHICLES)]\n  (asp/close-chan (:mover @veh))\n  (.removeLayer @CHART (:marker @veh)))\n(vreset! VEHICLES {})")
+	(source "(doseq [veh (vals @VEHICLES)]\n  (asp/stop-process (:movst @veh))\n  (.removeLayer @CHART (:marker @veh)))\n(vreset! VEHICLES {})")
 	(title "clear-vehicles []"))
 
 ([FlightPro_Class220001] of  CloFuncall
 
-	(source "fr24.client/STATUS"))
+	(source "(ru.rules/f 391)"))
+
+([FlightPro_Class220002] of  CloFuncall
+
+	(source "(ru.rules/f 32)"))
+
+([FlightPro_Class220003] of  CloFuncall
+
+	(source "(ru.rules/f 186)"))
 
 ([FlightPro_Class220007] of  CloFunction
 
@@ -874,17 +884,10 @@
 	(source "(let [ldiff (- lambda lambda0)\n       cosphi (Math/cos phi)]\n  (Math/atan2 (* cosphi (Math/sin ldiff))\n                      (- (* (Math/cos phi1) (Math/sin phi)) \n                          (* (Math/sin phi1) cosphi (Math/cos ldiff)))))")
 	(title "spherical-azimuth [^double phi1 ^double lambda0 ^double phi ^double lambda]"))
 
-([FlightPro_Class230002] of  Rule
-
-	(lhs "?ob1 (Onboard time ?t1)\n?ob2 (Onboard time ?t2\n	(> ?t2 ?t1))")
-	(rhs "(retract ?ob1)")
-	(salience 1)
-	(title "af:RefereshOnboard"))
-
 ([FlightPro_Class230003] of  Rule
 
-	(lhs "(Onboard id ?id1 time ?t1)\n(Onboard id ?id2 time ?t2\n	((not= ?id1 ?id2)\n	 (> ?t2 ?t1)))\n(Flight id ?id1 coord ?c1)\n(Flight id ?id2 coord ?c2 speed ?s2 altitude ?a2 callsign ?cs2)")
-	(rhs "(let [bea (geo/bear-deg ?c2 ?c1)]\n  (es/onboard ?c2 bea ?s2 ?a2 ?cs2)))")
+	(lhs "?ob1 (Onboard id ?id1)\n?ob2 (Onboard id ?idx callsign ?cs2\n	(nil? ?idx))\n(Flight id ?id2 coord ?crd2 course ?crs2 speed ?s2 altitude ?a2 callsign ?cs2)")
+	(rhs "(modify ?ob2 id ?id2)\n(retract ?ob1)\n(es/onboard ?crd2 ?crs2 ?s2 ?a2 ?cs2)")
 	(salience 2)
 	(title "af:SwitchOnboard"))
 
@@ -936,11 +939,7 @@
 
 ([FlightPro_Class250000] of  CloFuncall
 
-	(source "(ru.rules/pp :all)"))
-
-([FlightPro_Class250001] of  CloFuncall
-
-	(source "(rete.core/assert-frame ['Camera 'onboard \"bb6e61b\" 'time 0])"))
+	(source "pro.server/CALLS"))
 
 ([FlightPro_Class250002] of  CloFunction
 
@@ -985,13 +984,13 @@
 ([FlightPro_Class250010] of  Rule
 
 	(lhs "(Onboard id ?id1)\n(Flight id ?id1 coord ?c1 time ?t1)\n(Flight id ?id1 coord ?c2 speed ?s2 altitude ?a2 time ?t2)\n(Current time ?t2)\n(not Flight id ?id1 time ?t3\n	(< ?t1 ?t3 ?t2))")
-	(rhs "(let [bea (geo/bear-deg ?c1 ?c2)]\n  (es/fly-to bea ?s2 ?a2))")
+	(rhs "(let [bea (int (geo/bear-deg ?c1 ?c2))]\n  (es/fly-to bea ?s2 ?a2))")
 	(salience 0)
 	(title "af:FlyTo"))
 
 ([FlightPro_Class250011] of  CloFunction
 
-	(source "(asp/pump-in serv/DIR-CHN\n	{:directive :fly\n	 :course crs\n	 :speed spd\n	 :altitude alt})")
+	(source "(asp/pump-in serv/DIR-CHN\n	{:directive :fly\n	 :crs crs\n	 :spd spd\n	 :alt alt})")
 	(title "fly-to [crs spd alt]"))
 
 ([FlightPro_Class260000] of  CloFunction
@@ -999,27 +998,19 @@
 	(source "(println \"Loading Clojure Programs...\")\n(if-let [wps (ClojureTab/findAnnotated (cls-instances \"WorkingPrograms\") nil)]\n  (loop [i 1 pins (svs wps \"cloPrograms\")]\n    (when (seq pins)\n      (println (str \" 1.\" i \" \" (sv (first pins) \"title\") \" = \" (ClojureTab/loadProgram (first pins)) ))\n      (recur (inc i) (rest pins))))\n  (println \"  Annotated instance of WorkingPrograms not found!\"))\n(println\"Starting Pro Server...\")\n(eval '(pro.server/start-server))\n(println\"Starting Expert System...\")\n(eval '(ru.rules/run-engine \"Flights Pro Run\"))")
 	(title "clojure-work []"))
 
-([FlightPro_Class260002] of  CloFuncall
-
-	(source "(rete.core/assert-frame ['Camera 'onboard \"bb6cc6e\" 'time 0])"))
-
 ([FlightPro_Class260003] of  CloFunction
 
-	(source "(asp/pump-in serv/DIR-CHN\n	{:directive :carrier\n	 :callsign csg\n	 :vehicle {:coord crd\n	               :course crs\n	               :speed spd\n	               :altitude alt}})")
+	(source "(println [:ONBOARD csg])\n(asp/pump-in serv/DIR-CHN\n	{:directive :carrier\n	 :callsign csg\n	 :vehicle {:coord crd\n	               :course crs\n	               :speed spd\n	               :altitude alt}})")
 	(title "onboard [crd crs spd alt csg]"))
-
-([FlightPro_Class260004] of  CloFuncall
-
-	(source "(rete.core/assert-frame ['Camera 'onboard \"bb778c2\" 'time 0])"))
 
 ([FlightPro_Class270000] of  CloFunction
 
-	(source "(println [:PARAMS params])\n(vreset! ONBOARD (:callsign params))")
+	(source "(println [:PARAMS params])\n(let [cls (:callsign params)]\n  (if (not= cls \"select)\n    (rete/assert-frame ['Onboard 'callsign cls])\n    (let [lst (vec (map fr24/callsign (keys @fr24/FLIGHTS)))]\n      (asp/pump-in DIR_CHN\n	{:directive callsigns\n	 :list lst})))\n  \"\")")
 	(title "onboard [params]"))
 
 ([FlightPro_Class270001] of  CloFunction
 
-	(source "(set-html! \"onboard-fld\" \n  (str \"<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>\"\n        \"<option value='select'>select</option>\"\n          (apply str (for [e list]\n                            (str \"<option value='\" e \"'>\" e \"</option>\")))\n        \"</select>\"))")
+	(source "(set-html! \"onboard-fld\" \n  (str \"<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>\"\n          (if (empty? list)\n            (str \"<option value='callsign'>callsign</option>\n                   <option value='select'>select</option>\")\n            (str \"<option value='select'>select</option>\"\n              (apply str (for [e list]\n                                (str \"<option value='\" e \"'>\" e \"</option>\")))))\n        \"</select>\"))")
 	(title "callsigns [list]"))
 
 ([FlightPro_Class280000] of  CloProgram
@@ -1044,10 +1035,10 @@
 	(salience 1)
 	(title "af:MoveTime"))
 
-([FlightPro_Class290001] of  CloVar
+([FlightPro_Class290000] of  CloFunction
 
-	(source "(volatile! \"select\")")
-	(title "ONBOARD"))
+	(source "(let [car @carr\n       [lat lon] (:coord car)\n       crs (:course car)\n       alt (int (/ (:altitude car) 3.281))\n       alt (if (< alt 10) 10 alt)]\n    (czm/fly-to lat lon alt crs (/ CAM-TIO 1000)))")
+	(title "camera-move [carr]"))
 
 ([FlightPro_Class290003] of  %3AINSTANCE-ANNOTATION
 
@@ -1082,9 +1073,30 @@
 	(source "(letfn [(proc-fn [cr]\n                      (let [c @cr\n                             g (get c gear)\n                             target (:target g)\n                             step (* temp (:step g))]\n                        (if (approx= (param c) target step)\n                            (do (param-fn cr target)\n                                  false)\n                            (do (param-fn cr (closer (param c) target step))\n                                  true))))]\n  (vswap! carr assoc-in [gear :eqz-status] (volatile! \"STOP\"))\n  (let [g (get @carr gear)]\n    (asp/start-process (:eqz-status g) \n                                   #(proc-fn carr) \n                                   (:time-out g))))")
 	(title "equalize [carr gear param-fn param closer temp]"))
 
+([FlightPro_Class300001] of  CloVar
+
+	(source "4000")
+	(title "CAM-TIO"))
+
+([FlightPro_Class300002] of  CloFuncall
+
+	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :fly :course 340 :speed 400 :altitude 4000})"))
+
+([FlightPro_Class300003] of  CloFuncall
+
+	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :fly :crs 340 :spd 400 :alt 4000})"))
+
+([FlightPro_Class300004] of  CloFuncall
+
+	(source "(num 3.5)"))
+
+([FlightPro_Class300005] of  CloFuncall
+
+	(source "(num \"3.5\")"))
+
 ([FlightPro_Class300006] of  CloFunction
 
-	(source "(if (not= callsign (:name @CARRIER))\n  (vswap! CARRIER assoc :name callsign))\n(let [old-crs (:course @CARRIER)\n       new-crs (:course vehicle)\n       veh (if (< (:altitude vehicle) 20)\n                (assoc vehicle :altitude 20)\n                vehicle)]\n  (vswap! CARRIER merge veh)\n  (mov/set-turn-point CARRIER)\n  (if (> (dyn/abs (- old-crs new-crs)) 10)\n    (turn-and-bank CARRIER new-crs)))")
+	(source "(if (not= callsign (:name @CARRIER))\n  (vswap! CARRIER assoc :name callsign))\n(let [old-crs (:course @CARRIER)\n       new-crs (:course vehicle)]\n  (vswap! CARRIER merge vehicle)\n  (mov/set-turn-point CARRIER)\n  (if (> (dyn/abs (- old-crs new-crs)) 10)\n    (turn-and-bank CARRIER new-crs)))")
 	(title "carrier [callsign vehicle]"))
 
 ([FlightPro_Class30001] of  ClsRequired
@@ -1180,9 +1192,70 @@
 	(source "(let [head (str \"<h3>\" call \"</h3>\")\n       itag (str \"<img src=\\\"\" img \"\\\">\")\n       rows (for [[k v] dat]\n                 (str \"<tr><td>\" k \"</td><td>\" v \"</td></tr>\"))\n      rows (apply str rows)]\n  (str head itag \"<table>\" rows \"</table>\"))")
 	(title "make-info-html [call img dat]"))
 
-([FlightPro_Class320001] of  CloFuncall
+([FlightPro_Class310006] of  CloFunction
+
+	(source "(if (number? x) x (rdr/read-string x))")
+	(title "num-val [x]"))
+
+([FlightPro_Class310007] of  CloFuncall
+
+	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :fly :crs 350 :spd 500 :alt 5000})"))
+
+([FlightPro_Class310008] of  CloFuncall
+
+	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :fly :crs 5 :spd 430 :alt 8000})"))
+
+([FlightPro_Class310009] of  CloFuncall
+
+	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :fly :crs 20 :spd 430 :alt 8000})"))
+
+([FlightPro_Class310010] of  CloFuncall
+
+	(source "(rete.core/assert-frame ['Camera 'onboard \"bbd8069\" 'time 0])"))
+
+([FlightPro_Class310011] of  CloFuncall
+
+	(source "(ru.rules/f 73)"))
+
+([FlightPro_Class310012] of  CloFuncall
+
+	(source "(rete.core/assert-frame ['Onboard 'id \"bbd8069\" 'time 0])"))
+
+([FlightPro_Class310013] of  CloFuncall
+
+	(source "(rete.core/assert-frame ['Onboard 'id \"bbda2f4\" 'time 0])"))
+
+([FlightPro_Class310014] of  CloFuncall
+
+	(source "(rete.core/assert-frame ['Onboard 'id \"bbda886\" 'time 0])"))
+
+([FlightPro_Class310015] of  CloFuncall
+
+	(source "(rete.core/assert-frame ['Onboard 'id \"bbda453\" 'time 0])"))
+
+([FlightPro_Class310016] of  CloFuncall
+
+	(source "(rete.core/assert-frame ['Onboard 'id \"bbd9df1\" 'time 0])"))
+
+([FlightPro_Class310017] of  CloFuncall
+
+	(source "(rete.core/assert-frame ['Onboard 'id \"bbd60c3\" 'time 0])"))
+
+([FlightPro_Class310018] of  CloFuncall
+
+	(source "(rete.core/assert-frame ['Onboard 'id \"bbda85a\" 'time 0])"))
+
+([FlightPro_Class310019] of  CloFuncall
 
 	(source "(ru.rules/sp :all)"))
+
+([FlightPro_Class310020] of  CloFuncall
+
+	(source "(ru.rules/f 35)"))
+
+([FlightPro_Class310021] of  CloFuncall
+
+	(source "(ru.rules/pp :all)"))
 
 ([FlightPro_Class320005] of  CloFunction
 
@@ -1203,7 +1276,6 @@
 		[FlightPro_Class320012]
 		[FlightPro_Class290005]
 		[FlightPro_Class180000]
-		[FlightPro_Class230002]
 		[FlightPro_Class230003]
 		[FlightPro_Class250010])
 	(templates
@@ -1331,7 +1403,7 @@
 
 ([FlightPro_Class70001] of  CloFunction
 
-	(source "(enable-console-print!)\n(czm/init-3D-view BSE-URL :terrain)\n(vswap! CARRIER assoc :step-hrs (double (/ CAR-TIO 3600000)))\n(asp/repeater mov/move CARRIER CAR-TIO)\n(asp/repeater ctl/show-flight-data CARRIER HUD-TIO)\n(asp/repeater receive-directives DIR-TIO)\n(ctl/show-controls)")
+	(source "(enable-console-print!)\n(czm/init-3D-view BSE-URL :terrain)\n(vswap! CARRIER assoc :step-hrs (double (/ CAR-TIO 3600000)))\n(asp/repeater mov/move CARRIER CAR-TIO)\n(asp/repeater ctl/show-flight-data CARRIER HUD-TIO)\n(asp/repeater camera-move CARRIER CAM-TIO)\n(asp/repeater receive-directives DIR-TIO)\n(ctl/show-controls)")
 	(title "on-load []"))
 
 ([FlightPro_Class70002] of  CloProgram
@@ -1423,7 +1495,7 @@
 
 ([FlightPro_Class80003] of  CloFunction
 
-	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :callsigns (let [{:keys [list]} dir]\n            (ctl/callsigns list))\n    :carrier (let [{:keys [callsign vehicle]} dir]\n            (carrier callsign vehicle))\n    :fly (let [{:keys [course speed altitude]} dir]\n            (course course)\n            (speed speed)\n            (altitude altitude))\n    :camera (vreset! czm/CAMERA (merge @czm/CAMERA dir))\n    :turn (let [{:keys [course]} dir]\n              (turn-and-bank CARRIER course))\n    :accel (let [{:keys [speed temp]} dir]\n              (mov/accel CARRIER speed temp))\n    (println (str \"Unknown directive: \" [directive dir]))))")
+	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :callsigns (let [{:keys [list]} dir]\n            (ctl/callsigns list))\n    :carrier (let [{:keys [callsign vehicle]} dir]\n            (carrier callsign vehicle))\n    :fly (let [{:keys [crs spd alt]} dir]\n            (course crs)\n            (speed spd)\n            (altitude alt))\n    :camera (vreset! czm/CAMERA (merge @czm/CAMERA dir))\n    :turn (let [{:keys [course]} dir]\n              (turn-and-bank CARRIER course))\n    :accel (let [{:keys [speed temp]} dir]\n              (mov/accel CARRIER speed temp))\n    (println (str \"Unknown directive: \" [directive dir]))))")
 	(title "directives-handler [response]"))
 
 ([FlightPro_Class80004] of  CloFunction

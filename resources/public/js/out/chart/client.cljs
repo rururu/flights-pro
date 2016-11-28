@@ -42,7 +42,7 @@
 
 (defn clear-vehicles []
   (doseq [veh (vals @VEHICLES)]
-  (asp/close-chan (:mover @veh))
+  (asp/stop-process (:movst @veh))
   (.removeLayer @CHART (:marker @veh)))
 (vreset! VEHICLES {}))
 

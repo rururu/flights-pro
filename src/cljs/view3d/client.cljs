@@ -33,12 +33,17 @@
 (def DIR-TIO 1000)
 (def CAR-TIO 1000)
 (def HUD-TIO 831)
+(def CAM-TIO 4000)
+(defn num-val [x]
+  (if (number? x) x (rdr/read-string x)))
+
 (defn read-transit [x]
   (t/read (t/reader :json) x))
 
 (defn turn-and-bank [carr course]
-  (let [arc (dyn/abs (-  (:course @carr) course))]
-  (if (< arc 10)
+  (let [arc (dyn/abs (-  (:course @carr) course))
+       alt (:altitude @carr)]
+  (if (or (< alt 90) (< arc 8))
     (mov/turn carr course 1)
     (let [bank (if (dyn/turn-right? (:course @carr) course)
                       (:bank-right @carr)
@@ -68,14 +73,39 @@
   (if (not= callsign (:name @CARRIER))
   (vswap! CARRIER assoc :name callsign))
 (let [old-crs (:course @CARRIER)
-       new-crs (:course vehicle)
-       veh (if (< (:altitude vehicle) 20)
-                (assoc vehicle :altitude 20)
-                vehicle)]
-  (vswap! CARRIER merge veh)
+       new-crs (:course vehicle)]
+  (vswap! CARRIER merge vehicle)
   (mov/set-turn-point CARRIER)
   (if (> (dyn/abs (- old-crs new-crs)) 10)
     (turn-and-bank CARRIER new-crs))))
+
+(defn view [dir]
+  (czm/camera :view dir))
+
+(defn pitch [deg]
+  (let [deg (num-val deg)]
+  (if (<= -180 deg 180)
+    (czm/camera :pitch deg))))
+
+(defn roll [deg]
+  (let [deg (num-val deg)]
+  (if (<= -180 deg 180)
+    (czm/camera :roll deg))))
+
+(defn course [crs]
+  (let [crs (num-val crs)]
+  (if (<= 0 crs 360)
+    (turn-and-bank CARRIER crs))))
+
+(defn speed [spd]
+  (let [spd (num-val spd)]
+  (let [tmp (if (< (:speed @CARRIER) 150) 2 1)]
+    (mov/accel CARRIER spd tmp))))
+
+(defn altitude [alt]
+  (let [alt (num-val alt)]
+  (let [tmp (if (< (:altitude @CARRIER) 1500) 1 3)]
+    (mov/elevate CARRIER alt tmp))))
 
 (defn directives-handler [response]
   (doseq [{:keys [directive] :as dir} (read-transit response)]
@@ -85,10 +115,10 @@
             (ctl/callsigns list))
     :carrier (let [{:keys [callsign vehicle]} dir]
             (carrier callsign vehicle))
-    :fly (let [{:keys [course speed altitude]} dir]
-            (course course)
-            (speed speed)
-            (altitude altitude))
+    :fly (let [{:keys [crs spd alt]} dir]
+            (course crs)
+            (speed spd)
+            (altitude alt))
     :camera (vreset! czm/CAMERA (merge @czm/CAMERA dir))
     :turn (let [{:keys [course]} dir]
               (turn-and-bank CARRIER course))
@@ -100,33 +130,13 @@
   (GET DIR-URL {:handler directives-handler
                        :error-handler error-handler}))
 
-(defn view [dir]
-  (czm/camera :view dir))
-
-(defn pitch [deg]
-  (let [deg (rdr/read-string deg)]
-  (if (<= -180 deg 180)
-    (czm/camera :pitch deg))))
-
-(defn roll [deg]
-  (let [deg (rdr/read-string deg)]
-  (if (<= -180 deg 180)
-    (czm/camera :roll deg))))
-
-(defn course [crs]
-  (let [crs (rdr/read-string crs)]
-  (if (<= 0 crs 360)
-    (turn-and-bank CARRIER crs))))
-
-(defn speed [spd]
-  (let [spd (rdr/read-string spd)]
-  (let [tmp (if (< (:speed @CARRIER) 150) 2 1)]
-    (mov/accel CARRIER spd tmp))))
-
-(defn altitude [alt]
-  (let [alt (rdr/read-string alt)]
-  (let [tmp (if (< (:altitude @CARRIER) 1000) 1 3)]
-    (mov/elevate CARRIER alt tmp))))
+(defn camera-move [carr]
+  (let [car @carr
+       [lat lon] (:coord car)
+       crs (:course car)
+       alt (int (/ (:altitude car) 3.281))
+       alt (if (< alt 10) 10 alt)]
+    (czm/fly-to lat lon alt crs (/ CAM-TIO 1000))))
 
 (defn on-load []
   (enable-console-print!)
@@ -134,8 +144,14 @@
 (vswap! CARRIER assoc :step-hrs (double (/ CAR-TIO 3600000)))
 (asp/repeater mov/move CARRIER CAR-TIO)
 (asp/repeater ctl/show-flight-data CARRIER HUD-TIO)
+(asp/repeater camera-move CARRIER CAM-TIO)
 (asp/repeater receive-directives DIR-TIO)
 (ctl/show-controls))
 
 
 (set! (.-onload js/window) (on-load))
+(carrier "R1"
+ {:coord [60 30]
+  :course 270
+  :speed 315
+  :altitude 3000})

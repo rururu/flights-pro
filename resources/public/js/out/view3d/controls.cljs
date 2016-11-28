@@ -22,8 +22,9 @@
 (set-html! "camera" "<h4>Camera</h4>")
 (set-html! "onboard" "Onboard:")
 (set-html! "onboard-fld" 
-  "<input value='callsign' style='width:90px'
-               onchange='javascript:view3d.client.onboard(this.value)'>")
+  "<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>
+   <option value='callsign'>callsign</option>
+   <option value='select'>select</option>")
 (set-html! "view" "View:")
 (set-html! "view-fld" 
   "<select onchange='javascript:view3d.client.view(this.value)' style='width:96px'>
@@ -67,8 +68,11 @@
 (defn callsigns [list]
   (set-html! "onboard-fld" 
   (str "<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>"
-        "<option value='select'>select</option>"
-          (apply str (for [e list]
-                            (str "<option value='" e "'>" e "</option>")))
+          (if (empty? list)
+            (str "<option value='callsign'>callsign</option>
+                   <option value='select'>select</option>")
+            (str "<option value='select'>select</option>"
+              (apply str (for [e list]
+                                (str "<option value='" e "'>" e "</option>")))))
         "</select>")))
 
