@@ -75,7 +75,7 @@
   (clear))
 ([]
   (fr24/stop)
-  (reset&start-es)
+  (rete/reset)
   (asp/pump-in INS-CHN
       {:instruct :clear})
   ""))

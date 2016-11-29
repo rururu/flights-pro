@@ -3,6 +3,7 @@
   [pro.server :as serv]
   [async.proc :as asp]))
 
+(def HISTORY-SEC 80)
 (defn put-on-map [id crd crs spd sts]
   (asp/pump-in serv/INS-CHN
 	{:instruct :create-update

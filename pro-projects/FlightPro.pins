@@ -1,4 +1,4 @@
-; Tue Nov 29 12:57:13 MSK 2016
+; Tue Nov 29 18:58:19 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -406,7 +406,7 @@
 
 ([FlightPro_Class180000] of  Rule
 
-	(lhs "(History time ?ht)\n?old (Flight id ?id time ?ft)\n(Current time ?ct\n	(> (- ?ct ?ft) ?ht))\n(not Flight id ?id)")
+	(lhs "?f1 (Flight id ?id time ?t1)\n(not Flight id ?id time ?t2\n	(< ?t2 ?t1))")
 	(rhs "(es/put-off-map ?id)")
 	(salience 2)
 	(title "af:PutFlightOffMap"))
@@ -541,7 +541,6 @@
 		[FlightPro_Class20017]
 		[FlightPro_Class320022]
 		[FlightPro_Class190000]
-		[FlightPro_Class320005]
 		[FlightPro_Class210001]
 		[FlightPro_Class310005]
 		[FlightPro_Class310000]
@@ -565,10 +564,6 @@
 		[FlightPro_Class310001]
 		[FlightPro_Class320006])
 	(title "Pro Server"))
-
-([FlightPro_Class200000] of  CloFuncall
-
-	(source "(ru.rules/f 30)"))
 
 ([FlightPro_Class200001] of  CloFunction
 
@@ -784,7 +779,7 @@
 
 ([FlightPro_Class210001] of  CloFunction
 
-	(source "([params]\n  (clear))\n([]\n  (fr24/stop)\n  (reset&start-es)\n  (asp/pump-in INS-CHN\n      {:instruct :clear})\n  \"\")")
+	(source "([params]\n  (clear))\n([]\n  (fr24/stop)\n  (rete/reset)\n  (asp/pump-in INS-CHN\n      {:instruct :clear})\n  \"\")")
 	(title "clear"))
 
 ([FlightPro_Class210007] of  CloVar
@@ -826,18 +821,6 @@
 
 	(source "(doseq [veh (vals @VEHICLES)]\n  (asp/stop-process (:movst @veh))\n  (.removeLayer @CHART (:marker @veh)))\n(vreset! VEHICLES {})")
 	(title "clear-vehicles []"))
-
-([FlightPro_Class220001] of  CloFuncall
-
-	(source "(ru.rules/f 391)"))
-
-([FlightPro_Class220002] of  CloFuncall
-
-	(source "(ru.rules/f 32)"))
-
-([FlightPro_Class220003] of  CloFuncall
-
-	(source "(ru.rules/f 186)"))
 
 ([FlightPro_Class220007] of  CloFunction
 
@@ -937,10 +920,6 @@
 	(source "(let [pdiff (Math/sin (/ (- phi phi1) 2.0))\n       ldiff (Math/sin (/ (- lambda lambda0) 2.0))\n       rval (Math/sqrt (+ (* pdiff pdiff) (* (Math/cos phi1) (Math/cos phi) ldiff ldiff)))]\n   (* 2.0 (Math/asin rval)))")
 	(title "spherical-distance [^double phi1 ^double lambda0 ^double phi ^double lambda]"))
 
-([FlightPro_Class250000] of  CloFuncall
-
-	(source "pro.server/CALLS"))
-
 ([FlightPro_Class250002] of  CloFunction
 
 	(source "(let [phi (Math/toRadians lat)\n       lam (Math/toRadians lon)\n       dir (Math/toRadians crs)\n       way (* spd tim)\n       way (Math/toRadians (/ way 60))\n       [phi2 lam2] (spherical-between phi lam way dir)]\n   [(Math/toDegrees phi2) (Math/toDegrees lam2)])")
@@ -986,7 +965,7 @@
 	(lhs "(Onboard id ?id1)\n(Flight id ?id1 coord ?c1 time ?t1)\n(Flight id ?id1 coord ?c2 speed ?s2 altitude ?a2 time ?t2)\n(Current time ?t2)\n(not Flight id ?id1 time ?t3\n	(< ?t1 ?t3 ?t2))")
 	(rhs "(let [bea (int (geo/bear-deg ?c1 ?c2))]\n  (es/fly-to bea ?s2 ?a2))")
 	(salience 0)
-	(title "af:FlyTo"))
+	(title "af:FlyOnboardTo"))
 
 ([FlightPro_Class250011] of  CloFunction
 
@@ -1021,6 +1000,7 @@
 		[FlightPro_Class250011]
 		[FlightPro_Class260003])
 	(cloNamespace [FlightPro_Class280001])
+	(cloVars [FlightPro_Class320006])
 	(title "ES Functions"))
 
 ([FlightPro_Class280001] of  CloNamespace
@@ -1030,10 +1010,10 @@
 
 ([FlightPro_Class280002] of  Rule
 
-	(lhs "?old (Current time ?t1)\n(Current time ?t2\n	(> ?t2 ?t1))")
-	(rhs "(println [:CT ?t2])\n(retract ?old)")
+	(lhs "?pt (Current time ?t1)\n(Current time ?t2\n	(> ?t2 ?t1))")
+	(rhs "(println [:CT ?t2])\n(retract ?pt)")
 	(salience 1)
-	(title "af:MoveTime"))
+	(title "af:ForgetPastTime"))
 
 ([FlightPro_Class290000] of  CloFunction
 
@@ -1077,22 +1057,6 @@
 
 	(source "4000")
 	(title "CAM-TIO"))
-
-([FlightPro_Class300002] of  CloFuncall
-
-	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :fly :course 340 :speed 400 :altitude 4000})"))
-
-([FlightPro_Class300003] of  CloFuncall
-
-	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :fly :crs 340 :spd 400 :alt 4000})"))
-
-([FlightPro_Class300004] of  CloFuncall
-
-	(source "(num 3.5)"))
-
-([FlightPro_Class300005] of  CloFuncall
-
-	(source "(num \"3.5\")"))
 
 ([FlightPro_Class300006] of  CloFunction
 
@@ -1197,70 +1161,9 @@
 	(source "(if (number? x) x (rdr/read-string x))")
 	(title "num-val [x]"))
 
-([FlightPro_Class310007] of  CloFuncall
-
-	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :fly :crs 350 :spd 500 :alt 5000})"))
-
-([FlightPro_Class310008] of  CloFuncall
-
-	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :fly :crs 5 :spd 430 :alt 8000})"))
-
-([FlightPro_Class310009] of  CloFuncall
-
-	(source "(async.proc/pump-in pro.server/DIR-CHN {:directive :fly :crs 20 :spd 430 :alt 8000})"))
-
-([FlightPro_Class310010] of  CloFuncall
-
-	(source "(rete.core/assert-frame ['Camera 'onboard \"bbd8069\" 'time 0])"))
-
-([FlightPro_Class310011] of  CloFuncall
-
-	(source "(ru.rules/f 73)"))
-
-([FlightPro_Class310012] of  CloFuncall
-
-	(source "(rete.core/assert-frame ['Onboard 'id \"bbd8069\" 'time 0])"))
-
-([FlightPro_Class310013] of  CloFuncall
-
-	(source "(rete.core/assert-frame ['Onboard 'id \"bbda2f4\" 'time 0])"))
-
-([FlightPro_Class310014] of  CloFuncall
-
-	(source "(rete.core/assert-frame ['Onboard 'id \"bbda886\" 'time 0])"))
-
-([FlightPro_Class310015] of  CloFuncall
-
-	(source "(rete.core/assert-frame ['Onboard 'id \"bbda453\" 'time 0])"))
-
-([FlightPro_Class310016] of  CloFuncall
-
-	(source "(rete.core/assert-frame ['Onboard 'id \"bbd9df1\" 'time 0])"))
-
-([FlightPro_Class310017] of  CloFuncall
-
-	(source "(rete.core/assert-frame ['Onboard 'id \"bbd60c3\" 'time 0])"))
-
-([FlightPro_Class310018] of  CloFuncall
-
-	(source "(rete.core/assert-frame ['Onboard 'id \"bbda85a\" 'time 0])"))
-
 ([FlightPro_Class310019] of  CloFuncall
 
 	(source "(ru.rules/sp :all)"))
-
-([FlightPro_Class310020] of  CloFuncall
-
-	(source "(ru.rules/f 35)"))
-
-([FlightPro_Class310021] of  CloFuncall
-
-	(source "(ru.rules/pp :all)"))
-
-([FlightPro_Class320005] of  CloFunction
-
-	(source "(rete/reset)\n(rete/assert-frame ['History 'time HISTORY-SEC])")
-	(title "reset&start-es []"))
 
 ([FlightPro_Class320006] of  CloVar
 
@@ -1270,27 +1173,26 @@
 ([FlightPro_Class320010] of  RuleSet
 
 	(rules
+		[FlightPro_Class180000]
+		[FlightPro_Class230003]
 		[FlightPro_Class280002]
 		[FlightPro_Class320011]
 		[FlightPro_Class320013]
 		[FlightPro_Class320012]
-		[FlightPro_Class290005]
-		[FlightPro_Class180000]
-		[FlightPro_Class230003]
-		[FlightPro_Class250010])
+		[FlightPro_Class250010]
+		[FlightPro_Class290005])
 	(templates
 		[Flight]
 		[Current]
-		[History]
 		[Onboard])
 	(title "All Flights"))
 
 ([FlightPro_Class320011] of  Rule
 
-	(lhs "(History time ?ht)\n?old (Flight id ?id time ?ft)\n(Current time ?ct\n	(> (- ?ct ?ft) ?ht))")
-	(rhs "(retract ?old)")
+	(lhs "?fp (Flight id ?id time ?t1)\n(Current time ?t2\n	(> (- ?t2 ?t1) (identity es/HISTORY-SEC)))")
+	(rhs "(retract ?fp)")
 	(salience 1)
-	(title "af:ForegetPast"))
+	(title "af:ForgetFlightPast"))
 
 ([FlightPro_Class320012] of  Rule
 
@@ -1312,7 +1214,6 @@
 	(butt-fire "Fire/ru.rules/fire-all-rules")
 	(butt-run "Run/ru.rules/run-engine")
 	(butt-step "Step/ru.rules/step-engine")
-	(facts [FlightPro_Class320025])
 	(mode run)
 	(rule-sets [FlightPro_Class320010])
 	(steps 1)
@@ -1333,10 +1234,6 @@
 
 	(source "(int (/ (System/currentTimeMillis) 1000))")
 	(title "current-time []"))
-
-([FlightPro_Class320025] of  History
-
-	(time "80"))
 
 ([FlightPro_Class4] of  CloVar
 

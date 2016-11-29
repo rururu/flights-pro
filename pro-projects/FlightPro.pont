@@ -1,4 +1,4 @@
-; Tue Nov 29 12:57:13 MSK 2016
+; Tue Nov 29 18:58:19 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -81,14 +81,6 @@
 		(create-accessor read-write)))
 
 (defclass Current
-	(is-a Flights+Ontology)
-	(role concrete)
-	(single-slot time
-		(type STRING)
-;+		(cardinality 0 1)
-		(create-accessor read-write)))
-
-(defclass History
 	(is-a Flights+Ontology)
 	(role concrete)
 	(single-slot time
