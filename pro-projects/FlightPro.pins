@@ -1,4 +1,4 @@
-; Mon Nov 28 21:57:15 MSK 2016
+; Tue Nov 29 12:57:13 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -37,7 +37,7 @@
 
 ([FlightPro_Class10001] of  CloFunction
 
-	(source "(let [pitch (condp = (:view @CAMERA)\n                \"UP\" 90\n                \"DOWN\" -90\n                (:pitch @CAMERA))\n        roll (:roll @CAMERA)\n        head (dyn/norm-crs (condp = (:view @CAMERA)\n                         \"BACKWARD\" (+ crs 180)\n                         \"RIGHT\" (+ crs 90)\n                         \"LEFT\" (- crs 90)\n                         \"FORWARD-RIGHT\" (+ crs 45)\n                         \"FORWARD-LEFT\" (- crs 45)\n                         \"BACKWARD-RIGHT\" (+ crs 135)\n                         \"BACKWARD-LEFT\" (- crs 135)\n                         crs))]\n    (fly-control lat lon alt head pitch roll per))")
+	(source "(println [:ALT alt])\n(let [pitch (condp = (:view @CAMERA)\n                \"UP\" 90\n                \"DOWN\" -90\n                (:pitch @CAMERA))\n        roll (:roll @CAMERA)\n        head (dyn/norm-crs (condp = (:view @CAMERA)\n                         \"BACKWARD\" (+ crs 180)\n                         \"RIGHT\" (+ crs 90)\n                         \"LEFT\" (- crs 90)\n                         \"FORWARD-RIGHT\" (+ crs 45)\n                         \"FORWARD-LEFT\" (- crs 45)\n                         \"BACKWARD-RIGHT\" (+ crs 135)\n                         \"BACKWARD-LEFT\" (- crs 135)\n                         crs))]\n    (fly-control lat lon alt head pitch roll per))")
 	(title "fly-to [lat lon alt crs per]"))
 
 ([FlightPro_Class10002] of  CloFunction
@@ -1005,7 +1005,7 @@
 
 ([FlightPro_Class270000] of  CloFunction
 
-	(source "(println [:PARAMS params])\n(let [cls (:callsign params)]\n  (if (not= cls \"select)\n    (rete/assert-frame ['Onboard 'callsign cls])\n    (let [lst (vec (map fr24/callsign (keys @fr24/FLIGHTS)))]\n      (asp/pump-in DIR_CHN\n	{:directive callsigns\n	 :list lst})))\n  \"\")")
+	(source "(println [:PARAMS params])\n(let [cls (:callsign params)]\n  (if (not= cls \"select\")\n    (rete/assert-frame ['Onboard 'callsign cls])\n    (let [lst (vec (map fr24/callsign (keys @fr24/FLIGHTS)))]\n      (asp/pump-in DIR-CHN\n	{:directive :callsigns\n	 :list lst})))\n  \"\")")
 	(title "onboard [params]"))
 
 ([FlightPro_Class270001] of  CloFunction
