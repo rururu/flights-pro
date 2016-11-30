@@ -35,8 +35,7 @@
                   :easingFunction (fn [time] time)})))
 
 (defn fly-to [lat lon alt crs per]
-  (println [:ALT alt])
-(let [pitch (condp = (:view @CAMERA)
+  (let [pitch (condp = (:view @CAMERA)
                 "UP" 90
                 "DOWN" -90
                 (:pitch @CAMERA))

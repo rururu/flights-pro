@@ -18,12 +18,15 @@
 	{:instruct :delete
 	 :id id}))
 
-(defn fly-to [crs spd alt]
+(defn fly-to [crd alt crs per]
+  (let [alt (/ alt 3.28084)
+       alt (if (< alt 10) 10 alt)]
   (asp/pump-in serv/DIR-CHN
 	{:directive :fly
-	 :crs crs
-	 :spd spd
-	 :alt alt}))
+	 :coord crd
+	 :altitude alt
+	 :course crs
+	 :period per})))
 
 (defn onboard [crd crs spd alt csg]
   (println [:ONBOARD csg])

@@ -66,10 +66,6 @@
                                      "GROUND")])))
   (rete/fire)))
 
-(defn reset&start-es []
-  (rete/reset)
-(rete/assert-frame ['History 'time HISTORY-SEC]))
-
 (defn clear
   ([params]
   (clear))

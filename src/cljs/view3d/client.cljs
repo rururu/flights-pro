@@ -115,10 +115,9 @@
             (ctl/callsigns list))
     :carrier (let [{:keys [callsign vehicle]} dir]
             (carrier callsign vehicle))
-    :fly (let [{:keys [crs spd alt]} dir]
-            (course crs)
-            (speed spd)
-            (altitude alt))
+    :fly (let [{:keys [coord altitude course period]} dir
+                 [lat lon] coord]
+            (czm/fly-to lat lon altitude course period))
     :camera (vreset! czm/CAMERA (merge @czm/CAMERA dir))
     :turn (let [{:keys [course]} dir]
               (turn-and-bank CARRIER course))
@@ -140,11 +139,11 @@
 
 (defn on-load []
   (enable-console-print!)
-(czm/init-3D-view BSE-URL :terrain)
+(czm/init-3D-view BSE-URL :no-terrain)
 (vswap! CARRIER assoc :step-hrs (double (/ CAR-TIO 3600000)))
-(asp/repeater mov/move CARRIER CAR-TIO)
+;;(asp/repeater mov/move CARRIER CAR-TIO)
 (asp/repeater ctl/show-flight-data CARRIER HUD-TIO)
-(asp/repeater camera-move CARRIER CAM-TIO)
+;;(asp/repeater camera-move CARRIER CAM-TIO)
 (asp/repeater receive-directives DIR-TIO)
 (ctl/show-controls))
 
