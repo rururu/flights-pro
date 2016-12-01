@@ -85,11 +85,24 @@
                                  #(proc-fn carr)
                                  (get-in @carr tio-pth))))
 
-(defn turn-right? [from to]
-  (let [dif (- to from)]
-  (cond
-    (> dif 0)
-      (<= dif 180)
-    (< dif 0) 
-      (< dif -180))))
+(defn bank [old-crs new-crs [right-bank small-arc big-arc big-factor]]
+  (letfn [(turn-right? [from to]
+	(let [dif (- to from)]
+	  (cond
+	    (> dif 0)
+	      (<= dif 180)
+	    (< dif 0) 
+	      (< dif -180))))]
+  (let [arc (abs (- old-crs new-crs))
+         arc (if (> arc 180)
+                 (- 360 arc)
+                 arc)]
+    (if (< arc small-arc)
+        0
+        (let [bnk (if (> arc big-arc)
+	(* right-bank big-factor)
+	right-bank)]
+          (if (turn-right? old-crs new-crs)
+           bnk
+           (- bnk)))))))
 

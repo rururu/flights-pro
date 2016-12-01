@@ -1,4 +1,4 @@
-; Wed Nov 30 22:15:29 MSK 2016
+; Thu Dec 01 22:16:07 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -69,7 +69,7 @@
 
 ([FlightPro_Class100025] of  CloVar
 
-	(source "(volatile! {:name \"-\"\n               :coord [0 0]\n               :altitude 0\n               :speed 0\n               :course 0\n               :step 0\n               :bank-right 20\n               :rudder {:target 0\n                            :step 3\n                            :time-out 1011}\n               :elevator {:target 0\n                            :step 7\n                            :time-out 997}\n               :engine {:target 0\n                            :step 6\n                            :time-out 1003}})")
+	(source "(volatile! {:name \"-\"\n               :coord [0 0]\n               :altitude 0\n               :speed 0\n               :course 0\n               :step 0\n               :bank-params [20 8 64 2]\n               :rudder {:target 0\n                            :step 3\n                            :time-out 1011}\n               :elevator {:target 0\n                            :step 7\n                            :time-out 997}\n               :engine {:target 0\n                            :step 6\n                            :time-out 1003}})")
 	(title "CARRIER"))
 
 ([FlightPro_Class100026] of  CloFunction
@@ -104,8 +104,8 @@
 
 ([FlightPro_Class110000] of  CloFunction
 
-	(source "(let [dif (- to from)]\n  (cond\n    (> dif 0)\n      (<= dif 180)\n    (< dif 0) \n      (< dif -180)))")
-	(title "turn-right? [from to]"))
+	(source "(letfn [(turn-right? [from to]\n	(let [dif (- to from)]\n	  (cond\n	    (> dif 0)\n	      (<= dif 180)\n	    (< dif 0) \n	      (< dif -180))))]\n  (let [arc (abs (- old-crs new-crs))\n         arc (if (> arc 180)\n                 (- 360 arc)\n                 arc)]\n    (if (< arc small-arc)\n        0\n        (let [bnk (if (> arc big-arc)\n	(* right-bank big-factor)\n	right-bank)]\n          (if (turn-right? old-crs new-crs)\n           bnk\n           (- bnk))))))")
+	(title "bank [old-crs new-crs [right-bank small-arc big-arc big-factor]]"))
 
 ([FlightPro_Class120000] of  CSS
 
@@ -127,7 +127,7 @@
 
 ([FlightPro_Class130001] of  CloFunction
 
-	(source "(let [arc (dyn/abs (-  (:course @carr) course))\n       alt (:altitude @carr)]\n  (if (or (< alt 90) (< arc 8))\n    (mov/turn carr course 1)\n    (let [bank (if (dyn/turn-right? (:course @carr) course)\n                      (:bank-right @carr)\n                      (- (:bank-right @carr)))\n           [bank temp] (if (> arc 70) \n                                 [(* 2 bank) 2]\n                                 [bank 1])]\n      (mov/turn carr course temp)\n      (dyn/check-diff-and-do carr\n        [:rudder :target]\n        [:course]\n        (* 2 (get-in @carr [:rudder :step]))\n        [:rudder :time-out]\n        #(czm/camera :roll 0))\n      (czm/camera :roll bank))))")
+	(source "(let [[rb sa ba fa :as bps] (:bank-params @carr)\n       bnk (dyn/bank (:course @carr) course bps)\n       alt (:altitude @carr)]\n  (if (or (< alt 90) (= bnk 0))\n    (mov/turn carr course 1)\n    (let [temp (if (> (dyn/abs bnk) rb) 2 1)]\n      (mov/turn carr course temp)\n      (dyn/check-diff-and-do carr\n        [:rudder :target]\n        [:course]\n        (* 2 (get-in @carr [:rudder :step]))\n        [:rudder :time-out]\n        #(czm/camera :roll 0))\n      (czm/camera :roll bnk))))")
 	(title "turn-and-bank [carr course]"))
 
 ([FlightPro_Class130003] of  CloFunction
@@ -356,7 +356,7 @@
 
 ([FlightPro_Class160011] of  CloFunction
 
-	(source "(println :INIT-CHART)\n(let [m (-> js/L\n              (.map \"map\")\n              (.setView (array 60.3, 25.0) 10)) ;; HEL\n        tile1 (-> js/L (.tileLayer \"http://{s}.tile.osm.org/{z}/{x}/{y}.png\"\n                                   #js{:maxZoom 16\n                                       :attribution \"Ru, OpenStreetMap &copy;\"}))\n        tile2 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile3 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile4 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile5 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        base (clj->js {\"OpenStreetMap\" tile1\n                       \"Google Satellite\" tile2\n                       \"Google Streets\" tile3\n                       \"Google Hybrid\" tile4\n                       \"Google Terrain\" tile5})\n        ctrl (-> js/L (.control.layers base nil))]\n  (.addTo tile1 m)\n  (.addTo ctrl m)\n  (.on m \"mousemove\"\n         (fn [e] (ctl/mouse-move (.. e -latlng -lat) (.. e -latlng -lng))))\n  (vreset! CHART m))")
+	(source "(println :INIT-CHART)\n(let [m (-> js/L\n              (.map \"map\")\n              (.setView (array 50.04, 8.55) 10)) ;; Frankfurt\n        tile1 (-> js/L (.tileLayer \"http://{s}.tile.osm.org/{z}/{x}/{y}.png\"\n                                   #js{:maxZoom 16\n                                       :attribution \"Ru, OpenStreetMap &copy;\"}))\n        tile2 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile3 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile4 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile5 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        base (clj->js {\"OpenStreetMap\" tile1\n                       \"Google Satellite\" tile2\n                       \"Google Streets\" tile3\n                       \"Google Hybrid\" tile4\n                       \"Google Terrain\" tile5})\n        ctrl (-> js/L (.control.layers base nil))]\n  (.addTo tile1 m)\n  (.addTo ctrl m)\n  (.on m \"mousemove\"\n         (fn [e] (ctl/mouse-move (.. e -latlng -lat) (.. e -latlng -lng))))\n  (vreset! CHART m))")
 	(title "init-chart []"))
 
 ([FlightPro_Class160012] of  CloFunction
@@ -501,9 +501,9 @@
 		[FlightPro_Class140019]
 		[FlightPro_Class140024]
 		[FlightPro_Class140025]
+		[FlightPro_Class290000]
 		[FlightPro_Class80003]
 		[FlightPro_Class80001]
-		[FlightPro_Class290000]
 		[FlightPro_Class70001])
 	(cloNamespace [FlightPro_Class60001])
 	(cloVars
@@ -832,7 +832,7 @@
 ([FlightPro_Class220001] of  Rule
 
 	(lhs "?ob1 (Onboard)\n?ob2 (Onboard id ?idx callsign ?cs2\n	(nil? ?idx))\n(Flight id ?id2 coord ?crd2 course ?crs2 speed ?s2 altitude ?a2 callsign ?cs2)")
-	(rhs "(retract ?ob1)\n(modify ?ob2 id ?id2)\n(es/onboard ?crd2 ?crs2 ?s2 ?a2 ?cs2)")
+	(rhs "(retract ?ob1)\n(modify ?ob2 id ?id2)\n(es/onboard ?crd2 ?crs2 ?spd2 ?a2 ?cs2)")
 	(salience 2)
 	(title "af:SwitchOnboard2"))
 
@@ -888,7 +888,7 @@
 ([FlightPro_Class230003] of  Rule
 
 	(lhs "?ob (Onboard id ?idx callsign ?cs2\n	(nil? ?idx))\n(Flight id ?id2 coord ?crd2 course ?crs2 speed ?s2 altitude ?a2 callsign ?cs2)")
-	(rhs "(modify ?ob id ?id2)\n(es/onboard ?crd2 ?crs2 ?s2 ?a2 ?cs2)")
+	(rhs "(modify ?ob id ?id2)\n(es/onboard ?crd2 ?crs2 ?spd2 ?a2 ?cs2)")
 	(salience 2)
 	(title "af:SwitchOnboard1"))
 
@@ -984,15 +984,15 @@
 
 ([FlightPro_Class250010] of  Rule
 
-	(lhs "(Onboard id ?id)\n(Flight id ?id coord ?c1 time ?t1)\n(Flight id ?id coord ?c2 time ?t2 altitude ?a2 course ?crs2)\n(Current time ?t2)\n(not Flight id ?id time ?t3\n	(< ?t1 ?t3 ?t2))")
-	(rhs "(es/fly-onboard-to ?c2 ?a2 ?crs2 (- ?t2 ?t1))")
+	(lhs "(Onboard id ?id)\n(Flight id ?id time ?t1 course ?crs1)\n(Flight id ?id time ?t2 course ?crs2 \n	coord ?crd2 \n	speed ?spd2 \n	altitude ?alt2 \n	callsign ?csn)\n(Current time ?t2)\n(not Flight id ?id time ?t3\n	(< ?t1 ?t3 ?t2))")
+	(rhs "(es/fly-onboard-to ?csn ?crs1 ?crs2 ?crd2 ?spd2 ?alt2 (- ?t2 ?t1))")
 	(salience 0)
 	(title "af:FlyOnboardTo"))
 
 ([FlightPro_Class250011] of  CloFunction
 
-	(source "(let [alt (/ alt 3.28084)\n       alt (if (< alt 10) 10 alt)]\n  (asp/pump-in serv/DIR-CHN\n	{:directive :fly\n	 :coord crd\n	 :altitude alt\n	 :course crs\n	 :period per}))")
-	(title "fly-onboard-to [crd alt crs per]"))
+	(source "(asp/pump-in serv/DIR-CHN\n	{:directive :fly-onboard\n	 :callsign csn\n	 :vehicle {\n	   :coord crd2\n	   :altitude alt2\n	   :speed spd2\n	   :course crs2}\n	 :old-course crs1\n	 :period per})")
+	(title "fly-onboard-to [csn crs1 crs2 crd2 spd2 alt2 per]"))
 
 ([FlightPro_Class260000] of  CloFunction
 
@@ -1039,8 +1039,8 @@
 
 ([FlightPro_Class290000] of  CloFunction
 
-	(source "(let [car @carr\n       [lat lon] (:coord car)\n       crs (:course car)\n       alt (int (/ (:altitude car) 3.281))\n       alt (if (< alt 10) 10 alt)]\n    (czm/fly-to lat lon alt crs (/ CAM-TIO 1000)))")
-	(title "camera-move [carr]"))
+	(source "([carr]\n  (camera-move carr (/ CAM-TIO 1000)))\n([carr period]\n  (let [car @carr\n         [lat lon] (:coord car)\n         crs (:course car)\n         alt (int (/ (:altitude car) 3.28084))\n         alt (if (< alt 10) 10 alt)]\n      (czm/fly-to lat lon alt crs period)))")
+	(title "camera-move"))
 
 ([FlightPro_Class290003] of  %3AINSTANCE-ANNOTATION
 
@@ -1324,7 +1324,7 @@
 
 ([FlightPro_Class70001] of  CloFunction
 
-	(source "(enable-console-print!)\n(czm/init-3D-view BSE-URL :no-terrain)\n(vswap! CARRIER assoc :step-hrs (double (/ CAR-TIO 3600000)))\n;;(asp/repeater mov/move CARRIER CAR-TIO)\n(asp/repeater ctl/show-flight-data CARRIER HUD-TIO)\n;;(asp/repeater camera-move CARRIER CAM-TIO)\n(asp/repeater receive-directives DIR-TIO)\n(ctl/show-controls)")
+	(source "(enable-console-print!)\n(czm/init-3D-view BSE-URL :no-terrain)\n(vswap! CARRIER assoc :step-hrs (double (/ CAR-TIO 3600000)))\n(asp/repeater mov/move CARRIER CAR-TIO)\n(asp/repeater ctl/show-flight-data CARRIER HUD-TIO)\n;;(asp/repeater camera-move CARRIER CAM-TIO)\n(asp/repeater receive-directives DIR-TIO)\n(ctl/show-controls)")
 	(title "on-load []"))
 
 ([FlightPro_Class70002] of  CloProgram
@@ -1416,7 +1416,7 @@
 
 ([FlightPro_Class80003] of  CloFunction
 
-	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :callsigns (let [{:keys [list]} dir]\n            (ctl/callsigns list))\n    :carrier (let [{:keys [callsign vehicle]} dir]\n            (carrier callsign vehicle))\n    :fly (let [{:keys [coord altitude course period]} dir\n                 [lat lon] coord]\n            (czm/fly-to lat lon altitude course period))\n    :camera (vreset! czm/CAMERA (merge @czm/CAMERA dir))\n    :turn (let [{:keys [course]} dir]\n              (turn-and-bank CARRIER course))\n    :accel (let [{:keys [speed temp]} dir]\n              (mov/accel CARRIER speed temp))\n    (println (str \"Unknown directive: \" [directive dir]))))")
+	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :callsigns (let [{:keys [list]} dir]\n            (ctl/callsigns list))\n    :carrier (let [{:keys [callsign vehicle]} dir]\n            (carrier callsign vehicle))\n    :fly-onboard (let [{:keys [callsign vehicle old-course period]} dir]\n            (carrier callsign vehicle)\n            (camera-move CARRIER period)\n            (if (> (:altitude vehicle) 60)\n              (roll (dyn/bank old-course (:course vehicle) (:bank-params @CARRIER)))))\n    :camera (vreset! czm/CAMERA (merge @czm/CAMERA dir))\n    :turn (let [{:keys [course]} dir]\n              (turn-and-bank CARRIER course))\n    :accel (let [{:keys [speed temp]} dir]\n              (mov/accel CARRIER speed temp))\n    (println (str \"Unknown directive: \" [directive dir]))))")
 	(title "directives-handler [response]"))
 
 ([FlightPro_Class80004] of  CloFunction
