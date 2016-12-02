@@ -94,14 +94,26 @@
     (turn-and-bank CARRIER crs))))
 
 (defn speed [spd]
-  (let [spd (num-val spd)]
-  (let [tmp (if (< (:speed @CARRIER) 150) 2 1)]
-    (mov/accel CARRIER spd tmp))))
+  (let [spd (num-val spd)
+       tmp (if (< (:speed @CARRIER) 150) 2 1)]
+  (mov/accel CARRIER spd tmp)))
 
 (defn altitude [alt]
-  (let [alt (num-val alt)]
-  (let [tmp (if (< (:altitude @CARRIER) 1500) 1 3)]
-    (mov/elevate CARRIER alt tmp))))
+  (let [alt (num-val alt)
+       tmp (if (< (:altitude @CARRIER) 1500) 1 3)]
+  (mov/elevate CARRIER alt tmp)))
+
+(defn latitude [lat]
+  (let [car @CARRIER
+       lat (num-val lat)
+       [_ lon] (:coord car)]
+  (mov/set-turn-point CARRIER [lat lon] (:course car) (:speed car))))
+
+(defn longitude [lon]
+  (let [car @CARRIER
+       lon (num-val lon)
+       [lat _] (:coord car)]
+  (mov/set-turn-point CARRIER [lat lon] (:course car) (:speed car))))
 
 (defn camera-move
   ([carr]
@@ -111,7 +123,7 @@
          [lat lon] (:coord car)
          crs (:course car)
          alt (int (/ (:altitude car) 3.28084))
-         alt (if (< alt 10) 10 alt)]
+         alt (if (< alt 20) 20 alt)]
       (czm/fly-to lat lon alt crs period))))
 
 (defn directives-handler [response]
@@ -144,7 +156,7 @@
 (vswap! CARRIER assoc :step-hrs (double (/ CAR-TIO 3600000)))
 (asp/repeater mov/move CARRIER CAR-TIO)
 (asp/repeater ctl/show-flight-data CARRIER HUD-TIO)
-;;(asp/repeater camera-move CARRIER CAM-TIO)
+(asp/repeater camera-move CARRIER CAM-TIO)
 (asp/repeater receive-directives DIR-TIO)
 (ctl/show-controls))
 

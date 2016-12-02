@@ -178,7 +178,7 @@
 (let [cls (:callsign params)]
   (if (not= cls "select")
     (rete/assert-frame ['Onboard 'callsign cls])
-    (let [lst (vec (map fr24/callsign (keys @fr24/FLIGHTS)))]
+    (let [lst (vec (sort (map fr24/callsign (keys @fr24/FLIGHTS))))]
       (asp/pump-in DIR-CHN
 	{:directive :callsigns
 	 :list lst})))

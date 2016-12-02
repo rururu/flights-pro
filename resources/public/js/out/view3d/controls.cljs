@@ -55,7 +55,13 @@
                onchange='javascript:view3d.client.speed(this.value)'>")
 (set-html! "altitude-fld" 
   "<input value='0' style='width:40px'
-               onchange='javascript:view3d.client.altitude(this.value)'>"))
+               onchange='javascript:view3d.client.altitude(this.value)'>")
+(set-html! "latitude-fld" 
+  "<input value='0' style='width:40px'
+               onchange='javascript:view3d.client.latitude(this.value)'>")
+(set-html! "longitude-fld" 
+  "<input value='0' style='width:40px'
+               onchange='javascript:view3d.client.longitude(this.value)'>"))
 
 (defn show-flight-data [carr]
   (let [{:keys [coord course speed altitude]} @carr]

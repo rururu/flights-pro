@@ -30,6 +30,22 @@
   z-index:100;
   color:yellow
 }
+#lat {
+  position:fixed;
+  bottom:220px;
+  right:70px;
+  padding:5px;
+  z-index:100;
+  color:yellow
+}
+#lon {
+  position:fixed;
+  bottom:200px;
+  right:70px;
+  padding:5px;
+  z-index:100;
+  color:yellow
+}
 #course-fld {
   position:fixed;
   bottom:280px;
@@ -52,21 +68,19 @@
   padding:5px;
   z-index:100;
 }
-#lat {
+#latitude-fld {
   position:fixed;
   bottom:220px;
   right:20px;
   padding:5px;
   z-index:100;
-  color:yellow
 }
-#lon {
+#longitude-fld {
   position:fixed;
   bottom:200px;
   right:20px;
   padding:5px;
   z-index:100;
-  color:yellow
 }
 #camera {
   position:fixed;
