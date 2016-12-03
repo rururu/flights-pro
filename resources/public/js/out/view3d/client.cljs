@@ -11,15 +11,19 @@
   [nightlight.repl-server]))
 
 (def PORT 4444)
-(def BSE-URL (str "http://localhost:" PORT "/"))
-(def DIR-URL (str "http://localhost:" PORT "/directives/"))
-(def CMD-URL (str "http://localhost:" PORT "/command/"))
-(def CARRIER (volatile! {:name "-"
+(def URL {:base (str "http://localhost:" PORT "/")
+ :directives (str "http://localhost:" PORT "/directives/")
+ :command (str "http://localhost:" PORT "/command/")})
+(def TIO {:carrier 1000
+ :camera 4200
+ :directives 911
+ :display 831})
+(def CARRIER (volatile! {:mode "?"
                :coord [0 0]
                :altitude 0
                :speed 0
                :course 0
-               :step 0
+               :step-hrs (double (/ (:carrier TIO) 3600000))
                :bank-params [20 8 64 2]
                :rudder {:target 0
                             :step 3
@@ -30,10 +34,7 @@
                :engine {:target 0
                             :step 6
                             :time-out 1003}}))
-(def DIR-TIO 1000)
-(def CAR-TIO 1000)
-(def HUD-TIO 831)
-(def CAM-TIO 4000)
+(def CAM-PROC (volatile! "STOP"))
 (defn num-val [x]
   (if (number? x) x (rdr/read-string x)))
 
@@ -61,13 +62,15 @@
   (println (str "AJAX ERROR: " status " " status-text))))
 
 (defn onboard [call]
-  (GET (str CMD-URL "onboard?callsign=" call)
+  (if (= call "manual")
+  (asp/stop-process CAM-PROC))
+(GET (str (:command URL) "onboard?callsign=" call)
   {:handler (fn [response])
    :error-handler error-handler}))
 
 (defn carrier [callsign vehicle]
-  (if (not= callsign (:name @CARRIER))
-  (vswap! CARRIER assoc :name callsign))
+  (if (not= callsign (:mode @CARRIER))
+  (vswap! CARRIER assoc :mode callsign))
 (let [old-crs (:course @CARRIER)
        new-crs (:course vehicle)]
   (vswap! CARRIER merge vehicle)
@@ -89,50 +92,68 @@
     (czm/camera :roll deg))))
 
 (defn course [crs]
+  (if (= (:mode @CARRIER) "MANUAL")
   (let [crs (num-val crs)]
-  (if (<= 0 crs 360)
-    (turn-and-bank CARRIER crs))))
+    (if (<= 0 crs 360)
+      (turn-and-bank CARRIER crs)))))
 
 (defn speed [spd]
+  (if (= (:mode @CARRIER) "MANUAL")
   (let [spd (num-val spd)
-       tmp (if (< (:speed @CARRIER) 150) 2 1)]
-  (mov/accel CARRIER spd tmp)))
+         tmp (if (< (:speed @CARRIER) 150) 2 1)]
+    (mov/accel CARRIER spd tmp))))
 
 (defn altitude [alt]
+  (if (= (:mode @CARRIER) "MANUAL")
   (let [alt (num-val alt)
-       tmp (if (< (:altitude @CARRIER) 1500) 1 3)]
-  (mov/elevate CARRIER alt tmp)))
+         tmp (if (< (:altitude @CARRIER) 1500) 1 3)]
+    (mov/elevate CARRIER alt tmp))))
 
 (defn latitude [lat]
+  (if (= (:mode @CARRIER) "MANUAL")
   (let [car @CARRIER
-       lat (num-val lat)
-       [_ lon] (:coord car)]
-  (mov/set-turn-point CARRIER [lat lon] (:course car) (:speed car))))
+         lat (num-val lat)
+         [_ lon] (:coord car)]
+    (mov/set-turn-point CARRIER [lat lon] (:course car) (:speed car)))))
 
 (defn longitude [lon]
+  (if (= (:mode @CARRIER) "MANUAL")
   (let [car @CARRIER
-       lon (num-val lon)
-       [lat _] (:coord car)]
-  (mov/set-turn-point CARRIER [lat lon] (:course car) (:speed car))))
+         lon (num-val lon)
+         [lat _] (:coord car)]
+    (mov/set-turn-point CARRIER [lat lon] (:course car) (:speed car)))))
 
 (defn camera-move
   ([carr]
-  (camera-move carr (/ CAM-TIO 1000)))
+  (camera-move carr (/ (:camera TIO) 1000)))
 ([carr period]
   (let [car @carr
          [lat lon] (:coord car)
          crs (:course car)
          alt (int (/ (:altitude car) 3.28084))
          alt (if (< alt 20) 20 alt)]
-      (czm/fly-to lat lon alt crs period))))
+      (czm/fly-to lat lon alt crs period))
+  true))
+
+(defn manual-vehicle []
+  {:coord   [(num-val (ctl/get-value "input-lat"))
+               (num-val (ctl/get-value "input-lon"))]
+ :course   (num-val (ctl/get-value "input-crs"))
+ :speed    (num-val (ctl/get-value "input-spd"))
+ :altitude (num-val (ctl/get-value "input-alt"))})
 
 (defn directives-handler [response]
   (doseq [{:keys [directive] :as dir} (read-transit response)]
   ;;(println [:DIRECTIVE dir])
   (condp = directive
+    :manual (do (if (= (:mode @CARRIER) "?")
+	  (carrier "MANUAL" (manual-vehicle))
+	  (vswap! CARRIER assoc :mode "MANUAL"))
+	(asp/start-process CAM-PROC #(camera-move CARRIER) (:camera TIO)))
     :callsigns (let [{:keys [list]} dir]
             (ctl/callsigns list))
     :carrier (let [{:keys [callsign vehicle]} dir]
+            (asp/stop-process CAM-PROC)
             (carrier callsign vehicle))
     :fly-onboard (let [{:keys [callsign vehicle old-course period]} dir]
             (carrier callsign vehicle)
@@ -147,23 +168,19 @@
     (println (str "Unknown directive: " [directive dir])))))
 
 (defn receive-directives []
-  (GET DIR-URL {:handler directives-handler
+  (GET (:directives URL) {:handler directives-handler
                        :error-handler error-handler}))
 
 (defn on-load []
   (enable-console-print!)
-(czm/init-3D-view BSE-URL :no-terrain)
-(vswap! CARRIER assoc :step-hrs (double (/ CAR-TIO 3600000)))
-(asp/repeater mov/move CARRIER CAR-TIO)
-(asp/repeater ctl/show-flight-data CARRIER HUD-TIO)
-(asp/repeater camera-move CARRIER CAM-TIO)
-(asp/repeater receive-directives DIR-TIO)
+(czm/init-3D-view (:base URL) :no-terrain)
+(asp/repeater mov/move CARRIER (:carrier TIO))
+(asp/repeater ctl/show-flight-data CARRIER (:display TIO))
+(asp/repeater receive-directives (:directives TIO))
 (ctl/show-controls))
+
+(defn to-manual []
+)
 
 
 (set! (.-onload js/window) (on-load))
-(carrier "R1"
- {:coord [60 30]
-  :course 270
-  :speed 315
-  :altitude 3000})

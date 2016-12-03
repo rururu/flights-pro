@@ -9,6 +9,12 @@
 (defn by-id  [id]
   (.getElementById js/document id))
 
+(defn get-value [id]
+  (.-value (by-id id)))
+
+(defn get-html [id]
+  (.-innerHTML (by-id id)))
+
 (defn set-html! [id msg]
   (set! (.-innerHTML (by-id id)) msg))
 
@@ -24,6 +30,7 @@
 (set-html! "onboard-fld" 
   "<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>
    <option value='callsign'>callsign</option>
+   <option value='manual'>manual</option>
    <option value='select'>select</option>")
 (set-html! "view" "View:")
 (set-html! "view-fld" 
@@ -48,19 +55,19 @@
   "<input value='0' style='width:90px'
                onchange='javascript:view3d.client.roll(this.value)'>")
 (set-html! "course-fld" 
-  "<input value='0' style='width:40px'
+  "<input value='0' style='width:40px' id='input-crs'
                      onchange='javascript:view3d.client.course(this.value)'>")
 (set-html! "speed-fld" 
-  "<input value='0' style='width:40px'
+  "<input value='0' style='width:40px' id='input-spd'
                onchange='javascript:view3d.client.speed(this.value)'>")
 (set-html! "altitude-fld" 
-  "<input value='0' style='width:40px'
+  "<input value='0' style='width:40px' id='input-alt'
                onchange='javascript:view3d.client.altitude(this.value)'>")
 (set-html! "latitude-fld" 
-  "<input value='0' style='width:40px'
+  "<input value='0' style='width:40px' id='input-lat'
                onchange='javascript:view3d.client.latitude(this.value)'>")
 (set-html! "longitude-fld" 
-  "<input value='0' style='width:40px'
+  "<input value='0' style='width:40px' id='input-lon'
                onchange='javascript:view3d.client.longitude(this.value)'>"))
 
 (defn show-flight-data [carr]

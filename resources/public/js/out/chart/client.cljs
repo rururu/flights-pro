@@ -11,7 +11,6 @@
 (def PORT 4444)
 (def CHR-URL (str "http://localhost:" PORT "/chart/"))
 (def INS-URL (str "http://localhost:" PORT "/instructions/"))
-(def CMD-URL (str "http://localhost:" PORT "/command/"))
 (def INS-TIO 1000)
 (def CHART (volatile! {}))
 (def VEHICLES (volatile! {}))

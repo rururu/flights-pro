@@ -176,11 +176,13 @@
 (defn onboard [params]
   (println [:PARAMS params])
 (let [cls (:callsign params)]
-  (if (not= cls "select")
-    (rete/assert-frame ['Onboard 'callsign cls])
-    (let [lst (vec (sort (map fr24/callsign (keys @fr24/FLIGHTS))))]
-      (asp/pump-in DIR-CHN
+  (condp = cls
+    "manual" (asp/pump-in DIR-CHN
+	{:directive :manual})
+   "select" (let [lst (vec (sort (map fr24/callsign (keys @fr24/FLIGHTS))))]
+                   (asp/pump-in DIR-CHN
 	{:directive :callsigns
-	 :list lst})))
+	 :list lst}))
+    (rete/assert-frame ['Onboard 'callsign cls]))
   ""))
 
