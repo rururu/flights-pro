@@ -10,13 +10,18 @@
   [cljs.reader :as rdr]
   [nightlight.repl-server]))
 
+(def HOST "http://localhost:")
 (def PORT 4444)
-(def URL {:base (str "http://localhost:" PORT "/")
- :directives (str "http://localhost:" PORT "/directives/")
- :command (str "http://localhost:" PORT "/command/")})
+(def URL {:base (str HOST PORT "/")
+ :chart (str HOST PORT "/chart/")
+ :directives (str HOST PORT "/directives/")
+ :instructions (str HOST PORT "/instructions/")
+ :command (str HOST PORT "/command/")})
 (def TIO {:carrier 1000
  :camera 4200
  :directives 911
+ :instructions 979
+ :vehicles 200
  :display 831})
 (def CARRIER (volatile! {:mode "?"
                :coord [0 0]
@@ -131,7 +136,7 @@
          [lat lon] (:coord car)
          crs (:course car)
          alt (int (/ (:altitude car) 3.28084))
-         alt (if (< alt 20) 20 alt)]
+         alt (if (< alt 12) 12 alt)]
       (czm/fly-to lat lon alt crs period))
   true))
 
@@ -151,7 +156,7 @@
 	  (vswap! CARRIER assoc :mode "MANUAL"))
 	(asp/start-process CAM-PROC #(camera-move CARRIER) (:camera TIO)))
     :callsigns (let [{:keys [list]} dir]
-            (ctl/callsigns list))
+            (ctl/callsigns (conj list "manual")))
     :carrier (let [{:keys [callsign vehicle]} dir]
             (asp/stop-process CAM-PROC)
             (carrier callsign vehicle))

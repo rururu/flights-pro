@@ -8,18 +8,26 @@
   [cognitect.transit :as t]
   [ajax.core :refer (GET)]))
 
+(def HOST "http://localhost:")
 (def PORT 4444)
-(def CHR-URL (str "http://localhost:" PORT "/chart/"))
-(def INS-URL (str "http://localhost:" PORT "/instructions/"))
-(def INS-TIO 1000)
-(def CHART (volatile! {}))
-(def VEHICLES (volatile! {}))
-(def MOV-TIO 200)
+(def URL {:base (str HOST PORT "/")
+ :chart (str HOST PORT "/chart/")
+ :directives (str HOST PORT "/directives/")
+ :instructions (str HOST PORT "/instructions/")
+ :command (str HOST PORT "/command/")})
+(def TIO {:carrier 1000
+ :camera 4200
+ :directives 911
+ :instructions 979
+ :vehicles 200
+ :display 831})
 (def URL-ICO {"INTERSECT" 	(str "http://localhost:" PORT "/img/redpln32.png")
  "DESCEND" 	(str "http://localhost:" PORT "/img/greenpln32.png")
  "CLIMB" 	(str "http://localhost:" PORT "/img/bluepln32.png")
  "LEVEL" 	(str "http://localhost:" PORT "/img/purplepln32.png")
  "GROUND" 	(str "http://localhost:" PORT "/img/greypln32.png")})
+(def CHART (volatile! {}))
+(def VEHICLES (volatile! {}))
 (defn read-transit [x]
   (t/read (t/reader :json) x))
 
@@ -50,7 +58,7 @@
   (println (str "AJAX ERROR: " status " " status-text))))
 
 (defn info [id]
-  (GET (str CMD-URL "info?id=" id)
+  (GET (str (:command URL) "info?id=" id)
   {:handler (fn [response])
    :error-handler error-handler}))
 
@@ -76,9 +84,9 @@
   (delete-vehicle id)
 (let [ms (volatile! "START")
        mp (assoc mp :marker (create-update-marker nil mp)
-                              :step-hrs (double (/ MOV-TIO 3600000))
+                              :step-hrs (double (/ (:vehicles TIO) 3600000))
 	      :movst ms
-                              :mover (asp/start-process ms #(move-vehicle id) MOV-TIO))
+                              :mover (asp/start-process ms #(move-vehicle id) (:vehicles TIO)))
          carr (volatile! mp)]
     (mov/set-turn-point carr)
     (vswap! VEHICLES assoc id carr)))
@@ -113,7 +121,7 @@
     (println (str "Unknown instruction: " [instruct ins])))))
 
 (defn receive-instructions []
-  (GET INS-URL {:handler instructions-handler
+  (GET (:instructions URL) {:handler instructions-handler
                        :error-handler error-handler}))
 
 (defn watch-visible []
@@ -124,7 +132,7 @@
                              "&e=" (.getEast bnd))))
 
 (defn command [cmd]
-  (GET (str CMD-URL
+  (GET (str (:command URL)
   (condp = cmd
     "watch-visible" (watch-visible)
     cmd))
@@ -170,7 +178,7 @@
 (defn on-load-chart []
   (enable-console-print!)
 (init-chart)
-(asp/repeater receive-instructions INS-TIO)
+(asp/repeater receive-instructions (:instructions TIO))
 (ctl/show-chart-controls))
 
 

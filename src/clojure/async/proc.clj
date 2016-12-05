@@ -13,8 +13,7 @@
            (<! (timeout time-out))))))
 
 (defn start-process [status proc-fn time-out]
-  (println [:SP status proc-fn time-out])
-(when (not= @status "RUN") 
+  (when (not= @status "RUN") 
   (vreset! status "RUN")
   (go (do 
           (while (and (= @status "RUN")

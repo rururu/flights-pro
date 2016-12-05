@@ -10,7 +10,7 @@
 (def FLIGHTS (volatile! {}))
 (def BBX (volatile! [0 0 0 0]))
 (def STATUS (volatile! "START"))
-(def F24-TIO 20000)
+(def F24-TIO 12000)
 (def AIRPORTS (volatile! nil))
 (def FL-INFOS (volatile! {}))
 (defn json-web-data [url]
