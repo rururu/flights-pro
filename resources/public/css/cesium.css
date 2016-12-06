@@ -1,76 +1,84 @@
 #autopilot {
   position:fixed;
-  bottom:290px;
+  bottom:160px;
   right:40px;
+  padding:5px;
+  z-index:100;
+  color:yellow
+}
+#temp {
+  position:fixed;
+  bottom:150px;
+  right:24px;
   padding:5px;
   z-index:100;
   color:yellow
 }
 #course {
   position:fixed;
-  bottom:280px;
-  right:80px;
+  bottom:150px;
+  right:108px;
   padding:5px;
   z-index:100;
   color:yellow
 }
 #speed {
   position:fixed;
-  bottom:260px;
-  right:80px;
+  bottom:130px;
+  right:108px;
   padding:5px;
   z-index:100;
   color:yellow
 }
 #altitude {
   position:fixed;
-  bottom:240px;
-  right:80px;
+  bottom:110px;
+  right:108px;
   padding:5px;
   z-index:100;
   color:yellow
 }
 #lat {
   position:fixed;
-  bottom:220px;
-  right:80px;
+  bottom:90px;
+  right:108px;
   padding:5px;
   z-index:100;
   color:yellow
 }
 #lon {
   position:fixed;
-  bottom:200px;
-  right:80px;
+  bottom:70px;
+  right:108px;
   padding:5px;
   z-index:100;
   color:yellow
 }
 #course-fld {
   position:fixed;
-  bottom:280px;
-  right:32px;
+  bottom:150px;
+  right:60px;
   padding:5px;
   z-index:100;
 }
 #speed-fld {
   position:fixed;
-  bottom:260px;
-  right:32px;
+  bottom:130px;
+  right:60px;
   padding:5px;
   z-index:100;
   color:yellow
 }
 #altitude-fld {
   position:fixed;
-  bottom:240px;
-  right:32px;
+  bottom:110px;
+  right:60px;
   padding:5px;
   z-index:100;
 }
 #speed-tmp {
   position:fixed;
-  bottom:260px;
+  bottom:130px;
   right:20px;
   padding:5px;
   z-index:100;
@@ -78,21 +86,21 @@
 }
 #altitude-tmp {
   position:fixed;
-  bottom:240px;
+  bottom:110px;
   right:20px;
   padding:5px;
   z-index:100;
 }
 #latitude-fld {
   position:fixed;
-  bottom:220px;
+  bottom:90px;
   right:20px;
   padding:5px;
   z-index:100;
 }
 #longitude-fld {
   position:fixed;
-  bottom:200px;
+  bottom:70px;
   right:20px;
   padding:5px;
   z-index:100;
@@ -100,7 +108,7 @@
 #camera {
   position:fixed;
   bottom:140px;
-  right:40px;
+  left:60px;
   padding:5px;
   z-index:100;
   color:yellow
@@ -108,7 +116,7 @@
 #onboard {
   position:fixed;
   bottom:130px;
-  right:120px;
+  left:20px;
   padding:5px;
   z-index:100;
   color:yellow
@@ -116,14 +124,14 @@
 #onboard-fld {
   position:fixed;
   bottom:130px;
-  right:20px;
+  left:84px;
   padding:5px;
   z-index:100;
 }
 #view {
   position:fixed;
   bottom:110px;
-  right:120px;
+  left:42px;
   padding:5px;
   z-index:100;
   color:yellow
@@ -131,14 +139,14 @@
 #view-fld {
   position:fixed;
   bottom:110px;
-  right:20px;
+  left:84px;
   padding:5px;
   z-index:100;
 }
 #pitch {
   position:fixed;
   bottom:90px;
-  right:120px;
+  left:42px;
   padding:5px;
   z-index:100;
   color:yellow
@@ -146,14 +154,14 @@
 #pitch-fld {
   position:fixed;
   bottom:90px;
-  right:20px;
+  left:84px;
   padding:5px;
   z-index:100;
 }
 #roll {
   position:fixed;
   bottom:70px;
-  right:120px;
+  left:48px;
   padding:5px;
   z-index:100;
   color:yellow
@@ -161,22 +169,7 @@
 #roll-fld {
   position:fixed;
   bottom:70px;
-  right:20px;
-  padding:5px;
-  z-index:100;
-}
-#hud {
-  position:fixed;
-  bottom:50px;
-  right:120px;
-  padding:5px;
-  z-index:100;
-  color:yellow
-}
-#hud-fld {
-  position:fixed;
-  bottom:50px;
-  right:20px;
+  left:84px;
   padding:5px;
   z-index:100;
 }
