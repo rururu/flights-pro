@@ -37,7 +37,7 @@
                             :step 5
                             :time-out 997}
                :engine {:target 0
-                            :step 0.4
+                            :step 1
                             :time-out 1003}}))
 (def CAM-PROC (volatile! "STOP"))
 (defn num-val [x]
@@ -104,13 +104,13 @@
 
 (defn speed [spd]
   (if (= (:mode @CARRIER) "MANUAL")
-  (let [spd (num-val spd)
+  (let [spd (num-val (ctl/get-value "input-spd"))
          acl (num-val (ctl/get-value "input-spdacl"))]
     (mov/accel CARRIER spd acl))))
 
-(defn altitude [alt]
+(defn altitude []
   (if (= (:mode @CARRIER) "MANUAL")
-  (let [alt (num-val alt)
+  (let [alt (num-val (ctl/get-value "input-alt"))
          acl (num-val (ctl/get-value "input-altacl"))]
     (mov/elevate CARRIER alt acl))))
 

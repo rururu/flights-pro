@@ -56,33 +56,35 @@
   "<input value='0' style='width:90px'
                onchange='javascript:view3d.client.roll(this.value)'>")
 (set-html! "course-fld" 
-  "<input value='0' style='width:38px' id='input-crs'
+  "<input value='180' style='width:38px' id='input-crs'
                      onchange='javascript:view3d.client.course(this.value)'>")
 (set-html! "speed-fld" 
-  "<input value='0' style='width:38px' id='input-spd'
-               onchange='javascript:view3d.client.speed(this.value)'>")
+  "<input value='210' style='width:38px' id='input-spd'
+               onchange='javascript:view3d.client.speed()'>")
 (set-html! "altitude-fld" 
-  "<input value='0' style='width:38px' id='input-alt'
-               onchange='javascript:view3d.client.altitude(this.value)'>")
+  "<input value='4000' style='width:38px' id='input-alt'
+               onchange='javascript:view3d.client.altitude()'>")
 (set-html! "speed-acl" 
-  "<select style='width:40px' id='input-spdacl'>
+  "<select style='width:40px' id='input-spdacl'
+                onchange='javascript:view3d.client.speed()'>
    <option value='1'>1</option>
    <option value='2'>2</option>
    <option value='3'>3</option>
    <option value='4'>4</option>
    <option value='5'>5</option>")
 (set-html! "altitude-acl" 
-  "<select style='width:40px' id='input-altacl'>
+  "<select style='width:40px' id='input-altacl'
+                onchange='javascript:view3d.client.altitude()'>
    <option value='1'>1</option>
    <option value='2'>2</option>
    <option value='3'>3</option>
    <option value='4'>4</option>
    <option value='5'>5</option>")
 (set-html! "latitude-fld" 
-  "<input value='0' style='width:78px' id='input-lat'
+  "<input value='40.8' style='width:78px' id='input-lat'
                onchange='javascript:view3d.client.latitude(this.value)'>")
 (set-html! "longitude-fld" 
-  "<input value='0' style='width:78px' id='input-lon'
+  "<input value='-74.0' style='width:78px' id='input-lon'
                onchange='javascript:view3d.client.longitude(this.value)'>"))
 
 (defn show-flight-data [carr]

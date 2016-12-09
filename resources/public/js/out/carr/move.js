@@ -16,23 +16,23 @@ var lam2 = (Math.atan2((sinc * sinaz),((cosphi1 * cosc) - ((sinphi1 * sinc) * co
 return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [phi2,lam2], null);
 });
 carr.move.set_turn_point = (function carr$move$set_turn_point(var_args){
-var args25464 = [];
-var len__21101__auto___25471 = arguments.length;
-var i__21102__auto___25472 = (0);
+var args23208 = [];
+var len__9931__auto___23215 = arguments.length;
+var i__9932__auto___23216 = (0);
 while(true){
-if((i__21102__auto___25472 < len__21101__auto___25471)){
-args25464.push((arguments[i__21102__auto___25472]));
+if((i__9932__auto___23216 < len__9931__auto___23215)){
+args23208.push((arguments[i__9932__auto___23216]));
 
-var G__25473 = (i__21102__auto___25472 + (1));
-i__21102__auto___25472 = G__25473;
+var G__23217 = (i__9932__auto___23216 + (1));
+i__9932__auto___23216 = G__23217;
 continue;
 } else {
 }
 break;
 }
 
-var G__25466 = args25464.length;
-switch (G__25466) {
+var G__23210 = args23208.length;
+switch (G__23210) {
 case 1:
 return carr.move.set_turn_point.cljs$core$IFn$_invoke$arity$1((arguments[(0)]));
 
@@ -42,7 +42,7 @@ return carr.move.set_turn_point.cljs$core$IFn$_invoke$arity$4((arguments[(0)]),(
 
 break;
 default:
-throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args25464.length)].join('')));
+throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args23208.length)].join('')));
 
 }
 });
@@ -52,10 +52,10 @@ var car = cljs.core.deref.call(null,carr__$1);
 return carr.move.set_turn_point.call(null,carr__$1,new cljs.core.Keyword(null,"coord","coord",-1453656639).cljs$core$IFn$_invoke$arity$1(car),new cljs.core.Keyword(null,"course","course",1455432948).cljs$core$IFn$_invoke$arity$1(car),new cljs.core.Keyword(null,"speed","speed",1257663751).cljs$core$IFn$_invoke$arity$1(car));
 });
 
-carr.move.set_turn_point.cljs$core$IFn$_invoke$arity$4 = (function (carr__$1,p__25467,crs,spd){
-var vec__25468 = p__25467;
-var lat = cljs.core.nth.call(null,vec__25468,(0),null);
-var lon = cljs.core.nth.call(null,vec__25468,(1),null);
+carr.move.set_turn_point.cljs$core$IFn$_invoke$arity$4 = (function (carr__$1,p__23211,crs,spd){
+var vec__23212 = p__23211;
+var lat = cljs.core.nth.call(null,vec__23212,(0),null);
+var lon = cljs.core.nth.call(null,vec__23212,(1),null);
 return cljs.core._vreset_BANG_.call(null,carr__$1,cljs.core.assoc.call(null,cljs.core._deref.call(null,carr__$1),new cljs.core.Keyword(null,"turn-point","turn-point",1337942146),new cljs.core.PersistentArrayMap(null, 5, [new cljs.core.Keyword(null,"phi","phi",-1526798304),(lat * carr.move.PID180),new cljs.core.Keyword(null,"lam","lam",1907357070),(lon * carr.move.PID180),new cljs.core.Keyword(null,"dir","dir",1734754661),(crs * carr.move.PID180),new cljs.core.Keyword(null,"rdh","rdh",1247569967),(spd * carr.move.NMRAD),new cljs.core.Keyword(null,"clk","clk",564834871),(0)], null)));
 });
 
@@ -79,9 +79,9 @@ var tur = new cljs.core.Keyword(null,"turn-point","turn-point",1337942146).cljs$
 var hrs = new cljs.core.Keyword(null,"step-hrs","step-hrs",-504384679).cljs$core$IFn$_invoke$arity$1(car);
 var elt = (new cljs.core.Keyword(null,"clk","clk",564834871).cljs$core$IFn$_invoke$arity$1(tur) + hrs);
 var way = (new cljs.core.Keyword(null,"rdh","rdh",1247569967).cljs$core$IFn$_invoke$arity$1(tur) * elt);
-var vec__25478 = carr.move.spherical_between_js.call(null,new cljs.core.Keyword(null,"phi","phi",-1526798304).cljs$core$IFn$_invoke$arity$1(tur),new cljs.core.Keyword(null,"lam","lam",1907357070).cljs$core$IFn$_invoke$arity$1(tur),way,new cljs.core.Keyword(null,"dir","dir",1734754661).cljs$core$IFn$_invoke$arity$1(tur));
-var phi = cljs.core.nth.call(null,vec__25478,(0),null);
-var lam = cljs.core.nth.call(null,vec__25478,(1),null);
+var vec__23222 = carr.move.spherical_between_js.call(null,new cljs.core.Keyword(null,"phi","phi",-1526798304).cljs$core$IFn$_invoke$arity$1(tur),new cljs.core.Keyword(null,"lam","lam",1907357070).cljs$core$IFn$_invoke$arity$1(tur),way,new cljs.core.Keyword(null,"dir","dir",1734754661).cljs$core$IFn$_invoke$arity$1(tur));
+var phi = cljs.core.nth.call(null,vec__23222,(0),null);
+var lam = cljs.core.nth.call(null,vec__23222,(1),null);
 return cljs.core._vreset_BANG_.call(null,carr__$1,cljs.core.assoc.call(null,cljs.core._deref.call(null,carr__$1),new cljs.core.Keyword(null,"coord","coord",-1453656639),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [(phi / carr.move.PID180),(lam / carr.move.PID180)], null),new cljs.core.Keyword(null,"turn-point","turn-point",1337942146),cljs.core.assoc.call(null,tur,new cljs.core.Keyword(null,"clk","clk",564834871),elt)));
 });
 carr.move.turn = (function carr$move$turn(carr__$1,course,temp){
