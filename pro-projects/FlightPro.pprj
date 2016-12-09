@@ -1,4 +1,4 @@
-; Tue Dec 06 21:26:35 MSK 2016
+; Fri Dec 09 21:48:47 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -81,39 +81,39 @@
 ([FlightPro_ProjectKB_Class618] of  Property_List
 )
 
-([FlightPro_ProjectKB_Class802] of  Map
+([FlightPro_ProjectKB_Class717] of  Map
 
 	(entries
-		[FlightPro_ProjectKB_Class803]
-		[FlightPro_ProjectKB_Class804]
-		[FlightPro_ProjectKB_Class805]))
+		[FlightPro_ProjectKB_Class718]
+		[FlightPro_ProjectKB_Class719]
+		[FlightPro_ProjectKB_Class720]))
 
-([FlightPro_ProjectKB_Class803] of  Map_Entry
+([FlightPro_ProjectKB_Class718] of  Map_Entry
 
 	(key "FlightPro_Class320015")
 	(key_class "edu.stanford.smi.protege.model.Frame")
 	(value "-8 584 224 146")
 	(value_class "java.awt.Rectangle"))
 
-([FlightPro_ProjectKB_Class804] of  Map_Entry
+([FlightPro_ProjectKB_Class719] of  Map_Entry
 
 	(key "FlightPro_Class290004")
 	(key_class "edu.stanford.smi.protege.model.Frame")
 	(value "-3 351 224 146")
 	(value_class "java.awt.Rectangle"))
 
-([FlightPro_ProjectKB_Class805] of  Map_Entry
+([FlightPro_ProjectKB_Class720] of  Map_Entry
 
 	(key "FlightPro_Class290003")
 	(key_class "edu.stanford.smi.protege.model.Frame")
 	(value "-5 349 224 146")
 	(value_class "java.awt.Rectangle"))
 
-([FlightPro_ProjectKB_Class806] of  Map_Entry
+([FlightPro_ProjectKB_Class721] of  Map_Entry
 
 	(key "InstanceDisplay.yellow_stickies")
 	(key_class "java.lang.String")
-	(value "FlightPro_ProjectKB_Class802")
+	(value "FlightPro_ProjectKB_Class717")
 	(value_class "java.util.Map"))
 
 ([FORMS_TAB] of  Widget
@@ -153,8 +153,8 @@
 
 ([KB_102576_Class1] of  Map
 
-	(entries [FlightPro_ProjectKB_Class806])
-	(referenced_maps [FlightPro_ProjectKB_Class802]))
+	(entries [FlightPro_ProjectKB_Class721])
+	(referenced_maps [FlightPro_ProjectKB_Class717]))
 
 ([KB_102576_Class11] of  Property_List
 
@@ -248,28 +248,28 @@
 	(name "instances_file_name")
 	(string_value "FlightPro.pins"))
 
-([KB_264966_Class618] of  Map
+([KB_407880_Class618] of  Map
 
 	(entries
-		[KB_264966_Class619]
-		[KB_264966_Class620]
-		[KB_264966_Class621]))
+		[KB_407880_Class619]
+		[KB_407880_Class620]
+		[KB_407880_Class621]))
 
-([KB_264966_Class619] of  Map_Entry
+([KB_407880_Class619] of  Map_Entry
 
 	(key "suppress_instance_counting")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_264966_Class620] of  Map_Entry
+([KB_407880_Class620] of  Map_Entry
 
 	(key "add_name_on_instance_form")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_264966_Class621] of  Map_Entry
+([KB_407880_Class621] of  Map_Entry
 
 	(key "change_tracking_active")
 	(key_class "java.lang.String")

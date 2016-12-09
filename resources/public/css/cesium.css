@@ -6,7 +6,7 @@
   z-index:100;
   color:yellow
 }
-#temp {
+#accel {
   position:fixed;
   bottom:150px;
   right:24px;
@@ -76,7 +76,7 @@
   padding:5px;
   z-index:100;
 }
-#speed-tmp {
+#speed-acl {
   position:fixed;
   bottom:130px;
   right:20px;
@@ -84,7 +84,7 @@
   z-index:100;
   color:yellow
 }
-#altitude-tmp {
+#altitude-acl {
   position:fixed;
   bottom:110px;
   right:20px;

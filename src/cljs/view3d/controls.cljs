@@ -20,7 +20,7 @@
 
 (defn show-controls []
   (set-html! "autopilot" "<h4>Autopilot</h4>")
-(set-html! "temp" "temp")
+(set-html! "accel" "accel")
 (set-html! "course" "Course: 000")
 (set-html! "speed" "Speed: 000")
 (set-html! "altitude" "Altitude: 00000")
@@ -64,18 +64,20 @@
 (set-html! "altitude-fld" 
   "<input value='0' style='width:38px' id='input-alt'
                onchange='javascript:view3d.client.altitude(this.value)'>")
-(set-html! "speed-tmp" 
-  "<select style='width:40px' id='input-spdtmp'>
+(set-html! "speed-acl" 
+  "<select style='width:40px' id='input-spdacl'>
    <option value='1'>1</option>
    <option value='2'>2</option>
    <option value='3'>3</option>
-   <option value='4'>4</option>")
-(set-html! "altitude-tmp" 
-  "<select style='width:40px' id='input-alttmp'>
+   <option value='4'>4</option>
+   <option value='5'>5</option>")
+(set-html! "altitude-acl" 
+  "<select style='width:40px' id='input-altacl'>
    <option value='1'>1</option>
    <option value='2'>2</option>
    <option value='3'>3</option>
-   <option value='4'>4</option>")
+   <option value='4'>4</option>
+   <option value='5'>5</option>")
 (set-html! "latitude-fld" 
   "<input value='0' style='width:78px' id='input-lat'
                onchange='javascript:view3d.client.latitude(this.value)'>")

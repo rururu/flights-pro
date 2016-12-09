@@ -34,10 +34,10 @@
                             :step 3
                             :time-out 1011}
                :elevator {:target 0
-                            :step 7
+                            :step 5
                             :time-out 997}
                :engine {:target 0
-                            :step 6
+                            :step 0.4
                             :time-out 1003}}))
 (def CAM-PROC (volatile! "STOP"))
 (defn num-val [x]
@@ -105,14 +105,14 @@
 (defn speed [spd]
   (if (= (:mode @CARRIER) "MANUAL")
   (let [spd (num-val spd)
-         tmp (if (< (:speed @CARRIER) 150) 2 1)]
-    (mov/accel CARRIER spd tmp))))
+         acl (num-val (ctl/get-value "input-spdacl"))]
+    (mov/accel CARRIER spd acl))))
 
 (defn altitude [alt]
   (if (= (:mode @CARRIER) "MANUAL")
   (let [alt (num-val alt)
-         tmp (if (< (:altitude @CARRIER) 1500) 1 3)]
-    (mov/elevate CARRIER alt tmp))))
+         acl (num-val (ctl/get-value "input-altacl"))]
+    (mov/elevate CARRIER alt acl))))
 
 (defn latitude [lat]
   (if (= (:mode @CARRIER) "MANUAL")
@@ -183,9 +183,6 @@
 (asp/repeater ctl/show-flight-data CARRIER (:display TIO))
 (asp/repeater receive-directives (:directives TIO))
 (ctl/show-controls))
-
-(defn to-manual []
-)
 
 
 (set! (.-onload js/window) (on-load))

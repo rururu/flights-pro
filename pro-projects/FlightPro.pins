@@ -1,4 +1,4 @@
-; Tue Dec 06 21:26:35 MSK 2016
+; Fri Dec 09 21:48:46 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -69,7 +69,7 @@
 
 ([FlightPro_Class100025] of  CloVar
 
-	(source "(volatile! {:mode \"?\"\n               :coord [0 0]\n               :altitude 0\n               :speed 0\n               :course 0\n               :step-hrs (double (/ (:carrier TIO) 3600000))\n               :bank-params [20 8 64 2]\n               :rudder {:target 0\n                            :step 3\n                            :time-out 1011}\n               :elevator {:target 0\n                            :step 7\n                            :time-out 997}\n               :engine {:target 0\n                            :step 6\n                            :time-out 1003}})")
+	(source "(volatile! {:mode \"?\"\n               :coord [0 0]\n               :altitude 0\n               :speed 0\n               :course 0\n               :step-hrs (double (/ (:carrier TIO) 3600000))\n               :bank-params [20 8 64 2]\n               :rudder {:target 0\n                            :step 3\n                            :time-out 1011}\n               :elevator {:target 0\n                            :step 5\n                            :time-out 997}\n               :engine {:target 0\n                            :step 1\n                            :time-out 1003}})")
 	(title "CARRIER"))
 
 ([FlightPro_Class100026] of  CloFunction
@@ -104,7 +104,7 @@
 
 ([FlightPro_Class120000] of  CSS
 
-	(source "#autopilot {\n  position:fixed;\n  bottom:160px;\n  right:40px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#temp {\n  position:fixed;\n  bottom:150px;\n  right:24px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#course {\n  position:fixed;\n  bottom:150px;\n  right:108px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#speed {\n  position:fixed;\n  bottom:130px;\n  right:108px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#altitude {\n  position:fixed;\n  bottom:110px;\n  right:108px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#lat {\n  position:fixed;\n  bottom:90px;\n  right:108px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#lon {\n  position:fixed;\n  bottom:70px;\n  right:108px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#course-fld {\n  position:fixed;\n  bottom:150px;\n  right:60px;\n  padding:5px;\n  z-index:100;\n}\n#speed-fld {\n  position:fixed;\n  bottom:130px;\n  right:60px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#altitude-fld {\n  position:fixed;\n  bottom:110px;\n  right:60px;\n  padding:5px;\n  z-index:100;\n}\n#speed-tmp {\n  position:fixed;\n  bottom:130px;\n  right:20px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#altitude-tmp {\n  position:fixed;\n  bottom:110px;\n  right:20px;\n  padding:5px;\n  z-index:100;\n}\n#latitude-fld {\n  position:fixed;\n  bottom:90px;\n  right:20px;\n  padding:5px;\n  z-index:100;\n}\n#longitude-fld {\n  position:fixed;\n  bottom:70px;\n  right:20px;\n  padding:5px;\n  z-index:100;\n}\n#camera {\n  position:fixed;\n  bottom:140px;\n  left:60px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#onboard {\n  position:fixed;\n  bottom:130px;\n  left:20px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#onboard-fld {\n  position:fixed;\n  bottom:130px;\n  left:84px;\n  padding:5px;\n  z-index:100;\n}\n#view {\n  position:fixed;\n  bottom:110px;\n  left:42px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#view-fld {\n  position:fixed;\n  bottom:110px;\n  left:84px;\n  padding:5px;\n  z-index:100;\n}\n#pitch {\n  position:fixed;\n  bottom:90px;\n  left:42px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#pitch-fld {\n  position:fixed;\n  bottom:90px;\n  left:84px;\n  padding:5px;\n  z-index:100;\n}\n#roll {\n  position:fixed;\n  bottom:70px;\n  left:48px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#roll-fld {\n  position:fixed;\n  bottom:70px;\n  left:84px;\n  padding:5px;\n  z-index:100;\n}")
+	(source "#autopilot {\n  position:fixed;\n  bottom:160px;\n  right:40px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#accel {\n  position:fixed;\n  bottom:150px;\n  right:24px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#course {\n  position:fixed;\n  bottom:150px;\n  right:108px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#speed {\n  position:fixed;\n  bottom:130px;\n  right:108px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#altitude {\n  position:fixed;\n  bottom:110px;\n  right:108px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#lat {\n  position:fixed;\n  bottom:90px;\n  right:108px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#lon {\n  position:fixed;\n  bottom:70px;\n  right:108px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#course-fld {\n  position:fixed;\n  bottom:150px;\n  right:60px;\n  padding:5px;\n  z-index:100;\n}\n#speed-fld {\n  position:fixed;\n  bottom:130px;\n  right:60px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#altitude-fld {\n  position:fixed;\n  bottom:110px;\n  right:60px;\n  padding:5px;\n  z-index:100;\n}\n#speed-acl {\n  position:fixed;\n  bottom:130px;\n  right:20px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#altitude-acl {\n  position:fixed;\n  bottom:110px;\n  right:20px;\n  padding:5px;\n  z-index:100;\n}\n#latitude-fld {\n  position:fixed;\n  bottom:90px;\n  right:20px;\n  padding:5px;\n  z-index:100;\n}\n#longitude-fld {\n  position:fixed;\n  bottom:70px;\n  right:20px;\n  padding:5px;\n  z-index:100;\n}\n#camera {\n  position:fixed;\n  bottom:140px;\n  left:60px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#onboard {\n  position:fixed;\n  bottom:130px;\n  left:20px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#onboard-fld {\n  position:fixed;\n  bottom:130px;\n  left:84px;\n  padding:5px;\n  z-index:100;\n}\n#view {\n  position:fixed;\n  bottom:110px;\n  left:42px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#view-fld {\n  position:fixed;\n  bottom:110px;\n  left:84px;\n  padding:5px;\n  z-index:100;\n}\n#pitch {\n  position:fixed;\n  bottom:90px;\n  left:42px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#pitch-fld {\n  position:fixed;\n  bottom:90px;\n  left:84px;\n  padding:5px;\n  z-index:100;\n}\n#roll {\n  position:fixed;\n  bottom:70px;\n  left:48px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#roll-fld {\n  position:fixed;\n  bottom:70px;\n  left:84px;\n  padding:5px;\n  z-index:100;\n}")
 	(store-in "resources/public/css")
 	(title "cesium"))
 
@@ -161,7 +161,7 @@
 
 ([FlightPro_Class140003] of  CloFunction
 
-	(source "(set-html! \"autopilot\" \"<h4>Autopilot</h4>\")\n(set-html! \"temp\" \"temp\")\n(set-html! \"course\" \"Course: 000\")\n(set-html! \"speed\" \"Speed: 000\")\n(set-html! \"altitude\" \"Altitude: 00000\")\n(set-html! \"lat\" \"Latitude: 00.0000\")\n(set-html! \"lon\" \"Longitude: 00.0000\")\n(set-html! \"camera\" \"<h4>Camera</h4>\")\n(set-html! \"onboard\" \"Onboard:\")\n(set-html! \"onboard-fld\" \n  \"<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>\n   <option value='callsign'>callsign</option>\n   <option value='manual'>manual</option>\n   <option value='select'>select</option>\")\n(set-html! \"view\" \"View:\")\n(set-html! \"view-fld\" \n  \"<select onchange='javascript:view3d.client.view(this.value)' style='width:96px'>\n   <option value='FORWARD'>FORWARD</option>\n   <option value='BACKWARD'>BACKWARD</option>\n   <option value='RIGHT'>RIGHT</option>\n   <option value='LEFT'>LEFT</option>\n   <option value='UP'>UP</option>\n   <option value='DOWN'>DOWN</option>\n   <option value='FORWARD-RIGHT'>FORWARD-RIGHT</option>\n   <option value='FORWARD'>FORWARD</option>\n   <option value='BACKWARD-RIGHT'>BACKWARD-RIGHT</option>\n   <option value='BACKWARD-LEFT'>BACKWARD-LEFT</option>\n   </select>\")\n(set-html! \"pitch\" \"Pitch:\")\n(set-html! \"pitch-fld\" \n  \"<input value='0' style='width:90px'\n               onchange='javascript:view3d.client.pitch(this.value)'>\")\n(set-html! \"roll\" \"Roll:\")\n(set-html! \"roll-fld\" \n  \"<input value='0' style='width:90px'\n               onchange='javascript:view3d.client.roll(this.value)'>\")\n(set-html! \"course-fld\" \n  \"<input value='0' style='width:38px' id='input-crs'\n                     onchange='javascript:view3d.client.course(this.value)'>\")\n(set-html! \"speed-fld\" \n  \"<input value='0' style='width:38px' id='input-spd'\n               onchange='javascript:view3d.client.speed(this.value)'>\")\n(set-html! \"altitude-fld\" \n  \"<input value='0' style='width:38px' id='input-alt'\n               onchange='javascript:view3d.client.altitude(this.value)'>\")\n(set-html! \"speed-tmp\" \n  \"<select style='width:40px' id='input-spdtmp'>\n   <option value='1'>1</option>\n   <option value='2'>2</option>\n   <option value='3'>3</option>\n   <option value='4'>4</option>\")\n(set-html! \"altitude-tmp\" \n  \"<select style='width:40px' id='input-alttmp'>\n   <option value='1'>1</option>\n   <option value='2'>2</option>\n   <option value='3'>3</option>\n   <option value='4'>4</option>\")\n(set-html! \"latitude-fld\" \n  \"<input value='0' style='width:78px' id='input-lat'\n               onchange='javascript:view3d.client.latitude(this.value)'>\")\n(set-html! \"longitude-fld\" \n  \"<input value='0' style='width:78px' id='input-lon'\n               onchange='javascript:view3d.client.longitude(this.value)'>\")")
+	(source "(set-html! \"autopilot\" \"<h4>Autopilot</h4>\")\n(set-html! \"accel\" \"accel\")\n(set-html! \"course\" \"Course: 000\")\n(set-html! \"speed\" \"Speed: 000\")\n(set-html! \"altitude\" \"Altitude: 00000\")\n(set-html! \"lat\" \"Latitude: 00.0000\")\n(set-html! \"lon\" \"Longitude: 00.0000\")\n(set-html! \"camera\" \"<h4>Camera</h4>\")\n(set-html! \"onboard\" \"Onboard:\")\n(set-html! \"onboard-fld\" \n  \"<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>\n   <option value='callsign'>callsign</option>\n   <option value='manual'>manual</option>\n   <option value='select'>select</option>\")\n(set-html! \"view\" \"View:\")\n(set-html! \"view-fld\" \n  \"<select onchange='javascript:view3d.client.view(this.value)' style='width:96px'>\n   <option value='FORWARD'>FORWARD</option>\n   <option value='BACKWARD'>BACKWARD</option>\n   <option value='RIGHT'>RIGHT</option>\n   <option value='LEFT'>LEFT</option>\n   <option value='UP'>UP</option>\n   <option value='DOWN'>DOWN</option>\n   <option value='FORWARD-RIGHT'>FORWARD-RIGHT</option>\n   <option value='FORWARD'>FORWARD</option>\n   <option value='BACKWARD-RIGHT'>BACKWARD-RIGHT</option>\n   <option value='BACKWARD-LEFT'>BACKWARD-LEFT</option>\n   </select>\")\n(set-html! \"pitch\" \"Pitch:\")\n(set-html! \"pitch-fld\" \n  \"<input value='0' style='width:90px'\n               onchange='javascript:view3d.client.pitch(this.value)'>\")\n(set-html! \"roll\" \"Roll:\")\n(set-html! \"roll-fld\" \n  \"<input value='0' style='width:90px'\n               onchange='javascript:view3d.client.roll(this.value)'>\")\n(set-html! \"course-fld\" \n  \"<input value='0' style='width:38px' id='input-crs'\n                     onchange='javascript:view3d.client.course(this.value)'>\")\n(set-html! \"speed-fld\" \n  \"<input value='0' style='width:38px' id='input-spd'\n               onchange='javascript:view3d.client.speed(this.value)'>\")\n(set-html! \"altitude-fld\" \n  \"<input value='0' style='width:38px' id='input-alt'\n               onchange='javascript:view3d.client.altitude(this.value)'>\")\n(set-html! \"speed-acl\" \n  \"<select style='width:40px' id='input-spdacl'>\n   <option value='1'>1</option>\n   <option value='2'>2</option>\n   <option value='3'>3</option>\n   <option value='4'>4</option>\n   <option value='5'>5</option>\")\n(set-html! \"altitude-acl\" \n  \"<select style='width:40px' id='input-altacl'>\n   <option value='1'>1</option>\n   <option value='2'>2</option>\n   <option value='3'>3</option>\n   <option value='4'>4</option>\n   <option value='5'>5</option>\")\n(set-html! \"latitude-fld\" \n  \"<input value='0' style='width:78px' id='input-lat'\n               onchange='javascript:view3d.client.latitude(this.value)'>\")\n(set-html! \"longitude-fld\" \n  \"<input value='0' style='width:78px' id='input-lon'\n               onchange='javascript:view3d.client.longitude(this.value)'>\")")
 	(title "show-controls []"))
 
 ([FlightPro_Class140004] of  CloFunction
@@ -211,18 +211,18 @@
 
 ([FlightPro_Class140024] of  CloFunction
 
-	(source "(if (= (:mode @CARRIER) \"MANUAL\")\n  (let [spd (num-val spd)\n         tmp (if (< (:speed @CARRIER) 150) 2 1)]\n    (mov/accel CARRIER spd tmp)))")
+	(source "(if (= (:mode @CARRIER) \"MANUAL\")\n  (let [spd (num-val spd)\n         acl (num-val (ctl/get-value \"input-spdacl\"))]\n    (mov/accel CARRIER spd acl)))")
 	(title "speed [spd]"))
 
 ([FlightPro_Class140025] of  CloFunction
 
-	(source "(if (= (:mode @CARRIER) \"MANUAL\")\n  (let [alt (num-val alt)\n         tmp (if (< (:altitude @CARRIER) 1500) 1 3)]\n    (mov/elevate CARRIER alt tmp)))")
+	(source "(if (= (:mode @CARRIER) \"MANUAL\")\n  (let [alt (num-val alt)\n         acl (num-val (ctl/get-value \"input-altacl\"))]\n    (mov/elevate CARRIER alt acl)))")
 	(title "altitude [alt]"))
 
 ([FlightPro_Class140027] of  CloFunction
 
-	(source "(vswap! carr assoc-in [:elevator :target] altitude)\n(dyn/equalize carr :elevator (fn [cr v] (vswap! cr assoc :altitude v)) \n                              :altitude dyn/step-closer temp)")
-	(title "elevate [carr altitude temp]"))
+	(source "(vswap! carr assoc-in [:elevator :target] altitude)\n(dyn/equalize carr :elevator (fn [cr v] (vswap! cr assoc :altitude v)) \n                              :altitude dyn/step-closer accl)")
+	(title "elevate [carr altitude accl]"))
 
 ([FlightPro_Class150000] of  ClsRequired
 
@@ -477,8 +477,7 @@
 		[FlightPro_Class320000]
 		[FlightPro_Class80003]
 		[FlightPro_Class80001]
-		[FlightPro_Class70001]
-		[FlightPro_Class330001])
+		[FlightPro_Class70001])
 	(cloNamespace [FlightPro_Class60001])
 	(cloVars
 		[FlightPro_Class70000]
@@ -807,10 +806,6 @@
 	(salience 2)
 	(title "af:SwitchOnboard2"))
 
-([FlightPro_Class220002] of  CloFuncall
-
-	(source "(ru.rules/f 86)"))
-
 ([FlightPro_Class220007] of  CloFunction
 
 	(source "(or (@FL-INFOS id)\n     (let [info (json-web-data (str URL-FLT id))]\n       (vswap! FL-INFOS assoc id info)\n       info))")
@@ -904,10 +899,6 @@
 	(source "(let [pdiff (Math/sin (/ (- phi phi1) 2.0))\n       ldiff (Math/sin (/ (- lambda lambda0) 2.0))\n       rval (Math/sqrt (+ (* pdiff pdiff) (* (Math/cos phi1) (Math/cos phi) ldiff ldiff)))]\n   (* 2.0 (Math/asin rval)))")
 	(title "spherical-distance [^double phi1 ^double lambda0 ^double phi ^double lambda]"))
 
-([FlightPro_Class250000] of  CloFuncall
-
-	(source "fr24.client/STATUS"))
-
 ([FlightPro_Class250002] of  CloFunction
 
 	(source "(let [phi (Math/toRadians lat)\n       lam (Math/toRadians lon)\n       dir (Math/toRadians crs)\n       way (* spd tim)\n       way (Math/toRadians (/ way 60))\n       [phi2 lam2] (spherical-between phi lam way dir)]\n   [(Math/toDegrees phi2) (Math/toDegrees lam2)])")
@@ -986,7 +977,8 @@
 		[FlightPro_Class290006]
 		[FlightPro_Class200001]
 		[FlightPro_Class250011]
-		[FlightPro_Class260003])
+		[FlightPro_Class260003]
+		[FlightPro_Class90005])
 	(cloNamespace [FlightPro_Class280001])
 	(cloVars [FlightPro_Class320006])
 	(title "ES Functions"))
@@ -1038,8 +1030,8 @@
 
 ([FlightPro_Class30000] of  CloFunction
 
-	(source "(letfn [(proc-fn [cr]\n                      (let [c @cr\n                             g (get c gear)\n                             target (:target g)\n                             step (* temp (:step g))]\n                        (if (approx= (param c) target step)\n                            (do (param-fn cr target)\n                                  false)\n                            (do (param-fn cr (closer (param c) target step))\n                                  true))))]\n  (vswap! carr assoc-in [gear :eqz-status] (volatile! \"STOP\"))\n  (let [g (get @carr gear)]\n    (asp/start-process (:eqz-status g) \n                                   #(proc-fn carr) \n                                   (:time-out g))))")
-	(title "equalize [carr gear param-fn param closer temp]"))
+	(source "(letfn [(proc-fn [cr]\n                      (let [c @cr\n                             g (get c gear)\n                             target (:target g)\n                             step (* accl (:step g))]\n                        (if (approx= (param c) target step)\n                            (do (param-fn cr target)\n                                  false)\n                            (do (param-fn cr (closer (param c) target step))\n                                  true))))]\n  (vswap! carr assoc-in [gear :eqz-status] (volatile! \"STOP\"))\n  (let [g (get @carr gear)]\n    (asp/start-process (:eqz-status g) \n                                   #(proc-fn carr) \n                                   (:time-out g))))")
+	(title "equalize [carr gear param-fn param closer accl]"))
 
 ([FlightPro_Class300000] of  CloFunction
 
@@ -1116,8 +1108,8 @@
 
 ([FlightPro_Class30027] of  CloFunction
 
-	(source "(vswap! carr assoc-in [:engine :target] speed)\n(dyn/equalize carr :engine set-speed :speed dyn/step-closer temp)")
-	(title "accel [carr speed temp]"))
+	(source "(vswap! carr assoc-in [:engine :target] speed)\n(dyn/equalize carr :engine set-speed :speed dyn/step-closer accl)")
+	(title "accel [carr speed accl]"))
 
 ([FlightPro_Class310000] of  CloFunction
 
@@ -1235,10 +1227,6 @@
 	(source "(int (/ (System/currentTimeMillis) 1000))")
 	(title "current-time []"))
 
-([FlightPro_Class330001] of  CloFunction
-
-	(title "to-manual []"))
-
 ([FlightPro_Class330002] of  CloVar
 
 	(source "(volatile! \"STOP\")")
@@ -1271,7 +1259,7 @@
 
 ([FlightPro_Class40000] of  HTML
 
-	(source "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <title>Cockpit View</title>\n    <link rel=\"stylesheet\" href=\"css/cesium.css\" />\n    <script src=\"Cesium/Cesium.js\"></script>\n    <style>\n      @import url(Cesium/Widgets/widgets.css);\n      #cesiumContainer {\n        position: absolute;\n        top: 0;\n        left: 0;\n        height: 100%;\n        width: 100%;\n        margin: 0;\n        overflow: hidden;\n        padding: 0;\n        font-family: sans-serif;\n      }\n      html {\n        height: 100%;\n      }\n      body {\n        padding: 0;\n        margin: 0;\n        overflow: hidden;\n        height: 100%;\n      }\n    </style>\n  </head>\n  <body>\n    <div id=\"cesiumContainer\"></div>\n    <div id=\"autopilot\"></div>\n    <div id=\"course\"></div><div id=\"course-fld\"></div><div id=\"temp\"></div>\n    <div id=\"speed\"></div><div id=\"speed-fld\"></div><div id=\"speed-tmp\"></div>\n    <div id=\"altitude\"></div><div id=\"altitude-fld\"></div><div id=\"altitude-tmp\"></div>\n    <div id=\"lat\"></div></div><div id=\"latitude-fld\"></div>\n    <div id=\"lon\"></div></div><div id=\"longitude-fld\"></div>\n    <div id=\"camera\"></div>\n    <div id=\"onboard\"></div><div id=\"onboard-fld\"></div>\n    <div id=\"view\"></div><div id=\"view-fld\"></div>\n    <div id=\"pitch\"></div><div id=\"pitch-fld\"></div>\n    <div id=\"roll\"></div><div id=\"roll-fld\"></div>\n    <script>\n      Cesium.BingMapsApi.defaultKey = 'Au5mRx6ODcM1h4EAWNyK8wWoyaTjeLuvGkacr7WRZgmAt4QtmyV03OrN1TYb-cr7';\n    </script>\n    <script type=\"text/javascript\" src=\"js/main.js\"></script>\n  </body>\n</html>")
+	(source "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <title>Cockpit View</title>\n    <link rel=\"stylesheet\" href=\"css/cesium.css\" />\n    <script src=\"Cesium/Cesium.js\"></script>\n    <style>\n      @import url(Cesium/Widgets/widgets.css);\n      #cesiumContainer {\n        position: absolute;\n        top: 0;\n        left: 0;\n        height: 100%;\n        width: 100%;\n        margin: 0;\n        overflow: hidden;\n        padding: 0;\n        font-family: sans-serif;\n      }\n      html {\n        height: 100%;\n      }\n      body {\n        padding: 0;\n        margin: 0;\n        overflow: hidden;\n        height: 100%;\n      }\n    </style>\n  </head>\n  <body>\n    <div id=\"cesiumContainer\"></div>\n    <div id=\"autopilot\"></div>\n    <div id=\"course\"></div><div id=\"course-fld\"></div><div id=\"accel\"></div>\n    <div id=\"speed\"></div><div id=\"speed-fld\"></div><div id=\"speed-acl\"></div>\n    <div id=\"altitude\"></div><div id=\"altitude-fld\"></div><div id=\"altitude-acl\"></div>\n    <div id=\"lat\"></div></div><div id=\"latitude-fld\"></div>\n    <div id=\"lon\"></div></div><div id=\"longitude-fld\"></div>\n    <div id=\"camera\"></div>\n    <div id=\"onboard\"></div><div id=\"onboard-fld\"></div>\n    <div id=\"view\"></div><div id=\"view-fld\"></div>\n    <div id=\"pitch\"></div><div id=\"pitch-fld\"></div>\n    <div id=\"roll\"></div><div id=\"roll-fld\"></div>\n    <script>\n      Cesium.BingMapsApi.defaultKey = 'Au5mRx6ODcM1h4EAWNyK8wWoyaTjeLuvGkacr7WRZgmAt4QtmyV03OrN1TYb-cr7';\n    </script>\n    <script type=\"text/javascript\" src=\"js/main.js\"></script>\n  </body>\n</html>")
 	(store-in "resources/public")
 	(title "cezium"))
 
@@ -1428,3 +1416,8 @@
 
 	(source "(alts!! chn)")
 	(title "one-out [chn]"))
+
+([FlightPro_Class90005] of  CloFunction
+
+	(source "(loop [n 1 y z]\n  (if (seq y)\n    (let [[onb1 cs1 t1 crd1 a1 c1 s1 gnd1] (first y)\n           [onb2 cs2 t2 crd2 a2 c2 s2 gnd2] (second y)\n           dt (if (and t1 t2) (- t2 t1) -7777)\n           da (if (and a1 a2) (- a2 a1) -7777)\n           ds (if (and s1 s2) (- s2 s1) -7777)\n           va (if (and dt da) (/ da dt) -7777)\n           vs (if (and dt ds) (/ ds dt) -7777)]\n      (protege.core/ctpl [n onb2 cs2 t2 crd2 a2 c2 s2 gnd2 \n        (read-string (format \"%.1f\" (float va)))\n        (read-string (format \"%.2f\" (float vs)))])\n      (recur (inc n) (rest y))) ))")
+	(title "proc [z]"))

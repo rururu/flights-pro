@@ -51,12 +51,12 @@
   (vswap! carr assoc-in [:rudder :target] course)
 (dyn/equalize carr :rudder set-course :course dyn/course-closer temp))
 
-(defn accel [carr speed temp]
+(defn accel [carr speed accl]
   (vswap! carr assoc-in [:engine :target] speed)
-(dyn/equalize carr :engine set-speed :speed dyn/step-closer temp))
+(dyn/equalize carr :engine set-speed :speed dyn/step-closer accl))
 
-(defn elevate [carr altitude temp]
+(defn elevate [carr altitude accl]
   (vswap! carr assoc-in [:elevator :target] altitude)
 (dyn/equalize carr :elevator (fn [cr v] (vswap! cr assoc :altitude v)) 
-                              :altitude dyn/step-closer temp))
+                              :altitude dyn/step-closer accl))
 
