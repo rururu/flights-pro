@@ -56,12 +56,12 @@
         (norm-crs (+ from step)))
     true to)))
 
-(defn equalize [carr gear param-fn param closer accl]
+(defn equalize [carr gear param-fn param closer]
   (letfn [(proc-fn [cr]
                       (let [c @cr
                              g (get c gear)
                              target (:target g)
-                             step (* accl (:step g))]
+                             step (* (:accel g) (:step g))]
                         (if (approx= (param c) target step)
                             (do (param-fn cr target)
                                   false)

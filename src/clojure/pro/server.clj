@@ -183,6 +183,6 @@
                    (asp/pump-in DIR-CHN
 	{:directive :callsigns
 	 :list lst}))
-    (rete/assert-frame ['Onboard 'callsign cls]))
+    (rete/assert-frame ['Onboard 'callsign cls 'time 0]))
   ""))
 

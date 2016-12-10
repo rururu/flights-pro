@@ -16,23 +16,23 @@ var lam2 = (Math.atan2((sinc * sinaz),((cosphi1 * cosc) - ((sinphi1 * sinc) * co
 return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [phi2,lam2], null);
 });
 carr.move.set_turn_point = (function carr$move$set_turn_point(var_args){
-var args23208 = [];
-var len__9931__auto___23215 = arguments.length;
-var i__9932__auto___23216 = (0);
+var args11197 = [];
+var len__9613__auto___11204 = arguments.length;
+var i__9614__auto___11205 = (0);
 while(true){
-if((i__9932__auto___23216 < len__9931__auto___23215)){
-args23208.push((arguments[i__9932__auto___23216]));
+if((i__9614__auto___11205 < len__9613__auto___11204)){
+args11197.push((arguments[i__9614__auto___11205]));
 
-var G__23217 = (i__9932__auto___23216 + (1));
-i__9932__auto___23216 = G__23217;
+var G__11206 = (i__9614__auto___11205 + (1));
+i__9614__auto___11205 = G__11206;
 continue;
 } else {
 }
 break;
 }
 
-var G__23210 = args23208.length;
-switch (G__23210) {
+var G__11199 = args11197.length;
+switch (G__11199) {
 case 1:
 return carr.move.set_turn_point.cljs$core$IFn$_invoke$arity$1((arguments[(0)]));
 
@@ -42,7 +42,7 @@ return carr.move.set_turn_point.cljs$core$IFn$_invoke$arity$4((arguments[(0)]),(
 
 break;
 default:
-throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args23208.length)].join('')));
+throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args11197.length)].join('')));
 
 }
 });
@@ -52,10 +52,10 @@ var car = cljs.core.deref.call(null,carr__$1);
 return carr.move.set_turn_point.call(null,carr__$1,new cljs.core.Keyword(null,"coord","coord",-1453656639).cljs$core$IFn$_invoke$arity$1(car),new cljs.core.Keyword(null,"course","course",1455432948).cljs$core$IFn$_invoke$arity$1(car),new cljs.core.Keyword(null,"speed","speed",1257663751).cljs$core$IFn$_invoke$arity$1(car));
 });
 
-carr.move.set_turn_point.cljs$core$IFn$_invoke$arity$4 = (function (carr__$1,p__23211,crs,spd){
-var vec__23212 = p__23211;
-var lat = cljs.core.nth.call(null,vec__23212,(0),null);
-var lon = cljs.core.nth.call(null,vec__23212,(1),null);
+carr.move.set_turn_point.cljs$core$IFn$_invoke$arity$4 = (function (carr__$1,p__11200,crs,spd){
+var vec__11201 = p__11200;
+var lat = cljs.core.nth.call(null,vec__11201,(0),null);
+var lon = cljs.core.nth.call(null,vec__11201,(1),null);
 return cljs.core._vreset_BANG_.call(null,carr__$1,cljs.core.assoc.call(null,cljs.core._deref.call(null,carr__$1),new cljs.core.Keyword(null,"turn-point","turn-point",1337942146),new cljs.core.PersistentArrayMap(null, 5, [new cljs.core.Keyword(null,"phi","phi",-1526798304),(lat * carr.move.PID180),new cljs.core.Keyword(null,"lam","lam",1907357070),(lon * carr.move.PID180),new cljs.core.Keyword(null,"dir","dir",1734754661),(crs * carr.move.PID180),new cljs.core.Keyword(null,"rdh","rdh",1247569967),(spd * carr.move.NMRAD),new cljs.core.Keyword(null,"clk","clk",564834871),(0)], null)));
 });
 
@@ -73,33 +73,36 @@ carr.move.set_turn_point.call(null,carr__$1,new cljs.core.Keyword(null,"coord","
 
 return cljs.core._vreset_BANG_.call(null,carr__$1,cljs.core.assoc.call(null,cljs.core._deref.call(null,carr__$1),new cljs.core.Keyword(null,"speed","speed",1257663751),spd));
 });
+carr.move.set_altitude = (function carr$move$set_altitude(carr__$1,alt){
+return cljs.core._vreset_BANG_.call(null,carr__$1,cljs.core.assoc.call(null,cljs.core._deref.call(null,carr__$1),new cljs.core.Keyword(null,"altitude","altitude",463588637),alt));
+});
 carr.move.move = (function carr$move$move(carr__$1){
 var car = cljs.core.deref.call(null,carr__$1);
 var tur = new cljs.core.Keyword(null,"turn-point","turn-point",1337942146).cljs$core$IFn$_invoke$arity$1(car);
 var hrs = new cljs.core.Keyword(null,"step-hrs","step-hrs",-504384679).cljs$core$IFn$_invoke$arity$1(car);
 var elt = (new cljs.core.Keyword(null,"clk","clk",564834871).cljs$core$IFn$_invoke$arity$1(tur) + hrs);
 var way = (new cljs.core.Keyword(null,"rdh","rdh",1247569967).cljs$core$IFn$_invoke$arity$1(tur) * elt);
-var vec__23222 = carr.move.spherical_between_js.call(null,new cljs.core.Keyword(null,"phi","phi",-1526798304).cljs$core$IFn$_invoke$arity$1(tur),new cljs.core.Keyword(null,"lam","lam",1907357070).cljs$core$IFn$_invoke$arity$1(tur),way,new cljs.core.Keyword(null,"dir","dir",1734754661).cljs$core$IFn$_invoke$arity$1(tur));
-var phi = cljs.core.nth.call(null,vec__23222,(0),null);
-var lam = cljs.core.nth.call(null,vec__23222,(1),null);
+var vec__11211 = carr.move.spherical_between_js.call(null,new cljs.core.Keyword(null,"phi","phi",-1526798304).cljs$core$IFn$_invoke$arity$1(tur),new cljs.core.Keyword(null,"lam","lam",1907357070).cljs$core$IFn$_invoke$arity$1(tur),way,new cljs.core.Keyword(null,"dir","dir",1734754661).cljs$core$IFn$_invoke$arity$1(tur));
+var phi = cljs.core.nth.call(null,vec__11211,(0),null);
+var lam = cljs.core.nth.call(null,vec__11211,(1),null);
 return cljs.core._vreset_BANG_.call(null,carr__$1,cljs.core.assoc.call(null,cljs.core._deref.call(null,carr__$1),new cljs.core.Keyword(null,"coord","coord",-1453656639),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [(phi / carr.move.PID180),(lam / carr.move.PID180)], null),new cljs.core.Keyword(null,"turn-point","turn-point",1337942146),cljs.core.assoc.call(null,tur,new cljs.core.Keyword(null,"clk","clk",564834871),elt)));
 });
-carr.move.turn = (function carr$move$turn(carr__$1,course,temp){
+carr.move.turn = (function carr$move$turn(carr__$1,course,accel){
 cljs.core._vreset_BANG_.call(null,carr__$1,cljs.core.assoc_in.call(null,cljs.core._deref.call(null,carr__$1),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"rudder","rudder",1071257290),new cljs.core.Keyword(null,"target","target",253001721)], null),course));
 
-return calc.dynamic.equalize.call(null,carr__$1,new cljs.core.Keyword(null,"rudder","rudder",1071257290),carr.move.set_course,new cljs.core.Keyword(null,"course","course",1455432948),calc.dynamic.course_closer,temp);
+cljs.core._vreset_BANG_.call(null,carr__$1,cljs.core.assoc_in.call(null,cljs.core._deref.call(null,carr__$1),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"rudder","rudder",1071257290),new cljs.core.Keyword(null,"accel","accel",-2118422974)], null),accel));
+
+return calc.dynamic.equalize.call(null,carr__$1,new cljs.core.Keyword(null,"rudder","rudder",1071257290),carr.move.set_course,new cljs.core.Keyword(null,"course","course",1455432948),calc.dynamic.course_closer);
 });
-carr.move.accel = (function carr$move$accel(carr__$1,speed,accl){
+carr.move.accel = (function carr$move$accel(carr__$1,speed){
 cljs.core._vreset_BANG_.call(null,carr__$1,cljs.core.assoc_in.call(null,cljs.core._deref.call(null,carr__$1),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"engine","engine",1459054265),new cljs.core.Keyword(null,"target","target",253001721)], null),speed));
 
-return calc.dynamic.equalize.call(null,carr__$1,new cljs.core.Keyword(null,"engine","engine",1459054265),carr.move.set_speed,new cljs.core.Keyword(null,"speed","speed",1257663751),calc.dynamic.step_closer,accl);
+return calc.dynamic.equalize.call(null,carr__$1,new cljs.core.Keyword(null,"engine","engine",1459054265),carr.move.set_speed,new cljs.core.Keyword(null,"speed","speed",1257663751),calc.dynamic.step_closer);
 });
-carr.move.elevate = (function carr$move$elevate(carr__$1,altitude,accl){
+carr.move.elevate = (function carr$move$elevate(carr__$1,altitude){
 cljs.core._vreset_BANG_.call(null,carr__$1,cljs.core.assoc_in.call(null,cljs.core._deref.call(null,carr__$1),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"elevator","elevator",-1729324395),new cljs.core.Keyword(null,"target","target",253001721)], null),altitude));
 
-return calc.dynamic.equalize.call(null,carr__$1,new cljs.core.Keyword(null,"elevator","elevator",-1729324395),(function (cr,v){
-return cljs.core._vreset_BANG_.call(null,cr,cljs.core.assoc.call(null,cljs.core._deref.call(null,cr),new cljs.core.Keyword(null,"altitude","altitude",463588637),v));
-}),new cljs.core.Keyword(null,"altitude","altitude",463588637),calc.dynamic.step_closer,accl);
+return calc.dynamic.equalize.call(null,carr__$1,new cljs.core.Keyword(null,"elevator","elevator",-1729324395),carr.move.set_altitude,new cljs.core.Keyword(null,"altitude","altitude",463588637),calc.dynamic.step_closer);
 });
 
 //# sourceMappingURL=move.js.map

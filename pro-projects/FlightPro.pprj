@@ -1,4 +1,4 @@
-; Fri Dec 09 22:13:21 MSK 2016
+; Sat Dec 10 22:07:19 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -248,28 +248,28 @@
 	(name "instances_file_name")
 	(string_value "FlightPro.pins"))
 
-([KB_390578_Class618] of  Map
+([KB_255682_Class618] of  Map
 
 	(entries
-		[KB_390578_Class619]
-		[KB_390578_Class620]
-		[KB_390578_Class621]))
+		[KB_255682_Class619]
+		[KB_255682_Class620]
+		[KB_255682_Class621]))
 
-([KB_390578_Class619] of  Map_Entry
+([KB_255682_Class619] of  Map_Entry
 
 	(key "suppress_instance_counting")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_390578_Class620] of  Map_Entry
+([KB_255682_Class620] of  Map_Entry
 
 	(key "add_name_on_instance_form")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_390578_Class621] of  Map_Entry
+([KB_255682_Class621] of  Map_Entry
 
 	(key "change_tracking_active")
 	(key_class "java.lang.String")

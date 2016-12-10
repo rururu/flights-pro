@@ -1,4 +1,4 @@
-; Fri Dec 09 22:13:21 MSK 2016
+; Sat Dec 10 22:07:19 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -91,6 +91,10 @@
 (defclass Onboard
 	(is-a Flights+Ontology)
 	(role concrete)
+	(single-slot time
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot id
 		(type STRING)
 ;+		(cardinality 0 1)

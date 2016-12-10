@@ -43,7 +43,7 @@
     (format "%04d-%02d-%02dT%02d:%02d:%02dZ" yar mon dat hor min sec)))
 
 (defn doc []
-  (str "{\"id\":\"document\",\"version\":\"1.0\",\"clock\":{\"currentTime\":\"" (iso8601curt) "\"}}"))
+  (str "{\"id\":\"document\",\"version\":\"1.0\",\"clock\":{\"currentTime\":\"" (iso8601futt -16) "\"}}"))
 
 (defn location [label scale img-url lat lon alt span-sec]
   (when DOC-SND

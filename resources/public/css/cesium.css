@@ -17,7 +17,7 @@
 #course {
   position:fixed;
   bottom:150px;
-  right:108px;
+  right:114px;
   padding:5px;
   z-index:100;
   color:yellow
@@ -25,7 +25,7 @@
 #speed {
   position:fixed;
   bottom:130px;
-  right:108px;
+  right:114px;
   padding:5px;
   z-index:100;
   color:yellow
@@ -33,7 +33,7 @@
 #altitude {
   position:fixed;
   bottom:110px;
-  right:108px;
+  right:114px;
   padding:5px;
   z-index:100;
   color:yellow
@@ -41,7 +41,7 @@
 #lat {
   position:fixed;
   bottom:90px;
-  right:108px;
+  right:114px;
   padding:5px;
   z-index:100;
   color:yellow
@@ -49,7 +49,7 @@
 #lon {
   position:fixed;
   bottom:70px;
-  right:108px;
+  right:114px;
   padding:5px;
   z-index:100;
   color:yellow
@@ -57,14 +57,14 @@
 #course-fld {
   position:fixed;
   bottom:150px;
-  right:60px;
+  right:66px;
   padding:5px;
   z-index:100;
 }
 #speed-fld {
   position:fixed;
   bottom:130px;
-  right:60px;
+  right:66px;
   padding:5px;
   z-index:100;
   color:yellow
@@ -72,7 +72,7 @@
 #altitude-fld {
   position:fixed;
   bottom:110px;
-  right:60px;
+  right:66px;
   padding:5px;
   z-index:100;
 }

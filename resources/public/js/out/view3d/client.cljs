@@ -32,12 +32,15 @@
                :bank-params [20 8 64 2]
                :rudder {:target 0
                             :step 3
+	    :accel 1
                             :time-out 1011}
                :elevator {:target 0
-                            :step 5
+                            :step 4
+	    :accel 1
                             :time-out 997}
                :engine {:target 0
                             :step 1
+	    :accel 1
                             :time-out 1003}}))
 (def CAM-PROC (volatile! "STOP"))
 (defn num-val [x]
@@ -52,8 +55,8 @@
        alt (:altitude @carr)]
   (if (or (< alt 90) (= bnk 0))
     (mov/turn carr course 1)
-    (let [temp (if (> (dyn/abs bnk) rb) 2 1)]
-      (mov/turn carr course temp)
+    (let [accel (if (> (dyn/abs bnk) rb) 2 1)]
+      (mov/turn carr course accel)
       (dyn/check-diff-and-do carr
         [:rudder :target]
         [:course]
@@ -104,15 +107,19 @@
 
 (defn speed [spd]
   (if (= (:mode @CARRIER) "MANUAL")
-  (let [spd (num-val (ctl/get-value "input-spd"))
-         acl (num-val (ctl/get-value "input-spdacl"))]
-    (mov/accel CARRIER spd acl))))
+  (mov/accel CARRIER (num-val spd))))
 
-(defn altitude []
+(defn altitude [alt]
   (if (= (:mode @CARRIER) "MANUAL")
-  (let [alt (num-val (ctl/get-value "input-alt"))
-         acl (num-val (ctl/get-value "input-altacl"))]
-    (mov/elevate CARRIER alt acl))))
+  (mov/elevate CARRIER (num-val alt))))
+
+(defn accel-speed [accel]
+  (if (= (:mode @CARRIER) "MANUAL")
+  (vswap! CARRIER assoc-in [:engine :accel] accel)))
+
+(defn accel-altitude [accel]
+  (if (= (:mode @CARRIER) "MANUAL")
+  (vswap! CARRIER assoc-in [:elevator :accel] accel)))
 
 (defn latitude [lat]
   (if (= (:mode @CARRIER) "MANUAL")
@@ -159,17 +166,13 @@
             (ctl/callsigns (conj list "manual")))
     :carrier (let [{:keys [callsign vehicle]} dir]
             (asp/stop-process CAM-PROC)
-            (carrier callsign vehicle))
+            (carrier callsign vehicle)
+            (camera-move CARRIER))
     :fly-onboard (let [{:keys [callsign vehicle old-course period]} dir]
             (carrier callsign vehicle)
             (camera-move CARRIER period)
             (if (> (:altitude vehicle) 60)
               (roll (dyn/bank old-course (:course vehicle) (:bank-params @CARRIER)))))
-    :camera (vreset! czm/CAMERA (merge @czm/CAMERA dir))
-    :turn (let [{:keys [course]} dir]
-              (turn-and-bank CARRIER course))
-    :accel (let [{:keys [speed temp]} dir]
-              (mov/accel CARRIER speed temp))
     (println (str "Unknown directive: " [directive dir])))))
 
 (defn receive-directives []

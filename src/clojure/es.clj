@@ -19,6 +19,8 @@
 	 :id id}))
 
 (defn fly-onboard-to [csn crs1 crs2 crd2 spd2 alt2 per]
+  (let [crd3 (geo/future-pos crd2 crs2 spd2 (/ per 3600))
+       per3 (* 2 per)]
   (asp/pump-in serv/DIR-CHN
 	{:directive :fly-onboard
 	 :callsign csn
@@ -28,7 +30,7 @@
 	   :speed spd2
 	   :course crs2}
 	 :old-course crs1
-	 :period per}))
+	 :period per3})))
 
 (defn onboard [crd crs spd alt csg]
   (println [:ONBOARD csg])
