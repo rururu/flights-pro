@@ -10,7 +10,7 @@
 (def FLIGHTS (volatile! {}))
 (def BBX (volatile! [0 0 0 0]))
 (def STATUS (volatile! "START"))
-(def F24-TIO 12000)
+(def F24-TIO 20000)
 (def AIRPORTS (volatile! nil))
 (def FL-INFOS (volatile! {}))
 (defn json-web-data [url]
@@ -25,14 +25,6 @@
     (do
       (println [:STATUS s])
       nil))))
-
-(defn flights-in-bbx []
-  (let [[n s w e] @BBX]
-  (if-let [ff (json-web-data (str URL-FLS "?bounds=" n "," s "," w "," e))]
-    (let [ff (filter #(vector? (second %)) ff)
-           ff (apply hash-map  (apply concat ff))]
-      (vreset! FLIGHTS ff)
-      ff))))
 
 (defn dat [iod]
   (if (string? iod)
@@ -54,6 +46,16 @@
 
 (defn callsign [iod]
   (nth (dat iod) 16))
+
+(defn flights-in-bbx []
+  (let [[n s w e] @BBX]
+  (if-let [ff (json-web-data (str URL-FLS "?bounds=" n "," s "," w "," e))]
+    (vreset! FLIGHTS 
+      (->> ff
+        (filter #(vector? (second %)))
+        (filter #(not (empty? (callsign (second %)))))
+        (apply concat)
+        (apply hash-map))))))
 
 (defn by-call [cs]
   (if-let [flt (filter #(= cs (callsign (second %)))
@@ -102,4 +104,7 @@
 
 (defn running? []
   (asp/running? STATUS))
+
+(defn clear-flights []
+  (vreset! FLIGHTS {}))
 

@@ -19,7 +19,6 @@
 (def PORT 4444)
 (def APP nil)
 (def SERV nil)
-(def CALLS (volatile! []))
 (def POP-TIM 30000)
 (def HISTORY-SEC 80)
 (defn index-page []
@@ -129,8 +128,10 @@
     (clear)
     (fr24/set-bbx n s w e)
     (fr24/start process-flights)
-    (vreset! CALLS [])
     "")))
+
+(defn terrain [params]
+  "yes")
 
 (defn update-watch-area []
   (if (= @fr24/STATUS "RUN")
@@ -180,9 +181,23 @@
     "manual" (asp/pump-in DIR-CHN
 	{:directive :manual})
    "select" (let [lst (vec (sort (map fr24/callsign (keys @fr24/FLIGHTS))))]
+                   (println [:CALLS lst])
                    (asp/pump-in DIR-CHN
 	{:directive :callsigns
 	 :list lst}))
     (rete/assert-frame ['Onboard 'callsign cls 'time 0]))
   ""))
+
+(defn trail [params]
+  (let [id (:id params)]
+
+
+
+
+
+      (asp/pump-in INS-CHN
+        {:instruct :trail
+         :id (:id params)
+         :time POP-TIM}))
+"")
 

@@ -11,7 +11,7 @@
   #js{:animation false}))
 (def CZM-SRC (js/Cesium.CzmlDataSource.))
 (def CAMERA (volatile! {:view "FORWARD"
-                        :pitch 0
+                        :pitch -20
                         :roll 0}))
 (defn norm-crs [x]
   (cond
@@ -55,7 +55,7 @@
   (vswap! CAMERA assoc key val))
 
 (defn init-3D-view [base-url terra]
-  (if (= terra :terrain)
+  (if (= terra "yes")
   (set! (.-terrainProvider VIEWER) TERR-PROV))
 (.add (.-dataSources VIEWER) CZM-SRC)
 (.addEventListener (js/EventSource. (str base-url "czml/")) "czml" cz-processor false)

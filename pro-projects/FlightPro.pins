@@ -1,11 +1,11 @@
-; Sat Dec 10 22:07:19 MSK 2016
+; Mon Dec 12 22:44:14 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
 
 ([FlightPro_Class0] of  CloVar
 
-	(source "(volatile! {:view \"FORWARD\"\n                        :pitch 0\n                        :roll 0})")
+	(source "(volatile! {:view \"FORWARD\"\n                        :pitch -20\n                        :roll 0})")
 	(title "CAMERA"))
 
 ([FlightPro_Class1] of  CloNamespace
@@ -95,7 +95,7 @@
 
 ([FlightPro_Class10003] of  CloFunction
 
-	(source "(if (= terra :terrain)\n  (set! (.-terrainProvider VIEWER) TERR-PROV))\n(.add (.-dataSources VIEWER) CZM-SRC)\n(.addEventListener (js/EventSource. (str base-url \"czml/\")) \"czml\" cz-processor false)\n(println [:INIT-3D-VIEW :BASE base-url :TERRA terra])")
+	(source "(if (= terra \"yes\")\n  (set! (.-terrainProvider VIEWER) TERR-PROV))\n(.add (.-dataSources VIEWER) CZM-SRC)\n(.addEventListener (js/EventSource. (str base-url \"czml/\")) \"czml\" cz-processor false)\n(println [:INIT-3D-VIEW :BASE base-url :TERRA terra])")
 	(title "init-3D-view [base-url terra]"))
 
 ([FlightPro_Class110000] of  CloFunction
@@ -162,7 +162,7 @@
 
 ([FlightPro_Class140003] of  CloFunction
 
-	(source "(set-html! \"autopilot\" \"<h4>Autopilot</h4>\")\n(set-html! \"accel\" \"accel\")\n(set-html! \"course\" \"Course: 000\")\n(set-html! \"speed\" \"Speed: 000\")\n(set-html! \"altitude\" \"Altitude: 00000\")\n(set-html! \"lat\" \"Latitude: 00.0000\")\n(set-html! \"lon\" \"Longitude: 00.0000\")\n(set-html! \"camera\" \"<h4>Camera</h4>\")\n(set-html! \"onboard\" \"Onboard:\")\n(set-html! \"onboard-fld\" \n  \"<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>\n   <option value='callsign'>callsign</option>\n   <option value='manual'>manual</option>\n   <option value='select'>select</option>\")\n(set-html! \"view\" \"View:\")\n(set-html! \"view-fld\" \n  \"<select onchange='javascript:view3d.client.view(this.value)' style='width:96px'>\n   <option value='FORWARD'>FORWARD</option>\n   <option value='BACKWARD'>BACKWARD</option>\n   <option value='RIGHT'>RIGHT</option>\n   <option value='LEFT'>LEFT</option>\n   <option value='UP'>UP</option>\n   <option value='DOWN'>DOWN</option>\n   <option value='FORWARD-RIGHT'>FORWARD-RIGHT</option>\n   <option value='FORWARD'>FORWARD</option>\n   <option value='BACKWARD-RIGHT'>BACKWARD-RIGHT</option>\n   <option value='BACKWARD-LEFT'>BACKWARD-LEFT</option>\n   </select>\")\n(set-html! \"pitch\" \"Pitch:\")\n(set-html! \"pitch-fld\" \n  \"<input value='0' style='width:90px'\n               onchange='javascript:view3d.client.pitch(this.value)'>\")\n(set-html! \"roll\" \"Roll:\")\n(set-html! \"roll-fld\" \n  \"<input value='0' style='width:90px'\n               onchange='javascript:view3d.client.roll(this.value)'>\")\n(set-html! \"course-fld\" \n  \"<input value='180' style='width:38px' id='input-crs'\n                     onchange='javascript:view3d.client.course(this.value)'>\")\n(set-html! \"speed-fld\" \n  \"<input value='210' style='width:38px' id='input-spd'\n               onchange='javascript:view3d.client.speed(this.value)'>\")\n(set-html! \"altitude-fld\" \n  \"<input value='4000' style='width:38px' id='input-alt'\n               onchange='javascript:view3d.client.altitude(this.value)'>\")\n(set-html! \"speed-acl\" \n  (str \"<select style='width:44px'\n                onchange='javascript:view3d.client.accel_speed(this.value)'>\"\n         (apply str (for [n (range 1 5)]\n                           (str \"<option value='\" n \"'>\" n \"</option>\")))))\n(set-html! \"altitude-acl\" \n  (str \"<select style='width:44px'\n                onchange='javascript:view3d.client.accel_altitude(this.value)'>\"\n         (apply str (for [n (range 1 11)]\n                           (str \"<option value='\" n \"'>\" n \"</option>\")))))\n(set-html! \"latitude-fld\" \n  \"<input value='40.8' style='width:84px' id='input-lat'\n               onchange='javascript:view3d.client.latitude(this.value)'>\")\n(set-html! \"longitude-fld\" \n  \"<input value='-74.0' style='width:84px' id='input-lon'\n               onchange='javascript:view3d.client.longitude(this.value)'>\")")
+	(source "(set-html! \"autopilot\" \"<h4>Autopilot</h4>\")\n(set-html! \"accel\" \"accel\")\n(set-html! \"course\" \"Course: 000\")\n(set-html! \"speed\" \"Speed: 000\")\n(set-html! \"altitude\" \"Altitude: 00000\")\n(set-html! \"lat\" \"Latitude: 00.0000\")\n(set-html! \"lon\" \"Longitude: 00.0000\")\n(set-html! \"camera\" \"<h4>Camera</h4>\")\n(set-html! \"onboard\" \"Onboard:\")\n(set-html! \"onboard-fld\" \n  \"<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>\n   <option value='callsign'>callsign</option>\n   <option value='manual'>manual</option>\n   <option value='select'>select</option>\")\n(set-html! \"view\" \"View:\")\n(set-html! \"view-fld\" \n  \"<select onchange='javascript:view3d.client.view(this.value)' style='width:96px'>\n   <option value='FORWARD'>FORWARD</option>\n   <option value='BACKWARD'>BACKWARD</option>\n   <option value='RIGHT'>RIGHT</option>\n   <option value='LEFT'>LEFT</option>\n   <option value='UP'>UP</option>\n   <option value='DOWN'>DOWN</option>\n   <option value='FORWARD-RIGHT'>FORWARD-RIGHT</option>\n   <option value='FORWARD'>FORWARD</option>\n   <option value='BACKWARD-RIGHT'>BACKWARD-RIGHT</option>\n   <option value='BACKWARD-LEFT'>BACKWARD-LEFT</option>\n   </select>\")\n(set-html! \"pitch\" \"Pitch:\")\n(set-html! \"pitch-fld\" \n  \"<input value='-20' style='width:90px'\n               onchange='javascript:view3d.client.pitch(this.value)'>\")\n(set-html! \"roll\" \"Roll:\")\n(set-html! \"roll-fld\" \n  \"<input value='0' style='width:90px'\n               onchange='javascript:view3d.client.roll(this.value)'>\")\n(set-html! \"course-fld\" \n  \"<input value='180' style='width:38px' id='input-crs'\n                     onchange='javascript:view3d.client.course(this.value)'>\")\n(set-html! \"speed-fld\" \n  \"<input value='210' style='width:38px' id='input-spd'\n               onchange='javascript:view3d.client.speed(this.value)'>\")\n(set-html! \"altitude-fld\" \n  \"<input value='4000' style='width:38px' id='input-alt'\n               onchange='javascript:view3d.client.altitude(this.value)'>\")\n(set-html! \"speed-acl\" \n  (str \"<select style='width:44px'\n                onchange='javascript:view3d.client.accel_speed(this.value)'>\"\n         (apply str (for [n (range 1 5)]\n                           (str \"<option value='\" n \"'>\" n \"</option>\")))))\n(set-html! \"altitude-acl\" \n  (str \"<select style='width:44px'\n                onchange='javascript:view3d.client.accel_altitude(this.value)'>\"\n         (apply str (for [n (range 1 11)]\n                           (str \"<option value='\" n \"'>\" n \"</option>\")))))\n(set-html! \"latitude-fld\" \n  \"<input value='40.8' style='width:84px' id='input-lat'\n               onchange='javascript:view3d.client.latitude(this.value)'>\")\n(set-html! \"longitude-fld\" \n  \"<input value='-74.0' style='width:84px' id='input-lon'\n               onchange='javascript:view3d.client.longitude(this.value)'>\")")
 	(title "show-controls []"))
 
 ([FlightPro_Class140004] of  CloFunction
@@ -292,7 +292,7 @@
 
 ([FlightPro_Class160000] of  CloFunction
 
-	(source "(let [[n s w e] @BBX]\n  (if-let [ff (json-web-data (str URL-FLS \"?bounds=\" n \",\" s \",\" w \",\" e))]\n    (let [ff (filter #(vector? (second %)) ff)\n           ff (apply hash-map  (apply concat ff))]\n      (vreset! FLIGHTS ff)\n      ff)))")
+	(source "(let [[n s w e] @BBX]\n  (if-let [ff (json-web-data (str URL-FLS \"?bounds=\" n \",\" s \",\" w \",\" e))]\n    (vreset! FLIGHTS \n      (->> ff\n        (filter #(vector? (second %)))\n        (filter #(not (empty? (callsign (second %)))))\n        (apply concat)\n        (apply hash-map)))))")
 	(title "flights-in-bbx []"))
 
 ([FlightPro_Class160002] of  CloFunction
@@ -337,7 +337,7 @@
 
 ([FlightPro_Class160011] of  CloFunction
 
-	(source "(println :INIT-CHART)\n(let [m (-> js/L\n              (.map \"map\")\n              (.setView (array 50.04, 8.55) 10)) ;; Frankfurt\n        tile1 (-> js/L (.tileLayer \"http://{s}.tile.osm.org/{z}/{x}/{y}.png\"\n                                   #js{:maxZoom 16\n                                       :attribution \"Ru, OpenStreetMap &copy;\"}))\n        tile2 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile3 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile4 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile5 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        base (clj->js {\"OpenStreetMap\" tile1\n                       \"Google Satellite\" tile2\n                       \"Google Streets\" tile3\n                       \"Google Hybrid\" tile4\n                       \"Google Terrain\" tile5})\n        ctrl (-> js/L (.control.layers base nil))]\n  (.addTo tile1 m)\n  (.addTo ctrl m)\n  (.on m \"mousemove\"\n         (fn [e] (ctl/mouse-move (.. e -latlng -lat) (.. e -latlng -lng))))\n  (vreset! CHART m))")
+	(source "(println :INIT-CHART)\n(let [m (-> js/L\n              (.map \"map\")\n              (.setView (array 40.8, -74.0) 10)) ;; Frankfurt\n        tile1 (-> js/L (.tileLayer \"http://{s}.tile.osm.org/{z}/{x}/{y}.png\"\n                                   #js{:maxZoom 16\n                                       :attribution \"Ru, OpenStreetMap &copy;\"}))\n        tile2 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile3 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile4 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile5 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        base (clj->js {\"OpenStreetMap\" tile1\n                       \"Google Satellite\" tile2\n                       \"Google Streets\" tile3\n                       \"Google Hybrid\" tile4\n                       \"Google Terrain\" tile5})\n        ctrl (-> js/L (.control.layers base nil))]\n  (.addTo tile1 m)\n  (.addTo ctrl m)\n  (.on m \"mousemove\"\n         (fn [e] (ctl/mouse-move (.. e -latlng -lat) (.. e -latlng -lng))))\n  (vreset! CHART m))")
 	(title "init-chart []"))
 
 ([FlightPro_Class160012] of  CloFunction
@@ -391,13 +391,13 @@
 
 	(cloFunctions
 		[FlightPro_Class190007]
-		[FlightPro_Class160000]
 		[FlightPro_Class200007]
 		[FlightPro_Class200010]
 		[FlightPro_Class200011]
 		[FlightPro_Class200012]
 		[FlightPro_Class200013]
 		[FlightPro_Class200014]
+		[FlightPro_Class160000]
 		[FlightPro_Class200015]
 		[FlightPro_Class200016]
 		[FlightPro_Class200002]
@@ -406,7 +406,8 @@
 		[FlightPro_Class210008]
 		[FlightPro_Class210009]
 		[FlightPro_Class210012]
-		[FlightPro_Class210013])
+		[FlightPro_Class210013]
+		[FlightPro_Class260002])
 	(cloNamespace [FlightPro_Class180003])
 	(cloVars
 		[FlightPro_Class190004]
@@ -518,12 +519,14 @@
 		[FlightPro_Class310005]
 		[FlightPro_Class310000]
 		[FlightPro_Class220030]
+		[FlightPro_Class340000]
 		[FlightPro_Class230005]
 		[FlightPro_Class20021]
 		[FlightPro_Class20022]
 		[FlightPro_Class20023]
 		[FlightPro_Class20024]
-		[FlightPro_Class270000])
+		[FlightPro_Class270000]
+		[FlightPro_Class350000])
 	(cloNamespace [FlightPro_Class20001])
 	(cloVars
 		[FlightPro_Class20002]
@@ -533,7 +536,6 @@
 		[FlightPro_Class20005]
 		[FlightPro_Class20006]
 		[FlightPro_Class20007]
-		[FlightPro_Class230000]
 		[FlightPro_Class310001]
 		[FlightPro_Class320006])
 	(title "Pro Server"))
@@ -836,13 +838,12 @@
 
 ([FlightPro_Class220030] of  CloFunction
 
-	(source "([]\n  (let [[n s w e] @fr24/BBX]\n    (watch-visible {:n n :s s :w w :e e})))\n([params]\n  (println [:WATCH-VISIBLE params])\n  (let [{:keys [n s w e]} params]\n    (clear)\n    (fr24/set-bbx n s w e)\n    (fr24/start process-flights)\n    (vreset! CALLS [])\n    \"\"))")
+	(source "([]\n  (let [[n s w e] @fr24/BBX]\n    (watch-visible {:n n :s s :w w :e e})))\n([params]\n  (println [:WATCH-VISIBLE params])\n  (let [{:keys [n s w e]} params]\n    (clear)\n    (fr24/set-bbx n s w e)\n    (fr24/start process-flights)\n    \"\"))")
 	(title "watch-visible"))
 
-([FlightPro_Class230000] of  CloVar
+([FlightPro_Class230000] of  CloFuncall
 
-	(source "(volatile! [])")
-	(title "CALLS"))
+	(source "(count fr24.client/FLIGHTS)"))
 
 ([FlightPro_Class230001] of  CloFunction
 
@@ -967,6 +968,15 @@
 	(source "(println \"Loading Clojure Programs...\")\n(if-let [wps (ClojureTab/findAnnotated (cls-instances \"WorkingPrograms\") nil)]\n  (loop [i 1 pins (svs wps \"cloPrograms\")]\n    (when (seq pins)\n      (println (str \" 1.\" i \" \" (sv (first pins) \"title\") \" = \" (ClojureTab/loadProgram (first pins)) ))\n      (recur (inc i) (rest pins))))\n  (println \"  Annotated instance of WorkingPrograms not found!\"))\n(println\"Starting Pro Server...\")\n(eval '(pro.server/start-server))\n(println\"Starting Expert System...\")\n(eval '(ru.rules/run-engine \"Flights Pro Run\"))")
 	(title "clojure-work []"))
 
+([FlightPro_Class260001] of  CloFuncall
+
+	(source "(count @fr24.client/FLIGHTS)"))
+
+([FlightPro_Class260002] of  CloFunction
+
+	(source "(vreset! FLIGHTS {})")
+	(title "clear-flights []"))
+
 ([FlightPro_Class260003] of  CloFunction
 
 	(source "(println [:ONBOARD csg])\n(asp/pump-in serv/DIR-CHN\n	{:directive :carrier\n	 :callsign csg\n	 :vehicle {:coord crd\n	               :course crs\n	               :speed spd\n	               :altitude alt}})")
@@ -981,6 +991,10 @@
 
 	(source "(set-html! \"onboard-fld\" \n  (str \"<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>\"\n          (if (empty? list)\n            (str \"<option value='callsign'>callsign</option>\n                   <option value='select'>select</option>\")\n            (str \"<option value='select'>select</option>\"\n              (apply str (for [e list]\n                                (str \"<option value='\" e \"'>\" e \"</option>\")))))\n        \"</select>\"))")
 	(title "callsigns [list]"))
+
+([FlightPro_Class270003] of  CloFuncall
+
+	(source "fr24.client/STATUS"))
 
 ([FlightPro_Class280000] of  CloProgram
 
@@ -1008,7 +1022,7 @@
 
 ([FlightPro_Class290000] of  CloFunction
 
-	(source "([carr]\n  (camera-move carr (/ (:camera TIO) 1000)))\n([carr period]\n  (let [car @carr\n         [lat lon] (:coord car)\n         crs (:course car)\n         alt (int (/ (:altitude car) 3.28084))\n         alt (if (< alt 12) 12 alt)]\n      (czm/fly-to lat lon alt crs period))\n  true)")
+	(source "([carr]\n  (camera-move carr (/ (:camera TIO) 1000)))\n([carr period]\n  (let [car @carr\n         [lat lon] (:coord car)\n         crs (:course car)\n         alt (int (/ (:altitude car) 3.28084))\n         alt (if (< alt 8) 8 alt)]\n      (czm/fly-to lat lon alt crs period))\n  true)")
 	(title "camera-move"))
 
 ([FlightPro_Class290003] of  %3AINSTANCE-ANNOTATION
@@ -1271,6 +1285,11 @@
 	(source "(.-value (by-id id))")
 	(title "get-value [id]"))
 
+([FlightPro_Class340000] of  CloFunction
+
+	(source "\"yes\"")
+	(title "terrain [params]"))
+
 ([FlightPro_Class340002] of  CloFuncall
 
 	(source "(ru.rules/facts-with-slot-value 'Flights 'id = \"Alice\")"))
@@ -1290,6 +1309,42 @@
 ([FlightPro_Class340006] of  CloFuncall
 
 	(source "(rete.core/facts-with-slot-value 'Flight 'id = :?)"))
+
+([FlightPro_Class350000] of  CloFunction
+
+	(source "(let [id (:id params)]\n\n\n\n\n\n      (asp/pump-in INS-CHN\n        {:instruct :trail\n         :id (:id params)\n         :time POP-TIM}))\n\"\"")
+	(title "trail [params]"))
+
+([FlightPro_Class350001] of  Rule
+
+	(lhs "?f (Follow id ?id)\n   (Flight id ?id coord ?crd1 history ?h1)\n   (Flight id ?id coord ?crd2 history ?h2)\n   (Flight id ?id coord ?crd3 history ?now)\n   (History moment ?now\n            (> ?now ?h2 ?h1))")
+	(rhs ";;(println [:FOLLOW ?id :CENTER ?lat ?lon])\n   (fl/set-map-view ?crd3)\n   (fl/follow-flight ?id ?crd3 ?crd2 ?crd1)\n   (retract ?f))")
+	(salience 0)
+	(title "af:FollowFlight"))
+
+([FlightPro_Class350002] of  CloFuncall
+
+	(source "(doseq [@fr24.client/FLIGHTS"))
+
+([FlightPro_Class350003] of  CloFuncall
+
+	(source "(doseq [[k v] (seq @fr24.client/FLIGHTS)] (protege.core/ctpl [:K k :V v]))"))
+
+([FlightPro_Class350004] of  CloFuncall
+
+	(source "(doseq [[k v] (seq @fr24.client/FLIGHTS)] (protege.core/ctpl [:K k v]))"))
+
+([FlightPro_Class350005] of  CloFuncall
+
+	(source "(doseq [[k v] (seq @fr24.client/FLIGHTS)] (protege.core/ctpl [:K k (fr24.client/callsign v)]))"))
+
+([FlightPro_Class350006] of  CloFuncall
+
+	(source "(doseq [[k v] (seq @fr24.client/FLIGHTS)] (protege.core/ctpl [:K k (fr24.client/callsign v) :V v]))"))
+
+([FlightPro_Class360000] of  CloFuncall
+
+	(source "(empty? \"\")"))
 
 ([FlightPro_Class4] of  CloVar
 
@@ -1351,7 +1406,7 @@
 
 ([FlightPro_Class70001] of  CloFunction
 
-	(source "(enable-console-print!)\n(czm/init-3D-view (:base URL) :no-terrain)\n(asp/repeater mov/move CARRIER (:carrier TIO))\n(asp/repeater ctl/show-flight-data CARRIER (:display TIO))\n(asp/repeater receive-directives (:directives TIO))\n(ctl/show-controls)")
+	(source "(enable-console-print!)\n(GET (str (:command URL) \"terrain\")\n	{:handler (fn [response]\n		(czm/init-3D-view (:base URL) response))\n	 :error-handler error-handler})\n(asp/repeater mov/move CARRIER (:carrier TIO))\n(asp/repeater ctl/show-flight-data CARRIER (:display TIO))\n(asp/repeater receive-directives (:directives TIO))\n(ctl/show-controls)")
 	(title "on-load []"))
 
 ([FlightPro_Class70002] of  CloProgram

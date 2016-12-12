@@ -143,7 +143,7 @@
          [lat lon] (:coord car)
          crs (:course car)
          alt (int (/ (:altitude car) 3.28084))
-         alt (if (< alt 12) 12 alt)]
+         alt (if (< alt 8) 8 alt)]
       (czm/fly-to lat lon alt crs period))
   true))
 
@@ -181,7 +181,10 @@
 
 (defn on-load []
   (enable-console-print!)
-(czm/init-3D-view (:base URL) :no-terrain)
+(GET (str (:command URL) "terrain")
+	{:handler (fn [response]
+		(czm/init-3D-view (:base URL) response))
+	 :error-handler error-handler})
 (asp/repeater mov/move CARRIER (:carrier TIO))
 (asp/repeater ctl/show-flight-data CARRIER (:display TIO))
 (asp/repeater receive-directives (:directives TIO))
