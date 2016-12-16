@@ -156,7 +156,7 @@
 
 (defn directives-handler [response]
   (doseq [{:keys [directive] :as dir} (read-transit response)]
-  ;;(println [:DIRECTIVE dir])
+  (println [:DIRECTIVE dir])
   (condp = directive
     :manual (do (if (= (:mode @CARRIER) "?")
 	  (carrier "MANUAL" (manual-vehicle))

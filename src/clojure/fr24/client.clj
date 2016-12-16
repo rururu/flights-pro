@@ -4,15 +4,15 @@
   [clj-json.core :as json]
   [async.proc :as asp]))
 
-(def URL-ARP "http://www.flightradar24.com/_json/airports.php")
-(def URL-FLS "http://data-live.flightradar24.com/zones/fcgi/feed.js")
-(def URL-FLT "http://data-live.flightradar24.com/clickhandler/?version=1.5&flight=")
-(def FLIGHTS (volatile! {}))
+(def F24 {:url-flights "http://data-live.flightradar24.com/zones/fcgi/feed.js"
+ :url-airports "http://www.flightradar24.com/_json/airports.php"
+ :url-flight-data "http://data-live.flightradar24.com/clickhandler/?version=1.5&flight="
+ :time-out 12000})
 (def BBX (volatile! [0 0 0 0]))
-(def STATUS (volatile! "START"))
-(def F24-TIO 20000)
+(def FLIGHTS (volatile! {}))
 (def AIRPORTS (volatile! nil))
 (def FL-INFOS (volatile! {}))
+(def STATUS (volatile! "START"))
 (defn json-web-data [url]
   (let [r @(client/get url)
        s (:status r)]
@@ -49,7 +49,7 @@
 
 (defn flights-in-bbx []
   (let [[n s w e] @BBX]
-  (if-let [ff (json-web-data (str URL-FLS "?bounds=" n "," s "," w "," e))]
+  (if-let [ff (json-web-data (str (:url-flights F24) "?bounds=" n "," s "," w "," e))]
     (vreset! FLIGHTS 
       (->> ff
         (filter #(vector? (second %)))
@@ -76,14 +76,14 @@
                         {} 
                         rows))]
   (or @AIRPORTS
-       (let [aps (json-web-data URL-ARP)
+       (let [aps (json-web-data (:url-airports F24))
               aps (mk-airports (get aps "rows"))]
          (vreset! AIRPORTS aps)
          aps))))
 
 (defn fl-info [id]
   (or (@FL-INFOS id)
-     (let [info (json-web-data (str URL-FLT id))]
+     (let [info (json-web-data (str (:url-flight-data F24) id))]
        (vswap! FL-INFOS assoc id info)
        info)))
 
@@ -95,9 +95,10 @@
   (vreset! BBX [n s w e]))
 
 (defn start [process-fn]
+  (println [:FLIGHTS-PROCESS 
   (asp/start-process STATUS 
                                #(do (flights-in-bbx) (process-fn FLIGHTS) true)
-                               F24-TIO))
+                               (:time-out F24))]))
 
 (defn stop []
   (asp/stop-process STATUS))

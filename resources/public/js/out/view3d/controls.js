@@ -4,23 +4,23 @@ goog.require('cljs.core');
 goog.require('goog.string');
 goog.require('goog.string.format');
 view3d.controls.format = (function view3d$controls$format(var_args){
-var args__20849__auto__ = [];
-var len__20842__auto___22120 = arguments.length;
-var i__20843__auto___22121 = (0);
+var args__20483__auto__ = [];
+var len__20476__auto___21754 = arguments.length;
+var i__20477__auto___21755 = (0);
 while(true){
-if((i__20843__auto___22121 < len__20842__auto___22120)){
-args__20849__auto__.push((arguments[i__20843__auto___22121]));
+if((i__20477__auto___21755 < len__20476__auto___21754)){
+args__20483__auto__.push((arguments[i__20477__auto___21755]));
 
-var G__22122 = (i__20843__auto___22121 + (1));
-i__20843__auto___22121 = G__22122;
+var G__21756 = (i__20477__auto___21755 + (1));
+i__20477__auto___21755 = G__21756;
 continue;
 } else {
 }
 break;
 }
 
-var argseq__20850__auto__ = ((((1) < args__20849__auto__.length))?(new cljs.core.IndexedSeq(args__20849__auto__.slice((1)),(0),null)):null);
-return view3d.controls.format.cljs$core$IFn$_invoke$arity$variadic((arguments[(0)]),argseq__20850__auto__);
+var argseq__20484__auto__ = ((((1) < args__20483__auto__.length))?(new cljs.core.IndexedSeq(args__20483__auto__.slice((1)),(0),null)):null);
+return view3d.controls.format.cljs$core$IFn$_invoke$arity$variadic((arguments[(0)]),argseq__20484__auto__);
 });
 
 view3d.controls.format.cljs$core$IFn$_invoke$arity$variadic = (function (fmt,args){
@@ -29,10 +29,10 @@ return cljs.core.apply.call(null,goog.string.format,fmt,args);
 
 view3d.controls.format.cljs$lang$maxFixedArity = (1);
 
-view3d.controls.format.cljs$lang$applyTo = (function (seq22118){
-var G__22119 = cljs.core.first.call(null,seq22118);
-var seq22118__$1 = cljs.core.next.call(null,seq22118);
-return view3d.controls.format.cljs$core$IFn$_invoke$arity$variadic(G__22119,seq22118__$1);
+view3d.controls.format.cljs$lang$applyTo = (function (seq21752){
+var G__21753 = cljs.core.first.call(null,seq21752);
+var seq21752__$1 = cljs.core.next.call(null,seq21752);
+return view3d.controls.format.cljs$core$IFn$_invoke$arity$variadic(G__21753,seq21752__$1);
 });
 
 view3d.controls.by_id = (function view3d$controls$by_id(id){
@@ -86,25 +86,25 @@ view3d.controls.set_html_BANG_.call(null,"speed-fld","<input value='210' style='
 
 view3d.controls.set_html_BANG_.call(null,"altitude-fld","<input value='4000' style='width:38px' id='input-alt'\n               onchange='javascript:view3d.client.altitude(this.value)'>");
 
-view3d.controls.set_html_BANG_.call(null,"speed-acl",[cljs.core.str("<select style='width:44px'\n                onchange='javascript:view3d.client.accel_speed(this.value)'>"),cljs.core.str(cljs.core.apply.call(null,cljs.core.str,(function (){var iter__20517__auto__ = (function view3d$controls$show_controls_$_iter__22131(s__22132){
+view3d.controls.set_html_BANG_.call(null,"speed-acl",[cljs.core.str("<select style='width:44px'\n                onchange='javascript:view3d.client.accel_speed(this.value)'>"),cljs.core.str(cljs.core.apply.call(null,cljs.core.str,(function (){var iter__20151__auto__ = (function view3d$controls$show_controls_$_iter__21765(s__21766){
 return (new cljs.core.LazySeq(null,(function (){
-var s__22132__$1 = s__22132;
+var s__21766__$1 = s__21766;
 while(true){
-var temp__4657__auto__ = cljs.core.seq.call(null,s__22132__$1);
+var temp__4657__auto__ = cljs.core.seq.call(null,s__21766__$1);
 if(temp__4657__auto__){
-var s__22132__$2 = temp__4657__auto__;
-if(cljs.core.chunked_seq_QMARK_.call(null,s__22132__$2)){
-var c__20515__auto__ = cljs.core.chunk_first.call(null,s__22132__$2);
-var size__20516__auto__ = cljs.core.count.call(null,c__20515__auto__);
-var b__22134 = cljs.core.chunk_buffer.call(null,size__20516__auto__);
-if((function (){var i__22133 = (0);
+var s__21766__$2 = temp__4657__auto__;
+if(cljs.core.chunked_seq_QMARK_.call(null,s__21766__$2)){
+var c__20149__auto__ = cljs.core.chunk_first.call(null,s__21766__$2);
+var size__20150__auto__ = cljs.core.count.call(null,c__20149__auto__);
+var b__21768 = cljs.core.chunk_buffer.call(null,size__20150__auto__);
+if((function (){var i__21767 = (0);
 while(true){
-if((i__22133 < size__20516__auto__)){
-var n = cljs.core._nth.call(null,c__20515__auto__,i__22133);
-cljs.core.chunk_append.call(null,b__22134,[cljs.core.str("<option value='"),cljs.core.str(n),cljs.core.str("'>"),cljs.core.str(n),cljs.core.str("</option>")].join(''));
+if((i__21767 < size__20150__auto__)){
+var n = cljs.core._nth.call(null,c__20149__auto__,i__21767);
+cljs.core.chunk_append.call(null,b__21768,[cljs.core.str("<option value='"),cljs.core.str(n),cljs.core.str("'>"),cljs.core.str(n),cljs.core.str("</option>")].join(''));
 
-var G__22139 = (i__22133 + (1));
-i__22133 = G__22139;
+var G__21773 = (i__21767 + (1));
+i__21767 = G__21773;
 continue;
 } else {
 return true;
@@ -112,13 +112,13 @@ return true;
 break;
 }
 })()){
-return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__22134),view3d$controls$show_controls_$_iter__22131.call(null,cljs.core.chunk_rest.call(null,s__22132__$2)));
+return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__21768),view3d$controls$show_controls_$_iter__21765.call(null,cljs.core.chunk_rest.call(null,s__21766__$2)));
 } else {
-return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__22134),null);
+return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__21768),null);
 }
 } else {
-var n = cljs.core.first.call(null,s__22132__$2);
-return cljs.core.cons.call(null,[cljs.core.str("<option value='"),cljs.core.str(n),cljs.core.str("'>"),cljs.core.str(n),cljs.core.str("</option>")].join(''),view3d$controls$show_controls_$_iter__22131.call(null,cljs.core.rest.call(null,s__22132__$2)));
+var n = cljs.core.first.call(null,s__21766__$2);
+return cljs.core.cons.call(null,[cljs.core.str("<option value='"),cljs.core.str(n),cljs.core.str("'>"),cljs.core.str(n),cljs.core.str("</option>")].join(''),view3d$controls$show_controls_$_iter__21765.call(null,cljs.core.rest.call(null,s__21766__$2)));
 }
 } else {
 return null;
@@ -127,28 +127,28 @@ break;
 }
 }),null,null));
 });
-return iter__20517__auto__.call(null,cljs.core.range.call(null,(1),(5)));
+return iter__20151__auto__.call(null,cljs.core.range.call(null,(1),(5)));
 })()))].join(''));
 
-view3d.controls.set_html_BANG_.call(null,"altitude-acl",[cljs.core.str("<select style='width:44px'\n                onchange='javascript:view3d.client.accel_altitude(this.value)'>"),cljs.core.str(cljs.core.apply.call(null,cljs.core.str,(function (){var iter__20517__auto__ = (function view3d$controls$show_controls_$_iter__22135(s__22136){
+view3d.controls.set_html_BANG_.call(null,"altitude-acl",[cljs.core.str("<select style='width:44px'\n                onchange='javascript:view3d.client.accel_altitude(this.value)'>"),cljs.core.str(cljs.core.apply.call(null,cljs.core.str,(function (){var iter__20151__auto__ = (function view3d$controls$show_controls_$_iter__21769(s__21770){
 return (new cljs.core.LazySeq(null,(function (){
-var s__22136__$1 = s__22136;
+var s__21770__$1 = s__21770;
 while(true){
-var temp__4657__auto__ = cljs.core.seq.call(null,s__22136__$1);
+var temp__4657__auto__ = cljs.core.seq.call(null,s__21770__$1);
 if(temp__4657__auto__){
-var s__22136__$2 = temp__4657__auto__;
-if(cljs.core.chunked_seq_QMARK_.call(null,s__22136__$2)){
-var c__20515__auto__ = cljs.core.chunk_first.call(null,s__22136__$2);
-var size__20516__auto__ = cljs.core.count.call(null,c__20515__auto__);
-var b__22138 = cljs.core.chunk_buffer.call(null,size__20516__auto__);
-if((function (){var i__22137 = (0);
+var s__21770__$2 = temp__4657__auto__;
+if(cljs.core.chunked_seq_QMARK_.call(null,s__21770__$2)){
+var c__20149__auto__ = cljs.core.chunk_first.call(null,s__21770__$2);
+var size__20150__auto__ = cljs.core.count.call(null,c__20149__auto__);
+var b__21772 = cljs.core.chunk_buffer.call(null,size__20150__auto__);
+if((function (){var i__21771 = (0);
 while(true){
-if((i__22137 < size__20516__auto__)){
-var n = cljs.core._nth.call(null,c__20515__auto__,i__22137);
-cljs.core.chunk_append.call(null,b__22138,[cljs.core.str("<option value='"),cljs.core.str(n),cljs.core.str("'>"),cljs.core.str(n),cljs.core.str("</option>")].join(''));
+if((i__21771 < size__20150__auto__)){
+var n = cljs.core._nth.call(null,c__20149__auto__,i__21771);
+cljs.core.chunk_append.call(null,b__21772,[cljs.core.str("<option value='"),cljs.core.str(n),cljs.core.str("'>"),cljs.core.str(n),cljs.core.str("</option>")].join(''));
 
-var G__22140 = (i__22137 + (1));
-i__22137 = G__22140;
+var G__21774 = (i__21771 + (1));
+i__21771 = G__21774;
 continue;
 } else {
 return true;
@@ -156,13 +156,13 @@ return true;
 break;
 }
 })()){
-return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__22138),view3d$controls$show_controls_$_iter__22135.call(null,cljs.core.chunk_rest.call(null,s__22136__$2)));
+return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__21772),view3d$controls$show_controls_$_iter__21769.call(null,cljs.core.chunk_rest.call(null,s__21770__$2)));
 } else {
-return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__22138),null);
+return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__21772),null);
 }
 } else {
-var n = cljs.core.first.call(null,s__22136__$2);
-return cljs.core.cons.call(null,[cljs.core.str("<option value='"),cljs.core.str(n),cljs.core.str("'>"),cljs.core.str(n),cljs.core.str("</option>")].join(''),view3d$controls$show_controls_$_iter__22135.call(null,cljs.core.rest.call(null,s__22136__$2)));
+var n = cljs.core.first.call(null,s__21770__$2);
+return cljs.core.cons.call(null,[cljs.core.str("<option value='"),cljs.core.str(n),cljs.core.str("'>"),cljs.core.str(n),cljs.core.str("</option>")].join(''),view3d$controls$show_controls_$_iter__21769.call(null,cljs.core.rest.call(null,s__21770__$2)));
 }
 } else {
 return null;
@@ -171,7 +171,7 @@ break;
 }
 }),null,null));
 });
-return iter__20517__auto__.call(null,cljs.core.range.call(null,(1),(11)));
+return iter__20151__auto__.call(null,cljs.core.range.call(null,(1),(11)));
 })()))].join(''));
 
 view3d.controls.set_html_BANG_.call(null,"latitude-fld","<input value='40.8' style='width:84px' id='input-lat'\n               onchange='javascript:view3d.client.latitude(this.value)'>");
@@ -179,12 +179,12 @@ view3d.controls.set_html_BANG_.call(null,"latitude-fld","<input value='40.8' sty
 return view3d.controls.set_html_BANG_.call(null,"longitude-fld","<input value='-74.0' style='width:84px' id='input-lon'\n               onchange='javascript:view3d.client.longitude(this.value)'>");
 });
 view3d.controls.show_flight_data = (function view3d$controls$show_flight_data(carr__$1){
-var map__22143 = cljs.core.deref.call(null,carr__$1);
-var map__22143__$1 = ((((!((map__22143 == null)))?((((map__22143.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__22143.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__22143):map__22143);
-var coord = cljs.core.get.call(null,map__22143__$1,new cljs.core.Keyword(null,"coord","coord",-1453656639));
-var course = cljs.core.get.call(null,map__22143__$1,new cljs.core.Keyword(null,"course","course",1455432948));
-var speed = cljs.core.get.call(null,map__22143__$1,new cljs.core.Keyword(null,"speed","speed",1257663751));
-var altitude = cljs.core.get.call(null,map__22143__$1,new cljs.core.Keyword(null,"altitude","altitude",463588637));
+var map__21777 = cljs.core.deref.call(null,carr__$1);
+var map__21777__$1 = ((((!((map__21777 == null)))?((((map__21777.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__21777.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__21777):map__21777);
+var coord = cljs.core.get.call(null,map__21777__$1,new cljs.core.Keyword(null,"coord","coord",-1453656639));
+var course = cljs.core.get.call(null,map__21777__$1,new cljs.core.Keyword(null,"course","course",1455432948));
+var speed = cljs.core.get.call(null,map__21777__$1,new cljs.core.Keyword(null,"speed","speed",1257663751));
+var altitude = cljs.core.get.call(null,map__21777__$1,new cljs.core.Keyword(null,"altitude","altitude",463588637));
 view3d.controls.set_html_BANG_.call(null,"course",[cljs.core.str("Course: "),cljs.core.str(course)].join(''));
 
 view3d.controls.set_html_BANG_.call(null,"speed",[cljs.core.str("Speed: "),cljs.core.str(speed)].join(''));
@@ -196,25 +196,25 @@ view3d.controls.set_html_BANG_.call(null,"lat",[cljs.core.str("Latitude: "),cljs
 return view3d.controls.set_html_BANG_.call(null,"lon",[cljs.core.str("Longitude: "),cljs.core.str(view3d.controls.format.call(null,"%.4f",cljs.core.second.call(null,coord)))].join(''));
 });
 view3d.controls.callsigns = (function view3d$controls$callsigns(list){
-return view3d.controls.set_html_BANG_.call(null,"onboard-fld",[cljs.core.str("<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>"),cljs.core.str(((cljs.core.empty_QMARK_.call(null,list))?[cljs.core.str("<option value='callsign'>callsign</option>\n                   <option value='select'>select</option>")].join(''):[cljs.core.str("<option value='select'>select</option>"),cljs.core.str(cljs.core.apply.call(null,cljs.core.str,(function (){var iter__20517__auto__ = (function view3d$controls$callsigns_$_iter__22149(s__22150){
+return view3d.controls.set_html_BANG_.call(null,"onboard-fld",[cljs.core.str("<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>"),cljs.core.str(((cljs.core.empty_QMARK_.call(null,list))?[cljs.core.str("<option value='callsign'>callsign</option>\n                   <option value='select'>select</option>")].join(''):[cljs.core.str("<option value='select'>select</option>"),cljs.core.str(cljs.core.apply.call(null,cljs.core.str,(function (){var iter__20151__auto__ = (function view3d$controls$callsigns_$_iter__21783(s__21784){
 return (new cljs.core.LazySeq(null,(function (){
-var s__22150__$1 = s__22150;
+var s__21784__$1 = s__21784;
 while(true){
-var temp__4657__auto__ = cljs.core.seq.call(null,s__22150__$1);
+var temp__4657__auto__ = cljs.core.seq.call(null,s__21784__$1);
 if(temp__4657__auto__){
-var s__22150__$2 = temp__4657__auto__;
-if(cljs.core.chunked_seq_QMARK_.call(null,s__22150__$2)){
-var c__20515__auto__ = cljs.core.chunk_first.call(null,s__22150__$2);
-var size__20516__auto__ = cljs.core.count.call(null,c__20515__auto__);
-var b__22152 = cljs.core.chunk_buffer.call(null,size__20516__auto__);
-if((function (){var i__22151 = (0);
+var s__21784__$2 = temp__4657__auto__;
+if(cljs.core.chunked_seq_QMARK_.call(null,s__21784__$2)){
+var c__20149__auto__ = cljs.core.chunk_first.call(null,s__21784__$2);
+var size__20150__auto__ = cljs.core.count.call(null,c__20149__auto__);
+var b__21786 = cljs.core.chunk_buffer.call(null,size__20150__auto__);
+if((function (){var i__21785 = (0);
 while(true){
-if((i__22151 < size__20516__auto__)){
-var e = cljs.core._nth.call(null,c__20515__auto__,i__22151);
-cljs.core.chunk_append.call(null,b__22152,[cljs.core.str("<option value='"),cljs.core.str(e),cljs.core.str("'>"),cljs.core.str(e),cljs.core.str("</option>")].join(''));
+if((i__21785 < size__20150__auto__)){
+var e = cljs.core._nth.call(null,c__20149__auto__,i__21785);
+cljs.core.chunk_append.call(null,b__21786,[cljs.core.str("<option value='"),cljs.core.str(e),cljs.core.str("'>"),cljs.core.str(e),cljs.core.str("</option>")].join(''));
 
-var G__22153 = (i__22151 + (1));
-i__22151 = G__22153;
+var G__21787 = (i__21785 + (1));
+i__21785 = G__21787;
 continue;
 } else {
 return true;
@@ -222,13 +222,13 @@ return true;
 break;
 }
 })()){
-return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__22152),view3d$controls$callsigns_$_iter__22149.call(null,cljs.core.chunk_rest.call(null,s__22150__$2)));
+return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__21786),view3d$controls$callsigns_$_iter__21783.call(null,cljs.core.chunk_rest.call(null,s__21784__$2)));
 } else {
-return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__22152),null);
+return cljs.core.chunk_cons.call(null,cljs.core.chunk.call(null,b__21786),null);
 }
 } else {
-var e = cljs.core.first.call(null,s__22150__$2);
-return cljs.core.cons.call(null,[cljs.core.str("<option value='"),cljs.core.str(e),cljs.core.str("'>"),cljs.core.str(e),cljs.core.str("</option>")].join(''),view3d$controls$callsigns_$_iter__22149.call(null,cljs.core.rest.call(null,s__22150__$2)));
+var e = cljs.core.first.call(null,s__21784__$2);
+return cljs.core.cons.call(null,[cljs.core.str("<option value='"),cljs.core.str(e),cljs.core.str("'>"),cljs.core.str(e),cljs.core.str("</option>")].join(''),view3d$controls$callsigns_$_iter__21783.call(null,cljs.core.rest.call(null,s__21784__$2)));
 }
 } else {
 return null;
@@ -237,7 +237,7 @@ break;
 }
 }),null,null));
 });
-return iter__20517__auto__.call(null,list);
+return iter__20151__auto__.call(null,list);
 })()))].join(''))),cljs.core.str("</select>")].join(''));
 });
 

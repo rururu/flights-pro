@@ -1,11 +1,11 @@
 (ns es
 (:require
-  [pro.server :as serv]
+  [pro.commands :as cmd]
   [async.proc :as asp]))
 
 (def HISTORY-SEC 80)
 (defn put-on-map [id crd crs spd sts]
-  (asp/pump-in serv/INS-CHN
+  (asp/pump-in (:instructions  cmd/CHN)
 	{:instruct :create-update
 	 :id id
 	 :vehicle {:coord crd
@@ -14,14 +14,14 @@
 	               :status sts}}))
 
 (defn put-off-map [id]
-  (asp/pump-in serv/INS-CHN
+  (asp/pump-in (:instructions  cmd/CHN)
 	{:instruct :delete
 	 :id id}))
 
 (defn fly-onboard-to [csn crs1 crs2 crd2 spd2 alt2 per]
   (let [crd3 (geo/future-pos crd2 crs2 spd2 (/ per 3600))
        per3 (* 2 per)]
-  (asp/pump-in serv/DIR-CHN
+  (asp/pump-in (:directives cmd/CHN)
 	{:directive :fly-onboard
 	 :callsign csn
 	 :vehicle {
@@ -32,9 +32,9 @@
 	 :old-course crs1
 	 :period per3})))
 
-(defn onboard [crd crs spd alt csg]
+(defn onboard [csg crd crs spd alt]
   (println [:ONBOARD csg])
-(asp/pump-in serv/DIR-CHN
+(asp/pump-in (:directives cmd/CHN)
 	{:directive :carrier
 	 :callsign csg
 	 :vehicle {:coord crd
@@ -56,4 +56,12 @@
         (read-string (format "%.1f" (float va)))
         (read-string (format "%.2f" (float vs)))])
       (recur (inc n) (rest y))) )))
+
+(defn set-map-view [coord]
+  (asp/pump-in (:instructions cmd/CHN)
+	{:instruct :map-center
+	 :coord coord}))
+
+(defn follow-trail [id [lat1 lon1] a1 [lat2 lon2] a2 [lat3 lon3] a3 [lat4 lon4] a4]
+  (cmd/trail id [lat1 lon1 a1 lat2 lon2 a2 lat3 lon3 a3 lat4 lon4 a4]))
 

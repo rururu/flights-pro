@@ -18,12 +18,13 @@
   (go (do 
           (while (and (= @status "RUN")
                             (proc-fn))
+                (println :process-step-done)
                 (<! (timeout time-out)))
           (vreset! status "STOP")))
   @status))
 
 (defn stop-process [status]
-  (vreset! status "FINISH"))
+  (println [:FLIGHTS-PROCESS  (vreset! status "FINISH")]))
 
 (defn running? [status]
   (= @status "RUN"))

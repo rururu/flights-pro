@@ -1,4 +1,4 @@
-; Tue Dec 13 22:02:06 MSK 2016
+; Fri Dec 16 22:58:57 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -31,6 +31,7 @@
 		[FlightPro_Class20025]
 		[FlightPro_Class180002]
 		[RuleEngine_Class30000]
+		[FlightPro_Class400000]
 		[FlightPro_Class20000]
 		[FlightPro_Class280000])
 	(title "FlightPro Programs"))
@@ -292,7 +293,7 @@
 
 ([FlightPro_Class160000] of  CloFunction
 
-	(source "(let [[n s w e] @BBX]\n  (if-let [ff (json-web-data (str URL-FLS \"?bounds=\" n \",\" s \",\" w \",\" e))]\n    (vreset! FLIGHTS \n      (->> ff\n        (filter #(vector? (second %)))\n        (filter #(not (empty? (callsign (second %)))))\n        (apply concat)\n        (apply hash-map)))))")
+	(source "(let [[n s w e] @BBX]\n  (if-let [ff (json-web-data (str (:url-flights F24) \"?bounds=\" n \",\" s \",\" w \",\" e))]\n    (vreset! FLIGHTS \n      (->> ff\n        (filter #(vector? (second %)))\n        (filter #(not (empty? (callsign (second %)))))\n        (apply concat)\n        (apply hash-map)))))")
 	(title "flights-in-bbx []"))
 
 ([FlightPro_Class160002] of  CloFunction
@@ -350,20 +351,10 @@
 	(source "(close! chn)")
 	(title "close-chan [chn]"))
 
-([FlightPro_Class160019] of  CloFunction
-
-	(source "(slurp (str ROOT \"leaflet.html\"))")
-	(title "chart-page []"))
-
 ([FlightPro_Class170000] of  CloVar
 
 	(source "(volatile! nil)")
 	(title "AIRPORTS"))
-
-([FlightPro_Class170001] of  CloVar
-
-	(source "(asp/mk-chan)")
-	(title "INS-CHN"))
 
 ([FlightPro_Class170004] of  CloFunction
 
@@ -410,15 +401,12 @@
 		[FlightPro_Class260002])
 	(cloNamespace [FlightPro_Class180003])
 	(cloVars
-		[FlightPro_Class190004]
-		[FlightPro_Class190005]
-		[FlightPro_Class190006]
-		[FlightPro_Class190001]
-		[FlightPro_Class210007]
-		[FlightPro_Class210010]
 		[FlightPro_Class210011]
+		[FlightPro_Class210007]
+		[FlightPro_Class190001]
 		[FlightPro_Class170000]
-		[FlightPro_Class220008])
+		[FlightPro_Class220008]
+		[FlightPro_Class210010])
 	(title "FlightRadar24 Client"))
 
 ([FlightPro_Class180003] of  CloNamespace
@@ -428,28 +416,13 @@
 
 ([FlightPro_Class190000] of  CloFunction
 
-	(source "(let [crt (current-time)]\n  (rete/assert-frame ['Current 'time crt])\n  (doseq [[k v] (seq @fls)]\n    (let [alt (fr24/altitude v)]\n      (rete/assert-frame \n	['Flight\n	'id k\n	'callsign (fr24/callsign v)\n	'coord (fr24/coord v)\n	'course (fr24/course v)\n	'speed (fr24/speed v)\n	'altitude alt\n	'time crt\n	'status (if (> alt 0)\n                                     \"LEVEL\"\n                                     \"GROUND\")])))\n  (rete/fire))")
+	(source "(let [crt (current-time)]\n  (println crt)\n  (rete/assert-frame ['Current 'time crt])\n  (doseq [[k v] (seq @fls)]\n    (let [alt (fr24/altitude v)]\n      (rete/assert-frame \n	['Flight\n	'id k\n	'callsign (fr24/callsign v)\n	'coord (fr24/coord v)\n	'course (fr24/course v)\n	'speed (fr24/speed v)\n	'altitude alt\n	'time crt\n	'status (if (> alt 0)\n                                     \"LEVEL\"\n                                     \"GROUND\")])))\n  (println :B)\n  (rete/fire)\n  (println :A)\n  true)")
 	(title "process-flights [fls]"))
 
 ([FlightPro_Class190001] of  CloVar
 
 	(source "(volatile! {})")
 	(title "FLIGHTS"))
-
-([FlightPro_Class190004] of  CloVar
-
-	(source "\"http://www.flightradar24.com/_json/airports.php\"")
-	(title "URL-ARP"))
-
-([FlightPro_Class190005] of  CloVar
-
-	(source "\"http://data-live.flightradar24.com/zones/fcgi/feed.js\"")
-	(title "URL-FLS"))
-
-([FlightPro_Class190006] of  CloVar
-
-	(source "\"http://data-live.flightradar24.com/clickhandler/?version=1.5&flight=\"")
-	(title "URL-FLT"))
 
 ([FlightPro_Class190007] of  CloFunction
 
@@ -508,53 +481,37 @@
 ([FlightPro_Class20000] of  CloProgram
 
 	(cloFunctions
-		[FlightPro_Class20009]
-		[FlightPro_Class160019]
 		[FlightPro_Class20013]
-		[FlightPro_Class20014]
 		[FlightPro_Class20017]
-		[FlightPro_Class320022]
-		[FlightPro_Class190000]
-		[FlightPro_Class210001]
-		[FlightPro_Class310005]
-		[FlightPro_Class310000]
-		[FlightPro_Class220030]
-		[FlightPro_Class340000]
-		[FlightPro_Class230005]
+		[FlightPro_Class20014]
+		[FlightPro_Class20024]
 		[FlightPro_Class20021]
 		[FlightPro_Class20022]
-		[FlightPro_Class20023]
-		[FlightPro_Class20024]
-		[FlightPro_Class270000]
-		[FlightPro_Class350000])
+		[FlightPro_Class20023])
 	(cloNamespace [FlightPro_Class20001])
 	(cloVars
-		[FlightPro_Class20002]
-		[FlightPro_Class20003]
-		[FlightPro_Class170001]
-		[FlightPro_Class20004]
+		[FlightPro_Class70000]
 		[FlightPro_Class20005]
+		[FlightPro_Class20002]
 		[FlightPro_Class20006]
-		[FlightPro_Class20007]
-		[FlightPro_Class310001]
-		[FlightPro_Class320006])
+		[FlightPro_Class20007])
 	(title "Pro Server"))
 
 ([FlightPro_Class200000] of  Rule
 
-	(lhs "(Onboard id ?id)\n(Flight id ?id\n           callsign ?cs\n           time ?t\n           coord ?crd\n           altitude ?alt\n           course ?crs\n           speed ?spd\n           status ?sts)")
+	(lhs "(Onboard callsign ?cs time ?t)\n(Flight callsign ?cs\n           time ?t\n           coord ?crd\n           altitude ?alt\n           course ?crs\n           speed ?spd\n           status ?sts)\n(Current time ?t)")
 	(rhs "(println [:ONB ?cs ?t ?crd ?alt ?crs ?spd ?sts])")
 	(salience -1)
 	(title "af:PrintOnboard"))
 
 ([FlightPro_Class200001] of  CloFunction
 
-	(source "(asp/pump-in serv/INS-CHN\n	{:instruct :delete\n	 :id id})")
+	(source "(asp/pump-in (:instructions  cmd/CHN)\n	{:instruct :delete\n	 :id id})")
 	(title "put-off-map [id]"))
 
 ([FlightPro_Class200002] of  CloFunction
 
-	(source "(letfn [(mk-airports [rows]\n            (reduce #(assoc %1\n                            (get %2 \"country\")\n                            (assoc (or (get %1 (get %2 \"country\")) {})\n                              (get %2 \"name\") \n                              %2)) \n                        {} \n                        rows))]\n  (or @AIRPORTS\n       (let [aps (json-web-data URL-ARP)\n              aps (mk-airports (get aps \"rows\"))]\n         (vreset! AIRPORTS aps)\n         aps)))")
+	(source "(letfn [(mk-airports [rows]\n            (reduce #(assoc %1\n                            (get %2 \"country\")\n                            (assoc (or (get %1 (get %2 \"country\")) {})\n                              (get %2 \"name\") \n                              %2)) \n                        {} \n                        rows))]\n  (or @AIRPORTS\n       (let [aps (json-web-data (:url-airports F24))\n              aps (mk-airports (get aps \"rows\"))]\n         (vreset! AIRPORTS aps)\n         aps)))")
 	(title "airports-by-ctrs []"))
 
 ([FlightPro_Class200007] of  CloFunction
@@ -564,7 +521,7 @@
 
 ([FlightPro_Class20001] of  CloNamespace
 
-	(source "(:use protege.core)\n(:require [ring.adapter.jetty :as jetty]\n              [ring.util.response :as r]\n              [compojure.core :refer [defroutes GET]]\n              [compojure.handler :as handler]\n              [compojure.route :as route]\n              [cognitect.transit :as t]\n              [async.proc :as asp]\n              [cesium.core :as cz]\n              [fr24.client :as fr24]\n              [rete.core :as rete])\n(:import java.io.ByteArrayOutputStream)")
+	(source "(:require [ring.adapter.jetty :as jetty]\n              [ring.util.response :as r]\n              [compojure.core :refer [defroutes GET]]\n              [compojure.handler :as handler]\n              [compojure.route :as route]\n              [cognitect.transit :as t]\n              [async.proc :as asp]\n              [pro.commands :as cmd])\n(:import java.io.ByteArrayOutputStream)")
 	(title "pro.server"))
 
 ([FlightPro_Class200010] of  CloFunction
@@ -612,15 +569,10 @@
 	(source "(str (System/getProperty \"user.dir\") \"/resources/public/\")")
 	(title "ROOT"))
 
-([FlightPro_Class20003] of  CloVar
-
-	(source "(asp/mk-chan)")
-	(title "DIR-CHN"))
-
 ([FlightPro_Class20004] of  CloVar
 
-	(source "(asp/mk-chan)")
-	(title "ANS-CHN"))
+	(source "{:answer (asp/mk-chan)\n :directives (asp/mk-chan)\n :instructions (asp/mk-chan)\n :czml (asp/mk-chan)}")
+	(title "CHN"))
 
 ([FlightPro_Class20005] of  CloVar
 
@@ -637,11 +589,6 @@
 	(source "nil")
 	(title "SERV"))
 
-([FlightPro_Class20009] of  CloFunction
-
-	(source "(slurp (str ROOT \"cezium.html\"))")
-	(title "index-page []"))
-
 ([FlightPro_Class20010] of  CloFunction
 
 	(source "(loop [[bit ch] (alts!! [chn] :default :none) bits []]\n  (if (= bit :none)\n    bits\n    (recur (alts!! [chn] :default :none) (conj bits bit))))")
@@ -655,16 +602,16 @@
 ([FlightPro_Class20014] of  CloFunction
 
 	(source "(-> (r/response (write-transit (deref (future (asp/pump-out chn)))))\n       (r/header \"Access-Control-Allow-Origin\" \"*\"))")
-	(title "directives [chn]"))
+	(title "responseN [chn]"))
 
 ([FlightPro_Class20017] of  CloFunction
 
-	(source "(-> (r/response (write-transit (deref (future (asp/one-out ANS-CHN)))))\n       (r/header \"Access-Control-Allow-Origin\" \"*\"))")
-	(title "answer []"))
+	(source "(-> (r/response (write-transit (deref (future (asp/one-out chn)))))\n       (r/header \"Access-Control-Allow-Origin\" \"*\"))")
+	(title "response1 [chn]"))
 
 ([FlightPro_Class20021] of  CloFunction
 
-	(source "(defroutes app-routes\n  (GET \"/\" [] (index-page))\n  (GET \"/chart\" [] (chart-page))\n  (GET \"/answer/\" [] (answer))\n  (GET \"/directives/\" [] (directives DIR-CHN))\n  (GET \"/instructions/\" [] (directives INS-CHN))\n  (GET \"/command/:cmd\" [cmd & params] \n    ((resolve (symbol (str \"pro.server/\" cmd))) params))\n  (GET \"/czml/\" [] (cz/events))\n  (route/files \"/\" (do (println [:ROOT-FILES ROOT]) {:root ROOT}))\n  (route/resources \"/\")\n  (route/not-found \"Not Found\"))\n\n(def APP\n  (handler/site app-routes))")
+	(source "(defroutes app-routes\n  (GET \"/\" [] (slurp (str ROOT \"cezium.html\")))\n  (GET \"/chart\" [] (slurp (str ROOT \"leaflet.html\")))\n  (GET \"/czml/\" [] (responseN (:czml cmd/CHN)))\n  (GET \"/answer/\" [] (response1 (:answer cmd/CHN)))\n  (GET \"/directives/\" [] (responseN (:directives cmd/CHN)))\n  (GET \"/instructions/\" [] (responseN (:instructions cmd/CHN)))\n  (GET \"/command/:cmd\" [cmd & params] \n    ((resolve (symbol (str \"pro.commands/\" cmd))) params))\n  (route/files \"/\" (do (println [:ROOT-FILES ROOT]) {:root ROOT}))\n  (route/resources \"/\")\n  (route/not-found \"Not Found\"))\n\n(def APP\n  (handler/site app-routes))")
 	(title "init-server []"))
 
 ([FlightPro_Class20022] of  CloFunction
@@ -679,7 +626,7 @@
 
 ([FlightPro_Class20024] of  CloFunction
 
-	(source "(let [address (str \"http://localhost:\" PORT)]\n  (println \"Location:\" address)\n  (when (java.awt.Desktop/isDesktopSupported)\n    (.browse (java.awt.Desktop/getDesktop) (java.net.URI. address))))")
+	(source "(let [address (str HOST PORT)]\n  (println \"Location:\" address)\n  (when (java.awt.Desktop/isDesktopSupported)\n    (.browse (java.awt.Desktop/getDesktop) (java.net.URI. address))))")
 	(title "view3D-in-browser []"))
 
 ([FlightPro_Class20025] of  CloProgram
@@ -761,7 +708,7 @@
 
 ([FlightPro_Class210001] of  CloFunction
 
-	(source "([params]\n  (clear))\n([]\n  (fr24/stop)\n  (rete/reset)\n  (asp/pump-in INS-CHN\n      {:instruct :clear})\n  \"\")")
+	(source "([params]\n  (clear))\n([]\n  (fr24/stop)\n  (fr24/clear-flights)\n  (rete/reset)\n  (asp/pump-in (:instructions CHN)\n      {:instruct :clear})\n  \"\")")
 	(title "clear"))
 
 ([FlightPro_Class210007] of  CloVar
@@ -776,7 +723,7 @@
 
 ([FlightPro_Class210009] of  CloFunction
 
-	(source "(asp/start-process STATUS \n                               #(do (flights-in-bbx) (process-fn FLIGHTS) true)\n                               F24-TIO)")
+	(source "(println [:FLIGHTS-PROCESS \n  (asp/start-process STATUS \n                               #(do (flights-in-bbx) (process-fn FLIGHTS) true)\n                               (:time-out F24))])")
 	(title "start [process-fn]"))
 
 ([FlightPro_Class210010] of  CloVar
@@ -786,8 +733,8 @@
 
 ([FlightPro_Class210011] of  CloVar
 
-	(source "12000")
-	(title "F24-TIO"))
+	(source "{:url-flights \"http://data-live.flightradar24.com/zones/fcgi/feed.js\"\n :url-airports \"http://www.flightradar24.com/_json/airports.php\"\n :url-flight-data \"http://data-live.flightradar24.com/clickhandler/?version=1.5&flight=\"\n :time-out 12000}")
+	(title "F24"))
 
 ([FlightPro_Class210012] of  CloFunction
 
@@ -806,14 +753,14 @@
 
 ([FlightPro_Class220001] of  Rule
 
-	(lhs "?ob1 (Onboard)\n?ob2 (Onboard callsign ?cs time 0)\n(Current time ?t)\n(Flight time ?t\n           callsign ?cs\n           coord ?crd \n           course ?crs\n           speed ?s\n           altitude ?a)")
-	(rhs "(retract ?ob1)\n(modify ?ob time ?t)\n(es/onboard ?cs ?crd ?crs ?spd ?a)")
+	(lhs "?ob1 (Onboard)\n?ob2 (Onboard callsign ?cs time 0)\n(Current time ?t)\n(Flight time ?t\n           callsign ?cs\n           coord ?crd \n           course ?crs\n           speed ?spd\n           altitude ?alt)")
+	(rhs "(retract ?ob1)\n(modify ?ob2 time ?t)\n(es/onboard ?cs ?crd ?crs ?spd ?alt)")
 	(salience 2)
 	(title "af:SwitchOnboard"))
 
 ([FlightPro_Class220007] of  CloFunction
 
-	(source "(or (@FL-INFOS id)\n     (let [info (json-web-data (str URL-FLT id))]\n       (vswap! FL-INFOS assoc id info)\n       info))")
+	(source "(or (@FL-INFOS id)\n     (let [info (json-web-data (str (:url-flight-data F24) id))]\n       (vswap! FL-INFOS assoc id info)\n       info))")
 	(title "fl-info [id]"))
 
 ([FlightPro_Class220008] of  CloVar
@@ -852,8 +799,8 @@
 
 ([FlightPro_Class230003] of  Rule
 
-	(lhs "?ob (Onboard callsign ?cs time 0)\n(Current time ?t)\n(Flight time ?t\n           callsign ?cs\n           coord ?crd \n           course ?crs\n           speed ?s\n           altitude ?a)")
-	(rhs "(modify ?ob time ?t)\n(es/onboard ?cs ?crd ?crs ?spd ?a)")
+	(lhs "?ob (Onboard callsign ?cs time 0)\n(Current time ?t)\n(Flight time ?t\n           callsign ?cs\n           coord ?crd \n           course ?crs\n           speed ?spd\n           altitude ?alt)")
+	(rhs "(println [:STA-ONB ?t (type ?t)])\n(modify ?ob time ?t)\n(es/onboard ?cs ?crd ?crs ?spd ?alt)")
 	(salience 2)
 	(title "af:StartOnboard"))
 
@@ -960,7 +907,7 @@
 
 ([FlightPro_Class250011] of  CloFunction
 
-	(source "(let [crd3 (geo/future-pos crd2 crs2 spd2 (/ per 3600))\n       per3 (* 2 per)]\n  (asp/pump-in serv/DIR-CHN\n	{:directive :fly-onboard\n	 :callsign csn\n	 :vehicle {\n	   :coord crd2\n	   :altitude alt2\n	   :speed spd2\n	   :course crs2}\n	 :old-course crs1\n	 :period per3}))")
+	(source "(let [crd3 (geo/future-pos crd2 crs2 spd2 (/ per 3600))\n       per3 (* 2 per)]\n  (asp/pump-in (:directives cmd/CHN)\n	{:directive :fly-onboard\n	 :callsign csn\n	 :vehicle {\n	   :coord crd2\n	   :altitude alt2\n	   :speed spd2\n	   :course crs2}\n	 :old-course crs1\n	 :period per3}))")
 	(title "fly-onboard-to [csn crs1 crs2 crd2 spd2 alt2 per]"))
 
 ([FlightPro_Class260000] of  CloFunction
@@ -979,12 +926,12 @@
 
 ([FlightPro_Class260003] of  CloFunction
 
-	(source "(println [:ONBOARD csg])\n(asp/pump-in serv/DIR-CHN\n	{:directive :carrier\n	 :callsign csg\n	 :vehicle {:coord crd\n	               :course crs\n	               :speed spd\n	               :altitude alt}})")
-	(title "onboard [crd crs spd alt csg]"))
+	(source "(println [:ONBOARD csg])\n(asp/pump-in (:directives cmd/CHN)\n	{:directive :carrier\n	 :callsign csg\n	 :vehicle {:coord crd\n	               :course crs\n	               :speed spd\n	               :altitude alt}})")
+	(title "onboard [csg crd crs spd alt]"))
 
 ([FlightPro_Class270000] of  CloFunction
 
-	(source "(println [:PARAMS params])\n(let [cls (:callsign params)]\n  (condp = cls\n    \"manual\" (do\n                     (asp/pump-in DIR-CHN\n	{:directive :manual})\n                     (rete/assert-frame ['Onboard 'callsign \"STOP\"]))\n   \"select\" (let [lst (vec (sort (map fr24/callsign (keys @fr24/FLIGHTS))))]\n                   (asp/pump-in DIR-CHN\n	{:directive :callsigns\n	 :list lst}))\n    (rete/assert-frame ['Onboard 'callsign cls 'time 0]))\n  \"\")")
+	(source "(println [:PARAMS params])\n(let [cls (:callsign params)]\n  (condp = cls\n    \"manual\" (do\n                     (asp/pump-in (:directives CHN)\n	{:directive :manual})\n                     (rete/assert-frame ['Onboard 'callsign \"STOP\"]))\n   \"select\" (let [lst (vec (sort (map fr24/callsign (keys @fr24/FLIGHTS))))]\n                   (asp/pump-in (:directives CHN)\n	{:directive :callsigns\n	 :list lst}))\n    (rete/assert-frame ['Onboard 'callsign cls 'time 0]))\n  \"\")")
 	(title "onboard [params]"))
 
 ([FlightPro_Class270001] of  CloFunction
@@ -1012,7 +959,7 @@
 
 ([FlightPro_Class280001] of  CloNamespace
 
-	(source "(:require\n  [pro.server :as serv]\n  [async.proc :as asp])")
+	(source "(:require\n  [pro.commands :as cmd]\n  [async.proc :as asp])")
 	(title "es"))
 
 ([FlightPro_Class280002] of  Rule
@@ -1047,7 +994,7 @@
 
 ([FlightPro_Class290006] of  CloFunction
 
-	(source "(asp/pump-in serv/INS-CHN\n	{:instruct :create-update\n	 :id id\n	 :vehicle {:coord crd\n	               :course crs\n	               :speed spd\n	               :status sts}})")
+	(source "(asp/pump-in (:instructions  cmd/CHN)\n	{:instruct :create-update\n	 :id id\n	 :vehicle {:coord crd\n	               :course crs\n	               :speed spd\n	               :status sts}})")
 	(title "put-on-map [id crd crs spd sts]"))
 
 ([FlightPro_Class3] of  CloVar
@@ -1140,13 +1087,13 @@
 
 ([FlightPro_Class310000] of  CloFunction
 
-	(source "(let [id (:id params)]\n  (if-let [inf (fr24/fl-info id)]\n    (let [cal (fr24/callsign id)\n           apt (inf \"airport\")\n           acr (inf \"aircraft\")\n           tim (inf \"time\")\n           img (get (first (get-in acr [\"images\" \"thumbnails\"])) \"src\")\n           [lat lon] (fr24/coord id)\n           dat [[\"from\" (or (get-in apt [\"origin\" \"name\"]) \"-\")]\n                  [\"to\" (or (get-in apt [\"destination\" \"name\"]) \"-\")]\n                  [\"airline\" (or (get-in inf [\"airline\" \"short\"]) \"-\")]\n                  [\"real-departure\" (or (get-in tim [\"real\" \"departure\"]) \"-\")]\n                  [\"scheduled-arrival\" (or (get-in tim [\"scheduled\" \"arrival\"]) \"-\")]\n                  [\"aircraft\" (or (get-in acr [\"model\" \"text\"]) \"-\")]\n                  [\"latitude\" (or lat \"-\")]\n                  [\"longitude\" (or lon \"-\")]\n                  [\"course\" (or (fr24/course id) \"-\")]\n                  [\"speed\" (or (fr24/speed id) \"-\")]\n                  [\"altitude\" (or (fr24/altitude id) \"-\")]\n                  [(str \"<input type='button' style='color:purple' value='Trail'\n                             onclick='chart.client.trail(\\\"\" id \"\\\")' >\")\n                   (str \"<input type='button' style='color:blue' value='Follow'\n                             onclick='chart.client.follow(\\\"\" id \"\\\")' >\")]\n                  [\"\"\n                   \"<input type='button' style='color:red' value='Stop'\n                       onclick='chart.client.stopfollow()' >\"]]\n           htm (make-info-html cal img dat)]\n      (asp/pump-in INS-CHN\n        {:instruct :popup\n         :id (:id params)\n         :html htm\n         :time POP-TIM}))))\n\"\"")
+	(source "(let [id (:id params)]\n  (if-let [inf (fr24/fl-info id)]\n    (let [cal (fr24/callsign id)\n           apt (inf \"airport\")\n           acr (inf \"aircraft\")\n           tim (inf \"time\")\n           img (get (first (get-in acr [\"images\" \"thumbnails\"])) \"src\")\n           [lat lon] (fr24/coord id)\n           dat [[\"from\" (or (get-in apt [\"origin\" \"name\"]) \"-\")]\n                  [\"to\" (or (get-in apt [\"destination\" \"name\"]) \"-\")]\n                  [\"airline\" (or (get-in inf [\"airline\" \"short\"]) \"-\")]\n                  [\"real-departure\" (or (get-in tim [\"real\" \"departure\"]) \"-\")]\n                  [\"scheduled-arrival\" (or (get-in tim [\"scheduled\" \"arrival\"]) \"-\")]\n                  [\"aircraft\" (or (get-in acr [\"model\" \"text\"]) \"-\")]\n                  [\"latitude\" (or lat \"-\")]\n                  [\"longitude\" (or lon \"-\")]\n                  [\"course\" (or (fr24/course id) \"-\")]\n                  [\"speed\" (or (fr24/speed id) \"-\")]\n                  [\"altitude\" (or (fr24/altitude id) \"-\")]\n                  [(str \"<input type='button' style='color:purple' value='Trail'\n                             onclick='chart.client.trail(\\\"\" id \"\\\")' >\")\n                   (str \"<input type='button' style='color:blue' value='Follow'\n                             onclick='chart.client.follow(\\\"\" id \"\\\")' >\")]\n                  [\"\"\n                   \"<input type='button' style='color:red' value='Stop'\n                       onclick='chart.client.stopfollow()' >\"]]\n           htm (make-info-html cal img dat)]\n      (asp/pump-in INS-CHN\n        {:instruct :popup\n         :id (:id params)\n         :html htm\n         :time (:popup TIM)}))))\n\"\"")
 	(title "info [params]"))
 
 ([FlightPro_Class310001] of  CloVar
 
-	(source "30000")
-	(title "POP-TIM"))
+	(source "{:popup 30000\n :trail 60000}")
+	(title "TIM"))
 
 ([FlightPro_Class310002] of  CloFunction
 
@@ -1204,7 +1151,8 @@
 	(templates
 		[Flight]
 		[Current]
-		[Onboard])
+		[Onboard]
+		[Follow])
 	(title "All Flights"))
 
 ([FlightPro_Class320011] of  Rule
@@ -1315,13 +1263,13 @@
 
 ([FlightPro_Class350000] of  CloFunction
 
-	(source "(let [id (:id params)]\n\n\n\n\n\n      (asp/pump-in INS-CHN\n        {:instruct :trail\n         :id (:id params)\n         :time POP-TIM}))\n\"\"")
-	(title "trail [params]"))
+	(source "([params]\n  (trail params []))\n([params head]\n  (if-let [inf (info params)]\n    (let [trl (mapcat #(list (% \"lat\") (% \"lng\") (% \"alt\")) (inf \"trail\"))]\n      (asp/pump-in (:instructions CHN)\n        {:instruct :trail\n         :id (:id params)\n         :points (concat head trl)\n         :options {:weight 3\n                        :color \"purple\"}\n         :time (:trial TIM)})))\n  \"\")")
+	(title "trail"))
 
 ([FlightPro_Class350001] of  Rule
 
-	(lhs "?f (Follow callsign ?cs time ?t0)\n(Flight callsign ?cs coord ?crd1 time ?t1)\n(Flight callsign ?cs coord ?crd2 time ?t2)\n(Flight callsign ?cs coord ?crd3 time ?t3)\n(Flight callsign ?cs coord ?crd4 time ?t4\n(Current time ?t4\n	(< ?t0 ?t1 ?t2 ?t3 ?t4))")
-	(rhs "(println [:FOLLOW ?cs ?t4])\n(es/set-map-view ?crd4)\n(es/follow-trail ?id [?crd1 ?crd2 ?crd3 ?crd4])\n(modify ?f time ?t4)")
+	(lhs "?f (Follow callsign ?cs time ?t0)\n(Flight callsign ?cs coord ?crd1 altitude ?a1 time ?t1)\n(Flight callsign ?cs coord ?crd2 altitude ?a2 time ?t2)\n(Flight callsign ?cs coord ?crd3 altitude ?a3 time ?t3)\n(Flight callsign ?cs coord ?crd4 altitude ?a4 time ?t4\n(Current time ?t4\n	(< ?t0 ?t1 ?t2 ?t3 ?t4))")
+	(rhs "(println [:FOLLOW ?cs ?t4])\n(es/set-map-view ?crd4)\n(es/follow-trail ?id ?crd1 ?a1 ?crd2 ?a2 ?crd3 ?a3 ?crd4 ?a4)\n(modify ?f time ?t4)")
 	(salience 2)
 	(title "af:FollowFlight"))
 
@@ -1349,6 +1297,10 @@
 
 	(source "(empty? \"\")"))
 
+([FlightPro_Class370000] of  CloFuncall
+
+	(source "(ru.rules/f 4371)"))
+
 ([FlightPro_Class370002] of  Rule
 
 	(lhs "?ob1 (Onboard)\n?ob2 (Onboard callsign \"STOP\")")
@@ -1365,11 +1317,61 @@
 
 ([FlightPro_Class370004] of  CloFunction
 
-	(title "set-map-view [[lat lon]]"))
+	(source "(asp/pump-in (:instructions cmd/CHN)\n	{:instruct :map-center\n	 :coord coord})")
+	(title "set-map-view [coord]"))
 
 ([FlightPro_Class370005] of  CloFunction
 
-	(title "follow-trail [points]"))
+	(source "(cmd/trail id [lat1 lon1 a1 lat2 lon2 a2 lat3 lon3 a3 lat4 lon4 a4])")
+	(title "follow-trail [id [lat1 lon1] a1 [lat2 lon2] a2 [lat3 lon3] a3 [lat4 lon4] a4]"))
+
+([FlightPro_Class380000] of  CloFuncall
+
+	(source "(rete.core/facts-with-slot-value 'Flight 'callsign = \"JBU264\")"))
+
+([FlightPro_Class380001] of  CloFuncall
+
+	(source "(def jj (rete.core/facts-with-slot-value 'Flight 'callsign = \"JBU264\"))"))
+
+([FlightPro_Class380002] of  CloFuncall
+
+	(source "(count jj)"))
+
+([FlightPro_Class380003] of  CloFuncall
+
+	(source "(map protege.core/ctpl jj)"))
+
+([FlightPro_Class380004] of  CloFuncall
+
+	(source "(def jj (rete.core/facts-with-slot-value 'Flight 'callsign = \"JBU72\"))"))
+
+([FlightPro_Class380005] of  CloFuncall
+
+	(source "(do (map protege.core/ctpl jj) 0)"))
+
+([FlightPro_Class380006] of  CloFuncall
+
+	(source "(rete.core/facts-with-slot-value 'Flight 'callsign = \"JBU72\")"))
+
+([FlightPro_Class380007] of  CloFuncall
+
+	(source " (map protege.core/ctpl jj)"))
+
+([FlightPro_Class380008] of  CloFuncall
+
+	(source "(doseq [e (rete.core/facts-with-slot-value 'Flight 'callsign = \"JBU72\")] (protege.core/ctpl e))"))
+
+([FlightPro_Class380009] of  CloFuncall
+
+	(source "(ru.rules/pp 'Current)"))
+
+([FlightPro_Class390000] of  CloFuncall
+
+	(source "(fr24.client/running?)"))
+
+([FlightPro_Class390001] of  CloFuncall
+
+	(source "(ru.rules/f 2884)"))
 
 ([FlightPro_Class4] of  CloVar
 
@@ -1381,6 +1383,34 @@
 	(source "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <title>Cockpit View</title>\n    <link rel=\"stylesheet\" href=\"css/cesium.css\" />\n    <script src=\"Cesium/Cesium.js\"></script>\n    <style>\n      @import url(Cesium/Widgets/widgets.css);\n      #cesiumContainer {\n        position: absolute;\n        top: 0;\n        left: 0;\n        height: 100%;\n        width: 100%;\n        margin: 0;\n        overflow: hidden;\n        padding: 0;\n        font-family: sans-serif;\n      }\n      html {\n        height: 100%;\n      }\n      body {\n        padding: 0;\n        margin: 0;\n        overflow: hidden;\n        height: 100%;\n      }\n    </style>\n  </head>\n  <body>\n    <div id=\"cesiumContainer\"></div>\n    <div id=\"autopilot\"></div>\n    <div id=\"course\"></div><div id=\"course-fld\"></div><div id=\"accel\"></div>\n    <div id=\"speed\"></div><div id=\"speed-fld\"></div><div id=\"speed-acl\"></div>\n    <div id=\"altitude\"></div><div id=\"altitude-fld\"></div><div id=\"altitude-acl\"></div>\n    <div id=\"lat\"></div></div><div id=\"latitude-fld\"></div>\n    <div id=\"lon\"></div></div><div id=\"longitude-fld\"></div>\n    <div id=\"camera\"></div>\n    <div id=\"onboard\"></div><div id=\"onboard-fld\"></div>\n    <div id=\"view\"></div><div id=\"view-fld\"></div>\n    <div id=\"pitch\"></div><div id=\"pitch-fld\"></div>\n    <div id=\"roll\"></div><div id=\"roll-fld\"></div>\n    <script>\n      Cesium.BingMapsApi.defaultKey = 'Au5mRx6ODcM1h4EAWNyK8wWoyaTjeLuvGkacr7WRZgmAt4QtmyV03OrN1TYb-cr7';\n    </script>\n    <script type=\"text/javascript\" src=\"js/main.js\"></script>\n  </body>\n</html>")
 	(store-in "resources/public")
 	(title "cezium"))
+
+([FlightPro_Class400000] of  CloProgram
+
+	(cloFunctions
+		[FlightPro_Class320022]
+		[FlightPro_Class190000]
+		[FlightPro_Class210001]
+		[FlightPro_Class310005]
+		[FlightPro_Class160010]
+		[FlightPro_Class220030]
+		[FlightPro_Class270000]
+		[FlightPro_Class340000]
+		[FlightPro_Class230005]
+		[FlightPro_Class350000])
+	(cloNamespace [FlightPro_Class400001])
+	(cloVars
+		[FlightPro_Class70000]
+		[FlightPro_Class20005]
+		[FlightPro_Class330003]
+		[FlightPro_Class20004]
+		[FlightPro_Class320006]
+		[FlightPro_Class310001])
+	(title "Pro Commands"))
+
+([FlightPro_Class400001] of  CloNamespace
+
+	(source "(:use protege.core)\n(:require [compojure.core :refer [GET]]\n              [fr24.client :as fr24]\n              [async.proc :as asp]\n              [rete.core :as rete])")
+	(title "pro.commands"))
 
 ([FlightPro_Class5] of  CloVar
 
@@ -1456,12 +1486,12 @@
 
 ([FlightPro_Class70004] of  CloFunction
 
-	(source "(when (not= @status \"RUN\") \n  (vreset! status \"RUN\")\n  (go (do \n          (while (and (= @status \"RUN\")\n                            (proc-fn))\n                (<! (timeout time-out)))\n          (vreset! status \"STOP\")))\n  @status)")
+	(source "(when (not= @status \"RUN\") \n  (vreset! status \"RUN\")\n  (go (do \n          (while (and (= @status \"RUN\")\n                            (proc-fn))\n                (println :process-step-done)\n                (<! (timeout time-out)))\n          (vreset! status \"STOP\")))\n  @status)")
 	(title "start-process [status proc-fn time-out]"))
 
 ([FlightPro_Class70005] of  CloFunction
 
-	(source "(vreset! status \"FINISH\")")
+	(source "(println [:FLIGHTS-PROCESS  (vreset! status \"FINISH\")])")
 	(title "stop-process [status]"))
 
 ([FlightPro_Class70006] of  CloFunction
@@ -1523,7 +1553,7 @@
 
 ([FlightPro_Class80003] of  CloFunction
 
-	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :manual (do (if (= (:mode @CARRIER) \"?\")\n	  (carrier \"MANUAL\" (manual-vehicle))\n	  (vswap! CARRIER assoc :mode \"MANUAL\"))\n	(asp/start-process CAM-PROC #(camera-move CARRIER) (:camera TIO)))\n    :callsigns (let [{:keys [list]} dir]\n            (ctl/callsigns (conj list \"manual\")))\n    :carrier (let [{:keys [callsign vehicle]} dir]\n            (asp/stop-process CAM-PROC)\n            (carrier callsign vehicle)\n            (camera-move CARRIER))\n    :fly-onboard (let [{:keys [callsign vehicle old-course period]} dir]\n            (carrier callsign vehicle)\n            (camera-move CARRIER period)\n            (if (> (:altitude vehicle) 60)\n              (roll (dyn/bank old-course (:course vehicle) (:bank-params @CARRIER)))))\n    (println (str \"Unknown directive: \" [directive dir]))))")
+	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  (println [:DIRECTIVE dir])\n  (condp = directive\n    :manual (do (if (= (:mode @CARRIER) \"?\")\n	  (carrier \"MANUAL\" (manual-vehicle))\n	  (vswap! CARRIER assoc :mode \"MANUAL\"))\n	(asp/start-process CAM-PROC #(camera-move CARRIER) (:camera TIO)))\n    :callsigns (let [{:keys [list]} dir]\n            (ctl/callsigns (conj list \"manual\")))\n    :carrier (let [{:keys [callsign vehicle]} dir]\n            (asp/stop-process CAM-PROC)\n            (carrier callsign vehicle)\n            (camera-move CARRIER))\n    :fly-onboard (let [{:keys [callsign vehicle old-course period]} dir]\n            (carrier callsign vehicle)\n            (camera-move CARRIER period)\n            (if (> (:altitude vehicle) 60)\n              (roll (dyn/bank old-course (:course vehicle) (:bank-params @CARRIER)))))\n    (println (str \"Unknown directive: \" [directive dir]))))")
 	(title "directives-handler [response]"))
 
 ([FlightPro_Class80004] of  CloFunction
