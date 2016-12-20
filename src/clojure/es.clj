@@ -3,7 +3,6 @@
   [pro.commands :as cmd]
   [async.proc :as asp]))
 
-(def HISTORY-SEC 80)
 (defn put-on-map [id crd crs spd sts]
   (asp/pump-in (:instructions  cmd/CHN)
 	{:instruct :create-update
@@ -61,7 +60,4 @@
   (asp/pump-in (:instructions cmd/CHN)
 	{:instruct :map-center
 	 :coord coord}))
-
-(defn follow-trail [id [lat1 lon1] a1 [lat2 lon2] a2 [lat3 lon3] a3 [lat4 lon4] a4]
-  (cmd/trail id [lat1 lon1 a1 lat2 lon2 a2 lat3 lon3 a3 lat4 lon4 a4]))
 

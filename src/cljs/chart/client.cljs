@@ -105,19 +105,52 @@
         (asp/delayer #(.removeLayer @CHART pop)
                             time)))))
 
+(defn add-trail [id points options time]
+  (let [ops (clj->js options)
+       pts (map #(js/L.LatLng. (first %) (second %)) (partition 3 points))
+       pts (clj->js pts)
+       trl (js/L.polyline pts ops)]
+    (.addLayer @CHART trl)
+    (if (> time 0)
+        (asp/delayer #(.removeLayer @CHART trl)
+                            time))))
+
+(defn visible-map []
+  (let [bnd (.getBounds @CHART)]
+  [(.getNorth bnd)
+   (.getSouth bnd)
+   (.getWest bnd)
+   (.getEast bnd)]))
+
+(defn new-visible []
+  (let [[n s w e] (visible-map)
+        url (str (:command URL) "visible?n=" n "&s=" s "&w=" w "&e=" e)]
+    (GET url {:handler (fn [response])
+              :error-handler error-handler})))
+
+(defn map-center [[lat lon]]
+  (let [cen (js/L.LatLng. lat lon)
+        zom (.getZoom @CHART)]
+  (.setView @CHART cen zom {})
+  (new-visible)))
+
 (defn instructions-handler [response]
   (doseq [{:keys [instruct] :as ins} (read-transit response)]
   ;;(println [:INSTRUCT ins])
   (condp = instruct
     :create-update (let [{:keys [id vehicle]} ins]
-              (create-update-vehicle id vehicle))
+	(create-update-vehicle id vehicle))
     :delete (let [{:keys [id]} ins]
-              (delete-vehicle id))
+	(delete-vehicle id))
     :clear (clear-vehicles)
     :popup (let [{:keys [id lat lon html time]} ins]
-             (cond
-               id (popup id html time)
-               (and lat lon) (popup lat lon html time)))
+	(cond
+	  id (popup id html time)
+	  (and lat lon) (popup lat lon html time)))
+    :trail (let [{:keys [id points options time]} ins]
+	(add-trail id points options time))
+    :map-center (let [{:keys [coord]} ins]
+	(map-center coord))             
     (println (str "Unknown instruction: " [instruct ins])))))
 
 (defn receive-instructions []
@@ -180,6 +213,21 @@
 (init-chart)
 (asp/repeater receive-instructions (:instructions TIO))
 (ctl/show-chart-controls))
+
+(defn follow [id]
+  (GET (str (:command URL) "follow?id=" id)
+  {:handler (fn [response])
+   :error-handler error-handler}))
+
+(defn stopfollow []
+  (GET (str (:command URL) "stopfollow")
+  {:handler (fn [response])
+   :error-handler error-handler}))
+
+(defn trail [id]
+  (GET (str (:command URL) "trail?id=" id)
+  {:handler (fn [response])
+   :error-handler error-handler}))
 
 
 (set! (.-onload js/window) (on-load-chart))

@@ -21,21 +21,21 @@ return true;
 }
 }
 });
-calc.dynamic.linint = (function calc$dynamic$linint(x,p__21688,p__21689){
-var vec__21696 = p__21688;
-var x1 = cljs.core.nth.call(null,vec__21696,(0),null);
-var y1 = cljs.core.nth.call(null,vec__21696,(1),null);
-var vec__21699 = p__21689;
-var x2 = cljs.core.nth.call(null,vec__21699,(0),null);
-var y2 = cljs.core.nth.call(null,vec__21699,(1),null);
+calc.dynamic.linint = (function calc$dynamic$linint(x,p__24450,p__24451){
+var vec__24458 = p__24450;
+var x1 = cljs.core.nth.call(null,vec__24458,(0),null);
+var y1 = cljs.core.nth.call(null,vec__24458,(1),null);
+var vec__24461 = p__24451;
+var x2 = cljs.core.nth.call(null,vec__24461,(0),null);
+var y2 = cljs.core.nth.call(null,vec__24461,(1),null);
 return (y1 + (((y2 - y1) * (x - x1)) / (x2 - x1)));
 });
 calc.dynamic.tabfun = (function calc$dynamic$tabfun(x,table){
-var vec__21706 = cljs.core.split_with.call(null,(function (p1__21702_SHARP_){
-return (cljs.core.first.call(null,p1__21702_SHARP_) < x);
+var vec__24468 = cljs.core.split_with.call(null,(function (p1__24464_SHARP_){
+return (cljs.core.first.call(null,p1__24464_SHARP_) < x);
 }),table);
-var lo = cljs.core.nth.call(null,vec__21706,(0),null);
-var hi = cljs.core.nth.call(null,vec__21706,(1),null);
+var lo = cljs.core.nth.call(null,vec__24468,(0),null);
+var hi = cljs.core.nth.call(null,vec__24468,(1),null);
 if(cljs.core.seq.call(null,lo)){
 if(cljs.core.seq.call(null,hi)){
 return calc.dynamic.linint.call(null,x,cljs.core.last.call(null,lo),cljs.core.first.call(null,hi));
@@ -47,8 +47,8 @@ return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMP
 }
 });
 calc.dynamic.i_mono_tabfun = (function calc$dynamic$i_mono_tabfun(y,table){
-return calc.dynamic.tabfun.call(null,y,cljs.core.map.call(null,(function (p1__21709_SHARP_){
-return (new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[cljs.core.second.call(null,p1__21709_SHARP_),cljs.core.first.call(null,p1__21709_SHARP_)],null));
+return calc.dynamic.tabfun.call(null,y,cljs.core.map.call(null,(function (p1__24471_SHARP_){
+return (new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[cljs.core.second.call(null,p1__24471_SHARP_),cljs.core.first.call(null,p1__24471_SHARP_)],null));
 }),table));
 });
 calc.dynamic.smooth_tabfun = (function calc$dynamic$smooth_tabfun(x,table){
@@ -146,13 +146,13 @@ return csasync.proc.start_process.call(null,new cljs.core.Keyword(null,"cdad-sta
 return proc_fn.call(null,carr);
 }),cljs.core.get_in.call(null,cljs.core.deref.call(null,carr),tio_pth));
 });
-calc.dynamic.bank = (function calc$dynamic$bank(old_crs,new_crs,p__21710){
-var vec__21714 = p__21710;
-var right_bank = cljs.core.nth.call(null,vec__21714,(0),null);
-var small_arc = cljs.core.nth.call(null,vec__21714,(1),null);
-var big_arc = cljs.core.nth.call(null,vec__21714,(2),null);
-var big_factor = cljs.core.nth.call(null,vec__21714,(3),null);
-var turn_right_QMARK_ = ((function (vec__21714,right_bank,small_arc,big_arc,big_factor){
+calc.dynamic.bank = (function calc$dynamic$bank(old_crs,new_crs,p__24472){
+var vec__24476 = p__24472;
+var right_bank = cljs.core.nth.call(null,vec__24476,(0),null);
+var small_arc = cljs.core.nth.call(null,vec__24476,(1),null);
+var big_arc = cljs.core.nth.call(null,vec__24476,(2),null);
+var big_factor = cljs.core.nth.call(null,vec__24476,(3),null);
+var turn_right_QMARK_ = ((function (vec__24476,right_bank,small_arc,big_arc,big_factor){
 return (function calc$dynamic$bank_$_turn_right_QMARK_(from,to){
 var dif = (to - from);
 if((dif > (0))){
@@ -164,7 +164,7 @@ return (dif < (-180));
 return null;
 }
 }
-});})(vec__21714,right_bank,small_arc,big_arc,big_factor))
+});})(vec__24476,right_bank,small_arc,big_arc,big_factor))
 ;
 var arc = calc.dynamic.abs.call(null,(old_crs - new_crs));
 var arc__$1 = (((arc > (180)))?((360) - arc):arc);

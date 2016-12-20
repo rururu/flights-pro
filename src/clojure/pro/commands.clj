@@ -16,17 +16,17 @@
  :directives (asp/mk-chan)
  :instructions (asp/mk-chan)
  :czml (asp/mk-chan)})
-(def HISTORY-SEC 80)
 (def TIM {:popup 30000
- :trail 60000})
+ :trail 30000})
 (defn current-time []
   (int (/ (System/currentTimeMillis) 1000)))
 
 (defn process-flights [fls]
-  (let [crt (current-time)]
-  (println crt)
+  (let [crt (current-time)
+       fls (seq @fls)]
+  (println crt (count fls))
   (rete/assert-frame ['Current 'time crt])
-  (doseq [[k v] (seq @fls)]
+  (doseq [[k v] fls]
     (let [alt (fr24/altitude v)]
       (rete/assert-frame 
 	['Flight
@@ -40,9 +40,7 @@
 	'status (if (> alt 0)
                                      "LEVEL"
                                      "GROUND")])))
-  (println :B)
   (rete/fire)
-  (println :A)
   true))
 
 (defn clear
@@ -64,11 +62,6 @@
       rows (apply str rows)]
   (str head itag "<table>" rows "</table>")))
 
-(defn info [id]
-  (GET (str (:command URL) "info?id=" id)
-  {:handler (fn [response])
-   :error-handler error-handler}))
-
 (defn watch-visible
   ([]
   (let [[n s w e] @fr24/BBX]
@@ -80,6 +73,63 @@
     (fr24/set-bbx n s w e)
     (fr24/start process-flights)
     "")))
+
+(defn update-watch-area []
+  (if (= @fr24/STATUS "RUN")
+  (watch-visible)))
+
+(defn do-trail [id head]
+  (let [pts (if-let [inf (fr24/fl-info id)]
+               (mapcat #(list (% "lat") (% "lng") (% "alt")) (inf "trail"))
+               head)]
+  (asp/pump-in (:instructions CHN)
+        {:instruct :trail
+         :id id
+         :points pts
+         :options {:weight 3
+                        :color "purple"}
+         :time (:trail TIM)})
+  ""))
+
+(defn set-map-view [coord]
+  (asp/pump-in (:instructions CHN)
+	{:instruct :map-center
+	 :coord coord}))
+
+(defn info [params]
+  (let [id (:id params)]
+  (if-let [inf (fr24/fl-info id)]
+    (let [cal (fr24/callsign id)
+           apt (inf "airport")
+           acr (inf "aircraft")
+           tim (inf "time")
+           img (get (first (get-in acr ["images" "thumbnails"])) "src")
+           [lat lon] (fr24/coord id)
+           dat [["from" (or (get-in apt ["origin" "name"]) "-")]
+                  ["to" (or (get-in apt ["destination" "name"]) "-")]
+                  ["airline" (or (get-in inf ["airline" "short"]) "-")]
+                  ["real-departure" (or (get-in tim ["real" "departure"]) "-")]
+                  ["scheduled-arrival" (or (get-in tim ["scheduled" "arrival"]) "-")]
+                  ["aircraft" (or (get-in acr ["model" "text"]) "-")]
+                  ["latitude" (or lat "-")]
+                  ["longitude" (or lon "-")]
+                  ["course" (or (fr24/course id) "-")]
+                  ["speed" (or (fr24/speed id) "-")]
+                  ["altitude" (or (fr24/altitude id) "-")]
+                  [(str "<input type='button' style='color:purple' value='Trail'
+                             onclick='chart.client.trail(\"" id "\")' >")
+                   (str "<input type='button' style='color:blue' value='Follow'
+                             onclick='chart.client.follow(\"" id "\")' >")]
+                  [""
+                   "<input type='button' style='color:red' value='Stop'
+                       onclick='chart.client.stopfollow()' >"]]
+           htm (make-info-html cal img dat)]
+      (asp/pump-in (:instructions CHN)
+        {:instruct :popup
+         :id (:id params)
+         :html htm
+         :time (:popup TIM)}))))
+"")
 
 (defn onboard [params]
   (println [:PARAMS params])
@@ -99,22 +149,21 @@
 (defn terrain [params]
   "yes")
 
-(defn update-watch-area []
-  (if (= @fr24/STATUS "RUN")
-  (watch-visible)))
+(defn follow [params]
+  (println [:PARAMS params])
+(let [id (:id params)]
+  (if (fr24/dat id)
+    (rete/assert-frame ['Follow 'id id 'time 0]))))
 
-(defn trail
-  ([params]
-  (trail params []))
-([params head]
-  (if-let [inf (info params)]
-    (let [trl (mapcat #(list (% "lat") (% "lng") (% "alt")) (inf "trail"))]
-      (asp/pump-in (:instructions CHN)
-        {:instruct :trail
-         :id (:id params)
-         :points (concat head trl)
-         :options {:weight 3
-                        :color "purple"}
-         :time (:trial TIM)})))
+(defn visible [params]
+  (let [{:keys [n s w e]} params]
+  (fr24/set-bbx n s w e)
   ""))
+
+(defn trail [params]
+  (println [:PARAMS params])
+(do-trail (:id params) []))
+
+(defn stopfollow [params]
+  (rete/assert-frame ['Follow 'id "STOP" 'time 0]))
 

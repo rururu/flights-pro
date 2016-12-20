@@ -53,7 +53,7 @@
     (vreset! FLIGHTS 
       (->> ff
         (filter #(vector? (second %)))
-        (filter #(not (empty? (callsign (second %)))))
+        ;;(filter #(not (empty? (callsign (second %)))))
         (apply concat)
         (apply hash-map))))))
 
@@ -82,10 +82,7 @@
          aps))))
 
 (defn fl-info [id]
-  (or (@FL-INFOS id)
-     (let [info (json-web-data (str (:url-flight-data F24) id))]
-       (vswap! FL-INFOS assoc id info)
-       info)))
+  (json-web-data (str (:url-flight-data F24) id)))
 
 (defn dat-by-call [cs]
   (if-let [[id dat] (by-call cs)]

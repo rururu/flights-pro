@@ -1,4 +1,4 @@
-; Fri Dec 16 22:58:57 MSK 2016
+; Tue Dec 20 22:09:46 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -257,12 +257,19 @@
 		[FlightPro_Class160008]
 		[FlightPro_Class160004]
 		[FlightPro_Class310002]
+		[FlightPro_Class360000]
+		[FlightPro_Class380003]
+		[FlightPro_Class370001]
+		[FlightPro_Class370000]
 		[FlightPro_Class170005]
 		[FlightPro_Class170004]
 		[FlightPro_Class220029]
 		[FlightPro_Class220027]
 		[FlightPro_Class160011]
-		[FlightPro_Class160002])
+		[FlightPro_Class160002]
+		[FlightPro_Class180000]
+		[FlightPro_Class380000]
+		[FlightPro_Class380001])
 	(cloNamespace [FlightPro_Class150003])
 	(cloVars
 		[FlightPro_Class70000]
@@ -293,7 +300,7 @@
 
 ([FlightPro_Class160000] of  CloFunction
 
-	(source "(let [[n s w e] @BBX]\n  (if-let [ff (json-web-data (str (:url-flights F24) \"?bounds=\" n \",\" s \",\" w \",\" e))]\n    (vreset! FLIGHTS \n      (->> ff\n        (filter #(vector? (second %)))\n        (filter #(not (empty? (callsign (second %)))))\n        (apply concat)\n        (apply hash-map)))))")
+	(source "(let [[n s w e] @BBX]\n  (if-let [ff (json-web-data (str (:url-flights F24) \"?bounds=\" n \",\" s \",\" w \",\" e))]\n    (vreset! FLIGHTS \n      (->> ff\n        (filter #(vector? (second %)))\n        ;;(filter #(not (empty? (callsign (second %)))))\n        (apply concat)\n        (apply hash-map)))))")
 	(title "flights-in-bbx []"))
 
 ([FlightPro_Class160002] of  CloFunction
@@ -363,15 +370,13 @@
 
 ([FlightPro_Class170005] of  CloFunction
 
-	(source "(doseq [{:keys [instruct] :as ins} (read-transit response)]\n  ;;(println [:INSTRUCT ins])\n  (condp = instruct\n    :create-update (let [{:keys [id vehicle]} ins]\n              (create-update-vehicle id vehicle))\n    :delete (let [{:keys [id]} ins]\n              (delete-vehicle id))\n    :clear (clear-vehicles)\n    :popup (let [{:keys [id lat lon html time]} ins]\n             (cond\n               id (popup id html time)\n               (and lat lon) (popup lat lon html time)))\n    (println (str \"Unknown instruction: \" [instruct ins]))))")
+	(source "(doseq [{:keys [instruct] :as ins} (read-transit response)]\n  ;;(println [:INSTRUCT ins])\n  (condp = instruct\n    :create-update (let [{:keys [id vehicle]} ins]\n	(create-update-vehicle id vehicle))\n    :delete (let [{:keys [id]} ins]\n	(delete-vehicle id))\n    :clear (clear-vehicles)\n    :popup (let [{:keys [id lat lon html time]} ins]\n	(cond\n	  id (popup id html time)\n	  (and lat lon) (popup lat lon html time)))\n    :trail (let [{:keys [id points options time]} ins]\n	(add-trail id points options time))\n    :map-center (let [{:keys [coord]} ins]\n	(map-center coord))             \n    (println (str \"Unknown instruction: \" [instruct ins]))))")
 	(title "instructions-handler [response]"))
 
-([FlightPro_Class180000] of  Rule
+([FlightPro_Class180000] of  CloFunction
 
-	(lhs "?f1 (Flight id ?id time ?t1)\n(not Flight id ?id time ?t2\n	(< ?t2 ?t1))")
-	(rhs "(es/put-off-map ?id)")
-	(salience 2)
-	(title "af:PutFlightOffMap"))
+	(source "(GET (str (:command URL) \"follow?id=\" id)\n  {:handler (fn [response])\n   :error-handler error-handler})")
+	(title "follow [id]"))
 
 ([FlightPro_Class180001] of  CloNamespace
 
@@ -416,7 +421,7 @@
 
 ([FlightPro_Class190000] of  CloFunction
 
-	(source "(let [crt (current-time)]\n  (println crt)\n  (rete/assert-frame ['Current 'time crt])\n  (doseq [[k v] (seq @fls)]\n    (let [alt (fr24/altitude v)]\n      (rete/assert-frame \n	['Flight\n	'id k\n	'callsign (fr24/callsign v)\n	'coord (fr24/coord v)\n	'course (fr24/course v)\n	'speed (fr24/speed v)\n	'altitude alt\n	'time crt\n	'status (if (> alt 0)\n                                     \"LEVEL\"\n                                     \"GROUND\")])))\n  (println :B)\n  (rete/fire)\n  (println :A)\n  true)")
+	(source "(let [crt (current-time)\n       fls (seq @fls)]\n  (println crt (count fls))\n  (rete/assert-frame ['Current 'time crt])\n  (doseq [[k v] fls]\n    (let [alt (fr24/altitude v)]\n      (rete/assert-frame \n	['Flight\n	'id k\n	'callsign (fr24/callsign v)\n	'coord (fr24/coord v)\n	'course (fr24/course v)\n	'speed (fr24/speed v)\n	'altitude alt\n	'time crt\n	'status (if (> alt 0)\n                                     \"LEVEL\"\n                                     \"GROUND\")])))\n  (rete/fire)\n  true)")
 	(title "process-flights [fls]"))
 
 ([FlightPro_Class190001] of  CloVar
@@ -753,14 +758,14 @@
 
 ([FlightPro_Class220001] of  Rule
 
-	(lhs "?ob1 (Onboard)\n?ob2 (Onboard callsign ?cs time 0)\n(Current time ?t)\n(Flight time ?t\n           callsign ?cs\n           coord ?crd \n           course ?crs\n           speed ?spd\n           altitude ?alt)")
+	(lhs "(Current time ?t)\n(Flight time ?t\n           callsign ?cs\n           coord ?crd \n           course ?crs\n           speed ?spd\n           altitude ?alt)\n?ob1 (Onboard)\n?ob2 (Onboard callsign ?cs time 0\n	(not= ?cs \"STOP\"))")
 	(rhs "(retract ?ob1)\n(modify ?ob2 time ?t)\n(es/onboard ?cs ?crd ?crs ?spd ?alt)")
-	(salience 2)
+	(salience 0)
 	(title "af:SwitchOnboard"))
 
 ([FlightPro_Class220007] of  CloFunction
 
-	(source "(or (@FL-INFOS id)\n     (let [info (json-web-data (str (:url-flight-data F24) id))]\n       (vswap! FL-INFOS assoc id info)\n       info))")
+	(source "(json-web-data (str (:url-flight-data F24) id))")
 	(title "fl-info [id]"))
 
 ([FlightPro_Class220008] of  CloVar
@@ -799,9 +804,9 @@
 
 ([FlightPro_Class230003] of  Rule
 
-	(lhs "?ob (Onboard callsign ?cs time 0)\n(Current time ?t)\n(Flight time ?t\n           callsign ?cs\n           coord ?crd \n           course ?crs\n           speed ?spd\n           altitude ?alt)")
+	(lhs "(Current time ?t)\n(Flight time ?t\n           callsign ?cs\n           coord ?crd \n           course ?crs\n           speed ?spd\n           altitude ?alt)\n?ob (Onboard callsign ?cs time 0)\n(not Onboard)")
 	(rhs "(println [:STA-ONB ?t (type ?t)])\n(modify ?ob time ?t)\n(es/onboard ?cs ?crd ?crs ?spd ?alt)")
-	(salience 2)
+	(salience 0)
 	(title "af:StartOnboard"))
 
 ([FlightPro_Class230004] of  ClsRequired
@@ -902,7 +907,7 @@
 
 	(lhs "?ob (Onboard time ?t1 callsign ?cs)\n(Flight time ?t1 callsign ?cs course ?crs1)\n(Flight time ?t2\n           callsign ?cs\n           course ?crs2 \n           coord ?crd2 \n           speed ?spd2 \n           altitude ?alt2)\n(Current time ?t2\n	(> ?t2 ?t1))")
 	(rhs "(modify ?ob time ?t2)\n(es/fly-onboard-to ?cs ?crs1 ?crs2 ?crd2 ?spd2 ?alt2 (- ?t2 ?t1))")
-	(salience -1)
+	(salience 0)
 	(title "af:FlyOnboardTo"))
 
 ([FlightPro_Class250011] of  CloFunction
@@ -951,10 +956,8 @@
 		[FlightPro_Class250011]
 		[FlightPro_Class260003]
 		[FlightPro_Class90005]
-		[FlightPro_Class370004]
-		[FlightPro_Class370005])
+		[FlightPro_Class370004])
 	(cloNamespace [FlightPro_Class280001])
-	(cloVars [FlightPro_Class320006])
 	(title "ES Functions"))
 
 ([FlightPro_Class280001] of  CloNamespace
@@ -971,8 +974,17 @@
 
 ([FlightPro_Class290000] of  CloFunction
 
-	(source "([carr]\n  (camera-move carr (/ (:camera TIO) 1000)))\n([carr period]\n  (let [car @carr\n         [lat lon] (:coord car)\n         crs (:course car)\n         alt (int (/ (:altitude car) 3.28084))\n         alt (if (< alt 8) 8 alt)]\n      (czm/fly-to lat lon alt crs period))\n  true)")
+	(source "([carr]\n  (camera-move carr (/ (:camera TIO) 1000)))\n([carr period]\n  (let [car @carr\n         [lat lon] (:coord car)\n         crs (:course car)\n         alt (int (/ (:altitude car) 3.28084))\n         alt (if (< alt 6) 6 alt)]\n      (czm/fly-to lat lon alt crs period))\n  true)")
 	(title "camera-move"))
+
+([FlightPro_Class290001] of  CloFunction
+
+	(source "(println [:PARAMS params])\n(let [id (:id params)]\n  (if (fr24/dat id)\n    (rete/assert-frame ['Follow 'id id 'time 0])))")
+	(title "follow [params]"))
+
+([FlightPro_Class290002] of  CloFuncall
+
+	(source "(ru.rules/pp 'Follow)"))
 
 ([FlightPro_Class290003] of  %3AINSTANCE-ANNOTATION
 
@@ -989,7 +1001,7 @@
 
 	(lhs "(Flight id ?id\n           coord ?crd\n           course ?crs\n           speed ?spd\n           status ?sts)")
 	(rhs "(es/put-on-map ?id ?crd ?crs ?spd ?sts)")
-	(salience -1)
+	(salience 0)
 	(title "af:PutFlightOnMap"))
 
 ([FlightPro_Class290006] of  CloFunction
@@ -1011,6 +1023,14 @@
 
 	(source "(if (= (:mode @CARRIER) \"MANUAL\")\n  (let [car @CARRIER\n         lat (num-val lat)\n         [_ lon] (:coord car)]\n    (mov/set-turn-point CARRIER [lat lon] (:course car) (:speed car))))")
 	(title "latitude [lat]"))
+
+([FlightPro_Class300003] of  CloFuncall
+
+	(source "(ru.rules/facts-with-slot-value 'Flight 'callsign = \"UAL1545\")"))
+
+([FlightPro_Class300004] of  CloFuncall
+
+	(source "(rete.core/facts-with-slot-value 'Flight 'callsign = \"UAL1545\")"))
 
 ([FlightPro_Class300006] of  CloFunction
 
@@ -1087,12 +1107,12 @@
 
 ([FlightPro_Class310000] of  CloFunction
 
-	(source "(let [id (:id params)]\n  (if-let [inf (fr24/fl-info id)]\n    (let [cal (fr24/callsign id)\n           apt (inf \"airport\")\n           acr (inf \"aircraft\")\n           tim (inf \"time\")\n           img (get (first (get-in acr [\"images\" \"thumbnails\"])) \"src\")\n           [lat lon] (fr24/coord id)\n           dat [[\"from\" (or (get-in apt [\"origin\" \"name\"]) \"-\")]\n                  [\"to\" (or (get-in apt [\"destination\" \"name\"]) \"-\")]\n                  [\"airline\" (or (get-in inf [\"airline\" \"short\"]) \"-\")]\n                  [\"real-departure\" (or (get-in tim [\"real\" \"departure\"]) \"-\")]\n                  [\"scheduled-arrival\" (or (get-in tim [\"scheduled\" \"arrival\"]) \"-\")]\n                  [\"aircraft\" (or (get-in acr [\"model\" \"text\"]) \"-\")]\n                  [\"latitude\" (or lat \"-\")]\n                  [\"longitude\" (or lon \"-\")]\n                  [\"course\" (or (fr24/course id) \"-\")]\n                  [\"speed\" (or (fr24/speed id) \"-\")]\n                  [\"altitude\" (or (fr24/altitude id) \"-\")]\n                  [(str \"<input type='button' style='color:purple' value='Trail'\n                             onclick='chart.client.trail(\\\"\" id \"\\\")' >\")\n                   (str \"<input type='button' style='color:blue' value='Follow'\n                             onclick='chart.client.follow(\\\"\" id \"\\\")' >\")]\n                  [\"\"\n                   \"<input type='button' style='color:red' value='Stop'\n                       onclick='chart.client.stopfollow()' >\"]]\n           htm (make-info-html cal img dat)]\n      (asp/pump-in INS-CHN\n        {:instruct :popup\n         :id (:id params)\n         :html htm\n         :time (:popup TIM)}))))\n\"\"")
+	(source "(let [id (:id params)]\n  (if-let [inf (fr24/fl-info id)]\n    (let [cal (fr24/callsign id)\n           apt (inf \"airport\")\n           acr (inf \"aircraft\")\n           tim (inf \"time\")\n           img (get (first (get-in acr [\"images\" \"thumbnails\"])) \"src\")\n           [lat lon] (fr24/coord id)\n           dat [[\"from\" (or (get-in apt [\"origin\" \"name\"]) \"-\")]\n                  [\"to\" (or (get-in apt [\"destination\" \"name\"]) \"-\")]\n                  [\"airline\" (or (get-in inf [\"airline\" \"short\"]) \"-\")]\n                  [\"real-departure\" (or (get-in tim [\"real\" \"departure\"]) \"-\")]\n                  [\"scheduled-arrival\" (or (get-in tim [\"scheduled\" \"arrival\"]) \"-\")]\n                  [\"aircraft\" (or (get-in acr [\"model\" \"text\"]) \"-\")]\n                  [\"latitude\" (or lat \"-\")]\n                  [\"longitude\" (or lon \"-\")]\n                  [\"course\" (or (fr24/course id) \"-\")]\n                  [\"speed\" (or (fr24/speed id) \"-\")]\n                  [\"altitude\" (or (fr24/altitude id) \"-\")]\n                  [(str \"<input type='button' style='color:purple' value='Trail'\n                             onclick='chart.client.trail(\\\"\" id \"\\\")' >\")\n                   (str \"<input type='button' style='color:blue' value='Follow'\n                             onclick='chart.client.follow(\\\"\" id \"\\\")' >\")]\n                  [\"\"\n                   \"<input type='button' style='color:red' value='Stop'\n                       onclick='chart.client.stopfollow()' >\"]]\n           htm (make-info-html cal img dat)]\n      (asp/pump-in (:instructions CHN)\n        {:instruct :popup\n         :id (:id params)\n         :html htm\n         :time (:popup TIM)}))))\n\"\"")
 	(title "info [params]"))
 
 ([FlightPro_Class310001] of  CloVar
 
-	(source "{:popup 30000\n :trail 60000}")
+	(source "{:popup 30000\n :trail 30000}")
 	(title "TIM"))
 
 ([FlightPro_Class310002] of  CloFunction
@@ -1129,24 +1149,21 @@
 	(source "(if (= (:mode @CARRIER) \"MANUAL\")\n  (let [car @CARRIER\n         lon (num-val lon)\n         [lat _] (:coord car)]\n    (mov/set-turn-point CARRIER [lat lon] (:course car) (:speed car))))")
 	(title "longitude [lon]"))
 
-([FlightPro_Class320006] of  CloVar
-
-	(source "80")
-	(title "HISTORY-SEC"))
-
 ([FlightPro_Class320010] of  RuleSet
 
 	(rules
-		[FlightPro_Class180000]
 		[FlightPro_Class230003]
 		[FlightPro_Class220001]
 		[FlightPro_Class370002]
 		[FlightPro_Class280002]
-		[FlightPro_Class320011]
+		[FlightPro_Class430010]
+		[FlightPro_Class290005]
 		[FlightPro_Class320013]
 		[FlightPro_Class320012]
-		[FlightPro_Class290005]
 		[FlightPro_Class250010]
+		[FlightPro_Class350001]
+		[FlightPro_Class370003]
+		[FlightPro_Class320011]
 		[FlightPro_Class200000])
 	(templates
 		[Flight]
@@ -1157,21 +1174,21 @@
 
 ([FlightPro_Class320011] of  Rule
 
-	(lhs "?fp (Flight id ?id time ?t1)\n(Current time ?t2\n	(> (- ?t2 ?t1) (identity es/HISTORY-SEC)))")
-	(rhs "(retract ?fp)")
-	(salience 1)
+	(lhs "?f1 (Flight id ?id time ?t1)\n(Flight id ?id time ?t2)\n(Flight id ?id time ?t3\n           coord ?crd\n           course ?crs\n           speed ?spd\n           status ?sts)\n(Current time ?t3\n	(<= ?t1 ?t2 ?t3))")
+	(rhs "(retract ?f1)")
+	(salience -1)
 	(title "af:ForgetFlightPast"))
 
 ([FlightPro_Class320012] of  Rule
 
-	(lhs "(Flight id ?id altitude ?a1 time ?t1)\n(Flight id ?id altitude ?a2 time ?t2)\n?fl (Flight id ?id altitude ?a3 time ?t3 status ?s3\n	((not= ?s3 \"DESCEND\")\n                         (< ?t1 ?t2 ?t3)\n	 (> ?a1 ?a2 ?a3)))")
+	(lhs "(Flight id ?id altitude ?a1 time ?t1)\n(Flight id ?id altitude ?a2 time ?t2)\n(Current time ?t3)\n?fl (Flight id ?id altitude ?a3 time ?t3 status ?s3\n	((not= ?s3 \"DESCEND\")\n                         (< ?t1 ?t2 ?t3)\n	 (> ?a1 ?a2 ?a3)))")
 	(rhs "(modify ?fl status \"DESCEND\")")
 	(salience 0)
 	(title "af:Descending"))
 
 ([FlightPro_Class320013] of  Rule
 
-	(lhs "(Flight id ?id altitude ?a1 time ?t1)\n(Flight id ?id altitude ?a2 time ?t2)\n?fl (Flight id ?id altitude ?a3 time ?t3 status ?s3\n	((not= ?s3 \"CLIMB\")\n                         (< ?t1 ?t2 ?t3)\n	 (< ?a1 ?a2 ?a3)))")
+	(lhs "(Flight id ?id altitude ?a1 time ?t1)\n(Flight id ?id altitude ?a2 time ?t2)\n(Current time ?t3)\n?fl (Flight id ?id altitude ?a3 time ?t3 status ?s3\n	((not= ?s3 \"CLIMB\")\n                         (< ?t1 ?t2 ?t3)\n	 (< ?a1 ?a2 ?a3)))")
 	(rhs "(modify ?fl status \"CLIMB\")")
 	(salience 0)
 	(title "af:Climbing"))
@@ -1263,14 +1280,14 @@
 
 ([FlightPro_Class350000] of  CloFunction
 
-	(source "([params]\n  (trail params []))\n([params head]\n  (if-let [inf (info params)]\n    (let [trl (mapcat #(list (% \"lat\") (% \"lng\") (% \"alt\")) (inf \"trail\"))]\n      (asp/pump-in (:instructions CHN)\n        {:instruct :trail\n         :id (:id params)\n         :points (concat head trl)\n         :options {:weight 3\n                        :color \"purple\"}\n         :time (:trial TIM)})))\n  \"\")")
-	(title "trail"))
+	(source "(let [pts (if-let [inf (fr24/fl-info id)]\n               (mapcat #(list (% \"lat\") (% \"lng\") (% \"alt\")) (inf \"trail\"))\n               head)]\n  (asp/pump-in (:instructions CHN)\n        {:instruct :trail\n         :id id\n         :points pts\n         :options {:weight 3\n                        :color \"purple\"}\n         :time (:trail TIM)})\n  \"\")")
+	(title "do-trail [id head]"))
 
 ([FlightPro_Class350001] of  Rule
 
-	(lhs "?f (Follow callsign ?cs time ?t0)\n(Flight callsign ?cs coord ?crd1 altitude ?a1 time ?t1)\n(Flight callsign ?cs coord ?crd2 altitude ?a2 time ?t2)\n(Flight callsign ?cs coord ?crd3 altitude ?a3 time ?t3)\n(Flight callsign ?cs coord ?crd4 altitude ?a4 time ?t4\n(Current time ?t4\n	(< ?t0 ?t1 ?t2 ?t3 ?t4))")
-	(rhs "(println [:FOLLOW ?cs ?t4])\n(es/set-map-view ?crd4)\n(es/follow-trail ?id ?crd1 ?a1 ?crd2 ?a2 ?crd3 ?a3 ?crd4 ?a4)\n(modify ?f time ?t4)")
-	(salience 2)
+	(lhs "?f (Follow id ?id time ?t0)\n(Flight id ?id coord ?crd1 altitude ?alt1 time ?t1)\n(Flight id ?id coord ?crd2 altitude ?alt2 time ?t2)\n(Flight id ?id coord ?crd3 altitude ?alt3 time ?t3)\n(Current time ?t3\n	(<= ?t0 ?t1 ?t2 ?t3))")
+	(rhs "(println [:FOLLOW ?id])\n(let [[lat1 lon1] ?crd1\n       [lat2 lon2] ?crd2\n       [lat3 lon3] ?crd3]\n  (pro.commands/set-map-view ?crd3)\n  (pro.commands/do-trail ?id [lat3 lon3 ?alt3\n                                          lat2 lon2 ?alt2\n                                          lat1 lon1 ?alt1])\n  (modify ?f time ?t3))")
+	(salience 0)
 	(title "af:FollowFlight"))
 
 ([FlightPro_Class350002] of  CloFuncall
@@ -1293,85 +1310,69 @@
 
 	(source "(doseq [[k v] (seq @fr24.client/FLIGHTS)] (protege.core/ctpl [:K k (fr24.client/callsign v) :V v]))"))
 
-([FlightPro_Class360000] of  CloFuncall
+([FlightPro_Class360000] of  CloFunction
 
-	(source "(empty? \"\")"))
+	(source "(let [ops (clj->js options)\n       pts (map #(js/L.LatLng. (first %) (second %)) (partition 3 points))\n       pts (clj->js pts)\n       trl (js/L.polyline pts ops)]\n    (.addLayer @CHART trl)\n    (if (> time 0)\n        (asp/delayer #(.removeLayer @CHART trl)\n                            time)))")
+	(title "add-trail [id points options time]"))
 
-([FlightPro_Class370000] of  CloFuncall
+([FlightPro_Class370000] of  CloFunction
 
-	(source "(ru.rules/f 4371)"))
+	(source "(let [cen (js/L.LatLng. lat lon)\n        zom (.getZoom @CHART)]\n  (.setView @CHART cen zom {})\n  (new-visible))")
+	(title "map-center [[lat lon]]"))
+
+([FlightPro_Class370001] of  CloFunction
+
+	(source "(let [[n s w e] (visible-map)\n        url (str (:command URL) \"visible?n=\" n \"&s=\" s \"&w=\" w \"&e=\" e)]\n    (GET url {:handler (fn [response])\n              :error-handler error-handler}))")
+	(title "new-visible []"))
 
 ([FlightPro_Class370002] of  Rule
 
 	(lhs "?ob1 (Onboard)\n?ob2 (Onboard callsign \"STOP\")")
 	(rhs "(retract ?ob1 ?ob2)")
-	(salience 2)
+	(salience 0)
 	(title "af:StopOnboard"))
 
 ([FlightPro_Class370003] of  Rule
 
-	(lhs "?f1 (Follow callsign ?cs1 time ?t1\n?f2 (Follow callsign ?cs2 time ?t2\n	((not= ?cs1 ?cs2)\n	 (> ?t1 ?t2)))")
-	(rhs "(println [:STOP-FOLLOW ?cs1 ?t2])\n(retract ?f1)\nif (= ?cs2 \"STOP\")\n   (retract ?f2))")
-	(salience 3)
+	(lhs "?f1 (Follow  id ?id1 time ?t1)\n?f2 (Follow  id ?id2 time ?t2\n	((not= ?id1 ?id2)\n	 (> ?t1 ?t2)))")
+	(rhs "(println [:STOP-FOLLOW ?id1])\n(retract ?f1)\n(if (= ?id2 \"STOP\")\n   (retract ?f2))")
+	(salience 0)
 	(title "af:StopOrSwitchFollow"))
 
 ([FlightPro_Class370004] of  CloFunction
 
-	(source "(asp/pump-in (:instructions cmd/CHN)\n	{:instruct :map-center\n	 :coord coord})")
+	(source "(asp/pump-in (:instructions CHN)\n	{:instruct :map-center\n	 :coord coord})")
 	(title "set-map-view [coord]"))
 
-([FlightPro_Class370005] of  CloFunction
+([FlightPro_Class380000] of  CloFunction
 
-	(source "(cmd/trail id [lat1 lon1 a1 lat2 lon2 a2 lat3 lon3 a3 lat4 lon4 a4])")
-	(title "follow-trail [id [lat1 lon1] a1 [lat2 lon2] a2 [lat3 lon3] a3 [lat4 lon4] a4]"))
+	(source "(GET (str (:command URL) \"stopfollow\")\n  {:handler (fn [response])\n   :error-handler error-handler})")
+	(title "stopfollow []"))
 
-([FlightPro_Class380000] of  CloFuncall
+([FlightPro_Class380001] of  CloFunction
 
-	(source "(rete.core/facts-with-slot-value 'Flight 'callsign = \"JBU264\")"))
+	(source "(GET (str (:command URL) \"trail?id=\" id)\n  {:handler (fn [response])\n   :error-handler error-handler})")
+	(title "trail [id]"))
 
-([FlightPro_Class380001] of  CloFuncall
+([FlightPro_Class380002] of  CloFunction
 
-	(source "(def jj (rete.core/facts-with-slot-value 'Flight 'callsign = \"JBU264\"))"))
+	(source "(println [:PARAMS params])\n(do-trail (:id params) [])")
+	(title "trail [params]"))
 
-([FlightPro_Class380002] of  CloFuncall
+([FlightPro_Class380003] of  CloFunction
 
-	(source "(count jj)"))
+	(source "(let [bnd (.getBounds @CHART)]\n  [(.getNorth bnd)\n   (.getSouth bnd)\n   (.getWest bnd)\n   (.getEast bnd)])")
+	(title "visible-map []"))
 
-([FlightPro_Class380003] of  CloFuncall
+([FlightPro_Class380004] of  CloFunction
 
-	(source "(map protege.core/ctpl jj)"))
+	(source "(let [{:keys [n s w e]} params]\n  (fr24/set-bbx n s w e)\n  \"\")")
+	(title "visible [params]"))
 
-([FlightPro_Class380004] of  CloFuncall
+([FlightPro_Class390003] of  CloFunction
 
-	(source "(def jj (rete.core/facts-with-slot-value 'Flight 'callsign = \"JBU72\"))"))
-
-([FlightPro_Class380005] of  CloFuncall
-
-	(source "(do (map protege.core/ctpl jj) 0)"))
-
-([FlightPro_Class380006] of  CloFuncall
-
-	(source "(rete.core/facts-with-slot-value 'Flight 'callsign = \"JBU72\")"))
-
-([FlightPro_Class380007] of  CloFuncall
-
-	(source " (map protege.core/ctpl jj)"))
-
-([FlightPro_Class380008] of  CloFuncall
-
-	(source "(doseq [e (rete.core/facts-with-slot-value 'Flight 'callsign = \"JBU72\")] (protege.core/ctpl e))"))
-
-([FlightPro_Class380009] of  CloFuncall
-
-	(source "(ru.rules/pp 'Current)"))
-
-([FlightPro_Class390000] of  CloFuncall
-
-	(source "(fr24.client/running?)"))
-
-([FlightPro_Class390001] of  CloFuncall
-
-	(source "(ru.rules/f 2884)"))
+	(source "(rete/assert-frame ['Follow 'id \"STOP\" 'time 0])")
+	(title "stopfollow [params]"))
 
 ([FlightPro_Class4] of  CloVar
 
@@ -1391,19 +1392,23 @@
 		[FlightPro_Class190000]
 		[FlightPro_Class210001]
 		[FlightPro_Class310005]
-		[FlightPro_Class160010]
 		[FlightPro_Class220030]
+		[FlightPro_Class230005]
+		[FlightPro_Class350000]
+		[FlightPro_Class370004]
+		[FlightPro_Class310000]
 		[FlightPro_Class270000]
 		[FlightPro_Class340000]
-		[FlightPro_Class230005]
-		[FlightPro_Class350000])
+		[FlightPro_Class290001]
+		[FlightPro_Class380004]
+		[FlightPro_Class380002]
+		[FlightPro_Class390003])
 	(cloNamespace [FlightPro_Class400001])
 	(cloVars
 		[FlightPro_Class70000]
 		[FlightPro_Class20005]
 		[FlightPro_Class330003]
 		[FlightPro_Class20004]
-		[FlightPro_Class320006]
 		[FlightPro_Class310001])
 	(title "Pro Commands"))
 
@@ -1411,6 +1416,53 @@
 
 	(source "(:use protege.core)\n(:require [compojure.core :refer [GET]]\n              [fr24.client :as fr24]\n              [async.proc :as asp]\n              [rete.core :as rete])")
 	(title "pro.commands"))
+
+([FlightPro_Class430000] of  CloFuncall
+
+	(source "(rete.core/facts-with-slot-value 'Flight 'time < )"))
+
+([FlightPro_Class430001] of  CloFuncall
+
+	(source "(count (rete.core/facts-with-slot-value 'Flight 'time < 1481996506))"))
+
+([FlightPro_Class430002] of  CloFuncall
+
+	(source "(count (rete.core/facts-with-slot-value 'Flight 'time < 1481996006))"))
+
+([FlightPro_Class430003] of  CloFuncall
+
+	(source "(count (rete.core/facts-with-slot-value 'Flight 'time < 1481995006))"))
+
+([FlightPro_Class430004] of  CloFuncall
+
+	(source "(count (rete.core/facts-with-slot-value 'Flight 'time < 1481994006))"))
+
+([FlightPro_Class430005] of  CloFuncall
+
+	(source "(count (rete.core/facts-with-slot-value 'Flight 'time < 1481993006))"))
+
+([FlightPro_Class430006] of  CloFuncall
+
+	(source "(count (rete.core/facts-with-slot-value 'Flight 'time < 1481992006))"))
+
+([FlightPro_Class430007] of  CloFuncall
+
+	(source "(count (rete.core/facts-with-slot-value 'Flight 'time < 1481991006))"))
+
+([FlightPro_Class430008] of  CloFuncall
+
+	(source "(count (rete.core/facts-with-slot-value 'Flight 'time < 148190006))"))
+
+([FlightPro_Class430009] of  CloFuncall
+
+	(source "(count (rete.core/facts-with-slot-value 'Flight 'time < 1481990006))"))
+
+([FlightPro_Class430010] of  Rule
+
+	(lhs "?f1 (Flight id ?id callsign ?cs time ?t1)\n(Current time ?t2\n	(> (- ?t2 ?t1) 120))")
+	(rhs "(es/put-off-map ?id)\n(retract ?f1)")
+	(salience 0)
+	(title "af:ForgetOldFlight"))
 
 ([FlightPro_Class5] of  CloVar
 
@@ -1486,12 +1538,12 @@
 
 ([FlightPro_Class70004] of  CloFunction
 
-	(source "(when (not= @status \"RUN\") \n  (vreset! status \"RUN\")\n  (go (do \n          (while (and (= @status \"RUN\")\n                            (proc-fn))\n                (println :process-step-done)\n                (<! (timeout time-out)))\n          (vreset! status \"STOP\")))\n  @status)")
+	(source "(when (not= @status \"RUN\") \n  (vreset! status \"RUN\")\n  (go (do \n          (while (and (= @status \"RUN\")\n                            (proc-fn))\n                (<! (timeout time-out)))\n          (vreset! status \"STOP\")))\n  @status)")
 	(title "start-process [status proc-fn time-out]"))
 
 ([FlightPro_Class70005] of  CloFunction
 
-	(source "(println [:FLIGHTS-PROCESS  (vreset! status \"FINISH\")])")
+	(source "(vreset! status \"FINISH\")")
 	(title "stop-process [status]"))
 
 ([FlightPro_Class70006] of  CloFunction
