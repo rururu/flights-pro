@@ -1,4 +1,4 @@
-(ns geo
+(ns calc.geo
 )
 
 (defn spherical-between [^double phi1 ^double lambda0 ^double c ^double az]
@@ -82,4 +82,14 @@
 (defn abaft [crs crd1 crd2]
   (let [ca (course-angle crs crd1 crd2)]
    (or (> ca 90) (< ca -90))))
+
+(defn following? [crs1 crs2]
+  (let [dif (Math/abs (- crs2 crs1))]
+   (or (< dif 90) (> dif 270))))
+
+(defn norm-crs [x]
+  (cond
+   (> x 360) (- x 360)
+   (< x 0) (+ x 360)
+   true x))
 

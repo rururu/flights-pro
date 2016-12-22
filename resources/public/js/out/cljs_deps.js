@@ -16,6 +16,8 @@ goog.addDependency("../cognitect/transit.js", ['cognitect.transit'], ['com.cogni
 goog.addDependency("../clojure/string.js", ['clojure.string'], ['goog.string', 'cljs.core', 'goog.string.StringBuffer']);
 goog.addDependency("../ajax/xhrio.js", ['ajax.xhrio'], ['goog.net.XhrManager', 'goog.net.XhrIo', 'goog.json', 'goog.Uri', 'cljs.core', 'goog.net.EventType', 'ajax.protocols', 'goog.events', 'goog.net.ErrorCode']);
 goog.addDependency("../ajax/core.js", ['ajax.core'], ['goog.net.XhrIo', 'ajax.xml_http_request', 'goog.json', 'goog.Uri.QueryData', 'cljs.core', 'cognitect.transit', 'goog.structs', 'goog.json.Serializer', 'ajax.protocols', 'clojure.string', 'ajax.xhrio']);
+goog.addDependency("../calc/core.js", ['calc.core'], ['cljs.core']);
+goog.addDependency("../calc/geo.js", ['calc.geo'], ['cljs.core']);
 goog.addDependency("../cljs/core/async/impl/protocols.js", ['cljs.core.async.impl.protocols'], ['cljs.core']);
 goog.addDependency("../cljs/core/async/impl/buffers.js", ['cljs.core.async.impl.buffers'], ['cljs.core', 'cljs.core.async.impl.protocols']);
 goog.addDependency("../cljs/core/async/impl/dispatch.js", ['cljs.core.async.impl.dispatch'], ['cljs.core', 'cljs.core.async.impl.buffers', 'goog.async.nextTick']);
@@ -24,7 +26,7 @@ goog.addDependency("../cljs/core/async/impl/ioc_helpers.js", ['cljs.core.async.i
 goog.addDependency("../cljs/core/async/impl/timers.js", ['cljs.core.async.impl.timers'], ['cljs.core.async.impl.channels', 'cljs.core.async.impl.dispatch', 'cljs.core', 'cljs.core.async.impl.protocols']);
 goog.addDependency("../cljs/core/async.js", ['cljs.core.async'], ['cljs.core.async.impl.channels', 'cljs.core.async.impl.dispatch', 'cljs.core', 'cljs.core.async.impl.buffers', 'cljs.core.async.impl.protocols', 'cljs.core.async.impl.ioc_helpers', 'cljs.core.async.impl.timers']);
 goog.addDependency("../csasync/proc.js", ['csasync.proc'], ['cljs.core', 'cljs.core.async']);
-goog.addDependency("../calc/dynamic.js", ['calc.dynamic'], ['cljs.core', 'csasync.proc']);
+goog.addDependency("../calc/dynamic.js", ['calc.dynamic'], ['calc.core', 'cljs.core', 'calc.geo', 'csasync.proc']);
 goog.addDependency("../carr/move.js", ['carr.move'], ['calc.dynamic', 'cljs.core']);
 goog.addDependency("../chart/controls.js", ['chart.controls'], ['goog.string', 'cljs.core', 'goog.string.format']);
 goog.addDependency("../chart/client.js", ['chart.client'], ['ajax.core', 'carr.move', 'goog.string', 'cljs.core', 'cognitect.transit', 'chart.controls', 'goog.string.format', 'csasync.proc']);
@@ -38,7 +40,7 @@ goog.addDependency("../cljs/reader.js", ['cljs.reader'], ['goog.string', 'cljs.c
 goog.addDependency("../cljs/tagged_literals.js", ['cljs.tagged_literals'], ['cljs.core', 'cljs.reader']);
 goog.addDependency("../cljs/tools/reader/impl/commons.js", ['cljs.tools.reader.impl.commons'], ['cljs.core', 'cljs.tools.reader.reader_types', 'cljs.tools.reader.impl.utils']);
 goog.addDependency("../cljs/tools/reader.js", ['cljs.tools.reader'], ['cljs.tools.reader.impl.commons', 'goog.string', 'cljs.core', 'cljs.tools.reader.reader_types', 'goog.string.StringBuffer', 'cljs.tools.reader.impl.utils', 'clojure.string', 'goog.array']);
-goog.addDependency("../czm/core.js", ['czm.core'], ['calc.dynamic', 'cljs.core']);
+goog.addDependency("../czm/core.js", ['czm.core'], ['calc.dynamic', 'cljs.core', 'calc.geo']);
 goog.addDependency("../cljs/env.js", ['cljs.env'], ['cljs.core']);
 goog.addDependency("../cljs/analyzer.js", ['cljs.analyzer'], ['cljs.tools.reader', 'goog.string', 'cljs.core', 'cljs.tools.reader.reader_types', 'cljs.env', 'clojure.set', 'cljs.tagged_literals', 'clojure.string', 'cljs.reader']);
 goog.addDependency("../cljs/source_map.js", ['cljs.source_map'], ['cljs.source_map.base64_vlq', 'cljs.core', 'goog.object', 'clojure.set', 'clojure.string']);
@@ -48,4 +50,4 @@ goog.addDependency("../cljs/core$macros.js", ['cljs.core$macros'], ['cljs.compil
 goog.addDependency("../cljs/js.js", ['cljs.js'], ['cljs.compiler', 'cljs.tools.reader', 'cljs.core', 'goog.crypt.base64', 'cljs.tools.reader.reader_types', 'cljs.env', 'goog.string.StringBuffer', 'cljs.tagged_literals', 'cljs.analyzer', 'cljs.source_map', 'clojure.string', 'clojure.walk', 'cljs.core$macros']);
 goog.addDependency("../eval_soup/core.js", ['eval_soup.core'], ['goog.net.XhrIo', 'cljs.js', 'cljs.core', 'cljs.core.async', 'clojure.string', 'cljs.reader', 'clojure.walk']);
 goog.addDependency("../nightlight/repl_server.js", ['nightlight.repl_server'], ['eval_soup.core', 'cljs.core']);
-goog.addDependency("../view3d/client.js", ['view3d.client'], ['ajax.core', 'carr.move', 'czm.core', 'view3d.controls', 'calc.dynamic', 'cljs.core', 'cognitect.transit', 'cljs.reader', 'csasync.proc', 'nightlight.repl_server']);
+goog.addDependency("../view3d/client.js", ['view3d.client'], ['calc.core', 'ajax.core', 'carr.move', 'czm.core', 'view3d.controls', 'calc.dynamic', 'cljs.core', 'cognitect.transit', 'cljs.reader', 'csasync.proc', 'nightlight.repl_server']);

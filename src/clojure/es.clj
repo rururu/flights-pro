@@ -1,8 +1,19 @@
 (ns es
 (:require
   [pro.commands :as cmd]
-  [async.proc :as asp]))
+  [async.proc :as asp]
+  [cesium.core :as czs]
+  [calc.geo :as geo]))
 
+(def HOST "http://localhost:")
+(def PORT 4444)
+(def URL-ICO {"INTERSECT" 	(str HOST PORT "/img/redpln32.png")
+ "DESCEND" 	(str HOST PORT "/img/greenpln32.png")
+ "CLIMB" 	(str HOST PORT "/img/bluepln32.png")
+ "LEVEL" 	(str HOST PORT "/img/purplepln32.png")
+ "GROUND" 	(str HOST PORT "/img/greypln32.png")
+ "COUNTER"	(str HOST PORT "/img/b.png")
+ "FOLLOWING"	(str HOST PORT "/img/r.png")})
 (defn put-on-map [id crd crs spd sts]
   (asp/pump-in (:instructions  cmd/CHN)
 	{:instruct :create-update
@@ -56,8 +67,8 @@
         (read-string (format "%.2f" (float vs)))])
       (recur (inc n) (rest y))) )))
 
-(defn set-map-view [coord]
-  (asp/pump-in (:instructions cmd/CHN)
-	{:instruct :map-center
-	 :coord coord}))
+(defn leg [label scale following p4d1 p4d2]
+  (czs/leg label (if following
+	(URL-ICO "FOLLOWING")
+	(URL-ICO "COUNTER")) scale p4d1 p4d2))
 

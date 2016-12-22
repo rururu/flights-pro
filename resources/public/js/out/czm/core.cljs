@@ -1,6 +1,7 @@
 (ns czm.core
 (:require
-  [calc.dynamic :as dyn]))
+  [calc.dynamic :as dyn]
+  [calc.geo :as geo]))
 
 (def TERR-PROV (js/Cesium.CesiumTerrainProvider.
   #js{:url "//assets.agi.com/stk-terrain/world"
@@ -40,7 +41,7 @@
                 "DOWN" -90
                 (:pitch @CAMERA))
         roll (:roll @CAMERA)
-        head (dyn/norm-crs (condp = (:view @CAMERA)
+        head (geo/norm-crs (condp = (:view @CAMERA)
                          "BACKWARD" (+ crs 180)
                          "RIGHT" (+ crs 90)
                          "LEFT" (- crs 90)

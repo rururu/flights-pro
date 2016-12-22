@@ -1,4 +1,4 @@
-; Tue Dec 20 22:09:46 MSK 2016
+; Thu Dec 22 22:21:29 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -12,6 +12,10 @@
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot course
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot age
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
@@ -75,15 +79,11 @@
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
-	(single-slot altitude
+	(single-slot age
 		(type STRING)
 ;+		(cardinality 0 1)
-		(create-accessor read-write)))
-
-(defclass Current
-	(is-a Flights+Ontology)
-	(role concrete)
-	(single-slot time
+		(create-accessor read-write))
+	(single-slot altitude
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write)))

@@ -21,11 +21,13 @@
  :instructions 979
  :vehicles 200
  :display 831})
-(def URL-ICO {"INTERSECT" 	(str "http://localhost:" PORT "/img/redpln32.png")
- "DESCEND" 	(str "http://localhost:" PORT "/img/greenpln32.png")
- "CLIMB" 	(str "http://localhost:" PORT "/img/bluepln32.png")
- "LEVEL" 	(str "http://localhost:" PORT "/img/purplepln32.png")
- "GROUND" 	(str "http://localhost:" PORT "/img/greypln32.png")})
+(def URL-ICO {"INTERSECT" 	(str HOST PORT "/img/redpln32.png")
+ "DESCEND" 	(str HOST PORT "/img/greenpln32.png")
+ "CLIMB" 	(str HOST PORT "/img/bluepln32.png")
+ "LEVEL" 	(str HOST PORT "/img/purplepln32.png")
+ "GROUND" 	(str HOST PORT "/img/greypln32.png")
+ "COUNTER"	(str HOST PORT "/img/b.png")
+ "FOLLOWING"	(str HOST PORT "/img/r.png")})
 (def CHART (volatile! {}))
 (def VEHICLES (volatile! {}))
 (defn read-transit [x]

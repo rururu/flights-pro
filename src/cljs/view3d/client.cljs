@@ -4,6 +4,7 @@
   [czm.core :as czm]
   [view3d.controls :as ctl]
   [carr.move :as mov]
+  [calc.core :as calc]
   [calc.dynamic :as dyn]
   [cognitect.transit :as t]
   [ajax.core :refer (GET)]
@@ -55,7 +56,7 @@
        alt (:altitude @carr)]
   (if (or (< alt 90) (= bnk 0))
     (mov/turn carr course 1)
-    (let [accel (if (> (dyn/abs bnk) rb) 2 1)]
+    (let [accel (if (> (calc/abs bnk) rb) 2 1)]
       (mov/turn carr course accel)
       (dyn/check-diff-and-do carr
         [:rudder :target]
@@ -83,7 +84,7 @@
        new-crs (:course vehicle)]
   (vswap! CARRIER merge vehicle)
   (mov/set-turn-point CARRIER)
-  (if (> (dyn/abs (- old-crs new-crs)) 10)
+  (if (> (calc/abs (- old-crs new-crs)) 10)
     (turn-and-bank CARRIER new-crs))))
 
 (defn view [dir]
@@ -156,7 +157,7 @@
 
 (defn directives-handler [response]
   (doseq [{:keys [directive] :as dir} (read-transit response)]
-  (println [:DIRECTIVE dir])
+  ;;(println [:DIRECTIVE dir])
   (condp = directive
     :manual (do (if (= (:mode @CARRIER) "?")
 	  (carrier "MANUAL" (manual-vehicle))

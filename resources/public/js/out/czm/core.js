@@ -2,6 +2,7 @@
 goog.provide('czm.core');
 goog.require('cljs.core');
 goog.require('calc.dynamic');
+goog.require('calc.geo');
 czm.core.TERR_PROV = (new Cesium.CesiumTerrainProvider(({"url": "//assets.agi.com/stk-terrain/world", "requestWaterMask": false, "requestVertexNormals": false})));
 czm.core.VIEWER = (new Cesium.Viewer("cesiumContainer",({"animation": false})));
 czm.core.CZM_SRC = (new Cesium.CzmlDataSource());
@@ -32,12 +33,12 @@ return time;
 }));
 });
 czm.core.fly_to = (function czm$core$fly_to(lat,lon,alt,crs,per){
-var pitch = (function (){var pred__24506 = cljs.core._EQ_;
-var expr__24507 = new cljs.core.Keyword(null,"view","view",1247994814).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
-if(cljs.core.truth_(pred__24506.call(null,"UP",expr__24507))){
+var pitch = (function (){var pred__19604 = cljs.core._EQ_;
+var expr__19605 = new cljs.core.Keyword(null,"view","view",1247994814).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
+if(cljs.core.truth_(pred__19604.call(null,"UP",expr__19605))){
 return (90);
 } else {
-if(cljs.core.truth_(pred__24506.call(null,"DOWN",expr__24507))){
+if(cljs.core.truth_(pred__19604.call(null,"DOWN",expr__19605))){
 return (-90);
 } else {
 return new cljs.core.Keyword(null,"pitch","pitch",1495126700).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
@@ -45,27 +46,27 @@ return new cljs.core.Keyword(null,"pitch","pitch",1495126700).cljs$core$IFn$_inv
 }
 })();
 var roll = new cljs.core.Keyword(null,"roll","roll",11266999).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
-var head = calc.dynamic.norm_crs.call(null,(function (){var pred__24509 = cljs.core._EQ_;
-var expr__24510 = new cljs.core.Keyword(null,"view","view",1247994814).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
-if(cljs.core.truth_(pred__24509.call(null,"BACKWARD",expr__24510))){
+var head = calc.geo.norm_crs.call(null,(function (){var pred__19607 = cljs.core._EQ_;
+var expr__19608 = new cljs.core.Keyword(null,"view","view",1247994814).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
+if(cljs.core.truth_(pred__19607.call(null,"BACKWARD",expr__19608))){
 return (crs + (180));
 } else {
-if(cljs.core.truth_(pred__24509.call(null,"RIGHT",expr__24510))){
+if(cljs.core.truth_(pred__19607.call(null,"RIGHT",expr__19608))){
 return (crs + (90));
 } else {
-if(cljs.core.truth_(pred__24509.call(null,"LEFT",expr__24510))){
+if(cljs.core.truth_(pred__19607.call(null,"LEFT",expr__19608))){
 return (crs - (90));
 } else {
-if(cljs.core.truth_(pred__24509.call(null,"FORWARD-RIGHT",expr__24510))){
+if(cljs.core.truth_(pred__19607.call(null,"FORWARD-RIGHT",expr__19608))){
 return (crs + (45));
 } else {
-if(cljs.core.truth_(pred__24509.call(null,"FORWARD-LEFT",expr__24510))){
+if(cljs.core.truth_(pred__19607.call(null,"FORWARD-LEFT",expr__19608))){
 return (crs - (45));
 } else {
-if(cljs.core.truth_(pred__24509.call(null,"BACKWARD-RIGHT",expr__24510))){
+if(cljs.core.truth_(pred__19607.call(null,"BACKWARD-RIGHT",expr__19608))){
 return (crs + (135));
 } else {
-if(cljs.core.truth_(pred__24509.call(null,"BACKWARD-LEFT",expr__24510))){
+if(cljs.core.truth_(pred__19607.call(null,"BACKWARD-LEFT",expr__19608))){
 return (crs - (135));
 } else {
 return crs;

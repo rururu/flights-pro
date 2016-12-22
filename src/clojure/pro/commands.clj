@@ -37,6 +37,7 @@
 	'speed (fr24/speed v)
 	'altitude alt
 	'time crt
+	'age "NEW"
 	'status (if (> alt 0)
                                      "LEVEL"
                                      "GROUND")])))
@@ -78,17 +79,19 @@
   (if (= @fr24/STATUS "RUN")
   (watch-visible)))
 
-(defn do-trail [id head]
-  (let [pts (if-let [inf (fr24/fl-info id)]
-               (mapcat #(list (% "lat") (% "lng") (% "alt")) (inf "trail"))
-               head)]
-  (asp/pump-in (:instructions CHN)
+(defn do-trail [id trail]
+  (let [pts (if (not (empty? trail))
+               trail
+               (if-let [inf (fr24/fl-info id)]
+                   (mapcat #(list (% "lat") (% "lng") (% "alt")) (inf "trail"))))]
+  (if pts
+    (asp/pump-in (:instructions CHN)
         {:instruct :trail
          :id id
          :points pts
          :options {:weight 3
                         :color "purple"}
-         :time (:trail TIM)})
+         :time (:trail TIM)}))
   ""))
 
 (defn set-map-view [coord]
@@ -139,8 +142,9 @@
                      (asp/pump-in (:directives CHN)
 	{:directive :manual})
                      (rete/assert-frame ['Onboard 'callsign "STOP"]))
-   "select" (let [lst (vec (sort (map fr24/callsign (keys @fr24/FLIGHTS))))]
-                   (asp/pump-in (:directives CHN)
+   "select" (let [lst (vec (sort (map fr24/callsign (keys @fr24/FLIGHTS))))
+                       lst (filter #(not (empty? %)) lst)]
+                  (asp/pump-in (:directives CHN)
 	{:directive :callsigns
 	 :list lst}))
     (rete/assert-frame ['Onboard 'callsign cls 'time 0]))
