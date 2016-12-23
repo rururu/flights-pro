@@ -40,7 +40,7 @@
   (defroutes app-routes
   (GET "/" [] (slurp (str ROOT "cezium.html")))
   (GET "/chart" [] (slurp (str ROOT "leaflet.html")))
-  (GET "/czml/" [] (responseN (:czml cmd/CHN)))
+  (GET "/czml/" [] (responseN (cmd/czml-chan)))
   (GET "/answer/" [] (response1 (:answer cmd/CHN)))
   (GET "/directives/" [] (responseN (:directives cmd/CHN)))
   (GET "/instructions/" [] (responseN (:instructions cmd/CHN)))

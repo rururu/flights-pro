@@ -2,6 +2,7 @@
 (:use protege.core)
 (:require [compojure.core :refer [GET]]
               [fr24.client :as fr24]
+              [cesium.core :as czs]
               [async.proc :as asp]
               [rete.core :as rete]))
 
@@ -14,8 +15,7 @@
  :command (str HOST PORT "/command/")})
 (def CHN {:answer (asp/mk-chan)
  :directives (asp/mk-chan)
- :instructions (asp/mk-chan)
- :czml (asp/mk-chan)})
+ :instructions (asp/mk-chan)})
 (def TIM {:popup 30000
  :trail 30000})
 (defn current-time []
@@ -24,8 +24,7 @@
 (defn process-flights [fls]
   (let [crt (current-time)
        fls (seq @fls)]
-  (println crt (count fls))
-  (rete/assert-frame ['Current 'time crt])
+  (println "t:" crt "flights:" (count fls))
   (doseq [[k v] fls]
     (let [alt (fr24/altitude v)]
       (rete/assert-frame 
@@ -170,4 +169,7 @@
 
 (defn stopfollow [params]
   (rete/assert-frame ['Follow 'id "STOP" 'time 0]))
+
+(defn czml-chan []
+  czs/CZ-CHAN)
 

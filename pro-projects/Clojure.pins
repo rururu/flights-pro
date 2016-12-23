@@ -1,4 +1,4 @@
-; Mon Oct 31 20:50:58 MSK 2016
+; Fri Dec 23 23:04:00 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -249,6 +249,10 @@
 
 	(source "; Return multiple slot values of instance\n(.getOwnSlotValues instance (.getSlot *kb* slot-name))")
 	(title "svs [instance slot-name]"))
+
+([Clojure_Class310000] of  ClsMain
+
+	(butt-build "Build/cljs.compile/build"))
 
 ([Clojure_Class310004] of  CloFunction
 

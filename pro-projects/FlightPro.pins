@@ -1,4 +1,4 @@
-; Thu Dec 22 22:21:29 MSK 2016
+; Fri Dec 23 23:30:33 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -26,6 +26,7 @@
 ([FlightPro_Class100000] of  WorkingPrograms
 
 	(cloPrograms
+		[FlightPro_Class390002]
 		[FlightPro_Class230004]
 		[FlightPro_Class70002]
 		[FlightPro_Class20025]
@@ -423,7 +424,7 @@
 
 ([FlightPro_Class190000] of  CloFunction
 
-	(source "(let [crt (current-time)\n       fls (seq @fls)]\n  (println crt (count fls))\n  (rete/assert-frame ['Current 'time crt])\n  (doseq [[k v] fls]\n    (let [alt (fr24/altitude v)]\n      (rete/assert-frame \n	['Flight\n	'id k\n	'callsign (fr24/callsign v)\n	'coord (fr24/coord v)\n	'course (fr24/course v)\n	'speed (fr24/speed v)\n	'altitude alt\n	'time crt\n	'age \"NEW\"\n	'status (if (> alt 0)\n                                     \"LEVEL\"\n                                     \"GROUND\")])))\n  (rete/fire)\n  true)")
+	(source "(let [crt (current-time)\n       fls (seq @fls)]\n  (println \"t:\" crt \"flights:\" (count fls))\n  (doseq [[k v] fls]\n    (let [alt (fr24/altitude v)]\n      (rete/assert-frame \n	['Flight\n	'id k\n	'callsign (fr24/callsign v)\n	'coord (fr24/coord v)\n	'course (fr24/course v)\n	'speed (fr24/speed v)\n	'altitude alt\n	'time crt\n	'age \"NEW\"\n	'status (if (> alt 0)\n                                     \"LEVEL\"\n                                     \"GROUND\")])))\n  (rete/fire)\n  true)")
 	(title "process-flights [fls]"))
 
 ([FlightPro_Class190001] of  CloVar
@@ -508,9 +509,9 @@
 
 ([FlightPro_Class200000] of  Rule
 
-	(lhs "(Onboard callsign ?cs)\n(Flight callsign ?cs\n           age \"NEW\"\n           coord ?crd\n           altitude ?alt\n           course ?crs\n           speed ?spd\n           status ?sts)")
-	(rhs "(println [:ONB ?cs ?t ?crd ?alt ?crs ?spd ?sts])")
-	(salience -1)
+	(lhs "(Onboard callsign ?cs)\n(Flight callsign ?cs\n           age \"NEW\"\n           coord ?crd\n           altitude ?alt\n           course ?crs\n           speed ?spd\n           status ?sts\n           time ?t)")
+	(rhs "(println [:ONBOARD ?cs ?t ?crd ?alt ?crs ?spd ?sts])")
+	(salience 0)
 	(title "af:PrintOnboard"))
 
 ([FlightPro_Class200001] of  CloFunction
@@ -580,7 +581,7 @@
 
 ([FlightPro_Class20004] of  CloVar
 
-	(source "{:answer (asp/mk-chan)\n :directives (asp/mk-chan)\n :instructions (asp/mk-chan)\n :czml (asp/mk-chan)}")
+	(source "{:answer (asp/mk-chan)\n :directives (asp/mk-chan)\n :instructions (asp/mk-chan)}")
 	(title "CHN"))
 
 ([FlightPro_Class20005] of  CloVar
@@ -620,7 +621,7 @@
 
 ([FlightPro_Class20021] of  CloFunction
 
-	(source "(defroutes app-routes\n  (GET \"/\" [] (slurp (str ROOT \"cezium.html\")))\n  (GET \"/chart\" [] (slurp (str ROOT \"leaflet.html\")))\n  (GET \"/czml/\" [] (responseN (:czml cmd/CHN)))\n  (GET \"/answer/\" [] (response1 (:answer cmd/CHN)))\n  (GET \"/directives/\" [] (responseN (:directives cmd/CHN)))\n  (GET \"/instructions/\" [] (responseN (:instructions cmd/CHN)))\n  (GET \"/command/:cmd\" [cmd & params] \n    ((resolve (symbol (str \"pro.commands/\" cmd))) params))\n  (route/files \"/\" (do (println [:ROOT-FILES ROOT]) {:root ROOT}))\n  (route/resources \"/\")\n  (route/not-found \"Not Found\"))\n\n(def APP\n  (handler/site app-routes))")
+	(source "(defroutes app-routes\n  (GET \"/\" [] (slurp (str ROOT \"cezium.html\")))\n  (GET \"/chart\" [] (slurp (str ROOT \"leaflet.html\")))\n  (GET \"/czml/\" [] (responseN (cmd/czml-chan)))\n  (GET \"/answer/\" [] (response1 (:answer cmd/CHN)))\n  (GET \"/directives/\" [] (responseN (:directives cmd/CHN)))\n  (GET \"/instructions/\" [] (responseN (:instructions cmd/CHN)))\n  (GET \"/command/:cmd\" [cmd & params] \n    ((resolve (symbol (str \"pro.commands/\" cmd))) params))\n  (route/files \"/\" (do (println [:ROOT-FILES ROOT]) {:root ROOT}))\n  (route/resources \"/\")\n  (route/not-found \"Not Found\"))\n\n(def APP\n  (handler/site app-routes))")
 	(title "init-server []"))
 
 ([FlightPro_Class20022] of  CloFunction
@@ -972,7 +973,7 @@
 
 ([FlightPro_Class280001] of  CloNamespace
 
-	(source "(:require\n  [pro.commands :as cmd]\n  [async.proc :as asp]\n  [cesium.core :as czs]\n  [calc.geo :as geo])")
+	(source "(:require\n  [pro.commands :as cmd]\n  [async.proc :as asp]\n  [cesium.core :as czs]\n  [calc.core :as calc]\n  [calc.geo :as geo])")
 	(title "es"))
 
 ([FlightPro_Class290000] of  CloFunction
@@ -1030,10 +1031,6 @@
 ([FlightPro_Class300003] of  CloFuncall
 
 	(source "(ru.rules/facts-with-slot-value 'Flight 'callsign = \"UAL1545\")"))
-
-([FlightPro_Class300004] of  CloFuncall
-
-	(source "(rete.core/facts-with-slot-value 'Flight 'callsign = \"UAL1545\")"))
 
 ([FlightPro_Class300006] of  CloFunction
 
@@ -1131,10 +1128,6 @@
 	(source "(if (number? x) x (rdr/read-string x))")
 	(title "num-val [x]"))
 
-([FlightPro_Class310019] of  CloFuncall
-
-	(source "(ru.rules/sp :all)"))
-
 ([FlightPro_Class320000] of  CloFunction
 
 	(source "{:coord   [(num-val (ctl/get-value \"input-lat\"))\n               (num-val (ctl/get-value \"input-lon\"))]\n :course   (num-val (ctl/get-value \"input-crs\"))\n :speed    (num-val (ctl/get-value \"input-spd\"))\n :altitude (num-val (ctl/get-value \"input-alt\"))}")
@@ -1148,18 +1141,22 @@
 ([FlightPro_Class320010] of  RuleSet
 
 	(rules
-		[FlightPro_Class230003]
-		[FlightPro_Class220001]
-		[FlightPro_Class370002]
 		[FlightPro_Class430010]
 		[FlightPro_Class290005]
 		[FlightPro_Class320013]
 		[FlightPro_Class320012]
-		[FlightPro_Class250010]
+		[FlightPro_Class320013]
+		[FlightPro_Class410020]
 		[FlightPro_Class350001]
 		[FlightPro_Class370003]
+		[FlightPro_Class230003]
+		[FlightPro_Class250010]
+		[FlightPro_Class370002]
+		[FlightPro_Class220001]
+		[FlightPro_Class200000]
 		[FlightPro_Class320011]
-		[FlightPro_Class200000])
+		[FlightPro_Class410002]
+		[FlightPro_Class410001])
 	(templates
 		[Flight]
 		[Onboard]
@@ -1171,18 +1168,18 @@
 	(lhs "?of (Flight id ?id age \"OLD\")\n?cf (Flight id ?id age \"CURRENT\")\n?nf (Flight id ?id age \"NEW\")")
 	(rhs "(retract ?of)\n(modify ?cf age \"OLD\")\n(modify ?nf age \"CURRENT\")")
 	(salience -1)
-	(title "af:FlightHistory"))
+	(title "af:FlightHistory3"))
 
 ([FlightPro_Class320012] of  Rule
 
-	(lhs "(Flight id ?id altitude ?a1 age \"OLD\")\n(Flight id ?id altitude ?a2 age \"CURRENT\")\n?fl (Flight id ?id altitude ?a3 age \"NEW\"\n	status ?s3 \n	coord ?crd3 \n	course ?crs3\n	speed ?spd3\n	(> ?a1 ?a2 ?a3))")
+	(lhs "(Flight id ?id altitude ?a1 age \"OLD\")\n(Flight id ?id altitude ?a2 age \"CURRENT\")\n?fl (Flight id ?id altitude ?a3 age \"NEW\"\n	status ?s3 \n	coord ?crd3 \n	course ?crs3\n	speed ?spd3\n	((not= ?s3 \"DESCEND\")\n	 (> ?a1 ?a2 ?a3)))")
 	(rhs "(modify ?fl status \"DESCEND\")\n(es/put-on-map ?id ?crd3 ?crs3 ?spd3 ?s3)")
 	(salience 0)
 	(title "af:Descending"))
 
 ([FlightPro_Class320013] of  Rule
 
-	(lhs "(Flight id ?id altitude ?a1 age \"OLD\")\n(Flight id ?id altitude ?a2 age \"CURRENT\")\n?fl (Flight id ?id altitude ?a3 age \"NEW\"\n	status ?s3 \n	coord ?crd3 \n	course ?crs3\n	speed ?spd3\n	(< ?a1 ?a2 ?a3))")
+	(lhs "(Flight id ?id altitude ?a1 age \"OLD\")\n(Flight id ?id altitude ?a2 age \"CURRENT\")\n?fl (Flight id ?id altitude ?a3 age \"NEW\"\n	status ?s3 \n	coord ?crd3 \n	course ?crs3\n	speed ?spd3\n	((not= ?s3 \"CLIMB\")\n	 (< ?a1 ?a2 ?a3)))")
 	(rhs "(modify ?fl status \"CLIMB\")\n(es/put-on-map ?id ?crd3 ?crs3 ?spd3 ?s3)")
 	(salience 0)
 	(title "af:Climbing"))
@@ -1193,7 +1190,7 @@
 	(butt-fire "Fire/ru.rules/fire-all-rules")
 	(butt-run "Run/ru.rules/run-engine")
 	(butt-step "Step/ru.rules/step-engine")
-	(mode run)
+	(mode trace)
 	(rule-sets [FlightPro_Class320010])
 	(steps 1)
 	(title "Flights Pro Run"))
@@ -1216,11 +1213,11 @@
 
 ([FlightPro_Class330000] of  CloFuncall
 
-	(source "(ru.rules/sp 'Flight)"))
+	(source "(ru.rules/facts-with-slot-value 'Flight 'id = \"UAL1545\")"))
 
 ([FlightPro_Class330001] of  CloFuncall
 
-	(source "(ru.rules/pp 'Flight)"))
+	(source "(ru.rules/facts-with-slot-value 'Flight 'id = \"bf9fab1\")"))
 
 ([FlightPro_Class330002] of  CloVar
 
@@ -1254,23 +1251,7 @@
 
 ([FlightPro_Class340002] of  CloFuncall
 
-	(source "(ru.rules/facts-with-slot-value 'Flights 'id = \"Alice\")"))
-
-([FlightPro_Class340003] of  CloFuncall
-
-	(source "(rete.core/facts-with-slot-value 'Flights 'id = \"bdac417\")"))
-
-([FlightPro_Class340004] of  CloFuncall
-
-	(source "(rete.core/facts-with-slot-value 'Flight 'id = \"bdac417\")"))
-
-([FlightPro_Class340005] of  CloFuncall
-
-	(source "(rete.core/facts-with-slot-value 'Flight 'id = nil)"))
-
-([FlightPro_Class340006] of  CloFuncall
-
-	(source "(rete.core/facts-with-slot-value 'Flight 'id = :?)"))
+	(source "(doseq [e (rete.core/facts-with-slot-value 'Flight 'id = \"bf9fab1\")] (protege.core/ctpl e))"))
 
 ([FlightPro_Class350000] of  CloFunction
 
@@ -1279,30 +1260,10 @@
 
 ([FlightPro_Class350001] of  Rule
 
-	(lhs "?f (Follow id ?id time ?t0)\n(Flight id ?id coord ?crd1 altitude ?alt1 age \"OLD\" time ?t1\n	(<= ?t0 ?t1))\n(Flight id ?id coord ?crd2 altitude ?alt2 age \"CURRENT\")\n(Flight id ?id coord ?crd3 altitude ?alt3 age \"NEW\" time ?t3)")
-	(rhs "(println [:FOLLOW ?id])\n(let [[lat1 lon1] ?crd1\n       [lat2 lon2] ?crd2\n       [lat3 lon3] ?crd3]\n  (pro.commands/set-map-view ?crd3)\n  (pro.commands/do-trail ?id \n	[lat3 lon3 ?alt3\n	 lat2 lon2 ?alt2\n	 lat1 lon1 ?alt1])\n  (modify ?f time ?t3))")
+	(lhs "?f (Follow id ?id time ?t1)\n(Flight id ?id coord ?crd1 altitude ?alt1 age \"OLD\" time ?t1)\n(Flight id ?id coord ?crd2 altitude ?alt2 age \"CURRENT\")\n(Flight id ?id coord ?crd3 altitude ?alt3 age \"NEW\" time ?t3 callsign ?cs)")
+	(rhs "(println [:FOLLOW ?cs])\n(let [[lat1 lon1] ?crd1\n       [lat2 lon2] ?crd2\n       [lat3 lon3] ?crd3]\n  (pro.commands/set-map-view ?crd3)\n  (pro.commands/do-trail ?id \n	[lat3 lon3 ?alt3\n	 lat2 lon2 ?alt2\n	 lat1 lon1 ?alt1])\n  (modify ?f time ?t3))")
 	(salience 0)
 	(title "af:FollowFlight"))
-
-([FlightPro_Class350002] of  CloFuncall
-
-	(source "(doseq [@fr24.client/FLIGHTS"))
-
-([FlightPro_Class350003] of  CloFuncall
-
-	(source "(doseq [[k v] (seq @fr24.client/FLIGHTS)] (protege.core/ctpl [:K k :V v]))"))
-
-([FlightPro_Class350004] of  CloFuncall
-
-	(source "(doseq [[k v] (seq @fr24.client/FLIGHTS)] (protege.core/ctpl [:K k v]))"))
-
-([FlightPro_Class350005] of  CloFuncall
-
-	(source "(doseq [[k v] (seq @fr24.client/FLIGHTS)] (protege.core/ctpl [:K k (fr24.client/callsign v)]))"))
-
-([FlightPro_Class350006] of  CloFuncall
-
-	(source "(doseq [[k v] (seq @fr24.client/FLIGHTS)] (protege.core/ctpl [:K k (fr24.client/callsign v) :V v]))"))
 
 ([FlightPro_Class360000] of  CloFunction
 
@@ -1328,8 +1289,8 @@
 
 ([FlightPro_Class370003] of  Rule
 
-	(lhs "?f1 (Follow  id ?id1 time ?t1)\n?f2 (Follow  id ?id2 time ?t2\n	((not= ?id1 ?id2)\n	 (= ?t2 0)))")
-	(rhs "(println [:STOP-FOLLOW ?id1])\n(retract ?f1)\n(if (= ?id2 \"STOP\")\n   (retract ?f2))")
+	(lhs "?f1 (Follow  id ?id1 time ?t1)\n?f2 (Follow  id ?id2 time ?t2 callsign ?cs\n	((not= ?id1 ?id2)\n	 (= ?t2 0)))")
+	(rhs "(println [:STOP-FOLLOW ?cs])\n(retract ?f1)\n(if (= ?id2 \"STOP\")\n   (retract ?f2))")
 	(salience 0)
 	(title "af:StopOrSwitchFollow"))
 
@@ -1365,8 +1326,8 @@
 
 ([FlightPro_Class390000] of  Rule
 
-	(lhs "(Onboard callsign ?cs1)\n(Flight callsign ?cs1 coord ?c1 course ?crs1 ?time ?t1)\n(Flight id ?id2 coord ?c2 altitude ?a2 pos4d ?p2 time ?t2)\n(Flight id ?id2 coord ?c3 altitude ?a3 pos4d ?p3 time ?t1 course ?crs3 callsign ?cs2)\n(Current time ?t1\n            ((= (- ?now ?h2) 1)\n             (< (fl/distance-nm ?c1 ?c3) 10)))")
-	(rhs "(es/leg ?cs\n           (calc.core/smooth-tabfun (fl/distance-nm ?c1 ?c3) [[0 1.0][20 0.1]])\n           (geo/following? ?crs1 ?crs3)\n           ?p2\n           ?p3))")
+	(lhs "(Onboard callsign ?cs1)\n(Flight callsign ?cs1 coord ?c1 course ?crs1 age \"NEW\")\n(Flight id ?id2 coord ?c2 altitude ?a2 age \"CURRENT\" time ?t2 callsign ?cs2)\n(Flight id ?id2 coord ?c3 altitude ?a3 age \"NEW\" time ?t3 course ?crs3 \n	(< (calc.geo/distance-nm ?c1 ?c3) 10)))")
+	(rhs "(es/leg ?cs2\n           (calc.core/smooth-tabfun (calc.geo/distance-nm ?c1 ?c3) [[0 1.0][20 0.1]])\n           (calc.geo/following? ?crs1 ?crs3)\n           [?c2 ?a2 ?t2]\n           [?c3 ?a3 ?t3]))")
 	(salience 0)
 	(title "fl:CZML-LegGeneration"))
 
@@ -1420,7 +1381,8 @@
 		[FlightPro_Class290001]
 		[FlightPro_Class380004]
 		[FlightPro_Class380002]
-		[FlightPro_Class390003])
+		[FlightPro_Class390003]
+		[FlightPro_Class410021])
 	(cloNamespace [FlightPro_Class400001])
 	(cloVars
 		[FlightPro_Class70000]
@@ -1432,7 +1394,7 @@
 
 ([FlightPro_Class400001] of  CloNamespace
 
-	(source "(:use protege.core)\n(:require [compojure.core :refer [GET]]\n              [fr24.client :as fr24]\n              [async.proc :as asp]\n              [rete.core :as rete])")
+	(source "(:use protege.core)\n(:require [compojure.core :refer [GET]]\n              [fr24.client :as fr24]\n              [cesium.core :as czs]\n              [async.proc :as asp]\n              [rete.core :as rete])")
 	(title "pro.commands"))
 
 ([FlightPro_Class400003] of  CloNamespace
@@ -1441,48 +1403,106 @@
 
 ([FlightPro_Class400004] of  CloFunction
 
-	(source "(czs/leg label (if following\n	(URL-ICO \"FOLLOWING\")\n	(URL-ICO \"COUNTER\")) scale p4d1 p4d2)")
-	(title "leg [label scale following p4d1 p4d2]"))
+	(source "(czs/leg  label	(if following\n	  (URL-ICO \"FOLLOWING\")\n	  (URL-ICO \"COUNTER\")) \n	scale \n	[lat1 lon1 alt1 tim1] \n	[lat2 lon2 alt2 tim2])")
+	(title "leg [label scale following [[lat1 lon1] alt1 tim1] [[lat2 lon2] alt2 tim2]]"))
 
-([FlightPro_Class430000] of  CloFuncall
+([FlightPro_Class410000] of  CloFuncall
 
-	(source "(rete.core/facts-with-slot-value 'Flight 'time < )"))
+	(source "(ru.rules/lp :all)"))
 
-([FlightPro_Class430001] of  CloFuncall
+([FlightPro_Class410001] of  Rule
 
-	(source "(count (rete.core/facts-with-slot-value 'Flight 'time < 1481996506))"))
+	(lhs "?nf1 (Flight id ?id age \"NEW\" time ?t1)\n?nf2 (Flight id ?id age \"NEW\" time ?t2\n	(> ?t2 ?t1))")
+	(rhs "(modify ?nf1 age \"CURRENT\")")
+	(salience -3)
+	(title "af:FlightHistory1"))
 
-([FlightPro_Class430002] of  CloFuncall
+([FlightPro_Class410002] of  Rule
 
-	(source "(count (rete.core/facts-with-slot-value 'Flight 'time < 1481996006))"))
+	(lhs "?cf1 (Flight id ?id age \"CURRENT\" time ?t1)\n?cf2 (Flight id ?id age \"CURRENT\" time ?t2\n	(> ?t2 ?t1))")
+	(rhs "(modify ?cf1 age \"OLD\")")
+	(salience -2)
+	(title "af:FlightHistory2"))
 
-([FlightPro_Class430003] of  CloFuncall
+([FlightPro_Class410003] of  CloFuncall
 
-	(source "(count (rete.core/facts-with-slot-value 'Flight 'time < 1481995006))"))
+	(source "(rete.core/facts-with-slot-value 'Flight 'callsign = \"C560\")"))
 
-([FlightPro_Class430004] of  CloFuncall
+([FlightPro_Class410004] of  CloFuncall
 
-	(source "(count (rete.core/facts-with-slot-value 'Flight 'time < 1481994006))"))
+	(source "(count (rete.core/facts-with-slot-value 'Flight 'callsign = \"C560\"))"))
 
-([FlightPro_Class430005] of  CloFuncall
+([FlightPro_Class410005] of  CloFuncall
 
-	(source "(count (rete.core/facts-with-slot-value 'Flight 'time < 1481993006))"))
+	(source "(count (rete.core/facts-with-slot-value 'Flight 'callsign = \"ASQ5525\"))"))
 
-([FlightPro_Class430006] of  CloFuncall
+([FlightPro_Class410006] of  CloFuncall
 
-	(source "(count (rete.core/facts-with-slot-value 'Flight 'time < 1481992006))"))
+	(source "(count (rete.core/facts-with-slot-value 'Flight 'callsign = \"AAL1103\"))"))
 
-([FlightPro_Class430007] of  CloFuncall
+([FlightPro_Class410007] of  CloFuncall
 
-	(source "(count (rete.core/facts-with-slot-value 'Flight 'time < 1481991006))"))
+	(source "(count (rete.core/facts-with-slot-value 'Flight 'callsign = \"FDX1787\"))"))
 
-([FlightPro_Class430008] of  CloFuncall
+([FlightPro_Class410008] of  CloFuncall
 
-	(source "(count (rete.core/facts-with-slot-value 'Flight 'time < 148190006))"))
+	(source "(count (rete.core/facts-with-slot-value 'Flight 'callsign = \"UAL1545\"))"))
 
-([FlightPro_Class430009] of  CloFuncall
+([FlightPro_Class410009] of  CloFuncall
 
-	(source "(count (rete.core/facts-with-slot-value 'Flight 'time < 1481990006))"))
+	(source "(count (rete.core/facts-with-slot-value 'Flight 'callsign = \"AWI3851\"))"))
+
+([FlightPro_Class410010] of  CloFuncall
+
+	(source "(dseq [e (rete.core/facts-with-slot-value 'Flight 'callsign = \"AWI3851\")] (protege.core/ctpl e))"))
+
+([FlightPro_Class410011] of  CloFuncall
+
+	(source "(doseq [e (rete.core/facts-with-slot-value 'Flight 'callsign = \"AWI3851\")] (protege.core/ctpl e))"))
+
+([FlightPro_Class410012] of  CloFuncall
+
+	(source "(doseq [e (rete.core/facts-with-slot-value 'Flight 'callsign = \"CL60\")] (protege.core/ctpl e))"))
+
+([FlightPro_Class410013] of  CloFuncall
+
+	(source "(doseq [e (rete.core/facts-with-slot-value 'Flight 'callsign = \"UAL4297\")] (protege.core/ctpl e))"))
+
+([FlightPro_Class410014] of  CloFuncall
+
+	(source "(doseq [e (rete.core/facts-with-slot-value 'Flight 'callsign = \"FDX1568\")] (protege.core/ctpl e))"))
+
+([FlightPro_Class410015] of  CloFuncall
+
+	(source "(doseq [e (rete.core/facts-with-slot-value 'Flight 'callsign = \"SWA792\")] (protege.core/ctpl e))"))
+
+([FlightPro_Class410016] of  CloFuncall
+
+	(source "(doseq [e (rete.core/facts-with-slot-value 'Flight 'callsign = \"3386143\")] (protege.core/ctpl e))"))
+
+([FlightPro_Class410017] of  CloFuncall
+
+	(source "(doseq [e (rete.core/facts-with-slot-value 'Flight 'callsign = \"N662DS\")] (protege.core/ctpl e))"))
+
+([FlightPro_Class410018] of  CloFuncall
+
+	(source "(doseq [e (rete.core/facts-with-slot-value 'Flight 'callsign = \"UCA4883\")] (protege.core/ctpl e))"))
+
+([FlightPro_Class410019] of  CloFuncall
+
+	(source "(doseq [e (rete.core/facts-with-slot-value 'Flight 'callsign = \"G150\")] (protege.core/ctpl e))"))
+
+([FlightPro_Class410020] of  Rule
+
+	(lhs "(Flight id ?id age \"OLD\" time ?t1)\n?f (Follow id ?id time 0)\n(not Follow)")
+	(rhs "(modify ?f time ?t1)")
+	(salience 0)
+	(title "af:StartFollow"))
+
+([FlightPro_Class410021] of  CloFunction
+
+	(source "czs/CZ-CHAN")
+	(title "czml-chan []"))
 
 ([FlightPro_Class430010] of  Rule
 
