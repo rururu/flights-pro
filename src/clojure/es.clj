@@ -68,11 +68,3 @@
         (read-string (format "%.2f" (float vs)))])
       (recur (inc n) (rest y))) )))
 
-(defn leg [label scale following [[lat1 lon1] alt1 tim1] [[lat2 lon2] alt2 tim2]]
-  (czs/leg  label	(if following
-	  (URL-ICO "FOLLOWING")
-	  (URL-ICO "COUNTER")) 
-	scale 
-	[lat1 lon1 alt1 tim1] 
-	[lat2 lon2 alt2 tim2]))
-

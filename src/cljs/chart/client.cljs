@@ -6,7 +6,8 @@
   [chart.controls :as ctl]
   [carr.move :as mov]
   [cognitect.transit :as t]
-  [ajax.core :refer (GET)]))
+  [ajax.core :refer [GET]]
+  [ask.master :as am]))
 
 (def HOST "http://localhost:")
 (def PORT 4444)
@@ -14,7 +15,9 @@
  :chart (str HOST PORT "/chart/")
  :directives (str HOST PORT "/directives/")
  :instructions (str HOST PORT "/instructions/")
- :command (str HOST PORT "/command/")})
+ :command (str HOST PORT "/command/")
+ :question (str HOST PORT "/question/")
+ :answer (str HOST PORT "/answer/")})
 (def TIO {:carrier 1000
  :camera 4200
  :directives 911
@@ -136,6 +139,20 @@
   (.setView @CHART cen zom {})
   (new-visible)))
 
+(defn move-to [ins]
+  (println [:MOVE-TO ins])
+(let [cts (:countries ins)
+       aps (:airports ins)]
+  (cond
+    cts (do (am/selector1 "chart.client" "countries" cts :itself 130)
+            (defn handler1 [sel]
+	(am/ask-server {:whom "direct"
+		  :question "airports"
+		  :country sel} (am/get-answer move-to))))
+    aps (do (am/selector2 "chart.client" "airports" aps :itself 130)
+            (defn handler2 [sel]
+	(println [:AIRPORT sel]))))))
+
 (defn instructions-handler [response]
   (doseq [{:keys [instruct] :as ins} (read-transit response)]
   ;;(println [:INSTRUCT ins])
@@ -152,7 +169,8 @@
     :trail (let [{:keys [id points options time]} ins]
 	(add-trail id points options time))
     :map-center (let [{:keys [coord]} ins]
-	(map-center coord))             
+	(map-center coord))
+    :move-to (move-to ins)     
     (println (str "Unknown instruction: " [instruct ins])))))
 
 (defn receive-instructions []

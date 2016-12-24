@@ -5,16 +5,16 @@ goog.require('eval_soup.core');
 nightlight.repl_server.cljs_start_ns = new cljs.core.Symbol(null,"cljs.user","cljs.user",877795071,null);
 nightlight.repl_server.form__GT_serializable = (function nightlight$repl_server$form__GT_serializable(form){
 if((form instanceof Error)){
-return [(function (){var or__8505__auto__ = (function (){var G__20851 = form;
-var G__20851__$1 = (((G__20851 == null))?null:G__20851.cause);
-if((G__20851__$1 == null)){
+return [(function (){var or__8823__auto__ = (function (){var G__21318 = form;
+var G__21318__$1 = (((G__21318 == null))?null:G__21318.cause);
+if((G__21318__$1 == null)){
 return null;
 } else {
-return G__20851__$1.message;
+return G__21318__$1.message;
 }
 })();
-if(cljs.core.truth_(or__8505__auto__)){
-return or__8505__auto__;
+if(cljs.core.truth_(or__8823__auto__)){
+return or__8823__auto__;
 } else {
 return form.message;
 }

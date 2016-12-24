@@ -1,10 +1,11 @@
 (ns pro.commands
 (:use protege.core)
-(:require [compojure.core :refer [GET]]
-              [fr24.client :as fr24]
-              [cesium.core :as czs]
-              [async.proc :as asp]
-              [rete.core :as rete]))
+(:require 
+  [compojure.core :refer [GET]]
+  [fr24.client :as fr24]
+  [async.proc :as asp]
+  [rete.core :as rete]
+  [cesium.core :refer [iso8601curt]]))
 
 (def HOST "http://localhost:")
 (def PORT 4444)
@@ -12,7 +13,9 @@
  :chart (str HOST PORT "/chart/")
  :directives (str HOST PORT "/directives/")
  :instructions (str HOST PORT "/instructions/")
- :command (str HOST PORT "/command/")})
+ :command (str HOST PORT "/command/")
+ :question (str HOST PORT "/question/")
+ :answer (str HOST PORT "/answer/")})
 (def CHN {:answer (asp/mk-chan)
  :directives (asp/mk-chan)
  :instructions (asp/mk-chan)})
@@ -26,16 +29,18 @@
        fls (seq @fls)]
   (println "t:" crt "flights:" (count fls))
   (doseq [[k v] fls]
-    (let [alt (fr24/altitude v)]
+    (let [alt (fr24/altitude v)
+           [lat lon :as crd] (fr24/coord v)]
       (rete/assert-frame 
 	['Flight
 	'id k
 	'callsign (fr24/callsign v)
-	'coord (fr24/coord v)
+	'coord crd
 	'course (fr24/course v)
 	'speed (fr24/speed v)
 	'altitude alt
 	'time crt
+	'point4d [lat lon alt (iso8601curt)]
 	'age "NEW"
 	'status (if (> alt 0)
                                      "LEVEL"
@@ -170,6 +175,27 @@
 (defn stopfollow [params]
   (rete/assert-frame ['Follow 'id "STOP" 'time 0]))
 
-(defn czml-chan []
-  czs/CZ-CHAN)
+(defn direct-question [pp]
+  (println [:DIR-Q pp])
+(if-let [ans (condp = (:question pp)
+	"airports" {:airports (keys (get (fr24/airports-by-country) (:country pp)))})]
+  (asp/pump-in (:answer CHN) ans)))
+
+(defn question [pp]
+  (println [:QUESTION pp])
+(if (= (:whom pp) "direct")
+  (direct-question pp)
+  (do (rete/assert-frame 
+	['Question
+	 'predicate (:predicate pp)
+	 'subject (:subject pp)
+	 'object (:object pp)])
+    (rete/fire)))
+{:status 204})
+
+(defn move-to [params]
+  (asp/pump-in (:instructions CHN)
+  {:instruct :move-to
+   :countries (sort (keys (fr24/airports-by-country)))}) 
+"")
 

@@ -66,7 +66,7 @@
   (if-let [[id dat] (by-call cs)]
   id))
 
-(defn airports-by-ctrs []
+(defn airports-by-country []
   (letfn [(mk-airports [rows]
             (reduce #(assoc %1
                             (get %2 "country")

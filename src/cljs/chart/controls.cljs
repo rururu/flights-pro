@@ -24,8 +24,6 @@
    <option value='intersect'>Intersections</option>
    <option value='move-to'>Move to Airport</option>
    <option value='schedule'>Schedule Flight</option>
-   <option value='camera'>Camera</option>
-   <option value='manual'>Manual Control</option>
    <option value='wikipedia'>Wikipedia</option>
    <option value='clear'>Clear</option>
    </select>"))

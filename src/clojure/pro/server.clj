@@ -6,6 +6,7 @@
               [compojure.route :as route]
               [cognitect.transit :as t]
               [async.proc :as asp]
+              [cesium.core :as czs]
               [pro.commands :as cmd])
 (:import java.io.ByteArrayOutputStream))
 
@@ -40,8 +41,9 @@
   (defroutes app-routes
   (GET "/" [] (slurp (str ROOT "cezium.html")))
   (GET "/chart" [] (slurp (str ROOT "leaflet.html")))
-  (GET "/czml/" [] (responseN (cmd/czml-chan)))
-  (GET "/answer/" [] (response1 (:answer cmd/CHN)))
+  (GET "/czml/" [] (czs/events))
+  (GET "/question/" [& params] (cmd/question params))
+  (GET "/answer/" [] (responseN (:answer cmd/CHN)))
   (GET "/directives/" [] (responseN (:directives cmd/CHN)))
   (GET "/instructions/" [] (responseN (:instructions cmd/CHN)))
   (GET "/command/:cmd" [cmd & params] 
