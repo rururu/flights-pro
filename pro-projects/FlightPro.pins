@@ -1,4 +1,4 @@
-; Sun Dec 25 00:14:47 MSK 2016
+; Sun Dec 25 22:34:06 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -240,7 +240,7 @@
 
 ([FlightPro_Class150001] of  CSS
 
-	(source "#map {\n    position: absolute;\n    top: 0px;\n    bottom: 0;\n    left: 0;\n    right: 0;\n}\n#mousepos {\n  position:fixed;\n  bottom:10px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#commands-header {\n  position:fixed;\n  bottom:50px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#commands {\n  position:fixed;\n  bottom:40px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#element1 {\n  position:fixed;\n  bottom:70px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}\n#element2 {\n  position:fixed;\n  bottom:50px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}\n#element3 {\n  position:fixed;\n  bottom:30px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}\n#element4 {\n  position:fixed;\n  bottom:10px;\n  left:190px;\n  padding:5px;\n  z-index:100;\n}")
+	(source "#map {\n    position: absolute;\n    top: 0px;\n    bottom: 0;\n    left: 0;\n    right: 0;\n}\n#mousepos {\n  position:fixed;\n  bottom:10px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#commands-header {\n  position:fixed;\n  bottom:50px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#commands {\n  position:fixed;\n  bottom:40px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#element1 {\n  position:fixed;\n  bottom:40px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element2 {\n  position:fixed;\n  bottom:40px;\n  left:310px;\n  padding:5px;\n  z-index:100;\n}\n#element3 {\n  position:fixed;\n  bottom:40px;\n  left:460px;\n  padding:5px;\n  z-index:100;\n}\n#element4 {\n  position:fixed;\n  bottom:40px;\n  left:610px;\n  padding:5px;\n  z-index:100;\n}")
 	(store-in "resources/public/css")
 	(title "leaflet"))
 
@@ -623,7 +623,7 @@
 
 ([FlightPro_Class20021] of  CloFunction
 
-	(source "(defroutes app-routes\n  (GET \"/\" [] (slurp (str ROOT \"cezium.html\")))\n  (GET \"/chart\" [] (slurp (str ROOT \"leaflet.html\")))\n  (GET \"/czml/\" [] (czs/events))\n  (GET \"/question/\" [& params] (cmd/question params))\n  (GET \"/answer/\" [] (responseN (:answer cmd/CHN)))\n  (GET \"/directives/\" [] (responseN (:directives cmd/CHN)))\n  (GET \"/instructions/\" [] (responseN (:instructions cmd/CHN)))\n  (GET \"/command/:cmd\" [cmd & params] \n    ((resolve (symbol (str \"pro.commands/\" cmd))) params))\n  (route/files \"/\" (do (println [:ROOT-FILES ROOT]) {:root ROOT}))\n  (route/resources \"/\")\n  (route/not-found \"Not Found\"))\n\n(def APP\n  (handler/site app-routes))")
+	(source "(defroutes app-routes\n  (GET \"/\" [] (slurp (str ROOT \"cezium.html\")))\n  (GET \"/chart\" [] (slurp (str ROOT \"leaflet.html\")))\n  (GET \"/czml/\" [] (czs/events))\n  (GET \"/question/\" [& params] (cmd/question params))\n  (GET \"/answer/\" [] (response1 (:answer cmd/CHN)))\n  (GET \"/directives/\" [] (responseN (:directives cmd/CHN)))\n  (GET \"/instructions/\" [] (responseN (:instructions cmd/CHN)))\n  (GET \"/command/:cmd\" [cmd & params] \n    ((resolve (symbol (str \"pro.commands/\" cmd))) params))\n  (route/files \"/\" (do (println [:ROOT-FILES ROOT]) {:root ROOT}))\n  (route/resources \"/\")\n  (route/not-found \"Not Found\"))\n\n(def APP\n  (handler/site app-routes))")
 	(title "init-server []"))
 
 ([FlightPro_Class20022] of  CloFunction
@@ -1193,7 +1193,9 @@
 	(butt-run "Run/ru.rules/run-engine")
 	(butt-step "Step/ru.rules/step-engine")
 	(mode run)
-	(rule-sets [FlightPro_Class320010])
+	(rule-sets
+		[FlightPro_Class320010]
+		[FlightPro_Class440007])
 	(steps 1)
 	(title "Flights Pro Run"))
 
@@ -1500,12 +1502,12 @@
 
 ([FlightPro_Class420000] of  CloFunction
 
-	(source "(println [:QUESTION pp])\n(if (= (:whom pp) \"direct\")\n  (direct-question pp)\n  (do (rete/assert-frame \n	['Question\n	 'predicate (:predicate pp)\n	 'subject (:subject pp)\n	 'object (:object pp)])\n    (rete/fire)))\n{:status 204}")
+	(source "(println [:QUESTION pp])\n(if (= (:whom pp) \"direct\")\n  (asp/pump-in (:answer CHN) (direct-question pp))\n  (do (rete/assert-frame \n	['Question\n	 'predicate (:predicate pp)\n	 'subject (:subject pp)\n	 'object (:object pp)])\n        (rete/fire)))\n{:status 204}")
 	(title "question [pp]"))
 
 ([FlightPro_Class420001] of  CloFunction
 
-	(source "(println [:DIR-Q pp])\n(if-let [ans (condp = (:question pp)\n	\"airports\" {:airports (keys (get (fr24/airports-by-country) (:country pp)))})]\n  (asp/pump-in (:answer CHN) ans))")
+	(source "(condp = (:question pp)\n  \"airports\" (do	(rete/assert-frame ['Question 'predicate 'AIRPORTS\n			'subject 'COUNTRY\n			'object (:country pp)])\n	{:airports (->> (get (fr24/airports-by-country) (:country pp))\n		keys\n		sort)})\n  \"move-to\" (do (rete/assert-frame ['Question 'predicate 'MOVE-TO\n			'subject 'AIRPORT\n			'object (:airport pp)])\n	\"\")\n  true \"\")")
 	(title "direct-question [pp]"))
 
 ([FlightPro_Class420002] of  CloFuncall
@@ -1544,7 +1546,8 @@
 		[FlightPro_Class430003]
 		[FlightPro_Class80002]
 		[FlightPro_Class420019]
-		[FlightPro_Class420020])
+		[FlightPro_Class420020]
+		[FlightPro_Class450000])
 	(cloNamespace [FlightPro_Class420009])
 	(cloVars
 		[FlightPro_Class70000]
@@ -1569,8 +1572,8 @@
 
 ([FlightPro_Class420019] of  CloFunction
 
-	(source "(GET (:question URL) \n    {:params params\n     :handler handler\n     :error-handler error-handler\n     :response-format :transit})")
-	(title "ask-server [params handler]"))
+	(source "(GET (:question URL) \n    {:params params\n     :error-handler error-handler\n     :response-format :transit})")
+	(title "ask-server [params]"))
 
 ([FlightPro_Class420020] of  CloFunction
 
@@ -1579,12 +1582,12 @@
 
 ([FlightPro_Class420021] of  CloFunction
 
-	(source "(asp/pump-in (:instructions CHN)\n  {:instruct :move-to\n   :countries (sort (keys (fr24/airports-by-country)))}) \n\"\"")
+	(source ";;(println :MOVE-TO params)\n(asp/pump-in (:instructions CHN)\n  {:instruct :move-to\n   :countries (sort (keys (fr24/airports-by-country)))}) \n\"\"")
 	(title "move-to [params]"))
 
 ([FlightPro_Class430000] of  CloFunction
 
-	(source "(println [:MOVE-TO ins])\n(let [cts (:countries ins)\n       aps (:airports ins)]\n  (cond\n    cts (do (am/selector1 \"chart.client\" \"countries\" cts :itself 130)\n            (defn handler1 [sel]\n	(am/ask-server {:whom \"direct\"\n		  :question \"airports\"\n		  :country sel} (am/get-answer move-to))))\n    aps (do (am/selector2 \"chart.client\" \"airports\" aps :itself 130)\n            (defn handler2 [sel]\n	(println [:AIRPORT sel])))))")
+	(source ";;(println :MOVE-TO ins)\n(let [cts (:countries ins)\n       aps (:airports ins)]\n  (cond\n    cts (do (am/selector1 \"chart.client\" \"countries\" cts :itself 130)\n            (defn handler1 [sel]\n	(am/ask-server {:whom \"direct\"\n		  :question \"airports\"\n		  :country sel})\n	(am/get-answer move-to)))\n    aps (do (am/selector2 \"chart.client\" \"airports\" aps :itself 130)\n            (defn handler2 [sel]\n	(am/ask-server {:whom \"direct\"\n		  :question \"move-to\"\n		  :airport sel})\n	(am/clear-dialog))) ))")
 	(title "move-to [ins]"))
 
 ([FlightPro_Class430001] of  CloFunction
@@ -1608,6 +1611,24 @@
 	(rhs "(es/put-off-map ?id)\n(retract ?f1)")
 	(salience 0)
 	(title "af:ForgetOldFlight"))
+
+([FlightPro_Class440000] of  CloFuncall
+
+	(source "(println 1)"))
+
+([FlightPro_Class440007] of  RuleSet
+
+	(templates [Question])
+	(title "Commands"))
+
+([FlightPro_Class450000] of  CloFunction
+
+	(source "(set-html! \"element1\" \"\")\n(set-html! \"element2\" \"\")\n(set-html! \"element3\" \"\")\n(set-html! \"element4\" \"\")")
+	(title "clear-dialog []"))
+
+([FlightPro_Class450001] of  CloFuncall
+
+	(source "(async.proc/one-out (:answer pro.commands/CHN))"))
 
 ([FlightPro_Class5] of  CloVar
 
@@ -1678,7 +1699,7 @@
 
 ([FlightPro_Class70003] of  CloNamespace
 
-	(source "(:require \n  [clojure.core.async :refer [chan alts!! put! <! go timeout close!]])")
+	(source "(:require \n  [clojure.core.async :refer [chan alts!! put! <! <!! go timeout close!]])")
 	(title "async.proc"))
 
 ([FlightPro_Class70004] of  CloFunction
@@ -1765,7 +1786,7 @@
 
 ([FlightPro_Class90000] of  CloFunction
 
-	(source "(alts!! chn)")
+	(source "(loop [out []]\n  (if (empty? out)\n    (recur (<!! chn))\n    out))")
 	(title "one-out [chn]"))
 
 ([FlightPro_Class90001] of  CloFunction

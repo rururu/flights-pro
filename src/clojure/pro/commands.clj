@@ -176,25 +176,35 @@
   (rete/assert-frame ['Follow 'id "STOP" 'time 0]))
 
 (defn direct-question [pp]
-  (println [:DIR-Q pp])
-(if-let [ans (condp = (:question pp)
-	"airports" {:airports (keys (get (fr24/airports-by-country) (:country pp)))})]
-  (asp/pump-in (:answer CHN) ans)))
+  (condp = (:question pp)
+  "airports" (do	(rete/assert-frame ['Question 'predicate 'AIRPORTS
+			'subject 'COUNTRY
+			'object (:country pp)])
+	{:airports (->> (:country pp)
+		(fr24/airports-by-country)
+		keys
+		sort)})
+  "move-to" (do (rete/assert-frame ['Question 'predicate 'MOVE-TO
+			'subject 'AIRPORT
+			'object (:airport pp)])
+	"")
+  true ""))
 
 (defn question [pp]
   (println [:QUESTION pp])
 (if (= (:whom pp) "direct")
-  (direct-question pp)
+  (asp/pump-in (:answer CHN) (direct-question pp))
   (do (rete/assert-frame 
 	['Question
 	 'predicate (:predicate pp)
 	 'subject (:subject pp)
 	 'object (:object pp)])
-    (rete/fire)))
+        (rete/fire)))
 {:status 204})
 
 (defn move-to [params]
-  (asp/pump-in (:instructions CHN)
+  ;;(println :MOVE-TO params)
+(asp/pump-in (:instructions CHN)
   {:instruct :move-to
    :countries (sort (keys (fr24/airports-by-country)))}) 
 "")

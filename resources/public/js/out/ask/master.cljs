@@ -55,10 +55,9 @@
   (let [{:keys [status status-text]} response]
   (println (str "AJAX ERROR: " status " " status-text))))
 
-(defn ask-server [params handler]
+(defn ask-server [params]
   (GET (:question URL) 
     {:params params
-     :handler handler
      :error-handler error-handler
      :response-format :transit}))
 
@@ -66,5 +65,12 @@
   (GET (:answer URL) 
   {:handler handler
    :error-handler error-handler
-   :response-format :transit}))
+   :response-format :transit})
+nil)
+
+(defn clear-dialog []
+  (set-html! "element1" "")
+(set-html! "element2" "")
+(set-html! "element3" "")
+(set-html! "element4" ""))
 

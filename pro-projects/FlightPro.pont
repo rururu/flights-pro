@@ -1,4 +1,4 @@
-; Sun Dec 25 00:14:47 MSK 2016
+; Sun Dec 25 22:34:06 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -35,7 +35,15 @@
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
+	(single-slot predicate
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot status
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot object
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
@@ -44,6 +52,10 @@
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot speed
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot subject
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write)))
@@ -116,6 +128,22 @@
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot id
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass Question
+	(is-a Flights+Ontology)
+	(role concrete)
+	(single-slot predicate
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot object
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot subject
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write)))

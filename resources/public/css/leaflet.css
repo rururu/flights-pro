@@ -28,29 +28,29 @@
 }
 #element1 {
   position:fixed;
-  bottom:70px;
-  left:190px;
+  bottom:40px;
+  left:160px;
   padding:5px;
   z-index:100;
 }
 #element2 {
   position:fixed;
-  bottom:50px;
-  left:190px;
+  bottom:40px;
+  left:310px;
   padding:5px;
   z-index:100;
 }
 #element3 {
   position:fixed;
-  bottom:30px;
-  left:190px;
+  bottom:40px;
+  left:460px;
   padding:5px;
   z-index:100;
 }
 #element4 {
   position:fixed;
-  bottom:10px;
-  left:190px;
+  bottom:40px;
+  left:610px;
   padding:5px;
   z-index:100;
 }

@@ -24,8 +24,10 @@
     ret))
 
 (defn response1 [chn]
-  (-> (r/response (write-transit (deref (future (asp/one-out chn)))))
-       (r/header "Access-Control-Allow-Origin" "*")))
+  (let [r (-> (r/response (write-transit (deref (future (asp/one-out chn)))))
+       (r/header "Access-Control-Allow-Origin" "*"))]
+  (println [:R r])
+  r))
 
 (defn responseN [chn]
   (-> (r/response (write-transit (deref (future (asp/pump-out chn)))))
@@ -43,7 +45,7 @@
   (GET "/chart" [] (slurp (str ROOT "leaflet.html")))
   (GET "/czml/" [] (czs/events))
   (GET "/question/" [& params] (cmd/question params))
-  (GET "/answer/" [] (responseN (:answer cmd/CHN)))
+  (GET "/answer/" [] (response1 (:answer cmd/CHN)))
   (GET "/directives/" [] (responseN (:directives cmd/CHN)))
   (GET "/instructions/" [] (responseN (:instructions cmd/CHN)))
   (GET "/command/:cmd" [cmd & params] 

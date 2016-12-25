@@ -140,7 +140,7 @@
   (new-visible)))
 
 (defn move-to [ins]
-  (println [:MOVE-TO ins])
+  (println :MOVE-TO ins)
 (let [cts (:countries ins)
        aps (:airports ins)]
   (cond
@@ -148,10 +148,14 @@
             (defn handler1 [sel]
 	(am/ask-server {:whom "direct"
 		  :question "airports"
-		  :country sel} (am/get-answer move-to))))
+		  :country sel})
+	(am/get-answer move-to)))
     aps (do (am/selector2 "chart.client" "airports" aps :itself 130)
             (defn handler2 [sel]
-	(println [:AIRPORT sel]))))))
+	(am/ask-server {:whom "direct"
+		  :question "move-to"
+		  :airport sel})
+	(am/clear-dialog))) )))
 
 (defn instructions-handler [response]
   (doseq [{:keys [instruct] :as ins} (read-transit response)]

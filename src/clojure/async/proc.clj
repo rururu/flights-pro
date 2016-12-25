@@ -1,6 +1,6 @@
 (ns async.proc
 (:require 
-  [clojure.core.async :refer [chan alts!! put! <! go timeout close!]]))
+  [clojure.core.async :refer [chan alts!! put! <! <!! go timeout close!]]))
 
 (defn repeater
   ([func time-out]
@@ -29,7 +29,8 @@
   (= @status "RUN"))
 
 (defn pump-in [chn val]
-  (put! chn val))
+  (println chn val)
+(put! chn val))
 
 (defn pump-out [chn]
   (loop [[bit ch] (alts!! [chn] :default :none) bits []]
@@ -38,7 +39,10 @@
     (recur (alts!! [chn] :default :none) (conj bits bit)))))
 
 (defn one-out [chn]
-  (alts!! chn))
+  (loop [out []]
+  (if (empty? out)
+    (recur (<!! chn))
+    out)))
 
 (defn mk-chan []
   (chan))
