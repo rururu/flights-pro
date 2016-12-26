@@ -4,7 +4,8 @@
   [async.proc :as asp]
   [cesium.core :as czs]
   [calc.core :as calc]
-  [calc.geo :as geo]))
+  [calc.geo :as geo]
+  [fr24.client :as fr24]))
 
 (def HOST "http://localhost:")
 (def PORT 4444)
@@ -67,4 +68,10 @@
         (read-string (format "%.1f" (float va)))
         (read-string (format "%.2f" (float vs)))])
       (recur (inc n) (rest y))) )))
+
+(defn move-to [country airport]
+  (if-let [apt (get-in @fr24/AIRPORTS [country airport])]
+  (asp/pump-in (:instructions cmd/CHN)
+    {:instruct :map-center
+     :coord [(apt "lat") (apt "lon")]})))
 

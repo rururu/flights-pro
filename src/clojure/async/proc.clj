@@ -29,8 +29,7 @@
   (= @status "RUN"))
 
 (defn pump-in [chn val]
-  (println chn val)
-(put! chn val))
+  (put! chn val))
 
 (defn pump-out [chn]
   (loop [[bit ch] (alts!! [chn] :default :none) bits []]

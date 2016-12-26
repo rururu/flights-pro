@@ -180,13 +180,13 @@
   "airports" (do	(rete/assert-frame ['Question 'predicate 'AIRPORTS
 			'subject 'COUNTRY
 			'object (:country pp)])
-	{:airports (->> (:country pp)
-		(fr24/airports-by-country)
+	{:airports (->> (get (fr24/airports-by-country) (:country pp))
 		keys
 		sort)})
   "move-to" (do (rete/assert-frame ['Question 'predicate 'MOVE-TO
 			'subject 'AIRPORT
 			'object (:airport pp)])
+	(rete/fire)
 	"")
   true ""))
 

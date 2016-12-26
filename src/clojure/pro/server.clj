@@ -24,10 +24,8 @@
     ret))
 
 (defn response1 [chn]
-  (let [r (-> (r/response (write-transit (deref (future (asp/one-out chn)))))
-       (r/header "Access-Control-Allow-Origin" "*"))]
-  (println [:R r])
-  r))
+  (-> (r/response (write-transit (deref (future (asp/one-out chn)))))
+       (r/header "Access-Control-Allow-Origin" "*")))
 
 (defn responseN [chn]
   (-> (r/response (write-transit (deref (future (asp/pump-out chn)))))
