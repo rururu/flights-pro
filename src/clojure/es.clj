@@ -69,9 +69,3 @@
         (read-string (format "%.2f" (float vs)))])
       (recur (inc n) (rest y))) )))
 
-(defn move-to [country airport]
-  (if-let [apt (get-in @fr24/AIRPORTS [country airport])]
-  (asp/pump-in (:instructions cmd/CHN)
-    {:instruct :map-center
-     :coord [(apt "lat") (apt "lon")]})))
-

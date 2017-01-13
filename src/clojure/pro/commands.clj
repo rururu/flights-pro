@@ -177,21 +177,16 @@
 
 (defn direct-question [pp]
   (condp = (:question pp)
-  "airports" (do	(rete/assert-frame ['Question 'predicate 'AIRPORTS
-			'subject 'COUNTRY
-			'object (:country pp)])
-	{:airports (->> (get (fr24/airports-by-country) (:country pp))
-		keys
-		sort)})
-  "move-to" (do (rete/assert-frame ['Question 'predicate 'MOVE-TO
-			'subject 'AIRPORT
-			'object (:airport pp)])
-	(rete/fire)
-	"")
+  "countries" (->> (fr24/airports-by-country)
+	keys
+	sort)
+  "airports" (->> (get (fr24/airports-by-country) (:country pp))
+	keys
+	sort)
   true ""))
 
 (defn question [pp]
-  (println [:QUESTION pp])
+  ;;(println [:QUESTION pp])
 (if (= (:whom pp) "direct")
   (asp/pump-in (:answer CHN) (direct-question pp))
   (do (rete/assert-frame 
@@ -203,9 +198,15 @@
 {:status 204})
 
 (defn move-to [params]
-  ;;(println :MOVE-TO params)
-(asp/pump-in (:instructions CHN)
-  {:instruct :move-to
-   :countries (sort (keys (fr24/airports-by-country)))}) 
+  (let [{:keys [country airport]} params]
+  (if-let [apt (get-in @fr24/AIRPORTS [country airport])]
+    (asp/pump-in (:instructions CHN)
+      {:instruct :map-center
+       :coord [(apt "lat") (apt "lon")]})))
+"")
+
+(defn schedule [params]
+  (let [{:keys [callsign time country1 airport1 country2 airport2]} params]
+  (println params))
 "")
 

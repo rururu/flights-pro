@@ -20,10 +20,10 @@
     (try
       (json/parse-string (:body r))
       (catch Exception e
-        (println [:EXCEPTION e])
+        (println [:JSON-WEB-DATA :EXCEPTION e])
         nil))
     (do
-      (println [:STATUS s])
+      (println [:JSON-WEB-DATA :STATUS s])
       nil))))
 
 (defn dat [iod]

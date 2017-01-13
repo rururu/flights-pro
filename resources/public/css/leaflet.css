@@ -35,22 +35,35 @@
 }
 #element2 {
   position:fixed;
-  bottom:40px;
-  left:310px;
+  bottom:60px;
+  left:160px;
   padding:5px;
   z-index:100;
 }
 #element3 {
   position:fixed;
-  bottom:40px;
-  left:460px;
+  bottom:80px;
+  left:160px;
   padding:5px;
   z-index:100;
 }
 #element4 {
   position:fixed;
-  bottom:40px;
-  left:610px;
+  bottom:100px;
+  left:160px;
+  padding:5px;
+  z-index:100;
+}
+#element5 {
+  position:fixed;
+  bottom:120px;
+  left:160px;
+  padding:5px;
+  z-index:100;
+}#element6 {
+  position:fixed;
+  bottom:140px;
+  left:160px;
   padding:5px;
   z-index:100;
 }

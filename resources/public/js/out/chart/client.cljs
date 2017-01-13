@@ -33,6 +33,11 @@
  "FOLLOWING"	(str HOST PORT "/img/r.png")})
 (def CHART (volatile! {}))
 (def VEHICLES (volatile! {}))
+(def error-handler (fn [response]
+  (let [{:keys [status status-text]} response]
+    (println (str "AJAX ERROR: " status " " status-text)))))
+(def no-handler {:handler (fn [response])
+ :error-handler error-handler})
 (defn read-transit [x]
   (t/read (t/reader :json) x))
 
@@ -57,10 +62,6 @@
   (asp/stop-process (:movst @veh))
   (.removeLayer @CHART (:marker @veh)))
 (vreset! VEHICLES {}))
-
-(defn error-handler [response]
-  (let [{:keys [status status-text]} response]
-  (println (str "AJAX ERROR: " status " " status-text))))
 
 (defn info [id]
   (GET (str (:command URL) "info?id=" id)
@@ -139,24 +140,6 @@
   (.setView @CHART cen zom {})
   (new-visible)))
 
-(defn move-to [ins]
-  (println :MOVE-TO ins)
-(let [cts (:countries ins)
-       aps (:airports ins)]
-  (cond
-    cts (do (am/selector1 "chart.client" "countries" cts :itself 130)
-            (defn handler1 [sel]
-	(am/ask-server {:whom "direct"
-		  :question "airports"
-		  :country sel})
-	(am/get-answer move-to)))
-    aps (do (am/selector2 "chart.client" "airports" aps :itself 130)
-            (defn handler2 [sel]
-	(am/ask-server {:whom "direct"
-		  :question "move-to"
-		  :airport sel})
-	(am/clear-dialog))) )))
-
 (defn instructions-handler [response]
   (doseq [{:keys [instruct] :as ins} (read-transit response)]
   ;;(println [:INSTRUCT ins])
@@ -174,27 +157,85 @@
 	(add-trail id points options time))
     :map-center (let [{:keys [coord]} ins]
 	(map-center coord))
-    :move-to (move-to ins)     
     (println (str "Unknown instruction: " [instruct ins])))))
 
 (defn receive-instructions []
   (GET (:instructions URL) {:handler instructions-handler
                        :error-handler error-handler}))
 
-(defn watch-visible []
-  (let [bnd (.getBounds @CHART)]
-  (str "watch-visible?n=" (.getNorth bnd)
-                             "&s=" (.getSouth bnd)
-                             "&w=" (.getWest bnd)
-                             "&e=" (.getEast bnd))))
+(defn move-to
+  ([]
+  (am/ask-server {:whom "direct"
+	    :question "countries"})
+  (am/get-answer move-to))
+([cns]
+  (am/selector1 "chart.client" "countries" cns :itself 130)
+  (defn handler1 [sel]
+    (am/ask-server {:whom "direct"
+	       :question "airports"
+	       :country sel})
+    (am/get-answer #(move-to sel %))))
+([cnt aps]
+  (am/selector2 "chart.client" "airports" aps :itself 130)
+  (defn handler2 [sel]
+    (let [prm (str "?country=" cnt
+	"&airport=" sel)]
+      (GET (str (:command URL) "move-to" prm) no-handler)
+      (am/clear-dialog)))))
+
+(defn schedule
+  ([]
+  (am/input1 "chart.client" "new callsign" 80)
+  (defn handler1 [call]
+    (am/input2 "chart.client" "hh:mm" 80)
+      (defn handler2 [tim]
+        (schedule call tim))))
+([call tim]
+  (am/ask-server {:whom "direct"
+	    :question "countries"})
+  (am/get-answer #(schedule call tim %)))
+([call tim cns1]
+  (am/selector3 "chart.client" "from country" cns1 :itself 130)
+  (defn handler3 [sel]
+    (am/ask-server {:whom "direct"
+	       :question "airports"
+	       :country sel})
+    (am/get-answer #(schedule call tim sel %))))
+([call tim cnt1 aps1]
+  (am/selector4 "chart.client" "from airport" aps1 :itself 130)
+  (defn handler4 [sel]
+    (am/ask-server {:whom "direct"
+	    :question "countries"})
+    (am/get-answer #(schedule call tim cnt1 sel %))))
+([call tim cnt1 apt1 cns2]
+  (am/selector5 "chart.client" "to county" cns2 :itself 130)
+  (defn handler5 [sel]
+    (am/ask-server {:whom "direct"
+	       :question "airports"
+	       :country sel})
+    (am/get-answer #(schedule call tim cnt1 apt1 sel %))))
+([call tim cnt1 apt1 cnt2 aps2]
+  (am/selector6 "chart.client" "to airport" aps2 :itself 130)
+  (defn handler6 [sel]
+    (let [prm (str "?callsign=" call
+	"&time=" tim
+	"&country1=" cnt1
+	"&airport1=" apt1
+	"&country2=" cnt2
+	"&airport2=" sel)]
+      (GET (str (:command URL) "schedule" prm) no-handler)
+      (am/clear-dialog)))))
 
 (defn command [cmd]
-  (GET (str (:command URL)
   (condp = cmd
-    "watch-visible" (watch-visible)
-    cmd))
-  {:handler (fn [response])
-   :error-handler error-handler}))
+  "watch-visible" (let [bnd (.getBounds @CHART)
+	          prm (str "?n=" (.getNorth bnd)
+		"&s=" (.getSouth bnd)
+		"&w=" (.getWest bnd)
+		"&e=" (.getEast bnd))]
+	       (GET (str (:command URL) cmd prm) no-handler))
+  "move-to" (move-to)
+  "schedule" (schedule)))
 
 (defn init-chart []
   (println :INIT-CHART)

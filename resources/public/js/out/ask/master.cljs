@@ -1,5 +1,7 @@
 (ns ask.master
-(:require [ajax.core :refer [GET]]))
+(:require 
+  [ajax.core :refer [GET]]
+  [chart.controls :refer [show-chart-controls]]))
 
 (def HOST "http://localhost:")
 (def PORT 4444)
@@ -10,6 +12,9 @@
  :command (str HOST PORT "/command/")
  :question (str HOST PORT "/question/")
  :answer (str HOST PORT "/answer/")})
+(def error-handler (fn [response]
+  (let [{:keys [status status-text]} response]
+    (println (str "AJAX ERROR: " status " " status-text)))))
 (defn by-id  [id]
   (.getElementById js/document id))
 
@@ -23,12 +28,24 @@
     :count  (apply str (for [i (range (count lst))]
                             (str "<option value='" i "'>" (nth lst i) "</option>")))))
 
+(defn input1 [ns header wid]
+  (let [inp (str "<input type='text' onchange='javascript:" ns ".handler1(this.value)'
+	style='width:" wid "px' 
+	value='" header "'>")]
+  (set-html! "element1" inp)))
+
+(defn input2 [ns header wid]
+  (let [inp (str "<input type='text' onchange='javascript:" ns ".handler2(this.value)'
+	style='width:" wid "px' 
+	value='" header "'>")]
+  (set-html! "element2" inp)))
+
 (defn selector1 [ns header lst typ wid]
   (let [sel (str "<select onchange='javascript:" ns ".handler1(this.value)' style='width:" wid "px'>"
                  "<option value='-1'>" header "</option>"
                  (options lst typ)
                  "</select>")]
-    (set-html! "element1" sel)))
+  (set-html! "element1" sel)))
 
 (defn selector2 [ns header lst typ wid]
   (let [sel (str "<select onchange='javascript:" ns ".handler2(this.value)' style='width:" wid "px'>"
@@ -51,9 +68,19 @@
                  "</select>")]
     (set-html! "element4" sel)))
 
-(defn error-handler [response]
-  (let [{:keys [status status-text]} response]
-  (println (str "AJAX ERROR: " status " " status-text))))
+(defn selector5 [ns header lst typ wid]
+  (let [sel (str "<select onchange='javascript:" ns ".handler5(this.value)' style='width:" wid "px'>"
+                 "<option value='-1'>" header "</option>"
+                 (options lst typ)
+                 "</select>")]
+    (set-html! "element5" sel)))
+
+(defn selector6 [ns header lst typ wid]
+  (let [sel (str "<select onchange='javascript:" ns ".handler6(this.value)' style='width:" wid "px'>"
+                 "<option value='-1'>" header "</option>"
+                 (options lst typ)
+                 "</select>")]
+    (set-html! "element6" sel)))
 
 (defn ask-server [params]
   (GET (:question URL) 
@@ -65,12 +92,14 @@
   (GET (:answer URL) 
   {:handler handler
    :error-handler error-handler
-   :response-format :transit})
-nil)
+   :response-format :transit}))
 
 (defn clear-dialog []
   (set-html! "element1" "")
 (set-html! "element2" "")
 (set-html! "element3" "")
-(set-html! "element4" ""))
+(set-html! "element4" "")
+(set-html! "element5" "")
+(set-html! "element6" "")
+(show-chart-controls))
 
