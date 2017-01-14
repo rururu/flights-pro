@@ -17,7 +17,9 @@
  :chart (str HOST PORT "/chart/")
  :directives (str HOST PORT "/directives/")
  :instructions (str HOST PORT "/instructions/")
- :command (str HOST PORT "/command/")})
+ :command (str HOST PORT "/command/")
+ :question (str HOST PORT "/question/")
+ :answer (str HOST PORT "/answer/")})
 (def TIO {:carrier 1000
  :camera 4200
  :directives 911
@@ -44,6 +46,9 @@
 	    :accel 1
                             :time-out 1003}}))
 (def CAM-PROC (volatile! "STOP"))
+(def error-handler (fn [response]
+  (let [{:keys [status status-text]} response]
+    (println (str "AJAX ERROR: " status " " status-text)))))
 (defn num-val [x]
   (if (number? x) x (rdr/read-string x)))
 
@@ -65,10 +70,6 @@
         [:rudder :time-out]
         #(czm/camera :roll 0))
       (czm/camera :roll bnk)))))
-
-(defn error-handler [response]
-  (let [{:keys [status status-text]} response]
-  (println (str "AJAX ERROR: " status " " status-text))))
 
 (defn onboard [call]
   (if (= call "manual")

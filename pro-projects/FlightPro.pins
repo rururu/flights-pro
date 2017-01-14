@@ -1,4 +1,4 @@
-; Fri Jan 13 22:32:26 MSK 2017
+; Sat Jan 14 21:53:54 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -67,7 +67,7 @@
 
 ([FlightPro_Class100024] of  CloNamespace
 
-	(source "(:require\n  [calc.dynamic :as dyn])")
+	(source "(:require\n  [calc.dynamic :refer \n	[equalize\n	 course-closer\n	 step-closer]])")
 	(title "carr.move"))
 
 ([FlightPro_Class100025] of  CloVar
@@ -224,7 +224,7 @@
 
 ([FlightPro_Class140027] of  CloFunction
 
-	(source "(vswap! carr assoc-in [:elevator :target] altitude)\n(dyn/equalize carr :elevator set-altitude :altitude dyn/step-closer)")
+	(source "(vswap! carr assoc-in [:elevator :target] altitude)\n(equalize carr :elevator set-altitude :altitude step-closer)")
 	(title "elevate [carr altitude]"))
 
 ([FlightPro_Class150000] of  ClsRequired
@@ -306,7 +306,7 @@
 
 ([FlightPro_Class160000] of  CloFunction
 
-	(source "(let [[n s w e] @BBX]\n  (if-let [ff (json-web-data (str (:url-flights F24) \"?bounds=\" n \",\" s \",\" w \",\" e))]\n    (vreset! FLIGHTS \n      (->> ff\n        (filter #(vector? (second %)))\n        ;;(filter #(not (empty? (callsign (second %)))))\n        (apply concat)\n        (apply hash-map)))))")
+	(source "(let [[n s w e] @BBX]\n  (if-let [ff (json-web-data (str (:url-flights F24) \"?bounds=\" n \",\" s \",\" w \",\" e))]\n    (vreset! FLIGHTS \n      (->> ff\n        (filter #(vector? (second %)))\n        ;;(filter #(not (empty? (callsign (second %)))))\n        (apply concat)\n        (apply hash-map)\n        (merge @MY-FLIGHTS)))))")
 	(title "flights-in-bbx []"))
 
 ([FlightPro_Class160002] of  CloFunction
@@ -409,7 +409,9 @@
 		[FlightPro_Class210009]
 		[FlightPro_Class210012]
 		[FlightPro_Class210013]
-		[FlightPro_Class260002])
+		[FlightPro_Class260002]
+		[FlightPro_Class480005]
+		[FlightPro_Class480007])
 	(cloNamespace [FlightPro_Class180003])
 	(cloVars
 		[FlightPro_Class210011]
@@ -417,7 +419,8 @@
 		[FlightPro_Class190001]
 		[FlightPro_Class170000]
 		[FlightPro_Class220008]
-		[FlightPro_Class210010])
+		[FlightPro_Class210010]
+		[FlightPro_Class480006])
 	(title "FlightRadar24 Client"))
 
 ([FlightPro_Class180003] of  CloNamespace
@@ -448,7 +451,6 @@
 		[FlightPro_Class310006]
 		[FlightPro_Class80004]
 		[FlightPro_Class130001]
-		[FlightPro_Class80002]
 		[FlightPro_Class140020]
 		[FlightPro_Class300006]
 		[FlightPro_Class140021]
@@ -473,7 +475,8 @@
 		[FlightPro_Class330003]
 		[FlightPro_Class330004]
 		[FlightPro_Class100025]
-		[FlightPro_Class330002])
+		[FlightPro_Class330002]
+		[FlightPro_Class80002])
 	(css [FlightPro_Class120000])
 	(epilogue "(set! (.-onload js/window) (on-load))")
 	(html [FlightPro_Class40000])
@@ -1090,12 +1093,12 @@
 
 ([FlightPro_Class30026] of  CloFunction
 
-	(source "(vswap! carr assoc-in [:rudder :target] course)\n(vswap! carr assoc-in [:rudder :accel] accel)\n(dyn/equalize carr :rudder set-course :course dyn/course-closer)")
+	(source "(vswap! carr assoc-in [:rudder :target] course)\n(vswap! carr assoc-in [:rudder :accel] accel)\n(equalize carr :rudder set-course :course course-closer)")
 	(title "turn [carr course accel]"))
 
 ([FlightPro_Class30027] of  CloFunction
 
-	(source "(vswap! carr assoc-in [:engine :target] speed)\n(dyn/equalize carr :engine set-speed :speed dyn/step-closer)")
+	(source "(vswap! carr assoc-in [:engine :target] speed)\n(equalize carr :engine set-speed :speed step-closer)")
 	(title "accel [carr speed]"))
 
 ([FlightPro_Class310000] of  CloFunction
@@ -1473,22 +1476,6 @@
 
 	(source "(doseq [e (rete.core/facts-with-slot-value 'Flight 'callsign = \"SWA792\")] (protege.core/ctpl e))"))
 
-([FlightPro_Class410016] of  CloFuncall
-
-	(source "(doseq [e (rete.core/facts-with-slot-value 'Flight 'callsign = \"3386143\")] (protege.core/ctpl e))"))
-
-([FlightPro_Class410017] of  CloFuncall
-
-	(source "(doseq [e (rete.core/facts-with-slot-value 'Flight 'callsign = \"N662DS\")] (protege.core/ctpl e))"))
-
-([FlightPro_Class410018] of  CloFuncall
-
-	(source "(doseq [e (rete.core/facts-with-slot-value 'Flight 'callsign = \"UCA4883\")] (protege.core/ctpl e))"))
-
-([FlightPro_Class410019] of  CloFuncall
-
-	(source "(doseq [e (rete.core/facts-with-slot-value 'Flight 'callsign = \"G150\")] (protege.core/ctpl e))"))
-
 ([FlightPro_Class410020] of  Rule
 
 	(lhs "(Flight id ?id age \"OLD\" time ?t1)\n?f (Follow id ?id time 0)\n(not Follow)")
@@ -1623,29 +1610,108 @@
 	(source "(let [{:keys [callsign time country1 airport1 country2 airport2]} params]\n  (println params))\n\"\"")
 	(title "schedule [params]"))
 
-([FlightPro_Class470000] of  CloFuncall
+([FlightPro_Class480000] of  CloProgram
 
-	(source "(ru.rules/pp :all)"))
+	(cloFunctions
+		[FlightPro_Class100027]
+		[FlightPro_Class240001]
+		[FlightPro_Class240002]
+		[FlightPro_Class80000]
+		[FlightPro_Class480002]
+		[FlightPro_Class30007]
+		[FlightPro_Class30011]
+		[FlightPro_Class30000]
+		[FlightPro_Class30027]
+		[FlightPro_Class140027]
+		[FlightPro_Class30026])
+	(cloNamespace [FlightPro_Class480001])
+	(cloVars
+		[FlightPro_Class480003]
+		[FlightPro_Class480004])
+	(title "My Flights Movement"))
 
-([FlightPro_Class470001] of  CloFuncall
+([FlightPro_Class480001] of  CloNamespace
 
-	(source "(rete.core/fire)"))
+	(source "(:require\n  [calc.core :as calc]\n  [calc.geo :as geo]\n  [async.proc :as asp])")
+	(title "my.flights.mov"))
 
-([FlightPro_Class470002] of  CloFuncall
+([FlightPro_Class480002] of  CloFunction
 
-	(source "(doseq [e (rete.core/facts-with-slot-value 'Flight 'callsign = \"FIN62B\")] (protege.core/ctpl e))"))
+	(source "(let [car @carr\n       tur (:turn-point car)\n       hrs (:step-hrs car)\n       elt (+ (:clk tur) hrs)\n       way (* (:rdh tur) elt)\n       [phi lam] (geo/spherical-between (:phi tur) (:lam tur) way (:dir tur))]\n  (vswap! carr assoc :coord [(/ phi PID180) (/ lam PID180)]\n                                :turn-point (assoc tur :clk elt)))")
+	(title "move [carr]"))
 
-([FlightPro_Class470003] of  CloFuncall
+([FlightPro_Class480003] of  CloVar
 
-	(source "(ru.rules/sp :all)"))
+	(source "(/ Math/PI 180)")
+	(title "PID180"))
 
-([FlightPro_Class470004] of  CloFuncall
+([FlightPro_Class480004] of  CloVar
 
-	(source "(ru.rules/f 1121)"))
+	(source "(/ Math/PI 10800)")
+	(title "NMRAD"))
 
-([FlightPro_Class470005] of  CloFuncall
+([FlightPro_Class480005] of  CloFunction
 
-	(source "(ru.rules/pp 'Onboard)"))
+	(source "([mp]\n  (doseq [[id [call crd crs spd alt]] (seq mp)]\n    (merge-my-flights id call crd crs spd alt)))\n([id call [lat lon] crs spd alt]\n  (vswap! MY-FLIGHTS assoc id [0 lat lon crs alt spd 6 7 8 9 10 11 12 13 14 15 call]))")
+	(title "merge-my-flights"))
+
+([FlightPro_Class480006] of  CloVar
+
+	(source "(volatile! {})")
+	(title "MY-FLIGHTS"))
+
+([FlightPro_Class480007] of  CloFunction
+
+	(source "(vswap! MY-FLIGHTS dissoc id)")
+	(title "remove-my-flight [id]"))
+
+([FlightPro_Class490000] of  CloFuncall
+
+	(source "(fr24.client/merge-my-flight \"my34\" \"R22\" [60 30] 45 300 12000)"))
+
+([FlightPro_Class490001] of  CloFuncall
+
+	(source "(fr24.client/merge-my-flight \"my34\" \"R22\" [60 30] 90 300 15000)"))
+
+([FlightPro_Class490002] of  CloFuncall
+
+	(source "(fr24.client/merge-my-flight \"my34\" \"R22\" [60 30] 100 300 17000)"))
+
+([FlightPro_Class490003] of  CloFuncall
+
+	(source "(fr24.client/merge-my-flight \"my34\" \"R22\" [60 30] 100 300 12000)"))
+
+([FlightPro_Class490004] of  CloFuncall
+
+	(source "(fr24.client/merge-my-flight \"my34\" \"R22\" [60 30] 100 300 13000)"))
+
+([FlightPro_Class490005] of  CloFuncall
+
+	(source "(fr24.client/merge-my-flight \"my34\" \"R22\" [60 30] 100 300 14000)"))
+
+([FlightPro_Class490006] of  CloFuncall
+
+	(source "(fr24.client/merge-my-flight \"my34\" \"R22\" [60 30] 100 300 15000)"))
+
+([FlightPro_Class490007] of  CloFuncall
+
+	(source "(fr24.client/merge-my-flight \"my34\" \"R22\" [60 30] 100 300 10000)"))
+
+([FlightPro_Class490008] of  CloFuncall
+
+	(source "(fr24.client/merge-my-flight \"my34\" \"R22\" [60 30] 100 300 8000)"))
+
+([FlightPro_Class490009] of  CloFuncall
+
+	(source "(fr24.client/remove-my-flight \"my34\")"))
+
+([FlightPro_Class490010] of  CloFuncall
+
+	(source "(fr24.client/merge-my-flights {\"my34\" [\"R22\" [60 30] 100 300 8000] \"my35\" [\"R23\" [60 30] 180 300 8000]})"))
+
+([FlightPro_Class490011] of  CloFuncall
+
+	(source "(fr24.client/remove-my-flight \"my35\")"))
 
 ([FlightPro_Class5] of  CloVar
 

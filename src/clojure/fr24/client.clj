@@ -13,6 +13,7 @@
 (def AIRPORTS (volatile! nil))
 (def FL-INFOS (volatile! {}))
 (def STATUS (volatile! "START"))
+(def MY-FLIGHTS (volatile! {}))
 (defn json-web-data [url]
   (let [r @(client/get url)
        s (:status r)]
@@ -55,7 +56,8 @@
         (filter #(vector? (second %)))
         ;;(filter #(not (empty? (callsign (second %)))))
         (apply concat)
-        (apply hash-map))))))
+        (apply hash-map)
+        (merge @MY-FLIGHTS))))))
 
 (defn by-call [cs]
   (if-let [flt (filter #(= cs (callsign (second %)))
@@ -105,4 +107,14 @@
 
 (defn clear-flights []
   (vreset! FLIGHTS {}))
+
+(defn merge-my-flights
+  ([mp]
+  (doseq [[id [call crd crs spd alt]] (seq mp)]
+    (merge-my-flights id call crd crs spd alt)))
+([id call [lat lon] crs spd alt]
+  (vswap! MY-FLIGHTS assoc id ["0" lat lon crs alt spd "6" "7" "8" "9" "10" "11" "12" "13" "14" "15" call])))
+
+(defn remove-my-flight [id]
+  (vswap! MY-FLIGHTS dissoc id))
 

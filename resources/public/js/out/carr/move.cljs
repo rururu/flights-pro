@@ -1,6 +1,9 @@
 (ns carr.move
 (:require
-  [calc.dynamic :as dyn]))
+  [calc.dynamic :refer 
+	[equalize
+	 course-closer
+	 step-closer]]))
 
 (def PID180 (/ Math.PI 180))
 (def NMRAD (/ Math.PI 10800))
@@ -53,13 +56,13 @@
 (defn turn [carr course accel]
   (vswap! carr assoc-in [:rudder :target] course)
 (vswap! carr assoc-in [:rudder :accel] accel)
-(dyn/equalize carr :rudder set-course :course dyn/course-closer))
+(equalize carr :rudder set-course :course course-closer))
 
 (defn accel [carr speed]
   (vswap! carr assoc-in [:engine :target] speed)
-(dyn/equalize carr :engine set-speed :speed dyn/step-closer))
+(equalize carr :engine set-speed :speed step-closer))
 
 (defn elevate [carr altitude]
   (vswap! carr assoc-in [:elevator :target] altitude)
-(dyn/equalize carr :elevator set-altitude :altitude dyn/step-closer))
+(equalize carr :elevator set-altitude :altitude step-closer))
 
