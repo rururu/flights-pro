@@ -12,6 +12,8 @@
   (println "  Annotated instance of WorkingPrograms not found!"))
 (println"Starting Pro Server...")
 (eval '(pro.server/start-server))
+(println"Starting My Flights Movement...")
+(eval '(my.flights.move/start-movement))
 (println"Starting Expert System...")
 (eval '(ru.rules/run-engine "Flights Pro Run")))
 

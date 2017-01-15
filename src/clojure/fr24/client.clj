@@ -2,7 +2,8 @@
 (:require
   [org.httpkit.client :as client]
   [clj-json.core :as json]
-  [async.proc :as asp]))
+  [async.proc :as asp]
+  [my.flights.move :as mfs]))
 
 (def F24 {:url-flights "http://data-live.flightradar24.com/zones/fcgi/feed.js"
  :url-airports "http://www.flightradar24.com/_json/airports.php"
@@ -13,7 +14,6 @@
 (def AIRPORTS (volatile! nil))
 (def FL-INFOS (volatile! {}))
 (def STATUS (volatile! "START"))
-(def MY-FLIGHTS (volatile! {}))
 (defn json-web-data [url]
   (let [r @(client/get url)
        s (:status r)]
@@ -48,6 +48,19 @@
 (defn callsign [iod]
   (nth (dat iod) 16))
 
+(defn merge-my-flights [mff ff]
+  (loop [mff (seq mff) ff ff]
+  (if (seq mff)
+    (let [[id mf] (first mff)
+           mf @mf
+           [lat lon] (:coord mf)]
+      (recur (rest mff) 
+        (assoc ff id 
+	[0 lat lon (:course mf) (:altitude mf) (:speed mf) 
+	 6 7 8 9 10 11 12 13 14 15
+	 (:mode mf)])))
+    ff)))
+
 (defn flights-in-bbx []
   (let [[n s w e] @BBX]
   (if-let [ff (json-web-data (str (:url-flights F24) "?bounds=" n "," s "," w "," e))]
@@ -57,7 +70,7 @@
         ;;(filter #(not (empty? (callsign (second %)))))
         (apply concat)
         (apply hash-map)
-        (merge @MY-FLIGHTS))))))
+        (merge-my-flights @mfs/CARRIERS))))))
 
 (defn by-call [cs]
   (if-let [flt (filter #(= cs (callsign (second %)))
@@ -107,14 +120,4 @@
 
 (defn clear-flights []
   (vreset! FLIGHTS {}))
-
-(defn merge-my-flights
-  ([mp]
-  (doseq [[id [call crd crs spd alt]] (seq mp)]
-    (merge-my-flights id call crd crs spd alt)))
-([id call [lat lon] crs spd alt]
-  (vswap! MY-FLIGHTS assoc id ["0" lat lon crs alt spd "6" "7" "8" "9" "10" "11" "12" "13" "14" "15" call])))
-
-(defn remove-my-flight [id]
-  (vswap! MY-FLIGHTS dissoc id))
 

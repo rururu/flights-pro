@@ -1,4 +1,4 @@
-(ns my.flights.mov
+(ns my.flights.move
 (:require
   [calc.core :as calc]
   [calc.geo :as geo]
@@ -6,6 +6,32 @@
 
 (def PID180 (/ Math/PI 180))
 (def NMRAD (/ Math/PI 10800))
+(def TIO {:carrier 1000
+ :camera 4200
+ :directives 911
+ :instructions 979
+ :vehicles 200
+ :display 831})
+(def CARRIER (volatile! {:mode "?"
+               :coord [0 0]
+               :altitude 0
+               :speed 0
+               :course 0
+               :step-hrs (double (/ (:carrier TIO) 3600000))
+               :bank-params [20 8 64 2]
+               :rudder {:target 0
+                            :step 3
+	    :accel 1
+                            :time-out 1011}
+               :elevator {:target 0
+                            :step 4
+	    :accel 1
+                            :time-out 997}
+               :engine {:target 0
+                            :step 1
+	    :accel 1
+                            :time-out 1003}}))
+(def CARRIERS (volatile! {}))
 (defn set-turn-point
   ([carr]
   (let [car @carr]
@@ -85,8 +111,35 @@
   (vswap! carr assoc-in [:elevator :target] altitude)
 (equalize carr :elevator set-altitude :altitude step-closer))
 
-(defn turn [carr course accel]
+(defn turn
+  ([carr course]
+  (turn carr course 1))
+([carr course accel]
   (vswap! carr assoc-in [:rudder :target] course)
-(vswap! carr assoc-in [:rudder :accel] accel)
-(equalize carr :rudder set-course :course course-closer))
+  (vswap! carr assoc-in [:rudder :accel] accel)
+  (equalize carr :rudder set-course :course course-closer)))
+
+(defn add-my-flight [id call coord crs spd alt]
+  (let [carr (volatile! (assoc (merge {} @CARRIER)
+	:mode call
+   	:coord coord
+   	:course crs
+   	:speed spd
+   	:altitude alt))]
+  (set-turn-point carr)
+  (vswap! CARRIERS assoc id carr)))
+
+(defn rem-my-flight [id]
+  (vswap! CARRIERS dissoc id))
+
+(defn control [id func val]
+  (if-let [carr (get @CARRIERS id)]
+  (func carr val)))
+
+(defn start-movement []
+  (letfn [(move-all [carrs]
+	(doseq [carr (vals @carrs)]
+	  (move carr)))]
+  (asp/repeater move-all CARRIERS (:carrier TIO))
+  (println (str "  My Flights Movement Interval: " (:carrier TIO)))))
 
