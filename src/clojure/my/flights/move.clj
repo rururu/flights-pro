@@ -126,6 +126,7 @@
    	:course crs
    	:speed spd
    	:altitude alt))]
+  (vswap! carr assoc-in [:elevator :accel] 4)
   (set-turn-point carr)
   (vswap! CARRIERS assoc id carr)))
 

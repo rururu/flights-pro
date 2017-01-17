@@ -23,6 +23,7 @@
 (defn cz-processor [e]
   (let [data (.-data e)
        data (js/JSON.parse data)]
+  ;;(println [:CZML data])
   (.process CZM-SRC data)))
 
 (defn fly-control [lat lon alt hea pit rol per]
@@ -36,7 +37,8 @@
                   :easingFunction (fn [time] time)})))
 
 (defn fly-to [lat lon alt crs per]
-  (let [pitch (condp = (:view @CAMERA)
+  ;;(println [:CZ-FLY-TO lat lon alt crs per])
+(let [pitch (condp = (:view @CAMERA)
                 "UP" 90
                 "DOWN" -90
                 (:pitch @CAMERA))

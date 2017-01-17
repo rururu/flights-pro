@@ -53,16 +53,27 @@
   (vswap! carr assoc :coord [(/ phi PID180) (/ lam PID180)]
                                 :turn-point (assoc tur :clk elt))))
 
-(defn turn [carr course accel]
+(defn turn
+  ([carr course]
   (vswap! carr assoc-in [:rudder :target] course)
-(vswap! carr assoc-in [:rudder :accel] accel)
-(equalize carr :rudder set-course :course course-closer))
+  (equalize carr :rudder set-course :course course-closer))
+([carr course accel]
+  (vswap! carr assoc-in [:rudder :accel] accel)
+  (turn carr course)))
 
-(defn accel [carr speed]
+(defn accel
+  ([carr speed]
   (vswap! carr assoc-in [:engine :target] speed)
-(equalize carr :engine set-speed :speed step-closer))
+  (equalize carr :engine set-speed :speed step-closer))
+([carr speed acl]
+  (vswap! carr assoc-in [:engine :accel] acl)
+  (accel carr speed)))
 
-(defn elevate [carr altitude]
+(defn elevate
+  ([carr altitude]
   (vswap! carr assoc-in [:elevator :target] altitude)
-(equalize carr :elevator set-altitude :altitude step-closer))
+  (equalize carr :elevator set-altitude :altitude step-closer))
+([carr altitude accel]
+  (vswap! carr assoc-in [:elevator :accel] accel)
+  (elevate carr altitude)))
 

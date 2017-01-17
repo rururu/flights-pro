@@ -7,7 +7,8 @@
 (def CZ-CHAN (asp/mk-chan))
 (def DOC-SND true)
 (defn send-event [typ dat]
-  (asp/pump-in CZ-CHAN [typ (.trim dat)]))
+  ;;(println [:CZ-EVT typ dat])
+(asp/pump-in CZ-CHAN [typ (.trim dat)]))
 
 (defn events []
   (let [evt-hr (fn [[typ dat]]

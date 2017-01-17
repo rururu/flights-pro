@@ -40,7 +40,7 @@
 	'speed (fr24/speed v)
 	'altitude alt
 	'time crt
-	'point4d [lat lon alt (iso8601curt)]
+	'point4d [lat lon (int (/ alt 3.28084)) (iso8601curt)]
 	'age "NEW"
 	'status (if (> alt 0)
                                      "LEVEL"
