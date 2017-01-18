@@ -241,7 +241,7 @@
   (println :INIT-CHART)
 (let [m (-> js/L
               (.map "map")
-              (.setView (array 40.8, -74.0) 10)) ;; Frankfurt
+              (.setView (array 60.0, 30.0) 10)) ;; New York 40.8, -74.0
         tile1 (-> js/L (.tileLayer "http://{s}.tile.osm.org/{z}/{x}/{y}.png"
                                    #js{:maxZoom 16
                                        :attribution "Ru, OpenStreetMap &copy;"}))

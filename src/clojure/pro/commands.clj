@@ -95,8 +95,7 @@
          :points pts
          :options {:weight 3
                         :color "purple"}
-         :time (:trail TIM)}))
-  ""))
+         :time (:trail TIM)}))))
 
 (defn set-map-view [coord]
   (asp/pump-in (:instructions CHN)
@@ -104,7 +103,8 @@
 	 :coord coord}))
 
 (defn info [params]
-  (let [id (:id params)]
+  (println [:INFO params])
+(let [id (:id params)]
   (if-let [inf (fr24/fl-info id)]
     (let [cal (fr24/callsign id)
            apt (inf "airport")
@@ -139,7 +139,7 @@
 "")
 
 (defn onboard [params]
-  (println [:PARAMS params])
+  (println [:ONBOARD params])
 (let [cls (:callsign params)]
   (condp = cls
     "manual" (do
@@ -151,11 +151,12 @@
                   (asp/pump-in (:directives CHN)
 	{:directive :callsigns
 	 :list lst}))
-    (rete/assert-frame ['Onboard 'callsign cls 'time 0]))
-  ""))
+    (rete/assert-frame ['Onboard 'callsign cls 'time 0])))
+"")
 
 (defn terrain [params]
-  "yes")
+  (println [:TERRAIN params])
+"yes")
 
 (defn follow [params]
   (println [:PARAMS params])
@@ -169,11 +170,14 @@
   ""))
 
 (defn trail [params]
-  (println [:PARAMS params])
-(do-trail (:id params) []))
+  (println [:TRAIL params])
+(do-trail (:id params) [])
+"")
 
 (defn stopfollow [params]
-  (rete/assert-frame ['Follow 'id "STOP" 'time 0]))
+  (println [:STOPFOLLOW params])
+(rete/assert-frame ['Follow 'id "STOP" 'time 0])
+"")
 
 (defn direct-question [pp]
   (condp = (:question pp)
@@ -198,7 +202,8 @@
 {:status 204})
 
 (defn move-to [params]
-  (let [{:keys [country airport]} params]
+  (println [:MOVE-TO params])
+(let [{:keys [country airport]} params]
   (if-let [apt (get-in @fr24/AIRPORTS [country airport])]
     (asp/pump-in (:instructions CHN)
       {:instruct :map-center
@@ -206,7 +211,15 @@
 "")
 
 (defn schedule [params]
-  (let [{:keys [callsign time country1 airport1 country2 airport2]} params]
-  (println params))
+  (println [:SCHEDULER params])
+(let [{:keys [callsign time country1 airport1 country2 airport2]} params
+       abc (fr24/airports-by-country)
+       apf (get-in abc [country1 airport1])
+       apt (get-in abc [country2 airport2])]
+  (rete/assert-frame ['Schedule 
+	'callsign callsign
+	'time time
+	'from apf
+	'to apt]))
 "")
 

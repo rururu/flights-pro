@@ -1,4 +1,4 @@
-; Tue Jan 17 22:05:36 MSK 2017
+; Wed Jan 18 22:11:00 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -352,7 +352,7 @@
 
 ([FlightPro_Class160011] of  CloFunction
 
-	(source "(println :INIT-CHART)\n(let [m (-> js/L\n              (.map \"map\")\n              (.setView (array 40.8, -74.0) 10)) ;; Frankfurt\n        tile1 (-> js/L (.tileLayer \"http://{s}.tile.osm.org/{z}/{x}/{y}.png\"\n                                   #js{:maxZoom 16\n                                       :attribution \"Ru, OpenStreetMap &copy;\"}))\n        tile2 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile3 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile4 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile5 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        base (clj->js {\"OpenStreetMap\" tile1\n                       \"Google Satellite\" tile2\n                       \"Google Streets\" tile3\n                       \"Google Hybrid\" tile4\n                       \"Google Terrain\" tile5})\n        ctrl (-> js/L (.control.layers base nil))]\n  (.addTo tile1 m)\n  (.addTo ctrl m)\n  (.on m \"mousemove\"\n         (fn [e] (ctl/mouse-move (.. e -latlng -lat) (.. e -latlng -lng))))\n  (vreset! CHART m))")
+	(source "(println :INIT-CHART)\n(let [m (-> js/L\n              (.map \"map\")\n              (.setView (array 60.0, 30.0) 10)) ;; New York 40.8, -74.0\n        tile1 (-> js/L (.tileLayer \"http://{s}.tile.osm.org/{z}/{x}/{y}.png\"\n                                   #js{:maxZoom 16\n                                       :attribution \"Ru, OpenStreetMap &copy;\"}))\n        tile2 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile3 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile4 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile5 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        base (clj->js {\"OpenStreetMap\" tile1\n                       \"Google Satellite\" tile2\n                       \"Google Streets\" tile3\n                       \"Google Hybrid\" tile4\n                       \"Google Terrain\" tile5})\n        ctrl (-> js/L (.control.layers base nil))]\n  (.addTo tile1 m)\n  (.addTo ctrl m)\n  (.on m \"mousemove\"\n         (fn [e] (ctl/mouse-move (.. e -latlng -lat) (.. e -latlng -lng))))\n  (vreset! CHART m))")
 	(title "init-chart []"))
 
 ([FlightPro_Class160012] of  CloFunction
@@ -798,7 +798,7 @@
 
 ([FlightPro_Class230000] of  CloFuncall
 
-	(source "(count fr24.client/FLIGHTS)"))
+	(source "(es/start-time \"19:32\")"))
 
 ([FlightPro_Class230001] of  CloFunction
 
@@ -862,7 +862,11 @@
 
 ([FlightPro_Class250000] of  CloFuncall
 
-	(source "c``"))
+	(source "(rete.core/facts-with-slot-value 'Flight 'id \"R1\")"))
+
+([FlightPro_Class250001] of  CloFuncall
+
+	(source "(es/start-time \"18:32\")"))
 
 ([FlightPro_Class250002] of  CloFunction
 
@@ -921,6 +925,10 @@
 	(source "(println \"Loading Clojure Programs...\")\n(if-let [wps (ClojureTab/findAnnotated (cls-instances \"WorkingPrograms\") nil)]\n  (loop [i 1 pins (svs wps \"cloPrograms\")]\n    (when (seq pins)\n      (println (str \" 1.\" i \" \" (sv (first pins) \"title\") \" = \" (ClojureTab/loadProgram (first pins)) ))\n      (recur (inc i) (rest pins))))\n  (println \"  Annotated instance of WorkingPrograms not found!\"))\n(println\"Starting Pro Server...\")\n(eval '(pro.server/start-server))\n(println\"Starting My Flights Movement...\")\n(eval '(my.flights.move/start-movement))\n(println\"Starting Expert System...\")\n(eval '(ru.rules/run-engine \"Flights Pro Run\"))")
 	(title "clojure-work []"))
 
+([FlightPro_Class260001] of  CloFuncall
+
+	(source "(rete.core/facts-with-slot-value 'Flight 'id = \"R1\")"))
+
 ([FlightPro_Class260002] of  CloFunction
 
 	(source "(vreset! FLIGHTS {})")
@@ -941,6 +949,66 @@
 	(source "(set-html! \"onboard-fld\" \n  (str \"<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>\"\n          (if (empty? list)\n            (str \"<option value='callsign'>callsign</option>\n                   <option value='select'>select</option>\")\n            (str \"<option value='select'>select</option>\"\n              (apply str (for [e list]\n                                (str \"<option value='\" e \"'>\" e \"</option>\")))))\n        \"</select>\"))")
 	(title "callsigns [list]"))
 
+([FlightPro_Class270002] of  CloFuncall
+
+	(source "(es/start-time \"18:30\")"))
+
+([FlightPro_Class270003] of  CloFuncall
+
+	(source "(es/start-time \"20:30\")"))
+
+([FlightPro_Class270004] of  CloFuncall
+
+	(source "(es/start-time \"17:30\")"))
+
+([FlightPro_Class270005] of  CloFuncall
+
+	(source "(ru.rules/pp 'Flight)"))
+
+([FlightPro_Class270007] of  CloFuncall
+
+	(source "(my.flights.move/rem-my-flight \"R1\")"))
+
+([FlightPro_Class270008] of  CloFuncall
+
+	(source "my.flights.move/CARRIERS"))
+
+([FlightPro_Class270009] of  CloFuncall
+
+	(source "(def abc (fr24.client/airports-by-country))"))
+
+([FlightPro_Class270010] of  CloFuncall
+
+	(source "(get-in [\"Russia\"])"))
+
+([FlightPro_Class270011] of  CloFuncall
+
+	(source "(get-in abc [\"Russia\"])"))
+
+([FlightPro_Class270012] of  CloFuncall
+
+	(source "(get-in abc [\"Russia\" \"Petropavlovsk-Kamchatsky Airport\"])"))
+
+([FlightPro_Class270013] of  CloFuncall
+
+	(source "(ru.rules/sp :all)"))
+
+([FlightPro_Class270015] of  CloFuncall
+
+	(source "(my.flights.move/rem-my-flight \"R2\")"))
+
+([FlightPro_Class270016] of  CloFuncall
+
+	(source "(my.flights.move/rem-my-flight \"R44\")"))
+
+([FlightPro_Class270017] of  CloFuncall
+
+	(source "fr24.client/FLIGHTS"))
+
+([FlightPro_Class270018] of  CloFuncall
+
+	(source "(ru.rules/pp 'Schedule)"))
+
 ([FlightPro_Class280000] of  CloProgram
 
 	(cloFunctions
@@ -948,7 +1016,9 @@
 		[FlightPro_Class200001]
 		[FlightPro_Class250011]
 		[FlightPro_Class260003]
-		[FlightPro_Class90005])
+		[FlightPro_Class90005]
+		[FlightPro_Class490000]
+		[FlightPro_Class490002])
 	(cloNamespace [FlightPro_Class280001])
 	(cloVars
 		[FlightPro_Class70000]
@@ -958,7 +1028,7 @@
 
 ([FlightPro_Class280001] of  CloNamespace
 
-	(source "(:require\n  [pro.commands :as cmd]\n  [async.proc :as asp]\n  [cesium.core :as czs]\n  [calc.core :as calc]\n  [calc.geo :as geo]\n  [fr24.client :as fr24])")
+	(source "(:require\n  [pro.commands :as cmd]\n  [async.proc :as asp]\n  [cesium.core :as czs]\n  [calc.core :as calc]\n  [calc.geo :as geo]\n  [fr24.client :as fr24])\n(:import\n  java.util.Calendar)")
 	(title "es"))
 
 ([FlightPro_Class290000] of  CloFunction
@@ -1172,7 +1242,10 @@
 	(butt-run "Run/ru.rules/run-engine")
 	(butt-step "Step/ru.rules/step-engine")
 	(mode run)
-	(rule-sets [FlightPro_Class320010])
+	(rule-sets
+		[FlightPro_Class320010]
+		[FlightPro_Class410000]
+		[FlightPro_Class300001])
 	(steps 1)
 	(title "Flights Pro Run"))
 
@@ -1194,15 +1267,15 @@
 
 ([FlightPro_Class330000] of  Rule
 
-	(lhs "?fp (FlightPlan id ?id\n	takeoff ?tof\n	(vector? ?tof))\n(Flight age \"CURRENT\" \n	id ?id\n	speed ?spd\n	altitude ?alt\n	((> ?spd (first ?tof))\n	 (> ?alt (second ?tof))))")
+	(lhs "?fp (FlightPlan id ?id\n	takeoff ?tof\n	(vector? ?tof))\n(Flight age \"CURRENT\" \n	id ?id\n	speed ?spd\n	altitude ?alt\n	((> ?spd (first (nth ?tof 3)))\n	 (> ?alt (first (nth ?tof 4)))))")
 	(rhs "(println [:TakeoffDone ?id])\n(modify ?fp takeoff \"DONE\")")
 	(salience 0)
 	(title "mf:TakeoffDone"))
 
 ([FlightPro_Class330001] of  Rule
 
-	(lhs "?fp (FlightPlan id ?id\n	start-time ?stm\n	takeoff ?tof)\n(Flight age \"CURRENT\" \n	id ?id\n	time ?tim\n	(>= ?tim ?stm))")
-	(rhs "(my.flight.move/control ?id set-course (nth ?tof 2))\n(my.flight.move/control ?id accel (first ?tof) 8)\n(my.flight.move/control ?id elevate (second ?tof) 6)")
+	(lhs "?fp (FlightPlan id ?id\n	start-time ?stm\n	takeoff ?tof)\n(Flight age \"CURRENT\"\n	id ?id\n	time ?tim\n	(>= ?tim ?stm))")
+	(rhs "(println [:TakeoffStart ?id ?tof])\n(let [[_ _ _ [finish-spd spd-accel] [finish-alt alt-accel]] ?tof]\n  (my.flights.move/control ?id my.flights.move/accel finish-spd spd-accel)\n  (my.flights.move/control ?id my.flights.move/elevate finish-alt alt-accel))")
 	(salience 0)
 	(title "mf:TakeoffStart"))
 
@@ -1239,7 +1312,7 @@
 ([FlightPro_Class340002] of  Rule
 
 	(lhs "?sd (Schedule callsign ?csn\n	time ?tim\n	from ?frm\n	to ?to)")
-	(rhs "(let [stm (es/start-time ?tim)]\n  (my.flight.move/add-my-flight ?csn ?csn (es/parking ?frm) 0 0 0)\n  (asser FlightPlan id ?csn\n	start-time ?stm\n	takeoff (es/takeoff-plan ?frm))\n  (retract ?sd))")
+	(rhs "(if-let [stm (es/start-time ?tim)]\n  (let [[start-crd start-alt start-crs _ _ :as tof] (es/takeoff-plan ?frm)]\n     (my.flights.move/add-my-flight ?csn ?csn start-crd start-crs 0 start-alt)\n     (asser FlightPlan id ?csn\n	start-time stm\n	takeoff tof)))")
 	(salience 0)
 	(title "mf:FlightPlan"))
 
@@ -1400,6 +1473,10 @@
 		[FlightPro_Class340002]
 		[FlightPro_Class330000]
 		[FlightPro_Class330001])
+	(templates
+		[Flight]
+		[FlightPlan]
+		[Schedule])
 	(title "My Flights"))
 
 ([FlightPro_Class410001] of  Rule
@@ -1547,7 +1624,7 @@
 
 ([FlightPro_Class460002] of  CloFunction
 
-	(source "(println [:SCHEDULER params])\n(let [{:keys [callsign time country1 airport1 country2 airport2]} params\n       abc (fr24/airports-by-country)\n       apf (get-in abc [country1 name1])\n       apt (get-in abc [country2 name2])]\n  (rete/assert-frame ['Schedule \n	'callsign callsign\n	'time time\n	'from apf\n	'to apt]))\n\"\"")
+	(source "(println [:SCHEDULER params])\n(let [{:keys [callsign time country1 airport1 country2 airport2]} params\n       abc (fr24/airports-by-country)\n       apf (get-in abc [country1 airport1])\n       apt (get-in abc [country2 airport2])]\n  (rete/assert-frame ['Schedule \n	'callsign callsign\n	'time time\n	'from apf\n	'to apt]))\n\"\"")
 	(title "schedule [params]"))
 
 ([FlightPro_Class470000] of  CloVar
@@ -1627,6 +1704,48 @@
 	(source "(loop [mff (seq mff) ff ff]\n  (if (seq mff)\n    (let [[id mf] (first mff)\n           mf @mf\n           [lat lon] (:coord mf)]\n      (recur (rest mff) \n        (assoc ff id \n	[0 lat lon (:course mf) (:altitude mf) (:speed mf) \n	 6 7 8 9 10 11 12 13 14 15\n	 (:mode mf)])))\n    ff))")
 	(title "merge-my-flights [mff ff]"))
 
+([FlightPro_Class490000] of  CloFunction
+
+	(source "(println [:START-TIME tim])\n(let [[h m :as hm] (seq (.split tim \":\"))]\n  (if (and (seq hm) (= (count hm) 2))\n    (let [h (read-string h)\n           m (read-string m)]\n      (if (and (number? h) (number? m) (<= 0 h 23) (<= 0 m 59))\n        (let [cld (Calendar/getInstance)]\n          (.set cld Calendar/HOUR_OF_DAY h)\n          (.set cld Calendar/MINUTE m)\n          (.set cld Calendar/SECOND 0)\n          (.getTimeInMillis cld))))))")
+	(title "start-time [tim]"))
+
+([FlightPro_Class490002] of  CloFunction
+
+	(source "(println [:TAKE-OFF apt])\n;; [[start-lat start-lon] start-alt start-crs [finish-spd spd-accel] [finish-alt alt-accel]]\n[[(get apt \"lat\") (get apt \"lon\")] (get apt \"alt\") 135 [220 8] [1500 6]]")
+	(title "takeoff-plan [apt]"))
+
+([FlightPro_Class490003] of  CloFuncall
+
+	(source "(ru.rules/pp 'FlightPlan)"))
+
+([FlightPro_Class490004] of  CloFuncall
+
+	(source "(ru.rules/pp 'Scheduler)"))
+
+([FlightPro_Class490005] of  CloFuncall
+
+	(source "(.split \"18:30\" \":\")"))
+
+([FlightPro_Class490006] of  CloFuncall
+
+	(source "(seq (.split \"18:30\" \":\"))"))
+
+([FlightPro_Class490007] of  CloFuncall
+
+	(source "(let [[h m :as hm] (seq (.split \"\" \":\"))]   (if (and (seq hm) (= (count hm) 2)) [h m]))"))
+
+([FlightPro_Class490008] of  CloFuncall
+
+	(source "(let [[h m :as hm] (seq (.split \"ww\" \":\"))]   (if (and (seq hm) (= (count hm) 2)) [h m]))"))
+
+([FlightPro_Class490009] of  CloFuncall
+
+	(source "(let [[h m :as hm] (seq (.split \"w:g\" \":\"))]   (if (and (seq hm) (= (count hm) 2)) [h m]))"))
+
+([FlightPro_Class490010] of  CloFuncall
+
+	(source "(es/start-time \"19:30\")"))
+
 ([FlightPro_Class5] of  CloVar
 
 	(source "(js/Cesium.CzmlDataSource.)")
@@ -1654,90 +1773,6 @@
 		[FlightPro_Class0])
 	(documentation [FlightPro_Class60000])
 	(title "Cezium Client"))
-
-([FlightPro_Class510000] of  CloFuncall
-
-	(source "(my.flights.move/add-my-flight \"m1\" \"R1\" [59.6 29.84] 85 500 38000)"))
-
-([FlightPro_Class510001] of  CloFuncall
-
-	(source "(my.flights.move/control \"m1\" my.flights.move/turn 261)"))
-
-([FlightPro_Class510002] of  CloFuncall
-
-	(source "(my.flights.move/add-my-flight \"m1\" \"R1\" [59.54 29.0] 261 500 38000)"))
-
-([FlightPro_Class510003] of  CloFuncall
-
-	(source "(my.flights.move/control \"m1\" my.flights.move/turn 249)"))
-
-([FlightPro_Class510004] of  CloFuncall
-
-	(source "(my.flights.move/control \"m1\" my.flights.move/turn 251)"))
-
-([FlightPro_Class510005] of  CloFuncall
-
-	(source "(my.flights.move/control \"m1\" my.flights.move/accel 516)"))
-
-([FlightPro_Class510006] of  CloFuncall
-
-	(source "(my.flights.move/control \"m1\" my.flights.move/accel 500)"))
-
-([FlightPro_Class510007] of  CloFuncall
-
-	(source "(my.flights.move/control \"m1\" my.flights.move/turn 245"))
-
-([FlightPro_Class510008] of  CloFuncall
-
-	(source "(my.flights.move/control \"m1\" my.flights.move/turn 245)"))
-
-([FlightPro_Class510009] of  CloFuncall
-
-	(source "(my.flights.move/control \"m1\" my.flights.move/turn 200)"))
-
-([FlightPro_Class510010] of  CloFuncall
-
-	(source "(my.flights.move/control \"m1\" my.flights.move/turn 248)"))
-
-([FlightPro_Class510011] of  CloFuncall
-
-	(source "(my.flights.move/control \"m1\" my.flights.move/accel 1000)"))
-
-([FlightPro_Class510012] of  CloFuncall
-
-	(source "(my.flights.move/control \"m1\" my.flights.move/turn 250)"))
-
-([FlightPro_Class510013] of  CloFuncall
-
-	(source "(my.flights.move/control \"m1\" my.flights.move/turn 100)"))
-
-([FlightPro_Class510014] of  CloFuncall
-
-	(source "(my.flights.move/control \"m1\" my.flights.move/turn 40)"))
-
-([FlightPro_Class510015] of  CloFuncall
-
-	(source "(my.flights.move/control \"m1\" my.flights.move/turn 20)"))
-
-([FlightPro_Class510016] of  CloFuncall
-
-	(source "(my.flights.move/control \"m1\" my.flights.move/turn 260)"))
-
-([FlightPro_Class510017] of  CloFuncall
-
-	(source "(my.flights.move/control \"m1\" my.flights.move/turn 240)"))
-
-([FlightPro_Class510018] of  CloFuncall
-
-	(source "(my.flights.move/control \"m1\" my.flights.move/accel 1500)"))
-
-([FlightPro_Class510019] of  CloFuncall
-
-	(source "(my.flights.move/control \"m1\" my.flights.move/turn 235)"))
-
-([FlightPro_Class510020] of  CloFuncall
-
-	(source "(my.flights.move/control \"m1\" my.flights.move/turn 230)"))
 
 ([FlightPro_Class60000] of  CloDocumentation
 

@@ -103,21 +103,29 @@
                                    #(proc-fn carr) 
                                    (:time-out g)))))
 
-(defn accel [carr speed]
+(defn accel
+  ([carr speed]
   (vswap! carr assoc-in [:engine :target] speed)
-(equalize carr :engine set-speed :speed step-closer))
+  (equalize carr :engine set-speed :speed step-closer))
+([carr speed acl]
+  (vswap! carr assoc-in [:engine :accel] acl)
+  (accel carr speed)))
 
-(defn elevate [carr altitude]
+(defn elevate
+  ([carr altitude]
   (vswap! carr assoc-in [:elevator :target] altitude)
-(equalize carr :elevator set-altitude :altitude step-closer))
+  (equalize carr :elevator set-altitude :altitude step-closer))
+([carr altitude accel]
+  (vswap! carr assoc-in [:elevator :accel] accel)
+  (elevate carr altitude)))
 
 (defn turn
   ([carr course]
-  (turn carr course 1))
-([carr course accel]
   (vswap! carr assoc-in [:rudder :target] course)
+  (equalize carr :rudder set-course :course course-closer))
+([carr course accel]
   (vswap! carr assoc-in [:rudder :accel] accel)
-  (equalize carr :rudder set-course :course course-closer)))
+  (turn carr course)))
 
 (defn add-my-flight [id call coord crs spd alt]
   (let [carr (volatile! (assoc (merge {} @CARRIER)
@@ -133,9 +141,13 @@
 (defn rem-my-flight [id]
   (vswap! CARRIERS dissoc id))
 
-(defn control [id func val]
+(defn control
+  ([id func val]
   (if-let [carr (get @CARRIERS id)]
-  (func carr val)))
+    (func carr val)))
+([id func val accel]
+  (if-let [carr (get @CARRIERS id)]
+    (func carr val accel))))
 
 (defn start-movement []
   (letfn [(move-all [carrs]

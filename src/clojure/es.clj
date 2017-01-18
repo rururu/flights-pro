@@ -5,7 +5,9 @@
   [cesium.core :as czs]
   [calc.core :as calc]
   [calc.geo :as geo]
-  [fr24.client :as fr24]))
+  [fr24.client :as fr24])
+(:import
+  java.util.Calendar))
 
 (def HOST "http://localhost:")
 (def PORT 4444)
@@ -68,4 +70,22 @@
         (read-string (format "%.1f" (float va)))
         (read-string (format "%.2f" (float vs)))])
       (recur (inc n) (rest y))) )))
+
+(defn start-time [tim]
+  (println [:START-TIME tim])
+(let [[h m :as hm] (seq (.split tim ":"))]
+  (if (and (seq hm) (= (count hm) 2))
+    (let [h (read-string h)
+           m (read-string m)]
+      (if (and (number? h) (number? m) (<= 0 h 23) (<= 0 m 59))
+        (let [cld (Calendar/getInstance)]
+          (.set cld Calendar/HOUR_OF_DAY h)
+          (.set cld Calendar/MINUTE m)
+          (.set cld Calendar/SECOND 0)
+          (.getTimeInMillis cld)))))))
+
+(defn takeoff-plan [apt]
+  (println [:TAKE-OFF apt])
+;; [[start-lat start-lon] start-alt start-crs [finish-spd spd-accel] [finish-alt alt-accel]]
+[[(get apt "lat") (get apt "lon")] (get apt "alt") 135 [220 8] [1500 6]])
 
