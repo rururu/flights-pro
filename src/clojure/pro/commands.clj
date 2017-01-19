@@ -21,6 +21,7 @@
  :instructions (asp/mk-chan)})
 (def TIM {:popup 30000
  :trail 30000})
+(def MY-INFOS (volatile! {}))
 (defn current-time []
   (int (/ (System/currentTimeMillis) 1000)))
 
@@ -104,10 +105,13 @@
 
 (defn info [params]
   (println [:INFO params])
-(let [id (:id params)]
-  (if-let [inf (fr24/fl-info id)]
-    (let [cal (fr24/callsign id)
-           apt (inf "airport")
+(let [id (:id params)
+       inf (or (get @MY-INFOS id) (fr24/fl-info id))
+       cal (if-let[d (fr24/dat id)]
+               (fr24/callsign d)
+               id)]
+  (if inf
+    (let [apt (inf "airport")
            acr (inf "aircraft")
            tim (inf "time")
            img (get (first (get-in acr ["images" "thumbnails"])) "src")
@@ -159,15 +163,16 @@
 "yes")
 
 (defn follow [params]
-  (println [:PARAMS params])
+  (println [:FOLLOW params])
 (let [id (:id params)]
   (if (fr24/dat id)
     (rete/assert-frame ['Follow 'id id 'time 0]))))
 
 (defn visible [params]
-  (let [{:keys [n s w e]} params]
-  (fr24/set-bbx n s w e)
-  ""))
+  (println [:VISIBLE params])
+(let [{:keys [n s w e]} params]
+  (fr24/set-bbx n s w e))
+"")
 
 (defn trail [params]
   (println [:TRAIL params])
@@ -211,7 +216,7 @@
 "")
 
 (defn schedule [params]
-  (println [:SCHEDULER params])
+  (println [:SCHEDULE params])
 (let [{:keys [callsign time country1 airport1 country2 airport2]} params
        abc (fr24/airports-by-country)
        apf (get-in abc [country1 airport1])
@@ -222,4 +227,17 @@
 	'from apf
 	'to apt]))
 "")
+
+(defn set-my-flight-info [csoid dept fapt tapt]
+  (vswap! MY-INFOS assoc csoid
+  {"airport" {"origin" {"name" (fapt "name") "code" {"iata" (fapt "iata")}}
+                  "destination" {"name" (tapt "name") "code" {"iata" (tapt "iata")}}}
+
+   "aircraft" {"model" {"text" "Ru Lentokone"}
+                   "images" {"thumbnails" [{"src" (str "img/" (int  (rand 7)) ".jpg")}]}}
+
+   "time" {"real" {"departure" dept}
+               "scheduled" {"arrival" "unk"}}
+
+   "airline" {"short" "Ru Airlines"}}))
 

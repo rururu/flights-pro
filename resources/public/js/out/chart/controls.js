@@ -4,23 +4,23 @@ goog.require('cljs.core');
 goog.require('goog.string');
 goog.require('goog.string.format');
 chart.controls.format = (function chart$controls$format(var_args){
-var args__25281__auto__ = [];
-var len__25274__auto___26658 = arguments.length;
-var i__25275__auto___26659 = (0);
+var args__31966__auto__ = [];
+var len__31959__auto___33343 = arguments.length;
+var i__31960__auto___33344 = (0);
 while(true){
-if((i__25275__auto___26659 < len__25274__auto___26658)){
-args__25281__auto__.push((arguments[i__25275__auto___26659]));
+if((i__31960__auto___33344 < len__31959__auto___33343)){
+args__31966__auto__.push((arguments[i__31960__auto___33344]));
 
-var G__26660 = (i__25275__auto___26659 + (1));
-i__25275__auto___26659 = G__26660;
+var G__33345 = (i__31960__auto___33344 + (1));
+i__31960__auto___33344 = G__33345;
 continue;
 } else {
 }
 break;
 }
 
-var argseq__25282__auto__ = ((((1) < args__25281__auto__.length))?(new cljs.core.IndexedSeq(args__25281__auto__.slice((1)),(0),null)):null);
-return chart.controls.format.cljs$core$IFn$_invoke$arity$variadic((arguments[(0)]),argseq__25282__auto__);
+var argseq__31967__auto__ = ((((1) < args__31966__auto__.length))?(new cljs.core.IndexedSeq(args__31966__auto__.slice((1)),(0),null)):null);
+return chart.controls.format.cljs$core$IFn$_invoke$arity$variadic((arguments[(0)]),argseq__31967__auto__);
 });
 
 chart.controls.format.cljs$core$IFn$_invoke$arity$variadic = (function (fmt,args){
@@ -29,10 +29,10 @@ return cljs.core.apply.call(null,goog.string.format,fmt,args);
 
 chart.controls.format.cljs$lang$maxFixedArity = (1);
 
-chart.controls.format.cljs$lang$applyTo = (function (seq26656){
-var G__26657 = cljs.core.first.call(null,seq26656);
-var seq26656__$1 = cljs.core.next.call(null,seq26656);
-return chart.controls.format.cljs$core$IFn$_invoke$arity$variadic(G__26657,seq26656__$1);
+chart.controls.format.cljs$lang$applyTo = (function (seq33341){
+var G__33342 = cljs.core.first.call(null,seq33341);
+var seq33341__$1 = cljs.core.next.call(null,seq33341);
+return chart.controls.format.cljs$core$IFn$_invoke$arity$variadic(G__33342,seq33341__$1);
 });
 
 chart.controls.by_id = (function chart$controls$by_id(id){

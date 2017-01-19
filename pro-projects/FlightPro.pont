@@ -1,4 +1,4 @@
-; Wed Jan 18 22:11:00 MSK 2017
+; Thu Jan 19 23:58:13 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -56,6 +56,10 @@
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot status
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot ini-turn
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
@@ -168,6 +172,10 @@
 	(is-a Flights+Ontology)
 	(role concrete)
 	(single-slot id
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot ini-turn
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))

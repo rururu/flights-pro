@@ -187,7 +187,7 @@
   ([]
   (am/input1 "chart.client" "new callsign" 80)
   (defn handler1 [call]
-    (am/input2 "chart.client" "hh:mm" 80)
+    (am/input2 "chart.client" "h:m" 80)
       (defn handler2 [tim]
         (schedule call tim))))
 ([call tim]

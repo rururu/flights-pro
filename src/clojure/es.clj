@@ -18,6 +18,9 @@
  "GROUND" 	(str HOST PORT "/img/greypln32.png")
  "COUNTER"	(str HOST PORT "/img/b.png")
  "FOLLOWING"	(str HOST PORT "/img/r.png")})
+(def RUNWAYS (volatile! {"URE" 180 "LED" 287 "LHR" 90 "EWR" 26
+	"TAY" 269 "HEL" 227 "FRA" 70 "KEF" 180
+	"KDL" 147 "JFK" 301 "BOS" 200 "LGA" 122}))
 (defn put-on-map [id crd crs spd sts]
   (asp/pump-in (:instructions  cmd/CHN)
 	{:instruct :create-update
@@ -82,10 +85,27 @@
           (.set cld Calendar/HOUR_OF_DAY h)
           (.set cld Calendar/MINUTE m)
           (.set cld Calendar/SECOND 0)
-          (.getTimeInMillis cld)))))))
+          (int (/ (.getTimeInMillis cld) 1000))))))))
+
+(defn runway [iata]
+  (let [rw (if-let [rw (@RUNWAYS iata)]
+              (int rw)
+              0)]
+  (if (> (rand 1) 0.5)
+    rw
+    (geo/norm-crs (+ rw 180)))))
 
 (defn takeoff-plan [apt]
-  (println [:TAKE-OFF apt])
-;; [[start-lat start-lon] start-alt start-crs [finish-spd spd-accel] [finish-alt alt-accel]]
-[[(get apt "lat") (get apt "lon")] (get apt "alt") 135 [220 8] [1500 6]])
+  (println [:TAKE-OFF-PLAN apt])
+[[(apt "lat") (apt "lon")]	; init-coord
+ (apt "alt") 		; init-alt
+ (runway (apt "iata")) 	; init-crs
+ [220 5] 		; [final-spd spd-accel]
+ [1500 6]		; [final-alt   alt-accel]
+])
+
+(defn ini-turn-plan [fapt tapt]
+  (let [fcrd [(fapt "lat") (fapt "lon")]
+       tcrd [(tapt "lat") (tapt "lon")]]
+  [(int (geo/bear-deg fcrd tcrd))]))
 

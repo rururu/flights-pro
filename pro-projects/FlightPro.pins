@@ -1,4 +1,4 @@
-; Wed Jan 18 22:11:00 MSK 2017
+; Thu Jan 19 23:58:13 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -796,10 +796,6 @@
 	(source "([]\n  (let [[n s w e] @fr24/BBX]\n    (watch-visible {:n n :s s :w w :e e})))\n([params]\n  (println [:WATCH-VISIBLE params])\n  (let [{:keys [n s w e]} params]\n    (clear)\n    (fr24/set-bbx n s w e)\n    (fr24/start process-flights)\n    \"\"))")
 	(title "watch-visible"))
 
-([FlightPro_Class230000] of  CloFuncall
-
-	(source "(es/start-time \"19:32\")"))
-
 ([FlightPro_Class230001] of  CloFunction
 
 	(source "(let [ldiff (- lambda lambda0)\n       cosphi (Math/cos phi)]\n  (Math/atan2 (* cosphi (Math/sin ldiff))\n                      (- (* (Math/cos phi1) (Math/sin phi)) \n                          (* (Math/sin phi1) cosphi (Math/cos ldiff)))))")
@@ -860,14 +856,6 @@
 	(source "(let [pdiff (Math/sin (/ (- phi phi1) 2.0))\n       ldiff (Math/sin (/ (- lambda lambda0) 2.0))\n       rval (Math/sqrt (+ (* pdiff pdiff) (* (Math/cos phi1) (Math/cos phi) ldiff ldiff)))]\n   (* 2.0 (Math/asin rval)))")
 	(title "spherical-distance [^double phi1 ^double lambda0 ^double phi ^double lambda]"))
 
-([FlightPro_Class250000] of  CloFuncall
-
-	(source "(rete.core/facts-with-slot-value 'Flight 'id \"R1\")"))
-
-([FlightPro_Class250001] of  CloFuncall
-
-	(source "(es/start-time \"18:32\")"))
-
 ([FlightPro_Class250002] of  CloFunction
 
 	(source "(let [phi (Math/toRadians lat)\n       lam (Math/toRadians lon)\n       dir (Math/toRadians crs)\n       way (* spd tim)\n       way (Math/toRadians (/ way 60))\n       [phi2 lam2] (spherical-between phi lam way dir)]\n   [(Math/toDegrees phi2) (Math/toDegrees lam2)])")
@@ -925,10 +913,6 @@
 	(source "(println \"Loading Clojure Programs...\")\n(if-let [wps (ClojureTab/findAnnotated (cls-instances \"WorkingPrograms\") nil)]\n  (loop [i 1 pins (svs wps \"cloPrograms\")]\n    (when (seq pins)\n      (println (str \" 1.\" i \" \" (sv (first pins) \"title\") \" = \" (ClojureTab/loadProgram (first pins)) ))\n      (recur (inc i) (rest pins))))\n  (println \"  Annotated instance of WorkingPrograms not found!\"))\n(println\"Starting Pro Server...\")\n(eval '(pro.server/start-server))\n(println\"Starting My Flights Movement...\")\n(eval '(my.flights.move/start-movement))\n(println\"Starting Expert System...\")\n(eval '(ru.rules/run-engine \"Flights Pro Run\"))")
 	(title "clojure-work []"))
 
-([FlightPro_Class260001] of  CloFuncall
-
-	(source "(rete.core/facts-with-slot-value 'Flight 'id = \"R1\")"))
-
 ([FlightPro_Class260002] of  CloFunction
 
 	(source "(vreset! FLIGHTS {})")
@@ -949,66 +933,6 @@
 	(source "(set-html! \"onboard-fld\" \n  (str \"<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>\"\n          (if (empty? list)\n            (str \"<option value='callsign'>callsign</option>\n                   <option value='select'>select</option>\")\n            (str \"<option value='select'>select</option>\"\n              (apply str (for [e list]\n                                (str \"<option value='\" e \"'>\" e \"</option>\")))))\n        \"</select>\"))")
 	(title "callsigns [list]"))
 
-([FlightPro_Class270002] of  CloFuncall
-
-	(source "(es/start-time \"18:30\")"))
-
-([FlightPro_Class270003] of  CloFuncall
-
-	(source "(es/start-time \"20:30\")"))
-
-([FlightPro_Class270004] of  CloFuncall
-
-	(source "(es/start-time \"17:30\")"))
-
-([FlightPro_Class270005] of  CloFuncall
-
-	(source "(ru.rules/pp 'Flight)"))
-
-([FlightPro_Class270007] of  CloFuncall
-
-	(source "(my.flights.move/rem-my-flight \"R1\")"))
-
-([FlightPro_Class270008] of  CloFuncall
-
-	(source "my.flights.move/CARRIERS"))
-
-([FlightPro_Class270009] of  CloFuncall
-
-	(source "(def abc (fr24.client/airports-by-country))"))
-
-([FlightPro_Class270010] of  CloFuncall
-
-	(source "(get-in [\"Russia\"])"))
-
-([FlightPro_Class270011] of  CloFuncall
-
-	(source "(get-in abc [\"Russia\"])"))
-
-([FlightPro_Class270012] of  CloFuncall
-
-	(source "(get-in abc [\"Russia\" \"Petropavlovsk-Kamchatsky Airport\"])"))
-
-([FlightPro_Class270013] of  CloFuncall
-
-	(source "(ru.rules/sp :all)"))
-
-([FlightPro_Class270015] of  CloFuncall
-
-	(source "(my.flights.move/rem-my-flight \"R2\")"))
-
-([FlightPro_Class270016] of  CloFuncall
-
-	(source "(my.flights.move/rem-my-flight \"R44\")"))
-
-([FlightPro_Class270017] of  CloFuncall
-
-	(source "fr24.client/FLIGHTS"))
-
-([FlightPro_Class270018] of  CloFuncall
-
-	(source "(ru.rules/pp 'Schedule)"))
-
 ([FlightPro_Class280000] of  CloProgram
 
 	(cloFunctions
@@ -1018,12 +942,15 @@
 		[FlightPro_Class260003]
 		[FlightPro_Class90005]
 		[FlightPro_Class490000]
-		[FlightPro_Class490002])
+		[FlightPro_Class530000]
+		[FlightPro_Class490002]
+		[FlightPro_Class520002])
 	(cloNamespace [FlightPro_Class280001])
 	(cloVars
 		[FlightPro_Class70000]
 		[FlightPro_Class20005]
-		[FlightPro_Class160009])
+		[FlightPro_Class160009]
+		[FlightPro_Class530002])
 	(title "ES Functions"))
 
 ([FlightPro_Class280001] of  CloNamespace
@@ -1038,7 +965,7 @@
 
 ([FlightPro_Class290001] of  CloFunction
 
-	(source "(println [:PARAMS params])\n(let [id (:id params)]\n  (if (fr24/dat id)\n    (rete/assert-frame ['Follow 'id id 'time 0])))")
+	(source "(println [:FOLLOW params])\n(let [id (:id params)]\n  (if (fr24/dat id)\n    (rete/assert-frame ['Follow 'id id 'time 0])))")
 	(title "follow [params]"))
 
 ([FlightPro_Class290003] of  %3AINSTANCE-ANNOTATION
@@ -1152,7 +1079,7 @@
 
 ([FlightPro_Class310000] of  CloFunction
 
-	(source "(println [:INFO params])\n(let [id (:id params)]\n  (if-let [inf (fr24/fl-info id)]\n    (let [cal (fr24/callsign id)\n           apt (inf \"airport\")\n           acr (inf \"aircraft\")\n           tim (inf \"time\")\n           img (get (first (get-in acr [\"images\" \"thumbnails\"])) \"src\")\n           [lat lon] (fr24/coord id)\n           dat [[\"from\" (or (get-in apt [\"origin\" \"name\"]) \"-\")]\n                  [\"to\" (or (get-in apt [\"destination\" \"name\"]) \"-\")]\n                  [\"airline\" (or (get-in inf [\"airline\" \"short\"]) \"-\")]\n                  [\"real-departure\" (or (get-in tim [\"real\" \"departure\"]) \"-\")]\n                  [\"scheduled-arrival\" (or (get-in tim [\"scheduled\" \"arrival\"]) \"-\")]\n                  [\"aircraft\" (or (get-in acr [\"model\" \"text\"]) \"-\")]\n                  [\"latitude\" (or lat \"-\")]\n                  [\"longitude\" (or lon \"-\")]\n                  [\"course\" (or (fr24/course id) \"-\")]\n                  [\"speed\" (or (fr24/speed id) \"-\")]\n                  [\"altitude\" (or (fr24/altitude id) \"-\")]\n                  [(str \"<input type='button' style='color:purple' value='Trail'\n                             onclick='chart.client.trail(\\\"\" id \"\\\")' >\")\n                   (str \"<input type='button' style='color:blue' value='Follow'\n                             onclick='chart.client.follow(\\\"\" id \"\\\")' >\")]\n                  [\"\"\n                   \"<input type='button' style='color:red' value='Stop'\n                       onclick='chart.client.stopfollow()' >\"]]\n           htm (make-info-html cal img dat)]\n      (asp/pump-in (:instructions CHN)\n        {:instruct :popup\n         :id (:id params)\n         :html htm\n         :time (:popup TIM)}))))\n\"\"")
+	(source "(println [:INFO params])\n(let [id (:id params)\n       inf (or (get @MY-INFOS id) (fr24/fl-info id))\n       cal (if-let[d (fr24/dat id)]\n               (fr24/callsign d)\n               id)]\n  (if inf\n    (let [apt (inf \"airport\")\n           acr (inf \"aircraft\")\n           tim (inf \"time\")\n           img (get (first (get-in acr [\"images\" \"thumbnails\"])) \"src\")\n           [lat lon] (fr24/coord id)\n           dat [[\"from\" (or (get-in apt [\"origin\" \"name\"]) \"-\")]\n                  [\"to\" (or (get-in apt [\"destination\" \"name\"]) \"-\")]\n                  [\"airline\" (or (get-in inf [\"airline\" \"short\"]) \"-\")]\n                  [\"real-departure\" (or (get-in tim [\"real\" \"departure\"]) \"-\")]\n                  [\"scheduled-arrival\" (or (get-in tim [\"scheduled\" \"arrival\"]) \"-\")]\n                  [\"aircraft\" (or (get-in acr [\"model\" \"text\"]) \"-\")]\n                  [\"latitude\" (or lat \"-\")]\n                  [\"longitude\" (or lon \"-\")]\n                  [\"course\" (or (fr24/course id) \"-\")]\n                  [\"speed\" (or (fr24/speed id) \"-\")]\n                  [\"altitude\" (or (fr24/altitude id) \"-\")]\n                  [(str \"<input type='button' style='color:purple' value='Trail'\n                             onclick='chart.client.trail(\\\"\" id \"\\\")' >\")\n                   (str \"<input type='button' style='color:blue' value='Follow'\n                             onclick='chart.client.follow(\\\"\" id \"\\\")' >\")]\n                  [\"\"\n                   \"<input type='button' style='color:red' value='Stop'\n                       onclick='chart.client.stopfollow()' >\"]]\n           htm (make-info-html cal img dat)]\n      (asp/pump-in (:instructions CHN)\n        {:instruct :popup\n         :id (:id params)\n         :html htm\n         :time (:popup TIM)}))))\n\"\"")
 	(title "info [params]"))
 
 ([FlightPro_Class310001] of  CloVar
@@ -1267,15 +1194,15 @@
 
 ([FlightPro_Class330000] of  Rule
 
-	(lhs "?fp (FlightPlan id ?id\n	takeoff ?tof\n	(vector? ?tof))\n(Flight age \"CURRENT\" \n	id ?id\n	speed ?spd\n	altitude ?alt\n	((> ?spd (first (nth ?tof 3)))\n	 (> ?alt (first (nth ?tof 4)))))")
-	(rhs "(println [:TakeoffDone ?id])\n(modify ?fp takeoff \"DONE\")")
+	(lhs "?fp (FlightPlan id ?id\n	takeoff ?tof\n	(vector? ?tof))\n(Flight age \"CURRENT\" \n	id ?id\n	speed ?spd\n	altitude ?alt\n	((>= ?spd (first (nth ?tof 3)))\n	 (>= ?alt (first (nth ?tof 4)))))")
+	(rhs "(println [:TakeoffDone ?id ?spd ?alt])\n(modify ?fp takeoff \"DONE\")")
 	(salience 0)
 	(title "mf:TakeoffDone"))
 
 ([FlightPro_Class330001] of  Rule
 
-	(lhs "?fp (FlightPlan id ?id\n	start-time ?stm\n	takeoff ?tof)\n(Flight age \"CURRENT\"\n	id ?id\n	time ?tim\n	(>= ?tim ?stm))")
-	(rhs "(println [:TakeoffStart ?id ?tof])\n(let [[_ _ _ [finish-spd spd-accel] [finish-alt alt-accel]] ?tof]\n  (my.flights.move/control ?id my.flights.move/accel finish-spd spd-accel)\n  (my.flights.move/control ?id my.flights.move/elevate finish-alt alt-accel))")
+	(lhs "?fp (FlightPlan id ?id\n	start-time ?stm\n	takeoff ?tof\n	((number? ?stm)\n	 (vector? ?tof)))\n(Flight age \"CURRENT\"\n	id ?id\n	time ?tim\n	(>= ?tim ?stm))")
+	(rhs "(println [:TakeoffStart ?id ?tof])\n(let [[_ _ _ [fin-spd spd-acl] [fin-alt alt-acl]] ?tof]\n  (println [fin-spd fin-alt spd-acl alt-acl])\n  (my.flights.move/control ?id my.flights.move/accel fin-spd spd-acl)\n  (my.flights.move/control ?id my.flights.move/elevate fin-alt alt-acl))\n(modify ?fp start-time \"PASSED\")")
 	(salience 0)
 	(title "mf:TakeoffStart"))
 
@@ -1312,7 +1239,7 @@
 ([FlightPro_Class340002] of  Rule
 
 	(lhs "?sd (Schedule callsign ?csn\n	time ?tim\n	from ?frm\n	to ?to)")
-	(rhs "(if-let [stm (es/start-time ?tim)]\n  (let [[start-crd start-alt start-crs _ _ :as tof] (es/takeoff-plan ?frm)]\n     (my.flights.move/add-my-flight ?csn ?csn start-crd start-crs 0 start-alt)\n     (asser FlightPlan id ?csn\n	start-time stm\n	takeoff tof)))")
+	(rhs "(if-let [stm (es/start-time ?tim)]\n  (let [tof (es/takeoff-plan ?frm)\n         [ini-crd ini-alt ini-crs & r] tof]\n     (my.flights.move/add-my-flight ?csn ?csn ini-crd ini-crs 0 ini-alt)\n     (asser FlightPlan id ?csn\n	start-time stm\n	takeoff tof\n	ini-turn (es/ini-turn-plan ?frm ?to))\n     (pro.commands/set-my-flight-info ?csn ?tim ?frm ?to)))")
 	(salience 0)
 	(title "mf:FlightPlan"))
 
@@ -1384,7 +1311,7 @@
 
 ([FlightPro_Class380004] of  CloFunction
 
-	(source "(let [{:keys [n s w e]} params]\n  (fr24/set-bbx n s w e)\n  \"\")")
+	(source "(println [:VISIBLE params])\n(let [{:keys [n s w e]} params]\n  (fr24/set-bbx n s w e))\n\"\"")
 	(title "visible [params]"))
 
 ([FlightPro_Class390000] of  Rule
@@ -1448,14 +1375,16 @@
 		[FlightPro_Class420001]
 		[FlightPro_Class420000]
 		[FlightPro_Class420021]
-		[FlightPro_Class460002])
+		[FlightPro_Class460002]
+		[FlightPro_Class510000])
 	(cloNamespace [FlightPro_Class400001])
 	(cloVars
 		[FlightPro_Class70000]
 		[FlightPro_Class20005]
 		[FlightPro_Class330003]
 		[FlightPro_Class20004]
-		[FlightPro_Class310001])
+		[FlightPro_Class310001]
+		[FlightPro_Class510001])
 	(title "Pro Commands"))
 
 ([FlightPro_Class400001] of  CloNamespace
@@ -1471,8 +1400,10 @@
 
 	(rules
 		[FlightPro_Class340002]
+		[FlightPro_Class330001]
 		[FlightPro_Class330000]
-		[FlightPro_Class330001])
+		[FlightPro_Class520003]
+		[FlightPro_Class520004])
 	(templates
 		[Flight]
 		[FlightPlan]
@@ -1594,7 +1525,7 @@
 
 ([FlightPro_Class440000] of  CloFunction
 
-	(source "([]\n  (am/input1 \"chart.client\" \"new callsign\" 80)\n  (defn handler1 [call]\n    (am/input2 \"chart.client\" \"hh:mm\" 80)\n      (defn handler2 [tim]\n        (schedule call tim))))\n([call tim]\n  (am/ask-server {:whom \"direct\"\n	    :question \"countries\"})\n  (am/get-answer #(schedule call tim %)))\n([call tim cns1]\n  (am/selector3 \"chart.client\" \"from country\" cns1 :itself 130)\n  (defn handler3 [sel]\n    (am/ask-server {:whom \"direct\"\n	       :question \"airports\"\n	       :country sel})\n    (am/get-answer #(schedule call tim sel %))))\n([call tim cnt1 aps1]\n  (am/selector4 \"chart.client\" \"from airport\" aps1 :itself 130)\n  (defn handler4 [sel]\n    (am/ask-server {:whom \"direct\"\n	    :question \"countries\"})\n    (am/get-answer #(schedule call tim cnt1 sel %))))\n([call tim cnt1 apt1 cns2]\n  (am/selector5 \"chart.client\" \"to county\" cns2 :itself 130)\n  (defn handler5 [sel]\n    (am/ask-server {:whom \"direct\"\n	       :question \"airports\"\n	       :country sel})\n    (am/get-answer #(schedule call tim cnt1 apt1 sel %))))\n([call tim cnt1 apt1 cnt2 aps2]\n  (am/selector6 \"chart.client\" \"to airport\" aps2 :itself 130)\n  (defn handler6 [sel]\n    (let [prm (str \"?callsign=\" call\n	\"&time=\" tim\n	\"&country1=\" cnt1\n	\"&airport1=\" apt1\n	\"&country2=\" cnt2\n	\"&airport2=\" sel)]\n      (GET (str (:command URL) \"schedule\" prm) no-handler)\n      (am/clear-dialog))))")
+	(source "([]\n  (am/input1 \"chart.client\" \"new callsign\" 80)\n  (defn handler1 [call]\n    (am/input2 \"chart.client\" \"h:m\" 80)\n      (defn handler2 [tim]\n        (schedule call tim))))\n([call tim]\n  (am/ask-server {:whom \"direct\"\n	    :question \"countries\"})\n  (am/get-answer #(schedule call tim %)))\n([call tim cns1]\n  (am/selector3 \"chart.client\" \"from country\" cns1 :itself 130)\n  (defn handler3 [sel]\n    (am/ask-server {:whom \"direct\"\n	       :question \"airports\"\n	       :country sel})\n    (am/get-answer #(schedule call tim sel %))))\n([call tim cnt1 aps1]\n  (am/selector4 \"chart.client\" \"from airport\" aps1 :itself 130)\n  (defn handler4 [sel]\n    (am/ask-server {:whom \"direct\"\n	    :question \"countries\"})\n    (am/get-answer #(schedule call tim cnt1 sel %))))\n([call tim cnt1 apt1 cns2]\n  (am/selector5 \"chart.client\" \"to county\" cns2 :itself 130)\n  (defn handler5 [sel]\n    (am/ask-server {:whom \"direct\"\n	       :question \"airports\"\n	       :country sel})\n    (am/get-answer #(schedule call tim cnt1 apt1 sel %))))\n([call tim cnt1 apt1 cnt2 aps2]\n  (am/selector6 \"chart.client\" \"to airport\" aps2 :itself 130)\n  (defn handler6 [sel]\n    (let [prm (str \"?callsign=\" call\n	\"&time=\" tim\n	\"&country1=\" cnt1\n	\"&airport1=\" apt1\n	\"&country2=\" cnt2\n	\"&airport2=\" sel)]\n      (GET (str (:command URL) \"schedule\" prm) no-handler)\n      (am/clear-dialog))))")
 	(title "schedule"))
 
 ([FlightPro_Class440001] of  CloFunction
@@ -1624,7 +1555,7 @@
 
 ([FlightPro_Class460002] of  CloFunction
 
-	(source "(println [:SCHEDULER params])\n(let [{:keys [callsign time country1 airport1 country2 airport2]} params\n       abc (fr24/airports-by-country)\n       apf (get-in abc [country1 airport1])\n       apt (get-in abc [country2 airport2])]\n  (rete/assert-frame ['Schedule \n	'callsign callsign\n	'time time\n	'from apf\n	'to apt]))\n\"\"")
+	(source "(println [:SCHEDULE params])\n(let [{:keys [callsign time country1 airport1 country2 airport2]} params\n       abc (fr24/airports-by-country)\n       apf (get-in abc [country1 airport1])\n       apt (get-in abc [country2 airport2])]\n  (rete/assert-frame ['Schedule \n	'callsign callsign\n	'time time\n	'from apf\n	'to apt]))\n\"\"")
 	(title "schedule [params]"))
 
 ([FlightPro_Class470000] of  CloVar
@@ -1706,45 +1637,13 @@
 
 ([FlightPro_Class490000] of  CloFunction
 
-	(source "(println [:START-TIME tim])\n(let [[h m :as hm] (seq (.split tim \":\"))]\n  (if (and (seq hm) (= (count hm) 2))\n    (let [h (read-string h)\n           m (read-string m)]\n      (if (and (number? h) (number? m) (<= 0 h 23) (<= 0 m 59))\n        (let [cld (Calendar/getInstance)]\n          (.set cld Calendar/HOUR_OF_DAY h)\n          (.set cld Calendar/MINUTE m)\n          (.set cld Calendar/SECOND 0)\n          (.getTimeInMillis cld))))))")
+	(source "(println [:START-TIME tim])\n(let [[h m :as hm] (seq (.split tim \":\"))]\n  (if (and (seq hm) (= (count hm) 2))\n    (let [h (read-string h)\n           m (read-string m)]\n      (if (and (number? h) (number? m) (<= 0 h 23) (<= 0 m 59))\n        (let [cld (Calendar/getInstance)]\n          (.set cld Calendar/HOUR_OF_DAY h)\n          (.set cld Calendar/MINUTE m)\n          (.set cld Calendar/SECOND 0)\n          (int (/ (.getTimeInMillis cld) 1000)))))))")
 	(title "start-time [tim]"))
 
 ([FlightPro_Class490002] of  CloFunction
 
-	(source "(println [:TAKE-OFF apt])\n;; [[start-lat start-lon] start-alt start-crs [finish-spd spd-accel] [finish-alt alt-accel]]\n[[(get apt \"lat\") (get apt \"lon\")] (get apt \"alt\") 135 [220 8] [1500 6]]")
+	(source "(println [:TAKE-OFF-PLAN apt])\n[[(apt \"lat\") (apt \"lon\")]	; init-coord\n (apt \"alt\") 		; init-alt\n (runway (apt \"iata\")) 	; init-crs\n [220 5] 		; [final-spd spd-accel]\n [1500 6]		; [final-alt   alt-accel]\n]")
 	(title "takeoff-plan [apt]"))
-
-([FlightPro_Class490003] of  CloFuncall
-
-	(source "(ru.rules/pp 'FlightPlan)"))
-
-([FlightPro_Class490004] of  CloFuncall
-
-	(source "(ru.rules/pp 'Scheduler)"))
-
-([FlightPro_Class490005] of  CloFuncall
-
-	(source "(.split \"18:30\" \":\")"))
-
-([FlightPro_Class490006] of  CloFuncall
-
-	(source "(seq (.split \"18:30\" \":\"))"))
-
-([FlightPro_Class490007] of  CloFuncall
-
-	(source "(let [[h m :as hm] (seq (.split \"\" \":\"))]   (if (and (seq hm) (= (count hm) 2)) [h m]))"))
-
-([FlightPro_Class490008] of  CloFuncall
-
-	(source "(let [[h m :as hm] (seq (.split \"ww\" \":\"))]   (if (and (seq hm) (= (count hm) 2)) [h m]))"))
-
-([FlightPro_Class490009] of  CloFuncall
-
-	(source "(let [[h m :as hm] (seq (.split \"w:g\" \":\"))]   (if (and (seq hm) (= (count hm) 2)) [h m]))"))
-
-([FlightPro_Class490010] of  CloFuncall
-
-	(source "(es/start-time \"19:30\")"))
 
 ([FlightPro_Class5] of  CloVar
 
@@ -1773,6 +1672,45 @@
 		[FlightPro_Class0])
 	(documentation [FlightPro_Class60000])
 	(title "Cezium Client"))
+
+([FlightPro_Class510000] of  CloFunction
+
+	(source "(vswap! MY-INFOS assoc csoid\n  {\"airport\" {\"origin\" {\"name\" (fapt \"name\") \"code\" {\"iata\" (fapt \"iata\")}}\n                  \"destination\" {\"name\" (tapt \"name\") \"code\" {\"iata\" (tapt \"iata\")}}}\n\n   \"aircraft\" {\"model\" {\"text\" \"Ru Lentokone\"}\n                   \"images\" {\"thumbnails\" [{\"src\" (str \"img/\" (int  (rand 7)) \".jpg\")}]}}\n\n   \"time\" {\"real\" {\"departure\" dept}\n               \"scheduled\" {\"arrival\" \"unk\"}}\n\n   \"airline\" {\"short\" \"Ru Airlines\"}})")
+	(title "set-my-flight-info [csoid dept fapt tapt]"))
+
+([FlightPro_Class510001] of  CloVar
+
+	(source "(volatile! {})")
+	(title "MY-INFOS"))
+
+([FlightPro_Class520002] of  CloFunction
+
+	(source "(let [fcrd [(fapt \"lat\") (fapt \"lon\")]\n       tcrd [(tapt \"lat\") (tapt \"lon\")]]\n  [(int (geo/bear-deg fcrd tcrd))])")
+	(title "ini-turn-plan [fapt tapt]"))
+
+([FlightPro_Class520003] of  Rule
+
+	(lhs "(FlightPlan id ?id\n	takeoff \"DONE\"\n	ini-turn ?itn\n	(vector? ?itn))")
+	(rhs "(println [:InitialTurnStart ?id ?itn])\n(my.flights.move/control ?id my.flights.move/turn (first ?itn))")
+	(salience 0)
+	(title "mf:InitialTurnStart"))
+
+([FlightPro_Class520004] of  Rule
+
+	(lhs "?fp (FlightPlan id ?id\n	takeoff \"DONE\"\n	ini-turn ?itn\n	(vector? ?itn))\n(Flight age \"CURRENT\" \n	id ?id\n	course ?crs\n	(= ?crs (first ?itn)))")
+	(rhs "(println [:InitialTurnDone ?id ?itn ?crs])\n(modify ?fp ini-turn \"DONE\")")
+	(salience 0)
+	(title "mf:InitialTurnDone"))
+
+([FlightPro_Class530000] of  CloFunction
+
+	(source "(let [rw (if-let [rw (@RUNWAYS iata)]\n              (int rw)\n              0)]\n  (if (> (rand 1) 0.5)\n    rw\n    (geo/norm-crs (+ rw 180))))")
+	(title "runway [iata]"))
+
+([FlightPro_Class530002] of  CloVar
+
+	(source "(volatile! {\"URE\" 180 \"LED\" 287 \"LHR\" 90 \"EWR\" 26\n	\"TAY\" 269 \"HEL\" 227 \"FRA\" 70 \"KEF\" 180\n	\"KDL\" 147 \"JFK\" 301 \"BOS\" 200 \"LGA\" 122})")
+	(title "RUNWAYS"))
 
 ([FlightPro_Class60000] of  CloDocumentation
 
