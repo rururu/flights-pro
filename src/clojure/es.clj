@@ -96,7 +96,7 @@
     (geo/norm-crs (+ rw 180)))))
 
 (defn takeoff-plan [apt]
-  (println [:TAKE-OFF-PLAN apt])
+  ;;(println [:TAKE-OFF-PLAN apt])
 [[(apt "lat") (apt "lon")]	; init-coord
  (apt "alt") 		; init-alt
  (runway (apt "iata")) 	; init-crs
@@ -108,4 +108,14 @@
   (let [fcrd [(fapt "lat") (fapt "lon")]
        tcrd [(tapt "lat") (tapt "lon")]]
   [(int (geo/bear-deg fcrd tcrd))]))
+
+(defn climb-plan []
+  [33000	; cruise alt
+ 3	; climbing accel
+])
+
+(defn accel-plan []
+  [500	; cruise spd
+ 3	; spd accel
+])
 

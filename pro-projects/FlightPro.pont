@@ -1,4 +1,4 @@
-; Thu Jan 19 23:58:13 MSK 2017
+; Sat Jan 21 23:22:21 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -35,7 +35,15 @@
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
+	(single-slot climb
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot callsign
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot accel
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
@@ -179,7 +187,15 @@
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
+	(single-slot accel
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot start-time
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot climb
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))

@@ -1,4 +1,4 @@
-; Thu Jan 19 23:58:13 MSK 2017
+; Sat Jan 21 23:22:21 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -73,7 +73,7 @@
 
 ([FlightPro_Class100025] of  CloVar
 
-	(source "(volatile! {:mode \"?\"\n               :coord [0 0]\n               :altitude 0\n               :speed 0\n               :course 0\n               :step-hrs (double (/ (:carrier TIO) 3600000))\n               :bank-params [20 8 64 2]\n               :rudder {:target 0\n                            :step 3\n	    :accel 1\n                            :time-out 1011}\n               :elevator {:target 0\n                            :step 4\n	    :accel 1\n                            :time-out 997}\n               :engine {:target 0\n                            :step 1\n	    :accel 1\n                            :time-out 1003}})")
+	(source "(volatile! {:mode \"?\"\n               :coord [0 0]\n               :altitude 0\n               :speed 0\n               :course 0\n               :step-hrs (double (/ (:carrier TIO) 3600000))\n               :bank-params [20 8 64 2]\n               :rudder {:target 0\n                            :step 3\n	    :accel 1\n                            :time-out 1011}\n               :elevator {:target 0\n                            :step 4\n	    :accel 1\n                            :time-out 997}\n               :engine {:target 0\n                            :step 1\n	    :accel 1\n                            :time-out 2003}})")
 	(title "CARRIER"))
 
 ([FlightPro_Class100026] of  CloFunction
@@ -796,6 +796,11 @@
 	(source "([]\n  (let [[n s w e] @fr24/BBX]\n    (watch-visible {:n n :s s :w w :e e})))\n([params]\n  (println [:WATCH-VISIBLE params])\n  (let [{:keys [n s w e]} params]\n    (clear)\n    (fr24/set-bbx n s w e)\n    (fr24/start process-flights)\n    \"\"))")
 	(title "watch-visible"))
 
+([FlightPro_Class230000] of  CloFunction
+
+	(source "[33000	; cruise alt\n 3	; climbing accel\n]")
+	(title "climb-plan []"))
+
 ([FlightPro_Class230001] of  CloFunction
 
 	(source "(let [ldiff (- lambda lambda0)\n       cosphi (Math/cos phi)]\n  (Math/atan2 (* cosphi (Math/sin ldiff))\n                      (- (* (Math/cos phi1) (Math/sin phi)) \n                          (* (Math/sin phi1) cosphi (Math/cos ldiff)))))")
@@ -933,6 +938,95 @@
 	(source "(set-html! \"onboard-fld\" \n  (str \"<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>\"\n          (if (empty? list)\n            (str \"<option value='callsign'>callsign</option>\n                   <option value='select'>select</option>\")\n            (str \"<option value='select'>select</option>\"\n              (apply str (for [e list]\n                                (str \"<option value='\" e \"'>\" e \"</option>\")))))\n        \"</select>\"))")
 	(title "callsigns [list]"))
 
+([FlightPro_Class270002] of  Rule
+
+	(lhs "(FlightPlan id ?id\n	takeoff \"DONE\"\n	climb ?cli\n	(vector? ?cli))")
+	(rhs "(println [:ClimbStart ?id ?cli])\n(my.flights.move/control ?id my.flights.move/elevate (first ?cli) (second ?cli))")
+	(salience 0)
+	(title "mf:ClimbStart"))
+
+([FlightPro_Class270003] of  Rule
+
+	(lhs "?fp (FlightPlan id ?id\n	takeoff \"DONE\"\n	climb ?cli\n	(vector? ?cli))\n(Flight age \"CURRENT\" \n	id ?id\n	altitude ?alt\n	(= ?alt (first ?cli)))")
+	(rhs "(println [:ClimbDone ?id ?acl ?alt])\n(modify ?fp climb \"DONE\")")
+	(salience 0)
+	(title "mf:ClimbDone"))
+
+([FlightPro_Class270005] of  Rule
+
+	(lhs "(FlightPlan id ?id\n	takeoff \"DONE\"\n	accel ?acl\n	(vector? ?acl))")
+	(rhs "(println [:AccelStart ?id ?acl])\n(my.flights.move/control ?id my.flights.move/accel (first ?acl) (second ?acl))")
+	(salience 0)
+	(title "mf:AccelStart"))
+
+([FlightPro_Class270006] of  Rule
+
+	(lhs "?fp (FlightPlan id ?id\n	takeoff \"DONE\"\n	accel ?acl\n	(vector? ?acl))\n(Flight age \"CURRENT\" \n	id ?id\n	speed ?spd\n	(= ?spd (first ?acl)))")
+	(rhs "(println [:AccelDone ?id ?acl ?spd])\n(modify ?fp accel \"DONE\")")
+	(salience 0)
+	(title "mf:AccelDone"))
+
+([FlightPro_Class270007] of  CloFunction
+
+	(source "[500	; cruise spd\n 1	; spd accel\n]")
+	(title "accel-plan []"))
+
+([FlightPro_Class270008] of  CloFuncall
+
+	(source "(ru.rules/pp 'FlightPlan)"))
+
+([FlightPro_Class270009] of  CloFuncall
+
+	(source "(rete.core/facts-with-slot-value 'Flifht 'id = \"R1\")"))
+
+([FlightPro_Class270010] of  CloFuncall
+
+	(source "(do [e (rete.core/facts-with-slot-value 'Flight 'id = \"R1\")] (println e))"))
+
+([FlightPro_Class270011] of  CloFuncall
+
+	(source "(doseq [e (rete.core/facts-with-slot-value 'Flight 'id = \"R1\")] (println e))"))
+
+([FlightPro_Class270012] of  CloFuncall
+
+	(source "(doseq [e (rete.core/facts-with-slot-value 'Flight 'id = \"R1\")] (protege.core/ctpl e))"))
+
+([FlightPro_Class270013] of  CloFuncall
+
+	(source "(doseq [e (rete.core/facts-with-slot-value 'FlightPlan 'id = \"R1\")] (protege.core/ctpl e))"))
+
+([FlightPro_Class270014] of  CloFuncall
+
+	(source "(doseq [e (rete.core/facts-with-slot-value 'FlightPlan 'id = \"R2\")] (protege.core/ctpl e))"))
+
+([FlightPro_Class270015] of  CloFuncall
+
+	(source "(doseq [e (rete.core/facts-with-slot-value 'FlightPlan 'id = \"R3\")] (protege.core/ctpl e))"))
+
+([FlightPro_Class270016] of  CloFuncall
+
+	(source "(my.flights.move/turn \"R3\" 270)"))
+
+([FlightPro_Class270017] of  CloFuncall
+
+	(source "(my.flights.move/control turn \"R3\" 270)"))
+
+([FlightPro_Class270018] of  CloFuncall
+
+	(source "(my.flights.move/control my.flights.move/turn \"R3\" 270)"))
+
+([FlightPro_Class270019] of  CloFuncall
+
+	(source "(doseq [e (rete.core/facts-with-slot-value 'Flight 'id = \"R3\")] (protege.core/ctpl e))"))
+
+([FlightPro_Class270020] of  CloFuncall
+
+	(source "(my.flights.move/control my.flights.move/accel \"R3\" 2000 4)"))
+
+([FlightPro_Class270021] of  CloFuncall
+
+	(source "my.flights.move/CARRIERS"))
+
 ([FlightPro_Class280000] of  CloProgram
 
 	(cloFunctions
@@ -944,7 +1038,9 @@
 		[FlightPro_Class490000]
 		[FlightPro_Class530000]
 		[FlightPro_Class490002]
-		[FlightPro_Class520002])
+		[FlightPro_Class520002]
+		[FlightPro_Class230000]
+		[FlightPro_Class270007])
 	(cloNamespace [FlightPro_Class280001])
 	(cloVars
 		[FlightPro_Class70000]
@@ -1153,14 +1249,14 @@
 	(lhs "(Flight id ?id altitude ?a1 age \"OLD\")\n(Flight id ?id altitude ?a2 age \"CURRENT\")\n?fl (Flight id ?id altitude ?a3 age \"NEW\"\n	status ?s3 \n	coord ?crd3 \n	course ?crs3\n	speed ?spd3\n	((not= ?s3 \"DESCEND\")\n	 (> ?a1 ?a2 ?a3)))")
 	(rhs "(modify ?fl status \"DESCEND\")\n(es/put-on-map ?id ?crd3 ?crs3 ?spd3 ?s3)")
 	(salience 0)
-	(title "af:Descending"))
+	(title "af:DescendMark"))
 
 ([FlightPro_Class320013] of  Rule
 
 	(lhs "(Flight id ?id altitude ?a1 age \"OLD\")\n(Flight id ?id altitude ?a2 age \"CURRENT\")\n?fl (Flight id ?id altitude ?a3 age \"NEW\"\n	status ?s3 \n	coord ?crd3 \n	course ?crs3\n	speed ?spd3\n	((not= ?s3 \"CLIMB\")\n	 (< ?a1 ?a2 ?a3)))")
 	(rhs "(modify ?fl status \"CLIMB\")\n(es/put-on-map ?id ?crd3 ?crs3 ?spd3 ?s3)")
 	(salience 0)
-	(title "af:Climbing"))
+	(title "af:ClimbMark"))
 
 ([FlightPro_Class320014] of  Run
 
@@ -1239,7 +1335,7 @@
 ([FlightPro_Class340002] of  Rule
 
 	(lhs "?sd (Schedule callsign ?csn\n	time ?tim\n	from ?frm\n	to ?to)")
-	(rhs "(if-let [stm (es/start-time ?tim)]\n  (let [tof (es/takeoff-plan ?frm)\n         [ini-crd ini-alt ini-crs & r] tof]\n     (my.flights.move/add-my-flight ?csn ?csn ini-crd ini-crs 0 ini-alt)\n     (asser FlightPlan id ?csn\n	start-time stm\n	takeoff tof\n	ini-turn (es/ini-turn-plan ?frm ?to))\n     (pro.commands/set-my-flight-info ?csn ?tim ?frm ?to)))")
+	(rhs "(if-let [stm (es/start-time ?tim)]\n  (let [tof (es/takeoff-plan ?frm)\n         [ini-crd ini-alt ini-crs & r] tof]\n     (my.flights.move/add-my-flight ?csn ?csn ini-crd ini-crs 0 ini-alt)\n     (asser FlightPlan id ?csn\n	start-time stm\n	takeoff tof\n	ini-turn (es/ini-turn-plan ?frm ?to)\n	climb (es/climb-plan)\n	accel (es/accel-plan))\n     (pro.commands/set-my-flight-info ?csn ?tim ?frm ?to)))")
 	(salience 0)
 	(title "mf:FlightPlan"))
 
@@ -1403,7 +1499,11 @@
 		[FlightPro_Class330001]
 		[FlightPro_Class330000]
 		[FlightPro_Class520003]
-		[FlightPro_Class520004])
+		[FlightPro_Class520004]
+		[FlightPro_Class270006]
+		[FlightPro_Class270005]
+		[FlightPro_Class270003]
+		[FlightPro_Class270002])
 	(templates
 		[Flight]
 		[FlightPlan]
@@ -1642,7 +1742,7 @@
 
 ([FlightPro_Class490002] of  CloFunction
 
-	(source "(println [:TAKE-OFF-PLAN apt])\n[[(apt \"lat\") (apt \"lon\")]	; init-coord\n (apt \"alt\") 		; init-alt\n (runway (apt \"iata\")) 	; init-crs\n [220 5] 		; [final-spd spd-accel]\n [1500 6]		; [final-alt   alt-accel]\n]")
+	(source ";;(println [:TAKE-OFF-PLAN apt])\n[[(apt \"lat\") (apt \"lon\")]	; init-coord\n (apt \"alt\") 		; init-alt\n (runway (apt \"iata\")) 	; init-crs\n [220 8] 		; [final-spd spd-accel]\n [1500 6]		; [final-alt   alt-accel]\n]")
 	(title "takeoff-plan [apt]"))
 
 ([FlightPro_Class5] of  CloVar
