@@ -5,7 +5,8 @@
   [cesium.core :as czs]
   [calc.core :as calc]
   [calc.geo :as geo]
-  [fr24.client :as fr24])
+  [fr24.client :as fr24]
+  [my.flights.move :as mfs])
 (:import
   java.util.Calendar))
 
@@ -18,9 +19,19 @@
  "GROUND" 	(str HOST PORT "/img/greypln32.png")
  "COUNTER"	(str HOST PORT "/img/b.png")
  "FOLLOWING"	(str HOST PORT "/img/r.png")})
-(def RUNWAYS (volatile! {"URE" 180 "LED" 287 "LHR" 90 "EWR" 26
-	"TAY" 269 "HEL" 227 "FRA" 70 "KEF" 180
-	"KDL" 147 "JFK" 301 "BOS" 200 "LGA" 122}))
+(def RUNWAYS (volatile! 
+  {"URE" 180 
+   "LED" 287 
+   "LHR" 90 
+   "EWR" 26
+   "TAY" 269 
+   "HEL" 227 
+   "FRA" 70 
+   "KEF" 180
+   "KDL" 147 
+   "JFK" 301 
+   "BOS" 200 
+   "LGA" 122}))
 (defn put-on-map [id crd crs spd sts]
   (asp/pump-in (:instructions  cmd/CHN)
 	{:instruct :create-update
@@ -100,14 +111,13 @@
 [[(apt "lat") (apt "lon")]	; init-coord
  (apt "alt") 		; init-alt
  (runway (apt "iata")) 	; init-crs
- [220 5] 		; [final-spd spd-accel]
+ [220 8] 		; [final-spd spd-accel]
  [1500 6]		; [final-alt   alt-accel]
 ])
 
-(defn ini-turn-plan [fapt tapt]
-  (let [fcrd [(fapt "lat") (fapt "lon")]
-       tcrd [(tapt "lat") (tapt "lon")]]
-  [(int (geo/bear-deg fcrd tcrd))]))
+(defn ini-turn-plan [fapt ftp]
+  ;; bearing from airpotrt of departure to final turn start point
+[(int (geo/bear-deg [(fapt "lat") (fapt "lon")] (first ftp)))])
 
 (defn climb-plan []
   [33000	; cruise alt
@@ -116,6 +126,27 @@
 
 (defn accel-plan []
   [500	; cruise spd
- 3	; spd accel
+ 1	; spd accel
 ])
+
+(defn cruise-plan [ftp]
+  ;; final turn start point
+[(first ftp)])
+
+(defn final-turn-plan [fapt tapt]
+  ;; as backward takeoff plan
+(let [fcrd [(fapt "lat") (fapt "lon")]
+       tcrd [(tapt "lat") (tapt "lon")]	;; destination coordinates
+       rudd (:rudder @mfs/CARRIER)
+       trw (runway (tapt "iata"))		;; lannding runway
+       rlc (geo/rev-bear trw)		;; reverse landing course
+       ftpt (mfs/turn-end-point 
+	(geo/future-pos tcrd rlc 7 1)	;; outer marker position 7 nm away 
+	200 		;; final turn speed 200 knots
+	rlc
+	(geo/bear-deg tcrd fcrd) 	;; reverse general course
+	(:step rudd) 
+	(:accl rudd) 
+	(:time-out rudd))] 
+    [ftpt tcrd trw]))
 

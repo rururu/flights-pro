@@ -30,7 +30,7 @@
                :engine {:target 0
                             :step 1
 	    :accel 1
-                            :time-out 1003}}))
+                            :time-out 2003}}))
 (def CARRIERS (volatile! {}))
 (defn set-turn-point
   ([carr]
@@ -155,4 +155,25 @@
 	  (move carr)))]
   (asp/repeater move-all CARRIERS (:carrier TIO))
   (println (str "  My Flights Movement Interval: " (:carrier TIO)))))
+
+(defn turn-end-point [ipoint spd crs1 crs2 crs-stp crs-acl crs-tio]
+  ;; Calculates end point of turn
+(if (not= crs1 crs2)
+  (let [step (* crs-stp crs-acl)
+         tioh (/ crs-tio 3600000)]
+    (loop [crs crs1 point ipoint]
+      (if (< (Math/abs (- crs crs2)) step)
+        point
+        (recur (geo/norm-crs (course-closer crs crs2 step)) 
+                  (geo/future-pos point crs spd tioh)))))
+  ipoint))
+
+(defn accel-dist [ini-spd fin-spd spd-stp spd-acl spd-tio]
+  ;; Calculates acceleration distance
+(let [step (* spd-stp spd-acl)
+       tioh (/ spd-tio 3600000)]
+  (loop [spd ini-spd dist 0]
+    (if (>= spd fin-spd)
+      (float dist)
+      (recur (+ spd step) (+ (* spd tioh) dist))))))
 

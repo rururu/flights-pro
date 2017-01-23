@@ -1,4 +1,4 @@
-; Sat Jan 21 23:22:21 MSK 2017
+; Mon Jan 23 21:05:13 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -861,6 +861,16 @@
 	(source "(let [pdiff (Math/sin (/ (- phi phi1) 2.0))\n       ldiff (Math/sin (/ (- lambda lambda0) 2.0))\n       rval (Math/sqrt (+ (* pdiff pdiff) (* (Math/cos phi1) (Math/cos phi) ldiff ldiff)))]\n   (* 2.0 (Math/asin rval)))")
 	(title "spherical-distance [^double phi1 ^double lambda0 ^double phi ^double lambda]"))
 
+([FlightPro_Class250000] of  CloFunction
+
+	(source ";; Calculates end point of turn\n(if (not= crs1 crs2)\n  (let [step (* crs-stp crs-acl)\n         tioh (/ crs-tio 3600000)]\n    (loop [crs crs1 point ipoint]\n      (if (< (Math/abs (- crs crs2)) step)\n        point\n        (recur (geo/norm-crs (course-closer crs crs2 step)) \n                  (geo/future-pos point crs spd tioh)))))\n  ipoint)")
+	(title "turn-end-point [ipoint spd crs1 crs2 crs-stp crs-acl crs-tio]"))
+
+([FlightPro_Class250001] of  CloFunction
+
+	(source ";; as backward takeoff plan\n(let [fcrd [(fapt \"lat\") (fapt \"lon\")]\n       tcrd [(tapt \"lat\") (tapt \"lon\")]	;; destination coordinates\n       rudd (:rudder @mfs/CARRIER)\n       trw (runway (tapt \"iata\"))		;; lannding runway\n       rlc (geo/rev-bear trw)		;; reverse landing course\n       ftpt (mfs/turn-end-point \n	(geo/future-pos tcrd rlc 7 1)	;; outer marker position 7 nm away \n	200 		;; final turn speed 200 knots\n	rlc\n	(geo/bear-deg tcrd fcrd) 	;; reverse general course\n	(:step rudd) \n	(:accl rudd) \n	(:time-out rudd))] \n    [ftpt trw])")
+	(title "final-turn-plan [fapt tapt]"))
+
 ([FlightPro_Class250002] of  CloFunction
 
 	(source "(let [phi (Math/toRadians lat)\n       lam (Math/toRadians lon)\n       dir (Math/toRadians crs)\n       way (* spd tim)\n       way (Math/toRadians (/ way 60))\n       [phi2 lam2] (spherical-between phi lam way dir)]\n   [(Math/toDegrees phi2) (Math/toDegrees lam2)])")
@@ -1040,7 +1050,9 @@
 		[FlightPro_Class490002]
 		[FlightPro_Class520002]
 		[FlightPro_Class230000]
-		[FlightPro_Class270007])
+		[FlightPro_Class270007]
+		[FlightPro_Class540017]
+		[FlightPro_Class250001])
 	(cloNamespace [FlightPro_Class280001])
 	(cloVars
 		[FlightPro_Class70000]
@@ -1051,7 +1063,7 @@
 
 ([FlightPro_Class280001] of  CloNamespace
 
-	(source "(:require\n  [pro.commands :as cmd]\n  [async.proc :as asp]\n  [cesium.core :as czs]\n  [calc.core :as calc]\n  [calc.geo :as geo]\n  [fr24.client :as fr24])\n(:import\n  java.util.Calendar)")
+	(source "(:require\n  [pro.commands :as cmd]\n  [async.proc :as asp]\n  [cesium.core :as czs]\n  [calc.core :as calc]\n  [calc.geo :as geo]\n  [fr24.client :as fr24]\n  [my.flights.move :as mfs])\n(:import\n  java.util.Calendar)")
 	(title "es"))
 
 ([FlightPro_Class290000] of  CloFunction
@@ -1335,7 +1347,7 @@
 ([FlightPro_Class340002] of  Rule
 
 	(lhs "?sd (Schedule callsign ?csn\n	time ?tim\n	from ?frm\n	to ?to)")
-	(rhs "(if-let [stm (es/start-time ?tim)]\n  (let [tof (es/takeoff-plan ?frm)\n         [ini-crd ini-alt ini-crs & r] tof]\n     (my.flights.move/add-my-flight ?csn ?csn ini-crd ini-crs 0 ini-alt)\n     (asser FlightPlan id ?csn\n	start-time stm\n	takeoff tof\n	ini-turn (es/ini-turn-plan ?frm ?to)\n	climb (es/climb-plan)\n	accel (es/accel-plan))\n     (pro.commands/set-my-flight-info ?csn ?tim ?frm ?to)))")
+	(rhs "(if-let [stm (es/start-time ?tim)]\n  (let [tof (es/takeoff-plan ?frm)\n         [ini-crd ini-alt ini-crs & r] tof\n         ftp (es/final-turn-plan ?frm ?to)]\n     (my.flights.move/add-my-flight ?csn ?csn ini-crd ini-crs 0 ini-alt)\n     (asser FlightPlan id ?csn\n	start-time stm\n	takeoff tof\n	ini-turn (es/ini-turn-plan ?frm ftp)\n	final-turn ftp\n	climb (es/climb-plan)\n	accel (es/accel-plan)\n	cruise (es/cruise-plan ftp))\n     (pro.commands/set-my-flight-info ?csn ?tim ?frm ?to)))")
 	(salience 0)
 	(title "mf:FlightPlan"))
 
@@ -1500,10 +1512,14 @@
 		[FlightPro_Class330000]
 		[FlightPro_Class520003]
 		[FlightPro_Class520004]
-		[FlightPro_Class270006]
 		[FlightPro_Class270005]
+		[FlightPro_Class270006]
+		[FlightPro_Class270002]
 		[FlightPro_Class270003]
-		[FlightPro_Class270002])
+		[FlightPro_Class500001]
+		[FlightPro_Class540018]
+		[FlightPro_Class540019]
+		[FlightPro_Class540020])
 	(templates
 		[Flight]
 		[FlightPlan]
@@ -1700,7 +1716,9 @@
 		[FlightPro_Class470002]
 		[FlightPro_Class470003]
 		[FlightPro_Class470004]
-		[FlightPro_Class470001])
+		[FlightPro_Class470001]
+		[FlightPro_Class250000]
+		[FlightPro_Class520000])
 	(cloNamespace [FlightPro_Class480001])
 	(cloVars
 		[FlightPro_Class480003]
@@ -1755,6 +1773,17 @@
 	(source "(vswap! CAMERA assoc key val)")
 	(title "camera [key val]"))
 
+([FlightPro_Class500000] of  CloFuncall
+
+	(source "(ru.rules/pp 'Schedule)"))
+
+([FlightPro_Class500001] of  Rule
+
+	(lhs "(FlightPlan id ?id\n	takeoff \"DONE\"\n	cruise ?cru\n	(vector? ?cru))\n(Flight age \"CURRENT\" \n	id ?id\n	coord ?crd\n	course ?crs\n	(not= ?crs (int (calc.geo/bear-deg ?crd (first ?cru))) ))")
+	(rhs "(let [newc (int (calc.geo/bear-deg ?crd (first ?cru)))]\n  (println [:Cruise ?id newc])\n  (my.flights.move/control ?id my.flights.move/turn newc))")
+	(salience 0)
+	(title "mf:Cruise"))
+
 ([FlightPro_Class50001] of  ClsRequired
 
 	(cloFunctions
@@ -1783,10 +1812,19 @@
 	(source "(volatile! {})")
 	(title "MY-INFOS"))
 
+([FlightPro_Class520000] of  CloFunction
+
+	(source ";; Calculates acceleration distance\n(let [step (* spd-stp spd-acl)\n       tioh (/ spd-tio 3600000)]\n  (loop [spd ini-spd dist 0]\n    (if (>= spd fin-spd)\n      (float dist)\n      (recur (+ spd step) (+ (* spd tioh) dist)))))")
+	(title "accel-dist [ini-spd fin-spd spd-stp spd-acl spd-tio]"))
+
+([FlightPro_Class520001] of  CloFuncall
+
+	(source "(my.flights.move/accel-dist 0 500 "))
+
 ([FlightPro_Class520002] of  CloFunction
 
-	(source "(let [fcrd [(fapt \"lat\") (fapt \"lon\")]\n       tcrd [(tapt \"lat\") (tapt \"lon\")]]\n  [(int (geo/bear-deg fcrd tcrd))])")
-	(title "ini-turn-plan [fapt tapt]"))
+	(source ";; bearing from airpotrt of departure to final turn start point\n[(int (geo/bear-deg [(fapt \"lat\") (fapt \"lon\")] (first ftp)))]")
+	(title "ini-turn-plan [fapt ftp]"))
 
 ([FlightPro_Class520003] of  Rule
 
@@ -1798,7 +1836,7 @@
 ([FlightPro_Class520004] of  Rule
 
 	(lhs "?fp (FlightPlan id ?id\n	takeoff \"DONE\"\n	ini-turn ?itn\n	(vector? ?itn))\n(Flight age \"CURRENT\" \n	id ?id\n	course ?crs\n	(= ?crs (first ?itn)))")
-	(rhs "(println [:InitialTurnDone ?id ?itn ?crs])\n(modify ?fp ini-turn \"DONE\")")
+	(rhs "(println [:InitialTurnDone ?id ?crs ?itn])\n(modify ?fp ini-turn \"DONE\")")
 	(salience 0)
 	(title "mf:InitialTurnDone"))
 
@@ -1809,8 +1847,94 @@
 
 ([FlightPro_Class530002] of  CloVar
 
-	(source "(volatile! {\"URE\" 180 \"LED\" 287 \"LHR\" 90 \"EWR\" 26\n	\"TAY\" 269 \"HEL\" 227 \"FRA\" 70 \"KEF\" 180\n	\"KDL\" 147 \"JFK\" 301 \"BOS\" 200 \"LGA\" 122})")
+	(source "(volatile! \n  {\"URE\" 180 \n   \"LED\" 287 \n   \"LHR\" 90 \n   \"EWR\" 26\n   \"TAY\" 269 \n   \"HEL\" 227 \n   \"FRA\" 70 \n   \"KEF\" 180\n   \"KDL\" 147 \n   \"JFK\" 301 \n   \"BOS\" 200 \n   \"LGA\" 122})")
 	(title "RUNWAYS"))
+
+([FlightPro_Class540002] of  CloFuncall
+
+	(source "(def en (:engine @my.glights.move/CARRIER))"))
+
+([FlightPro_Class540003] of  CloFuncall
+
+	(source "(def en (:engine @my.flights.move/CARRIER))"))
+
+([FlightPro_Class540004] of  CloFuncall
+
+	(source "en"))
+
+([FlightPro_Class540005] of  CloFuncall
+
+	(source "(my.flights.move/accel-dist 0 500 (:step en) (:accel en) (:time-out en))"))
+
+([FlightPro_Class540006] of  CloFuncall
+
+	(source "(my.flights.move/accel-dist 200 500 (:step en) (:accel en) (:time-out en))"))
+
+([FlightPro_Class540007] of  CloFuncall
+
+	(source "(my.flights.move/accel-dist 200 500 1 1 (:time-out en))"))
+
+([FlightPro_Class540008] of  CloFuncall
+
+	(source "(my.flights.move/accel-dist 200 500 1 2 (:time-out en))"))
+
+([FlightPro_Class540009] of  CloFuncall
+
+	(source "(def ru (:rudder @my.flights.move/CARRIER))"))
+
+([FlightPro_Class540010] of  CloFuncall
+
+	(source "ru"))
+
+([FlightPro_Class540011] of  CloFuncall
+
+	(source "(my.flights.move/turn-end-point [60 30] 220 0 180 (:step ru) (/ (:time-out ru) 3600000))"))
+
+([FlightPro_Class540012] of  CloFuncall
+
+	(source "(my.flights.move/turn-end-point [60 30] 220 0 90 (:step ru) (/ (:time-out ru) 3600000))"))
+
+([FlightPro_Class540013] of  CloFuncall
+
+	(source "(my.flights.move/turn-end-point [60 30] 220 0 270 (:step ru) (/ (:time-out ru) 3600000))"))
+
+([FlightPro_Class540014] of  CloFuncall
+
+	(source "(my.flights.move/accel-dist 0 500 1 1 (:time-out en))"))
+
+([FlightPro_Class540015] of  CloFuncall
+
+	(source "(my.flights.move/turn-end-point [60 30] 220 0 270 (:step ru) (:accel ru) (:time-out ru))"))
+
+([FlightPro_Class540016] of  CloFuncall
+
+	(source "(my.flights.move/turn-end-point [60 30] 220 0 90 (:step ru) (:accel ru) (:time-out ru))"))
+
+([FlightPro_Class540017] of  CloFunction
+
+	(source ";; final turn start point\n[(first ftp)]")
+	(title "cruise-plan [ftp]"))
+
+([FlightPro_Class540018] of  Rule
+
+	(lhs "(FlightPlan id ?id\n	takeoff \"DONE\"\n	cruise ?cru\n	(vector? ?cru))\n(Flight age \"CURRENT\" \n	id ?id\n	coord ?crd\n	course ?crs\n	(calc.geo/abaft ?crs ?crd (first ?cru)))")
+	(rhs "(println [:CruiseDone ?id ?crd ?cru])\n(modify ?fp cruise \"DONE\")")
+	(salience 0)
+	(title "mf:CruiseDone"))
+
+([FlightPro_Class540019] of  Rule
+
+	(lhs "(FlightPlan id ?id\n	cruise \"DONE\"\n	final-turn ?ftp\n	(vector? ?ftp))")
+	(rhs "(println [:FinalTurnStart ?id ?ftp])\n(my.flights.move/control ?id my.flights.move/turn (second ?ftp))")
+	(salience 0)
+	(title "mf:FinalTurnStart"))
+
+([FlightPro_Class540020] of  Rule
+
+	(lhs "(FlightPlan id ?id\n	cruise \"DONE\"\n	final-turn ?ftp\n	(vector? ?ftp))\n(Flight age \"CURRENT\" \n	id ?id\n	course ?crs\n	(= ?crs (second ?ftp)))")
+	(rhs "(println [:FinalTurnDone ?id ?crs ?ftp])\n(modify ?fp final-turn \"DONE\")")
+	(salience 0)
+	(title "mf:FinalTurnDone"))
 
 ([FlightPro_Class60000] of  CloDocumentation
 
