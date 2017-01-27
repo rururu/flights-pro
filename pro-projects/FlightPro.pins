@@ -1,4 +1,4 @@
-; Mon Jan 23 21:05:13 MSK 2017
+; Fri Jan 27 22:39:44 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -73,7 +73,7 @@
 
 ([FlightPro_Class100025] of  CloVar
 
-	(source "(volatile! {:mode \"?\"\n               :coord [0 0]\n               :altitude 0\n               :speed 0\n               :course 0\n               :step-hrs (double (/ (:carrier TIO) 3600000))\n               :bank-params [20 8 64 2]\n               :rudder {:target 0\n                            :step 3\n	    :accel 1\n                            :time-out 1011}\n               :elevator {:target 0\n                            :step 4\n	    :accel 1\n                            :time-out 997}\n               :engine {:target 0\n                            :step 1\n	    :accel 1\n                            :time-out 2003}})")
+	(source "(volatile! {:mode \"?\"\n               :coord [0 0]\n               :altitude 0\n               :speed 0\n               :course 0\n               :step-hrs (double (/ (:carrier TIO) 3600000))\n               :bank-params [20 8 64 2]\n               :rudder {:target 0\n                            :step 3\n	    :accel 1\n                            :time-out 1011}\n               :elevator {:target 0\n                            :step 4\n	    :accel 1\n                            :time-out 997}\n               :propeller {:target 0\n                            :step 1\n	    :accel 1\n                            :time-out 2003}})")
 	(title "CARRIER"))
 
 ([FlightPro_Class100026] of  CloFunction
@@ -798,7 +798,7 @@
 
 ([FlightPro_Class230000] of  CloFunction
 
-	(source "[33000	; cruise alt\n 3	; climbing accel\n]")
+	(source "(:climbing-plan GENPLAN)")
 	(title "climb-plan []"))
 
 ([FlightPro_Class230001] of  CloFunction
@@ -868,7 +868,7 @@
 
 ([FlightPro_Class250001] of  CloFunction
 
-	(source ";; as backward takeoff plan\n(let [fcrd [(fapt \"lat\") (fapt \"lon\")]\n       tcrd [(tapt \"lat\") (tapt \"lon\")]	;; destination coordinates\n       rudd (:rudder @mfs/CARRIER)\n       trw (runway (tapt \"iata\"))		;; lannding runway\n       rlc (geo/rev-bear trw)		;; reverse landing course\n       ftpt (mfs/turn-end-point \n	(geo/future-pos tcrd rlc 7 1)	;; outer marker position 7 nm away \n	200 		;; final turn speed 200 knots\n	rlc\n	(geo/bear-deg tcrd fcrd) 	;; reverse general course\n	(:step rudd) \n	(:accl rudd) \n	(:time-out rudd))] \n    [ftpt trw])")
+	(source ";; as backward takeoff plan\n(let [fcrd [(fapt \"lat\") (fapt \"lon\")]	;; departure coordinates\n       tcrd [(tapt \"lat\") (tapt \"lon\")]	;; destination coordinates\n       rudd (:rudder @mfs/CARRIER)\n       trw (runway (tapt \"iata\"))		;; lannding runway\n       crs (geo/rev-bear trw)		;; course = reverse landing course\n       crsa 1			;; course accel\n       spd  180			;; final turn speed\n       spda 6			;; speed accel\n       ftsp (mfs/turn-end-point \n	(geo/future-pos tcrd crs 7 1)	;; outer marker position 7 nm away \n	spd \n	crs		\n	(geo/bear-deg tcrd fcrd) 	;; reverse general course\n	(:step rudd) \n	crsa\n	(:time-out rudd))] 	;; final turn start point\n    [ftsp [crs crsa] [spd spda]])")
 	(title "final-turn-plan [fapt tapt]"))
 
 ([FlightPro_Class250002] of  CloFunction
@@ -978,7 +978,7 @@
 
 ([FlightPro_Class270007] of  CloFunction
 
-	(source "[500	; cruise spd\n 1	; spd accel\n]")
+	(source "(:cruise-speed GENPLAN)")
 	(title "accel-plan []"))
 
 ([FlightPro_Class270008] of  CloFuncall
@@ -1052,13 +1052,15 @@
 		[FlightPro_Class230000]
 		[FlightPro_Class270007]
 		[FlightPro_Class540017]
-		[FlightPro_Class250001])
+		[FlightPro_Class250001]
+		[FlightPro_Class540001])
 	(cloNamespace [FlightPro_Class280001])
 	(cloVars
 		[FlightPro_Class70000]
 		[FlightPro_Class20005]
 		[FlightPro_Class160009]
-		[FlightPro_Class530002])
+		[FlightPro_Class530002]
+		[FlightPro_Class550000])
 	(title "ES Functions"))
 
 ([FlightPro_Class280001] of  CloNamespace
@@ -1686,7 +1688,7 @@
 
 ([FlightPro_Class470002] of  CloFunction
 
-	(source "(let [carr (volatile! (assoc (merge {} @CARRIER)\n	:mode call\n   	:coord coord\n   	:course crs\n   	:speed spd\n   	:altitude alt))]\n  (vswap! carr assoc-in [:elevator :accel] 4)\n  (set-turn-point carr)\n  (vswap! CARRIERS assoc id carr))")
+	(source "(let [carr (volatile! (assoc (merge {} @CARRIER)\n	:mode call\n   	:coord coord\n   	:course crs\n   	:speed spd\n   	:altitude alt))]\n  (set-turn-point carr)\n  (vswap! CARRIERS assoc id carr))")
 	(title "add-my-flight [id call coord crs spd alt]"))
 
 ([FlightPro_Class470003] of  CloFunction
@@ -1696,8 +1698,8 @@
 
 ([FlightPro_Class470004] of  CloFunction
 
-	(source "([id func val]\n  (if-let [carr (get @CARRIERS id)]\n    (func carr val)))\n([id func val accel]\n  (if-let [carr (get @CARRIERS id)]\n    (func carr val accel)))")
-	(title "control"))
+	(source "(if-let [carr (get @CARRIERS id)]\n  (if (vector? arg)\n    (func carr (first arg) (second arg))\n    (func carr arg)))")
+	(title "control [id func arg]"))
 
 ([FlightPro_Class480000] of  CloProgram
 
@@ -1718,7 +1720,8 @@
 		[FlightPro_Class470004]
 		[FlightPro_Class470001]
 		[FlightPro_Class250000]
-		[FlightPro_Class520000])
+		[FlightPro_Class520000]
+		[FlightPro_Class560001])
 	(cloNamespace [FlightPro_Class480001])
 	(cloVars
 		[FlightPro_Class480003]
@@ -1760,7 +1763,7 @@
 
 ([FlightPro_Class490002] of  CloFunction
 
-	(source ";;(println [:TAKE-OFF-PLAN apt])\n[[(apt \"lat\") (apt \"lon\")]	; init-coord\n (apt \"alt\") 		; init-alt\n (runway (apt \"iata\")) 	; init-crs\n [220 8] 		; [final-spd spd-accel]\n [1500 6]		; [final-alt   alt-accel]\n]")
+	(source "[[(apt \"lat\") (apt \"lon\")]	;; initial coordinates\n (apt \"alt\") 		;; initial altitude\n (runway (apt \"iata\")) 	;; initial course\n (:initial-turn-speed GENPLAN)\n (:initial-turn-altitude GENPLAN)\n]")
 	(title "takeoff-plan [apt]"))
 
 ([FlightPro_Class5] of  CloVar
@@ -1780,7 +1783,7 @@
 ([FlightPro_Class500001] of  Rule
 
 	(lhs "(FlightPlan id ?id\n	takeoff \"DONE\"\n	cruise ?cru\n	(vector? ?cru))\n(Flight age \"CURRENT\" \n	id ?id\n	coord ?crd\n	course ?crs\n	(not= ?crs (int (calc.geo/bear-deg ?crd (first ?cru))) ))")
-	(rhs "(let [newc (int (calc.geo/bear-deg ?crd (first ?cru)))]\n  (println [:Cruise ?id newc])\n  (my.flights.move/control ?id my.flights.move/turn newc))")
+	(rhs "(let [newc (int (calc.geo/bear-deg ?crd (first ?cru)))]\n  (println [:Cruise ?id newc])\n  (my.flights.move/control ?id my.flights.move/turn newc (second ?cru)))")
 	(salience 0)
 	(title "mf:Cruise"))
 
@@ -1814,8 +1817,8 @@
 
 ([FlightPro_Class520000] of  CloFunction
 
-	(source ";; Calculates acceleration distance\n(let [step (* spd-stp spd-acl)\n       tioh (/ spd-tio 3600000)]\n  (loop [spd ini-spd dist 0]\n    (if (>= spd fin-spd)\n      (float dist)\n      (recur (+ spd step) (+ (* spd tioh) dist)))))")
-	(title "accel-dist [ini-spd fin-spd spd-stp spd-acl spd-tio]"))
+	(source ";; Calculates time (hrs) and distance (nm)\n(if (= ini-spd fin-spd)\n  [0 0]\n  (let [step (* spd-stp spd-acl)\n         tioh (float (/ spd-tio 3600000))\n         [func pred] (if (> ini-spd fin-spd) [+ >=] [- <=])]\n    (loop [spd ini-spd tim 0 dist 0]\n      (if (pred spd fin-spd)\n        [tim dist]\n        (recur (func spd step) (+ tioh tim) (+ (* spd tioh) dist))))))")
+	(title "speed-variation [[ini-spd x] [fin-spd spd-acl] spd-stp spd-tio]"))
 
 ([FlightPro_Class520001] of  CloFuncall
 
@@ -1823,13 +1826,13 @@
 
 ([FlightPro_Class520002] of  CloFunction
 
-	(source ";; bearing from airpotrt of departure to final turn start point\n[(int (geo/bear-deg [(fapt \"lat\") (fapt \"lon\")] (first ftp)))]")
+	(source ";; on bearing from airpotrt of departure to final turn start point\n[(int (geo/bear-deg [(fapt \"lat\") (fapt \"lon\")] (first ftp)))	;; fin-crs\n 2				;; crs-acl\n]")
 	(title "ini-turn-plan [fapt ftp]"))
 
 ([FlightPro_Class520003] of  Rule
 
 	(lhs "(FlightPlan id ?id\n	takeoff \"DONE\"\n	ini-turn ?itn\n	(vector? ?itn))")
-	(rhs "(println [:InitialTurnStart ?id ?itn])\n(my.flights.move/control ?id my.flights.move/turn (first ?itn))")
+	(rhs "(println [:InitialTurnStart ?id ?itn])\n(my.flights.move/control ?id my.flights.move/turn (first ?itn) (second ?itn))")
 	(salience 0)
 	(title "mf:InitialTurnStart"))
 
@@ -1849,6 +1852,15 @@
 
 	(source "(volatile! \n  {\"URE\" 180 \n   \"LED\" 287 \n   \"LHR\" 90 \n   \"EWR\" 26\n   \"TAY\" 269 \n   \"HEL\" 227 \n   \"FRA\" 70 \n   \"KEF\" 180\n   \"KDL\" 147 \n   \"JFK\" 301 \n   \"BOS\" 200 \n   \"LGA\" 122})")
 	(title "RUNWAYS"))
+
+([FlightPro_Class540000] of  CloFuncall
+
+	(source "(es/descend-plan)"))
+
+([FlightPro_Class540001] of  CloFunction
+
+	(source "(let [cru (:cruise GENPLAN)\n       lnd (:landing GENPLAN)\n       [spd1 acl1] (:speed cru)\n       [spd2 acl2 :as lspd] (:speed lnd) \n       prop (:propeller @mfs/CARRIER)\n       elev (:elevator @mfs/CARRIER)\n       [stim dist] (mfs/speed-variation	;; deceleration time and distance\n	  (:speed cru)\n	  (:speed lnd) \n	  (:step prop) \n	  (:time-out prop))\n       _ (println [stim dist])\n       atim (mfs/altitude-variation	;; descend time\n	  (:altitude cru)\n	  (:altitude lnd)\n	  (:step elev)\n	  (:time-out elev))]\n  atim)")
+	(title "descend-plan []"))
 
 ([FlightPro_Class540002] of  CloFuncall
 
@@ -1912,7 +1924,7 @@
 
 ([FlightPro_Class540017] of  CloFunction
 
-	(source ";; final turn start point\n[(first ftp)]")
+	(source "[(first ftp)	;; final turn start point\n 1	;; crs-acl\n]")
 	(title "cruise-plan [ftp]"))
 
 ([FlightPro_Class540018] of  Rule
@@ -1925,16 +1937,30 @@
 ([FlightPro_Class540019] of  Rule
 
 	(lhs "(FlightPlan id ?id\n	cruise \"DONE\"\n	final-turn ?ftp\n	(vector? ?ftp))")
-	(rhs "(println [:FinalTurnStart ?id ?ftp])\n(my.flights.move/control ?id my.flights.move/turn (second ?ftp))")
+	(rhs "(println [:FinalTurnStart ?id ?ftp])\n(let [[ftsp [crs crsa] [spd spda]] ?ftp]\n (my.flights.move/control ?id my.flights.move/accel spd spda)\n (my.flights.move/control ?id my.flights.move/turn crs crsa))")
 	(salience 0)
 	(title "mf:FinalTurnStart"))
 
 ([FlightPro_Class540020] of  Rule
 
-	(lhs "(FlightPlan id ?id\n	cruise \"DONE\"\n	final-turn ?ftp\n	(vector? ?ftp))\n(Flight age \"CURRENT\" \n	id ?id\n	course ?crs\n	(= ?crs (second ?ftp)))")
+	(lhs "(FlightPlan id ?id\n	cruise \"DONE\"\n	final-turn ?ftp\n	(vector? ?ftp))\n(Flight age \"CURRENT\" \n	id ?id\n	course ?crs\n	(= ?crs (first (second ?ftp))))")
 	(rhs "(println [:FinalTurnDone ?id ?crs ?ftp])\n(modify ?fp final-turn \"DONE\")")
 	(salience 0)
 	(title "mf:FinalTurnDone"))
+
+([FlightPro_Class550000] of  CloVar
+
+	(source "{:takeoff \n  {:speed [220 8]\n   :altitude [1500 6]}\n :cruise \n  {:speed [500 1]\n   :altitude [33000 3]}\n :landing \n  {:speed [180 1]\n   :altitude [2000 1]}\n}")
+	(title "GENPLAN"))
+
+([FlightPro_Class550001] of  CloFuncall
+
+	(source "(es/decel-plan)"))
+
+([FlightPro_Class560001] of  CloFunction
+
+	(source ";; Calculates time (hrs)\n(if (= ini-alt fin-alt)\n  0\n  (let [step (* alt-stp alt-acl)\n         tioh (float (/ alt-tio 3600000))\n         adif (if (> ini-alt fin-alt) (- ini-alt fin-alt) (- fin-alt ini-alt))]\n    (* (/ adif step) tioh)))")
+	(title "altitude-variation [[ini-alt x] [fin-alt alt-acl] alt-stp alt-tio]"))
 
 ([FlightPro_Class60000] of  CloDocumentation
 

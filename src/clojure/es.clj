@@ -32,6 +32,16 @@
    "JFK" 301 
    "BOS" 200 
    "LGA" 122}))
+(def GENPLAN {:takeoff 
+  {:speed [220 8]
+   :altitude [1500 6]}
+ :cruise 
+  {:speed [500 1]
+   :altitude [33000 3]}
+ :landing 
+  {:speed [180 1]
+   :altitude [2000 1]}
+})
 (defn put-on-map [id crd crs spd sts]
   (asp/pump-in (:instructions  cmd/CHN)
 	{:instruct :create-update
@@ -107,46 +117,67 @@
     (geo/norm-crs (+ rw 180)))))
 
 (defn takeoff-plan [apt]
-  ;;(println [:TAKE-OFF-PLAN apt])
-[[(apt "lat") (apt "lon")]	; init-coord
- (apt "alt") 		; init-alt
- (runway (apt "iata")) 	; init-crs
- [220 8] 		; [final-spd spd-accel]
- [1500 6]		; [final-alt   alt-accel]
+  [[(apt "lat") (apt "lon")]	;; initial coordinates
+ (apt "alt") 		;; initial altitude
+ (runway (apt "iata")) 	;; initial course
+ (:initial-turn-speed GENPLAN)
+ (:initial-turn-altitude GENPLAN)
 ])
 
 (defn ini-turn-plan [fapt ftp]
-  ;; bearing from airpotrt of departure to final turn start point
-[(int (geo/bear-deg [(fapt "lat") (fapt "lon")] (first ftp)))])
+  ;; on bearing from airpotrt of departure to final turn start point
+[(int (geo/bear-deg [(fapt "lat") (fapt "lon")] (first ftp)))	;; fin-crs
+ 2				;; crs-acl
+])
 
 (defn climb-plan []
-  [33000	; cruise alt
- 3	; climbing accel
-])
+  (:climbing-plan GENPLAN))
 
 (defn accel-plan []
-  [500	; cruise spd
- 1	; spd accel
-])
+  (:cruise-speed GENPLAN))
 
 (defn cruise-plan [ftp]
-  ;; final turn start point
-[(first ftp)])
+  [(first ftp)	;; final turn start point
+ 1	;; crs-acl
+])
 
 (defn final-turn-plan [fapt tapt]
   ;; as backward takeoff plan
-(let [fcrd [(fapt "lat") (fapt "lon")]
+(let [fcrd [(fapt "lat") (fapt "lon")]	;; departure coordinates
        tcrd [(tapt "lat") (tapt "lon")]	;; destination coordinates
        rudd (:rudder @mfs/CARRIER)
        trw (runway (tapt "iata"))		;; lannding runway
-       rlc (geo/rev-bear trw)		;; reverse landing course
-       ftpt (mfs/turn-end-point 
-	(geo/future-pos tcrd rlc 7 1)	;; outer marker position 7 nm away 
-	200 		;; final turn speed 200 knots
-	rlc
+       crs (geo/rev-bear trw)		;; course = reverse landing course
+       crsa 1			;; course accel
+       spd  180			;; final turn speed
+       spda 6			;; speed accel
+       ftsp (mfs/turn-end-point 
+	(geo/future-pos tcrd crs 7 1)	;; outer marker position 7 nm away 
+	spd 
+	crs		
 	(geo/bear-deg tcrd fcrd) 	;; reverse general course
 	(:step rudd) 
-	(:accl rudd) 
-	(:time-out rudd))] 
-    [ftpt tcrd trw]))
+	crsa
+	(:time-out rudd))] 	;; final turn start point
+    [ftsp [crs crsa] [spd spda]]))
+
+(defn descend-plan []
+  (let [cru (:cruise GENPLAN)
+       lnd (:landing GENPLAN)
+       [spd1 acl1] (:speed cru)
+       [spd2 acl2 :as lspd] (:speed lnd) 
+       prop (:propeller @mfs/CARRIER)
+       elev (:elevator @mfs/CARRIER)
+       [stim dist] (mfs/speed-variation	;; deceleration time and distance
+	  (:speed cru)
+	  (:speed lnd) 
+	  (:step prop) 
+	  (:time-out prop))
+       _ (println [stim dist])
+       atim (mfs/altitude-variation	;; descend time
+	  (:altitude cru)
+	  (:altitude lnd)
+	  (:step elev)
+	  (:time-out elev))]
+  atim))
 

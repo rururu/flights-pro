@@ -27,7 +27,7 @@
                             :step 4
 	    :accel 1
                             :time-out 997}
-               :engine {:target 0
+               :propeller {:target 0
                             :step 1
 	    :accel 1
                             :time-out 2003}}))
@@ -134,20 +134,17 @@
    	:course crs
    	:speed spd
    	:altitude alt))]
-  (vswap! carr assoc-in [:elevator :accel] 4)
   (set-turn-point carr)
   (vswap! CARRIERS assoc id carr)))
 
 (defn rem-my-flight [id]
   (vswap! CARRIERS dissoc id))
 
-(defn control
-  ([id func val]
+(defn control [id func arg]
   (if-let [carr (get @CARRIERS id)]
-    (func carr val)))
-([id func val accel]
-  (if-let [carr (get @CARRIERS id)]
-    (func carr val accel))))
+  (if (vector? arg)
+    (func carr (first arg) (second arg))
+    (func carr arg))))
 
 (defn start-movement []
   (letfn [(move-all [carrs]
@@ -168,12 +165,24 @@
                   (geo/future-pos point crs spd tioh)))))
   ipoint))
 
-(defn accel-dist [ini-spd fin-spd spd-stp spd-acl spd-tio]
-  ;; Calculates acceleration distance
-(let [step (* spd-stp spd-acl)
-       tioh (/ spd-tio 3600000)]
-  (loop [spd ini-spd dist 0]
-    (if (>= spd fin-spd)
-      (float dist)
-      (recur (+ spd step) (+ (* spd tioh) dist))))))
+(defn speed-variation [[ini-spd x] [fin-spd spd-acl] spd-stp spd-tio]
+  ;; Calculates time (hrs) and distance (nm)
+(if (= ini-spd fin-spd)
+  [0 0]
+  (let [step (* spd-stp spd-acl)
+         tioh (float (/ spd-tio 3600000))
+         [func pred] (if (> ini-spd fin-spd) [+ >=] [- <=])]
+    (loop [spd ini-spd tim 0 dist 0]
+      (if (pred spd fin-spd)
+        [tim dist]
+        (recur (func spd step) (+ tioh tim) (+ (* spd tioh) dist)))))))
+
+(defn altitude-variation [[ini-alt x] [fin-alt alt-acl] alt-stp alt-tio]
+  ;; Calculates time (hrs)
+(if (= ini-alt fin-alt)
+  0
+  (let [step (* alt-stp alt-acl)
+         tioh (float (/ alt-tio 3600000))
+         adif (if (> ini-alt fin-alt) (- ini-alt fin-alt) (- fin-alt ini-alt))]
+    (* (/ adif step) tioh))))
 
