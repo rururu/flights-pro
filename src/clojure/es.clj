@@ -34,13 +34,16 @@
    "LGA" 122}))
 (def GENPLAN {:takeoff 
   {:speed [220 8]
-   :altitude [1500 6]}
+   :altitude [1500 6]
+   :initial-turn-course [-1 2]}
  :cruise 
   {:speed [500 1]
-   :altitude [33000 3]}
+   :altitude [33000 7]}
  :landing 
-  {:speed [180 1]
-   :altitude [2000 1]}
+  {:speed [180 1 6]
+   :altitude [2000 7]
+   :outer-marker-distance 7
+   :final-turn-course [-1 1]}
 })
 (defn put-on-map [id crd crs spd sts]
   (asp/pump-in (:instructions  cmd/CHN)
@@ -116,68 +119,70 @@
     rw
     (geo/norm-crs (+ rw 180)))))
 
-(defn takeoff-plan [apt]
-  [[(apt "lat") (apt "lon")]	;; initial coordinates
- (apt "alt") 		;; initial altitude
- (runway (apt "iata")) 	;; initial course
- (:initial-turn-speed GENPLAN)
- (:initial-turn-altitude GENPLAN)
-])
-
-(defn ini-turn-plan [fapt ftp]
-  ;; on bearing from airpotrt of departure to final turn start point
-[(int (geo/bear-deg [(fapt "lat") (fapt "lon")] (first ftp)))	;; fin-crs
- 2				;; crs-acl
-])
+(defn takeoff-plan [fapt tapt]
+  (let [fcrd [(fapt "lat") (fapt "lon")]
+       tcrd [(tapt "lat") (tapt "lon")]
+       tof (:takeoff GENPLAN)
+       [x crsa] (:initial-turn-course tof)]
+  [fcrd			;; initial coordinates
+   (fapt "alt") 			;; initial altitude
+   [(runway (fapt "iata")) crsa]		;; initial course
+   (:altitude tof)			
+   (:speed tof)
+   [(int (geo/bear-deg fcrd tcrd)) crsa]	;; final course
+   tcrd			;; final coordinates
+  ]))
 
 (defn climb-plan []
-  (:climbing-plan GENPLAN))
+  (let [cru (:cruise GENPLAN)]
+  [(:altitude cru) (:speed cru)]))
 
-(defn accel-plan []
-  (:cruise-speed GENPLAN))
+(defn cruise-plan [lp]
+  ;; final turn start point
+[(first lp) 1])
 
-(defn cruise-plan [ftp]
-  [(first ftp)	;; final turn start point
- 1	;; crs-acl
-])
-
-(defn final-turn-plan [fapt tapt]
-  ;; as backward takeoff plan
-(let [fcrd [(fapt "lat") (fapt "lon")]	;; departure coordinates
-       tcrd [(tapt "lat") (tapt "lon")]	;; destination coordinates
+(defn landing-plan [tofp tapt]
+  (let [fcrd (first tofp)		;; departure coordinates
+       tcrd (last tofp)		;; destination coordinates
        rudd (:rudder @mfs/CARRIER)
-       trw (runway (tapt "iata"))		;; lannding runway
-       crs (geo/rev-bear trw)		;; course = reverse landing course
-       crsa 1			;; course accel
-       spd  180			;; final turn speed
-       spda 6			;; speed accel
-       ftsp (mfs/turn-end-point 
-	(geo/future-pos tcrd crs 7 1)	;; outer marker position 7 nm away 
+       crs (runway (tapt "iata"))		;; lannding course
+       rcrs (geo/rev-bear crs)		;; reverse landing course
+       rgen (geo/bear-deg tcrd fcrd)	;; reverse general course
+       lnd (:landing GENPLAN)
+       [x crsa] (:final-turn-course lnd)	;; landing course accel
+       [spd y spda] (:speed lnd)		;; final turn speed
+       omd (:outer-marker-distance lnd)
+       ftsp (mfs/turn-end-point 	
+	(geo/future-pos tcrd rcrs omd 1) ;; outer-marker coordinates
 	spd 
-	crs		
-	(geo/bear-deg tcrd fcrd) 	;; reverse general course
+	rcrs	
+	[rgen crsa] 
 	(:step rudd) 
-	crsa
-	(:time-out rudd))] 	;; final turn start point
-    [ftsp [crs crsa] [spd spda]]))
+	(:time-out rudd))] 	
+    [ftsp 			;; final turn start point
+     [crs crsa] 			;; lannding course
+     [spd spda] 			;; lannding speed
+     (tapt "alt") 			;; lannding altitude
+     tcrd 			;; lannding coordinates
+    ]))
 
 (defn descend-plan []
   (let [cru (:cruise GENPLAN)
        lnd (:landing GENPLAN)
-       [spd1 acl1] (:speed cru)
-       [spd2 acl2 :as lspd] (:speed lnd) 
        prop (:propeller @mfs/CARRIER)
        elev (:elevator @mfs/CARRIER)
-       [stim dist] (mfs/speed-variation	;; deceleration time and distance
+       [stim sdis] (mfs/speed-variation	;; deceleration time and distance
 	  (:speed cru)
 	  (:speed lnd) 
 	  (:step prop) 
 	  (:time-out prop))
-       _ (println [stim dist])
        atim (mfs/altitude-variation	;; descend time
 	  (:altitude cru)
 	  (:altitude lnd)
 	  (:step elev)
-	  (:time-out elev))]
-  atim))
+	  (:time-out elev))
+       adis (if (<= atim stim)
+                sdis
+                (+ sdis (* (- atim stim) (first (:speed cru)))))]
+  [adis (:altitude lnd) sdis (:speed lnd)]))
 

@@ -153,7 +153,7 @@
   (asp/repeater move-all CARRIERS (:carrier TIO))
   (println (str "  My Flights Movement Interval: " (:carrier TIO)))))
 
-(defn turn-end-point [ipoint spd crs1 crs2 crs-stp crs-acl crs-tio]
+(defn turn-end-point [ipoint spd crs1 [crs2 crs-acl] crs-stp crs-tio]
   ;; Calculates end point of turn
 (if (not= crs1 crs2)
   (let [step (* crs-stp crs-acl)
@@ -171,7 +171,7 @@
   [0 0]
   (let [step (* spd-stp spd-acl)
          tioh (float (/ spd-tio 3600000))
-         [func pred] (if (> ini-spd fin-spd) [+ >=] [- <=])]
+         [func pred] (if (> ini-spd fin-spd) [- <=] [+ >=])]
     (loop [spd ini-spd tim 0 dist 0]
       (if (pred spd fin-spd)
         [tim dist]
