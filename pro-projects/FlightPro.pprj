@@ -1,4 +1,4 @@
-; Sat Jan 28 18:09:37 MSK 2017
+; Mon Jan 30 22:34:42 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -81,39 +81,39 @@
 ([FlightPro_ProjectKB_Class618] of  Property_List
 )
 
-([FlightPro_ProjectKB_Class697] of  Map
+([FlightPro_ProjectKB_Class747] of  Map
 
 	(entries
-		[FlightPro_ProjectKB_Class698]
-		[FlightPro_ProjectKB_Class699]
-		[FlightPro_ProjectKB_Class700]))
+		[FlightPro_ProjectKB_Class748]
+		[FlightPro_ProjectKB_Class749]
+		[FlightPro_ProjectKB_Class750]))
 
-([FlightPro_ProjectKB_Class698] of  Map_Entry
+([FlightPro_ProjectKB_Class748] of  Map_Entry
 
 	(key "FlightPro_Class320015")
 	(key_class "edu.stanford.smi.protege.model.Frame")
 	(value "-8 584 224 146")
 	(value_class "java.awt.Rectangle"))
 
-([FlightPro_ProjectKB_Class699] of  Map_Entry
+([FlightPro_ProjectKB_Class749] of  Map_Entry
 
 	(key "FlightPro_Class290004")
 	(key_class "edu.stanford.smi.protege.model.Frame")
 	(value "-3 351 224 146")
 	(value_class "java.awt.Rectangle"))
 
-([FlightPro_ProjectKB_Class700] of  Map_Entry
+([FlightPro_ProjectKB_Class750] of  Map_Entry
 
 	(key "FlightPro_Class290003")
 	(key_class "edu.stanford.smi.protege.model.Frame")
 	(value "-5 349 224 146")
 	(value_class "java.awt.Rectangle"))
 
-([FlightPro_ProjectKB_Class701] of  Map_Entry
+([FlightPro_ProjectKB_Class751] of  Map_Entry
 
 	(key "InstanceDisplay.yellow_stickies")
 	(key_class "java.lang.String")
-	(value "FlightPro_ProjectKB_Class697")
+	(value "FlightPro_ProjectKB_Class747")
 	(value_class "java.util.Map"))
 
 ([FORMS_TAB] of  Widget
@@ -153,8 +153,8 @@
 
 ([KB_102576_Class1] of  Map
 
-	(entries [FlightPro_ProjectKB_Class701])
-	(referenced_maps [FlightPro_ProjectKB_Class697]))
+	(entries [FlightPro_ProjectKB_Class751])
+	(referenced_maps [FlightPro_ProjectKB_Class747]))
 
 ([KB_102576_Class11] of  Property_List
 
@@ -248,28 +248,177 @@
 	(name "instances_file_name")
 	(string_value "FlightPro.pins"))
 
-([KB_366745_Class618] of  Map
+([KB_199638_Class350] of  Widget
+
+	(is_hidden FALSE)
+	(name "Rule")
+	(property_list [KB_199638_Class351])
+	(widget_class_name "edu.stanford.smi.protege.widget.FormWidget"))
+
+([KB_199638_Class351] of  Property_List
+
+	(properties
+		[KB_199638_Class352]
+		[KB_199638_Class355]
+		[KB_199638_Class357]
+		[KB_199638_Class359]
+		[KB_199638_Class363]
+		[KB_199638_Class367]))
+
+([KB_199638_Class352] of  Property_List
+
+	(name "layout properties")
+	(properties
+		[KB_199638_Class353]
+		[KB_199638_Class354]))
+
+([KB_199638_Class353] of  String
+
+	(name "horizontal_stretcher")
+	(string_value "<<all>>"))
+
+([KB_199638_Class354] of  String
+
+	(name "vertical_stretcher")
+	(string_value "<<none>>"))
+
+([KB_199638_Class355] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "salience")
+	(property_list [KB_199638_Class356])
+	(widget_class_name "edu.stanford.smi.protege.widget.IntegerFieldWidget")
+	(width 100)
+	(x 200)
+	(y 0))
+
+([KB_199638_Class356] of  Property_List
+)
+
+([KB_199638_Class357] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "title")
+	(property_list [KB_199638_Class358])
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(width 200)
+	(x 0)
+	(y 0))
+
+([KB_199638_Class358] of  Property_List
+)
+
+([KB_199638_Class359] of  Widget
+
+	(height 240)
+	(is_hidden FALSE)
+	(label "When")
+	(name "lhs")
+	(property_list [KB_199638_Class360])
+	(widget_class_name "edu.stanford.smi.protege.widget.TextAreaWidget")
+	(width 480)
+	(x 0)
+	(y 60))
+
+([KB_199638_Class360] of  Property_List
+
+	(properties
+		[KB_199638_Class361]
+		[KB_199638_Class362]))
+
+([KB_199638_Class361] of  String
+
+	(name "tooltip_text"))
+
+([KB_199638_Class362] of  Boolean
+
+	(boolean_value FALSE)
+	(name "readOnly_configured"))
+
+([KB_199638_Class363] of  Widget
+
+	(height 240)
+	(is_hidden FALSE)
+	(label "Then")
+	(name "rhs")
+	(property_list [KB_199638_Class364])
+	(widget_class_name "edu.stanford.smi.protege.widget.TextAreaWidget")
+	(width 480)
+	(x 0)
+	(y 300))
+
+([KB_199638_Class364] of  Property_List
+
+	(properties
+		[KB_199638_Class365]
+		[KB_199638_Class366]))
+
+([KB_199638_Class365] of  String
+
+	(name "tooltip_text"))
+
+([KB_199638_Class366] of  Boolean
+
+	(boolean_value FALSE)
+	(name "readOnly_configured"))
+
+([KB_199638_Class367] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "document")
+	(property_list [KB_199638_Class368])
+	(widget_class_name "edu.stanford.smi.protege.widget.InstanceFieldWidget")
+	(width 200)
+	(x 0)
+	(y 540))
+
+([KB_199638_Class368] of  Property_List
+
+	(properties
+		[KB_199638_Class369]
+		[KB_199638_Class370]
+		[KB_199638_Class371]))
+
+([KB_199638_Class369] of  Boolean
+
+	(boolean_value FALSE)
+	(name "ButtonDisplayed-View References to Value"))
+
+([KB_199638_Class370] of  Boolean
+
+	(boolean_value FALSE)
+	(name "ButtonDisplayed-Delete Instance"))
+
+([KB_199638_Class371] of  Boolean
+
+	(boolean_value FALSE)
+	(name "ButtonDisplayed-Стереть Выделенный Экземпляр"))
+
+([KB_199638_Class618] of  Map
 
 	(entries
-		[KB_366745_Class619]
-		[KB_366745_Class620]
-		[KB_366745_Class621]))
+		[KB_199638_Class619]
+		[KB_199638_Class620]
+		[KB_199638_Class621]))
 
-([KB_366745_Class619] of  Map_Entry
+([KB_199638_Class619] of  Map_Entry
 
 	(key "suppress_instance_counting")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_366745_Class620] of  Map_Entry
+([KB_199638_Class620] of  Map_Entry
 
 	(key "add_name_on_instance_form")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_366745_Class621] of  Map_Entry
+([KB_199638_Class621] of  Map_Entry
 
 	(key "change_tracking_active")
 	(key_class "java.lang.String")
@@ -310,12 +459,12 @@
 
 ([KB_786132_Class217] of  Widget
 
-	(height 260)
+	(height 360)
 	(is_hidden FALSE)
 	(name "source")
 	(property_list [KB_786132_Class218])
 	(widget_class_name "edu.stanford.smi.protege.widget.TextAreaWidget")
-	(width 260)
+	(width 420)
 	(x 0)
 	(y 60))
 
@@ -361,7 +510,7 @@
 	(name "source")
 	(property_list [KB_932737_Class275])
 	(widget_class_name "edu.stanford.smi.protege.widget.TextAreaWidget")
-	(width 290)
+	(width 480)
 	(x 0)
 	(y 60))
 
@@ -456,6 +605,7 @@
 		[KB_932737_Class269]
 		[INSTANCE_ANNOTATION_FORM_WIDGET]
 		[PAL_FORM_WIDGET]
+		[KB_199638_Class350]
 		[STANDARD_FACET_FORM_WIDGET]
 		[KB_786132_Class212])
 	(default_cls_metaclass ":STANDARD-CLASS")

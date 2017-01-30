@@ -1,4 +1,4 @@
-; Sat Jan 28 18:09:37 MSK 2017
+; Mon Jan 30 22:34:42 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -8,6 +8,10 @@
 	(is-a USER)
 	(role abstract)
 	(single-slot course
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot descend
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
@@ -47,11 +51,11 @@
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
-	(single-slot accel
+	(single-slot to
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
-	(single-slot to
+	(single-slot landing
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
@@ -67,15 +71,7 @@
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
-	(single-slot final-turn
-		(type STRING)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
 	(single-slot status
-		(type STRING)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(single-slot ini-turn
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
@@ -187,23 +183,15 @@
 (defclass FlightPlan
 	(is-a Flights+Ontology)
 	(role concrete)
-	(single-slot final-turn
-		(type STRING)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
 	(single-slot cruise
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
+	(single-slot landing
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot id
-		(type STRING)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(single-slot ini-turn
-		(type STRING)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(single-slot accel
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
@@ -216,6 +204,10 @@
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot takeoff
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot descend
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write)))
