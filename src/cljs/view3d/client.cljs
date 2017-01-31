@@ -41,10 +41,10 @@
                             :step 4
 	    :accel 1
                             :time-out 997}
-               :engine {:target 0
+               :propeller {:target 0
                             :step 1
 	    :accel 1
-                            :time-out 1003}}))
+                            :time-out 2003}}))
 (def CAM-PROC (volatile! "STOP"))
 (def error-handler (fn [response]
   (let [{:keys [status status-text]} response]
@@ -117,7 +117,7 @@
 
 (defn accel-speed [accel]
   (if (= (:mode @CARRIER) "MANUAL")
-  (vswap! CARRIER assoc-in [:engine :accel] accel)))
+  (vswap! CARRIER assoc-in [:propeller :accel] accel)))
 
 (defn accel-altitude [accel]
   (if (= (:mode @CARRIER) "MANUAL")

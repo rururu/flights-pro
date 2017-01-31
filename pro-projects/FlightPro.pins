@@ -1,4 +1,4 @@
-; Mon Jan 30 22:34:42 MSK 2017
+; Tue Jan 31 22:04:06 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -165,7 +165,7 @@
 
 ([FlightPro_Class140003] of  CloFunction
 
-	(source "(set-html! \"autopilot\" \"<h4>Autopilot</h4>\")\n(set-html! \"accel\" \"accel\")\n(set-html! \"course\" \"Course: 000\")\n(set-html! \"speed\" \"Speed: 000\")\n(set-html! \"altitude\" \"Altitude: 00000\")\n(set-html! \"lat\" \"Latitude: 00.0000\")\n(set-html! \"lon\" \"Longitude: 00.0000\")\n(set-html! \"camera\" \"<h4>Camera</h4>\")\n(set-html! \"onboard\" \"Onboard:\")\n(set-html! \"onboard-fld\" \n  \"<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>\n   <option value='callsign'>callsign</option>\n   <option value='manual'>manual</option>\n   <option value='select'>select</option>\")\n(set-html! \"view\" \"View:\")\n(set-html! \"view-fld\" \n  \"<select onchange='javascript:view3d.client.view(this.value)' style='width:96px'>\n   <option value='FORWARD'>FORWARD</option>\n   <option value='BACKWARD'>BACKWARD</option>\n   <option value='RIGHT'>RIGHT</option>\n   <option value='LEFT'>LEFT</option>\n   <option value='UP'>UP</option>\n   <option value='DOWN'>DOWN</option>\n   <option value='FORWARD-RIGHT'>FORWARD-RIGHT</option>\n   <option value='FORWARD'>FORWARD</option>\n   <option value='BACKWARD-RIGHT'>BACKWARD-RIGHT</option>\n   <option value='BACKWARD-LEFT'>BACKWARD-LEFT</option>\n   </select>\")\n(set-html! \"pitch\" \"Pitch:\")\n(set-html! \"pitch-fld\" \n  \"<input value='-20' style='width:90px'\n               onchange='javascript:view3d.client.pitch(this.value)'>\")\n(set-html! \"roll\" \"Roll:\")\n(set-html! \"roll-fld\" \n  \"<input value='0' style='width:90px'\n               onchange='javascript:view3d.client.roll(this.value)'>\")\n(set-html! \"course-fld\" \n  \"<input value='180' style='width:38px' id='input-crs'\n                     onchange='javascript:view3d.client.course(this.value)'>\")\n(set-html! \"speed-fld\" \n  \"<input value='210' style='width:38px' id='input-spd'\n               onchange='javascript:view3d.client.speed(this.value)'>\")\n(set-html! \"altitude-fld\" \n  \"<input value='4000' style='width:38px' id='input-alt'\n               onchange='javascript:view3d.client.altitude(this.value)'>\")\n(set-html! \"speed-acl\" \n  (str \"<select style='width:44px'\n                onchange='javascript:view3d.client.accel_speed(this.value)'>\"\n         (apply str (for [n (range 1 5)]\n                           (str \"<option value='\" n \"'>\" n \"</option>\")))))\n(set-html! \"altitude-acl\" \n  (str \"<select style='width:44px'\n                onchange='javascript:view3d.client.accel_altitude(this.value)'>\"\n         (apply str (for [n (range 1 11)]\n                           (str \"<option value='\" n \"'>\" n \"</option>\")))))\n(set-html! \"latitude-fld\" \n  \"<input value='40.8' style='width:84px' id='input-lat'\n               onchange='javascript:view3d.client.latitude(this.value)'>\")\n(set-html! \"longitude-fld\" \n  \"<input value='-74.0' style='width:84px' id='input-lon'\n               onchange='javascript:view3d.client.longitude(this.value)'>\")")
+	(source "(set-html! \"autopilot\" \"<h4>Autopilot</h4>\")\n(set-html! \"accel\" \"accel\")\n(set-html! \"course\" \"Course: 000\")\n(set-html! \"speed\" \"Speed: 000\")\n(set-html! \"altitude\" \"Altitude: 00000\")\n(set-html! \"lat\" \"Latitude: 00.0000\")\n(set-html! \"lon\" \"Longitude: 00.0000\")\n(set-html! \"camera\" \"<h4>Camera</h4>\")\n(set-html! \"onboard\" \"Onboard:\")\n(set-html! \"onboard-fld\" \n  \"<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>\n   <option value='callsign'>callsign</option>\n   <option value='manual'>manual</option>\n   <option value='select'>select</option>\")\n(set-html! \"view\" \"View:\")\n(set-html! \"view-fld\" \n  \"<select onchange='javascript:view3d.client.view(this.value)' style='width:96px'>\n   <option value='FORWARD'>FORWARD</option>\n   <option value='BACKWARD'>BACKWARD</option>\n   <option value='RIGHT'>RIGHT</option>\n   <option value='LEFT'>LEFT</option>\n   <option value='UP'>UP</option>\n   <option value='DOWN'>DOWN</option>\n   <option value='FORWARD-RIGHT'>FORWARD-RIGHT</option>\n   <option value='FORWARD'>FORWARD</option>\n   <option value='BACKWARD-RIGHT'>BACKWARD-RIGHT</option>\n   <option value='BACKWARD-LEFT'>BACKWARD-LEFT</option>\n   </select>\")\n(set-html! \"pitch\" \"Pitch:\")\n(set-html! \"pitch-fld\" \n  \"<input value='-20' style='width:90px'\n               onchange='javascript:view3d.client.pitch(this.value)'>\")\n(set-html! \"roll\" \"Roll:\")\n(set-html! \"roll-fld\" \n  \"<input value='0' style='width:90px'\n               onchange='javascript:view3d.client.roll(this.value)'>\")\n(set-html! \"course-fld\" \n  \"<input value='180' style='width:38px' id='input-crs'\n                     onchange='javascript:view3d.client.course(this.value)'>\")\n(set-html! \"speed-fld\" \n  \"<input value='210' style='width:38px' id='input-spd'\n               onchange='javascript:view3d.client.speed(this.value)'>\")\n(set-html! \"altitude-fld\" \n  \"<input value='4000' style='width:38px' id='input-alt'\n               onchange='javascript:view3d.client.altitude(this.value)'>\")\n(set-html! \"speed-acl\" \n  (str \"<select style='width:44px'\n                onchange='javascript:view3d.client.accel_speed(this.value)'>\"\n         (apply str (for [n (range 1 11)]\n                           (str \"<option value='\" n \"'>\" n \"</option>\")))))\n(set-html! \"altitude-acl\" \n  (str \"<select style='width:44px'\n                onchange='javascript:view3d.client.accel_altitude(this.value)'>\"\n         (apply str (for [n (range 1 11)]\n                           (str \"<option value='\" n \"'>\" n \"</option>\")))))\n(set-html! \"latitude-fld\" \n  \"<input value='40.8' style='width:84px' id='input-lat'\n               onchange='javascript:view3d.client.latitude(this.value)'>\")\n(set-html! \"longitude-fld\" \n  \"<input value='-74.0' style='width:84px' id='input-lon'\n               onchange='javascript:view3d.client.longitude(this.value)'>\")")
 	(title "show-controls []"))
 
 ([FlightPro_Class140004] of  CloFunction
@@ -352,7 +352,7 @@
 
 ([FlightPro_Class160011] of  CloFunction
 
-	(source "(println :INIT-CHART)\n(let [m (-> js/L\n              (.map \"map\")\n              (.setView (array 60.0, 30.0) 10)) ;; New York 40.8, -74.0\n        tile1 (-> js/L (.tileLayer \"http://{s}.tile.osm.org/{z}/{x}/{y}.png\"\n                                   #js{:maxZoom 16\n                                       :attribution \"Ru, OpenStreetMap &copy;\"}))\n        tile2 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile3 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile4 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile5 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        base (clj->js {\"OpenStreetMap\" tile1\n                       \"Google Satellite\" tile2\n                       \"Google Streets\" tile3\n                       \"Google Hybrid\" tile4\n                       \"Google Terrain\" tile5})\n        ctrl (-> js/L (.control.layers base nil))]\n  (.addTo tile1 m)\n  (.addTo ctrl m)\n  (.on m \"mousemove\"\n         (fn [e] (ctl/mouse-move (.. e -latlng -lat) (.. e -latlng -lng))))\n  (vreset! CHART m))")
+	(source "(println :INIT-CHART)\n(let [m (-> js/L\n              (.map \"map\")\n              (.setView (array 60.3, 25.0) 10)) ;; New York 40.8, -74.0\n        tile1 (-> js/L (.tileLayer \"http://{s}.tile.osm.org/{z}/{x}/{y}.png\"\n                                   #js{:maxZoom 16\n                                       :attribution \"Ru, OpenStreetMap &copy;\"}))\n        tile2 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile3 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile4 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile5 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        base (clj->js {\"OpenStreetMap\" tile1\n                       \"Google Satellite\" tile2\n                       \"Google Streets\" tile3\n                       \"Google Hybrid\" tile4\n                       \"Google Terrain\" tile5})\n        ctrl (-> js/L (.control.layers base nil))]\n  (.addTo tile1 m)\n  (.addTo ctrl m)\n  (.on m \"mousemove\"\n         (fn [e] (ctl/mouse-move (.. e -latlng -lat) (.. e -latlng -lng))))\n  (vreset! CHART m))")
 	(title "init-chart []"))
 
 ([FlightPro_Class160012] of  CloFunction
@@ -868,7 +868,7 @@
 
 ([FlightPro_Class250001] of  CloFunction
 
-	(source "(let [fcrd (first tofp)		;; departure coordinates\n       tcrd (last tofp)		;; destination coordinates\n       lalt (tapt \"alt\")		;; landing altitude\n       crs (runway (tapt \"iata\"))		;; lannding course\n       rcrs (geo/rev-bear crs)		;; reverse landing course\n       rgen (geo/bear-deg tcrd fcrd)	;; reverse general course\n       lnd (:landing GENPLAN)\n       [x crsa] (:final-turn-course lnd)	;; landing course accel\n       [spd y spda] (:speed lnd)		;; final turn speed\n       omd (:outer-marker-distance lnd)\n       rudd (:rudder @mfs/CARRIER)\n       ftsp (mfs/turn-end-point 	\n	(geo/future-pos tcrd rcrs omd 1) ;; outer-marker coordinates\n	spd \n	rcrs	\n	[rgen crsa] \n	(:step rudd) \n	(:time-out rudd))] 	\n    {:final-turn-crd 	ftsp\n     :landing-crs	[crs crsa] 	\n     :lannding-spd	[spd spda]\n     :lannding-alt	lalt\n     :table-alt		(corr-alt-tab (:table-alt lnd) lalt)\n     :table-spd		(:table-spd lnd)\n     :stop-crd		tcrd})")
+	(source "(let [fcrd (:from-crd tofp)		;; departure coordinates\n       tcrd (:to-crd tofp)		;; destination coordinates\n       lalt (tapt \"alt\")		;; landing altitude\n       crs (runway (tapt \"iata\"))		;; lannding course\n       rcrs (geo/rev-bear crs)		;; reverse landing course\n       rgen (geo/bear-deg tcrd fcrd)	;; reverse general course\n       lnd (:landing GENPLAN)\n       [x crsa] (:final-turn-course lnd)	;; landing course accel\n       [spd y spda] (:speed lnd)		;; final turn speed\n       omd (:outer-marker-distance lnd)\n       rudd (:rudder @mfs/CARRIER)\n       ftsp (mfs/turn-end-point 	\n	(geo/future-pos tcrd rcrs omd 1) ;; outer-marker coordinates\n	spd \n	rcrs	\n	[rgen crsa] \n	(:step rudd) \n	(:time-out rudd))] 	\n    {:final-turn-crd 	ftsp\n     :landing-crs	[crs crsa] 	\n     :lannding-spd	[spd spda]\n     :lannding-alt	lalt\n     :table-alt		(corr-alt-tab (:table-alt lnd) lalt)\n     :table-spd		(:table-spd lnd)\n     :stop-crd		tcrd\n     :status		\"OFF\"})")
 	(title "landing-plan [tofp tapt]"))
 
 ([FlightPro_Class250002] of  CloFunction
@@ -950,14 +950,14 @@
 
 ([FlightPro_Class270002] of  Rule
 
-	(lhs "(FlightPlan id ?id\n	takeoff \"DONE\"\n	climb ?cli\n	(map? ?cli))")
+	(lhs "(FlightPlan id ?id\n	takeoff \"DONE\"\n	climb ?cli\n	descend ?dnd\n	((map? ?cli)\n	 (map? ?dnd)\n	 (not= (:status ?dnd) \"ON\")))")
 	(rhs "(println [:ClimbStart ?id ?cli])\n(my.flights.move/control ?id my.flights.move/elevate (:climb-alt ?cli))\n(my.flights.move/control ?id my.flights.move/accel (:climb-spd ?cli))")
 	(salience 0)
 	(title "mf:ClimbStart"))
 
 ([FlightPro_Class270003] of  Rule
 
-	(lhs "?fp (FlightPlan id ?id\n	takeoff \"DONE\"\n	climb ?cli\n	(map? ?cli))\n(Flight age \"CURRENT\" \n	id ?id\n	altitude ?alt\n	speed ?spd\n	((= ?alt (:climb-alt ?cli))\n	 (= ?spd (:climb-spd ?cli)))")
+	(lhs "?fp (FlightPlan id ?id\n	takeoff \"DONE\"\n	climb ?cli\n	(map? ?cli))\n(Flight age \"CURRENT\" \n	id ?id\n	altitude ?alt\n	speed ?spd\n	((= ?alt (:climb-alt ?cli))\n	 (= ?spd (:climb-spd ?cli))))")
 	(rhs "(println [:ClimbDone ?id ?alt])\n(modify ?fp climb \"DONE\")")
 	(salience 0)
 	(title "mf:ClimbDone"))
@@ -1108,7 +1108,7 @@
 
 ([FlightPro_Class30027] of  CloFunction
 
-	(source "([carr speed]\n  (vswap! carr assoc-in [:engine :target] speed)\n  (equalize carr :engine set-speed :speed step-closer))\n([carr speed acl]\n  (vswap! carr assoc-in [:engine :accel] acl)\n  (accel carr speed))")
+	(source "([carr speed]\n  (vswap! carr assoc-in [:propeller :target] speed)\n  (equalize carr :propeller set-speed :speed step-closer))\n([carr speed acl]\n  (vswap! carr assoc-in [:propeller :accel] acl)\n  (accel carr speed))")
 	(title "accel"))
 
 ([FlightPro_Class310000] of  CloFunction
@@ -1273,7 +1273,7 @@
 ([FlightPro_Class340002] of  Rule
 
 	(lhs "?sd (Schedule callsign ?csn\n	time ?tim\n	from ?frm\n	to ?to)")
-	(rhs "(if-let [stm (es/start-time ?tim)]\n  (let [tof (es/takeoff-plan ?frm ?to)\n         lnd (es/landing-plan tof ?to)\n         [fcrd falt [fcrs ca] & r] tof]\n     (my.flights.move/add-my-flight \n	?csn ?csn (:from-crd tof) (first (:initial-crs tof)) 0 (:from-alt tof))\n     (asser FlightPlan id ?csn\n	start-time stm\n	takeoff tof\n	climb (es/climb-plan)\n	cruise (es/cruise-plan lnd)\n                        descend (es/descend-plan lnd)\n	landing lnd)\n     (pro.commands/set-my-flight-info ?csn ?tim ?frm ?to)))")
+	(rhs "(if-let [stm (es/start-time ?tim)]\n  (let [tof (es/takeoff-plan ?frm ?to)\n         lnd (es/landing-plan tof ?to)]\n     (my.flights.move/add-my-flight \n	?csn ?csn (:from-crd tof) (first (:initial-crs tof)) 0 (:from-alt tof))\n     (asser FlightPlan id ?csn\n	start-time stm\n	takeoff tof\n	climb (es/climb-plan)\n	cruise (es/cruise-plan lnd)\n                        descend (es/descend-plan lnd)\n	landing lnd)\n     (pro.commands/set-my-flight-info ?csn ?tim ?frm ?to)))")
 	(salience 0)
 	(title "mf:FlightPlan"))
 
@@ -1444,7 +1444,9 @@
 		[FlightPro_Class550002]
 		[FlightPro_Class540018]
 		[FlightPro_Class540019]
-		[FlightPro_Class540020])
+		[FlightPro_Class540020]
+		[FlightPro_Class560000]
+		[FlightPro_Class570001])
 	(templates
 		[Flight]
 		[FlightPlan]
@@ -1566,7 +1568,7 @@
 
 ([FlightPro_Class440000] of  CloFunction
 
-	(source "([]\n  (am/input1 \"chart.client\" \"new callsign\" 80)\n  (defn handler1 [call]\n    (am/input2 \"chart.client\" \"h:m\" 80)\n      (defn handler2 [tim]\n        (schedule call tim))))\n([call tim]\n  (am/ask-server {:whom \"direct\"\n	    :question \"countries\"})\n  (am/get-answer #(schedule call tim %)))\n([call tim cns1]\n  (am/selector3 \"chart.client\" \"from country\" cns1 :itself 130)\n  (defn handler3 [sel]\n    (am/ask-server {:whom \"direct\"\n	       :question \"airports\"\n	       :country sel})\n    (am/get-answer #(schedule call tim sel %))))\n([call tim cnt1 aps1]\n  (am/selector4 \"chart.client\" \"from airport\" aps1 :itself 130)\n  (defn handler4 [sel]\n    (am/ask-server {:whom \"direct\"\n	    :question \"countries\"})\n    (am/get-answer #(schedule call tim cnt1 sel %))))\n([call tim cnt1 apt1 cns2]\n  (am/selector5 \"chart.client\" \"to county\" cns2 :itself 130)\n  (defn handler5 [sel]\n    (am/ask-server {:whom \"direct\"\n	       :question \"airports\"\n	       :country sel})\n    (am/get-answer #(schedule call tim cnt1 apt1 sel %))))\n([call tim cnt1 apt1 cnt2 aps2]\n  (am/selector6 \"chart.client\" \"to airport\" aps2 :itself 130)\n  (defn handler6 [sel]\n    (let [prm (str \"?callsign=\" call\n	\"&time=\" tim\n	\"&country1=\" cnt1\n	\"&airport1=\" apt1\n	\"&country2=\" cnt2\n	\"&airport2=\" sel)]\n      (GET (str (:command URL) \"schedule\" prm) no-handler)\n      (am/clear-dialog))))")
+	(source "([]\n  (am/input1 \"chart.client\" \"new callsign\" 80)\n  (defn handler1 [call]\n    (am/input2 \"chart.client\" \"hh:mm\" 80)\n      (defn handler2 [tim]\n        (schedule call tim))))\n([call tim]\n  (am/ask-server {:whom \"direct\"\n	    :question \"countries\"})\n  (am/get-answer #(schedule call tim %)))\n([call tim cns1]\n  (am/selector3 \"chart.client\" \"from country\" cns1 :itself 130)\n  (defn handler3 [sel]\n    (am/ask-server {:whom \"direct\"\n	       :question \"airports\"\n	       :country sel})\n    (am/get-answer #(schedule call tim sel %))))\n([call tim cnt1 aps1]\n  (am/selector4 \"chart.client\" \"from airport\" aps1 :itself 130)\n  (defn handler4 [sel]\n    (am/ask-server {:whom \"direct\"\n	    :question \"countries\"})\n    (am/get-answer #(schedule call tim cnt1 sel %))))\n([call tim cnt1 apt1 cns2]\n  (am/selector5 \"chart.client\" \"to county\" cns2 :itself 130)\n  (defn handler5 [sel]\n    (am/ask-server {:whom \"direct\"\n	       :question \"airports\"\n	       :country sel})\n    (am/get-answer #(schedule call tim cnt1 apt1 sel %))))\n([call tim cnt1 apt1 cnt2 aps2]\n  (am/selector6 \"chart.client\" \"to airport\" aps2 :itself 130)\n  (defn handler6 [sel]\n    (let [prm (str \"?callsign=\" call\n	\"&time=\" tim\n	\"&country1=\" cnt1\n	\"&airport1=\" apt1\n	\"&country2=\" cnt2\n	\"&airport2=\" sel)]\n      (GET (str (:command URL) \"schedule\" prm) no-handler)\n      (am/clear-dialog))))")
 	(title "schedule"))
 
 ([FlightPro_Class440001] of  CloFunction
@@ -1601,8 +1603,8 @@
 
 ([FlightPro_Class470000] of  CloVar
 
-	(source "(volatile! {})")
-	(title "CARRIERS"))
+	(source "(defonce CARRIERS (volatile! {}))")
+	(title "defCARRIERS"))
 
 ([FlightPro_Class470001] of  CloFunction
 
@@ -1681,12 +1683,16 @@
 
 ([FlightPro_Class490000] of  CloFunction
 
-	(source "(println [:START-TIME tim])\n(let [[h m :as hm] (seq (.split tim \":\"))]\n  (if (and (seq hm) (= (count hm) 2))\n    (let [h (read-string h)\n           m (read-string m)]\n      (if (and (number? h) (number? m) (<= 0 h 23) (<= 0 m 59))\n        (let [cld (Calendar/getInstance)]\n          (.set cld Calendar/HOUR_OF_DAY h)\n          (.set cld Calendar/MINUTE m)\n          (.set cld Calendar/SECOND 0)\n          (int (/ (.getTimeInMillis cld) 1000)))))))")
+	(source ";;(println [:START-TIME tim])\n(let [[h m :as hm] (seq (.split tim \":\"))]\n  (if (and (seq hm) (= (count hm) 2))\n    (let [h (read-string h)\n           m (if (.startsWith m \"0\") (.substring m 1) m)\n           m (read-string m)]\n      (if (and (number? h) (number? m) (<= 0 h 23) (<= 0 m 59))\n        (let [cld (Calendar/getInstance)]\n          (.set cld Calendar/HOUR_OF_DAY h)\n          (.set cld Calendar/MINUTE m)\n          (.set cld Calendar/SECOND 0)\n          (int (/ (.getTimeInMillis cld) 1000)))))))")
 	(title "start-time [tim]"))
+
+([FlightPro_Class490001] of  CloFuncall
+
+	(source "(get @my.flights.move/CARRIERS \"U2\")"))
 
 ([FlightPro_Class490002] of  CloFunction
 
-	(source "(let [fcrd [(fapt \"lat\") (fapt \"lon\")]\n       tcrd [(tapt \"lat\") (tapt \"lon\")]\n       tof (:takeoff GENPLAN)\n       [x crsa] (:initial-turn-course tof)]\n  {:from-crd 	fcrd\n   :from-alt 	(fapt \"alt\") \n   :initial-crs 	[(runway (fapt \"iata\")) crsa]\n   :takeoff-alt 	(:altitude tof)			\n   :takeoff-spd (:speed tof)\n   :general-crs 	[(int (geo/bear-deg fcrd tcrd)) crsa]\n   :to-crd 	tcrd})")
+	(source "(let [fcrd [(fapt \"lat\") (fapt \"lon\")]\n       tcrd [(tapt \"lat\") (tapt \"lon\")]\n       tof (:takeoff GENPLAN)\n       [x crsa] (:initial-turn-course tof)]\n  {:from-crd 	fcrd\n   :from-alt 	(fapt \"alt\") \n   :initial-crs 	[(runway (fapt \"iata\")) crsa]\n   :takeoff-alt 	(:altitude tof)			\n   :takeoff-spd (:speed tof)\n   :general-crs 	[(int (geo/bear-deg fcrd tcrd)) crsa]\n   :to-crd 	tcrd\n   :initial-turn \"OFF\"})")
 	(title "takeoff-plan [fapt tapt]"))
 
 ([FlightPro_Class5] of  CloVar
@@ -1705,10 +1711,26 @@
 
 ([FlightPro_Class500001] of  Rule
 
-	(lhs "(FlightPlan id ?id\n	takeoff \"DONE\"\n	cruise ?cru\n	(map? ?cru))\n(Flight age \"CURRENT\" \n	id ?id\n	coord ?crd\n	course ?crs\n	(not= ?crs (int (calc.geo/bear-deg ?crd (:target-crd ?cru))) ))")
+	(lhs "(FlightPlan id ?id\n	takeoff \"DONE\"\n	cruise ?cru\n	(map? ?cru))\n(Flight age \"CURRENT\" \n	id ?id\n	coord ?crd\n	course ?crs\n	(not= ?crs (int (calc.geo/bear-deg ?crd (:target-crd ?cru)))))")
 	(rhs "(let [newc (int (calc.geo/bear-deg ?crd (:target-crd ?cru)))]\n  (println [:Cruise ?id newc])\n  (my.flights.move/control ?id my.flights.move/turn [newc 1]))")
 	(salience 0)
 	(title "mf:Cruise"))
+
+([FlightPro_Class500002] of  CloFuncall
+
+	(source "(my.flights.move/control ?id my.flights.move/elevate [2000 7])"))
+
+([FlightPro_Class500003] of  CloFuncall
+
+	(source "(my.flights.move/control \"U2\" my.flights.move/elevate [2000 7])"))
+
+([FlightPro_Class500004] of  CloFuncall
+
+	(source "(my.flights.move/control \"U2\" my.flights.move/elevate [8000 7])"))
+
+([FlightPro_Class500005] of  CloFuncall
+
+	(source "(my.flights.move/control \"U2\" my.flights.move/accel [180 6])"))
 
 ([FlightPro_Class50001] of  ClsRequired
 
@@ -1745,8 +1767,8 @@
 
 ([FlightPro_Class520003] of  Rule
 
-	(lhs "?fp (FlightPlan id ?id\n	takeoff ?tof\n	(map? ?tof))\n(Flight age \"CURRENT\" \n	id ?id\n	altitude ?alt\n	speed ?spd\n	((>= ?alt (first (:takeoff-alt ?tof)))\n	 (>= ?spd (first (:takeoff-spd ?tof)))))")
-	(rhs "(println [:InitialTurnStart ?id ?alt ?spd])\n(my.flights.move/control ?id my.flights.move/turn (:general-crs ?tof))")
+	(lhs "?fp (FlightPlan id ?id\n	takeoff ?tof\n	((map? ?tof)\n	 (= (:initial-turn ?tof) \"OFF\")))\n(Flight age \"CURRENT\" \n	id ?id\n	altitude ?alt\n	speed ?spd\n	((>= ?alt (first (:takeoff-alt ?tof)))\n	 (>= ?spd (first (:takeoff-spd ?tof)))))")
+	(rhs "(println [:InitialTurnStart ?id ?alt ?spd])\n(my.flights.move/control ?id my.flights.move/turn (:general-crs ?tof))\n(modify ?fp takeoff (assoc ?tof :initial-turn \"ON\"))")
 	(salience 0)
 	(title "mf:InitialTurnStart"))
 
@@ -1762,24 +1784,24 @@
 
 ([FlightPro_Class540000] of  Rule
 
-	(lhs "?fp (FlightPlan id ?id\n	takeoff \"DONE\"\n	descend ?dnd\n	((map? ?dnd)\n	 (= (:status ?dnd) \"OFF\")))\n(Flight age \"CURRENT\" \n	id ?id\n	coors ?crd\n	(<= (calc.geo/distance-nm ?crd (:target-crd ?dnd))\n	  (:alt-dist ?dnd)))")
+	(lhs "?fp (FlightPlan id ?id\n	takeoff \"DONE\"\n	descend ?dnd\n	((map? ?dnd)\n	 (= (:status ?dnd) \"OFF\")))\n(Flight age \"CURRENT\" \n	id ?id\n	coord ?crd\n	(<= (calc.geo/distance-nm ?crd (:target-crd ?dnd))\n	  (:alt-dist ?dnd)))")
 	(rhs "(println [:DescendStart ?id ?dnd])\n(my.flights.move/control ?id my.flights.move/elevate (:alt-target ?dnd))\n(modify ?fp descend (assoc ?dnd :status \"ON\"))")
 	(salience 0)
 	(title "mf:DescendStart"))
 
 ([FlightPro_Class540001] of  CloFunction
 
-	(source "(let [cru (:cruise GENPLAN)\n       lnd (:landing GENPLAN)\n       prop (:propeller @mfs/CARRIER)\n       elev (:elevator @mfs/CARRIER)\n       [stim sdis] (mfs/speed-variation	;; deceleration time and distance\n	  (:speed cru)\n	  (:speed lnd) \n	  (:step prop) \n	  (:time-out prop))\n       atim (mfs/altitude-variation	;; descend time\n	  (:altitude cru)\n	  (:altitude lnd)\n	  (:step elev)\n	  (:time-out elev))\n       adis (if (<= atim stim)\n                sdis\n                (+ sdis (* (- atim stim) (first (:speed cru)))))]\n  {:status \"OFF\"\n   :alt-dist adis\n   :alt-target (:altitude lnd)\n   :spd-dist sdis \n   :spd-target (:speed lnd) \n   :target-crd (first lp)})")
+	(source "(let [cru (:cruise GENPLAN)\n       lnd (:landing GENPLAN)\n       prop (:propeller @mfs/CARRIER)\n       elev (:elevator @mfs/CARRIER)\n       [stim sdis] (mfs/speed-variation	;; deceleration time and distance\n	  (:speed cru)\n	  (:speed lnd) \n	  (:step prop) \n	  (:time-out prop))\n       atim (mfs/altitude-variation	;; descend time\n	  (:altitude cru)\n	  (:altitude lnd)\n	  (:step elev)\n	  (:time-out elev))\n       adis (if (<= atim stim)\n                sdis\n                (+ sdis (* (- atim stim) (first (:speed cru)))))]\n  {:status \"OFF\"\n   :alt-dist adis\n   :alt-target (:altitude lnd)\n   :spd-dist sdis \n   :spd-target (:speed lnd) \n   :target-crd (:final-turn-crd lp)})")
 	(title "descend-plan [lp]"))
 
 ([FlightPro_Class540017] of  CloFunction
 
-	(source ";; final turn start point\n{:target-crd (first lp)}")
+	(source ";; final turn start point\n{:target-crd (:final-turn-crd lp)}")
 	(title "cruise-plan [lp]"))
 
 ([FlightPro_Class540018] of  Rule
 
-	(lhs "(FlightPlan id ?id\n	takeoff \"DONE\"\n	cruise ?cru\n	(map? ?cru))\n(Flight age \"CURRENT\" \n	id ?id\n	coord ?crd\n	course ?crs\n	(calc.geo/abaft ?crs ?crd (:target-crd ?cru)))")
+	(lhs "?fp (FlightPlan id ?id\n	takeoff \"DONE\"\n	cruise ?cru\n	(map? ?cru))\n(Flight age \"CURRENT\" \n	id ?id\n	coord ?crd\n	course ?crs\n	(calc.geo/abaft ?crs ?crd (:target-crd ?cru)))")
 	(rhs "(println [:CruiseDone ?id ?crd ?cru])\n(modify ?fp cruise \"DONE\")")
 	(salience 0)
 	(title "mf:CruiseDone"))
@@ -1793,20 +1815,20 @@
 
 ([FlightPro_Class540020] of  Rule
 
-	(lhs "(FlightPlan id ?id\n	cruise \"DONE\"\n	landing ?lnd\n	(map? ?lnd))\n(Flight age \"CURRENT\" \n	id ?id\n	altitude ?alt\n	speed ?spd\n	course ?crs\n	(= ?crs (first (:landing-crs ?lnd))))")
-	(rhs "(println [:Landing ?id ?alt ?spd ?crs])")
+	(lhs "?fp (FlightPlan id ?id\n	cruise \"DONE\"\n	landing ?lnd\n	((map? ?lnd)\n	 (= (:status ?lnd) \"OFF\")))\n(Flight age \"CURRENT\" \n	id ?id\n	altitude ?alt\n	speed ?spd\n	course ?crs\n	(= ?crs (first (:landing-crs ?lnd))))")
+	(rhs "(println [:LandingStart ?id ?alt ?spd ?crs])\n(modify ?fp landing (assoc ?lnd :status \"ON\"))")
 	(salience 0)
-	(title "mf:Landing"))
+	(title "mf:LandingStart"))
 
 ([FlightPro_Class550000] of  CloVar
 
-	(source "{:takeoff \n  {:speed [220 8]\n   :altitude [1500 6]\n   :initial-turn-course [-1 2]}\n :cruise \n  {:speed [500 1]\n   :altitude [33000 7]}\n :landing \n  {:speed [180 1 6]\n   :altitude [2000 7]\n   :outer-marker-distance 7\n   :final-turn-course [-1 1]\n   :table-alt\n     [[0.05 0][0.5 15][2 200][7 2000]]]))) ;; x - dist, y - alt\n   :table-spd\n     [[0.05 5][0.5 140][3 180]]     ;; x - dist, y - spd\n}")
+	(source "{:takeoff \n  {:speed [220 8]\n   :altitude [1500 6]\n   :initial-turn-course [-1 2]}\n :cruise \n  {:speed [500 1]\n   :altitude [33000 8]}\n :landing \n  {:speed [180 1 6]\n   :altitude [2000 8]\n   :outer-marker-distance 7\n   :final-turn-course [-1 1]\n   :table-alt\n     [[0.05 0][0.5 15][2 200][7 2000]] ;; x - dist, y - alt\n   :table-spd\n     [[0.05 5][0.5 140][3 180]]}	;; x - dist, y - spd\n}")
 	(title "GENPLAN"))
 
 ([FlightPro_Class550002] of  Rule
 
-	(lhs "?fp (FlightPlan id ?id\n	takeoff \"DONE\"\n	descend ?dnd\n	((map? ?dnd)\n	 (= (:status ?dnd) \"ON\")))\n(Flight age \"CURRENT\" \n	id ?id\n	coors ?crd\n	(<= (calc.geo/distance-nm ?crd (:target-crd ?dnd))\n	  (:spd-dist ?dnd)))")
-	(rhs "(println [:BrakeStart ?id ?dnd])\n(my.flights.move/control ?id my.flights.move/accel (:spd-target ?dnd))\n(modify ?fp descend \"DONE\")")
+	(lhs "?fp (FlightPlan id ?id\n	takeoff \"DONE\"\n	descend ?dnd\n	((map? ?dnd)\n	 (= (:status ?dnd) \"ON\")))\n(Flight age \"CURRENT\" \n	id ?id\n	coord ?crd\n	(<= (calc.geo/distance-nm ?crd (:target-crd ?dnd))\n	  (:spd-dist ?dnd)))")
+	(rhs "(println [:BrakeStart ?id ?dnd])\n(my.flights.move/control ?id my.flights.move/accel (:spd-target ?dnd))\n(modify ?fp descend \"DOING\")")
 	(salience 0)
 	(title "mf:BrakeStart"))
 
@@ -1815,10 +1837,92 @@
 	(source ";; add h to all but last yy\n(letfn [(corr1 [[x y]]\n	[x (+ y h)])]\n (vec (map corr1 tab)))")
 	(title "corr-alt-tab [tab h]"))
 
+([FlightPro_Class560000] of  Rule
+
+	(lhs "?fp (FlightPlan id ?id\n	cruise \"DONE\"\n	landing ?lnd\n	((map? ?lnd)\n	 (= (:status ?lnd) \"ON\")))\n(Flight age \"CURRENT\" \n	id ?id\n	coord ?crd)")
+	(rhs "(let [tcrd (:stop-crd ?lnd)\n       dist (calc.geo/distance-nm ?crd tcrd)\n       bear (calc.geo/bear-deg ?crd tcrd)\n       alt (calc.core/smooth-tabfun dist (:table-alt ?lnd))\n       spd (calc.core/smooth-tabfun dist (:table-spd ?lnd))]\n   (my.flights.move/control ?id my.flights.move/turn [bear 2])\n   (my.flights.move/control ?id my.flights.move/elevate [alt 6])\n   (my.flights.move/control ?id my.flights.move/accel [spd 8]))")
+	(salience 0)
+	(title "mf:OnLandingCourse"))
+
 ([FlightPro_Class560001] of  CloFunction
 
 	(source ";; Calculates time (hrs)\n(if (= ini-alt fin-alt)\n  0\n  (let [step (* alt-stp alt-acl)\n         tioh (float (/ alt-tio 3600000))\n         adif (if (> ini-alt fin-alt) (- ini-alt fin-alt) (- fin-alt ini-alt))]\n    (* (/ adif step) tioh)))")
 	(title "altitude-variation [[ini-alt x] [fin-alt alt-acl] alt-stp alt-tio]"))
+
+([FlightPro_Class570000] of  CloFuncall
+
+	(source "(pro.commands/schedule {:callsign \"R2\", :time \"13:54\", :country1 \"Russia\", :airport1 \"St. Petersburg Pulkovo Airport\", :country2 \"Finland\", :airport2 \"Helsinki Vantaa Airport\"})"))
+
+([FlightPro_Class570001] of  Rule
+
+	(lhs "?fp (FlightPlan id ?id\n	cruise \"DONE\"\n	landing ?lnd\n	((map? ?lnd)\n	 (= (:status ?lnd) \"ON\")))\n(Flight age \"CURRENT\" \n	id ?id\n	coord ?crd\n	course ?crs\n	(calc.geo/abaft ?crs ?crd (:stop-crd ?lnd)))")
+	(rhs "(println [:LandingDone ?id ?crd])\n(my.flights.move/rem-my-flight ?id)\n(modify ?fp landing \"DONE\")")
+	(salience 0)
+	(title "mf:LandingDone"))
+
+([FlightPro_Class570002] of  CloFuncall
+
+	(source "(pro.commands/schedule {:callsign \"R2\", :time \"13:21\", :country1 \"Russia\", :airport1 \"St. Petersburg Pulkovo Airport\", :country2 \"Finland\", :airport2 \"Helsinki Vantaa Airport\"})"))
+
+([FlightPro_Class570003] of  CloFuncall
+
+	(source "(ru.rules/pp 'FlightPlan)"))
+
+([FlightPro_Class570004] of  CloFuncall
+
+	(source "(ru.rules/sp :all)"))
+
+([FlightPro_Class570005] of  CloFuncall
+
+	(source "(pro.commands/schedule {:callsign \"R2\", :time \"13:31\", :country1 \"Russia\", :airport1 \"St. Petersburg Pulkovo Airport\", :country2 \"Finland\", :airport2 \"Helsinki Vantaa Airport\"})"))
+
+([FlightPro_Class570006] of  CloFuncall
+
+	(source "(ru.rules/f 45)"))
+
+([FlightPro_Class570007] of  CloFuncall
+
+	(source "(my.flights.move/CARRIERS)"))
+
+([FlightPro_Class570008] of  CloFuncall
+
+	(source "my.flights.move/CARRIERS"))
+
+([FlightPro_Class570009] of  CloFuncall
+
+	(source "(pro.commands/schedule {:callsign \"R2\", :time \"13:37\", :country1 \"Russia\", :airport1 \"St. Petersburg Pulkovo Airport\", :country2 \"Finland\", :airport2 \"Helsinki Vantaa Airport\"})"))
+
+([FlightPro_Class570010] of  CloFuncall
+
+	(source "(pro.commands/schedule {:callsign \"R2\", :time \"13:44\", :country1 \"Russia\", :airport1 \"St. Petersburg Pulkovo Airport\", :country2 \"Finland\", :airport2 \"Helsinki Vantaa Airport\"})"))
+
+([FlightPro_Class570011] of  CloFuncall
+
+	(source "(pro.commands/schedule {:callsign \"R2\", :time \"13:47\", :country1 \"Russia\", :airport1 \"St. Petersburg Pulkovo Airport\", :country2 \"Finland\", :airport2 \"Helsinki Vantaa Airport\"})"))
+
+([FlightPro_Class580000] of  CloFuncall
+
+	(source "(pro.commands/schedule {:callsign \"R2\", :time \"14:08\", :country1 \"Russia\", :airport1 \"St. Petersburg Pulkovo Airport\", :country2 \"Finland\", :airport2 \"Helsinki Vantaa Airport\"})"))
+
+([FlightPro_Class580001] of  CloFuncall
+
+	(source "(pro.commands/schedule {:callsign \"R2\", :time \"14:9\", :country1 \"Russia\", :airport1 \"St. Petersburg Pulkovo Airport\", :country2 \"Finland\", :airport2 \"Helsinki Vantaa Airport\"})"))
+
+([FlightPro_Class580002] of  CloFuncall
+
+	(source "(pro.commands/schedule {:callsign \"R2\", :time \"14:10\", :country1 \"Russia\", :airport1 \"St. Petersburg Pulkovo Airport\", :country2 \"Finland\", :airport2 \"Helsinki Vantaa Airport\"})"))
+
+([FlightPro_Class580003] of  CloFuncall
+
+	(source "(pro.commands/schedule {:callsign \"R3\", :time \"14:12\", :country1 \"Russia\", :airport1 \"St. Petersburg Pulkovo Airport\", :country2 \"Finland\", :airport2 \"Helsinki Vantaa Airport\"})"))
+
+([FlightPro_Class580004] of  CloFuncall
+
+	(source "(rete.core/facts-with-slot-value 'Flight 'id = \"R1\")"))
+
+([FlightPro_Class580005] of  CloFuncall
+
+	(source "(get @my.flights.move/CARRIERS \"R1\")"))
 
 ([FlightPro_Class60000] of  CloDocumentation
 
@@ -1953,7 +2057,7 @@
 
 ([FlightPro_Class90001] of  CloFunction
 
-	(source "(if (= (:mode @CARRIER) \"MANUAL\")\n  (vswap! CARRIER assoc-in [:engine :accel] accel))")
+	(source "(if (= (:mode @CARRIER) \"MANUAL\")\n  (vswap! CARRIER assoc-in [:propeller :accel] accel))")
 	(title "accel-speed [accel]"))
 
 ([FlightPro_Class90002] of  CloFunction

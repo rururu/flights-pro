@@ -67,7 +67,7 @@
 (set-html! "speed-acl" 
   (str "<select style='width:44px'
                 onchange='javascript:view3d.client.accel_speed(this.value)'>"
-         (apply str (for [n (range 1 5)]
+         (apply str (for [n (range 1 11)]
                            (str "<option value='" n "'>" n "</option>")))))
 (set-html! "altitude-acl" 
   (str "<select style='width:44px'

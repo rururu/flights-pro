@@ -187,7 +187,7 @@
   ([]
   (am/input1 "chart.client" "new callsign" 80)
   (defn handler1 [call]
-    (am/input2 "chart.client" "h:m" 80)
+    (am/input2 "chart.client" "hh:mm" 80)
       (defn handler2 [tim]
         (schedule call tim))))
 ([call tim]
@@ -241,7 +241,7 @@
   (println :INIT-CHART)
 (let [m (-> js/L
               (.map "map")
-              (.setView (array 60.0, 30.0) 10)) ;; New York 40.8, -74.0
+              (.setView (array 60.3, 25.0) 10)) ;; New York 40.8, -74.0
         tile1 (-> js/L (.tileLayer "http://{s}.tile.osm.org/{z}/{x}/{y}.png"
                                    #js{:maxZoom 16
                                        :attribution "Ru, OpenStreetMap &copy;"}))

@@ -38,12 +38,16 @@
    :initial-turn-course [-1 2]}
  :cruise 
   {:speed [500 1]
-   :altitude [33000 7]}
+   :altitude [33000 8]}
  :landing 
   {:speed [180 1 6]
-   :altitude [2000 7]
+   :altitude [2000 8]
    :outer-marker-distance 7
-   :final-turn-course [-1 1]}
+   :final-turn-course [-1 1]
+   :table-alt
+     [[0.05 0][0.5 15][2 200][7 2000]] ;; x - dist, y - alt
+   :table-spd
+     [[0.05 5][0.5 140][3 180]]}	;; x - dist, y - spd
 })
 (defn put-on-map [id crd crs spd sts]
   (asp/pump-in (:instructions  cmd/CHN)
@@ -99,10 +103,11 @@
       (recur (inc n) (rest y))) )))
 
 (defn start-time [tim]
-  (println [:START-TIME tim])
+  ;;(println [:START-TIME tim])
 (let [[h m :as hm] (seq (.split tim ":"))]
   (if (and (seq hm) (= (count hm) 2))
     (let [h (read-string h)
+           m (if (.startsWith m "0") (.substring m 1) m)
            m (read-string m)]
       (if (and (number? h) (number? m) (<= 0 h 23) (<= 0 m 59))
         (let [cld (Calendar/getInstance)]
@@ -119,32 +124,39 @@
     rw
     (geo/norm-crs (+ rw 180)))))
 
+(defn corr-alt-tab [tab h]
+  ;; add h to all but last yy
+(letfn [(corr1 [[x y]]
+	[x (+ y h)])]
+ (vec (map corr1 tab))))
+
 (defn takeoff-plan [fapt tapt]
   (let [fcrd [(fapt "lat") (fapt "lon")]
        tcrd [(tapt "lat") (tapt "lon")]
        tof (:takeoff GENPLAN)
        [x crsa] (:initial-turn-course tof)]
-  [fcrd			;; initial coordinates
-   (fapt "alt") 			;; initial altitude
-   [(runway (fapt "iata")) crsa]		;; initial course
-   (:altitude tof)			
-   (:speed tof)
-   [(int (geo/bear-deg fcrd tcrd)) crsa]	;; final course
-   tcrd			;; final coordinates
-  ]))
+  {:from-crd 	fcrd
+   :from-alt 	(fapt "alt") 
+   :initial-crs 	[(runway (fapt "iata")) crsa]
+   :takeoff-alt 	(:altitude tof)			
+   :takeoff-spd (:speed tof)
+   :general-crs 	[(int (geo/bear-deg fcrd tcrd)) crsa]
+   :to-crd 	tcrd
+   :initial-turn "OFF"}))
 
 (defn climb-plan []
   (let [cru (:cruise GENPLAN)]
-  [(:altitude cru) (:speed cru)]))
+  {:climb-alt	(:altitude cru) 
+   :climb-spd	(:speed cru)}))
 
 (defn cruise-plan [lp]
   ;; final turn start point
-[(first lp) 1])
+{:target-crd (:final-turn-crd lp)})
 
 (defn landing-plan [tofp tapt]
-  (let [fcrd (first tofp)		;; departure coordinates
-       tcrd (last tofp)		;; destination coordinates
-       rudd (:rudder @mfs/CARRIER)
+  (let [fcrd (:from-crd tofp)		;; departure coordinates
+       tcrd (:to-crd tofp)		;; destination coordinates
+       lalt (tapt "alt")		;; landing altitude
        crs (runway (tapt "iata"))		;; lannding course
        rcrs (geo/rev-bear crs)		;; reverse landing course
        rgen (geo/bear-deg tcrd fcrd)	;; reverse general course
@@ -152,6 +164,7 @@
        [x crsa] (:final-turn-course lnd)	;; landing course accel
        [spd y spda] (:speed lnd)		;; final turn speed
        omd (:outer-marker-distance lnd)
+       rudd (:rudder @mfs/CARRIER)
        ftsp (mfs/turn-end-point 	
 	(geo/future-pos tcrd rcrs omd 1) ;; outer-marker coordinates
 	spd 
@@ -159,14 +172,16 @@
 	[rgen crsa] 
 	(:step rudd) 
 	(:time-out rudd))] 	
-    [ftsp 			;; final turn start point
-     [crs crsa] 			;; lannding course
-     [spd spda] 			;; lannding speed
-     (tapt "alt") 			;; lannding altitude
-     tcrd 			;; lannding coordinates
-    ]))
+    {:final-turn-crd 	ftsp
+     :landing-crs	[crs crsa] 	
+     :lannding-spd	[spd spda]
+     :lannding-alt	lalt
+     :table-alt		(corr-alt-tab (:table-alt lnd) lalt)
+     :table-spd		(:table-spd lnd)
+     :stop-crd		tcrd
+     :status		"OFF"}))
 
-(defn descend-plan []
+(defn descend-plan [lp]
   (let [cru (:cruise GENPLAN)
        lnd (:landing GENPLAN)
        prop (:propeller @mfs/CARRIER)
@@ -184,5 +199,10 @@
        adis (if (<= atim stim)
                 sdis
                 (+ sdis (* (- atim stim) (first (:speed cru)))))]
-  [adis (:altitude lnd) sdis (:speed lnd)]))
+  {:status "OFF"
+   :alt-dist adis
+   :alt-target (:altitude lnd)
+   :spd-dist sdis 
+   :spd-target (:speed lnd) 
+   :target-crd (:final-turn-crd lp)}))
 

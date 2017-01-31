@@ -31,7 +31,7 @@
                             :step 1
 	    :accel 1
                             :time-out 2003}}))
-(def CARRIERS (volatile! {}))
+(def defCARRIERS (defonce CARRIERS (volatile! {})))
 (defn set-turn-point
   ([carr]
   (let [car @carr]
@@ -105,10 +105,10 @@
 
 (defn accel
   ([carr speed]
-  (vswap! carr assoc-in [:engine :target] speed)
-  (equalize carr :engine set-speed :speed step-closer))
+  (vswap! carr assoc-in [:propeller :target] speed)
+  (equalize carr :propeller set-speed :speed step-closer))
 ([carr speed acl]
-  (vswap! carr assoc-in [:engine :accel] acl)
+  (vswap! carr assoc-in [:propeller :accel] acl)
   (accel carr speed)))
 
 (defn elevate

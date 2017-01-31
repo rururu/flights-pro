@@ -16,23 +16,23 @@ var lam2 = (Math.atan2((sinc * sinaz),((cosphi1 * cosc) - ((sinphi1 * sinc) * co
 return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [phi2,lam2], null);
 });
 carr.move.set_turn_point = (function carr$move$set_turn_point(var_args){
-var args33287 = [];
-var len__31959__auto___33294 = arguments.length;
-var i__31960__auto___33295 = (0);
+var args22439 = [];
+var len__21111__auto___22446 = arguments.length;
+var i__21112__auto___22447 = (0);
 while(true){
-if((i__31960__auto___33295 < len__31959__auto___33294)){
-args33287.push((arguments[i__31960__auto___33295]));
+if((i__21112__auto___22447 < len__21111__auto___22446)){
+args22439.push((arguments[i__21112__auto___22447]));
 
-var G__33296 = (i__31960__auto___33295 + (1));
-i__31960__auto___33295 = G__33296;
+var G__22448 = (i__21112__auto___22447 + (1));
+i__21112__auto___22447 = G__22448;
 continue;
 } else {
 }
 break;
 }
 
-var G__33289 = args33287.length;
-switch (G__33289) {
+var G__22441 = args22439.length;
+switch (G__22441) {
 case 1:
 return carr.move.set_turn_point.cljs$core$IFn$_invoke$arity$1((arguments[(0)]));
 
@@ -42,7 +42,7 @@ return carr.move.set_turn_point.cljs$core$IFn$_invoke$arity$4((arguments[(0)]),(
 
 break;
 default:
-throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args33287.length)].join('')));
+throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args22439.length)].join('')));
 
 }
 });
@@ -52,10 +52,10 @@ var car = cljs.core.deref.call(null,carr__$1);
 return carr.move.set_turn_point.call(null,carr__$1,new cljs.core.Keyword(null,"coord","coord",-1453656639).cljs$core$IFn$_invoke$arity$1(car),new cljs.core.Keyword(null,"course","course",1455432948).cljs$core$IFn$_invoke$arity$1(car),new cljs.core.Keyword(null,"speed","speed",1257663751).cljs$core$IFn$_invoke$arity$1(car));
 });
 
-carr.move.set_turn_point.cljs$core$IFn$_invoke$arity$4 = (function (carr__$1,p__33290,crs,spd){
-var vec__33291 = p__33290;
-var lat = cljs.core.nth.call(null,vec__33291,(0),null);
-var lon = cljs.core.nth.call(null,vec__33291,(1),null);
+carr.move.set_turn_point.cljs$core$IFn$_invoke$arity$4 = (function (carr__$1,p__22442,crs,spd){
+var vec__22443 = p__22442;
+var lat = cljs.core.nth.call(null,vec__22443,(0),null);
+var lon = cljs.core.nth.call(null,vec__22443,(1),null);
 return cljs.core._vreset_BANG_.call(null,carr__$1,cljs.core.assoc.call(null,cljs.core._deref.call(null,carr__$1),new cljs.core.Keyword(null,"turn-point","turn-point",1337942146),new cljs.core.PersistentArrayMap(null, 5, [new cljs.core.Keyword(null,"phi","phi",-1526798304),(lat * carr.move.PID180),new cljs.core.Keyword(null,"lam","lam",1907357070),(lon * carr.move.PID180),new cljs.core.Keyword(null,"dir","dir",1734754661),(crs * carr.move.PID180),new cljs.core.Keyword(null,"rdh","rdh",1247569967),(spd * carr.move.NMRAD),new cljs.core.Keyword(null,"clk","clk",564834871),(0)], null)));
 });
 
@@ -82,29 +82,29 @@ var tur = new cljs.core.Keyword(null,"turn-point","turn-point",1337942146).cljs$
 var hrs = new cljs.core.Keyword(null,"step-hrs","step-hrs",-504384679).cljs$core$IFn$_invoke$arity$1(car);
 var elt = (new cljs.core.Keyword(null,"clk","clk",564834871).cljs$core$IFn$_invoke$arity$1(tur) + hrs);
 var way = (new cljs.core.Keyword(null,"rdh","rdh",1247569967).cljs$core$IFn$_invoke$arity$1(tur) * elt);
-var vec__33301 = carr.move.spherical_between_js.call(null,new cljs.core.Keyword(null,"phi","phi",-1526798304).cljs$core$IFn$_invoke$arity$1(tur),new cljs.core.Keyword(null,"lam","lam",1907357070).cljs$core$IFn$_invoke$arity$1(tur),way,new cljs.core.Keyword(null,"dir","dir",1734754661).cljs$core$IFn$_invoke$arity$1(tur));
-var phi = cljs.core.nth.call(null,vec__33301,(0),null);
-var lam = cljs.core.nth.call(null,vec__33301,(1),null);
+var vec__22453 = carr.move.spherical_between_js.call(null,new cljs.core.Keyword(null,"phi","phi",-1526798304).cljs$core$IFn$_invoke$arity$1(tur),new cljs.core.Keyword(null,"lam","lam",1907357070).cljs$core$IFn$_invoke$arity$1(tur),way,new cljs.core.Keyword(null,"dir","dir",1734754661).cljs$core$IFn$_invoke$arity$1(tur));
+var phi = cljs.core.nth.call(null,vec__22453,(0),null);
+var lam = cljs.core.nth.call(null,vec__22453,(1),null);
 return cljs.core._vreset_BANG_.call(null,carr__$1,cljs.core.assoc.call(null,cljs.core._deref.call(null,carr__$1),new cljs.core.Keyword(null,"coord","coord",-1453656639),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [(phi / carr.move.PID180),(lam / carr.move.PID180)], null),new cljs.core.Keyword(null,"turn-point","turn-point",1337942146),cljs.core.assoc.call(null,tur,new cljs.core.Keyword(null,"clk","clk",564834871),elt)));
 });
 carr.move.turn = (function carr$move$turn(var_args){
-var args33304 = [];
-var len__31959__auto___33307 = arguments.length;
-var i__31960__auto___33308 = (0);
+var args22456 = [];
+var len__21111__auto___22459 = arguments.length;
+var i__21112__auto___22460 = (0);
 while(true){
-if((i__31960__auto___33308 < len__31959__auto___33307)){
-args33304.push((arguments[i__31960__auto___33308]));
+if((i__21112__auto___22460 < len__21111__auto___22459)){
+args22456.push((arguments[i__21112__auto___22460]));
 
-var G__33309 = (i__31960__auto___33308 + (1));
-i__31960__auto___33308 = G__33309;
+var G__22461 = (i__21112__auto___22460 + (1));
+i__21112__auto___22460 = G__22461;
 continue;
 } else {
 }
 break;
 }
 
-var G__33306 = args33304.length;
-switch (G__33306) {
+var G__22458 = args22456.length;
+switch (G__22458) {
 case 2:
 return carr.move.turn.cljs$core$IFn$_invoke$arity$2((arguments[(0)]),(arguments[(1)]));
 
@@ -114,7 +114,7 @@ return carr.move.turn.cljs$core$IFn$_invoke$arity$3((arguments[(0)]),(arguments[
 
 break;
 default:
-throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args33304.length)].join('')));
+throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args22456.length)].join('')));
 
 }
 });
@@ -134,23 +134,23 @@ return carr.move.turn.call(null,carr__$1,course);
 carr.move.turn.cljs$lang$maxFixedArity = 3;
 
 carr.move.accel = (function carr$move$accel(var_args){
-var args33311 = [];
-var len__31959__auto___33314 = arguments.length;
-var i__31960__auto___33315 = (0);
+var args22463 = [];
+var len__21111__auto___22466 = arguments.length;
+var i__21112__auto___22467 = (0);
 while(true){
-if((i__31960__auto___33315 < len__31959__auto___33314)){
-args33311.push((arguments[i__31960__auto___33315]));
+if((i__21112__auto___22467 < len__21111__auto___22466)){
+args22463.push((arguments[i__21112__auto___22467]));
 
-var G__33316 = (i__31960__auto___33315 + (1));
-i__31960__auto___33315 = G__33316;
+var G__22468 = (i__21112__auto___22467 + (1));
+i__21112__auto___22467 = G__22468;
 continue;
 } else {
 }
 break;
 }
 
-var G__33313 = args33311.length;
-switch (G__33313) {
+var G__22465 = args22463.length;
+switch (G__22465) {
 case 2:
 return carr.move.accel.cljs$core$IFn$_invoke$arity$2((arguments[(0)]),(arguments[(1)]));
 
@@ -160,19 +160,19 @@ return carr.move.accel.cljs$core$IFn$_invoke$arity$3((arguments[(0)]),(arguments
 
 break;
 default:
-throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args33311.length)].join('')));
+throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args22463.length)].join('')));
 
 }
 });
 
 carr.move.accel.cljs$core$IFn$_invoke$arity$2 = (function (carr__$1,speed){
-cljs.core._vreset_BANG_.call(null,carr__$1,cljs.core.assoc_in.call(null,cljs.core._deref.call(null,carr__$1),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"engine","engine",1459054265),new cljs.core.Keyword(null,"target","target",253001721)], null),speed));
+cljs.core._vreset_BANG_.call(null,carr__$1,cljs.core.assoc_in.call(null,cljs.core._deref.call(null,carr__$1),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"propeller","propeller",-1462065491),new cljs.core.Keyword(null,"target","target",253001721)], null),speed));
 
-return calc.dynamic.equalize.call(null,carr__$1,new cljs.core.Keyword(null,"engine","engine",1459054265),carr.move.set_speed,new cljs.core.Keyword(null,"speed","speed",1257663751),calc.dynamic.step_closer);
+return calc.dynamic.equalize.call(null,carr__$1,new cljs.core.Keyword(null,"propeller","propeller",-1462065491),carr.move.set_speed,new cljs.core.Keyword(null,"speed","speed",1257663751),calc.dynamic.step_closer);
 });
 
 carr.move.accel.cljs$core$IFn$_invoke$arity$3 = (function (carr__$1,speed,acl){
-cljs.core._vreset_BANG_.call(null,carr__$1,cljs.core.assoc_in.call(null,cljs.core._deref.call(null,carr__$1),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"engine","engine",1459054265),new cljs.core.Keyword(null,"accel","accel",-2118422974)], null),acl));
+cljs.core._vreset_BANG_.call(null,carr__$1,cljs.core.assoc_in.call(null,cljs.core._deref.call(null,carr__$1),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"propeller","propeller",-1462065491),new cljs.core.Keyword(null,"accel","accel",-2118422974)], null),acl));
 
 return carr.move.accel.call(null,carr__$1,speed);
 });
@@ -180,23 +180,23 @@ return carr.move.accel.call(null,carr__$1,speed);
 carr.move.accel.cljs$lang$maxFixedArity = 3;
 
 carr.move.elevate = (function carr$move$elevate(var_args){
-var args33318 = [];
-var len__31959__auto___33321 = arguments.length;
-var i__31960__auto___33322 = (0);
+var args22470 = [];
+var len__21111__auto___22473 = arguments.length;
+var i__21112__auto___22474 = (0);
 while(true){
-if((i__31960__auto___33322 < len__31959__auto___33321)){
-args33318.push((arguments[i__31960__auto___33322]));
+if((i__21112__auto___22474 < len__21111__auto___22473)){
+args22470.push((arguments[i__21112__auto___22474]));
 
-var G__33323 = (i__31960__auto___33322 + (1));
-i__31960__auto___33322 = G__33323;
+var G__22475 = (i__21112__auto___22474 + (1));
+i__21112__auto___22474 = G__22475;
 continue;
 } else {
 }
 break;
 }
 
-var G__33320 = args33318.length;
-switch (G__33320) {
+var G__22472 = args22470.length;
+switch (G__22472) {
 case 2:
 return carr.move.elevate.cljs$core$IFn$_invoke$arity$2((arguments[(0)]),(arguments[(1)]));
 
@@ -206,7 +206,7 @@ return carr.move.elevate.cljs$core$IFn$_invoke$arity$3((arguments[(0)]),(argumen
 
 break;
 default:
-throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args33318.length)].join('')));
+throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args22470.length)].join('')));
 
 }
 });
