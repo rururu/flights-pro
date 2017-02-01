@@ -145,7 +145,7 @@
          [lat lon] (:coord car)
          crs (:course car)
          alt (int (/ (:altitude car) 3.28084))
-         alt (if (< alt 6) 6 alt)]
+         alt (if (< alt 20) 20 alt)]
       (czm/fly-to lat lon alt crs period))
   true))
 

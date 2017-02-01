@@ -22,6 +22,7 @@
 (def TIM {:popup 30000
  :trail 30000})
 (def MY-INFOS (volatile! {}))
+(def APT-ELEV 0)
 (defn current-time []
   (int (/ (System/currentTimeMillis) 1000)))
 
@@ -104,7 +105,7 @@
 	 :coord coord}))
 
 (defn info [params]
-  (println [:INFO params])
+  (println [:CMD-INFO params])
 (let [id (:id params)
        inf (or (get @MY-INFOS id) (fr24/fl-info id))
        cal (if-let[d (fr24/dat id)]
@@ -143,7 +144,7 @@
 "")
 
 (defn onboard [params]
-  (println [:ONBOARD params])
+  (println [:CMD-ONBOARD params])
 (let [cls (:callsign params)]
   (condp = cls
     "manual" (do
@@ -159,28 +160,28 @@
 "")
 
 (defn terrain [params]
-  (println [:TERRAIN params])
-"yes")
+  (println [:CMD-TERRAIN params])
+"no")
 
 (defn follow [params]
-  (println [:FOLLOW params])
+  (println [:CMD-FOLLOW params])
 (let [id (:id params)]
   (if (fr24/dat id)
     (rete/assert-frame ['Follow 'id id 'time 0]))))
 
 (defn visible [params]
-  (println [:VISIBLE params])
+  (println [:CMD-VISIBLE params])
 (let [{:keys [n s w e]} params]
   (fr24/set-bbx n s w e))
 "")
 
 (defn trail [params]
-  (println [:TRAIL params])
+  (println [:CMD-TRAIL params])
 (do-trail (:id params) [])
 "")
 
 (defn stopfollow [params]
-  (println [:STOPFOLLOW params])
+  (println [:CMD-STOPFOLLOW params])
 (rete/assert-frame ['Follow 'id "STOP" 'time 0])
 "")
 
@@ -207,16 +208,20 @@
 {:status 204})
 
 (defn move-to [params]
-  (println [:MOVE-TO params])
+  (println [:CMD-MOVE-TO params])
 (let [{:keys [country airport]} params]
   (if-let [apt (get-in @fr24/AIRPORTS [country airport])]
-    (asp/pump-in (:instructions CHN)
-      {:instruct :map-center
-       :coord [(apt "lat") (apt "lon")]})))
+    (let [alt (apt "alt")
+           crd [(apt "lat") (apt "lon")]]
+      (def APT-ELEV alt)
+      (asp/pump-in (:instructions CHN)
+        {:instruct :map-center
+         :coord crd})
+      (println :Airport country airport crd alt))))
 "")
 
 (defn schedule [params]
-  (println [:SCHEDULE params])
+  (println [:CMD-SCHEDULE params])
 (let [{:keys [callsign time country1 airport1 country2 airport2]} params
        abc (fr24/airports-by-country)
        apf (get-in abc [country1 airport1])

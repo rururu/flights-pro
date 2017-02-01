@@ -49,6 +49,7 @@
    :table-spd
      [[0.05 5][0.5 140][3 180]]}	;; x - dist, y - spd
 })
+(def ONB-PAUSE false)
 (defn put-on-map [id crd crs spd sts]
   (asp/pump-in (:instructions  cmd/CHN)
 	{:instruct :create-update
@@ -64,28 +65,30 @@
 	 :id id}))
 
 (defn fly-onboard-to [csn crs1 crs2 crd2 spd2 alt2 per]
+  (if (not ONB-PAUSE)
   (let [crd3 (geo/future-pos crd2 crs2 spd2 (/ per 3600))
-       per3 (* 2 per)]
-  (asp/pump-in (:directives cmd/CHN)
+         per3 (* 2 per)]
+    (asp/pump-in (:directives cmd/CHN)
 	{:directive :fly-onboard
 	 :callsign csn
 	 :vehicle {
 	   :coord crd2
-	   :altitude alt2
+	   :altitude (if (<= alt2 0) (+ alt2 cmd/APT-ELEV) alt2)
 	   :speed spd2
 	   :course crs2}
 	 :old-course crs1
-	 :period per3})))
+	 :period per3}))))
 
-(defn onboard [csg crd crs spd alt]
-  (println [:ONBOARD csg])
+(defn go-onboard [csg crd crs spd alt]
+  (def ONB-PAUSE true)
+(asp/delayer #(def ONB-PAUSE false) 8000)
 (asp/pump-in (:directives cmd/CHN)
 	{:directive :carrier
 	 :callsign csg
 	 :vehicle {:coord crd
 	               :course crs
 	               :speed spd
-	               :altitude alt}}))
+	               :altitude (if (<= alt 0) (+ alt cmd/APT-ELEV) alt)}}))
 
 (defn proc [z]
   (loop [n 1 y z]
