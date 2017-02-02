@@ -22,7 +22,7 @@
 (def TIM {:popup 30000
  :trail 30000})
 (def MY-INFOS (volatile! {}))
-(def APT-ELEV 0)
+(def TERRAIN "yes")
 (defn current-time []
   (int (/ (System/currentTimeMillis) 1000)))
 
@@ -161,7 +161,8 @@
 
 (defn terrain [params]
   (println [:CMD-TERRAIN params])
-"no")
+(println "Terrain: " TERRAIN)
+TERRAIN)
 
 (defn follow [params]
   (println [:CMD-FOLLOW params])
@@ -211,13 +212,13 @@
   (println [:CMD-MOVE-TO params])
 (let [{:keys [country airport]} params]
   (if-let [apt (get-in @fr24/AIRPORTS [country airport])]
-    (let [alt (apt "alt")
+    (let [iata (apt "iata")
+           alt (apt "alt")
            crd [(apt "lat") (apt "lon")]]
-      (def APT-ELEV alt)
       (asp/pump-in (:instructions CHN)
         {:instruct :map-center
          :coord crd})
-      (println :Airport country airport crd alt))))
+      (println :Airport country airport iata crd alt))))
 "")
 
 (defn schedule [params]

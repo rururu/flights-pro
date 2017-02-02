@@ -1,4 +1,4 @@
-; Wed Feb 01 22:27:33 MSK 2017
+; Thu Feb 02 21:49:13 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -44,6 +44,10 @@
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot callsign
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot spec-plan
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
@@ -99,6 +103,10 @@
 (defclass Flight
 	(is-a Flights+Ontology)
 	(role concrete)
+	(single-slot spec-plan
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot time
 		(type STRING)
 ;+		(cardinality 0 1)
