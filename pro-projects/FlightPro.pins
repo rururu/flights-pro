@@ -1,4 +1,4 @@
-; Thu Feb 02 21:49:13 MSK 2017
+; Fri Feb 03 21:45:06 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -868,7 +868,7 @@
 
 ([FlightPro_Class250001] of  CloFunction
 
-	(source "(let [fcrd (:from-crd spp)		;; departure coordinates\n       tcrd (:to-crd spp)		;; destination coordinates\n       lalt (tapt \"alt\")		;; landing altitude\n       crs (runway (tapt \"iata\"))		;; lannding course\n       rcrs (geo/rev-bear crs)		;; reverse landing course\n       rgen (geo/bear-deg tcrd fcrd)	;; reverse general course\n       lnd (:landing spp)\n       [x crsa] (:final-turn-course lnd)	;; landing course accel\n       [spd y spda] (:speed lnd)		;; final turn speed\n       omd (:outer-marker-distance lnd)\n       rudd (:rudder @mfs/CARRIER)\n       ftsp (mfs/turn-end-point 	\n	(geo/future-pos tcrd rcrs omd 1) ;; outer-marker coordinates\n	spd \n	rcrs	\n	[rgen crsa] \n	(:step rudd) \n	(:time-out rudd))] 	\n    {:final-turn-crd 	ftsp\n     :landing-crs	[crs crsa] 	\n     :lannding-spd	[spd spda]\n     :lannding-alt	lalt\n     :table-alt		(:table-alt lnd)\n     :table-spd		(:table-spd lnd)\n     :stop-crd		tcrd\n     :status		\"OFF\"})")
+	(source "(let [fcrd (->> spp :takeoff :from-crd)	;; departure coordinates\n       tcrd (->> spp :landing :to-crd)	;; destination coordinates\n       lalt (tapt \"alt\")		;; landing altitude\n       crs (runway (tapt \"iata\"))		;; lannding course\n       rcrs (geo/rev-bear crs)		;; reverse landing course\n       rgen (geo/bear-deg tcrd fcrd)	;; reverse general course\n       lnd (:landing spp)\n       [x crsa] (:final-turn-course lnd)	;; landing course accel\n       [spd y spda] (:speed lnd)		;; final turn speed\n       omd (:outer-marker-distance lnd)\n       rudd (:rudder @mfs/CARRIER)\n       ftsp (mfs/turn-end-point 	\n	(geo/future-pos tcrd rcrs omd 1) ;; outer-marker coordinates\n	spd \n	rcrs	\n	[rgen crsa] \n	(:step rudd) \n	(:time-out rudd))] 	\n    {:final-turn-crd 	ftsp\n     :landing-crs	[crs crsa] 	\n     :lannding-spd	[spd spda]\n     :lannding-alt	lalt\n     :table-alt		(:table-alt lnd)\n     :table-spd		(:table-spd lnd)\n     :stop-crd		tcrd\n     :status		\"OFF\"})")
 	(title "landing-plan [spp tapt]"))
 
 ([FlightPro_Class250002] of  CloFunction
@@ -1276,7 +1276,7 @@
 ([FlightPro_Class340002] of  Rule
 
 	(lhs "?sd (Schedule callsign ?csn\n	time ?tim\n	from ?frm\n	to ?to)")
-	(rhs "(if-let [stm (es/start-time ?tim)]\n  (let [spp (es/specific-plan (:cruise es/GENPLAN) ?frm ?to)\n         tof (es/takeoff-plan spp ?frm)\n         lnd (es/landing-plan spp ?to)]\n     (my.flights.move/add-my-flight \n	?csn ?csn (:from-crd tof) (first (:initial-crs tof)) 0 (:from-alt tof))\n     (asser FlightPlan id ?csn\n	start-time stm\n	spec-plan spp\n	takeoff tof\n	climb (es/climb-plan spp)\n	cruise (es/cruise-plan lnd)\n                        descend (es/descend-plan spp lnd)\n	landing lnd)\n     (pro.commands/set-my-flight-info ?csn ?tim ?frm ?to)))")
+	(rhs "(if-let [stm (es/start-time ?tim)]\n  (let [spp (es/specific-plan ?frm ?to)\n         tof (es/takeoff-plan spp ?frm)\n         lnd (es/landing-plan spp ?to)]\n     (my.flights.move/add-my-flight \n	?csn ?csn (:from-crd tof) (first (:initial-crs tof)) 0 (:from-alt tof))\n     (asser FlightPlan id ?csn\n	start-time stm\n	spec-plan spp\n	takeoff tof\n	climb (es/climb-plan spp)\n	cruise (es/cruise-plan lnd)\n                        descend (es/descend-plan spp lnd)\n	landing lnd)\n     (pro.commands/set-my-flight-info ?csn ?tim ?frm ?to)))")
 	(salience 0)
 	(title "mf:FlightPlan"))
 
@@ -1696,7 +1696,7 @@
 
 ([FlightPro_Class490002] of  CloFunction
 
-	(source "(let [fcrd (:from-crd spp)\n       tcrd (:to-crd spp)\n       tof (:takeoff spp)\n       [x crsa] (:initial-turn-course tof)]\n  {:from-crd 	fcrd\n   :from-alt 	(fapt \"alt\") \n   :initial-crs 	[(runway (fapt \"iata\")) crsa]\n   :takeoff-alt 	(:altitude tof)			\n   :takeoff-spd (:speed tof)\n   :general-crs 	[(int (geo/bear-deg fcrd tcrd)) crsa]\n   :to-crd 	tcrd\n   :initial-turn \"OFF\"})")
+	(source "(let [tof (:takeoff spp)\n       fcrd (:from-crd tof)\n       tcrd (->> spp :landing :to-crd)\n       [x crsa] (:initial-turn-course tof)]\n  {:from-crd 	fcrd\n   :from-alt 	(fapt \"alt\") \n   :initial-crs 	[(runway (fapt \"iata\")) crsa]\n   :takeoff-alt 	(:altitude tof)			\n   :takeoff-spd (:speed tof)\n   :general-crs 	[(int (geo/bear-deg fcrd tcrd)) crsa]\n   :to-crd 	tcrd\n   :initial-turn \"OFF\"})")
 	(title "takeoff-plan [spp fapt]"))
 
 ([FlightPro_Class5] of  CloVar
@@ -1772,7 +1772,7 @@
 ([FlightPro_Class520003] of  Rule
 
 	(lhs "?fp (FlightPlan id ?id\n	takeoff ?tof\n	((map? ?tof)\n	 (= (:initial-turn ?tof) \"OFF\")))\n(Flight age \"CURRENT\" \n	id ?id\n	altitude ?alt\n	speed ?spd\n	((>= ?alt (first (:takeoff-alt ?tof)))\n	 (>= ?spd (first (:takeoff-spd ?tof)))))")
-	(rhs "(println [:InitialTurnStart ?id ?alt ?spd])\n(my.flights.move/control ?id my.flights.move/turn (:general-crs ?tof))\n(modify ?fp takeoff (assoc ?tof :initial-turn \"ON\"))")
+	(rhs "(println [:InitialTurnStart ?id (:general-crs ?tof) ?alt ?spd])\n(my.flights.move/control ?id my.flights.move/turn (:general-crs ?tof))\n(modify ?fp takeoff (assoc ?tof :initial-turn \"ON\"))")
 	(salience 0)
 	(title "mf:InitialTurnStart"))
 
@@ -1795,13 +1795,13 @@
 
 ([FlightPro_Class540001] of  CloFunction
 
-	(source "(let [lnd (:landing spp)]\n  {:status \"OFF\"\n   :alt-dist (:alt-dist spp)\n   :spd-dist (:spd-dist spp)\n   :alt-target (:altitude lnd)\n   :spd-target (:speed lnd) \n   :target-crd (:final-turn-crd lp)})")
-	(title "descend-plan [spp lp]"))
+	(source "(let [lnd (:landing spp)\n       cru (:cruise spp)]\n  {:status \"OFF\"\n   :alt-dist (:alt-dist cru)\n   :spd-dist (:spd-dist cru)\n   :alt-target (:altitude lnd)\n   :spd-target (:speed lnd) \n   :target-crd (:final-turn-crd lgp)})")
+	(title "descend-plan [spp lgp]"))
 
 ([FlightPro_Class540017] of  CloFunction
 
-	(source ";; final turn start point\n{:target-crd (:final-turn-crd lp)}")
-	(title "cruise-plan [lp]"))
+	(source ";; final turn start point\n{:target-crd (:final-turn-crd lgp)}")
+	(title "cruise-plan [lgp]"))
 
 ([FlightPro_Class540018] of  Rule
 
@@ -1887,6 +1887,26 @@
 
 	(source "my.flights.move/CARRIERS"))
 
+([FlightPro_Class580000] of  CloFuncall
+
+	(source "(ru.rules/pp 'Schedule)"))
+
+([FlightPro_Class580001] of  CloFuncall
+
+	(source "(def fapt"))
+
+([FlightPro_Class580002] of  CloFuncall
+
+	(source "(def fapt {\"name\" \"Helsinki Malmi Airport\", \"iata\" \"HEM\", \"icao\" \"EFHF\", \"lat\" 60.25388, \"lon\" 25.044161, \"country\" \"Finland\", \"alt\" 57})"))
+
+([FlightPro_Class580003] of  CloFuncall
+
+	(source "(def tapt"))
+
+([FlightPro_Class590000] of  CloFuncall
+
+	(source "fapt"))
+
 ([FlightPro_Class590001] of  CloVar
 
 	(source "false")
@@ -1896,90 +1916,78 @@
 
 	(source "<html>\n  <head>\n    <style type=\"text/css\">\n      <!--\n        body { font-family: arial; font-size: 12pt }\n        p { font-family: arial; margin-top: 2; margin-right: 2; margin-bottom: 2; margin-left: 2 }\n      -->\n    </style>\n    \n  </head>\n  <body>\n    <b>Cesium Client<br></b><br>API<br><br>1. fly-to [lat lon alt crs per]<br>2. camera [key val], keys: :view, :altitude, :pitch, :roll<br><br>CZML rendering support<br><br>Initialization: (init-3D-view)</body>\n</html>"))
 
+([FlightPro_Class600001] of  CloFuncall
+
+	(source "(def fapt  {\"name\" \"Helsinki Malmi Airport\", \"iata\" \"HEM\", \"icao\" \"EFHF\", \"lat\" 60.25388, \"lon\" 25.044161, \"country\" \"Finland\", \"alt\" 57})"))
+
+([FlightPro_Class600002] of  CloFuncall
+
+	(source "(def tapt "))
+
+([FlightPro_Class600003] of  CloFuncall
+
+	(source "(def tapt  {\"name\" \"Kuressaare Airport\", \"iata\" \"URE\", \"icao\" \"EEKE\", \"lat\" 58.229881, \"lon\" 22.509489, \"country\" \"Estonia\", \"alt\" 14})"))
+
+([FlightPro_Class600004] of  CloFuncall
+
+	(source "(es/adjust-cruise 144 [33000 8] [500 1] [2000 8] [180 1 6] (:elevator @my.flights.move/CARRIER) (:propeller @my.flights.move/CARRIER))"))
+
+([FlightPro_Class600005] of  CloFuncall
+
+	(source "(es/adjust-cruise 1440 [33000 8] [500 1] [2000 8] [180 1 6] (:elevator @my.flights.move/CARRIER) (:propeller @my.flights.move/CARRIER))"))
+
+([FlightPro_Class600006] of  CloFuncall
+
+	(source "(es/adjust-cruise 200 [33000 8] [500 1] [2000 8] [180 1 6] (:elevator @my.flights.move/CARRIER) (:propeller @my.flights.move/CARRIER))"))
+
+([FlightPro_Class600007] of  CloFuncall
+
+	(source "(es/adjust-cruise 210 [33000 8] [500 1] [2000 8] [180 1 6] (:elevator @my.flights.move/CARRIER) (:propeller @my.flights.move/CARRIER))"))
+
+([FlightPro_Class600008] of  CloFuncall
+
+	(source "(es/adjust-cruise 212 [33000 8] [500 1] [2000 8] [180 1 6] (:elevator @my.flights.move/CARRIER) (:propeller @my.flights.move/CARRIER))"))
+
+([FlightPro_Class600009] of  CloFuncall
+
+	(source "(es/adjust-cruise 130 [33000 8] [500 1] [2000 8] [180 1 6] (:elevator @my.flights.move/CARRIER) (:propeller @my.flights.move/CARRIER))"))
+
 ([FlightPro_Class60001] of  CloNamespace
 
 	(source "(:require\n  [csasync.proc :as asp]\n  [czm.core :as czm]\n  [view3d.controls :as ctl]\n  [carr.move :as mov]\n  [calc.core :as calc]\n  [calc.dynamic :as dyn]\n  [cognitect.transit :as t]\n  [ajax.core :refer (GET)]\n  [cljs.reader :as rdr]\n  [nightlight.repl-server])")
 	(title "view3d.client"))
+
+([FlightPro_Class600010] of  CloFuncall
+
+	(source "(es/adjust-cruise 30 [33000 8] [500 1] [2000 8] [180 1 6] (:elevator @my.flights.move/CARRIER) (:propeller @my.flights.move/CARRIER))"))
+
+([FlightPro_Class600011] of  CloFuncall
+
+	(source "(es/adjust-cruise 20 [33000 8] [500 1] [2000 8] [180 1 6] (:elevator @my.flights.move/CARRIER) (:propeller @my.flights.move/CARRIER))"))
+
+([FlightPro_Class600012] of  CloFuncall
+
+	(source "(es/adjust-cruise 10 [33000 8] [500 1] [2000 8] [180 1 6] (:elevator @my.flights.move/CARRIER) (:propeller @my.flights.move/CARRIER))"))
 
 ([FlightPro_Class610000] of  CloVar
 
 	(source "\"yes\"")
 	(title "TERRAIN"))
 
-([FlightPro_Class620001] of  CloFuncall
-
-	(source "(not= 236 236)"))
-
-([FlightPro_Class620002] of  CloFuncall
-
-	(source "@my.flights.move/CARRIERS"))
-
 ([FlightPro_Class620003] of  CloFunction
 
-	(source "(let [cru (:cruise GENPLAN)\n       lnd (:landing GENPLAN)\n       prop (:propeller @mfs/CARRIER)\n       elev (:elevator @mfs/CARRIER)\n       fcrd [(fapt \"lat\") (fapt \"lon\")]\n       tcrd [(tapt \"lat\") (tapt \"lon\")]\n       gdist (calc.geo/distance-nm fcrd tcrd)\n       [adist sdist calt cspd] (adjust-cruise\n		gdist\n		(:altitude cru)\n		(:speed cru)\n		(:altitude lnd)\n		(:speed lnd) \n		elev\n		prop)\n       spp (assoc-in genp [:takeoff :from-crd] fcrd)\n       spp (assoc spp :cruise (merge (:cruise genp)\n		{:alt-dist adist\n		 :spd-dist sdist\n		 :altitude calt\n		 :speed cspd}))]\n  (assoc-in spp [:landing :to-crd] tcrd))")
-	(title "specific-plan [genp fapt tapt]"))
+	(source "(let [gen GENPLAN\n       cru (:cruise gen)\n       lnd (:landing gen)\n       prop (:propeller @mfs/CARRIER)\n       elev (:elevator @mfs/CARRIER)\n       fcrd [(fapt \"lat\") (fapt \"lon\")]\n       tcrd [(tapt \"lat\") (tapt \"lon\")]\n       gdist (calc.geo/distance-nm fcrd tcrd)\n       _ (println :General-Distance gdist)\n       [adist sdist calt cspd] (adjust-cruise\n		gdist\n		(:altitude cru)\n		(:speed cru)\n		(:altitude lnd)\n		(:speed lnd) \n		elev\n		prop)\n       _ (println calt cspd)\n       spp (assoc-in gen [:takeoff :from-crd] fcrd)\n       spp (assoc spp :cruise (merge (:cruise gen)\n		{:alt-dist adist\n		 :spd-dist sdist\n		 :altitude calt\n		 :speed cspd}))]\n  (assoc-in spp [:landing :to-crd] tcrd))")
+	(title "specific-plan [fapt tapt]"))
 
 ([FlightPro_Class620004] of  CloFunction
 
-	(source ";; return [cruise-altitude cruise-speed altitude-distance altitude-speed]\n(loop [alt cru-alt spd cru-spd calt cru-alt cspd cru-spd ad 0 sd 0]\n  (if (and (> (first alt) 4000) (> (first spd) 220))\n    (let [[stim sdis] (mfs/speed-variation spd spd-lnd (:step prop) (:time-out prop))\n           atim (mfs/altitude-variation alt alt-lnd (:step elev) (:time-out elev))\n           adis (if (<= atim stim)\n                    sdis\n                    (+ sdis (* (- atim stim) (first spd))))]\n      (if (< (* 2 adis) gen-dist)\n        [adis sdis calt cspd]\n        (let [[a aa] alt\n               [s sa] spd]\n          (recur [(round (int (* 0.8 a)) 1000) aa] [(round (int (* 0.8 s)) 10) sa] alt spd adis sdis))))\n    [ad sd alt spd]))")
+	(source ";; return [cruise-altitude cruise-speed altitude-distance altitude-speed]\n(loop [alt cru-alt spd cru-spd ad 0 sd 0]\n  (if (and (> (first alt) 4000) (> (first spd) 220))\n    (let [[stim sdis] (mfs/speed-variation spd spd-lnd (:step prop) (:time-out prop))\n           atim (mfs/altitude-variation alt alt-lnd (:step elev) (:time-out elev))\n           adis (if (<= atim stim)\n                    sdis\n                    (+ sdis (* (- atim stim) (first spd))))]\n      (if (< (* 2 adis) gen-dist)\n        [adis sdis alt spd]\n        (let [[a aa] alt\n               [s sa] spd]\n          (recur [(round (int (* 0.8 a)) 1000) aa] [(round (int (* 0.8 s)) 10) sa] adis sdis))))\n    [ad sd alt spd]))")
 	(title "adjust-cruise [gen-dist cru-alt cru-spd alt-lnd spd-lnd elev prop]"))
-
-([FlightPro_Class620005] of  CloFuncall
-
-	(source "(es/adjust-cruise 2000 33000 500 2000 180 (:elevator @my.flights.move/CARRIER) (:propeller @my.flights.move/CARRIER))"))
-
-([FlightPro_Class620006] of  CloFuncall
-
-	(source "(es/adjust-cruise 2000 [33000 8] [500 1] [2000 8] [180 1 6] (:elevator @my.flights.move/CARRIER) (:propeller @my.flights.move/CARRIER))"))
-
-([FlightPro_Class620007] of  CloFuncall
-
-	(source "(es/adjust-cruise 80 [33000 8] [500 1] [2000 8] [180 1 6] (:elevator @my.flights.move/CARRIER) (:propeller @my.flights.move/CARRIER))"))
-
-([FlightPro_Class620008] of  CloFuncall
-
-	(source "(mod 21120 1000)"))
-
-([FlightPro_Class620009] of  CloFuncall
-
-	(source "(numerator (/ 21120 1000))"))
 
 ([FlightPro_Class620010] of  CloFunction
 
 	(source "(let [md (mod x p)\n       r (- x md)]\n  (if (< md (/ p 2))\n    r\n    (+ r p)))")
 	(title "round [x p]"))
-
-([FlightPro_Class620011] of  CloFuncall
-
-	(source "(round 21120 1000)"))
-
-([FlightPro_Class620012] of  CloFuncall
-
-	(source "(es/round 21120 1000)"))
-
-([FlightPro_Class620013] of  CloFuncall
-
-	(source "(es/round 21820 1000)"))
-
-([FlightPro_Class620014] of  CloFuncall
-
-	(source "(es/round 21500 1000)"))
-
-([FlightPro_Class620015] of  CloFuncall
-
-	(source "(es/round 21499 1000)"))
-
-([FlightPro_Class620016] of  CloFuncall
-
-	(source "(es/adjust-cruise 30 [33000 8] [500 1] [2000 8] [180 1 6] (:elevator @my.flights.move/CARRIER) (:propeller @my.flights.move/CARRIER))"))
-
-([FlightPro_Class620017] of  CloFuncall
-
-	(source "(es/adjust-cruise 10 [33000 8] [500 1] [2000 8] [180 1 6] (:elevator @my.flights.move/CARRIER) (:propeller @my.flights.move/CARRIER))"))
-
-([FlightPro_Class620018] of  CloFuncall
-
-	(source "(es/adjust-cruise 120 [33000 8] [500 1] [2000 8] [180 1 6] (:elevator @my.flights.move/CARRIER) (:propeller @my.flights.move/CARRIER))"))
 
 ([FlightPro_Class7] of  CloVar
 

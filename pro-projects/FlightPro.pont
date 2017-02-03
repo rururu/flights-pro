@@ -1,4 +1,4 @@
-; Thu Feb 02 21:49:13 MSK 2017
+; Fri Feb 03 21:45:06 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -103,10 +103,6 @@
 (defclass Flight
 	(is-a Flights+Ontology)
 	(role concrete)
-	(single-slot spec-plan
-		(type STRING)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
 	(single-slot time
 		(type STRING)
 ;+		(cardinality 0 1)
@@ -191,6 +187,10 @@
 (defclass FlightPlan
 	(is-a Flights+Ontology)
 	(role concrete)
+	(single-slot spec-plan
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot cruise
 		(type STRING)
 ;+		(cardinality 0 1)
