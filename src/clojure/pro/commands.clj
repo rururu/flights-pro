@@ -226,12 +226,18 @@ TERRAIN)
 (let [{:keys [callsign time country1 airport1 country2 airport2]} params
        abc (fr24/airports-by-country)
        apf (get-in abc [country1 airport1])
-       apt (get-in abc [country2 airport2])]
-  (rete/assert-frame ['Schedule 
+       apt (get-in abc [country2 airport2])
+       mes "Airport not found: "]
+  (if (and apf apt)
+    (rete/assert-frame ['Schedule 
 	'callsign callsign
 	'time time
 	'from apf
-	'to apt]))
+	'to apt])
+    (do (if (nil? apf)
+            (println mes country1 airport1))
+          (if (nil? apt)
+            (println mes country2 airport2)))))
 "")
 
 (defn set-my-flight-info [csoid dept fapt tapt]

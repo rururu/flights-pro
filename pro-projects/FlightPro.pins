@@ -1,4 +1,4 @@
-; Fri Feb 03 21:45:06 MSK 2017
+; Sat Feb 04 14:34:18 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -1602,7 +1602,7 @@
 
 ([FlightPro_Class460002] of  CloFunction
 
-	(source "(println [:CMD-SCHEDULE params])\n(let [{:keys [callsign time country1 airport1 country2 airport2]} params\n       abc (fr24/airports-by-country)\n       apf (get-in abc [country1 airport1])\n       apt (get-in abc [country2 airport2])]\n  (rete/assert-frame ['Schedule \n	'callsign callsign\n	'time time\n	'from apf\n	'to apt]))\n\"\"")
+	(source "(println [:CMD-SCHEDULE params])\n(let [{:keys [callsign time country1 airport1 country2 airport2]} params\n       abc (fr24/airports-by-country)\n       apf (get-in abc [country1 airport1])\n       apt (get-in abc [country2 airport2])\n       mes \"Airport not found: \"]\n  (if (and apf apt)\n    (rete/assert-frame ['Schedule \n	'callsign callsign\n	'time time\n	'from apf\n	'to apt])\n    (do (if (nil? apf)\n            (println mes country1 airport1))\n          (if (nil? apt)\n            (println mes country2 airport2)))))\n\"\"")
 	(title "schedule [params]"))
 
 ([FlightPro_Class470000] of  CloVar
@@ -1826,7 +1826,7 @@
 
 ([FlightPro_Class550000] of  CloVar
 
-	(source "{:takeoff \n  {:speed [220 8]\n   :altitude [1500 6]\n   :initial-turn-course [-1 2]}\n :cruise \n  {:speed [500 1]\n   :altitude [33000 8]}\n :landing \n  {:speed [180 1 6]\n   :altitude [2000 8]\n   :outer-marker-distance 7\n   :final-turn-course [-1 1]\n   :table-alt\n     [[0.05 0][0.5 15][2 200][7 2000]] ;; x - dist, y - alt\n   :table-spd\n     [[0.05 5][0.5 140][3 180]]}	;; x - dist, y - spd\n}")
+	(source "{:takeoff \n  {:speed [220 8]\n   :altitude [1500 6]\n   :initial-turn-course [-1 2]}\n :cruise \n  {:speed [500 1]\n   :altitude [33000 8]\n   :min-spd 220\n   :min-alt 4000}\n :landing \n  {:speed [180 1 6]\n   :altitude [2000 8]\n   :outer-marker-distance 7\n   :final-turn-course [-1 1]\n   :table-alt\n     [[0.1 0][0.5 15][2 200][7 2000]] ;; x - dist, y - alt\n   :table-spd\n     [[0.0 0][0.1 10][0.5 100][3 180]]}	;; x - dist, y - spd\n}")
 	(title "GENPLAN"))
 
 ([FlightPro_Class550002] of  Rule
@@ -1916,6 +1916,10 @@
 
 	(source "<html>\n  <head>\n    <style type=\"text/css\">\n      <!--\n        body { font-family: arial; font-size: 12pt }\n        p { font-family: arial; margin-top: 2; margin-right: 2; margin-bottom: 2; margin-left: 2 }\n      -->\n    </style>\n    \n  </head>\n  <body>\n    <b>Cesium Client<br></b><br>API<br><br>1. fly-to [lat lon alt crs per]<br>2. camera [key val], keys: :view, :altitude, :pitch, :roll<br><br>CZML rendering support<br><br>Initialization: (init-3D-view)</body>\n</html>"))
 
+([FlightPro_Class600000] of  CloFuncall
+
+	(source "(get-in (fr24.client/airports-by-country) [\"Estonia\" \"Tallinn Lennart Meri Airport\"])"))
+
 ([FlightPro_Class600001] of  CloFuncall
 
 	(source "(def fapt  {\"name\" \"Helsinki Malmi Airport\", \"iata\" \"HEM\", \"icao\" \"EFHF\", \"lat\" 60.25388, \"lon\" 25.044161, \"country\" \"Finland\", \"alt\" 57})"))
@@ -1974,15 +1978,19 @@
 	(source "\"yes\"")
 	(title "TERRAIN"))
 
+([FlightPro_Class610001] of  CloFuncall
+
+	(source "(get-in (fr24.client/airports-by-country) [\"Estonia\" \"Kardla Airport\"])"))
+
 ([FlightPro_Class620003] of  CloFunction
 
-	(source "(let [gen GENPLAN\n       cru (:cruise gen)\n       lnd (:landing gen)\n       prop (:propeller @mfs/CARRIER)\n       elev (:elevator @mfs/CARRIER)\n       fcrd [(fapt \"lat\") (fapt \"lon\")]\n       tcrd [(tapt \"lat\") (tapt \"lon\")]\n       gdist (calc.geo/distance-nm fcrd tcrd)\n       _ (println :General-Distance gdist)\n       [adist sdist calt cspd] (adjust-cruise\n		gdist\n		(:altitude cru)\n		(:speed cru)\n		(:altitude lnd)\n		(:speed lnd) \n		elev\n		prop)\n       _ (println calt cspd)\n       spp (assoc-in gen [:takeoff :from-crd] fcrd)\n       spp (assoc spp :cruise (merge (:cruise gen)\n		{:alt-dist adist\n		 :spd-dist sdist\n		 :altitude calt\n		 :speed cspd}))]\n  (assoc-in spp [:landing :to-crd] tcrd))")
+	(source "(let [gen GENPLAN\n       cru (:cruise gen)\n       lnd (:landing gen)\n       prop (:propeller @mfs/CARRIER)\n       elev (:elevator @mfs/CARRIER)\n       fcrd [(fapt \"lat\") (fapt \"lon\")]\n       tcrd [(tapt \"lat\") (tapt \"lon\")]\n       gdist (calc.geo/distance-nm fcrd tcrd)\n       [adist sdist calt cspd] (adjust-cruise\n		gdist\n		(:altitude cru)\n		(:speed cru)\n		(:altitude lnd)\n		(:speed lnd) \n		elev\n		prop\n		(:min-alt cru)\n		(:min-spd cru))\n       spp (assoc-in gen [:takeoff :from-crd] fcrd)\n       spp (assoc spp :cruise (merge (:cruise gen)\n		{:alt-dist adist\n		 :spd-dist sdist\n		 :altitude calt\n		 :speed cspd}))]\n  (assoc-in spp [:landing :to-crd] tcrd))")
 	(title "specific-plan [fapt tapt]"))
 
 ([FlightPro_Class620004] of  CloFunction
 
-	(source ";; return [cruise-altitude cruise-speed altitude-distance altitude-speed]\n(loop [alt cru-alt spd cru-spd ad 0 sd 0]\n  (if (and (> (first alt) 4000) (> (first spd) 220))\n    (let [[stim sdis] (mfs/speed-variation spd spd-lnd (:step prop) (:time-out prop))\n           atim (mfs/altitude-variation alt alt-lnd (:step elev) (:time-out elev))\n           adis (if (<= atim stim)\n                    sdis\n                    (+ sdis (* (- atim stim) (first spd))))]\n      (if (< (* 2 adis) gen-dist)\n        [adis sdis alt spd]\n        (let [[a aa] alt\n               [s sa] spd]\n          (recur [(round (int (* 0.8 a)) 1000) aa] [(round (int (* 0.8 s)) 10) sa] adis sdis))))\n    [ad sd alt spd]))")
-	(title "adjust-cruise [gen-dist cru-alt cru-spd alt-lnd spd-lnd elev prop]"))
+	(source ";; return [cruise-altitude cruise-speed altitude-distance altitude-speed]\n(loop [alt cru-alt spd cru-spd ad 0 sd 0]\n  (if (and (> (first alt) min-alt) (> (first spd) min-spd))\n    (let [[stim sdis] (mfs/speed-variation spd spd-lnd (:step prop) (:time-out prop))\n           atim (mfs/altitude-variation alt alt-lnd (:step elev) (:time-out elev))\n           adis (if (<= atim stim)\n                    sdis\n                    (+ sdis (* (- atim stim) (first spd))))]\n      (if (< (* 2 adis) gen-dist)\n        [adis sdis alt spd]\n        (let [[a aa] alt\n               [s sa] spd]\n          (recur [(round (int (* 0.8 a)) 1000) aa] [(round (int (* 0.8 s)) 10) sa] adis sdis))))\n    [ad sd alt spd]))")
+	(title "adjust-cruise [gen-dist cru-alt cru-spd alt-lnd spd-lnd elev prop min-alt min-spd]"))
 
 ([FlightPro_Class620010] of  CloFunction
 

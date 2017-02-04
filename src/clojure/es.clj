@@ -39,16 +39,18 @@
    :initial-turn-course [-1 2]}
  :cruise 
   {:speed [500 1]
-   :altitude [33000 8]}
+   :altitude [33000 8]
+   :min-spd 220
+   :min-alt 4000}
  :landing 
   {:speed [180 1 6]
    :altitude [2000 8]
    :outer-marker-distance 7
    :final-turn-course [-1 1]
    :table-alt
-     [[0.05 0][0.5 15][2 200][7 2000]] ;; x - dist, y - alt
+     [[0.1 0][0.5 15][2 200][7 2000]] ;; x - dist, y - alt
    :table-spd
-     [[0.05 5][0.5 140][3 180]]}	;; x - dist, y - spd
+     [[0.0 0][0.1 10][0.5 100][3 180]]}	;; x - dist, y - spd
 })
 (def ONB-PAUSE false)
 (defn round [x p]
@@ -135,10 +137,10 @@
     rw
     (geo/norm-crs (+ rw 180)))))
 
-(defn adjust-cruise [gen-dist cru-alt cru-spd alt-lnd spd-lnd elev prop]
+(defn adjust-cruise [gen-dist cru-alt cru-spd alt-lnd spd-lnd elev prop min-alt min-spd]
   ;; return [cruise-altitude cruise-speed altitude-distance altitude-speed]
 (loop [alt cru-alt spd cru-spd ad 0 sd 0]
-  (if (and (> (first alt) 4000) (> (first spd) 220))
+  (if (and (> (first alt) min-alt) (> (first spd) min-spd))
     (let [[stim sdis] (mfs/speed-variation spd spd-lnd (:step prop) (:time-out prop))
            atim (mfs/altitude-variation alt alt-lnd (:step elev) (:time-out elev))
            adis (if (<= atim stim)
@@ -160,7 +162,6 @@
        fcrd [(fapt "lat") (fapt "lon")]
        tcrd [(tapt "lat") (tapt "lon")]
        gdist (calc.geo/distance-nm fcrd tcrd)
-       _ (println :General-Distance gdist)
        [adist sdist calt cspd] (adjust-cruise
 		gdist
 		(:altitude cru)
@@ -168,8 +169,9 @@
 		(:altitude lnd)
 		(:speed lnd) 
 		elev
-		prop)
-       _ (println calt cspd)
+		prop
+		(:min-alt cru)
+		(:min-spd cru))
        spp (assoc-in gen [:takeoff :from-crd] fcrd)
        spp (assoc spp :cruise (merge (:cruise gen)
 		{:alt-dist adist
@@ -202,10 +204,11 @@
 {:target-crd (:final-turn-crd lgp)})
 
 (defn descend-plan [spp lgp]
-  (let [lnd (:landing spp)]
+  (let [lnd (:landing spp)
+       cru (:cruise spp)]
   {:status "OFF"
-   :alt-dist (:alt-dist spp)
-   :spd-dist (:spd-dist spp)
+   :alt-dist (:alt-dist cru)
+   :spd-dist (:spd-dist cru)
    :alt-target (:altitude lnd)
    :spd-target (:speed lnd) 
    :target-crd (:final-turn-crd lgp)}))
