@@ -1,4 +1,4 @@
-; Sat Feb 04 14:34:18 MSK 2017
+; Sun Feb 05 20:40:32 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -81,39 +81,39 @@
 ([FlightPro_ProjectKB_Class618] of  Property_List
 )
 
-([FlightPro_ProjectKB_Class632] of  Map
+([FlightPro_ProjectKB_Class662] of  Map
 
 	(entries
-		[FlightPro_ProjectKB_Class633]
-		[FlightPro_ProjectKB_Class634]
-		[FlightPro_ProjectKB_Class635]))
+		[FlightPro_ProjectKB_Class663]
+		[FlightPro_ProjectKB_Class664]
+		[FlightPro_ProjectKB_Class665]))
 
-([FlightPro_ProjectKB_Class633] of  Map_Entry
+([FlightPro_ProjectKB_Class663] of  Map_Entry
 
 	(key "FlightPro_Class320015")
 	(key_class "edu.stanford.smi.protege.model.Frame")
 	(value "-8 584 224 146")
 	(value_class "java.awt.Rectangle"))
 
-([FlightPro_ProjectKB_Class634] of  Map_Entry
+([FlightPro_ProjectKB_Class664] of  Map_Entry
 
 	(key "FlightPro_Class290004")
 	(key_class "edu.stanford.smi.protege.model.Frame")
 	(value "-3 351 224 146")
 	(value_class "java.awt.Rectangle"))
 
-([FlightPro_ProjectKB_Class635] of  Map_Entry
+([FlightPro_ProjectKB_Class665] of  Map_Entry
 
 	(key "FlightPro_Class290003")
 	(key_class "edu.stanford.smi.protege.model.Frame")
 	(value "-5 349 224 146")
 	(value_class "java.awt.Rectangle"))
 
-([FlightPro_ProjectKB_Class636] of  Map_Entry
+([FlightPro_ProjectKB_Class666] of  Map_Entry
 
 	(key "InstanceDisplay.yellow_stickies")
 	(key_class "java.lang.String")
-	(value "FlightPro_ProjectKB_Class632")
+	(value "FlightPro_ProjectKB_Class662")
 	(value_class "java.util.Map"))
 
 ([FORMS_TAB] of  Widget
@@ -146,34 +146,6 @@
 	(is_hidden FALSE)
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
 
-([KB_068375_Class618] of  Map
-
-	(entries
-		[KB_068375_Class619]
-		[KB_068375_Class620]
-		[KB_068375_Class621]))
-
-([KB_068375_Class619] of  Map_Entry
-
-	(key "suppress_instance_counting")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([KB_068375_Class620] of  Map_Entry
-
-	(key "add_name_on_instance_form")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([KB_068375_Class621] of  Map_Entry
-
-	(key "change_tracking_active")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
 ([KB_102576_Class0] of  String
 
 	(name "factory_class_name")
@@ -181,8 +153,8 @@
 
 ([KB_102576_Class1] of  Map
 
-	(entries [FlightPro_ProjectKB_Class636])
-	(referenced_maps [FlightPro_ProjectKB_Class632]))
+	(entries [FlightPro_ProjectKB_Class666])
+	(referenced_maps [FlightPro_ProjectKB_Class662]))
 
 ([KB_102576_Class11] of  Property_List
 
@@ -516,6 +488,34 @@
 
 ([KB_932737_Class275] of  Property_List
 )
+
+([KB_995388_Class618] of  Map
+
+	(entries
+		[KB_995388_Class619]
+		[KB_995388_Class620]
+		[KB_995388_Class621]))
+
+([KB_995388_Class619] of  Map_Entry
+
+	(key "suppress_instance_counting")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([KB_995388_Class620] of  Map_Entry
+
+	(key "add_name_on_instance_form")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([KB_995388_Class621] of  Map_Entry
+
+	(key "change_tracking_active")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
 
 ([LAYOUT_PROPERTIES] of  Property_List
 

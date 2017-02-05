@@ -58,8 +58,8 @@
 (defn turn-and-bank [carr course]
   (let [[rb sa ba fa :as bps] (:bank-params @carr)
        bnk (dyn/bank (:course @carr) course bps)
-       alt (:altitude @carr)]
-  (if (or (< alt 90) (= bnk 0))
+       spd (:speed @carr)]
+  (if (or (< spd 90) (= bnk 0))
     (mov/turn carr course 1)
     (let [accel (if (> (calc/abs bnk) rb) 2 1)]
       (mov/turn carr course accel)

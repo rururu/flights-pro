@@ -23,6 +23,7 @@
  :trail 30000})
 (def MY-INFOS (volatile! {}))
 (def TERRAIN "yes")
+(def APT-ALT 0)
 (defn current-time []
   (int (/ (System/currentTimeMillis) 1000)))
 
@@ -215,6 +216,7 @@ TERRAIN)
     (let [iata (apt "iata")
            alt (apt "alt")
            crd [(apt "lat") (apt "lon")]]
+      (def APT-ALT alt)
       (asp/pump-in (:instructions CHN)
         {:instruct :map-center
          :coord crd})
