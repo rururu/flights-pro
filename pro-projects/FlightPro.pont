@@ -1,4 +1,4 @@
-; Sun Feb 05 20:40:32 MSK 2017
+; Tue Feb 07 22:31:41 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -8,10 +8,6 @@
 	(is-a USER)
 	(role abstract)
 	(single-slot course
-		(type STRING)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(single-slot descend
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
@@ -39,10 +35,6 @@
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
-	(single-slot climb
-		(type STRING)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
 	(single-slot callsign
 		(type STRING)
 ;+		(cardinality 0 1)
@@ -64,6 +56,10 @@
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot altitude
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot vertical-status
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
@@ -191,6 +187,14 @@
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
+	(single-slot status
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot vertical-status
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot cruise
 		(type STRING)
 ;+		(cardinality 0 1)
@@ -207,15 +211,7 @@
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
-	(single-slot climb
-		(type STRING)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
 	(single-slot takeoff
-		(type STRING)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(single-slot descend
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write)))

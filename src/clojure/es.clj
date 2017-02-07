@@ -83,9 +83,7 @@
 	 :callsign csn
 	 :vehicle {
 	   :coord crd2
-	   :altitude (if (< alt2 cmd/APT-ALT) 
-		cmd/APT-ALT 
-		alt2)
+	   :altitude alt2
 	   :speed spd2
 	   :course crs2}
 	 :old-course crs1
@@ -100,9 +98,7 @@
 	 :vehicle {:coord crd
 	               :course crs
 	               :speed spd
-	               :altitude (if (< alt cmd/APT-ALT) 
-		      cmd/APT-ALT 
-		      alt)}}))
+	               :altitude alt}}))
 
 (defn proc [z]
   (loop [n 1 y z]
@@ -143,12 +139,16 @@
 
 (defn corr-alt-tab [atab elv]
   (letfn [(corr1 [[x y]]
-	[x (+ y elv)])]
+	(if (> y 0)
+	  [x (+ y elv)]
+	  [x y]))]
   (vec (map corr1 atab))))
 
 (defn corr-alt [alt elv]
   (let [[a aa] alt]
-  [(+ a elv) aa]))
+  (if (> a 0)
+    [(+ a elv) aa]
+    alt)))
 
 (defn adjust-cruise [gen-dist cru-alt cru-spd alt-lnd spd-lnd elev prop min-alt min-spd]
   ;; return [cruise-altitude cruise-speed altitude-distance altitude-speed]
@@ -208,7 +208,6 @@
        tcrd (->> spp :landing :to-crd)
        [x crsa] (:initial-turn-course tof)]
   {:from-crd 	fcrd
-   :from-alt 	(fapt "alt") 
    :initial-crs 	[(runway (fapt "iata")) crsa]
    :takeoff-alt 	(:altitude tof)			
    :takeoff-spd (:speed tof)
