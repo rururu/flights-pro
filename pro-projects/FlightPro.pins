@@ -1,4 +1,4 @@
-; Tue Feb 07 22:31:41 MSK 2017
+; Sat Feb 11 21:48:52 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -863,7 +863,7 @@
 
 ([FlightPro_Class250001] of  CloFunction
 
-	(source "(let [lnd (:landing spp)\n       rcrs (geo/rev-bear (:finish-run spp))	;; reverse landing course\n       rgen (geo/rev-bear (:general-crs spp))	;; reverse general course\n       [x crsa] (:final-turn-course lnd)	;; landing course accel\n       [spd y spda] (:speed lnd)		;; final turn speed\n       omd (:outer-marker-distance lnd)\n       rudd (:rudder @mfs/CARRIER)\n       ftcrd (mfs/turn-end-point 	\n	(geo/future-pos tcrd rcrs omd 1) ;; outer-marker coordinates\n	spd \n	rcrs	\n	[rgen crsa] \n	(:step rudd) \n	(:time-out rudd))] 	\n    {:final-turn-crd	ftcrd\n     :landing-crs	[crs crsa] 	\n     :lannding-spd	[spd spda]})")
+	(source "(let [lnd (:landing spp)\n       tcrd (:finish-crd spp)\n       crs (:finish-run spp)		;; landing course\n       rcrs (geo/rev-bear crs)		;; reverse landing course\n       rgen (geo/rev-bear (:general-crs spp))	;; reverse general course\n       [x crsa] (:final-turn-course lnd)	;; landing course accel\n       [spd y spda] (:speed lnd)		;; final turn speed\n       omd (:outer-marker-distance lnd)\n       rudd (:rudder @mfs/CARRIER)\n       ftcrd (mfs/turn-end-point 	\n	(geo/future-pos tcrd rcrs omd 1) ;; outer-marker coordinates\n	spd \n	rcrs	\n	[rgen crsa] \n	(:step rudd) \n	(:time-out rudd))] \n    (merge lnd  {:final-turn-crd	ftcrd\n	:landing-crs	[crs crsa] 	\n     	:lannding-spd	[spd spda]}))")
 	(title "landing-plan [spp]"))
 
 ([FlightPro_Class250002] of  CloFunction
@@ -946,13 +946,13 @@
 ([FlightPro_Class270002] of  Rule
 
 	(lhs "?fp (FlightPlan id ?id\n	status \"CRUISE\"\n	vertical-status \"OFF\"\n	cruise ?cru)")
-	(rhs "(println [:ClimbStart ?id ?cli])\n(my.flights.move/control ?id my.flights.move/elevate (:cruise-alt ?cru))\n(my.flights.move/control ?id my.flights.move/accel (:cruise-spd ?cru))\n(modify ?fp vertical-status \"CLIMB\")")
+	(rhs "(println [:ClimbStart ?id ?cru])\n(my.flights.move/control ?id my.flights.move/elevate (:altitude ?cru))\n(my.flights.move/control ?id my.flights.move/accel (:speed ?cru))\n(modify ?fp vertical-status \"CLIMB\")")
 	(salience 0)
 	(title "mf:ClimbStart"))
 
 ([FlightPro_Class270003] of  Rule
 
-	(lhs "?fp (FlightPlan id ?id\n	vertical-status \"CLIMB\"\n	cruise ?cru)\n(Flight age \"CURRENT\" \n	id ?id\n	altitude ?alt\n	speed ?spd\n	((= ?alt (:cruise-alt ?cru))\n	 (= ?spd (:cruise-spd ?cru))))")
+	(lhs "?fp (FlightPlan id ?id\n	vertical-status \"CLIMB\"\n	cruise ?cru)\n(Flight age \"CURRENT\" \n	id ?id\n	altitude ?alt\n	speed ?spd\n	((= ?alt (:altitude ?cru))\n	 (= ?spd (:spdeed ?cru))))")
 	(rhs "(println [:ClimbDone ?id ?alt])\n(modify ?fp vertical-status \"LEVEL\")")
 	(salience 0)
 	(title "mf:ClimbDone"))
@@ -1271,7 +1271,7 @@
 ([FlightPro_Class340002] of  Rule
 
 	(lhs "?sd (Schedule callsign ?csn\n	time ?tim\n	from ?frm\n	to ?to)")
-	(rhs "(if-let [stm (es/start-time ?tim)]\n  (let [spp (es/specific-plan es/GENPLAN ?frm ?to)]\n     (my.flights.move/add-my-flight \n	?csn ?csn (:start-crd spp) (:start-run spp) 0 (:start-alt spp))\n     (asser FlightPlan id ?csn\n	start-time stm\n	spec-plan spp\n	takeoff (es/takeoff-plan spp)\n	cruise (es/cruise-plan spp)\n	landing (es/landing-plan spp)\n	status \"READY\"\n	vertical-status \"OFF\")\n     (pro.commands/set-my-flight-info ?csn ?tim ?frm ?to)))")
+	(rhs "(if-let [stm (es/start-time ?tim)]\n  (let [spp (es/specific-plan es/GENPLAN ?frm ?to)]\n     (my.flights.move/add-my-flight \n	?csn ?csn (:start-crd spp) (:start-run spp) 0 (:start-alt spp))\n     (println [:SPP spp])\n     (asser FlightPlan id ?csn\n	start-time stm\n	spec-plan spp\n	takeoff (es/takeoff-plan spp)\n	cruise (es/cruise-plan spp)\n	landing (es/landing-plan spp)\n	status \"READY\"\n	vertical-status \"OFF\")\n     (pro.commands/set-my-flight-info ?csn ?tim ?frm ?to)))")
 	(salience 0)
 	(title "mf:FlightPlan"))
 
@@ -1687,7 +1687,7 @@
 
 ([FlightPro_Class490002] of  CloFunction
 
-	(source "(let [tof (:takeoff spp)\n       [x crsa] (:initial-turn-course tof)]\n    (merge tof   {:from-crs 	[(:start-run spp) crsa]\n	:to-crs 	[(:general-crs spp) crsa]})")
+	(source "(let [tof (:takeoff spp)\n       [x crsa] (:initial-turn-course tof)]\n    (merge tof   {:from-crs 	[(:start-run spp) crsa]\n	:to-crs 	[(:general-crs spp) crsa]}))")
 	(title "takeoff-plan [spp]"))
 
 ([FlightPro_Class5] of  CloVar
@@ -1776,7 +1776,7 @@
 
 ([FlightPro_Class540017] of  CloFunction
 
-	(source "(let [tof (:takeoff spp)\n       cru (:cruise spp)\n       lnd (:landing spp)\n       car @mfs/CARRIER\n       [ddist bdist calt cspd] \n         (adjust-cruise\n	(calc.geo/distance-nm (:start-crd tof) (:finish-crd lnd))\n	(:altitude cru)\n	(:speed cru)\n	(:altitude lnd)\n	(:speed lnd) \n	(:elevator car)\n	(:propeller car)\n	(:min-alt cru)\n	(:min-spd cru))\n\n  {:cruise-alt calt\n   :cruise-spd cspd\n   :descend-dist ddist\n   :brake-dist bdist})")
+	(source "(let [tof (:takeoff spp)\n       cru (:cruise spp)\n       lnd (:landing spp)\n       car @mfs/CARRIER\n       [ddist bdist calt cspd] \n         (adjust-cruise\n	(calc.geo/distance-nm (:start-crd spp) (:finish-crd spp))\n	(:altitude cru)\n	(:speed cru)\n	(:altitude lnd)\n	(:speed lnd) \n	(:elevator car)\n	(:propeller car)\n	(:min-alt cru)\n	(:min-spd cru))]\n    (merge cru  {:altitude calt\n	:speed cspd\n	:descend-dist ddist\n	:brake-dist bdist}))")
 	(title "cruise-plan [spp]"))
 
 ([FlightPro_Class540018] of  Rule
@@ -1807,7 +1807,7 @@
 
 ([FlightPro_Class550002] of  Rule
 
-	(lhs "?fp (FlightPlan id ?id\n	landing ?lnd\n	cruise ?cru\n	vertical-status \"DESCEND\")\n(Flight age \"CURRENT\" \n	id ?id\n	coord ?crd\n	(<= (calc.geo/distance-nm ?crd (:final-turn-crd ?lnd))\n	  (:brake-dist ?cru))")
+	(lhs "?fp (FlightPlan id ?id\n	landing ?lnd\n	cruise ?cru\n	vertical-status \"DESCEND\")\n(Flight age \"CURRENT\" \n	id ?id\n	coord ?crd\n	(<= (calc.geo/distance-nm ?crd (:final-turn-crd ?lnd))\n	  (:brake-dist ?cru)))")
 	(rhs "(println [:BrakeStart ?id ?dnd])\n(my.flights.move/control ?id my.flights.move/accel (:speed ?lnd))\n(modify ?fp vertical-status \"DESCEND&BRAKE\")")
 	(salience 0)
 	(title "mf:BrakeStart"))
@@ -1815,7 +1815,7 @@
 ([FlightPro_Class560000] of  Rule
 
 	(lhs "?fp (FlightPlan id ?id\n	status \"LANDING\"\n	landing ?lnd\n	spec-plan ?spp)\n(Flight age \"CURRENT\" \n	id ?id\n	coord ?crd)")
-	(rhs "(let [fcrd (:finish-crd ?spp)\n       dist (calc.geo/distance-nm ?crd fcrd)\n       bear (int (calc.geo/bear-deg ?crd fcrd))\n       alt (int (calc.core/smooth-tabfun dist (:table-alt ?lnd)))\n       spd (int (calc.core/smooth-tabfun dist (:table-spd ?lnd)))]\n   (my.flights.move/control ?id my.flights.move/turn [bear 2])\n   (my.flights.move/control ?id my.flights.move/elevate [alt 8])\n   (my.flights.move/control ?id my.flights.move/accel [spd 10]))")
+	(rhs "(let [fcrd (:finish-crd ?spp)\n       dist (calc.geo/distance-nm ?crd fcrd)\n       bear (int (calc.geo/bear-deg ?crd fcrd))\n       alt (int (calc.core/smooth-tabfun dist (:altitude-graph ?lnd)))\n       spd (int (calc.core/smooth-tabfun dist (:spdeed-graph ?lnd)))]\n   (my.flights.move/control ?id my.flights.move/turn [bear 2])\n   (my.flights.move/control ?id my.flights.move/elevate [alt 8])\n   (my.flights.move/control ?id my.flights.move/accel [spd 10]))")
 	(salience 0)
 	(title "mf:OnLandingCourse"))
 
@@ -1860,7 +1860,7 @@
 
 ([FlightPro_Class620003] of  CloFunction
 
-	(source "(let [tof (:takeoff gen)\n       cru (:cruise gen)\n       lnd (:landing gen)\n       fcrd [(fapt \"lat\") (fapt \"lon\")]\n       tcrd [(tapt \"lat\") (tapt \"lon\")]\n       falt (fapt \"alt\")\n       talt (tapt \"alt\")\n       spp (assoc gen :takeoff (merge tof\n		{:altitude (corr-alt (:altitude tof) falt)})\n	        :landing (merge lnd\n		{:altitude (corr-alt (:altitude lnd) talt)\n		 :table-alt (corr-alt-tab (:table-alt lnd) talt)})]\n    (merge spp {:general-crs	(int (geo/bear-deg fcrd tcrd))\n	:general-dist	(int (geo/distance-nm fcrd tcrd))\n	:start-crd 	fcrd\n	:finish-crd 	tcrd\n	:start-alt 	falt\n	:finish-alt 	talt\n	:start-run 	(runway (fapt \"iata\"))\n	:finish-run 	(runway (tapt \"iata\"))}))")
+	(source "(let [tof (:takeoff gen)\n       cru (:cruise gen)\n       lnd (:landing gen)\n       fcrd [(fapt \"lat\") (fapt \"lon\")]\n       tcrd [(tapt \"lat\") (tapt \"lon\")]\n       falt (fapt \"alt\")\n       talt (tapt \"alt\")\n       spp (assoc gen :takeoff (merge tof\n		{:altitude (corr-alt (:altitude tof) falt)})\n	        :landing (merge lnd\n		{:altitude (corr-alt (:altitude lnd) talt)\n		 :table-alt (corr-alt-tab (:table-alt lnd) talt)}))]\n    (merge spp {:general-crs	(int (geo/bear-deg fcrd tcrd))\n	:general-dist	(int (geo/distance-nm fcrd tcrd))\n	:start-crd 	fcrd\n	:finish-crd 	tcrd\n	:start-alt 	falt\n	:finish-alt 	talt\n	:start-run 	(runway (fapt \"iata\"))\n	:finish-run 	(runway (tapt \"iata\"))}))")
 	(title "specific-plan [gen fapt tapt]"))
 
 ([FlightPro_Class620004] of  CloFunction

@@ -47,10 +47,10 @@
    :altitude [2000 8]
    :outer-marker-distance 7
    :final-turn-course [-1 1]
-   :table-alt
+   :altitude-graph
      [[0.1 0][0.5 15][2 200][7 2000]] ;; x - dist, y - alt
-   :table-spd
-     [[0.0 0][0.1 10][0.5 100][3 180]]}	;; x - dist, y - spd
+   :spdeed-graph
+     [[0.0 0][0.1 10][0.5 100][3 180]]} ;; x - dist, y - spd
 })
 (def ONB-PAUSE false)
 (defn round [x p]
@@ -166,98 +166,73 @@
           (recur [(round (int (* 0.8 a)) 1000) aa] [(round (int (* 0.8 s)) 10) sa] adis sdis))))
     [ad sd alt spd])))
 
-(defn specific-plan [fapt tapt]
-  (let [gen GENPLAN
-       tof (:takeoff gen)
+(defn specific-plan [gen fapt tapt]
+  (let [tof (:takeoff gen)
        cru (:cruise gen)
        lnd (:landing gen)
-       prop (:propeller @mfs/CARRIER)
-       elev (:elevator @mfs/CARRIER)
        fcrd [(fapt "lat") (fapt "lon")]
        tcrd [(tapt "lat") (tapt "lon")]
        falt (fapt "alt")
        talt (tapt "alt")
-       lalt (corr-alt (:altitude lnd) talt)
-       gdist (calc.geo/distance-nm fcrd tcrd)
-       [adist sdist calt cspd] (adjust-cruise
-		gdist
-		(:altitude cru)
-		(:speed cru)
-		lalt
-		(:speed lnd) 
-		elev
-		prop
-		(:min-alt cru)
-		(:min-spd cru))
        spp (assoc gen :takeoff (merge tof
-		{:altitude (corr-alt (:altitude tof) falt)
-		 :from-crd fcrd}))
-       spp (assoc spp :cruise (merge cru
-		{:alt-dist adist
-		 :spd-dist sdist
-		 :altitude calt
-		 :speed cspd}))]
-  (assoc spp :landing (merge lnd
+		{:altitude (corr-alt (:altitude tof) falt)})
+	        :landing (merge lnd
 		{:altitude (corr-alt (:altitude lnd) talt)
-		 :table-alt (corr-alt-tab (:table-alt lnd) talt)
-		 :to-crd tcrd}))))
+		 :table-alt (corr-alt-tab (:table-alt lnd) talt)}))]
+    (merge spp {:general-crs	(int (geo/bear-deg fcrd tcrd))
+	:general-dist	(int (geo/distance-nm fcrd tcrd))
+	:start-crd 	fcrd
+	:finish-crd 	tcrd
+	:start-alt 	falt
+	:finish-alt 	talt
+	:start-run 	(runway (fapt "iata"))
+	:finish-run 	(runway (tapt "iata"))})))
 
-(defn takeoff-plan [spp fapt]
+(defn takeoff-plan [spp]
   (let [tof (:takeoff spp)
-       fcrd (:from-crd tof)
-       tcrd (->> spp :landing :to-crd)
        [x crsa] (:initial-turn-course tof)]
-  {:from-crd 	fcrd
-   :initial-crs 	[(runway (fapt "iata")) crsa]
-   :takeoff-alt 	(:altitude tof)			
-   :takeoff-spd (:speed tof)
-   :general-crs 	[(int (geo/bear-deg fcrd tcrd)) crsa]
-   :to-crd 	tcrd
-   :initial-turn "OFF"}))
+    (merge tof   {:from-crs 	[(:start-run spp) crsa]
+	:to-crs 	[(:general-crs spp) crsa]})))
 
-(defn climb-plan [spp]
-  (let [cru (:cruise spp)]
-  {:climb-alt	(:altitude cru) 
-   :climb-spd	(:speed cru)}))
-
-(defn cruise-plan [lgp]
-  ;; final turn start point
-{:target-crd (:final-turn-crd lgp)})
-
-(defn descend-plan [spp lgp]
-  (let [lnd (:landing spp)
-       cru (:cruise spp)]
-  {:status "OFF"
-   :alt-dist (:alt-dist cru)
-   :spd-dist (:spd-dist cru)
-   :alt-target (:altitude lnd)
-   :spd-target (:speed lnd) 
-   :target-crd (:final-turn-crd lgp)}))
-
-(defn landing-plan [spp tapt]
-  (let [fcrd (->> spp :takeoff :from-crd)	;; departure coordinates
-       tcrd (->> spp :landing :to-crd)	;; destination coordinates
-       crs (runway (tapt "iata"))		;; lannding course
-       rcrs (geo/rev-bear crs)		;; reverse landing course
-       rgen (geo/bear-deg tcrd fcrd)	;; reverse general course
+(defn cruise-plan [spp]
+  (let [tof (:takeoff spp)
+       cru (:cruise spp)
        lnd (:landing spp)
+       car @mfs/CARRIER
+       [ddist bdist calt cspd] 
+         (adjust-cruise
+	(calc.geo/distance-nm (:start-crd spp) (:finish-crd spp))
+	(:altitude cru)
+	(:speed cru)
+	(:altitude lnd)
+	(:speed lnd) 
+	(:elevator car)
+	(:propeller car)
+	(:min-alt cru)
+	(:min-spd cru))]
+    (merge cru  {:altitude calt
+	:speed cspd
+	:descend-dist ddist
+	:brake-dist bdist})))
+
+(defn landing-plan [spp]
+  (let [lnd (:landing spp)
+       tcrd (:finish-crd spp)
+       crs (:finish-run spp)		;; landing course
+       rcrs (geo/rev-bear crs)		;; reverse landing course
+       rgen (geo/rev-bear (:general-crs spp))	;; reverse general course
        [x crsa] (:final-turn-course lnd)	;; landing course accel
        [spd y spda] (:speed lnd)		;; final turn speed
        omd (:outer-marker-distance lnd)
        rudd (:rudder @mfs/CARRIER)
-       ftsp (mfs/turn-end-point 	
+       ftcrd (mfs/turn-end-point 	
 	(geo/future-pos tcrd rcrs omd 1) ;; outer-marker coordinates
 	spd 
 	rcrs	
 	[rgen crsa] 
 	(:step rudd) 
-	(:time-out rudd))] 	
-    {:final-turn-crd 	ftsp
-     :landing-crs	[crs crsa] 	
-     :lannding-spd	[spd spda]
-     :lannding-alt	(tapt "alt")
-     :table-alt		(:table-alt lnd)
-     :table-spd		(:table-spd lnd)
-     :stop-crd		tcrd
-     :status		"OFF"}))
+	(:time-out rudd))] 
+    (merge lnd  {:final-turn-crd	ftcrd
+	:landing-crs	[crs crsa] 	
+     	:lannding-spd	[spd spda]})))
 
