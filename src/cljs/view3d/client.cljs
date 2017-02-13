@@ -19,13 +19,15 @@
  :instructions (str HOST PORT "/instructions/")
  :command (str HOST PORT "/command/")
  :question (str HOST PORT "/question/")
- :answer (str HOST PORT "/answer/")})
+ :answer (str HOST PORT "/answer/")
+ :manual-data (str HOST PORT "/manual-data/")})
 (def TIO {:carrier 1000
  :camera 4200
  :directives 911
  :instructions 979
  :vehicles 200
- :display 831})
+ :display 831
+ :manual-data 6000})
 (def CARRIER (volatile! {:mode "?"
                :coord [0 0]
                :altitude 0
@@ -181,6 +183,17 @@
   (GET (:directives URL) {:handler directives-handler
                        :error-handler error-handler}))
 
+(defn send-manual-data []
+  (let [carr @CARRIER]
+  (if (= (:mode carr) "MANUAL")
+    (GET (str (:manual-data URL) 
+	"?coord=" (:coord carr)
+	"&course=" (:course carr)
+	"&speed= " (:speed carr)
+	"&altitude=" (:altitude carr))
+	{:handler (fn[response])
+	 :error-handler error-handler}))))
+
 (defn on-load []
   (enable-console-print!)
 (GET (str (:command URL) "terrain")
@@ -190,6 +203,7 @@
 (asp/repeater mov/move CARRIER (:carrier TIO))
 (asp/repeater ctl/show-flight-data CARRIER (:display TIO))
 (asp/repeater receive-directives (:directives TIO))
+(asp/repeater send-manual-data (:manual-data TIO))
 (ctl/show-controls))
 
 

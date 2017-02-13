@@ -15,13 +15,24 @@
  :instructions (str HOST PORT "/instructions/")
  :command (str HOST PORT "/command/")
  :question (str HOST PORT "/question/")
- :answer (str HOST PORT "/answer/")})
+ :answer (str HOST PORT "/answer/")
+ :manual-data (str HOST PORT "/manual-data/")})
 (def CHN {:answer (asp/mk-chan)
  :directives (asp/mk-chan)
  :instructions (asp/mk-chan)})
 (def TIM {:popup 30000
  :trail 30000})
-(def MY-INFOS (volatile! {}))
+(def MY-INFOS (volatile! {"MANUAL"
+  {"airport" {"origin" {"name" "unk" "code" {"iata" "unk"}}
+                  "destination" {"name" "unk" "code" {"iata" "unk"}}}
+
+   "aircraft" {"model" {"text" "Ru Lentokone"}
+                   "images" {"thumbnails" [{"src" "img/5.jpg"}]}}
+
+   "time" {"real" {"departure" "unk"}
+               "scheduled" {"arrival" "unk"}}
+
+   "airline" {"short" "Ru Airlines"}}}))
 (def TERRAIN "yes")
 (defn current-time []
   (int (/ (System/currentTimeMillis) 1000)))
@@ -252,4 +263,12 @@ TERRAIN)
                "scheduled" {"arrival" "unk"}}
 
    "airline" {"short" "Ru Airlines"}}))
+
+(defn get-manual-data [params]
+  (vswap! fr24/MANUAL-DATA assoc "MANUAL"
+          (volatile! {:callsign "MANUAL"
+	 :coord (read-string (:coord params))
+	 :course (read-string (:course params))
+	 :speed (read-string (:speed params))
+	 :altitude (read-string (:altitude params))})))
 

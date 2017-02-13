@@ -11,7 +11,8 @@
  :instructions (str HOST PORT "/instructions/")
  :command (str HOST PORT "/command/")
  :question (str HOST PORT "/question/")
- :answer (str HOST PORT "/answer/")})
+ :answer (str HOST PORT "/answer/")
+ :manual-data (str HOST PORT "/manual-data/")})
 (def error-handler (fn [response]
   (let [{:keys [status status-text]} response]
     (println (str "AJAX ERROR: " status " " status-text)))))

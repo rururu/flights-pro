@@ -11,7 +11,8 @@
  :directives 911
  :instructions 979
  :vehicles 200
- :display 831})
+ :display 831
+ :manual-data 6000})
 (def CARRIER (volatile! {:mode "?"
                :coord [0 0]
                :altitude 0

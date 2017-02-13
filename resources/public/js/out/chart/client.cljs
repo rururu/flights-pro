@@ -17,13 +17,15 @@
  :instructions (str HOST PORT "/instructions/")
  :command (str HOST PORT "/command/")
  :question (str HOST PORT "/question/")
- :answer (str HOST PORT "/answer/")})
+ :answer (str HOST PORT "/answer/")
+ :manual-data (str HOST PORT "/manual-data/")})
 (def TIO {:carrier 1000
  :camera 4200
  :directives 911
  :instructions 979
  :vehicles 200
- :display 831})
+ :display 831
+ :manual-data 6000})
 (def URL-ICO {"INTERSECT" 	(str HOST PORT "/img/redpln32.png")
  "DESCEND" 	(str HOST PORT "/img/greenpln32.png")
  "CLIMB" 	(str HOST PORT "/img/bluepln32.png")

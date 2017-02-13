@@ -14,6 +14,7 @@
 (def AIRPORTS (volatile! nil))
 (def FL-INFOS (volatile! {}))
 (def STATUS (volatile! "START"))
+(def MANUAL-DATA (volatile! {}))
 (defn json-web-data [url]
   (let [r @(client/get url)
        s (:status r)]
@@ -70,7 +71,8 @@
         ;;(filter #(not (empty? (callsign (second %)))))
         (apply concat)
         (apply hash-map)
-        (merge-my-flights @mfs/CARRIERS))))))
+        (merge-my-flights @mfs/CARRIERS)
+        (merge-my-flights @MANUAL-DATA))))))
 
 (defn by-call [cs]
   (if-let [flt (filter #(= cs (callsign (second %)))

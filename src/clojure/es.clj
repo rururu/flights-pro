@@ -48,7 +48,7 @@
    :outer-marker-distance 7
    :final-turn-course [-1 1]
    :altitude-graph
-     [[0.1 0][0.5 15][2 200][7 2000]] ;; x - dist, y - alt
+     [[0.1 0][0.5 15][2 600][7 2000]] ;; x - dist, y - alt
    :spdeed-graph
      [[0.0 0][0.1 10][0.5 100][3 180]]} ;; x - dist, y - spd
 })
@@ -178,7 +178,7 @@
 		{:altitude (corr-alt (:altitude tof) falt)})
 	        :landing (merge lnd
 		{:altitude (corr-alt (:altitude lnd) talt)
-		 :table-alt (corr-alt-tab (:table-alt lnd) talt)}))]
+		 :altitude-graph (corr-alt-tab (:altitude-graph lnd) talt)}))]
     (merge spp {:general-crs	(int (geo/bear-deg fcrd tcrd))
 	:general-dist	(int (geo/distance-nm fcrd tcrd))
 	:start-crd 	fcrd

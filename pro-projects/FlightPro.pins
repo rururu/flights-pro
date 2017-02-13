@@ -1,4 +1,4 @@
-; Sat Feb 11 21:48:52 MSK 2017
+; Mon Feb 13 22:07:25 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -307,7 +307,7 @@
 
 ([FlightPro_Class160000] of  CloFunction
 
-	(source "(let [[n s w e] @BBX]\n  (if-let [ff (json-web-data (str (:url-flights F24) \"?bounds=\" n \",\" s \",\" w \",\" e))]\n    (vreset! FLIGHTS \n      (->> ff\n        (filter #(vector? (second %)))\n        ;;(filter #(not (empty? (callsign (second %)))))\n        (apply concat)\n        (apply hash-map)\n        (merge-my-flights @mfs/CARRIERS)))))")
+	(source "(let [[n s w e] @BBX]\n  (if-let [ff (json-web-data (str (:url-flights F24) \"?bounds=\" n \",\" s \",\" w \",\" e))]\n    (vreset! FLIGHTS \n      (->> ff\n        (filter #(vector? (second %)))\n        ;;(filter #(not (empty? (callsign (second %)))))\n        (apply concat)\n        (apply hash-map)\n        (merge-my-flights @mfs/CARRIERS)\n        (merge-my-flights @MANUAL-DATA)))))")
 	(title "flights-in-bbx []"))
 
 ([FlightPro_Class160002] of  CloFunction
@@ -419,7 +419,8 @@
 		[FlightPro_Class190001]
 		[FlightPro_Class170000]
 		[FlightPro_Class220008]
-		[FlightPro_Class210010])
+		[FlightPro_Class210010]
+		[FlightPro_Class620001])
 	(title "FlightRadar24 Client"))
 
 ([FlightPro_Class180003] of  CloNamespace
@@ -466,6 +467,7 @@
 		[FlightPro_Class320000]
 		[FlightPro_Class80003]
 		[FlightPro_Class80001]
+		[FlightPro_Class600003]
 		[FlightPro_Class70001])
 	(cloNamespace [FlightPro_Class60001])
 	(cloVars
@@ -624,7 +626,7 @@
 
 ([FlightPro_Class20021] of  CloFunction
 
-	(source "(defroutes app-routes\n  (GET \"/\" [] (slurp (str ROOT \"cezium.html\")))\n  (GET \"/chart\" [] (slurp (str ROOT \"leaflet.html\")))\n  (GET \"/czml/\" [] (czs/events))\n  (GET \"/question/\" [& params] (cmd/question params))\n  (GET \"/answer/\" [] (response1 (:answer cmd/CHN)))\n  (GET \"/directives/\" [] (responseN (:directives cmd/CHN)))\n  (GET \"/instructions/\" [] (responseN (:instructions cmd/CHN)))\n  (GET \"/command/:cmd\" [cmd & params] \n    ((resolve (symbol (str \"pro.commands/\" cmd))) params))\n  (route/files \"/\" (do (println [:ROOT-FILES ROOT]) {:root ROOT}))\n  (route/resources \"/\")\n  (route/not-found \"Not Found\"))\n\n(def APP\n  (handler/site app-routes))")
+	(source "(defroutes app-routes\n  (GET \"/\" [] (slurp (str ROOT \"cezium.html\")))\n  (GET \"/chart\" [] (slurp (str ROOT \"leaflet.html\")))\n  (GET \"/czml/\" [] (czs/events))\n  (GET \"/question/\" [& params] (cmd/question params))\n  (GET \"/answer/\" [] (response1 (:answer cmd/CHN)))\n  (GET \"/directives/\" [] (responseN (:directives cmd/CHN)))\n  (GET \"/instructions/\" [] (responseN (:instructions cmd/CHN)))\n  (GET \"/manual-data/\" [& params] (cmd/get-manual-data params))\n  (GET \"/command/:cmd\" [cmd & params] \n    ((resolve (symbol (str \"pro.commands/\" cmd))) params))\n  (route/files \"/\" (do (println [:ROOT-FILES ROOT]) {:root ROOT}))\n  (route/resources \"/\")\n  (route/not-found \"Not Found\"))\n\n(def APP\n  (handler/site app-routes))")
 	(title "init-server []"))
 
 ([FlightPro_Class20022] of  CloFunction
@@ -796,6 +798,10 @@
 	(source "([]\n  (let [[n s w e] @fr24/BBX]\n    (watch-visible {:n n :s s :w w :e e})))\n([params]\n  (println [:WATCH-VISIBLE params])\n  (let [{:keys [n s w e]} params]\n    (clear)\n    (fr24/set-bbx n s w e)\n    (fr24/start process-flights)\n    \"\"))")
 	(title "watch-visible"))
 
+([FlightPro_Class230000] of  CloFuncall
+
+	(source "(ru.rules/pp 'Flight)"))
+
 ([FlightPro_Class230001] of  CloFunction
 
 	(source "(let [ldiff (- lambda lambda0)\n       cosphi (Math/cos phi)]\n  (Math/atan2 (* cosphi (Math/sin ldiff))\n                      (- (* (Math/cos phi1) (Math/sin phi)) \n                          (* (Math/sin phi1) cosphi (Math/cos ldiff)))))")
@@ -923,6 +929,10 @@
 	(source "(println \"Loading Clojure Programs...\")\n(if-let [wps (ClojureTab/findAnnotated (cls-instances \"WorkingPrograms\") nil)]\n  (loop [i 1 pins (svs wps \"cloPrograms\")]\n    (when (seq pins)\n      (println (str \" 1.\" i \" \" (sv (first pins) \"title\") \" = \" (ClojureTab/loadProgram (first pins)) ))\n      (recur (inc i) (rest pins))))\n  (println \"  Annotated instance of WorkingPrograms not found!\"))\n(println\"Starting Pro Server...\")\n(eval '(pro.server/start-server))\n(println\"Starting My Flights Movement...\")\n(eval '(my.flights.move/start-movement))\n(println\"Starting Expert System...\")\n(eval '(ru.rules/run-engine \"Flights Pro Run\"))")
 	(title "clojure-work []"))
 
+([FlightPro_Class260001] of  CloFuncall
+
+	(source "(pro.commands/follow {:id \"R6\"})"))
+
 ([FlightPro_Class260002] of  CloFunction
 
 	(source "(vreset! FLIGHTS {})")
@@ -989,6 +999,18 @@
 
 	(source "(:require\n  [pro.commands :as cmd]\n  [async.proc :as asp]\n  [cesium.core :as czs]\n  [calc.core :as calc]\n  [calc.geo :as geo]\n  [fr24.client :as fr24]\n  [my.flights.move :as mfs])\n(:import\n  java.util.Calendar)")
 	(title "es"))
+
+([FlightPro_Class280002] of  CloFuncall
+
+	(source "(my.flights.move/rem-my-flight \"R1\")"))
+
+([FlightPro_Class280003] of  CloFuncall
+
+	(source "(my.flights.move/rem-my-flight \"R6\")"))
+
+([FlightPro_Class280004] of  CloFuncall
+
+	(source "(my.flights.move/rem-my-flight \"R881\")"))
 
 ([FlightPro_Class290000] of  CloFunction
 
@@ -1245,12 +1267,12 @@
 
 ([FlightPro_Class330003] of  CloVar
 
-	(source "{:base (str HOST PORT \"/\")\n :chart (str HOST PORT \"/chart/\")\n :directives (str HOST PORT \"/directives/\")\n :instructions (str HOST PORT \"/instructions/\")\n :command (str HOST PORT \"/command/\")\n :question (str HOST PORT \"/question/\")\n :answer (str HOST PORT \"/answer/\")}")
+	(source "{:base (str HOST PORT \"/\")\n :chart (str HOST PORT \"/chart/\")\n :directives (str HOST PORT \"/directives/\")\n :instructions (str HOST PORT \"/instructions/\")\n :command (str HOST PORT \"/command/\")\n :question (str HOST PORT \"/question/\")\n :answer (str HOST PORT \"/answer/\")\n :manual-data (str HOST PORT \"/manual-data/\")}")
 	(title "URL"))
 
 ([FlightPro_Class330004] of  CloVar
 
-	(source "{:carrier 1000\n :camera 4200\n :directives 911\n :instructions 979\n :vehicles 200\n :display 831}")
+	(source "{:carrier 1000\n :camera 4200\n :directives 911\n :instructions 979\n :vehicles 200\n :display 831\n :manual-data 6000}")
 	(title "TIO"))
 
 ([FlightPro_Class330005] of  CloFunction
@@ -1271,7 +1293,7 @@
 ([FlightPro_Class340002] of  Rule
 
 	(lhs "?sd (Schedule callsign ?csn\n	time ?tim\n	from ?frm\n	to ?to)")
-	(rhs "(if-let [stm (es/start-time ?tim)]\n  (let [spp (es/specific-plan es/GENPLAN ?frm ?to)]\n     (my.flights.move/add-my-flight \n	?csn ?csn (:start-crd spp) (:start-run spp) 0 (:start-alt spp))\n     (println [:SPP spp])\n     (asser FlightPlan id ?csn\n	start-time stm\n	spec-plan spp\n	takeoff (es/takeoff-plan spp)\n	cruise (es/cruise-plan spp)\n	landing (es/landing-plan spp)\n	status \"READY\"\n	vertical-status \"OFF\")\n     (pro.commands/set-my-flight-info ?csn ?tim ?frm ?to)))")
+	(rhs "(if-let [stm (es/start-time ?tim)]\n  (let [spp (es/specific-plan es/GENPLAN ?frm ?to)]\n     (my.flights.move/add-my-flight \n	?csn ?csn (:start-crd spp) (:start-run spp) 0 (:start-alt spp))\n     (asser FlightPlan id ?csn\n	start-time stm\n	spec-plan spp\n	takeoff (es/takeoff-plan spp)\n	cruise (es/cruise-plan spp)\n	landing (es/landing-plan spp)\n	status \"READY\"\n	vertical-status \"OFF\")\n     (pro.commands/set-my-flight-info ?csn ?tim ?frm ?to)))")
 	(salience 0)
 	(title "mf:FlightPlan"))
 
@@ -1408,7 +1430,8 @@
 		[FlightPro_Class420000]
 		[FlightPro_Class420021]
 		[FlightPro_Class460002]
-		[FlightPro_Class510000])
+		[FlightPro_Class510000]
+		[FlightPro_Class590000])
 	(cloNamespace [FlightPro_Class400001])
 	(cloVars
 		[FlightPro_Class70000]
@@ -1737,7 +1760,7 @@
 
 ([FlightPro_Class510001] of  CloVar
 
-	(source "(volatile! {})")
+	(source "(volatile! {\"MANUAL\"\n  {\"airport\" {\"origin\" {\"name\" \"unk\" \"code\" {\"iata\" \"unk\"}}\n                  \"destination\" {\"name\" \"unk\" \"code\" {\"iata\" \"unk\"}}}\n\n   \"aircraft\" {\"model\" {\"text\" \"Ru Lentokone\"}\n                   \"images\" {\"thumbnails\" [{\"src\" \"img/5.jpg\"}]}}\n\n   \"time\" {\"real\" {\"departure\" \"unk\"}\n               \"scheduled\" {\"arrival\" \"unk\"}}\n\n   \"airline\" {\"short\" \"Ru Airlines\"}}})")
 	(title "MY-INFOS"))
 
 ([FlightPro_Class520000] of  CloFunction
@@ -1802,7 +1825,7 @@
 
 ([FlightPro_Class550000] of  CloVar
 
-	(source "{:takeoff \n  {:speed [220 8]\n   :altitude [1500 6]\n   :initial-turn-course [-1 2]}\n :cruise \n  {:speed [500 1]\n   :altitude [33000 8]\n   :min-spd 220\n   :min-alt 4000}\n :landing \n  {:speed [180 1 6]\n   :altitude [2000 8]\n   :outer-marker-distance 7\n   :final-turn-course [-1 1]\n   :altitude-graph\n     [[0.1 0][0.5 15][2 200][7 2000]] ;; x - dist, y - alt\n   :spdeed-graph\n     [[0.0 0][0.1 10][0.5 100][3 180]]} ;; x - dist, y - spd\n}")
+	(source "{:takeoff \n  {:speed [220 8]\n   :altitude [1500 6]\n   :initial-turn-course [-1 2]}\n :cruise \n  {:speed [500 1]\n   :altitude [33000 8]\n   :min-spd 220\n   :min-alt 4000}\n :landing \n  {:speed [180 1 6]\n   :altitude [2000 8]\n   :outer-marker-distance 7\n   :final-turn-course [-1 1]\n   :altitude-graph\n     [[0.1 0][0.5 15][2 600][7 2000]] ;; x - dist, y - alt\n   :spdeed-graph\n     [[0.0 0][0.1 10][0.5 100][3 180]]} ;; x - dist, y - spd\n}")
 	(title "GENPLAN"))
 
 ([FlightPro_Class550002] of  Rule
@@ -1830,14 +1853,23 @@
 
 ([FlightPro_Class570001] of  Rule
 
-	(lhs "?fp (FlightPlan id ?id\n	cruise \"DONE\"\n	landing ?lnd\n	((map? ?lnd)\n	 (= (:status ?lnd) \"ON\")))\n(Flight age \"CURRENT\" \n	id ?id\n	coord ?crd\n	course ?crs\n	(calc.geo/abaft ?crs ?crd (:stop-crd ?lnd)))")
-	(rhs "(println [:LandingDone ?id ?crd])\n(my.flights.move/rem-my-flight ?id)\n(modify ?fp landing \"DONE\")")
-	(salience 0)
+	(lhs "?fp (FlightPlan id ?id\n	status \"LANDING\"\n	spec-plan ?spp\n	landing ?lnd)\n(Flight age \"CURRENT\" \n	id ?id\n	coord ?crd\n	course ?crs\n	speed ?spd\n                        [(= ?spd 0)\n	 (calc.geo/abaft ?crs ?crd (:finish-crd ?spp))])")
+	(rhs "(println [:LandingDone ?id ?crd])\n(es/put-off-map ?id)\n(my.flights.move/rem-my-flight ?id)\n(modify ?fp status \"GROUND\" \n	landing \"DONE\")")
+	(salience 1)
 	(title "mf:LandingDone"))
+
+([FlightPro_Class580000] of  CloFuncall
+
+	(source "(my.flights.move/rem-my-flight \"S17\")"))
 
 ([FlightPro_Class580001] of  CloFuncall
 
 	(source "my.flights.move/CARRIERS"))
+
+([FlightPro_Class590000] of  CloFunction
+
+	(source "(vswap! fr24/MANUAL-DATA assoc \"MANUAL\"\n          (volatile! {:callsign \"MANUAL\"\n	 :coord (read-string (:coord params))\n	 :course (read-string (:course params))\n	 :speed (read-string (:speed params))\n	 :altitude (read-string (:altitude params))}))")
+	(title "get-manual-data [params]"))
 
 ([FlightPro_Class590001] of  CloVar
 
@@ -1847,6 +1879,23 @@
 ([FlightPro_Class60000] of  CloDocumentation
 
 	(source "<html>\n  <head>\n    <style type=\"text/css\">\n      <!--\n        body { font-family: arial; font-size: 12pt }\n        p { font-family: arial; margin-top: 2; margin-right: 2; margin-bottom: 2; margin-left: 2 }\n      -->\n    </style>\n    \n  </head>\n  <body>\n    <b>Cesium Client<br></b><br>API<br><br>1. fly-to [lat lon alt crs per]<br>2. camera [key val], keys: :view, :altitude, :pitch, :roll<br><br>CZML rendering support<br><br>Initialization: (init-3D-view)</body>\n</html>"))
+
+([FlightPro_Class600000] of  CloFuncall
+
+	(source "(ru.rules/sp :all)"))
+
+([FlightPro_Class600001] of  CloFuncall
+
+	(source "(es/put-off-map \"RS117\")"))
+
+([FlightPro_Class600002] of  CloFuncall
+
+	(source "(es/put-off-map \"S17\")"))
+
+([FlightPro_Class600003] of  CloFunction
+
+	(source "(let [carr @CARRIER]\n  (if (= (:mode carr) \"MANUAL\")\n    (GET (str (:manual-data URL) \n	\"?coord=\" (:coord carr)\n	\"&course=\" (:course carr)\n	\"&speed= \" (:speed carr)\n	\"&altitude=\" (:altitude carr))\n	{:handler (fn[response])\n	 :error-handler error-handler})))")
+	(title "send-manual-data []"))
 
 ([FlightPro_Class60001] of  CloNamespace
 
@@ -1858,9 +1907,22 @@
 	(source "\"yes\"")
 	(title "TERRAIN"))
 
+([FlightPro_Class610001] of  CloFuncall
+
+	(source "(pro.commands/get"))
+
+([FlightPro_Class620001] of  CloVar
+
+	(source "(volatile! {})")
+	(title "MANUAL-DATA"))
+
+([FlightPro_Class620002] of  CloFuncall
+
+	(source "f24.client/MANUAL-DATA"))
+
 ([FlightPro_Class620003] of  CloFunction
 
-	(source "(let [tof (:takeoff gen)\n       cru (:cruise gen)\n       lnd (:landing gen)\n       fcrd [(fapt \"lat\") (fapt \"lon\")]\n       tcrd [(tapt \"lat\") (tapt \"lon\")]\n       falt (fapt \"alt\")\n       talt (tapt \"alt\")\n       spp (assoc gen :takeoff (merge tof\n		{:altitude (corr-alt (:altitude tof) falt)})\n	        :landing (merge lnd\n		{:altitude (corr-alt (:altitude lnd) talt)\n		 :table-alt (corr-alt-tab (:table-alt lnd) talt)}))]\n    (merge spp {:general-crs	(int (geo/bear-deg fcrd tcrd))\n	:general-dist	(int (geo/distance-nm fcrd tcrd))\n	:start-crd 	fcrd\n	:finish-crd 	tcrd\n	:start-alt 	falt\n	:finish-alt 	talt\n	:start-run 	(runway (fapt \"iata\"))\n	:finish-run 	(runway (tapt \"iata\"))}))")
+	(source "(let [tof (:takeoff gen)\n       cru (:cruise gen)\n       lnd (:landing gen)\n       fcrd [(fapt \"lat\") (fapt \"lon\")]\n       tcrd [(tapt \"lat\") (tapt \"lon\")]\n       falt (fapt \"alt\")\n       talt (tapt \"alt\")\n       spp (assoc gen :takeoff (merge tof\n		{:altitude (corr-alt (:altitude tof) falt)})\n	        :landing (merge lnd\n		{:altitude (corr-alt (:altitude lnd) talt)\n		 :altitude-graph (corr-alt-tab (:altitude-graph lnd) talt)}))]\n    (merge spp {:general-crs	(int (geo/bear-deg fcrd tcrd))\n	:general-dist	(int (geo/distance-nm fcrd tcrd))\n	:start-crd 	fcrd\n	:finish-crd 	tcrd\n	:start-alt 	falt\n	:finish-alt 	talt\n	:start-run 	(runway (fapt \"iata\"))\n	:finish-run 	(runway (tapt \"iata\"))}))")
 	(title "specific-plan [gen fapt tapt]"))
 
 ([FlightPro_Class620004] of  CloFunction
@@ -1872,6 +1934,10 @@
 
 	(source "(let [md (mod x p)\n       r (- x md)]\n  (if (< md (/ p 2))\n    r\n    (+ r p)))")
 	(title "round [x p]"))
+
+([FlightPro_Class630003] of  CloFuncall
+
+	(source "fr24.client/MANUAL-DATA"))
 
 ([FlightPro_Class7] of  CloVar
 
@@ -1885,7 +1951,7 @@
 
 ([FlightPro_Class70001] of  CloFunction
 
-	(source "(enable-console-print!)\n(GET (str (:command URL) \"terrain\")\n	{:handler (fn [response]\n		(czm/init-3D-view (:base URL) response))\n	 :error-handler error-handler})\n(asp/repeater mov/move CARRIER (:carrier TIO))\n(asp/repeater ctl/show-flight-data CARRIER (:display TIO))\n(asp/repeater receive-directives (:directives TIO))\n(ctl/show-controls)")
+	(source "(enable-console-print!)\n(GET (str (:command URL) \"terrain\")\n	{:handler (fn [response]\n		(czm/init-3D-view (:base URL) response))\n	 :error-handler error-handler})\n(asp/repeater mov/move CARRIER (:carrier TIO))\n(asp/repeater ctl/show-flight-data CARRIER (:display TIO))\n(asp/repeater receive-directives (:directives TIO))\n(asp/repeater send-manual-data (:manual-data TIO))\n(ctl/show-controls)")
 	(title "on-load []"))
 
 ([FlightPro_Class70002] of  CloProgram

@@ -46,6 +46,7 @@
   (GET "/answer/" [] (response1 (:answer cmd/CHN)))
   (GET "/directives/" [] (responseN (:directives cmd/CHN)))
   (GET "/instructions/" [] (responseN (:instructions cmd/CHN)))
+  (GET "/manual-data/" [& params] (cmd/get-manual-data params))
   (GET "/command/:cmd" [cmd & params] 
     ((resolve (symbol (str "pro.commands/" cmd))) params))
   (route/files "/" (do (println [:ROOT-FILES ROOT]) {:root ROOT}))
