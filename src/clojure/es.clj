@@ -1,4 +1,5 @@
 (ns es
+(:use protege.core)
 (:require
   [pro.commands :as cmd]
   [async.proc :as asp]
@@ -19,20 +20,6 @@
  "GROUND" 	(str HOST PORT "/img/greypln32.png")
  "COUNTER"	(str HOST PORT "/img/b.png")
  "FOLLOWING"	(str HOST PORT "/img/r.png")})
-(def RUNWAYS (volatile! 
-  {"URE" 180 
-   "LED" 287 
-   "LHR" 90 
-   "EWR" 26
-   "TAY" 269 
-   "HEL" 227 
-   "FRA" 70 
-   "KEF" 180
-   "KDL" 147 
-   "JFK" 301 
-   "BOS" 200 
-   "LGA" 122
-   "PHL" 76}))
 (def GENPLAN {:takeoff 
   {:speed [220 8]
    :altitude [1500 6]
@@ -130,8 +117,10 @@
           (int (/ (.getTimeInMillis cld) 1000))))))))
 
 (defn runway [iata]
-  (let [rw (if-let [rw (@RUNWAYS iata)]
-              (int rw)
+  (let [rw (if-let [ins (fifos "Airport" "iata" iata)]
+              (let [rws (vec (svs ins "runways"))
+                     idx (int (rand (count rws)))]
+                (nth rws idx))
               0)]
   (if (> (rand 1) 0.5)
     rw

@@ -1,4 +1,4 @@
-; Mon Feb 13 22:07:25 MSK 2017
+; Tue Feb 14 21:31:21 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -990,14 +990,13 @@
 		[FlightPro_Class70000]
 		[FlightPro_Class20005]
 		[FlightPro_Class160009]
-		[FlightPro_Class530002]
 		[FlightPro_Class550000]
 		[FlightPro_Class590001])
 	(title "ES Functions"))
 
 ([FlightPro_Class280001] of  CloNamespace
 
-	(source "(:require\n  [pro.commands :as cmd]\n  [async.proc :as asp]\n  [cesium.core :as czs]\n  [calc.core :as calc]\n  [calc.geo :as geo]\n  [fr24.client :as fr24]\n  [my.flights.move :as mfs])\n(:import\n  java.util.Calendar)")
+	(source "(:use protege.core)\n(:require\n  [pro.commands :as cmd]\n  [async.proc :as asp]\n  [cesium.core :as czs]\n  [calc.core :as calc]\n  [calc.geo :as geo]\n  [fr24.client :as fr24]\n  [my.flights.move :as mfs])\n(:import\n  java.util.Calendar)")
 	(title "es"))
 
 ([FlightPro_Class280002] of  CloFuncall
@@ -1428,6 +1427,7 @@
 		[FlightPro_Class390003]
 		[FlightPro_Class420001]
 		[FlightPro_Class420000]
+		[FlightPro_Class640008]
 		[FlightPro_Class420021]
 		[FlightPro_Class460002]
 		[FlightPro_Class510000]
@@ -1558,7 +1558,7 @@
 
 ([FlightPro_Class420021] of  CloFunction
 
-	(source "(println [:CMD-MOVE-TO params])\n(let [{:keys [country airport]} params]\n  (if-let [apt (get-in @fr24/AIRPORTS [country airport])]\n    (let [iata (apt \"iata\")\n           alt (apt \"alt\")\n           crd [(apt \"lat\") (apt \"lon\")]]\n      (asp/pump-in (:instructions CHN)\n        {:instruct :map-center\n         :coord crd})\n      (println :Airport country airport iata crd alt))))\n\"\"")
+	(source "(println [:CMD-MOVE-TO params])\n(let [{:keys [country airport]} params]\n  (if-let [apt (get-in @fr24/AIRPORTS [country airport])]\n    (let [iata (apt \"iata\")\n           alt (apt \"alt\")\n           crd [(apt \"lat\") (apt \"lon\")]]\n      (foc-apt-ins apt)\n      (asp/pump-in (:instructions CHN)\n        {:instruct :map-center\n         :coord crd})\n      (println :Airport country airport iata crd alt))))\n\"\"")
 	(title "move-to [params]"))
 
 ([FlightPro_Class430000] of  CloFunction
@@ -1620,7 +1620,7 @@
 
 ([FlightPro_Class460002] of  CloFunction
 
-	(source "(println [:CMD-SCHEDULE params])\n(let [{:keys [callsign time country1 airport1 country2 airport2]} params\n       abc (fr24/airports-by-country)\n       apf (get-in abc [country1 airport1])\n       apt (get-in abc [country2 airport2])\n       mes \"Airport not found: \"]\n  (if (and apf apt)\n    (rete/assert-frame ['Schedule \n	'callsign callsign\n	'time time\n	'from apf\n	'to apt])\n    (do (if (nil? apf)\n            (println mes country1 airport1))\n          (if (nil? apt)\n            (println mes country2 airport2)))))\n\"\"")
+	(source "(println [:CMD-SCHEDULE params])\n(let [{:keys [callsign time country1 airport1 country2 airport2]} params\n       abc (fr24/airports-by-country)\n       apf (get-in abc [country1 airport1])\n       apt (get-in abc [country2 airport2])\n       mes \"Airport not found: \"]\n  (if (and apf apt)\n    (do (foc-apt-ins apf)\n      (foc-apt-ins apt)\n      (rete/assert-frame ['Schedule \n	'callsign callsign\n	'time time\n	'from apf\n	'to apt]))\n    (do (if (nil? apf)\n            (println mes country1 airport1))\n          (if (nil? apt)\n            (println mes country2 airport2)))))\n\"\"")
 	(title "schedule [params]"))
 
 ([FlightPro_Class470000] of  CloVar
@@ -1782,13 +1782,8 @@
 
 ([FlightPro_Class530000] of  CloFunction
 
-	(source "(let [rw (if-let [rw (@RUNWAYS iata)]\n              (int rw)\n              0)]\n  (if (> (rand 1) 0.5)\n    rw\n    (geo/norm-crs (+ rw 180))))")
+	(source "(let [rw (if-let [ins (fifos \"Airport\" \"iata\" iata)]\n              (let [rws (vec (svs ins \"runways\"))\n                     idx (int (rand (count rws)))]\n                (nth rws idx))\n              0)]\n  (if (> (rand 1) 0.5)\n    rw\n    (geo/norm-crs (+ rw 180))))")
 	(title "runway [iata]"))
-
-([FlightPro_Class530002] of  CloVar
-
-	(source "(volatile! \n  {\"URE\" 180 \n   \"LED\" 287 \n   \"LHR\" 90 \n   \"EWR\" 26\n   \"TAY\" 269 \n   \"HEL\" 227 \n   \"FRA\" 70 \n   \"KEF\" 180\n   \"KDL\" 147 \n   \"JFK\" 301 \n   \"BOS\" 200 \n   \"LGA\" 122\n   \"PHL\" 76})")
-	(title "RUNWAYS"))
 
 ([FlightPro_Class540000] of  Rule
 
@@ -1911,6 +1906,10 @@
 
 	(source "(pro.commands/get"))
 
+([FlightPro_Class620000] of  CloFuncall
+
+	(source "(def abc (fr24.client/airports-by-country))"))
+
 ([FlightPro_Class620001] of  CloVar
 
 	(source "(volatile! {})")
@@ -1935,9 +1934,224 @@
 	(source "(let [md (mod x p)\n       r (- x md)]\n  (if (< md (/ p 2))\n    r\n    (+ r p)))")
 	(title "round [x p]"))
 
+([FlightPro_Class630001] of  CloFuncall
+
+	(source "(ffirst abc)"))
+
+([FlightPro_Class630002] of  CloFuncall
+
+	(source "(first abc)"))
+
 ([FlightPro_Class630003] of  CloFuncall
 
 	(source "fr24.client/MANUAL-DATA"))
+
+([FlightPro_Class640000] of  CloFuncall
+
+	(source "(proxy [Runnable] [] (run [] (fn[]))) "))
+
+([FlightPro_Class640008] of  CloFunction
+
+	(source ";; find or create airport instance\n(invoke-later\n(let [iata (apt \"iata\")]\n  (if (not (fifos \"Airport\" \"iata\" iata))\n    (let [ins (crin \"Airport\")]\n      (ssv ins \"title\" (apt \"name\"))\n      (ssv ins \"iata\" iata)\n      (ssv ins \"icao\" (apt \"icao\"))\n      (ssv ins \"country\" (apt \"country\"))\n      (ssv ins \"altitude\" (apt \"alt\"))\n      (ssvs ins \"coord\" [(float (apt \"lat\"))\n	          (float (apt \"lon\"))]))))\n)")
+	(title "foc-apt-ins [apt]"))
+
+([FlightPro_Class650001] of  Airport
+
+	(altitude 179)
+	(coord 60.31722 24.96333)
+	(country "Finland")
+	(iata "HEL")
+	(icao "EFHK")
+	(runways 47 153)
+	(title "Helsinki Vantaa Airport"))
+
+([FlightPro_Class650002] of  Airport
+
+	(altitude 14)
+	(coord 40.63975 -73.7789)
+	(country "United States")
+	(iata "JFK")
+	(icao "KJFK")
+	(runways 121 31)
+	(title "New York John F. Kennedy International Airport"))
+
+([FlightPro_Class650003] of  Airport
+
+	(altitude 21)
+	(coord 40.77725 -73.8726)
+	(country "United States")
+	(iata "LGA")
+	(icao "KLGA")
+	(runways 32 122)
+	(title "New York LaGuardia Airport"))
+
+([FlightPro_Class650004] of  Airport
+
+	(altitude 18)
+	(coord 40.6925 -74.1686)
+	(country "United States")
+	(iata "EWR")
+	(icao "KEWR")
+	(runways 26 95)
+	(title "New York Newark Liberty International Airport"))
+
+([FlightPro_Class650005] of  Airport
+
+	(altitude 36)
+	(coord 39.87194 -75.2411)
+	(country "United States")
+	(iata "PHL")
+	(icao "KPHL")
+	(runways 75 159)
+	(title "Philadelphia International Airport"))
+
+([FlightPro_Class650006] of  Airport
+
+	(altitude 8)
+	(coord 25.79325 -80.2905)
+	(country "United States")
+	(iata "MIA")
+	(icao "KMIA")
+	(runways 87 119)
+	(title "Miami International Airport"))
+
+([FlightPro_Class650007] of  Airport
+
+	(altitude 83)
+	(coord 51.4775 -0.46138)
+	(country "United Kingdom")
+	(iata "LHR")
+	(icao "EGLL")
+	(runways 90)
+	(title "London Heathrow Airport"))
+
+([FlightPro_Class650008] of  Airport
+
+	(altitude 364)
+	(coord 50.02642 8.543125)
+	(country "Germany")
+	(iata "FRA")
+	(icao "EDDF")
+	(runways 70 179)
+	(title "Frankfurt Airport"))
+
+([FlightPro_Class650009] of  Airport
+
+	(altitude 78)
+	(coord 59.80029 30.2625)
+	(country "Russia")
+	(iata "LED")
+	(icao "ULLI")
+	(runways 106)
+	(title "St. Petersburg Pulkovo Airport"))
+
+([FlightPro_Class650010] of  Airport
+
+	(altitude 622)
+	(coord 55.97264 37.41458)
+	(country "Russia")
+	(iata "SVO")
+	(icao "UUEE")
+	(runways 75)
+	(title "Moscow Sheremetyevo International Airport"))
+
+([FlightPro_Class650011] of  Airport
+
+	(altitude 118)
+	(coord 45.03468 39.17053)
+	(country "Russia")
+	(iata "KRR")
+	(icao "URKK")
+	(runways 52)
+	(title "Krasnodar International Airport"))
+
+([FlightPro_Class650012] of  Airport
+
+	(altitude 89)
+	(coord 43.44992 39.95658)
+	(country "Russia")
+	(iata "AER")
+	(icao "URSS")
+	(runways 28 65)
+	(title "Sochi International Airport"))
+
+([FlightPro_Class650013] of  Airport
+
+	(altitude 1225)
+	(coord -17.6447 -63.1353)
+	(country "Bolivia")
+	(iata "VVI")
+	(icao "SLVR")
+	(runways 147)
+	(title "Santa Cruz Viru Viru International Airport"))
+
+([FlightPro_Class650014] of  Airport
+
+	(altitude 1371)
+	(coord -17.8115 -63.1714)
+	(country "Bolivia")
+	(iata "SRZ")
+	(icao "SLET")
+	(runways 144)
+	(title "Santa Cruz El Trompillo Airport"))
+
+([FlightPro_Class650015] of  Airport
+
+	(altitude 8360)
+	(coord -17.421 -66.1771)
+	(country "Bolivia")
+	(iata "CBB")
+	(icao "SLCB")
+	(runways 38 132)
+	(title "Cochabamba Jorge Wilstermann International Airport"))
+
+([FlightPro_Class650016] of  Airport
+
+	(altitude 13325)
+	(coord -16.5133 -68.1922)
+	(country "Bolivia")
+	(iata "LPB")
+	(icao "SLLP")
+	(runways 92)
+	(title "La Paz El Alto International Airport"))
+
+([FlightPro_Class650017] of  Airport
+
+	(altitude 151)
+	(coord 61.88516 34.15474)
+	(country "Russia")
+	(iata "PES")
+	(icao "ULPB")
+	(runways 23 51)
+	(title "Petrozavodsk Airport"))
+
+([FlightPro_Class650018] of  CloFuncall
+
+	(source "(rand 5)"))
+
+([FlightPro_Class650019] of  CloFuncall
+
+	(source "(int 4.37)"))
+
+([FlightPro_Class650020] of  CloFuncall
+
+	(source "(int 4.57)"))
+
+([FlightPro_Class650021] of  CloFuncall
+
+	(source "(es/runway \"LED\")"))
+
+([FlightPro_Class650022] of  CloFuncall
+
+	(source "(es/runway \"JFK\")"))
+
+([FlightPro_Class650023] of  CloFuncall
+
+	(source "(es/runway \"HEL\")"))
+
+([FlightPro_Class650024] of  CloFuncall
+
+	(source "(es/runway \"\")"))
 
 ([FlightPro_Class7] of  CloVar
 

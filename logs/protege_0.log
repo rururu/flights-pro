@@ -1194,3 +1194,20 @@ Was expecting one of:
 2017.02.13 22:09:19.018 MSK INFO: *** SYSTEM START ***
 2017.02.13 22:09:20.145 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
 2017.02.13 22:09:26.483 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 2 sec (ui) -- ProjectManager$3.run()
+2017.02.14 11:18:43.387 MSK INFO: *** SYSTEM START ***
+2017.02.14 11:18:46.357 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.02.14 11:19:04.186 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 10 sec (ui) -- ProjectManager$3.run()
+2017.02.14 12:09:18.034 MSK INFO: *** SYSTEM START ***
+2017.02.14 12:09:19.016 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.02.14 12:09:30.218 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 2 sec (ui) -- ProjectManager$3.run()
+2017.02.14 12:13:22.277 MSK INFO: *** SYSTEM START ***
+2017.02.14 12:13:23.042 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.02.14 12:13:32.102 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 2 sec (ui) -- ProjectManager$3.run()
+2017.02.14 14:57:27.259 MSK INFO: *** SYSTEM START ***
+2017.02.14 14:57:28.008 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.02.14 14:57:33.095 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 2 sec (ui) -- ProjectManager$3.run()
+2017.02.14 16:18:31.242 MSK INFO: *** SYSTEM START ***
+2017.02.14 16:18:32.113 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.02.14 16:18:45.752 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/Clojure.pprj = 0 sec (project) + 2 sec (ui) -- ProjectManager$3.run()
+2017.02.14 16:24:43.490 MSK INFO: Project load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj: 0 sec -- ProjectChooser.loadProject()
+2017.02.14 16:24:43.756 MSK INFO: UI display time = 0 sec -- ProjectManager$2.run()

@@ -219,6 +219,21 @@ TERRAIN)
         (rete/fire)))
 {:status 204})
 
+(defn foc-apt-ins [apt]
+  ;; find or create airport instance
+(invoke-later
+(let [iata (apt "iata")]
+  (if (not (fifos "Airport" "iata" iata))
+    (let [ins (crin "Airport")]
+      (ssv ins "title" (apt "name"))
+      (ssv ins "iata" iata)
+      (ssv ins "icao" (apt "icao"))
+      (ssv ins "country" (apt "country"))
+      (ssv ins "altitude" (apt "alt"))
+      (ssvs ins "coord" [(float (apt "lat"))
+	          (float (apt "lon"))]))))
+))
+
 (defn move-to [params]
   (println [:CMD-MOVE-TO params])
 (let [{:keys [country airport]} params]
@@ -226,6 +241,7 @@ TERRAIN)
     (let [iata (apt "iata")
            alt (apt "alt")
            crd [(apt "lat") (apt "lon")]]
+      (foc-apt-ins apt)
       (asp/pump-in (:instructions CHN)
         {:instruct :map-center
          :coord crd})
@@ -240,11 +256,13 @@ TERRAIN)
        apt (get-in abc [country2 airport2])
        mes "Airport not found: "]
   (if (and apf apt)
-    (rete/assert-frame ['Schedule 
+    (do (foc-apt-ins apf)
+      (foc-apt-ins apt)
+      (rete/assert-frame ['Schedule 
 	'callsign callsign
 	'time time
 	'from apf
-	'to apt])
+	'to apt]))
     (do (if (nil? apf)
             (println mes country1 airport1))
           (if (nil? apt)

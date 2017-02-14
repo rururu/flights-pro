@@ -1,4 +1,4 @@
-; Mon Feb 13 22:07:25 MSK 2017
+; Tue Feb 14 21:31:21 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -47,6 +47,10 @@
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
+	(single-slot iata
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot to
 		(type STRING)
 ;+		(cardinality 0 1)
@@ -56,18 +60,23 @@
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot altitude
-		(type STRING)
+		(type INTEGER)
+		(range 0 %3FVARIABLE)
+		(default 0)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot vertical-status
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
-	(single-slot coord
+	(multislot coord
+		(type FLOAT)
+		(create-accessor read-write))
+	(single-slot time
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
-	(single-slot time
+	(single-slot icao
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
@@ -75,9 +84,18 @@
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
+	(single-slot country
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot from
 		(type STRING)
 ;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot runways
+		(type INTEGER)
+		(range 0 359)
+		(default 0)
 		(create-accessor read-write))
 	(single-slot speed
 		(type STRING)
@@ -123,9 +141,8 @@
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
-	(single-slot coord
-		(type STRING)
-;+		(cardinality 0 1)
+	(multislot coord
+		(type FLOAT)
 		(create-accessor read-write))
 	(single-slot speed
 		(type STRING)
@@ -136,7 +153,9 @@
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot altitude
-		(type STRING)
+		(type INTEGER)
+		(range 0 %3FVARIABLE)
+		(default 0)
 ;+		(cardinality 0 1)
 		(create-accessor read-write)))
 
@@ -233,5 +252,39 @@
 		(create-accessor read-write))
 	(single-slot callsign
 		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass Airport
+	(is-a Flights+Ontology)
+	(role concrete)
+	(single-slot icao
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot title
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot country
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot coord
+		(type FLOAT)
+		(create-accessor read-write))
+	(multislot runways
+		(type INTEGER)
+		(range 0 359)
+		(default 0)
+		(create-accessor read-write))
+	(single-slot iata
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot altitude
+		(type INTEGER)
+		(range 0 %3FVARIABLE)
+		(default 0)
 ;+		(cardinality 0 1)
 		(create-accessor read-write)))

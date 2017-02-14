@@ -1,4 +1,4 @@
-; Fri Dec 23 23:04:00 MSK 2016
+; Tue Feb 14 16:24:35 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -46,7 +46,8 @@
 		[Clojure_Class240000]
 		[Clojure_Class250000]
 		[Clojure_Class270000]
-		[Clojure_Class280000])
+		[Clojure_Class280000]
+		[Clojure_Class320000])
 	(cloNamespace [Clojure_Class9])
 	(cloVars
 		[Clojure_Class10]
@@ -263,6 +264,11 @@
 
 	(source "(let [tit (p/sv inst \"title\")\n       src (p/sv inst \"source\")\n       sin (p/sv inst \"store-in\")\n       _ (chk&mk-folder sin)\n       fwr (FileWriter. (str sin SEP tit ext))]\n  (.write fwr src)\n  (.close fwr))")
 	(title "store-asset [inst ext]"))
+
+([Clojure_Class320000] of  CloMacro
+
+	(source "`(javax.swing.SwingUtilities/invokeLater\n    (proxy [Runnable] [] (run [] ~code)))")
+	(title "invoke-later [code]"))
 
 ([Clojure_Class40000] of  CloFunction
 
