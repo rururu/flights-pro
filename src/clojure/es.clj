@@ -70,7 +70,7 @@
 	 :callsign csn
 	 :vehicle {
 	   :coord crd2
-	   :altitude alt2
+	   :altitude (if (= alt2 0) cmd/APT-ALT alt2)
 	   :speed spd2
 	   :course crs2}
 	 :old-course crs1
@@ -85,7 +85,7 @@
 	 :vehicle {:coord crd
 	               :course crs
 	               :speed spd
-	               :altitude alt}}))
+	               :altitude (if (= alt 0) cmd/APT-ALT alt)}}))
 
 (defn proc [z]
   (loop [n 1 y z]

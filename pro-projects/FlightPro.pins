@@ -1,4 +1,4 @@
-; Tue Feb 14 21:31:21 MSK 2017
+; Wed Feb 15 20:34:07 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -430,7 +430,7 @@
 
 ([FlightPro_Class190000] of  CloFunction
 
-	(source "(let [crt (current-time)\n       fls (seq @fls)]\n  (println \"t:\" crt \"flights:\" (count fls))\n  (doseq [[k v] fls]\n    (let [alt (fr24/altitude v)\n           [lat lon :as crd] (fr24/coord v)]\n      (rete/assert-frame \n	['Flight\n	'id k\n	'callsign (fr24/callsign v)\n	'coord crd\n	'course (fr24/course v)\n	'speed (fr24/speed v)\n	'altitude alt\n	'time crt\n	'point4d [lat lon (int (/ alt 3.28084)) (iso8601curt)]\n	'age \"NEW\"\n	'status (if (> alt 0)\n                                     \"LEVEL\"\n                                     \"GROUND\")])))\n  (rete/fire)\n  true)")
+	(source "(let [crt (current-time)\n       fls (seq @fls)]\n  (println \"t:\" crt \"flights:\" (count fls))\n  (doseq [[k v] fls]\n    (let [alt (fr24/altitude v)\n           [lat lon :as crd] (fr24/coord v)]\n      (rete/assert-frame \n	['Flight\n	'id k\n	'callsign (fr24/callsign v)\n	'coord crd\n	'course (fr24/course v)\n	'speed (fr24/speed v)\n	'altitude alt\n	'time crt\n	'point4d [lat lon (int (/ alt 3.28084)) (iso8601curt)]\n	'age \"NEW\"\n	'status (if (> alt APT-ALT)\n                                     \"LEVEL\"\n                                     \"GROUND\")])))\n  (rete/fire)\n  true)")
 	(title "process-flights [fls]"))
 
 ([FlightPro_Class190001] of  CloVar
@@ -921,7 +921,7 @@
 
 ([FlightPro_Class250011] of  CloFunction
 
-	(source "(if (not ONB-PAUSE)\n  (let [crd3 (geo/future-pos crd2 crs2 spd2 (/ per 3600))\n         per3 (* 2 per)]\n    (asp/pump-in (:directives cmd/CHN)\n	{:directive :fly-onboard\n	 :callsign csn\n	 :vehicle {\n	   :coord crd2\n	   :altitude alt2\n	   :speed spd2\n	   :course crs2}\n	 :old-course crs1\n	 :period per3})))")
+	(source "(if (not ONB-PAUSE)\n  (let [crd3 (geo/future-pos crd2 crs2 spd2 (/ per 3600))\n         per3 (* 2 per)]\n    (asp/pump-in (:directives cmd/CHN)\n	{:directive :fly-onboard\n	 :callsign csn\n	 :vehicle {\n	   :coord crd2\n	   :altitude (if (= alt2 0) cmd/APT-ALT alt2)\n	   :speed spd2\n	   :course crs2}\n	 :old-course crs1\n	 :period per3})))")
 	(title "fly-onboard-to [csn crs1 crs2 crd2 spd2 alt2 per]"))
 
 ([FlightPro_Class260000] of  CloFunction
@@ -940,7 +940,7 @@
 
 ([FlightPro_Class260003] of  CloFunction
 
-	(source "(def ONB-PAUSE true)\n(asp/delayer #(def ONB-PAUSE false) 8000)\n(asp/pump-in (:directives cmd/CHN)\n	{:directive :carrier\n	 :callsign csg\n	 :vehicle {:coord crd\n	               :course crs\n	               :speed spd\n	               :altitude alt}})")
+	(source "(def ONB-PAUSE true)\n(asp/delayer #(def ONB-PAUSE false) 8000)\n(asp/pump-in (:directives cmd/CHN)\n	{:directive :carrier\n	 :callsign csg\n	 :vehicle {:coord crd\n	               :course crs\n	               :speed spd\n	               :altitude (if (= alt 0) cmd/APT-ALT alt)}})")
 	(title "go-onboard [csg crd crs spd alt]"))
 
 ([FlightPro_Class270000] of  CloFunction
@@ -1440,7 +1440,8 @@
 		[FlightPro_Class20004]
 		[FlightPro_Class310001]
 		[FlightPro_Class510001]
-		[FlightPro_Class610000])
+		[FlightPro_Class610000]
+		[FlightPro_Class630000])
 	(title "Pro Commands"))
 
 ([FlightPro_Class400001] of  CloNamespace
@@ -1558,7 +1559,7 @@
 
 ([FlightPro_Class420021] of  CloFunction
 
-	(source "(println [:CMD-MOVE-TO params])\n(let [{:keys [country airport]} params]\n  (if-let [apt (get-in @fr24/AIRPORTS [country airport])]\n    (let [iata (apt \"iata\")\n           alt (apt \"alt\")\n           crd [(apt \"lat\") (apt \"lon\")]]\n      (foc-apt-ins apt)\n      (asp/pump-in (:instructions CHN)\n        {:instruct :map-center\n         :coord crd})\n      (println :Airport country airport iata crd alt))))\n\"\"")
+	(source "(println [:CMD-MOVE-TO params])\n(let [{:keys [country airport]} params]\n  (if-let [apt (get-in @fr24/AIRPORTS [country airport])]\n    (let [iata (apt \"iata\")\n           alt (apt \"alt\")\n           crd [(apt \"lat\") (apt \"lon\")]]\n      (foc-apt-ins apt)\n      (def APT-ALT alt)\n      (asp/pump-in (:instructions CHN)\n        {:instruct :map-center\n         :coord crd})\n      (println :Airport country airport iata crd alt))))\n\"\"")
 	(title "move-to [params]"))
 
 ([FlightPro_Class430000] of  CloFunction
@@ -1933,6 +1934,11 @@
 
 	(source "(let [md (mod x p)\n       r (- x md)]\n  (if (< md (/ p 2))\n    r\n    (+ r p)))")
 	(title "round [x p]"))
+
+([FlightPro_Class630000] of  CloVar
+
+	(source "0")
+	(title "APT-ALT"))
 
 ([FlightPro_Class630001] of  CloFuncall
 

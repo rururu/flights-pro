@@ -1,4 +1,4 @@
-; Tue Feb 14 21:31:21 MSK 2017
+; Wed Feb 15 20:34:07 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -20,7 +20,7 @@
 
 ([BROWSER_SLOT_NAMES] of  Property_List
 
-	(properties [FlightPro_ProjectKB_Class10749]))
+	(properties [FlightPro_ProjectKB_Class20634]))
 
 ([CLSES_TAB] of  Widget
 
@@ -49,44 +49,44 @@
 ([FlightPro_ProjectKB_Class10629] of  Property_List
 )
 
-([FlightPro_ProjectKB_Class10749] of  String
+([FlightPro_ProjectKB_Class20634] of  String
 
 	(name "Airport")
 	(string_value "title"))
 
-([FlightPro_ProjectKB_Class10750] of  Map
+([FlightPro_ProjectKB_Class20635] of  Map
 
 	(entries
-		[FlightPro_ProjectKB_Class10751]
-		[FlightPro_ProjectKB_Class10752]
-		[FlightPro_ProjectKB_Class10753]))
+		[FlightPro_ProjectKB_Class20636]
+		[FlightPro_ProjectKB_Class20637]
+		[FlightPro_ProjectKB_Class20638]))
 
-([FlightPro_ProjectKB_Class10751] of  Map_Entry
+([FlightPro_ProjectKB_Class20636] of  Map_Entry
 
 	(key "FlightPro_Class320015")
 	(key_class "edu.stanford.smi.protege.model.Frame")
 	(value "-8 584 224 146")
 	(value_class "java.awt.Rectangle"))
 
-([FlightPro_ProjectKB_Class10752] of  Map_Entry
+([FlightPro_ProjectKB_Class20637] of  Map_Entry
 
 	(key "FlightPro_Class290004")
 	(key_class "edu.stanford.smi.protege.model.Frame")
 	(value "-3 351 224 146")
 	(value_class "java.awt.Rectangle"))
 
-([FlightPro_ProjectKB_Class10753] of  Map_Entry
+([FlightPro_ProjectKB_Class20638] of  Map_Entry
 
 	(key "FlightPro_Class290003")
 	(key_class "edu.stanford.smi.protege.model.Frame")
 	(value "-5 349 224 146")
 	(value_class "java.awt.Rectangle"))
 
-([FlightPro_ProjectKB_Class10754] of  Map_Entry
+([FlightPro_ProjectKB_Class20639] of  Map_Entry
 
 	(key "InstanceDisplay.yellow_stickies")
 	(key_class "java.lang.String")
-	(value "FlightPro_ProjectKB_Class10750")
+	(value "FlightPro_ProjectKB_Class20635")
 	(value_class "java.util.Map"))
 
 ([FlightPro_ProjectKB_Class35] of  String
@@ -171,20 +171,6 @@
 	(y 120))
 
 ([FlightPro_ProjectKB_Class626] of  Property_List
-)
-
-([FlightPro_ProjectKB_Class627] of  Widget
-
-	(height 60)
-	(is_hidden FALSE)
-	(name "runways")
-	(property_list [FlightPro_ProjectKB_Class628])
-	(widget_class_name "edu.stanford.smi.protege.widget.IntegerFieldWidget")
-	(width 100)
-	(x 300)
-	(y 180))
-
-([FlightPro_ProjectKB_Class628] of  Property_List
 )
 
 ([FlightPro_ProjectKB_Class629] of  Widget
@@ -287,6 +273,34 @@
 	(is_hidden FALSE)
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
 
+([KB_032387_Class618] of  Map
+
+	(entries
+		[KB_032387_Class619]
+		[KB_032387_Class620]
+		[KB_032387_Class621]))
+
+([KB_032387_Class619] of  Map_Entry
+
+	(key "suppress_instance_counting")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([KB_032387_Class620] of  Map_Entry
+
+	(key "add_name_on_instance_form")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([KB_032387_Class621] of  Map_Entry
+
+	(key "change_tracking_active")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
 ([KB_102576_Class0] of  String
 
 	(name "factory_class_name")
@@ -294,8 +308,8 @@
 
 ([KB_102576_Class1] of  Map
 
-	(entries [FlightPro_ProjectKB_Class10754])
-	(referenced_maps [FlightPro_ProjectKB_Class10750]))
+	(entries [FlightPro_ProjectKB_Class20639])
+	(referenced_maps [FlightPro_ProjectKB_Class20635]))
 
 ([KB_102576_Class11] of  Property_List
 
@@ -583,34 +597,6 @@
 
 ([KB_786132_Class218] of  Property_List
 )
-
-([KB_848678_Class618] of  Map
-
-	(entries
-		[KB_848678_Class619]
-		[KB_848678_Class620]
-		[KB_848678_Class621]))
-
-([KB_848678_Class619] of  Map_Entry
-
-	(key "suppress_instance_counting")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([KB_848678_Class620] of  Map_Entry
-
-	(key "add_name_on_instance_form")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([KB_848678_Class621] of  Map_Entry
-
-	(key "change_tracking_active")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
 
 ([KB_932737_Class269] of  Widget
 

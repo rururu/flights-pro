@@ -34,6 +34,7 @@
 
    "airline" {"short" "Ru Airlines"}}}))
 (def TERRAIN "yes")
+(def APT-ALT 0)
 (defn current-time []
   (int (/ (System/currentTimeMillis) 1000)))
 
@@ -55,7 +56,7 @@
 	'time crt
 	'point4d [lat lon (int (/ alt 3.28084)) (iso8601curt)]
 	'age "NEW"
-	'status (if (> alt 0)
+	'status (if (> alt APT-ALT)
                                      "LEVEL"
                                      "GROUND")])))
   (rete/fire)
@@ -242,6 +243,7 @@ TERRAIN)
            alt (apt "alt")
            crd [(apt "lat") (apt "lon")]]
       (foc-apt-ins apt)
+      (def APT-ALT alt)
       (asp/pump-in (:instructions CHN)
         {:instruct :map-center
          :coord crd})
