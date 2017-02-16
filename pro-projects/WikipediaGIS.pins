@@ -1,0 +1,108 @@
+; Thu Feb 16 18:00:31 MSK 2017
+; 
+;+ (version "3.5")
+;+ (build "Build 663")
+
+([GeoNamesWikipedia_Class0] of  CloProgram
+
+	(cloFunctions
+		[WikipediaGIS_Class11]
+		[WikipediaGIS_Class18]
+		[WikipediaGIS_Class20008]
+		[WikipediaGIS_Class10003]
+		[WikipediaGIS_Class17]
+		[WikipediaGIS_Class20005]
+		[WikipediaGIS_Class40028]
+		[WikipediaGIS_Class20007]
+		[WikipediaGIS_Class50049]
+		[WikipediaGIS_Class20000]
+		[WikipediaGIS_Class30023]
+		[WikipediaGIS_Class50068]
+		[WikipediaGIS_Class60088])
+	(cloNamespace [GeoNamesWikipedia_Class1])
+	(title "Wikipedia GIS"))
+
+([GeoNamesWikipedia_Class1] of  CloNamespace
+
+	(source "(:use\n  protege.core\n  geo.names)\n(:import\n  javax.swing.JOptionPane)")
+	(title "wiki.gis"))
+
+([WikipediaGIS_Class10003] of  CloFunction
+
+	(source "([hm inst]\n  (let [mp (into {} hm)\n         max (mp \"max-responses\")\n         lang (request-lang (mp \"language\"))\n         [west south east north] (seq (svs (mp \"bbx\") \"wsen\"))]\n    (ssvs inst \"responses\" \n      (if-let [resp (call-wiki-bbx north west south east max lang)]\n        (filter some? (map article-from-map resp))\n        [])) ))\n([inst bbx-title bbx]\n  (if-let [bbx-inst (fifos \"BBX\" \"title\" bbx-title)]\n    (ssv inst \"bbx\" bbx-inst)\n    (let [[w s e n] bbx]\n      (ssv inst \"bbx\" (bbx-of-list [[n w] [s e]] bbx-title))))\n  (submit-bbx (itm inst 0) inst)\n  inst)")
+	(title "submit-bbx"))
+
+([WikipediaGIS_Class11] of  CloFunction
+
+	(source "(let [spl (.split sv \"-\")]\n  (aget spl 1))")
+	(title "request-lang [sv]"))
+
+([WikipediaGIS_Class17] of  CloFunction
+
+	(source "([hm inst]\n  (let [mp (into {} hm)\n         max (mp \"max-responses\")\n         lang (request-lang (mp \"language\"))\n         text (mp \"text\")]\n    (ssvs inst \"responses\" \n      (if-let [resp (call-wiki-search text max lang)]\n        (filter some? (map article-from-map resp))\n        [])) ))\n([inst any txt]\n  (ssv inst \"text\" txt)\n  (ssvs inst \"responses\" \n    (if-let [resp (call-wiki-search txt \n	(sv inst \"max-responses\") \n	(request-lang (sv inst  \"language\")))]\n      (filter some? (map article-from-map resp))\n      []))\n  inst)")
+	(title "submit-search"))
+
+([WikipediaGIS_Class18] of  CloFunction
+
+	(source "(if-let [tit (mp \"title\")]\n  (map-into-inst mp (foc \"WikiArticle\" \"title\" tit)))")
+	(title "article-from-map [mp]"))
+
+([WikipediaGIS_Class2] of  %3AINSTANCE-ANNOTATION
+
+	(%3ACREATION-TIMESTAMP "2016.05.23 12:00:48.647 MSK")
+	(%3ACREATOR "ru"))
+
+([WikipediaGIS_Class20000] of  CloFunction
+
+	(source "([hm inst]\n  (let [mp (into {} hm)\n         url (first (selection mp \"feedURL\"))]\n    (if url\n      (if-let [resp (call-geonames-rss url)]\n          (let [[inss bbx] (irss-bbx url resp)]\n             (ssvs inst \"georss_items\" inss)\n             (ssv inst \"bbx\" bbx))) )))\n([inst any url]\n  (if-let [resp (call-geonames-rss url)]\n    (let [[inss bbx] (irss-bbx url resp)]\n      (ssvs inst \"georss_items\" inss)\n      (ssv inst \"bbx\" bbx)\n      inst)))")
+	(title "submit-rss"))
+
+([WikipediaGIS_Class20005] of  CloFunction
+
+	(source ";; returns [lat lon]\n(let [[w s e n] (seq (svs bbx-ins \"wsen\"))]\n  [(float (/ (+ s n) 2)) (float (/ (+ w e) 2))])")
+	(title "get-bbx-center [bbx-ins]"))
+
+([WikipediaGIS_Class20007] of  CloFunction
+
+	(source ";; Collect coords from list of instances for given slot names\n(map #(map read-string [(sv % slat) (sv % slon)]) list)")
+	(title "coords-from-instances [list slat slon]"))
+
+([WikipediaGIS_Class20008] of  CloFunction
+
+	(source ";; crds = ([lat lon]..)\n([crds title]\n  ;; return instance of BBX class\n  (if-let [wsen (bbx-of-list  crds)]\n    (let [ins (crin \"BBX\")]\n       (ssv ins \"title\" title)\n       (ssvs ins \"wsen\" wsen)\n       ins)))\n([crds]\n  ;; return [west south east north] or nil\n  (try\n    (letfn [(apl [mx fst]\n	(float (apply mx (map fst crds))))]\n      [(apl min second) (apl min first) (apl max second) (apl max first)])\n  (catch Exception e\n     (println [:bbx-of-list crds :exception e])\n     nil)))")
+	(title "bbx-of-list"))
+
+([WikipediaGIS_Class20014] of  BBX
+
+	(title "Helsinki")
+	(wsen 24.5 59.9 25.5 60.5))
+
+([WikipediaGIS_Class30013] of  BBX
+
+	(title "Grey Horse")
+	(wsen 29.0 59.0 30.0 60.0))
+
+([WikipediaGIS_Class30023] of  CloFunction
+
+	(source "(let [mp (into {} hm)\n       url (or (mp \"wikipediaUrl\") (mp \"link\"))]\n  (if url\n    (.browse (java.awt.Desktop/getDesktop) (java.net.URI. url))))")
+	(title "open-site [hm inst]"))
+
+([WikipediaGIS_Class40028] of  CloFunction
+
+	(source "([hm inst]\n  (let [mp (into {} hm)\n         max (mp \"max-responses\")\n         lang (request-lang (mp \"language\"))\n         radius-km (mp \"radius-km\")\n         lat (mp \"lat\")\n         lon (mp \"lng\")]\n    (ssvs inst \"responses\" \n      (if-let [resp (call-wiki-nearby lat lon radius-km max lang)]\n        (filter some? (map article-from-map resp))\n        [])) ))\n([inst lat lon]\n  (ssv inst \"lat\" (str lat))\n  (ssv inst \"lng\" (str lon))\n  (submit-nearby (itm inst 0) inst)\n  inst)")
+	(title "submit-nearby"))
+
+([WikipediaGIS_Class50049] of  CloFunction
+
+	(source "(let [geos (filter #(and (get % \"geo:lat\") (get %\"geo:long\")) resp)\n       inss (map #(map-into-inst % (crin \"GeoRSSItem\")) geos)\n       crds (coords-from-instances inss \"geo:lat\" \"geo:long\")\n       bbx (if (seq crds) (bbx-of-list crds url))]\n  [inss bbx])")
+	(title "irss-bbx [url resp]"))
+
+([WikipediaGIS_Class50068] of  CloFunction
+
+	(source "(let [ans (JOptionPane/showConfirmDialog nil \"Are you shure?\")]\n  (if (= ans (JOptionPane/YES_OPTION))\n      (doall (map delin (cls-instances \"WikiArticle\"))) ))")
+	(title "clear-articles [hm inst]"))
+
+([WikipediaGIS_Class60088] of  CloFunction
+
+	(source "(let [ans (JOptionPane/showConfirmDialog nil \"Are you shure?\")]\n  (if (= ans (JOptionPane/YES_OPTION))\n      (doall (map delin (cls-instances \"GeoRSSItem\"))) ))")
+	(title "clear-rss [hm inst]"))

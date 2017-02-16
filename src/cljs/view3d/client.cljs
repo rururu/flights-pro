@@ -34,7 +34,7 @@
                :speed 0
                :course 0
                :step-hrs (double (/ (:carrier TIO) 3600000))
-               :bank-params [20 8 64 2]
+               :bank-params [20 16 64 2]
                :rudder {:target 0
                             :step 3
 	    :accel 1
@@ -87,7 +87,7 @@
        new-crs (:course vehicle)]
   (vswap! CARRIER merge vehicle)
   (mov/set-turn-point CARRIER)
-  (if (> (calc/abs (- old-crs new-crs)) 10)
+  (if (not= new-crs old-crs)
     (turn-and-bank CARRIER new-crs))))
 
 (defn view [dir]
@@ -172,11 +172,9 @@
             (asp/stop-process CAM-PROC)
             (carrier callsign vehicle)
             (camera-move CARRIER))
-    :fly-onboard (let [{:keys [callsign vehicle old-course period]} dir]
+    :fly-onboard (let [{:keys [callsign vehicle period]} dir]
             (carrier callsign vehicle)
-            (camera-move CARRIER period)
-            (if (> (:altitude vehicle) 60)
-              (roll (dyn/bank old-course (:course vehicle) (:bank-params @CARRIER)))))
+            (camera-move CARRIER period))
     (println (str "Unknown directive: " [directive dir])))))
 
 (defn receive-directives []

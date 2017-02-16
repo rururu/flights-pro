@@ -61,7 +61,7 @@
 	{:instruct :delete
 	 :id id}))
 
-(defn fly-onboard-to [csn crs1 crs2 crd2 spd2 alt2 per]
+(defn fly-onboard-to [csn crs2 crd2 spd2 alt2 per]
   (if (not ONB-PAUSE)
   (let [crd3 (geo/future-pos crd2 crs2 spd2 (/ per 3600))
          per3 (* 2 per)]
@@ -73,7 +73,6 @@
 	   :altitude (if (= alt2 0) cmd/APT-ALT alt2)
 	   :speed spd2
 	   :course crs2}
-	 :old-course crs1
 	 :period per3}))))
 
 (defn go-onboard [csg crd crs spd alt]
@@ -128,16 +127,12 @@
 
 (defn corr-alt-tab [atab elv]
   (letfn [(corr1 [[x y]]
-	(if (> y 0)
-	  [x (+ y elv)]
-	  [x y]))]
+	[x (+ y elv)])]
   (vec (map corr1 atab))))
 
 (defn corr-alt [alt elv]
   (let [[a aa] alt]
-  (if (> a 0)
-    [(+ a elv) aa]
-    alt)))
+  [(+ a elv) aa]))
 
 (defn adjust-cruise [gen-dist cru-alt cru-spd alt-lnd spd-lnd elev prop min-alt min-spd]
   ;; return [cruise-altitude cruise-speed altitude-distance altitude-speed]

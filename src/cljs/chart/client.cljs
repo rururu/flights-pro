@@ -237,7 +237,8 @@
 		"&e=" (.getEast bnd))]
 	       (GET (str (:command URL) cmd prm) no-handler))
   "move-to" (move-to)
-  "schedule" (schedule)))
+  "schedule" (schedule)
+  "wikipedia" (GET (str (:command URL) cmd) no-handler)))
 
 (defn init-chart []
   (println :INIT-CHART)

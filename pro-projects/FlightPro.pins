@@ -1,4 +1,4 @@
-; Wed Feb 15 20:34:07 MSK 2017
+; Thu Feb 16 22:04:57 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -35,6 +35,8 @@
 		[RuleEngine_Class30000]
 		[FlightPro_Class400000]
 		[FlightPro_Class20000]
+		[Example_Class10000]
+		[GeoNamesWikipedia_Class0]
 		[FlightPro_Class280000])
 	(title "FlightPro Programs"))
 
@@ -73,7 +75,7 @@
 
 ([FlightPro_Class100025] of  CloVar
 
-	(source "(volatile! {:mode \"?\"\n               :coord [0 0]\n               :altitude 0\n               :speed 0\n               :course 0\n               :step-hrs (double (/ (:carrier TIO) 3600000))\n               :bank-params [20 8 64 2]\n               :rudder {:target 0\n                            :step 3\n	    :accel 1\n                            :time-out 1011}\n               :elevator {:target 0\n                            :step 4\n	    :accel 1\n                            :time-out 997}\n               :propeller {:target 0\n                            :step 1\n	    :accel 1\n                            :time-out 2003}})")
+	(source "(volatile! {:mode \"?\"\n               :coord [0 0]\n               :altitude 0\n               :speed 0\n               :course 0\n               :step-hrs (double (/ (:carrier TIO) 3600000))\n               :bank-params [20 16 64 2]\n               :rudder {:target 0\n                            :step 3\n	    :accel 1\n                            :time-out 1011}\n               :elevator {:target 0\n                            :step 4\n	    :accel 1\n                            :time-out 997}\n               :propeller {:target 0\n                            :step 1\n	    :accel 1\n                            :time-out 2003}})")
 	(title "CARRIER"))
 
 ([FlightPro_Class100026] of  CloFunction
@@ -103,8 +105,8 @@
 
 ([FlightPro_Class110000] of  CloFunction
 
-	(source "(letfn [(turn-right? [from to]\n	(let [dif (- to from)]\n	  (cond\n	    (> dif 0)\n	      (<= dif 180)\n	    (< dif 0) \n	      (< dif -180))))]\n  (let [arc (calc/abs (- old-crs new-crs))\n         arc (if (> arc 180)\n                 (- 360 arc)\n                 arc)]\n    (if (< arc small-arc)\n        0\n        (let [bnk (if (> arc big-arc)\n	(* right-bank big-factor)\n	right-bank)]\n          (if (turn-right? old-crs new-crs)\n           bnk\n           (- bnk))))))")
-	(title "bank [old-crs new-crs [right-bank small-arc big-arc big-factor]]"))
+	(source "(letfn [(turn-right? [from to]\n	(let [dif (- to from)]\n	  (cond\n	    (> dif 0)\n	      (<= dif 180)\n	    (< dif 0) \n	      (< dif -180))))]\n  (let [arc (calc/abs (- old-crs new-crs))\n         arc (if (> arc 180)\n                 (- 360 arc)\n                 arc)\n         bnk (cond\n                  (> arc big-arc) (* right-bank factor)\n                  (< arc small-arc) (int (/ right-bank factor)) \n                  true right-bank)]\n    (if (turn-right? old-crs new-crs)\n        bnk\n        (- bnk))))")
+	(title "bank [old-crs new-crs [right-bank small-arc big-arc factor]]"))
 
 ([FlightPro_Class120000] of  CSS
 
@@ -790,7 +792,7 @@
 
 ([FlightPro_Class220027] of  CloFunction
 
-	(source "(condp = cmd\n  \"watch-visible\" (let [bnd (.getBounds @CHART)\n	          prm (str \"?n=\" (.getNorth bnd)\n		\"&s=\" (.getSouth bnd)\n		\"&w=\" (.getWest bnd)\n		\"&e=\" (.getEast bnd))]\n	       (GET (str (:command URL) cmd prm) no-handler))\n  \"move-to\" (move-to)\n  \"schedule\" (schedule))")
+	(source "(condp = cmd\n  \"watch-visible\" (let [bnd (.getBounds @CHART)\n	          prm (str \"?n=\" (.getNorth bnd)\n		\"&s=\" (.getSouth bnd)\n		\"&w=\" (.getWest bnd)\n		\"&e=\" (.getEast bnd))]\n	       (GET (str (:command URL) cmd prm) no-handler))\n  \"move-to\" (move-to)\n  \"schedule\" (schedule)\n  \"wikipedia\" (GET (str (:command URL) cmd) no-handler))")
 	(title "command [cmd]"))
 
 ([FlightPro_Class220030] of  CloFunction
@@ -914,15 +916,15 @@
 
 ([FlightPro_Class250010] of  Rule
 
-	(lhs "?ob (Onboard time ?t0 callsign ?cs)\n(Flight age \"CURRENT\" time ?t1 callsign ?cs course ?crs1\n	(<= ?t0 ?t1))\n(Flight age \"NEW\"\n           callsign ?cs\n           course ?crs2 \n           coord ?crd2 \n           speed ?spd2 \n           altitude ?alt2\n           status ?s2\n           time ?t2)")
-	(rhs "(modify ?ob time ?t2)\n(es/fly-onboard-to ?cs ?crs1 ?crs2 ?crd2 ?spd2 ?alt2 (- ?t2 ?t1))")
+	(lhs "?ob (Onboard time ?t0 callsign ?cs)\n(Flight age \"CURRENT\" time ?t1 callsign ?cs\n	(<= ?t0 ?t1))\n(Flight age \"NEW\"\n           callsign ?cs\n           course ?crs2 \n           coord ?crd2 \n           speed ?spd2 \n           altitude ?alt2\n           status ?s2\n           time ?t2)")
+	(rhs "(modify ?ob time ?t2)\n(es/fly-onboard-to ?cs ?crs2 ?crd2 ?spd2 ?alt2 (- ?t2 ?t1))")
 	(salience 0)
 	(title "af:FlyOnboardTo"))
 
 ([FlightPro_Class250011] of  CloFunction
 
-	(source "(if (not ONB-PAUSE)\n  (let [crd3 (geo/future-pos crd2 crs2 spd2 (/ per 3600))\n         per3 (* 2 per)]\n    (asp/pump-in (:directives cmd/CHN)\n	{:directive :fly-onboard\n	 :callsign csn\n	 :vehicle {\n	   :coord crd2\n	   :altitude (if (= alt2 0) cmd/APT-ALT alt2)\n	   :speed spd2\n	   :course crs2}\n	 :old-course crs1\n	 :period per3})))")
-	(title "fly-onboard-to [csn crs1 crs2 crd2 spd2 alt2 per]"))
+	(source "(if (not ONB-PAUSE)\n  (let [crd3 (geo/future-pos crd2 crs2 spd2 (/ per 3600))\n         per3 (* 2 per)]\n    (asp/pump-in (:directives cmd/CHN)\n	{:directive :fly-onboard\n	 :callsign csn\n	 :vehicle {\n	   :coord crd2\n	   :altitude (if (= alt2 0) cmd/APT-ALT alt2)\n	   :speed spd2\n	   :course crs2}\n	 :period per3})))")
+	(title "fly-onboard-to [csn crs2 crd2 spd2 alt2 per]"))
 
 ([FlightPro_Class260000] of  CloFunction
 
@@ -1066,7 +1068,7 @@
 
 ([FlightPro_Class300006] of  CloFunction
 
-	(source "(if (not= callsign (:mode @CARRIER))\n  (vswap! CARRIER assoc :mode callsign))\n(let [old-crs (:course @CARRIER)\n       new-crs (:course vehicle)]\n  (vswap! CARRIER merge vehicle)\n  (mov/set-turn-point CARRIER)\n  (if (> (calc/abs (- old-crs new-crs)) 10)\n    (turn-and-bank CARRIER new-crs)))")
+	(source "(if (not= callsign (:mode @CARRIER))\n  (vswap! CARRIER assoc :mode callsign))\n(let [old-crs (:course @CARRIER)\n       new-crs (:course vehicle)]\n  (vswap! CARRIER merge vehicle)\n  (mov/set-turn-point CARRIER)\n  (if (not= new-crs old-crs)\n    (turn-and-bank CARRIER new-crs)))")
 	(title "carrier [callsign vehicle]"))
 
 ([FlightPro_Class30001] of  ClsRequired
@@ -1364,7 +1366,7 @@
 
 ([FlightPro_Class380004] of  CloFunction
 
-	(source "(println [:CMD-VISIBLE params])\n(let [{:keys [n s w e]} params]\n  (fr24/set-bbx n s w e))\n\"\"")
+	(source "(println [:CMD-VISIBLE params])\n(let [{:keys [n s w e]} params]\n  (if (:on @WIKI)\n    (wiki-data [n s w e]))\n  (fr24/set-bbx n s w e))\n\"\"")
 	(title "visible [params]"))
 
 ([FlightPro_Class390000] of  Rule
@@ -1422,6 +1424,7 @@
 		[FlightPro_Class270000]
 		[FlightPro_Class340000]
 		[FlightPro_Class290001]
+		[FlightPro_Class660000]
 		[FlightPro_Class380004]
 		[FlightPro_Class380002]
 		[FlightPro_Class390003]
@@ -1431,7 +1434,8 @@
 		[FlightPro_Class420021]
 		[FlightPro_Class460002]
 		[FlightPro_Class510000]
-		[FlightPro_Class590000])
+		[FlightPro_Class590000]
+		[FlightPro_Class660024])
 	(cloNamespace [FlightPro_Class400001])
 	(cloVars
 		[FlightPro_Class70000]
@@ -1441,7 +1445,8 @@
 		[FlightPro_Class310001]
 		[FlightPro_Class510001]
 		[FlightPro_Class610000]
-		[FlightPro_Class630000])
+		[FlightPro_Class630000]
+		[FlightPro_Class660025])
 	(title "Pro Commands"))
 
 ([FlightPro_Class400001] of  CloNamespace
@@ -1726,7 +1731,7 @@
 
 ([FlightPro_Class500000] of  CloFunction
 
-	(source "(letfn [(corr1 [[x y]]\n	(if (> y 0)\n	  [x (+ y elv)]\n	  [x y]))]\n  (vec (map corr1 atab)))")
+	(source "(letfn [(corr1 [[x y]]\n	[x (+ y elv)])]\n  (vec (map corr1 atab)))")
 	(title "corr-alt-tab [atab elv]"))
 
 ([FlightPro_Class500001] of  Rule
@@ -1771,7 +1776,7 @@
 
 ([FlightPro_Class520001] of  CloFunction
 
-	(source "(let [[a aa] alt]\n  (if (> a 0)\n    [(+ a elv) aa]\n    alt))")
+	(source "(let [[a aa] alt]\n  [(+ a elv) aa])")
 	(title "corr-alt [alt elv]"))
 
 ([FlightPro_Class520003] of  Rule
@@ -1960,6 +1965,16 @@
 
 	(source ";; find or create airport instance\n(invoke-later\n(let [iata (apt \"iata\")]\n  (if (not (fifos \"Airport\" \"iata\" iata))\n    (let [ins (crin \"Airport\")]\n      (ssv ins \"title\" (apt \"name\"))\n      (ssv ins \"iata\" iata)\n      (ssv ins \"icao\" (apt \"icao\"))\n      (ssv ins \"country\" (apt \"country\"))\n      (ssv ins \"altitude\" (apt \"alt\"))\n      (ssvs ins \"coord\" [(float (apt \"lat\"))\n	          (float (apt \"lon\"))]))))\n)")
 	(title "foc-apt-ins [apt]"))
+
+([FlightPro_Class650000] of  NearbySearch
+
+	(button-clear-articles "Clear Articles/wiki.gis/clear-articles")
+	(button-nearby "submit/wiki.gis/submit-nearby")
+	(language English-en)
+	(lat "60.3")
+	(lng "25.0")
+	(max-responses 5)
+	(radius-km 10))
 
 ([FlightPro_Class650001] of  Airport
 
@@ -2159,6 +2174,41 @@
 
 	(source "(es/runway \"\")"))
 
+([FlightPro_Class660000] of  CloFunction
+
+	(source ";;(println [:WIKI-DATA bbx])\n(let [[n s w e] (vec (map read-string bbx))\n       [n0 s0 w0 e0] (:bbx @WIKI)]\n  (if (or (>= s n0)\n           (<= n s0)\n           (<= e w0)\n           (>= w e0))\n     (do (vswap! WIKI assoc :bbx [n s w e])\n       (println [:NEW-WIKI (:bbx @WIKI)]))))")
+	(title "wiki-data [bbx]"))
+
+([FlightPro_Class660001] of  CloFuncall
+
+	(source "pro.commands/WIKI"))
+
+([FlightPro_Class660006] of  BBXWiki
+
+	(bbx [WikipediaGIS_Class20014])
+	(button-bbx "submit/wiki.gis/submit-bbx")
+	(button-clear-articles "Clear Articles/wiki.gis/clear-articles")
+	(language English-en)
+	(max-responses 5))
+
+([FlightPro_Class660022] of  CloFuncall
+
+	(source "(es/put-on-map \"QQ\" [60.13 25.0] 180 20 \"LEVEL\")"))
+
+([FlightPro_Class660023] of  CloFuncall
+
+	(source "(es/put-off-map \"QQ\")"))
+
+([FlightPro_Class660024] of  CloFunction
+
+	(source "(println [:CMD-WIKIPEDIA params])\n(if (:on @WIKI)\n  (vswap! WIKI assoc :on false)\n  (vswap! WIKI assoc :on true))\n(println [:WIKI (:on @WIKI)])")
+	(title "wikipedia [params]"))
+
+([FlightPro_Class660025] of  CloVar
+
+	(source "(volatile! \n  {:on false\n   :bbx [0 0 0 0]})")
+	(title "WIKI"))
+
 ([FlightPro_Class7] of  CloVar
 
 	(source "(js/EventSource. (str BSE-URL \"czml/\"))")
@@ -2264,7 +2314,7 @@
 
 ([FlightPro_Class80003] of  CloFunction
 
-	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :manual (do (if (= (:mode @CARRIER) \"?\")\n	  (carrier \"MANUAL\" (manual-vehicle))\n	  (vswap! CARRIER assoc :mode \"MANUAL\"))\n	(asp/start-process CAM-PROC #(camera-move CARRIER) (:camera TIO)))\n    :callsigns (let [{:keys [list]} dir]\n            (ctl/callsigns (conj list \"manual\")))\n    :carrier (let [{:keys [callsign vehicle]} dir]\n            (asp/stop-process CAM-PROC)\n            (carrier callsign vehicle)\n            (camera-move CARRIER))\n    :fly-onboard (let [{:keys [callsign vehicle old-course period]} dir]\n            (carrier callsign vehicle)\n            (camera-move CARRIER period)\n            (if (> (:altitude vehicle) 60)\n              (roll (dyn/bank old-course (:course vehicle) (:bank-params @CARRIER)))))\n    (println (str \"Unknown directive: \" [directive dir]))))")
+	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :manual (do (if (= (:mode @CARRIER) \"?\")\n	  (carrier \"MANUAL\" (manual-vehicle))\n	  (vswap! CARRIER assoc :mode \"MANUAL\"))\n	(asp/start-process CAM-PROC #(camera-move CARRIER) (:camera TIO)))\n    :callsigns (let [{:keys [list]} dir]\n            (ctl/callsigns (conj list \"manual\")))\n    :carrier (let [{:keys [callsign vehicle]} dir]\n            (asp/stop-process CAM-PROC)\n            (carrier callsign vehicle)\n            (camera-move CARRIER))\n    :fly-onboard (let [{:keys [callsign vehicle period]} dir]\n            (carrier callsign vehicle)\n            (camera-move CARRIER period))\n    (println (str \"Unknown directive: \" [directive dir]))))")
 	(title "directives-handler [response]"))
 
 ([FlightPro_Class80004] of  CloFunction

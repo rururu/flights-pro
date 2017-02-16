@@ -35,6 +35,9 @@
    "airline" {"short" "Ru Airlines"}}}))
 (def TERRAIN "yes")
 (def APT-ALT 0)
+(def WIKI (volatile! 
+  {:on false
+   :bbx [0 0 0 0]}))
 (defn current-time []
   (int (/ (System/currentTimeMillis) 1000)))
 
@@ -182,9 +185,22 @@ TERRAIN)
   (if (fr24/dat id)
     (rete/assert-frame ['Follow 'id id 'time 0]))))
 
+(defn wiki-data [bbx]
+  ;;(println [:WIKI-DATA bbx])
+(let [[n s w e] (vec (map read-string bbx))
+       [n0 s0 w0 e0] (:bbx @WIKI)]
+  (if (or (>= s n0)
+           (<= n s0)
+           (<= e w0)
+           (>= w e0))
+     (do (vswap! WIKI assoc :bbx [n s w e])
+       (println [:NEW-WIKI (:bbx @WIKI)])))))
+
 (defn visible [params]
   (println [:CMD-VISIBLE params])
 (let [{:keys [n s w e]} params]
+  (if (:on @WIKI)
+    (wiki-data [n s w e]))
   (fr24/set-bbx n s w e))
 "")
 
@@ -291,4 +307,11 @@ TERRAIN)
 	 :course (read-string (:course params))
 	 :speed (read-string (:speed params))
 	 :altitude (read-string (:altitude params))})))
+
+(defn wikipedia [params]
+  (println [:CMD-WIKIPEDIA params])
+(if (:on @WIKI)
+  (vswap! WIKI assoc :on false)
+  (vswap! WIKI assoc :on true))
+(println [:WIKI (:on @WIKI)]))
 
