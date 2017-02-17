@@ -5,7 +5,8 @@
   [fr24.client :as fr24]
   [async.proc :as asp]
   [rete.core :as rete]
-  [cesium.core :refer [iso8601curt]]))
+  [cesium.core :refer [iso8601curt]]
+  [ext.data :refer [wiki-data]]))
 
 (def HOST "http://localhost:")
 (def PORT 4444)
@@ -185,22 +186,25 @@ TERRAIN)
   (if (fr24/dat id)
     (rete/assert-frame ['Follow 'id id 'time 0]))))
 
-(defn wiki-data [bbx]
-  ;;(println [:WIKI-DATA bbx])
-(let [[n s w e] (vec (map read-string bbx))
+(defn display-wiki-data [bbx]
+  (let [[n s w e] (vec (map read-string bbx))
        [n0 s0 w0 e0] (:bbx @WIKI)]
   (if (or (>= s n0)
            (<= n s0)
            (<= e w0)
            (>= w e0))
-     (do (vswap! WIKI assoc :bbx [n s w e])
-       (println [:NEW-WIKI (:bbx @WIKI)])))))
+     (let [data (wiki-data n s w e)]
+       (asp/pump-in (:instructions CHN) 
+	{:instruct :clear-placemarks})
+       (doseq [d data]
+         (asp/pump-in (:instructions CHN) d))
+       (vswap! WIKI assoc :bbx [n s w e])))))
 
 (defn visible [params]
   (println [:CMD-VISIBLE params])
 (let [{:keys [n s w e]} params]
   (if (:on @WIKI)
-    (wiki-data [n s w e]))
+    (display-wiki-data [n s w e]))
   (fr24/set-bbx n s w e))
 "")
 

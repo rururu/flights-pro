@@ -25,7 +25,9 @@
  :instructions 979
  :vehicles 200
  :display 831
- :manual-data 6000})
+ :manual-data 6000
+ :ext-data 15000
+ :ext-data-popup 60000})
 (def URL-ICO {"INTERSECT" 	(str HOST PORT "/img/redpln32.png")
  "DESCEND" 	(str HOST PORT "/img/greenpln32.png")
  "CLIMB" 	(str HOST PORT "/img/bluepln32.png")
@@ -35,6 +37,7 @@
  "FOLLOWING"	(str HOST PORT "/img/r.png")})
 (def CHART (volatile! {}))
 (def VEHICLES (volatile! {}))
+(def PLACEMARKS (volatile! {}))
 (def error-handler (fn [response]
   (let [{:keys [status status-text]} response]
     (println (str "AJAX ERROR: " status " " status-text)))))
@@ -99,6 +102,22 @@
     (mov/set-turn-point carr)
     (vswap! VEHICLES assoc id carr)))
 
+(defn create-placemark [iname lat lon feature]
+  (let [pos (js/L.LatLng. lat lon)
+       ico (js/L.icon #js{:iconUrl (URL-ICO feature) :iconSize #js[24, 24]})
+       opt #js{:icon ico :draggable true}
+       mrk (-> js/L (.rotatedMarker pos opt))]
+    (.on mrk "click"
+         (fn [e]
+           (info (str "pm" iname))))
+    (.addTo mrk @CHART)
+    (vswap! PLACEMARKS assoc iname mrk)))
+
+(defn clear-placemarks []
+  (doseq [mrk @PLACEMARKS]
+  (.removeLayer @CHART mrk))
+(vreset! PLACEMARKS {}))
+
 (defn popup
   ([id html time]
   (let [vmp (@VEHICLES id)
@@ -159,6 +178,9 @@
 	(add-trail id points options time))
     :map-center (let [{:keys [coord]} ins]
 	(map-center coord))
+      :create-placemark (let [{:keys [iname lat lon feature]} ins]
+                      (create-placemark iname lat lon feature))
+      :clear-placemarks (clear-placemarks)
     (println (str "Unknown instruction: " [instruct ins])))))
 
 (defn receive-instructions []

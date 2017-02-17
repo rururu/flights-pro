@@ -15,13 +15,19 @@
  :chart (str HOST PORT "/chart/")
  :directives (str HOST PORT "/directives/")
  :instructions (str HOST PORT "/instructions/")
- :command (str HOST PORT "/command/")})
+ :command (str HOST PORT "/command/")
+ :question (str HOST PORT "/question/")
+ :answer (str HOST PORT "/answer/")
+ :manual-data (str HOST PORT "/manual-data/")})
 (def TIO {:carrier 1000
  :camera 4200
  :directives 911
  :instructions 979
  :vehicles 200
- :display 831})
+ :display 831
+ :manual-data 6000
+ :ext-data 15000
+ :ext-data-popup 60000})
 (def URL-ICO {"INTERSECT" 	(str HOST PORT "/img/redpln32.png")
  "DESCEND" 	(str HOST PORT "/img/greenpln32.png")
  "CLIMB" 	(str HOST PORT "/img/bluepln32.png")
@@ -31,6 +37,12 @@
  "FOLLOWING"	(str HOST PORT "/img/r.png")})
 (def CHART (volatile! {}))
 (def VEHICLES (volatile! {}))
+(def PLACEMARKS (volatile! {}))
+(def error-handler (fn [response]
+  (let [{:keys [status status-text]} response]
+    (println (str "AJAX ERROR: " status " " status-text)))))
+(def no-handler {:handler (fn [response])
+ :error-handler error-handler})
 (defn read-transit [x]
   (t/read (t/reader :json) x))
 
@@ -55,10 +67,6 @@
   (asp/stop-process (:movst @veh))
   (.removeLayer @CHART (:marker @veh)))
 (vreset! VEHICLES {}))
-
-(defn error-handler [response]
-  (let [{:keys [status status-text]} response]
-  (println (str "AJAX ERROR: " status " " status-text))))
 
 (defn info [id]
   (GET (str (:command URL) "info?id=" id)
@@ -93,6 +101,21 @@
          carr (volatile! mp)]
     (mov/set-turn-point carr)
     (vswap! VEHICLES assoc id carr)))
+
+(defn create-placemark [iname lat lon feature]
+  (let [pos (js/L.LatLng. lat lon)
+       ico (js/L.icon #js{:iconUrl (URL-ICO feature) :iconSize #js[24, 24]})
+       opt #js{:icon ico :draggable true}]
+    (.on mrk "click"
+         (fn [e]
+           (info (str "pm" iname))))
+    (.addTo mrk @CHART)
+    (vswap! PLACEMARKS assoc iname mrk)))
+
+(defn clear-placemarks []
+  (doseq [mrk @PLACEMARKS]
+  (.removeLayer @CHART mrk))
+(vreset! PLACEMARKS {}))
 
 (defn popup
   ([id html time]
@@ -137,20 +160,6 @@
   (.setView @CHART cen zom {})
   (new-visible)))
 
-(defn move-to [ins]
-  (println [:MOVE-TO ins])
-(let [cts (:countries ins)
-       aps (:airports ins)]
-  (cond
-    cts (do (am/selector1 "chart.client" "countries" cts :itself 130)
-            (defn handler1 [sel]
-	(am/ask-server {:whom :direct
-		  :question "airports"
-		  :country sel} move-to)))
-    aps (do (am/selector2 "chart.client" "airports" aps :itself 130)
-            (defn handler2 [sel]
-	(println [:AIRPORT sel]))))))
-
 (defn instructions-handler [response]
   (doseq [{:keys [instruct] :as ins} (read-transit response)]
   ;;(println [:INSTRUCT ins])
@@ -168,33 +177,95 @@
 	(add-trail id points options time))
     :map-center (let [{:keys [coord]} ins]
 	(map-center coord))
-    :move-to (move-to ins)     
+      :create-placemark (let [{:keys [iname lat lon feature]} evt]
+                      (create-placemark iname lat lon feature))
+      :clear-placemarks (clear-placemarks)
     (println (str "Unknown instruction: " [instruct ins])))))
 
 (defn receive-instructions []
   (GET (:instructions URL) {:handler instructions-handler
                        :error-handler error-handler}))
 
-(defn watch-visible []
-  (let [bnd (.getBounds @CHART)]
-  (str "watch-visible?n=" (.getNorth bnd)
-                             "&s=" (.getSouth bnd)
-                             "&w=" (.getWest bnd)
-                             "&e=" (.getEast bnd))))
+(defn move-to
+  ([]
+  (am/ask-server {:whom "direct"
+	    :question "countries"})
+  (am/get-answer move-to))
+([cns]
+  (am/selector1 "chart.client" "countries" cns :itself 130)
+  (defn handler1 [sel]
+    (am/ask-server {:whom "direct"
+	       :question "airports"
+	       :country sel})
+    (am/get-answer #(move-to sel %))))
+([cnt aps]
+  (am/selector2 "chart.client" "airports" aps :itself 130)
+  (defn handler2 [sel]
+    (let [prm (str "?country=" cnt
+	"&airport=" sel)]
+      (GET (str (:command URL) "move-to" prm) no-handler)
+      (am/clear-dialog)))))
+
+(defn schedule
+  ([]
+  (am/input1 "chart.client" "new callsign" 80)
+  (defn handler1 [call]
+    (am/input2 "chart.client" "hh:mm" 80)
+      (defn handler2 [tim]
+        (schedule call tim))))
+([call tim]
+  (am/ask-server {:whom "direct"
+	    :question "countries"})
+  (am/get-answer #(schedule call tim %)))
+([call tim cns1]
+  (am/selector3 "chart.client" "from country" cns1 :itself 130)
+  (defn handler3 [sel]
+    (am/ask-server {:whom "direct"
+	       :question "airports"
+	       :country sel})
+    (am/get-answer #(schedule call tim sel %))))
+([call tim cnt1 aps1]
+  (am/selector4 "chart.client" "from airport" aps1 :itself 130)
+  (defn handler4 [sel]
+    (am/ask-server {:whom "direct"
+	    :question "countries"})
+    (am/get-answer #(schedule call tim cnt1 sel %))))
+([call tim cnt1 apt1 cns2]
+  (am/selector5 "chart.client" "to county" cns2 :itself 130)
+  (defn handler5 [sel]
+    (am/ask-server {:whom "direct"
+	       :question "airports"
+	       :country sel})
+    (am/get-answer #(schedule call tim cnt1 apt1 sel %))))
+([call tim cnt1 apt1 cnt2 aps2]
+  (am/selector6 "chart.client" "to airport" aps2 :itself 130)
+  (defn handler6 [sel]
+    (let [prm (str "?callsign=" call
+	"&time=" tim
+	"&country1=" cnt1
+	"&airport1=" apt1
+	"&country2=" cnt2
+	"&airport2=" sel)]
+      (GET (str (:command URL) "schedule" prm) no-handler)
+      (am/clear-dialog)))))
 
 (defn command [cmd]
-  (GET (str (:command URL)
   (condp = cmd
-    "watch-visible" (watch-visible)
-    cmd))
-  {:handler (fn [response])
-   :error-handler error-handler}))
+  "watch-visible" (let [bnd (.getBounds @CHART)
+	          prm (str "?n=" (.getNorth bnd)
+		"&s=" (.getSouth bnd)
+		"&w=" (.getWest bnd)
+		"&e=" (.getEast bnd))]
+	       (GET (str (:command URL) cmd prm) no-handler))
+  "move-to" (move-to)
+  "schedule" (schedule)
+  "wikipedia" (GET (str (:command URL) cmd) no-handler)))
 
 (defn init-chart []
   (println :INIT-CHART)
 (let [m (-> js/L
               (.map "map")
-              (.setView (array 40.8, -74.0) 10)) ;; Frankfurt
+              (.setView (array 60.3, 25.0) 10)) ;; New York 40.8, -74.0
         tile1 (-> js/L (.tileLayer "http://{s}.tile.osm.org/{z}/{x}/{y}.png"
                                    #js{:maxZoom 16
                                        :attribution "Ru, OpenStreetMap &copy;"}))
