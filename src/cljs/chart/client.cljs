@@ -34,7 +34,18 @@
  "LEVEL" 	(str HOST PORT "/img/purplepln32.png")
  "GROUND" 	(str HOST PORT "/img/greypln32.png")
  "COUNTER"	(str HOST PORT "/img/b.png")
- "FOLLOWING"	(str HOST PORT "/img/r.png")})
+ "FOLLOWING"	(str HOST PORT "/img/r.png")
+ "default"	(str HOST PORT "/img/info.png")
+ "landmark"	(str HOST PORT "/img/landmark.png")
+ "edu"	(str HOST PORT "/img/edu.png")
+ "mountain"	(str HOST PORT "/img/mountain.png")
+ "river"	(str HOST PORT "/img/river.png")
+ "railwaystation" (str HOST PORT "/img/railwaystation.png")
+ "event"	(str HOST PORT "/img/event.png")
+ "waterbody"	(str HOST PORT "/img/waterbody.png")
+ "isle"	(str HOST PORT "/img/isle.png")
+ "airport"	(str HOST PORT "/img/airport.png")
+ "city"	(str HOST PORT "/img/city.png")})
 (def CHART (volatile! {}))
 (def VEHICLES (volatile! {}))
 (def PLACEMARKS (volatile! {}))
@@ -104,7 +115,9 @@
 
 (defn create-placemark [iname lat lon feature]
   (let [pos (js/L.LatLng. lat lon)
-       ico (js/L.icon #js{:iconUrl (URL-ICO feature) :iconSize #js[24, 24]})
+       ico (js/L.icon #js{:iconUrl (or (URL-ICO feature) 
+		     (URL-ICO "default"))
+	           :iconSize #js[24, 24]})
        opt #js{:icon ico :draggable true}
        mrk (-> js/L (.rotatedMarker pos opt))]
     (.on mrk "click"
@@ -114,7 +127,7 @@
     (vswap! PLACEMARKS assoc iname mrk)))
 
 (defn clear-placemarks []
-  (doseq [mrk @PLACEMARKS]
+  (doseq [mrk (vals @PLACEMARKS)]
   (.removeLayer @CHART mrk))
 (vreset! PLACEMARKS {}))
 
@@ -178,9 +191,9 @@
 	(add-trail id points options time))
     :map-center (let [{:keys [coord]} ins]
 	(map-center coord))
-      :create-placemark (let [{:keys [iname lat lon feature]} ins]
+    :create-placemark (let [{:keys [iname lat lon feature]} ins]
                       (create-placemark iname lat lon feature))
-      :clear-placemarks (clear-placemarks)
+    :clear-placemarks (clear-placemarks)
     (println (str "Unknown instruction: " [instruct ins])))))
 
 (defn receive-instructions []
@@ -252,6 +265,7 @@
 
 (defn command [cmd]
   (condp = cmd
+  "commands" nil
   "watch-visible" (let [bnd (.getBounds @CHART)
 	          prm (str "?n=" (.getNorth bnd)
 		"&s=" (.getSouth bnd)
@@ -260,7 +274,7 @@
 	       (GET (str (:command URL) cmd prm) no-handler))
   "move-to" (move-to)
   "schedule" (schedule)
-  "wikipedia" (GET (str (:command URL) cmd) no-handler)))
+  (GET (str (:command URL) cmd) no-handler)))
 
 (defn init-chart []
   (println :INIT-CHART)

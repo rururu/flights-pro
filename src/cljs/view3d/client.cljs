@@ -22,23 +22,25 @@
  :answer (str HOST PORT "/answer/")
  :manual-data (str HOST PORT "/manual-data/")})
 (def TIO {:carrier 1000
- :camera 4200
+ :camera 2222
  :directives 911
  :instructions 979
  :vehicles 200
  :display 831
- :manual-data 6000})
+ :manual-data 6000
+ :ext-data 15000
+ :ext-data-popup 60000})
 (def CARRIER (volatile! {:mode "?"
                :coord [0 0]
                :altitude 0
                :speed 0
                :course 0
                :step-hrs (double (/ (:carrier TIO) 3600000))
-               :bank-params [20 16 64 2]
+               :bank-params [16 16 64 2]
                :rudder {:target 0
                             :step 3
 	    :accel 1
-                            :time-out 1011}
+                            :time-out 1017}
                :elevator {:target 0
                             :step 4
 	    :accel 1
@@ -64,14 +66,14 @@
   (if (or (< spd 90) (= bnk 0))
     (mov/turn carr course 1)
     (let [accel (if (> (calc/abs bnk) rb) 2 1)]
+      (czm/camera :roll bnk)
       (mov/turn carr course accel)
       (dyn/check-diff-and-do carr
         [:rudder :target]
         [:course]
-        (* 2 (get-in @carr [:rudder :step]))
+        (get-in @carr [:rudder :step])
         [:rudder :time-out]
-        #(czm/camera :roll 0))
-      (czm/camera :roll bnk)))))
+        #(czm/camera :roll 0))))))
 
 (defn onboard [call]
   (if (= call "manual")

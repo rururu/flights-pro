@@ -6,7 +6,7 @@
   [async.proc :as asp]
   [rete.core :as rete]
   [cesium.core :refer [iso8601curt]]
-  [ext.data :refer [wiki-data]]))
+  [ext.data :as exd]))
 
 (def HOST "http://localhost:")
 (def PORT 4444)
@@ -34,7 +34,7 @@
                "scheduled" {"arrival" "unk"}}
 
    "airline" {"short" "Ru Airlines"}}}))
-(def TERRAIN "yes")
+(def TERRAIN "no")
 (def APT-ALT 0)
 (def WIKI (volatile! 
   {:on false
@@ -122,41 +122,44 @@
 
 (defn info [params]
   (println [:CMD-INFO params])
-(let [id (:id params)
-       inf (or (get @MY-INFOS id) (fr24/fl-info id))
-       cal (if-let[d (fr24/dat id)]
-               (fr24/callsign d)
-               id)]
-  (if inf
-    (let [apt (inf "airport")
-           acr (inf "aircraft")
-           tim (inf "time")
-           img (get (first (get-in acr ["images" "thumbnails"])) "src")
-           [lat lon] (fr24/coord id)
-           dat [["from" (or (get-in apt ["origin" "name"]) "-")]
-                  ["to" (or (get-in apt ["destination" "name"]) "-")]
-                  ["airline" (or (get-in inf ["airline" "short"]) "-")]
-                  ["real-departure" (or (get-in tim ["real" "departure"]) "-")]
-                  ["scheduled-arrival" (or (get-in tim ["scheduled" "arrival"]) "-")]
-                  ["aircraft" (or (get-in acr ["model" "text"]) "-")]
-                  ["latitude" (or lat "-")]
-                  ["longitude" (or lon "-")]
-                  ["course" (or (fr24/course id) "-")]
-                  ["speed" (or (fr24/speed id) "-")]
-                  ["altitude" (or (fr24/altitude id) "-")]
-                  [(str "<input type='button' style='color:purple' value='Trail'
-                             onclick='chart.client.trail(\"" id "\")' >")
-                   (str "<input type='button' style='color:blue' value='Follow'
-                             onclick='chart.client.follow(\"" id "\")' >")]
-                  [""
-                   "<input type='button' style='color:red' value='Stop'
-                       onclick='chart.client.stopfollow()' >"]]
-           htm (make-info-html cal img dat)]
-      (asp/pump-in (:instructions CHN)
-        {:instruct :popup
-         :id (:id params)
-         :html htm
-         :time (:popup TIM)}))))
+(let [id (:id params)]
+  (if (.startsWith id "pm")
+    (asp/pump-in (:instructions CHN) 
+      (exd/placemark-popup-instruct (.substring id 2)))
+    (let [inf (or (get @MY-INFOS id) (fr24/fl-info id))
+           cal (if-let[d (fr24/dat id)]
+                   (fr24/callsign d)
+                   id)]
+      (if inf
+        (let [apt (inf "airport")
+               acr (inf "aircraft")
+               tim (inf "time")
+               img (get (first (get-in acr ["images" "thumbnails"])) "src")
+               [lat lon] (fr24/coord id)
+               dat   [["from" (or (get-in apt ["origin" "name"]) "-")]
+	["to" (or (get-in apt ["destination" "name"]) "-")]
+	["airline" (or (get-in inf ["airline" "short"]) "-")]
+	["real-departure" (or (get-in tim ["real" "departure"]) "-")]
+	["scheduled-arrival" (or (get-in tim ["scheduled" "arrival"]) "-")]
+	["aircraft" (or (get-in acr ["model" "text"]) "-")]
+	["latitude" (or lat "-")]
+	["longitude" (or lon "-")]
+	["course" (or (fr24/course id) "-")]
+	["speed" (or (fr24/speed id) "-")]
+	["altitude" (or (fr24/altitude id) "-")]
+	[(str "<input type='button' style='color:purple' value='Trail'
+		onclick='chart.client.trail(\"" id "\")' >")
+	 (str "<input type='button' style='color:blue' value='Follow'
+		onclick='chart.client.follow(\"" id "\")' >")]
+	[""
+	 "<input type='button' style='color:red' value='Stop'
+		onclick='chart.client.stopfollow()' >"]]
+                       htm (make-info-html cal img dat)]
+          (asp/pump-in (:instructions CHN)
+            {:instruct :popup
+             :id (:id params)
+             :html htm
+             :time (:popup TIM)}))))))
 "")
 
 (defn onboard [params]
@@ -186,25 +189,11 @@ TERRAIN)
   (if (fr24/dat id)
     (rete/assert-frame ['Follow 'id id 'time 0]))))
 
-(defn display-wiki-data [bbx]
-  (let [[n s w e] (vec (map read-string bbx))
-       [n0 s0 w0 e0] (:bbx @WIKI)]
-  (if (or (>= s n0)
-           (<= n s0)
-           (<= e w0)
-           (>= w e0))
-     (let [data (wiki-data n s w e)]
-       (asp/pump-in (:instructions CHN) 
-	{:instruct :clear-placemarks})
-       (doseq [d data]
-         (asp/pump-in (:instructions CHN) d))
-       (vswap! WIKI assoc :bbx [n s w e])))))
-
 (defn visible [params]
   (println [:CMD-VISIBLE params])
 (let [{:keys [n s w e]} params]
   (if (:on @WIKI)
-    (display-wiki-data [n s w e]))
+    (exd/pump-wiki [n s w e] (:instructions CHN) WIKI))
   (fr24/set-bbx n s w e))
 "")
 
@@ -258,12 +247,13 @@ TERRAIN)
 (defn move-to [params]
   (println [:CMD-MOVE-TO params])
 (let [{:keys [country airport]} params]
-  (if-let [apt (get-in @fr24/AIRPORTS [country airport])]
+  (if-let [apt (get-in (fr24/airports-by-country) [country airport])]
     (let [iata (apt "iata")
            alt (apt "alt")
            crd [(apt "lat") (apt "lon")]]
       (foc-apt-ins apt)
-      (def APT-ALT alt)
+      (if (= TERRAIN "yes")
+        (def APT-ALT alt))
       (asp/pump-in (:instructions CHN)
         {:instruct :map-center
          :coord crd})
@@ -315,7 +305,23 @@ TERRAIN)
 (defn wikipedia [params]
   (println [:CMD-WIKIPEDIA params])
 (if (:on @WIKI)
-  (vswap! WIKI assoc :on false)
-  (vswap! WIKI assoc :on true))
-(println [:WIKI (:on @WIKI)]))
+  (do (vswap! WIKI assoc :on false)
+    (asp/pump-in (:instructions CHN)
+	 {:instruct :clear-placemarks})
+    (vswap! WIKI assoc :bbx [0 0 0 0]))
+  (let [[n s w e] @fr24/BBX]
+    (vswap! WIKI assoc :on true)
+    (visible {:n (str n) :s (str s) :w (str w) :e (str e)})))
+(println [:WIKI (:on @WIKI)])
+"")
+
+(defn go-initial-airport []
+  (if-let [api (fainst (cls-instances "Airport") "Initial Airport")]
+  (move-to {:country (sv api "country")
+	:airport (sv api "title")})
+  (println "Annotated Initial Airport not found!")))
+
+(defn intersect [params]
+  (println [:CMD-INTERSECT params])
+"")
 

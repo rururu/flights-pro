@@ -1,4 +1,4 @@
-; Fri Feb 17 22:08:57 MSK 2017
+; Sat Feb 18 23:50:49 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -76,7 +76,7 @@
 
 ([FlightPro_Class100025] of  CloVar
 
-	(source "(volatile! {:mode \"?\"\n               :coord [0 0]\n               :altitude 0\n               :speed 0\n               :course 0\n               :step-hrs (double (/ (:carrier TIO) 3600000))\n               :bank-params [20 16 64 2]\n               :rudder {:target 0\n                            :step 3\n	    :accel 1\n                            :time-out 1011}\n               :elevator {:target 0\n                            :step 4\n	    :accel 1\n                            :time-out 997}\n               :propeller {:target 0\n                            :step 1\n	    :accel 1\n                            :time-out 2003}})")
+	(source "(volatile! {:mode \"?\"\n               :coord [0 0]\n               :altitude 0\n               :speed 0\n               :course 0\n               :step-hrs (double (/ (:carrier TIO) 3600000))\n               :bank-params [16 16 64 2]\n               :rudder {:target 0\n                            :step 3\n	    :accel 1\n                            :time-out 1017}\n               :elevator {:target 0\n                            :step 4\n	    :accel 1\n                            :time-out 997}\n               :propeller {:target 0\n                            :step 1\n	    :accel 1\n                            :time-out 2003}})")
 	(title "CARRIER"))
 
 ([FlightPro_Class100026] of  CloFunction
@@ -106,7 +106,7 @@
 
 ([FlightPro_Class110000] of  CloFunction
 
-	(source "(letfn [(turn-right? [from to]\n	(let [dif (- to from)]\n	  (cond\n	    (> dif 0)\n	      (<= dif 180)\n	    (< dif 0) \n	      (< dif -180))))]\n  (let [arc (calc/abs (- old-crs new-crs))\n         arc (if (> arc 180)\n                 (- 360 arc)\n                 arc)\n         bnk (cond\n                  (> arc big-arc) (* right-bank factor)\n                  (< arc small-arc) (int (/ right-bank factor)) \n                  true right-bank)]\n    (if (turn-right? old-crs new-crs)\n        bnk\n        (- bnk))))")
+	(source "(letfn [(turn-right? [from to]\n	(let [dif (- to from)]\n	  (cond\n	    (> dif 0)\n	      (<= dif 180)\n	    (< dif 0) \n	      (< dif -180))))]\n  (let [arc (calc/abs (- old-crs new-crs))\n         arc (if (> arc 180)\n                 (- 360 arc)\n                 arc)\n         bnk (cond\n                  (< arc small-arc) (int (/ right-bank factor)) \n                  (> arc big-arc) (* right-bank factor)\n                  true right-bank)]\n    (if (turn-right? old-crs new-crs)\n        bnk\n        (- bnk))))")
 	(title "bank [old-crs new-crs [right-bank small-arc big-arc factor]]"))
 
 ([FlightPro_Class120000] of  CSS
@@ -129,7 +129,7 @@
 
 ([FlightPro_Class130001] of  CloFunction
 
-	(source "(let [[rb sa ba fa :as bps] (:bank-params @carr)\n       bnk (dyn/bank (:course @carr) course bps)\n       spd (:speed @carr)]\n  (if (or (< spd 90) (= bnk 0))\n    (mov/turn carr course 1)\n    (let [accel (if (> (calc/abs bnk) rb) 2 1)]\n      (mov/turn carr course accel)\n      (dyn/check-diff-and-do carr\n        [:rudder :target]\n        [:course]\n        (* 2 (get-in @carr [:rudder :step]))\n        [:rudder :time-out]\n        #(czm/camera :roll 0))\n      (czm/camera :roll bnk))))")
+	(source "(let [[rb sa ba fa :as bps] (:bank-params @carr)\n       bnk (dyn/bank (:course @carr) course bps)\n       spd (:speed @carr)]\n  (if (or (< spd 90) (= bnk 0))\n    (mov/turn carr course 1)\n    (let [accel (if (> (calc/abs bnk) rb) 2 1)]\n      (czm/camera :roll bnk)\n      (mov/turn carr course accel)\n      (dyn/check-diff-and-do carr\n        [:rudder :target]\n        [:course]\n        (get-in @carr [:rudder :step])\n        [:rudder :time-out]\n        #(czm/camera :roll 0)))))")
 	(title "turn-and-bank [carr course]"))
 
 ([FlightPro_Class130003] of  CloFunction
@@ -139,7 +139,7 @@
 
 ([FlightPro_Class130004] of  CloFunction
 
-	(source "(letfn [(proc-fn [cr]\n             (let [c @cr]\n               (if (< (calc/abs (- (get-in c path1)\n                                   (get-in c path2))) limit)\n                 (do (final-fn) false)\n                  true)))]\n  (vswap! carr assoc :cdad-status (volatile! \"STOP\"))\n  (asp/start-process (:cdad-status @carr) \n                                 #(proc-fn carr)\n                                 (get-in @carr tio-pth)))")
+	(source "(letfn [(proc-fn [cr]\n             (let [c @cr]\n               (if (<= (calc/abs (- (get-in c path1)\n                                           (get-in c path2))) limit)\n                 (do (final-fn) false)\n                 true)))]\n  (vswap! carr assoc :cdad-status (volatile! \"STOP\"))\n  (asp/start-process (:cdad-status @carr) \n                                 #(proc-fn carr)\n                                 (get-in @carr tio-pth)))")
 	(title "check-diff-and-do [carr path1 path2 limit tio-pth final-fn]"))
 
 ([FlightPro_Class140000] of  CloVar
@@ -348,7 +348,7 @@
 
 ([FlightPro_Class160009] of  CloVar
 
-	(source "{\"INTERSECT\" 	(str HOST PORT \"/img/redpln32.png\")\n \"DESCEND\" 	(str HOST PORT \"/img/greenpln32.png\")\n \"CLIMB\" 	(str HOST PORT \"/img/bluepln32.png\")\n \"LEVEL\" 	(str HOST PORT \"/img/purplepln32.png\")\n \"GROUND\" 	(str HOST PORT \"/img/greypln32.png\")\n \"COUNTER\"	(str HOST PORT \"/img/b.png\")\n \"FOLLOWING\"	(str HOST PORT \"/img/r.png\")}")
+	(source "{\"INTERSECT\" 	(str HOST PORT \"/img/redpln32.png\")\n \"DESCEND\" 	(str HOST PORT \"/img/greenpln32.png\")\n \"CLIMB\" 	(str HOST PORT \"/img/bluepln32.png\")\n \"LEVEL\" 	(str HOST PORT \"/img/purplepln32.png\")\n \"GROUND\" 	(str HOST PORT \"/img/greypln32.png\")\n \"COUNTER\"	(str HOST PORT \"/img/b.png\")\n \"FOLLOWING\"	(str HOST PORT \"/img/r.png\")\n \"default\"	(str HOST PORT \"/img/info.png\")\n \"landmark\"	(str HOST PORT \"/img/landmark.png\")\n \"edu\"	(str HOST PORT \"/img/edu.png\")\n \"mountain\"	(str HOST PORT \"/img/mountain.png\")\n \"river\"	(str HOST PORT \"/img/river.png\")\n \"railwaystation\" (str HOST PORT \"/img/railwaystation.png\")\n \"event\"	(str HOST PORT \"/img/event.png\")\n \"waterbody\"	(str HOST PORT \"/img/waterbody.png\")\n \"isle\"	(str HOST PORT \"/img/isle.png\")\n \"airport\"	(str HOST PORT \"/img/airport.png\")\n \"city\"	(str HOST PORT \"/img/city.png\")}")
 	(title "URL-ICO"))
 
 ([FlightPro_Class160010] of  CloFunction
@@ -383,7 +383,7 @@
 
 ([FlightPro_Class170005] of  CloFunction
 
-	(source "(doseq [{:keys [instruct] :as ins} (read-transit response)]\n  ;;(println [:INSTRUCT ins])\n  (condp = instruct\n    :create-update (let [{:keys [id vehicle]} ins]\n	(create-update-vehicle id vehicle))\n    :delete (let [{:keys [id]} ins]\n	(delete-vehicle id))\n    :clear (clear-vehicles)\n    :popup (let [{:keys [id lat lon html time]} ins]\n	(cond\n	  id (popup id html time)\n	  (and lat lon) (popup lat lon html time)))\n    :trail (let [{:keys [id points options time]} ins]\n	(add-trail id points options time))\n    :map-center (let [{:keys [coord]} ins]\n	(map-center coord))\n      :create-placemark (let [{:keys [iname lat lon feature]} ins]\n                      (create-placemark iname lat lon feature))\n      :clear-placemarks (clear-placemarks)\n    (println (str \"Unknown instruction: \" [instruct ins]))))")
+	(source "(doseq [{:keys [instruct] :as ins} (read-transit response)]\n  ;;(println [:INSTRUCT ins])\n  (condp = instruct\n    :create-update (let [{:keys [id vehicle]} ins]\n	(create-update-vehicle id vehicle))\n    :delete (let [{:keys [id]} ins]\n	(delete-vehicle id))\n    :clear (clear-vehicles)\n    :popup (let [{:keys [id lat lon html time]} ins]\n	(cond\n	  id (popup id html time)\n	  (and lat lon) (popup lat lon html time)))\n    :trail (let [{:keys [id points options time]} ins]\n	(add-trail id points options time))\n    :map-center (let [{:keys [coord]} ins]\n	(map-center coord))\n    :create-placemark (let [{:keys [iname lat lon feature]} ins]\n                      (create-placemark iname lat lon feature))\n    :clear-placemarks (clear-placemarks)\n    (println (str \"Unknown instruction: \" [instruct ins]))))")
 	(title "instructions-handler [response]"))
 
 ([FlightPro_Class180000] of  CloFunction
@@ -791,12 +791,12 @@
 
 ([FlightPro_Class220026] of  CloFunction
 
-	(source "(set-html! \"commands-header\" \"<h4>Commands</h4>\")\n(set-html! \"commands\"\n  \"<select onchange='javascript:chart.client.command(this.value)'>\n   <option value='commands'>Commands</option>\n   <option value='watch-visible'>Watch visible area</option>\n   <option value='intersect'>Intersections</option>\n   <option value='move-to'>Move to Airport</option>\n   <option value='schedule'>Schedule Flight</option>\n   <option value='wikipedia'>Wikipedia</option>\n   <option value='clear'>Clear</option>\n   </select>\")")
+	(source "(set-html! \"commands-header\" \"<h4>Commands</h4>\")\n(set-html! \"commands\"\n  \"<select onchange='javascript:chart.client.command(this.value)'>\n   <option value='commands'>Commands</option>\n   <option value='watch-visible'>Watch visible area</option>\n   <option value='intersect'>Intersections</option>\n   <option value='move-to'>Move to Airport</option>\n   <option value='schedule'>Schedule Flight</option>\n   <option value='wikipedia'>Toggle Wikipedia</option>\n   <option value='clear'>Clear</option>\n   </select>\")")
 	(title "show-chart-controls []"))
 
 ([FlightPro_Class220027] of  CloFunction
 
-	(source "(condp = cmd\n  \"watch-visible\" (let [bnd (.getBounds @CHART)\n	          prm (str \"?n=\" (.getNorth bnd)\n		\"&s=\" (.getSouth bnd)\n		\"&w=\" (.getWest bnd)\n		\"&e=\" (.getEast bnd))]\n	       (GET (str (:command URL) cmd prm) no-handler))\n  \"move-to\" (move-to)\n  \"schedule\" (schedule)\n  \"wikipedia\" (GET (str (:command URL) cmd) no-handler))")
+	(source "(condp = cmd\n  \"commands\" nil\n  \"watch-visible\" (let [bnd (.getBounds @CHART)\n	          prm (str \"?n=\" (.getNorth bnd)\n		\"&s=\" (.getSouth bnd)\n		\"&w=\" (.getWest bnd)\n		\"&e=\" (.getEast bnd))]\n	       (GET (str (:command URL) cmd prm) no-handler))\n  \"move-to\" (move-to)\n  \"schedule\" (schedule)\n  (GET (str (:command URL) cmd) no-handler))")
 	(title "command [cmd]"))
 
 ([FlightPro_Class220030] of  CloFunction
@@ -932,7 +932,7 @@
 
 ([FlightPro_Class260000] of  CloFunction
 
-	(source "(println \"Loading Clojure Programs...\")\n(if-let [wps (ClojureTab/findAnnotated (cls-instances \"WorkingPrograms\") nil)]\n  (loop [i 1 pins (svs wps \"cloPrograms\")]\n    (when (seq pins)\n      (println (str \" 1.\" i \" \" (sv (first pins) \"title\") \" = \" (ClojureTab/loadProgram (first pins)) ))\n      (recur (inc i) (rest pins))))\n  (println \"  Annotated instance of WorkingPrograms not found!\"))\n(println\"Starting Pro Server...\")\n(eval '(pro.server/start-server))\n(println\"Starting My Flights Movement...\")\n(eval '(my.flights.move/start-movement))\n(println\"Starting Expert System...\")\n(eval '(ru.rules/run-engine \"Flights Pro Run\"))")
+	(source "(println \"Loading Clojure Programs...\")\n(if-let [wps (ClojureTab/findAnnotated (cls-instances \"WorkingPrograms\") nil)]\n  (loop [i 1 pins (svs wps \"cloPrograms\")]\n    (when (seq pins)\n      (println (str \" 1.\" i \" \" (sv (first pins) \"title\") \" = \" (ClojureTab/loadProgram (first pins)) ))\n      (recur (inc i) (rest pins))))\n  (println \"  Annotated instance of WorkingPrograms not found!\"))\n(println\"Starting Pro Server...\")\n(eval '(pro.server/start-server))\n(println\"Starting My Flights Movement...\")\n(eval '(my.flights.move/start-movement))\n(println\"Starting Expert System...\")\n(eval '(ru.rules/run-engine \"Flights Pro Run\"))\n(println\"Go Initial Airport...\")\n(eval '(pro.commands/go-initial-airport))")
 	(title "clojure-work []"))
 
 ([FlightPro_Class260001] of  CloFuncall
@@ -1138,7 +1138,7 @@
 
 ([FlightPro_Class310000] of  CloFunction
 
-	(source "(println [:CMD-INFO params])\n(let [id (:id params)\n       inf (or (get @MY-INFOS id) (fr24/fl-info id))\n       cal (if-let[d (fr24/dat id)]\n               (fr24/callsign d)\n               id)]\n  (if inf\n    (let [apt (inf \"airport\")\n           acr (inf \"aircraft\")\n           tim (inf \"time\")\n           img (get (first (get-in acr [\"images\" \"thumbnails\"])) \"src\")\n           [lat lon] (fr24/coord id)\n           dat [[\"from\" (or (get-in apt [\"origin\" \"name\"]) \"-\")]\n                  [\"to\" (or (get-in apt [\"destination\" \"name\"]) \"-\")]\n                  [\"airline\" (or (get-in inf [\"airline\" \"short\"]) \"-\")]\n                  [\"real-departure\" (or (get-in tim [\"real\" \"departure\"]) \"-\")]\n                  [\"scheduled-arrival\" (or (get-in tim [\"scheduled\" \"arrival\"]) \"-\")]\n                  [\"aircraft\" (or (get-in acr [\"model\" \"text\"]) \"-\")]\n                  [\"latitude\" (or lat \"-\")]\n                  [\"longitude\" (or lon \"-\")]\n                  [\"course\" (or (fr24/course id) \"-\")]\n                  [\"speed\" (or (fr24/speed id) \"-\")]\n                  [\"altitude\" (or (fr24/altitude id) \"-\")]\n                  [(str \"<input type='button' style='color:purple' value='Trail'\n                             onclick='chart.client.trail(\\\"\" id \"\\\")' >\")\n                   (str \"<input type='button' style='color:blue' value='Follow'\n                             onclick='chart.client.follow(\\\"\" id \"\\\")' >\")]\n                  [\"\"\n                   \"<input type='button' style='color:red' value='Stop'\n                       onclick='chart.client.stopfollow()' >\"]]\n           htm (make-info-html cal img dat)]\n      (asp/pump-in (:instructions CHN)\n        {:instruct :popup\n         :id (:id params)\n         :html htm\n         :time (:popup TIM)}))))\n\"\"")
+	(source "(println [:CMD-INFO params])\n(let [id (:id params)]\n  (if (.startsWith id \"pm\")\n    (asp/pump-in (:instructions CHN) \n      (exd/placemark-popup-instruct (.substring id 2)))\n    (let [inf (or (get @MY-INFOS id) (fr24/fl-info id))\n           cal (if-let[d (fr24/dat id)]\n                   (fr24/callsign d)\n                   id)]\n      (if inf\n        (let [apt (inf \"airport\")\n               acr (inf \"aircraft\")\n               tim (inf \"time\")\n               img (get (first (get-in acr [\"images\" \"thumbnails\"])) \"src\")\n               [lat lon] (fr24/coord id)\n               dat   [[\"from\" (or (get-in apt [\"origin\" \"name\"]) \"-\")]\n	[\"to\" (or (get-in apt [\"destination\" \"name\"]) \"-\")]\n	[\"airline\" (or (get-in inf [\"airline\" \"short\"]) \"-\")]\n	[\"real-departure\" (or (get-in tim [\"real\" \"departure\"]) \"-\")]\n	[\"scheduled-arrival\" (or (get-in tim [\"scheduled\" \"arrival\"]) \"-\")]\n	[\"aircraft\" (or (get-in acr [\"model\" \"text\"]) \"-\")]\n	[\"latitude\" (or lat \"-\")]\n	[\"longitude\" (or lon \"-\")]\n	[\"course\" (or (fr24/course id) \"-\")]\n	[\"speed\" (or (fr24/speed id) \"-\")]\n	[\"altitude\" (or (fr24/altitude id) \"-\")]\n	[(str \"<input type='button' style='color:purple' value='Trail'\n		onclick='chart.client.trail(\\\"\" id \"\\\")' >\")\n	 (str \"<input type='button' style='color:blue' value='Follow'\n		onclick='chart.client.follow(\\\"\" id \"\\\")' >\")]\n	[\"\"\n	 \"<input type='button' style='color:red' value='Stop'\n		onclick='chart.client.stopfollow()' >\"]]\n                       htm (make-info-html cal img dat)]\n          (asp/pump-in (:instructions CHN)\n            {:instruct :popup\n             :id (:id params)\n             :html htm\n             :time (:popup TIM)}))))))\n\"\"")
 	(title "info [params]"))
 
 ([FlightPro_Class310001] of  CloVar
@@ -1277,7 +1277,7 @@
 
 ([FlightPro_Class330004] of  CloVar
 
-	(source "{:carrier 1000\n :camera 4200\n :directives 911\n :instructions 979\n :vehicles 200\n :display 831\n :manual-data 6000\n :ext-data 15000\n :ext-data-popup 60000}")
+	(source "{:carrier 1000\n :camera 2222\n :directives 911\n :instructions 979\n :vehicles 200\n :display 831\n :manual-data 6000\n :ext-data 15000\n :ext-data-popup 60000}")
 	(title "TIO"))
 
 ([FlightPro_Class330005] of  CloFunction
@@ -1370,7 +1370,7 @@
 
 ([FlightPro_Class380004] of  CloFunction
 
-	(source "(println [:CMD-VISIBLE params])\n(let [{:keys [n s w e]} params]\n  (if (:on @WIKI)\n    (display-wiki-data [n s w e]))\n  (fr24/set-bbx n s w e))\n\"\"")
+	(source "(println [:CMD-VISIBLE params])\n(let [{:keys [n s w e]} params]\n  (if (:on @WIKI)\n    (exd/pump-wiki [n s w e] (:instructions CHN) WIKI))\n  (fr24/set-bbx n s w e))\n\"\"")
 	(title "visible [params]"))
 
 ([FlightPro_Class390000] of  Rule
@@ -1428,7 +1428,6 @@
 		[FlightPro_Class270000]
 		[FlightPro_Class340000]
 		[FlightPro_Class290001]
-		[FlightPro_Class660000]
 		[FlightPro_Class380004]
 		[FlightPro_Class380002]
 		[FlightPro_Class390003]
@@ -1439,7 +1438,9 @@
 		[FlightPro_Class460002]
 		[FlightPro_Class510000]
 		[FlightPro_Class590000]
-		[FlightPro_Class660024])
+		[FlightPro_Class660024]
+		[FlightPro_Class640001]
+		[FlightPro_Class690508])
 	(cloNamespace [FlightPro_Class400001])
 	(cloVars
 		[FlightPro_Class70000]
@@ -1455,7 +1456,7 @@
 
 ([FlightPro_Class400001] of  CloNamespace
 
-	(source "(:use protege.core)\n(:require \n  [compojure.core :refer [GET]]\n  [fr24.client :as fr24]\n  [async.proc :as asp]\n  [rete.core :as rete]\n  [cesium.core :refer [iso8601curt]]\n  [ext.data :refer [wiki-data]])")
+	(source "(:use protege.core)\n(:require \n  [compojure.core :refer [GET]]\n  [fr24.client :as fr24]\n  [async.proc :as asp]\n  [rete.core :as rete]\n  [cesium.core :refer [iso8601curt]]\n  [ext.data :as exd])")
 	(title "pro.commands"))
 
 ([FlightPro_Class400003] of  CloNamespace
@@ -1568,7 +1569,7 @@
 
 ([FlightPro_Class420021] of  CloFunction
 
-	(source "(println [:CMD-MOVE-TO params])\n(let [{:keys [country airport]} params]\n  (if-let [apt (get-in @fr24/AIRPORTS [country airport])]\n    (let [iata (apt \"iata\")\n           alt (apt \"alt\")\n           crd [(apt \"lat\") (apt \"lon\")]]\n      (foc-apt-ins apt)\n      (def APT-ALT alt)\n      (asp/pump-in (:instructions CHN)\n        {:instruct :map-center\n         :coord crd})\n      (println :Airport country airport iata crd alt))))\n\"\"")
+	(source "(println [:CMD-MOVE-TO params])\n(let [{:keys [country airport]} params]\n  (if-let [apt (get-in (fr24/airports-by-country) [country airport])]\n    (let [iata (apt \"iata\")\n           alt (apt \"alt\")\n           crd [(apt \"lat\") (apt \"lon\")]]\n      (foc-apt-ins apt)\n      (if (= TERRAIN \"yes\")\n        (def APT-ALT alt))\n      (asp/pump-in (:instructions CHN)\n        {:instruct :map-center\n         :coord crd})\n      (println :Airport country airport iata crd alt))))\n\"\"")
 	(title "move-to [params]"))
 
 ([FlightPro_Class430000] of  CloFunction
@@ -1909,7 +1910,7 @@
 
 ([FlightPro_Class610000] of  CloVar
 
-	(source "\"yes\"")
+	(source "\"no\"")
 	(title "TERRAIN"))
 
 ([FlightPro_Class610001] of  CloFuncall
@@ -1931,7 +1932,7 @@
 
 ([FlightPro_Class620003] of  CloFunction
 
-	(source "(let [tof (:takeoff gen)\n       cru (:cruise gen)\n       lnd (:landing gen)\n       fcrd [(fapt \"lat\") (fapt \"lon\")]\n       tcrd [(tapt \"lat\") (tapt \"lon\")]\n       falt (fapt \"alt\")\n       talt (tapt \"alt\")\n       spp (assoc gen :takeoff (merge tof\n		{:altitude (corr-alt (:altitude tof) falt)})\n	        :landing (merge lnd\n		{:altitude (corr-alt (:altitude lnd) talt)\n		 :altitude-graph (corr-alt-tab (:altitude-graph lnd) talt)}))]\n    (merge spp {:general-crs	(int (geo/bear-deg fcrd tcrd))\n	:general-dist	(int (geo/distance-nm fcrd tcrd))\n	:start-crd 	fcrd\n	:finish-crd 	tcrd\n	:start-alt 	falt\n	:finish-alt 	talt\n	:start-run 	(runway (fapt \"iata\"))\n	:finish-run 	(runway (tapt \"iata\"))}))")
+	(source "(let [tof (:takeoff gen)\n       cru (:cruise gen)\n       lnd (:landing gen)\n       fcrd [(fapt \"lat\") (fapt \"lon\")]\n       tcrd [(tapt \"lat\") (tapt \"lon\")]\n       falt (if (= cmd/TERRAIN \"yes\") (fapt \"alt\") 0)\n       talt (if (= cmd/TERRAIN \"yes\") (tapt \"alt\") 0)\n       spp (assoc gen :takeoff (merge tof\n		{:altitude (corr-alt (:altitude tof) falt)})\n	        :landing (merge lnd\n		{:altitude (corr-alt (:altitude lnd) talt)\n		 :altitude-graph (corr-alt-tab (:altitude-graph lnd) talt)}))]\n    (merge spp {:general-crs	(int (geo/bear-deg fcrd tcrd))\n	:general-dist	(int (geo/distance-nm fcrd tcrd))\n	:start-crd 	fcrd\n	:finish-crd 	tcrd\n	:start-alt 	falt\n	:finish-alt 	talt\n	:start-run 	(runway (fapt \"iata\"))\n	:finish-run 	(runway (tapt \"iata\"))}))")
 	(title "specific-plan [gen fapt tapt]"))
 
 ([FlightPro_Class620004] of  CloFunction
@@ -1956,6 +1957,22 @@
 ([FlightPro_Class630002] of  CloFuncall
 
 	(source "(first abc)"))
+
+([FlightPro_Class640000] of  %3AINSTANCE-ANNOTATION
+
+	(%3AANNOTATED-INSTANCE [FlightPro_Class650002])
+	(%3AANNOTATION-TEXT "Initial Airport")
+	(%3ACREATION-TIMESTAMP "2017.02.18 13:26:39.401 MSK")
+	(%3ACREATOR "ru"))
+
+([FlightPro_Class640001] of  CloFunction
+
+	(source "(if-let [api (fainst (cls-instances \"Airport\") \"Initial Airport\")]\n  (move-to {:country (sv api \"country\")\n	:airport (sv api \"title\")})\n  (println \"Annotated Initial Airport not found!\"))")
+	(title "go-initial-airport []"))
+
+([FlightPro_Class640002] of  CloFuncall
+
+	(source "(pro.commands/go-initial-airport)"))
 
 ([FlightPro_Class640008] of  CloFunction
 
@@ -2144,8 +2161,8 @@
 
 ([FlightPro_Class660000] of  CloFunction
 
-	(source "(let [[n s w e] (vec (map read-string bbx))\n       [n0 s0 w0 e0] (:bbx @WIKI)]\n  (if (or (>= s n0)\n           (<= n s0)\n           (<= e w0)\n           (>= w e0))\n     (let [data (wiki-data n s w e)]\n       (asp/pump-in (:instructions CHN) \n	{:instruct :clear-placemarks})\n       (doseq [d data]\n         (asp/pump-in (:instructions CHN) d))\n       (vswap! WIKI assoc :bbx [n s w e]))))")
-	(title "display-wiki-data [bbx]"))
+	(source "(let [[n s w e] (vec (map read-string bbx))\n       [n0 s0 w0 e0] (:bbx @wiki)]\n  (if (or (>= s n0)\n           (<= n s0)\n           (<= e w0)\n           (>= w e0))\n     (invoke-later\n       (let [bbi (foc \"BBX\" \"title\" \"Current\")\n              rqi (fainst (cls-instances \"BBXWiki\") \"Current BBXWiki Request\")]\n         (if (and bbi rqi)\n           (do\n             (ssvs bbi \"wsen\" (vec (map float [w s e n])))\n             (ssv rqi \"bbx\" bbi)\n             (ssvs rqi \"responses\" [])\n             (with-timeout (:ext-data TIO)\n	(wig/submit-bbx (itm rqi 0) rqi))\n             (let [rr (svs rqi \"responses\")]\n               (when (seq rr)\n	(asp/pump-in chn {:instruct :clear-placemarks})\n	(doseq [r rr]\n	  (asp/pump-in chn (placemark-instruct r)))\n	(vswap! wiki assoc :bbx [n s w e]))))\n           (println \"Instance of \\\"Current BBXWiki Request\\\" not found!\"))))))")
+	(title "pump-wiki [bbx chn wiki]"))
 
 ([FlightPro_Class660006] of  BBXWiki
 
@@ -2153,87 +2170,11 @@
 	(button-bbx "submit/wiki.gis/submit-bbx")
 	(button-clear-articles "Clear Articles/wiki.gis/clear-articles")
 	(language English-en)
-	(max-responses 75)
-	(responses
-		[FlightPro_Class670276]
-		[FlightPro_Class670277]
-		[FlightPro_Class670189]
-		[FlightPro_Class670278]
-		[FlightPro_Class670195]
-		[FlightPro_Class670198]
-		[FlightPro_Class670279]
-		[FlightPro_Class670280]
-		[FlightPro_Class670202]
-		[FlightPro_Class670281]
-		[FlightPro_Class670201]
-		[FlightPro_Class670282]
-		[FlightPro_Class670204]
-		[FlightPro_Class670283]
-		[FlightPro_Class670284]
-		[FlightPro_Class670285]
-		[FlightPro_Class670286]
-		[FlightPro_Class670208]
-		[FlightPro_Class670287]
-		[FlightPro_Class670288]
-		[FlightPro_Class670289]
-		[FlightPro_Class670290]
-		[FlightPro_Class670291]
-		[FlightPro_Class670292]
-		[FlightPro_Class670293]
-		[FlightPro_Class670211]
-		[FlightPro_Class670212]
-		[FlightPro_Class670294]
-		[FlightPro_Class670205]
-		[FlightPro_Class670295]
-		[FlightPro_Class670296]
-		[FlightPro_Class670217]
-		[FlightPro_Class670297]
-		[FlightPro_Class670218]
-		[FlightPro_Class670220]
-		[FlightPro_Class670221]
-		[FlightPro_Class670224]
-		[FlightPro_Class670226]
-		[FlightPro_Class670223]
-		[FlightPro_Class670222]
-		[FlightPro_Class670229]
-		[FlightPro_Class670227]
-		[FlightPro_Class670230]
-		[FlightPro_Class670298]
-		[FlightPro_Class670232]
-		[FlightPro_Class670236]
-		[FlightPro_Class670299]
-		[FlightPro_Class670234]
-		[FlightPro_Class670231]
-		[FlightPro_Class670300]
-		[FlightPro_Class670235]
-		[FlightPro_Class670237]
-		[FlightPro_Class670238]
-		[FlightPro_Class670243]
-		[FlightPro_Class670244]
-		[FlightPro_Class670245]
-		[FlightPro_Class670301]
-		[FlightPro_Class670251]
-		[FlightPro_Class670302]
-		[FlightPro_Class670239]
-		[FlightPro_Class670240]
-		[FlightPro_Class670253]
-		[FlightPro_Class670303]
-		[FlightPro_Class670249]
-		[FlightPro_Class670304]
-		[FlightPro_Class670246]
-		[FlightPro_Class670241]
-		[FlightPro_Class670259]
-		[FlightPro_Class670305]
-		[FlightPro_Class670258]
-		[FlightPro_Class670306]
-		[FlightPro_Class670263]
-		[FlightPro_Class670307]
-		[FlightPro_Class670252]
-		[FlightPro_Class670257]))
+	(max-responses 40))
 
 ([FlightPro_Class660024] of  CloFunction
 
-	(source "(println [:CMD-WIKIPEDIA params])\n(if (:on @WIKI)\n  (vswap! WIKI assoc :on false)\n  (vswap! WIKI assoc :on true))\n(println [:WIKI (:on @WIKI)])")
+	(source "(println [:CMD-WIKIPEDIA params])\n(if (:on @WIKI)\n  (do (vswap! WIKI assoc :on false)\n    (asp/pump-in (:instructions CHN)\n	 {:instruct :clear-placemarks})\n    (vswap! WIKI assoc :bbx [0 0 0 0]))\n  (let [[n s w e] @fr24/BBX]\n    (vswap! WIKI assoc :on true)\n    (visible {:n (str n) :s (str s) :w (str w) :e (str e)})))\n(println [:WIKI (:on @WIKI)])\n\"\"")
 	(title "wikipedia [params]"))
 
 ([FlightPro_Class660025] of  CloVar
@@ -2247,20 +2188,15 @@
 		[FlightPro_Class670006]
 		[FlightPro_Class670265]
 		[FlightPro_Class670266]
-		[FlightPro_Class670002])
+		[FlightPro_Class660000])
 	(cloNamespace [FlightPro_Class670001])
 	(cloVars [FlightPro_Class330004])
 	(title "External Data"))
 
 ([FlightPro_Class670001] of  CloNamespace
 
-	(source "(:use protege.core)\n(:require \n  [wiki.gis :as wig])")
+	(source "(:use protege.core)\n(:require \n  [wiki.gis :as wig]\n  [async.proc :as asp])")
 	(title "ext.data"))
-
-([FlightPro_Class670002] of  CloFunction
-
-	(source "(let [bbi (foc \"BBX\" \"title\" \"Current\")\n       rqi (fainst (cls-instances \"BBXWiki\") \"Current BBXWiki Request\")]\n  (if (and bbi rqi)\n    (let [wsen (vec (map float [w s e n]))]\n      (ssvs bbi \"wsen\" wsen)\n      (ssv rqi \"bbx\" bbi)\n      (with-timeout (:ext-data TIO)\n	(wig/submit-bbx (itm rqi 0) rqi))\n      (map #(placemark-instruct (.getName %)) (svs rqi \"responses\")))\n    (do (println \"Instance of \\\"Current BBXWiki Request\\\" not found!\") [])))")
-	(title "wiki-data [n s w e]"))
 
 ([FlightPro_Class670004] of  %3AINSTANCE-ANNOTATION
 
@@ -2281,7 +2217,7 @@
 ([FlightPro_Class670008] of  BBX
 
 	(title "Current")
-	(wsen -74.7 40.5 -74.3 40.7))
+	(wsen -74.39392 40.13794 -73.16345 41.13833))
 
 ([FlightPro_Class670009] of  CloFuncall
 
@@ -2315,1073 +2251,14 @@
 
 	(source "(count (ext.data/get-bbx-wiki 40.7 40.5 -74.7 -74.3))"))
 
-([FlightPro_Class670189] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "26")
-	(feature "adm2nd")
-	(lang "en")
-	(lat "40.6599")
-	(lng "-74.3087")
-	(rank "98")
-	(summary "Union County is a county located in the U.S. state of New Jersey. At the 2010 United States Census, the population was 536,499, an increase of 13,958 (2.7%) from the 522,541 enumerated in the 2000 Census, making it the seventh-most populous county in the state, having been surpassed by Ocean County (...)")
-	(title "Union County, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Union_County%2C_New_Jersey"))
-
-([FlightPro_Class670190] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "34")
-	(feature "city")
-	(lang "en")
-	(lat "40.6154")
-	(lng "-74.4158")
-	(rank "100")
-	(summary "Plainfield is a city in Union County, New Jersey, United States. As of the 2010 United States Census, the city's population increased to 49,808, its highest ever recorded population in any decennial census, with the population having increased by 1,979 (+4 (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/28000/thumb-27557-100.png")
-	(title "Plainfield, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Plainfield%2C_New_Jersey"))
-
-([FlightPro_Class670191] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "37")
-	(feature "city")
-	(lang "en")
-	(lat "40.6516")
-	(lng "-74.3434")
-	(rank "100")
-	(summary "Westfield is a town in Union County, New Jersey, United States. As of the 2010 United States Census, the town's population was 30,316, reflecting an increase of 672 (+2.3%) from the 29,644 counted in the 2000 Census, which had in turn increased by 774 (+2 (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/54000/thumb-53873-100.png")
-	(title "Westfield, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Westfield%2C_New_Jersey"))
-
-([FlightPro_Class670192] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "43")
-	(feature "city")
-	(lang "en")
-	(lat "40.633")
-	(lng "-74.3729")
-	(rank "100")
-	(summary "Scotch Plains is a township in Union County, New Jersey, United States. As of the 2010 Census, the township's population was 23,510, reflecting an increase of 778 (+3.4%) from the 22,732 counted in the 2000 Census, which had in turn increased by 1,572 (+7 (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/3000/thumb-2860-100.png")
-	(title "Scotch Plains, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Scotch_Plains%2C_New_Jersey"))
-
-([FlightPro_Class670193] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "20")
-	(feature "city")
-	(lang "en")
-	(lat "40.5697")
-	(lng "-74.6077")
-	(rank "98")
-	(summary "Somerville is a borough in Somerset County, New Jersey, United States. As of the 2010 United States Census, the borough's population was 12,098, reflecting a decline of 325 (-2.6%) from the 12,423 counted in the 2000 Census, which had in turn increased by 791 (+6 (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/133000/thumb-132303-100.jpg")
-	(title "Somerville, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Somerville%2C_New_Jersey"))
-
-([FlightPro_Class670194] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "16")
-	(feature "city")
-	(lang "en")
-	(lat "40.5653")
-	(lng "-74.5394")
-	(rank "98")
-	(summary "Bound Brook is a borough in Somerset County, New Jersey, United States, located along the Raritan River. At the 2010 United States Census, the borough's population was 10,402, reflecting an increase of 247 (+2.4%) from the 10,155 counted in the 2000 Census, which had in turn increased by 668 (+7 (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/124000/thumb-123010-100.jpg")
-	(title "Bound Brook, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Bound_Brook%2C_New_Jersey"))
-
-([FlightPro_Class670195] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "17")
-	(feature "city")
-	(lang "en")
-	(lat "40.5456")
-	(lng "-74.4608")
-	(rank "98")
-	(summary "Piscataway Township is a township in Middlesex County, New Jersey, United States. As of the 2010 United States Census, the township's population was 56,044, reflecting an increase of 5,562 (+11.0%) from the 50,482 counted in the 2000 Census, which had in turn increased by 3,393 (+7 (...)")
-	(title "Piscataway, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Piscataway%2C_New_Jersey"))
-
-([FlightPro_Class670196] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "70")
-	(feature "city")
-	(lang "en")
-	(lat "40.6989")
-	(lng "-74.4066")
-	(rank "98")
-	(summary "New Providence is a borough on the northwestern edge of Union County, New Jersey, United States. It is located on the Passaic River, which forms the county boundary with Morris County. As of the 2010 United States Census, the population was 12,171, reflecting an increase of 264 (+2 (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/102000/thumb-101556-100.jpg")
-	(title "New Providence, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/New_Providence%2C_New_Jersey"))
-
-([FlightPro_Class670197] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "26")
-	(feature "city")
-	(lang "en")
-	(lat "40.6564")
-	(lng "-74.3048")
-	(rank "98")
-	(summary "Cranford is a township in Union County, New Jersey, United States. As of the 2010 United States Census, the township's population was 22,625, reflecting an increase of 47 (+0.2%) from the 22,578 counted in the 2000 Census, which had in turn declined by 55 (-0 (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/97000/thumb-96482-100.png")
-	(title "Cranford, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Cranford%2C_New_Jersey"))
-
-([FlightPro_Class670198] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "49")
-	(feature "city")
-	(lang "en")
-	(lat "40.5931")
-	(lng "-74.6047")
-	(rank "98")
-	(summary "Bridgewater Township is a township in Somerset County, New Jersey, United States. , the township's population was 44,464, reflecting an increase of 1,524 (+3.5%) from the 42,940 counted in the 2000 Census, which had in turn increased by 10,431 (+32.1%) from the 32,509 counted in the 1990 Census (...)")
-	(title "Bridgewater Township, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Bridgewater_Township%2C_New_Jersey"))
-
-([FlightPro_Class670199] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "121")
-	(feature "city")
-	(lang "en")
-	(lat "40.6764")
-	(lng "-74.425")
-	(rank "98")
-	(summary "Berkeley Heights is a township in Union County, New Jersey, United States. As of the 2010 United States Census, the township's population was 13,183, reflecting a decline of 224 (-1.7%) from the 13,407 counted in the 2000 Census, which had in turn increased by 1,427 (+11 (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/82000/thumb-81535-100.png")
-	(title "Berkeley Heights, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Berkeley_Heights%2C_New_Jersey"))
-
-([FlightPro_Class670200] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "37")
-	(feature "city")
-	(lang "en")
-	(lat "40.6185")
-	(lng "-74.316")
-	(rank "98")
-	(summary "Clark is a township in southern Union County, New Jersey, United States. As of the 2010 United States Census, the township's population was 14,756 reflecting an increase of 159 (+1.1%) from the 14,597 counted in the 2000 Census, which had in turn declined by 32 (-0 (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/31000/thumb-30698-100.png")
-	(title "Clark, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Clark%2C_New_Jersey"))
-
-([FlightPro_Class670201] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "86")
-	(feature "city")
-	(lang "en")
-	(lat "40.6909")
-	(lng "-74.6216")
-	(rank "97")
-	(summary "Far Hills is a borough in Somerset County, New Jersey, United States. As of the 2010 United States Census, the population was 919, reflecting an increase of 60 (+7.0%) from the 859 counted in the 2000 Census, which had in turn increased by 202 (+30.7%) from the 657 counted in the 1990 Census (...)")
-	(title "Far Hills, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Far_Hills%2C_New_Jersey"))
-
-([FlightPro_Class670202] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(elevation "34")
-	(lang "en")
-	(lat "40.6142")
-	(lng "-74.4161")
-	(rank "98")
-	(summary "List of the National Register of Historic Places listings in Union County, New Jersey __NOTOC__ This is intended to be a complete list of properties and districts listed on the National Register of Historic Places in Union County, New Jersey (...)")
-	(title "National Register of Historic Places listings in Union County, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/National_Register_of_Historic_Places_listings_in_Union_County%2C_New_Jersey"))
-
-([FlightPro_Class670203] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "83")
-	(feature "city")
-	(lang "en")
-	(lat "40.6766")
-	(lng "-74.568")
-	(rank "98")
-	(summary "Bernards Township is a township in Somerset County, New Jersey, United States. At the 2010 United States Census, the township's population was 26,652, reflecting an increase of 2,077 (+8.5%) from the 24,575 counted in the 2000 Census, which had in turn increased by 7,376 (+42 (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/52000/thumb-51494-100.jpg")
-	(title "Bernards Township, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Bernards_Township%2C_New_Jersey"))
-
-([FlightPro_Class670204] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "130")
-	(feature "city")
-	(lang "en")
-	(lat "40.6346")
-	(lng "-74.519")
-	(rank "97")
-	(summary "Warren Township is a township in Somerset County, New Jersey, United States. As of the 2010 United States Census, the township's population was 15,311, reflecting an increase of 1,052 (+7.4%) from the 14,259 counted in the 2000 Census, which had in turn increased by 3,429 (+31 (...)")
-	(title "Warren Township, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Warren_Township%2C_New_Jersey"))
-
-([FlightPro_Class670205] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "54")
-	(feature "city")
-	(lang "en")
-	(lat "40.6731")
-	(lng "-74.6863")
-	(rank "93")
-	(summary "Bedminster is a township in Somerset County, New Jersey, United States. As of the 2010 United States Census, the township's population was 8,165, reflecting a decline of 137 (-1.7%) from the 8,302 counted in the 2000 Census, which had in turn increased by 1,216 (+17 (...)")
-	(title "Bedminster, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Bedminster%2C_New_Jersey"))
-
-([FlightPro_Class670206] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "13")
-	(feature "city")
-	(lang "en")
-	(lat "40.5413")
-	(lng "-74.5893")
-	(rank "97")
-	(summary "Manville is a borough in Somerset County, New Jersey, United States. As of the 2010 United States Census, the borough's population was 10,344, reflecting an increase of one person (+0.0%) from the 10,343 counted in the 2000 Census, which had in turn declined by 224 (-2 (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/135000/thumb-134089-100.jpg")
-	(title "Manville, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Manville%2C_New_Jersey"))
-
-([FlightPro_Class670207] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "76")
-	(feature "city")
-	(lang "en")
-	(lat "40.6807")
-	(lng "-74.3603")
-	(rank "97")
-	(summary "Mountainside is a borough in Union County, New Jersey, United States. As of the 2010 United States Census, the borough's population was 6,685, reflecting an increase of 83 (+1.3%) from the 6,602 counted in the 2000 Census, which had in turn declined by 55 (-0 (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/69000/thumb-68935-100.png")
-	(title "Mountainside, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Mountainside%2C_New_Jersey"))
-
-([FlightPro_Class670208] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "24")
-	(feature "landmark")
-	(lang "en")
-	(lat "40.5019")
-	(lng "-74.4481")
-	(rank "96")
-	(summary "New Brunswick Theological Seminary is a seminary with its main campus in New Brunswick, New Jersey affiliated with the Reformed Church in America (RCA). Founded in 1784, it is the oldest Protestant seminary in the United States.Reformed Church in America. . Retrieved August 24, 2013 (...)")
-	(title "New Brunswick Theological Seminary")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/New_Brunswick_Theological_Seminary"))
-
-([FlightPro_Class670209] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "51")
-	(feature "city")
-	(lang "en")
-	(lat "40.6417")
-	(lng "-74.3857")
-	(rank "96")
-	(summary "Fanwood is a borough in Union County, New Jersey, United States. As of the 2010 United States Census, the borough's population was 7,318 reflecting an increase of 144 (+2.0%) from the 7,174 counted in the 2000 Census, which had in turn increased by 59 (+0 (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/119000/thumb-118551-100.png")
-	(title "Fanwood, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Fanwood%2C_New_Jersey"))
-
-([FlightPro_Class670210] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "35")
-	(feature "city")
-	(lang "en")
-	(lat "40.5085")
-	(lng "-74.5002")
-	(rank "96")
-	(summary "Somerset is an unincorporated community and census designated place (CDP) located within Franklin Township, in Somerset County, New Jersey, United States., United States Census Bureau. Accessed January 13, 2013., United States Census Bureau. Accessed January 13, 2013 (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/130000/thumb-129391-100.jpg")
-	(title "Somerset, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Somerset%2C_New_Jersey"))
-
-([FlightPro_Class670211] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "28")
-	(feature "edu")
-	(lang "en")
-	(lat "40.6153")
-	(lng "-74.3592")
-	(rank "94")
-	(summary "Union County College (UCC) is an accredited, co-educational, two-year, public, community college located in Union County, New Jersey. As the first and oldest of New Jersey's 19 community colleges, Union County College has been serving both career-minded and transfer-oriented students since 1933 (...)")
-	(title "Union County College")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Union_County_College"))
-
-([FlightPro_Class670212] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "173")
-	(feature "edu")
-	(lang "en")
-	(lat "40.6868")
-	(lng "-74.388")
-	(rank "94")
-	(summary "Governor Livingston High School, known informally as GL, is a comprehensive four-year co-educational public high school located in Berkeley Heights, in Union County, New Jersey, United States, operating as part of the Berkeley Heights Public Schools (...)")
-	(title "Governor Livingston High School")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Governor_Livingston_High_School"))
-
-([FlightPro_Class670213] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "24")
-	(feature "city")
-	(lang "en")
-	(lat "40.6512")
-	(lng "-74.3231")
-	(rank "95")
-	(summary "Garwood is a borough in Union County, New Jersey, United States. As of the 2010 United States Census, the borough's population was 4,226, reflecting an increase of 73 (+1.8%) from the 4,153 counted in the 2000 Census, which had in turn declined by 74 (-1.8%) from the 4,227 counted in the 1990 Census (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/54000/thumb-53872-100.png")
-	(title "Garwood, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Garwood%2C_New_Jersey"))
-
-([FlightPro_Class670214] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(elevation "19")
-	(lang "en")
-	(lat "40.5153")
-	(lng "-74.489")
-	(rank "94")
-	(summary "The Marconi Wireless Corporation operated Ship to Shore, Spark gap, VLF, and Trans-Oceanic wireless telegraph stations. Since the 1890s, numerous pioneering radio stations were located in Canada, Ireland, Newfoundland, the United States, the United Kingdom and a number of other locations around the (...)")
-	(title "Marconi station")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Marconi_station"))
-
-([FlightPro_Class670215] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "138")
-	(feature "city")
-	(lang "en")
-	(lat "40.6")
-	(lng "-74.5")
-	(rank "94")
-	(summary "New Jersey's Seventh Congressional District is represented by Republican Leonard Lance. In the 2014 general election, Republican incumbent Leonard Lance held his seat against Democratic challenger Janice Kovach.http://politics.news12.com/new-jersey/election-results/  (...)")
-	(title "New Jersey's 7th congressional district")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/New_Jersey%27s_7th_congressional_district"))
-
-([FlightPro_Class670216] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "57")
-	(feature "event")
-	(lang "en")
-	(lat "40.595")
-	(lng "-74.39")
-	(rank "93")
-	(summary "The 1987 U.S. Women's Open Golf Championship was the 42nd U.S. Women's Open, held July 23–28 at Plainfield Country Club in Edison, New Jersey, a suburb southwest of New York City. Laura Davies won the first of her four major titles in an 18-hole Tuesday playoff over runners-up Ayako Okamoto and (...)")
-	(title "1987 U.S. Women's Open Golf Championship")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/1987_U.S._Women%27s_Open_Golf_Championship"))
-
-([FlightPro_Class670217] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "109")
-	(feature "edu")
-	(lang "en")
-	(lat "40.6518")
-	(lng "-74.4779")
-	(rank "93")
-	(summary "Watchung Hills Regional High School is a regional public high school and school district serving students in portions of Somerset and Morris Counties in New Jersey, United States. The high school is located next to Woodland School, in Warren Township (...)")
-	(title "Watchung Hills Regional High School")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Watchung_Hills_Regional_High_School"))
-
-([FlightPro_Class670218] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "122")
-	(feature "edu")
-	(lang "en")
-	(lat "40.695")
-	(lng "-74.5489")
-	(rank "91")
-	(summary "Ridge High School is a four-year public high school serving students from Bernards Township in Somerset County, New Jersey, United States, operating as part of the Bernards Township School District. Ridge High School opened in September 1961, ending a relationship under which students from the (...)")
-	(title "Ridge High School")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Ridge_High_School"))
-
-([FlightPro_Class670219] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "31")
-	(feature "edu")
-	(lang "en")
-	(lat "40.5533")
-	(lng "-74.3722")
-	(rank "93")
-	(summary "St. Joseph High School, also known as St. Joe's, is an independent, all-boys Roman Catholic college preparatory school located on a site in Metuchen and Edison, New Jersey., Saint Joseph High School. Accessed April 15, 2011 (...)")
-	(title "St. Joseph High School (Metuchen, New Jersey)")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/St._Joseph_High_School_%28Metuchen%2C_New_Jersey%29"))
-
-([FlightPro_Class670220] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "21")
-	(feature "city")
-	(lang "en")
-	(lat "40.5346")
-	(lng "-74.5722")
-	(rank "91")
-	(summary "Zarephath (pronounced ZARRA-fath) is a census-designated place and unincorporated community located in Franklin Township, in Somerset County, New Jersey, United States., United States Census Bureau. Accessed February 11, 2013., United States Census Bureau. Accessed February 11, 2013 (...)")
-	(title "Zarephath, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Zarephath%2C_New_Jersey"))
-
-([FlightPro_Class670221] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "26")
-	(feature "edu")
-	(lang "en")
-	(lat "40.6614")
-	(lng "-74.3123")
-	(rank "90")
-	(summary "Cranford High School is a four-year public high school located in Cranford, New Jersey, United States, operating as part of the Cranford Township Public Schools. The school has been accredited by the Middle States Association of Colleges and Schools Commission on Secondary Schools since 1929 (...)")
-	(title "Cranford High School")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Cranford_High_School"))
-
-([FlightPro_Class670222] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "19")
-	(feature "edu")
-	(lang "en")
-	(lat "40.5483")
-	(lng "-74.4746")
-	(rank "89")
-	(summary "Piscataway Township High School is a four-year public high school in Piscataway Township in Middlesex County, New Jersey, United States, serving students in grades 9-12 as part of the Piscataway Township Schools (...)")
-	(title "Piscataway Township High School")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Piscataway_Township_High_School"))
-
-([FlightPro_Class670223] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "20")
-	(feature "edu")
-	(lang "en")
-	(lat "40.58")
-	(lng "-74.6186")
-	(rank "89")
-	(summary "Immaculata High School (also known as Immaculata or IHS) is a private, coeducational, Roman Catholic high school in Somerville, in Somerset County, New Jersey, United States. Founded in 1962, Immaculata High School operates within the Roman Catholic Diocese of Metuchen (...)")
-	(title "Immaculata High School (New Jersey)")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Immaculata_High_School_%28New_Jersey%29"))
-
-([FlightPro_Class670224] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "47")
-	(feature "edu")
-	(lang "en")
-	(lat "40.5809")
-	(lng "-74.3593")
-	(rank "90")
-	(summary "John P. Stevens High School (abbr. JP or JPS) is a 4 year comprehensive public high school that serves the northern end of Edison, in Middlesex County, New Jersey. It is one of two public high schools in the Edison Township Public Schools, the other being Edison High School (...)")
-	(title "J.P. Stevens High School")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/J.P._Stevens_High_School"))
-
-([FlightPro_Class670225] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "33")
-	(feature "city")
-	(lang "en")
-	(lat "40.5941")
-	(lng "-74.3138")
-	(population "17795")
-	(rank "92")
-	(summary "Colonia is an unincorporated community and census designated place (CDP) located within Woodbridge Township, in Middlesex County, New Jersey, United States., United States Census Bureau, August 2012. Accessed November 30, 2012., United States Census Bureau. Accessed November 30, 2012 (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/159000/thumb-158763-100.png")
-	(title "Colonia, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Colonia%2C_New_Jersey"))
-
-([FlightPro_Class670226] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "58")
-	(feature "edu")
-	(lang "en")
-	(lat "40.6524")
-	(lng "-74.3848")
-	(rank "90")
-	(summary "Scotch Plains-Fanwood High School is a comprehensive regional four-year public high school in Union County, New Jersey, which serves students in Grades 9 through 12 from the Township of Scotch Plains and the Borough of Fanwood, operating as part of the Scotch Plains-Fanwood Regional School District (...)")
-	(title "Scotch Plains-Fanwood High School")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Scotch_Plains-Fanwood_High_School"))
-
-([FlightPro_Class670227] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "67")
-	(feature "edu")
-	(lang "en")
-	(lat "40.6999")
-	(lng "-74.4095")
-	(rank "87")
-	(summary "New Providence High School is a public high school in the borough of New Providence, in Union County, New Jersey, operating as the only high school in the New Providence School District, serving students in grades 9 through 12 (...)")
-	(title "New Providence High School")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/New_Providence_High_School"))
-
-([FlightPro_Class670228] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "34")
-	(feature "landmark")
-	(lang "en")
-	(lat "40.5167")
-	(lng "-74.4458")
-	(rank "91")
-	(summary "Camp Kilmer, New Jersey is a former United States Army camp that was activated in June 1942 as a staging area and part of an installation of the New York Port of Embarkation. The camp was organized as part of the Army Service Forces Transportation Corps (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/4000/thumb-3037-100.jpg")
-	(title "Camp Kilmer")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Camp_Kilmer"))
-
-([FlightPro_Class670229] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "23")
-	(feature "edu")
-	(lang "en")
-	(lat "40.6187")
-	(lng "-74.3584")
-	(rank "87")
-	(summary "The Union County Magnet High School (UCMHS) is a magnet public high school located in Scotch Plains on the Union County Vocational Technical Schools Campus, serving the vocational and technical educational needs of students throughout Union County, New Jersey (...)")
-	(title "Union County Magnet High School")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Union_County_Magnet_High_School"))
-
-([FlightPro_Class670230] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "44")
-	(feature "edu")
-	(lang "en")
-	(lat "40.5163")
-	(lng "-74.3891")
-	(rank "87")
-	(summary "Edison High School is a four-year comprehensive public high school located in Edison, in Middlesex County, New Jersey, United States. The school serves students of many diverse cultures, and is part of the Edison Township Public Schools. The other high school in the district is J. P (...)")
-	(title "Edison High School (New Jersey)")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Edison_High_School_%28New_Jersey%29"))
-
-([FlightPro_Class670231] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "25")
-	(feature "edu")
-	(lang "en")
-	(lat "40.578")
-	(lng "-74.613")
-	(rank "85")
-	(summary "Somerville High School is a four-year comprehensive public high school of the Somerville Public Schools serving students from Somerville and Branchburg Township in Somerset County, New Jersey, United States. Students from Branchburg Township attend Somerville High School as part of a (...)")
-	(title "Somerville High School (New Jersey)")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Somerville_High_School_%28New_Jersey%29"))
-
-([FlightPro_Class670232] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "39")
-	(feature "edu")
-	(lang "en")
-	(lat "40.553")
-	(lng "-74.3564")
-	(rank "87")
-	(summary "Metuchen High School is a four-year comprehensive public high school that serves students in ninth through twelfth grades from Metuchen in Middlesex County, New Jersey, United States, operating as part of the Metuchen School District (...)")
-	(title "Metuchen High School")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Metuchen_High_School"))
-
-([FlightPro_Class670233] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "14")
-	(feature "city")
-	(lang "en")
-	(lat "40.5693")
-	(lng "-74.3211")
-	(population "18695")
-	(rank "90")
-	(summary "Iselin is an unincorporated community and census designated place (CDP) located within Woodbridge Township, in Middlesex County, New Jersey, United States., United States Census Bureau, August 2012. Accessed November 30, 2012., United States Census Bureau. Accessed November 30, 2012 (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/31000/thumb-30065-100.png")
-	(title "Iselin, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Iselin%2C_New_Jersey"))
-
-([FlightPro_Class670234] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "17")
-	(feature "edu")
-	(lang "en")
-	(lat "40.5672")
-	(lng "-74.5365")
-	(rank "85")
-	(summary "Bound Brook High School is a comprehensive community public high school that serves students in ninth through twelfth grades from Bound Brook, in Somerset County, New Jersey, United States, operating as part of the Bound Brook School District (...)")
-	(title "Bound Brook High School")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Bound_Brook_High_School"))
-
-([FlightPro_Class670235] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "24")
-	(feature "edu")
-	(lang "en")
-	(lat "40.6188")
-	(lng "-74.3582")
-	(rank "84")
-	(summary "The Union County Vocational Technical Schools (UCVTS) are a grouping of schools on the Union County Vocational Technical Schools Campus in Scotch Plains, New Jersey, United States, which offers six potential programs to the student, five at the High School level and one at the adult education level (...)")
-	(title "Union County Vocational Technical Schools")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Union_County_Vocational_Technical_Schools"))
-
-([FlightPro_Class670236] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "15")
-	(lang "en")
-	(lat "40.5252")
-	(lng "-74.4962")
-	(rank "87")
-	(summary "The Meadows Foundation of Somerset County, New Jersey is a nonprofit corporation founded in 1978. It oversaw the restoration of seven historic houses in Somerset. The homes are on the New Jersey Register of Historic Places and the National Register of Historic Places.  (...)")
-	(title "Meadows Foundation")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Meadows_Foundation"))
-
-([FlightPro_Class670237] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "81")
-	(feature "city")
-	(lang "en")
-	(lat "40.6029")
-	(lng "-74.5758")
-	(rank "84")
-	(summary "Martinsville is a census-designated place (CDP) and unincorporated area located within Bridgewater Township, in Somerset County, New Jersey, United States., United States Census Bureau. Accessed February 11, 2013., United States Census Bureau. Accessed February 11, 2013 (...)")
-	(title "Martinsville, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Martinsville%2C_New_Jersey"))
-
-([FlightPro_Class670238] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(elevation "39")
-	(lang "en")
-	(lat "40.5253")
-	(lng "-74.4411")
-	(rank "83")
-	(summary "The Louis Brown Athletic Center, more commonly known as the RAC (for its original name, the Rutgers Athletic Center), is an 8,000-seat multi-purpose arena in Piscataway, New Jersey on Rutgers University's Livingston Campus (...)")
-	(title "Louis Brown Athletic Center")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Louis_Brown_Athletic_Center"))
-
-([FlightPro_Class670239] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "27")
-	(feature "edu")
-	(lang "en")
-	(lat "40.6119")
-	(lng "-74.4125")
-	(rank "82")
-	(summary "Plainfield High School is a comprehensive community four-year public high school that serves students in ninth through twelfth grades from Plainfield, in Union County, New Jersey, United States. The school is part of the Plainfield Public School District, one of New Jersey's 31 Abbott Districts (...)")
-	(title "Plainfield High School (New Jersey)")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Plainfield_High_School_%28New_Jersey%29"))
-
-([FlightPro_Class670240] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "23")
-	(feature "edu")
-	(lang "en")
-	(lat "40.6187")
-	(lng "-74.3584")
-	(rank "82")
-	(summary "The Union County Academy for Information Technology (UCAIT) is a full-time four-year public high school located in Scotch Plains, New Jersey, United States, on the Union County Vocational Technical Schools Campus (...)")
-	(title "Academy for Information Technology")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Academy_for_Information_Technology"))
-
-([FlightPro_Class670241] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(elevation "23")
-	(lang "en")
-	(lat "40.5874")
-	(lng "-74.4134")
-	(rank "80")
-	(summary "The Antiochian Orthodox Christian Archdiocese of North America (often referred to in North America simply as the Antiochian Archdiocese) is the sole jurisdiction of the Antiochian Orthodox Church in the United States and Canada with exclusive jurisdiction over the Antiochian Orthodox faithful in (...)")
-	(title "Antiochian Orthodox Christian Archdiocese of North America")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Antiochian_Orthodox_Christian_Archdiocese_of_North_America"))
-
-([FlightPro_Class670242] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "25")
-	(feature "city")
-	(lang "en")
-	(lat "40.5345")
-	(lng "-74.4561")
-	(rank "88")
-	(summary "Society Hill is an unincorporated community and census designated place (CDP) located within Piscataway Township, in Middlesex County, New Jersey, United States., United States Census Bureau, August 2012. Accessed November 29, 2012., United States Census Bureau. Accessed November 29, 2012 (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/39000/thumb-38480-100.png")
-	(title "Society Hill, Middlesex County, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Society_Hill%2C_Middlesex_County%2C_New_Jersey"))
-
-([FlightPro_Class670243] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "17")
-	(feature "edu")
-	(lang "en")
-	(lat "40.5813")
-	(lng "-74.4949")
-	(rank "83")
-	(summary "Middlesex High School (MHS) is a four-year comprehensive public high school located in the center of Middlesex, Middlesex County, New Jersey. It is part of the Middlesex Board of Education. The school is surrounded by Mountain View Park and all its athletic complexes, including Memorial Field (...)")
-	(title "Middlesex High School")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Middlesex_High_School"))
-
-([FlightPro_Class670244] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "29")
-	(feature "edu")
-	(lang "en")
-	(lat "40.5017")
-	(lng "-74.4246")
-	(rank "83")
-	(summary "Highland Park High School (HPHS), is a four-year comprehensive public high school, part of the Highland Park Public Schools system, that serves student in grades nine through twelve from the borough of Highland Park, in Middlesex County, New Jersey, United States (...)")
-	(title "Highland Park High School (New Jersey)")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Highland_Park_High_School_%28New_Jersey%29"))
-
-([FlightPro_Class670245] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "120")
-	(feature "city")
-	(lang "en")
-	(lat "40.6772")
-	(lng "-74.5178")
-	(rank "83")
-	(summary "Millington is an unincorporated community within Long Hill Township in Morris County, New Jersey, United States.  (...)")
-	(title "Millington, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Millington%2C_New_Jersey"))
-
-([FlightPro_Class670246] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "21")
-	(feature "edu")
-	(lang "en")
-	(lat "40.5005")
-	(lng "-74.4471")
-	(rank "80")
-	(summary "Voorhees Mall is a large grassy area with stately shade trees on a block (sometimes known as \"Voorhees Campus\") of about 28 acres (0.11 km²) located on the College Avenue Campus of Rutgers University near downtown New Brunswick, New Jersey (...)")
-	(title "Voorhees Mall")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Voorhees_Mall"))
-
-([FlightPro_Class670247] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "42")
-	(feature "city")
-	(lang "en")
-	(lat "40.5438")
-	(lng "-74.3129")
-	(population "15187")
-	(rank "87")
-	(summary "Fords is an unincorporated community and census designated place (CDP) located within Woodbridge Township, in Middlesex County, New Jersey, United States., United States Census Bureau, August 2012. Accessed November 30, 2012., United States Census Bureau. Accessed November 30, 2012 (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/158000/thumb-157656-100.png")
-	(title "Fords, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Fords%2C_New_Jersey"))
-
-([FlightPro_Class670248] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "23")
-	(feature "railwaystation")
-	(lang "en")
-	(lat "40.5681")
-	(lng "-74.3298")
-	(rank "87")
-	(summary "Metropark is a train station in Woodbridge Township, Middlesex County, New Jersey, served by Amtrak and New Jersey Transit trains on the Northeast Corridor. It was built in 1971 by the New Jersey Department of Transportation (NJDOT) and the United States Department of Transportation (...)")
-	(title "Metropark (NJT station)")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Metropark_%28NJT_station%29"))
-
-([FlightPro_Class670249] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "38")
-	(feature "city")
-	(lang "en")
-	(lat "40.5057")
-	(lng "-74.5334")
-	(rank "81")
-	(summary "Middlebush is a census-designated place (CDP) and unincorporated community located in Franklin Township, in Somerset County, New Jersey, United States., United States Census Bureau. Accessed February 11, 2013., United States Census Bureau. Accessed February 11, 2013 (...)")
-	(title "Middlebush, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Middlebush%2C_New_Jersey"))
-
-([FlightPro_Class670250] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "25")
-	(feature "city")
-	(lang "en")
-	(lat "40.6019")
-	(lng "-74.6775")
-	(rank "86")
-	(summary "North Branch is an unincorporated community and hamlet located mostly within Branchburg Township, in Somerset County, New Jersey, United States. A portion of North Branch is located in Bridgewater Township. The hamlet of North Branch, located on both sides of the North Branch of the Raritan River, (...)")
-	(title "North Branch, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/North_Branch%2C_New_Jersey"))
-
-([FlightPro_Class670251] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "41")
-	(feature "edu")
-	(lang "en")
-	(lat "40.5781")
-	(lng "-74.3764")
-	(rank "83")
-	(summary "Bishop George Ahr High School, also known as Bishop Ahr or BGA, is a four-year, private, college preparatory, and coeducational Roman Catholic high school located on a campus covering 36 acres in the northern section of Edison, New Jersey (...)")
-	(title "Bishop George Ahr High School")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Bishop_George_Ahr_High_School"))
-
-([FlightPro_Class670252] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "23")
-	(feature "edu")
-	(lang "en")
-	(lat "40.6231")
-	(lng "-74.312")
-	(rank "78")
-	(summary "Arthur L. Johnson High School is a four-year public high school that serves students in ninth through twelfth grades from Clark, in Union County, New Jersey, United States, operating as part of the Clark Public School District (...)")
-	(title "Arthur L. Johnson High School")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Arthur_L._Johnson_High_School"))
-
-([FlightPro_Class670253] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "47")
-	(lang "en")
-	(lat "40.5017")
-	(lng "-74.6967")
-	(rank "81")
-	(summary "Royce Brook (sometimes referred to as Royces Brook, Royces Branch, or Royce Brook River) is a tributary of the Millstone River in Hillsborough and Manville, New Jersey in the United States.  (...)")
-	(title "Royce Brook")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Royce_Brook"))
-
-([FlightPro_Class670254] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "56")
-	(feature "edu")
-	(lang "en")
-	(lat "40.6066")
-	(lng "-74.6943")
-	(rank "85")
-	(summary "Raritan Valley Community College (RVCC) is an accredited, coeducational, two-year, public, community college located in North Branch (within Branchburg Township), New Jersey. RVCC offers Associate's degree programs leading to an Associate of Arts (A.A.), Associate of Science (A.S (...)")
-	(title "Raritan Valley Community College")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Raritan_Valley_Community_College"))
-
-([FlightPro_Class670255] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "27")
-	(feature "edu")
-	(lang "en")
-	(lat "40.5172")
-	(lng "-74.5468")
-	(rank "85")
-	(summary "Franklin High School (FHS) is a comprehensive four-year public high school serving students in ninth through twelfth grades, located in the Somerset section of Franklin Township in Somerset County, New Jersey, United States, operating as the lone secondary school of the Franklin Township Public (...)")
-	(title "Franklin High School (New Jersey)")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Franklin_High_School_%28New_Jersey%29"))
-
-([FlightPro_Class670256] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "46")
-	(lang "en")
-	(lat "40.565")
-	(lng "-74.3375")
-	(rank "85")
-	(summary "Menlo Park is an unincorporated community located within Edison Township in Middlesex County, New Jersey, United States., State of New Jersey. Accessed February 10, 2015. In 1876, Thomas Edison set up his home and research laboratory in Menlo Park, which at the time was the site of an unsuccessful (...)")
-	(title "Menlo Park, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Menlo_Park%2C_New_Jersey"))
-
-([FlightPro_Class670257] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "24")
-	(feature "city")
-	(lang "en")
-	(lat "40.527")
-	(lng "-74.5672")
-	(rank "78")
-	(summary "Weston is a census-designated place and unincorporated community located in Franklin Township, in Somerset County, New Jersey, United States., United States Census Bureau. Accessed February 11, 2013., United States Census Bureau. Accessed February 11, 2013., United States Census Bureau, August 2012 (...)")
-	(title "Weston, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Weston%2C_New_Jersey"))
-
-([FlightPro_Class670258] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "34")
-	(feature "edu")
-	(lang "en")
-	(lat "40.5932")
-	(lng "-74.3199")
-	(rank "79")
-	(summary "Colonia High School is one of three four-year comprehensive public high schools that serve students in ninth through twelfth grades from Woodbridge Township in Middlesex County, New Jersey, United States, operating as part of the Woodbridge Township School District (...)")
-	(title "Colonia High School")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Colonia_High_School"))
-
-([FlightPro_Class670259] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "34")
-	(lang "en")
-	(lat "40.5255")
-	(lng "-74.4382")
-	(rank "80")
-	(summary "Rutgers Business School – Newark and New Brunswick (Rutgers Business School, RBS) is the graduate and undergraduate business school located on the Newark and New Brunswick campuses of Rutgers University. It was founded in 1929. Rutgers Business School offers bachelor's, master's, and Ph.D. degrees (...)")
-	(title "Rutgers Business School – Newark and New Brunswick")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Rutgers_Business_School_%E2%80%93_Newark_and_New_Brunswick"))
-
-([FlightPro_Class670260] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(elevation "24")
-	(lang "en")
-	(lat "40.505")
-	(lng "-74.454")
-	(rank "85")
-	(summary "The School of Communication and Information (SC&I) is a professional school within the New Brunswick Campus of Rutgers, The State University of New Jersey. The school was created in 1982 as a result of a merger between the Graduate School of Library and Information Studies, the School of (...)")
-	(title "Rutgers School of Communication and Information")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Rutgers_School_of_Communication_and_Information"))
-
-([FlightPro_Class670261] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "22")
-	(feature "edu")
-	(lang "en")
-	(lat "40.5897")
-	(lng "-74.4127")
-	(rank "84")
-	(summary "South Plainfield High School (or SPHS) is a four-year, co-ed comprehensive community public high school located in South Plainfield in Middlesex County, New Jersey, United States, serving students in ninth through twelfth grades and operating as the sole secondary school in the South Plainfield (...)")
-	(title "South Plainfield High School")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/South_Plainfield_High_School"))
-
-([FlightPro_Class670262] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "55")
-	(feature "city")
-	(lang "en")
-	(lat "40.6456")
-	(lng "-74.6392")
-	(rank "84")
-	(summary "Pluckemin is an unincorporated community located within Bedminster Township, in Somerset County, New Jersey, United States. It was also known historically as Pluckamin. It was the site of several historic events during the American Revolutionary War.  (...)")
-	(title "Pluckemin, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Pluckemin%2C_New_Jersey"))
-
-([FlightPro_Class670263] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "36")
-	(feature "edu")
-	(lang "en")
-	(lat "40.6253")
-	(lng "-74.3581")
-	(rank "79")
-	(summary "Union Catholic Regional High School is a private accredited high school located in Scotch Plains, New Jersey. Its motto promises to provide a \"Quality education in a faith-based environment.\" Founded in 1962 as separate schools for boys and girls, each with its own separate administration and (...)")
-	(title "Union Catholic Regional High School")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Union_Catholic_Regional_High_School"))
-
 ([FlightPro_Class670265] of  CloFunction
 
-	(source "(if-let [dati (ins inam)]\n  {:instruct :create-placemark\n   :iname (.getName dati)\n   :lat (sv dati \"lat\")\n   :lon (sv dati \"lng\")\n   :feature (sv dati \"feature\")})")
-	(title "placemark-instruct [inam]"))
+	(source "{:instruct :create-placemark\n :iname (.getName dati)\n :lat (sv dati \"lat\")\n :lon (sv dati \"lng\")\n :feature (sv dati \"feature\")}")
+	(title "placemark-instruct [dati]"))
 
 ([FlightPro_Class670266] of  CloFunction
 
-	(source "(if-let [dati (ins inam)]\n  (let [head (str \"<h3>\" (sv dati \"title\") \"</h3>\")\n         itag (str \"<img src=\\\"\" (sv dati \"thumbnailImg\") \"\\\">\")\n         summ (get dati \"summary\")\n         addr (str \"http://\" (sv dati \"wikipediaUrl\") \"\\\"\")\n         wiki (str \"<a href=\\\"\" addr \"\\\">\" addr \"</a>\")\n         html (str head itag \"<br>\" summ \"<br>\" wiki)]\n    {:instruct :popup\n     :lat (sv dati \"lat\")\n     :lon (sv dati \"lng\")\n     :html html\n     :time (:ext-data-popup TIO)}))")
+	(source "(if-let [dati (ins inam)]\n  (let [head (str \"<h3>\" (sv dati \"title\") \"</h3>\")\n         itag (str \"<img src=\\\"\" (sv dati \"thumbnailImg\") \"\\\">\")\n         summ (sv dati \"summary\")\n         addr (str \"http://\" (sv dati \"wikipediaUrl\") \"\\\"\")\n         wiki (str \"<a href=\\\"\" addr \"\\\">\" addr \"</a>\")\n         html (str head itag \"<br>\" summ \"<br>\" wiki)]\n    {:instruct :popup\n     :lat (sv dati \"lat\")\n     :lon (sv dati \"lng\")\n     :html html\n     :time (:ext-data-popup TIO)}))")
 	(title "placemark-popup-instruct [inam]"))
 
 ([FlightPro_Class670268] of  CloFuncall
@@ -3408,472 +2285,9 @@
 
 	(source "(.name dati)"))
 
-([FlightPro_Class670274] of  CloFuncall
-
-	(source "(.getName dati)"))
-
-([FlightPro_Class670275] of  CloFuncall
-
-	(source "(ext.data/get-bbx-wiki 40.7 40.5 -74.7 -74.3)"))
-
-([FlightPro_Class670276] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "8")
-	(feature "adm3rd")
-	(lang "en")
-	(lat "40.504")
-	(lng "-74.3494")
-	(rank "100")
-	(summary "Edison is a township in Middlesex County, New Jersey, United States. As of the 2010 United States Census, Edison had a total population of 99,967, retaining its position as the fifth-most populous municipality in New Jersey., United States Census Bureau. Accessed September 3, 2011 (...)")
-	(title "Edison, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Edison%2C_New_Jersey"))
-
-([FlightPro_Class670277] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "18")
-	(feature "adm2nd")
-	(lang "en")
-	(lat "40.5655")
-	(lng "-74.6199")
-	(rank "98")
-	(summary "Somerset County is a county located in the U.S. state of New Jersey. As of the 2010 United States Census, the county's population was 323,444, increasing by 25,954 (+8.7%) from the 297,490 counted in the 2000 Census, retaining its position as the state's 13th-most populous county (...)")
-	(title "Somerset County, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Somerset_County%2C_New_Jersey"))
-
-([FlightPro_Class670278] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "154")
-	(feature "landmark")
-	(lang "en")
-	(lat "40.6834")
-	(lng "-74.4007")
-	(rank "98")
-	(summary "Bell Laboratories (also known as Bell Labs and formerly known as AT&T Bell Laboratories and Bell Telephone Laboratories) is the research and development subsidiary of the French-owned Alcatel-Lucent in Berkeley Heights, New Jersey, United States (...)")
-	(title "Bell Labs")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Bell_Labs"))
-
-([FlightPro_Class670279] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "56")
-	(feature "city")
-	(lang "en")
-	(lat "40.6979")
-	(lng "-74.3345")
-	(rank "98")
-	(summary "Springfield Township is a township in Union County, New Jersey, United States. As of the 2010 United States Census, the township's population was 15,817, the highest recorded at any decennial census, reflecting an increase of 1,388 (+9 (...)")
-	(title "Springfield Township, Union County, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Springfield_Township%2C_Union_County%2C_New_Jersey"))
-
-([FlightPro_Class670280] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "100")
-	(lang "en")
-	(lat "40.6942")
-	(lng "-74.5761")
-	(rank "98")
-	(summary "List of the National Register of Historic Places listings in Somerset County, New Jersey __NOTOC__ This is intended to be a complete list of properties and districts listed on the National Register of Historic Places in Somerset County, New Jersey (...)")
-	(title "National Register of Historic Places listings in Somerset County, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/National_Register_of_Historic_Places_listings_in_Somerset_County%2C_New_Jersey"))
-
-([FlightPro_Class670281] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "38")
-	(feature "city")
-	(lang "en")
-	(lat "40.5721")
-	(lng "-74.6465")
-	(rank "97")
-	(summary "Raritan is a borough in Somerset County, New Jersey, United States. As of the 2010 United States Census, the borough's population was 6,881, reflecting an increase of 543 (+8.6%) from the 6,338 counted in the 2000 Census, which had in turn increased by 540 (+9 (...)")
-	(title "Raritan, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Raritan%2C_New_Jersey"))
-
-([FlightPro_Class670282] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "85")
-	(feature "adm3rd")
-	(lang "en")
-	(lat "40.6848")
-	(lng "-74.4921")
-	(rank "97")
-	(summary "Long Hill Township is a township in Morris County, New Jersey, United States. As of the 2010 United States Census, the township's population was 8,702, reflecting a decline of 75 (-0.9%) from the 8,777 counted in the 2000 Census, which had in turn increased by 951 (+12 (...)")
-	(title "Long Hill Township, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Long_Hill_Township%2C_New_Jersey"))
-
-([FlightPro_Class670283] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "30")
-	(feature "city")
-	(lang "en")
-	(lat "40.5424")
-	(lng "-74.3628")
-	(rank "96")
-	(summary "Metuchen is a borough in Middlesex County, New Jersey, United States, which is northeast of New Brunswick, miles southwest of Newark, southwest of Jersey City, and southwest of Manhattan, all part of the New York metropolitan area (...)")
-	(title "Metuchen, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Metuchen%2C_New_Jersey"))
-
-([FlightPro_Class670284] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "17")
-	(feature "city")
-	(lang "en")
-	(lat "40.5539")
-	(lng "-74.5275")
-	(rank "96")
-	(summary "South Bound Brook is a borough in Somerset County, New Jersey, United States. As of the 2010 United States Census, the borough's population was 4,563, reflecting an increase of 71 (+1.6%) from the 4,492 counted in the 2000 Census, which had in turn increased by 307 (+7 (...)")
-	(title "South Bound Brook, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/South_Bound_Brook%2C_New_Jersey"))
-
-([FlightPro_Class670285] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "113")
-	(feature "city")
-	(lang "en")
-	(lat "40.6428")
-	(lng "-74.4362")
-	(rank "96")
-	(summary "Watchung is a borough in Somerset County, New Jersey, United States. As of the 2010 United States Census, the borough's population was 5,801, reflecting an increase of 188 (+3.3%) from the 5,613 counted in the 2000 Census, which had in turn increased by 503 (+9 (...)")
-	(title "Watchung, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Watchung%2C_New_Jersey"))
-
-([FlightPro_Class670286] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "26")
-	(feature "city")
-	(lang "en")
-	(lat "40.5008")
-	(lng "-74.4279")
-	(rank "96")
-	(summary "Highland Park is a borough in Middlesex County, New Jersey, United States. As of the 2010 United States Census, the borough's population was 13,982, reflecting a decline of 17 (-0.1%) from the 13,999 counted in the 2000 Census, which had in turn increased by 720 (+5 (...)")
-	(title "Highland Park, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Highland_Park%2C_New_Jersey"))
-
-([FlightPro_Class670287] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "38")
-	(feature "edu")
-	(lang "en")
-	(lat "40.6438")
-	(lng "-74.348")
-	(rank "96")
-	(summary "Westfield Senior High School, or simply, Westfield High School (abbreviated as WHS) is the only public high school located in Westfield, in Union County, New Jersey, operating as part of the Westfield Public Schools (...)")
-	(title "Westfield High School (New Jersey)")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Westfield_High_School_%28New_Jersey%29"))
-
-([FlightPro_Class670288] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "36")
-	(feature "edu")
-	(lang "en")
-	(lat "40.595")
-	(lng "-74.6359")
-	(rank "96")
-	(summary "Bridgewater-Raritan Regional High School (commonly BRHS) is a four-year comprehensive public high school. It is the single high school of the Bridgewater-Raritan Regional School District serving students from Bridgewater Township and Raritan in Somerset County, New Jersey, United States (...)")
-	(title "Bridgewater-Raritan High School")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Bridgewater-Raritan_High_School"))
-
-([FlightPro_Class670289] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "147")
-	(lang "en")
-	(lat "40.62")
-	(lng "-74.5672")
-	(rank "95")
-	(summary "grades k-12 The Pingry School is a coeducational, independent, college preparatory country day school in New Jersey, with a Lower School (K-5) campus in the Short Hills neighborhood of Millburn, and a Middle and Upper School campus in the Basking Ridge section of Bernards Township (...)")
-	(title "Pingry School")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Pingry_School"))
-
-([FlightPro_Class670290] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "28")
-	(feature "city")
-	(lang "en")
-	(lat "40.6213")
-	(lng "-74.4395")
-	(rank "95")
-	(summary "North Plainfield is a borough in Somerset County, New Jersey, United States. As of the 2010 United States Census, the borough's population was 21,936, reflecting an increase of 833 (+3.9%) from the 21,103 counted in the 2000 Census, which had in turn increased by 2,283 (+12 (...)")
-	(title "North Plainfield, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/North_Plainfield%2C_New_Jersey"))
-
-([FlightPro_Class670291] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "30")
-	(feature "landmark")
-	(lang "en")
-	(lat "40.5424")
-	(lng "-74.3628")
-	(rank "95")
-	(summary "The Roman Catholic Diocese of Metuchen is a Roman Catholic diocese in New Jersey, centered in the borough of Metuchen. It was erected on November 19, 1981, from the territory of the Diocese of Trenton. The Bishop of Metuchen presides from the Saint Francis of Assisi Cathedral in Metuchen (...)")
-	(title "Roman Catholic Diocese of Metuchen")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Roman_Catholic_Diocese_of_Metuchen"))
-
-([FlightPro_Class670292] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "29")
-	(feature "city")
-	(lang "en")
-	(lat "40.5744")
-	(lng "-74.4148")
-	(rank "94")
-	(summary "South Plainfield is a borough in Middlesex County, New Jersey, United States. As of the 2010 United States Census, the borough's population was 23,385, reflecting an increase of 1,575 (+7.2%) from the 21,810 counted in the 2000 Census, which had in turn increased by 1,321 (+6 (...)")
-	(title "South Plainfield, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/South_Plainfield%2C_New_Jersey"))
-
-([FlightPro_Class670293] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "86")
-	(feature "city")
-	(lang "en")
-	(lat "40.6038")
-	(lng "-74.4832")
-	(rank "94")
-	(summary "Green Brook Township is a township in Somerset County, New Jersey, United States. As of the 2010 United States Census, the township's population was 7,203, reflecting an increase of 1,549 (+27.4%) from the 5,654 counted in the 2000 Census, which had in turn increased by 1,194 (+26 (...)")
-	(title "Green Brook Township, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Green_Brook_Township%2C_New_Jersey"))
-
-([FlightPro_Class670294] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "14")
-	(feature "city")
-	(lang "en")
-	(lat "40.5746")
-	(lng "-74.4983")
-	(rank "94")
-	(summary "Middlesex is a borough in Middlesex County, New Jersey, United States. As of the 2010 United States Census, the borough's population was 13,635 reflecting a decline of 82 (-0.6%) from the 13,717 counted in the 2000 Census, which had in turn increased by 662 (+5 (...)")
-	(title "Middlesex, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Middlesex%2C_New_Jersey"))
-
-([FlightPro_Class670295] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(elevation "29")
-	(lang "en")
-	(lat "40.5298")
-	(lng "-74.4711")
-	(rank "93")
-	(summary "Robert Wood Johnson Medical School (RWJMS) is the graduate medical school of Rutgers University. It is located in New Brunswick and Piscataway. Robert Wood Johnson is one of two medical schools that are a part of Rutgers University's School of Biomedical and Health Sciences.http://ru-umdnjtogether (...)")
-	(title "Robert Wood Johnson Medical School")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Robert_Wood_Johnson_Medical_School"))
-
-([FlightPro_Class670296] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "18")
-	(feature "city")
-	(lang "en")
-	(lat "40.5902")
-	(lng "-74.4656")
-	(rank "93")
-	(summary "Dunellen is a borough in Middlesex County, New Jersey, United States. As of the 2010 United States Census, the borough's population was 7,227, reflecting an increase of 404 (+5.9%) from the 6,823 counted in the 2000 Census, which had in turn increased by 295 (+4 (...)")
-	(title "Dunellen, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Dunellen%2C_New_Jersey"))
-
-([FlightPro_Class670297] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "29")
-	(feature "edu")
-	(lang "en")
-	(lat "40.5946")
-	(lng "-74.3801")
-	(rank "92")
-	(summary "The Wardlaw-Hartridge School (commonly referred to as Wardlaw or W-H) is a private, nonsectarian, coeducational day school located in Edison, New Jersey, United States, serving students in pre-kindergarten through twelfth grade (...)")
-	(title "Wardlaw-Hartridge School")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Wardlaw-Hartridge_School"))
-
-([FlightPro_Class670298] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "24")
-	(feature "edu")
-	(lang "en")
-	(lat "40.5018")
-	(lng "-74.4481")
-	(rank "87")
-	(summary "Rutgers–New Brunswick is the oldest and flagship campus of Rutgers University (the others being in Camden and Newark). It is chiefly located in the City of New Brunswick and Piscataway Township. It actually comprises several campuses: College Avenue, Busch, Livingston, Cook, and Douglass, the latter (...)")
-	(title "Rutgers–New Brunswick")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Rutgers%E2%80%93New_Brunswick"))
-
-([FlightPro_Class670299] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "22")
-	(feature "landmark")
-	(lang "en")
-	(lat "40.5136")
-	(lng "-74.4653")
-	(rank "86")
-	(summary "High Point Solutions Stadium is the on-campus football stadium for the football program at Rutgers University in Piscataway, New Jersey. It is located on the Busch Campus at Rutgers, and overlooks the Raritan River to the South (...)")
-	(title "High Point Solutions Stadium")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/High_Point_Solutions_Stadium"))
-
-([FlightPro_Class670300] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "21")
-	(lang "en")
-	(lat "40.5506")
-	(lng "-74.6187")
-	(rank "84")
-	(summary "Duke Gardens in Somerset County, New Jersey were among the most significant glass house collections in America. Created by Doris Duke herself, the aerial view confirms they were larger than the New York Botanical Garden's Haupt Conservatory, and were open to the public from 1964 (...)")
-	(title "Duke Gardens")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Duke_Gardens"))
-
-([FlightPro_Class670301] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "38")
-	(feature "event")
-	(lang "en")
-	(lat "40.5383")
-	(lng "-74.3786")
-	(rank "83")
-	(summary "The 1924 Nixon Nitration Works disaster was an explosion and fire that claimed many lives and destroyed several square miles of New Jersey factories. It began on Saturday morning, March 1, 1924, when an explosion destroyed a building in Nixon, New Jersey (an area within present-day Edison, New (...)")
-	(title "1924 Nixon Nitration Works disaster")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/1924_Nixon_Nitration_Works_disaster"))
-
-([FlightPro_Class670302] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "7")
-	(feature "event")
-	(lang "en")
-	(lat "40.5589")
-	(lng "-74.5278")
-	(rank "83")
-	(summary "The Battle of Bound Brook (April 13, 1777) was a surprise attack conducted by British and Hessian forces against a Continental Army outpost at Bound Brook, New Jersey during the American Revolutionary War. The British objective of capturing the entire garrison was not met, although prisoners were (...)")
-	(title "Battle of Bound Brook")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Battle_of_Bound_Brook"))
-
-([FlightPro_Class670303] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "89")
-	(feature "city")
-	(lang "en")
-	(lat "40.6953")
-	(lng "-74.4011")
-	(rank "81")
-	(summary "Murray Hill is an unincorporated community within portions of both Berkeley Heights and New Providence, located in Union County in northern New Jersey, United States. It is the longtime central location of Bell Labs (now part of Alcatel-Lucent), having relocated here in 1941 from New York City when (...)")
-	(title "Murray Hill, New Jersey")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Murray_Hill%2C_New_Jersey"))
-
-([FlightPro_Class670304] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(elevation "24")
-	(lang "en")
-	(lat "40.505")
-	(lng "-74.454")
-	(rank "81")
-	(summary "The School of Communication and Information (SC&I) is one of the 19 schools at the New Brunswick Campus of Rutgers, The State University of New Jersey. The school was created in 1982 as a result of a merger between the Graduate School of Library and Information Science and the School of (...)")
-	(title "School of Communication and Information (Rutgers University)")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/School_of_Communication_and_Information_%28Rutgers_University%29"))
-
-([FlightPro_Class670305] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "21")
-	(feature "edu")
-	(lang "en")
-	(lat "40.5731")
-	(lng "-74.3062")
-	(rank "80")
-	(summary "John F. Kennedy Memorial High School (J.F.K.) is one of three four-year comprehensive public high schools that serve students in ninth through twelfth grades from Woodbridge Township in Middlesex County, New Jersey, United States, operating as part of the Woodbridge Township School District (...)")
-	(title "John F. Kennedy Memorial High School (New Jersey)")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/John_F._Kennedy_Memorial_High_School_%28New_Jersey%29"))
-
-([FlightPro_Class670306] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "31")
-	(feature "edu")
-	(lang "en")
-	(lat "40.5045")
-	(lng "-74.3697")
-	(rank "79")
-	(summary "The Middlesex County Academy for Science, Mathematics and Engineering Technologies is a four-year comprehensive career academy college preparatory magnet public high school located on the campus of the Middlesex County College in Edison, in Middlesex County, New Jersey, United States, operating as (...)")
-	(title "Middlesex County Academy")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Middlesex_County_Academy"))
-
-([FlightPro_Class670307] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation "136")
-	(feature "city")
-	(lang "en")
-	(lat "40.6567")
-	(lng "-74.6334")
-	(population "8302")
-	(rank "79")
-	(summary "The Pluckemin Artillery Cantonment Site in Pluckemin, New Jersey, a hamlet at the southern section of Bedminster Township, New Jersey, holds historic American Revolutionary War importance as the Continental Army's artillery winter cantonment during the winter of 1778-1779 (...)")
-	(title "Pluckemin Continental Artillery Cantonment Site")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Pluckemin_Continental_Artillery_Cantonment_Site"))
-
-([FlightPro_Class670308] of  CloFuncall
-
-	(source "(placemark-instruct \"FlightPro_Class670205\")"))
-
-([FlightPro_Class670309] of  CloFuncall
-
-	(source "(ext.data/placemark-instruct \"FlightPro_Class670205\")"))
-
-([FlightPro_Class670310] of  CloFuncall
-
-	(source "(ext.data/placemark-popup-instruct \"FlightPro_Class670205\")"))
-
 ([FlightPro_Class670311] of  CloFunction
 
-	(source "(let [pos (js/L.LatLng. lat lon)\n       ico (js/L.icon #js{:iconUrl (URL-ICO feature) :iconSize #js[24, 24]})\n       opt #js{:icon ico :draggable true}\n       mrk (-> js/L (.rotatedMarker pos opt))]\n    (.on mrk \"click\"\n         (fn [e]\n           (info (str \"pm\" iname))))\n    (.addTo mrk @CHART)\n    (vswap! PLACEMARKS assoc iname mrk))")
+	(source "(let [pos (js/L.LatLng. lat lon)\n       ico (js/L.icon #js{:iconUrl (or (URL-ICO feature) \n		     (URL-ICO \"default\"))\n	           :iconSize #js[24, 24]})\n       opt #js{:icon ico :draggable true}\n       mrk (-> js/L (.rotatedMarker pos opt))]\n    (.on mrk \"click\"\n         (fn [e]\n           (info (str \"pm\" iname))))\n    (.addTo mrk @CHART)\n    (vswap! PLACEMARKS assoc iname mrk))")
 	(title "create-placemark [iname lat lon feature]"))
 
 ([FlightPro_Class670312] of  CloVar
@@ -3883,8 +2297,46 @@
 
 ([FlightPro_Class670313] of  CloFunction
 
-	(source "(doseq [mrk @PLACEMARKS]\n  (.removeLayer @CHART mrk))\n(vreset! PLACEMARKS {})")
+	(source "(doseq [mrk (vals @PLACEMARKS)]\n  (.removeLayer @CHART mrk))\n(vreset! PLACEMARKS {})")
 	(title "clear-placemarks []"))
+
+([FlightPro_Class680000] of  Airport
+
+	(altitude 52)
+	(coord 27.17831 33.79943)
+	(country "Egypt")
+	(iata "HRG")
+	(icao "HEGN")
+	(runways 0)
+	(title "Hurghada International Airport"))
+
+([FlightPro_Class690026] of  CloFuncall
+
+	(source "pro.commands/WIKI"))
+
+([FlightPro_Class690080] of  CloFuncall
+)
+
+([FlightPro_Class690430] of  CloFuncall
+
+	(source "(async.proc/pump-in (:instructions pro.commands/CHN) {:instruct :clear-placemarks})"))
+
+([FlightPro_Class690431] of  CloFuncall
+
+	(source "(async.proc/pump-in (:instructions pro.commands/CHN) {:instruct :clear})"))
+
+([FlightPro_Class690507] of  CloFuncall
+
+	(source "fr24.client/BBX"))
+
+([FlightPro_Class690508] of  CloFunction
+
+	(source "(println [:CMD-INTERSECT params])\n\"\"")
+	(title "intersect [params]"))
+
+([FlightPro_Class690549] of  CloFuncall
+
+	(source "pro.commands/APT-ALT"))
 
 ([FlightPro_Class7] of  CloVar
 

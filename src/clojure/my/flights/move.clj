@@ -12,14 +12,16 @@
  :instructions 979
  :vehicles 200
  :display 831
- :manual-data 6000})
+ :manual-data 6000
+ :ext-data 15000
+ :ext-data-popup 60000})
 (def CARRIER (volatile! {:mode "?"
                :coord [0 0]
                :altitude 0
                :speed 0
                :course 0
                :step-hrs (double (/ (:carrier TIO) 3600000))
-               :bank-params [20 16 64 2]
+               :bank-params [20 16 64 1 2]
                :rudder {:target 0
                             :step 3
 	    :accel 1

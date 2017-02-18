@@ -65,7 +65,7 @@ return proc_fn.call(null,carr);
 calc.dynamic.check_diff_and_do = (function calc$dynamic$check_diff_and_do(carr,path1,path2,limit,tio_pth,final_fn){
 var proc_fn = (function calc$dynamic$check_diff_and_do_$_proc_fn(cr){
 var c = cljs.core.deref.call(null,cr);
-if((calc.core.abs.call(null,(cljs.core.get_in.call(null,c,path1) - cljs.core.get_in.call(null,c,path2))) < limit)){
+if((calc.core.abs.call(null,(cljs.core.get_in.call(null,c,path1) - cljs.core.get_in.call(null,c,path2))) <= limit)){
 final_fn.call(null);
 
 return false;
@@ -79,13 +79,13 @@ return csasync.proc.start_process.call(null,new cljs.core.Keyword(null,"cdad-sta
 return proc_fn.call(null,carr);
 }),cljs.core.get_in.call(null,cljs.core.deref.call(null,carr),tio_pth));
 });
-calc.dynamic.bank = (function calc$dynamic$bank(old_crs,new_crs,p__93727){
-var vec__93731 = p__93727;
-var right_bank = cljs.core.nth.call(null,vec__93731,(0),null);
-var small_arc = cljs.core.nth.call(null,vec__93731,(1),null);
-var big_arc = cljs.core.nth.call(null,vec__93731,(2),null);
-var factor = cljs.core.nth.call(null,vec__93731,(3),null);
-var turn_right_QMARK_ = ((function (vec__93731,right_bank,small_arc,big_arc,factor){
+calc.dynamic.bank = (function calc$dynamic$bank(old_crs,new_crs,p__34501){
+var vec__34505 = p__34501;
+var right_bank = cljs.core.nth.call(null,vec__34505,(0),null);
+var small_arc = cljs.core.nth.call(null,vec__34505,(1),null);
+var big_arc = cljs.core.nth.call(null,vec__34505,(2),null);
+var factor = cljs.core.nth.call(null,vec__34505,(3),null);
+var turn_right_QMARK_ = ((function (vec__34505,right_bank,small_arc,big_arc,factor){
 return (function calc$dynamic$bank_$_turn_right_QMARK_(from,to){
 var dif = (to - from);
 if((dif > (0))){
@@ -97,11 +97,11 @@ return (dif < (-180));
 return null;
 }
 }
-});})(vec__93731,right_bank,small_arc,big_arc,factor))
+});})(vec__34505,right_bank,small_arc,big_arc,factor))
 ;
 var arc = calc.core.abs.call(null,(old_crs - new_crs));
 var arc__$1 = (((arc > (180)))?((360) - arc):arc);
-var bnk = (((arc__$1 > big_arc))?(right_bank * factor):(((arc__$1 < small_arc))?((right_bank / factor) | (0)):right_bank
+var bnk = (((arc__$1 < small_arc))?((right_bank / factor) | (0)):(((arc__$1 > big_arc))?(right_bank * factor):right_bank
 ));
 if(cljs.core.truth_(turn_right_QMARK_.call(null,old_crs,new_crs))){
 return bnk;

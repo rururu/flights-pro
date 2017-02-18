@@ -15,5 +15,7 @@
 (println"Starting My Flights Movement...")
 (eval '(my.flights.move/start-movement))
 (println"Starting Expert System...")
-(eval '(ru.rules/run-engine "Flights Pro Run")))
+(eval '(ru.rules/run-engine "Flights Pro Run"))
+(println"Go Initial Airport...")
+(eval '(pro.commands/go-initial-airport)))
 

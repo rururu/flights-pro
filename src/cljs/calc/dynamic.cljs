@@ -43,10 +43,10 @@
 (defn check-diff-and-do [carr path1 path2 limit tio-pth final-fn]
   (letfn [(proc-fn [cr]
              (let [c @cr]
-               (if (< (calc/abs (- (get-in c path1)
-                                   (get-in c path2))) limit)
+               (if (<= (calc/abs (- (get-in c path1)
+                                           (get-in c path2))) limit)
                  (do (final-fn) false)
-                  true)))]
+                 true)))]
   (vswap! carr assoc :cdad-status (volatile! "STOP"))
   (asp/start-process (:cdad-status @carr) 
                                  #(proc-fn carr)
@@ -65,8 +65,8 @@
                  (- 360 arc)
                  arc)
          bnk (cond
-                  (> arc big-arc) (* right-bank factor)
                   (< arc small-arc) (int (/ right-bank factor)) 
+                  (> arc big-arc) (* right-bank factor)
                   true right-bank)]
     (if (turn-right? old-crs new-crs)
         bnk

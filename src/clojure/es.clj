@@ -19,7 +19,18 @@
  "LEVEL" 	(str HOST PORT "/img/purplepln32.png")
  "GROUND" 	(str HOST PORT "/img/greypln32.png")
  "COUNTER"	(str HOST PORT "/img/b.png")
- "FOLLOWING"	(str HOST PORT "/img/r.png")})
+ "FOLLOWING"	(str HOST PORT "/img/r.png")
+ "default"	(str HOST PORT "/img/info.png")
+ "landmark"	(str HOST PORT "/img/landmark.png")
+ "edu"	(str HOST PORT "/img/edu.png")
+ "mountain"	(str HOST PORT "/img/mountain.png")
+ "river"	(str HOST PORT "/img/river.png")
+ "railwaystation" (str HOST PORT "/img/railwaystation.png")
+ "event"	(str HOST PORT "/img/event.png")
+ "waterbody"	(str HOST PORT "/img/waterbody.png")
+ "isle"	(str HOST PORT "/img/isle.png")
+ "airport"	(str HOST PORT "/img/airport.png")
+ "city"	(str HOST PORT "/img/city.png")})
 (def GENPLAN {:takeoff 
   {:speed [220 8]
    :altitude [1500 6]
@@ -156,8 +167,8 @@
        lnd (:landing gen)
        fcrd [(fapt "lat") (fapt "lon")]
        tcrd [(tapt "lat") (tapt "lon")]
-       falt (fapt "alt")
-       talt (tapt "alt")
+       falt (if (= cmd/TERRAIN "yes") (fapt "alt") 0)
+       talt (if (= cmd/TERRAIN "yes") (tapt "alt") 0)
        spp (assoc gen :takeoff (merge tof
 		{:altitude (corr-alt (:altitude tof) falt)})
 	        :landing (merge lnd
