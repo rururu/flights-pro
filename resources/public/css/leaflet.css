@@ -67,3 +67,17 @@
   padding:5px;
   z-index:100;
 }
+#questions-header {
+  position:fixed;
+  bottom:50px;
+  right:10px;
+  padding:5px;
+  z-index:100;
+}
+#questions {
+  position:fixed;
+  bottom:40px;
+  right:10px;
+  padding:5px;
+  z-index:100;
+}

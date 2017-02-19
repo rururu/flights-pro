@@ -4,23 +4,23 @@ goog.require('cljs.core');
 goog.require('goog.string');
 goog.require('goog.string.format');
 chart.controls.format = (function chart$controls$format(var_args){
-var args__24123__auto__ = [];
-var len__24116__auto___37026 = arguments.length;
-var i__24117__auto___37027 = (0);
+var args__21997__auto__ = [];
+var len__21990__auto___35538 = arguments.length;
+var i__21991__auto___35539 = (0);
 while(true){
-if((i__24117__auto___37027 < len__24116__auto___37026)){
-args__24123__auto__.push((arguments[i__24117__auto___37027]));
+if((i__21991__auto___35539 < len__21990__auto___35538)){
+args__21997__auto__.push((arguments[i__21991__auto___35539]));
 
-var G__37028 = (i__24117__auto___37027 + (1));
-i__24117__auto___37027 = G__37028;
+var G__35540 = (i__21991__auto___35539 + (1));
+i__21991__auto___35539 = G__35540;
 continue;
 } else {
 }
 break;
 }
 
-var argseq__24124__auto__ = ((((1) < args__24123__auto__.length))?(new cljs.core.IndexedSeq(args__24123__auto__.slice((1)),(0),null)):null);
-return chart.controls.format.cljs$core$IFn$_invoke$arity$variadic((arguments[(0)]),argseq__24124__auto__);
+var argseq__21998__auto__ = ((((1) < args__21997__auto__.length))?(new cljs.core.IndexedSeq(args__21997__auto__.slice((1)),(0),null)):null);
+return chart.controls.format.cljs$core$IFn$_invoke$arity$variadic((arguments[(0)]),argseq__21998__auto__);
 });
 
 chart.controls.format.cljs$core$IFn$_invoke$arity$variadic = (function (fmt,args){
@@ -29,10 +29,10 @@ return cljs.core.apply.call(null,goog.string.format,fmt,args);
 
 chart.controls.format.cljs$lang$maxFixedArity = (1);
 
-chart.controls.format.cljs$lang$applyTo = (function (seq37024){
-var G__37025 = cljs.core.first.call(null,seq37024);
-var seq37024__$1 = cljs.core.next.call(null,seq37024);
-return chart.controls.format.cljs$core$IFn$_invoke$arity$variadic(G__37025,seq37024__$1);
+chart.controls.format.cljs$lang$applyTo = (function (seq35536){
+var G__35537 = cljs.core.first.call(null,seq35536);
+var seq35536__$1 = cljs.core.next.call(null,seq35536);
+return chart.controls.format.cljs$core$IFn$_invoke$arity$variadic(G__35537,seq35536__$1);
 });
 
 chart.controls.by_id = (function chart$controls$by_id(id){
@@ -47,7 +47,11 @@ return chart.controls.set_html_BANG_.call(null,"mousepos",[cljs.core.str("lat ")
 chart.controls.show_chart_controls = (function chart$controls$show_chart_controls(){
 chart.controls.set_html_BANG_.call(null,"commands-header","<h4>Commands</h4>");
 
-return chart.controls.set_html_BANG_.call(null,"commands","<select onchange='javascript:chart.client.command(this.value)'>\n   <option value='commands'>Commands</option>\n   <option value='watch-visible'>Watch visible area</option>\n   <option value='intersect'>Intersections</option>\n   <option value='move-to'>Move to Airport</option>\n   <option value='schedule'>Schedule Flight</option>\n   <option value='wikipedia'>Toggle Wikipedia</option>\n   <option value='clear'>Clear</option>\n   </select>");
+chart.controls.set_html_BANG_.call(null,"commands","<select onchange='javascript:chart.client.command(this.value)'>\n   <option value='commands'>Commands</option>\n   <option value='watch-visible'>Watch visible area</option>\n   <option value='intersect'>Intersections</option>\n   <option value='move-to'>Move to Airport</option>\n   <option value='schedule'>Schedule Flight</option>\n   <option value='wikipedia'>Toggle Wikipedia</option>\n   <option value='clear'>Clear</option>\n   </select>");
+
+chart.controls.set_html_BANG_.call(null,"questions-header","<h4>Questions</h4>");
+
+return chart.controls.set_html_BANG_.call(null,"questions","<select onchange='javascript:chart.client.question(this.value)'>\n   <option value='questions'>Questions</option>\n   <option value='intersect'>Intersections</option>\n   <option value='weather'>Weather</option>\n   </select>");
 });
 
 //# sourceMappingURL=controls.js.map

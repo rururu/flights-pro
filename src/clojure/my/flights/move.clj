@@ -7,7 +7,7 @@
 (def PID180 (/ Math/PI 180))
 (def NMRAD (/ Math/PI 10800))
 (def TIO {:carrier 1000
- :camera 4200
+ :camera 2222
  :directives 911
  :instructions 979
  :vehicles 200
@@ -21,11 +21,11 @@
                :speed 0
                :course 0
                :step-hrs (double (/ (:carrier TIO) 3600000))
-               :bank-params [20 16 64 1 2]
+               :bank-params [16 16 64 2]
                :rudder {:target 0
                             :step 3
 	    :accel 1
-                            :time-out 1011}
+                            :time-out 1017}
                :elevator {:target 0
                             :step 4
 	    :accel 1

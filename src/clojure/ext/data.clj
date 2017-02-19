@@ -5,7 +5,7 @@
   [async.proc :as asp]))
 
 (def TIO {:carrier 1000
- :camera 4200
+ :camera 2222
  :directives 911
  :instructions 979
  :vehicles 200

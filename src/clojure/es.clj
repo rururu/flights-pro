@@ -51,6 +51,10 @@
      [[0.0 0][0.1 10][0.5 100][3 180]]} ;; x - dist, y - spd
 })
 (def ONB-PAUSE false)
+(def INTS-TIME ;; forcast time for intersection in hours (6 min)
+0.1)
+(def INTS-DMIN ;; distance of intersection in nautical miles (~400 m)
+0.215)
 (defn round [x p]
   (let [md (mod x p)
        r (- x md)]
@@ -230,4 +234,28 @@
     (merge lnd  {:final-turn-crd	ftcrd
 	:landing-crs	[crs crsa] 	
      	:lannding-spd	[spd spda]})))
+
+(defn intersect? [crd1 crs1 spd1 crd2 crs2 spd2 id1 id2]
+  (when-let [crd3 (geo/future-intersect crd1 crs1 spd1 crd2 crs2 spd2 INTS-TIME)]
+  (let [d1 (geo/distance-nm crd1 crd3)
+         tmin (/ d1 spd1)
+         crd4 (geo/future-pos crd2 crs2 spd2 tmin)
+         dmin (geo/distance-nm crd3 crd4)]
+     (if (< dmin INTS-DMIN)
+       [dmin tmin]))))
+
+(defn max-distance [spd1 spd2]
+  (* (+ spd1 spd2) INTS-TIME))
+
+(defn pom-and-link [id1 crd1 crs1 spd1 cs1 id2 crd2 crs2 spd2 cs2 dmin tmin]
+  (put-on-map id1 crd1 crs1 spd1 "INTERSECT")
+(put-on-map id2 crd2 crs2 spd2 "INTERSECT")
+(asp/pump-in (:instructions  cmd/CHN)
+	{:instruct :add-link
+                         :ids [id1 id2]
+                         :options {:weight 4
+	                :title (str cs1 " - " cs2)
+	                :color "red"
+	                :dmin dmin	
+	                :tmin tmin}}))
 

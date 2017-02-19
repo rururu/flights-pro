@@ -26,5 +26,12 @@
    <option value='schedule'>Schedule Flight</option>
    <option value='wikipedia'>Toggle Wikipedia</option>
    <option value='clear'>Clear</option>
+   </select>")
+(set-html! "questions-header" "<h4>Questions</h4>")
+(set-html! "questions"
+  "<select onchange='javascript:chart.client.question(this.value)'>
+   <option value='questions'>Questions</option>
+   <option value='intersect'>Intersections</option>
+   <option value='weather'>Weather</option>
    </select>"))
 

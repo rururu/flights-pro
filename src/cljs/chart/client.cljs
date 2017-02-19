@@ -20,7 +20,7 @@
  :answer (str HOST PORT "/answer/")
  :manual-data (str HOST PORT "/manual-data/")})
 (def TIO {:carrier 1000
- :camera 4200
+ :camera 2222
  :directives 911
  :instructions 979
  :vehicles 200
@@ -49,6 +49,7 @@
 (def CHART (volatile! {}))
 (def VEHICLES (volatile! {}))
 (def PLACEMARKS (volatile! {}))
+(def LINKS (volatile! {}))
 (def error-handler (fn [response]
   (let [{:keys [status status-text]} response]
     (println (str "AJAX ERROR: " status " " status-text)))))
@@ -142,8 +143,7 @@
                 (.setContent html))]
     (.addLayer @CHART pop)
     (if (> time 0)
-        (asp/delayer #(.removeLayer @CHART pop)
-                            time)))))
+        (asp/delayer #(.removeLayer @CHART pop) time)))))
 
 (defn add-trail [id points options time]
   (let [ops (clj->js options)
@@ -174,6 +174,42 @@
   (.setView @CHART cen zom {})
   (new-visible)))
 
+(defn collect-llga [ids]
+  (let [vhs (filter some? (map #(@VEHICLES %) ids))
+       mks (map #(:marker @%) vhs)
+       llgs (map #(.getLatLng %) mks)]
+  (clj->js llgs)))
+
+(defn linkPopup [[id1 id2] ops]
+  (let [vhs @VEHICLES
+       alt1 (:altitude @(vhs id1))
+       alt2 (:altitude @(vhs id2))
+       adif (- alt1 alt2)
+       titl (:title ops)
+       dmin (:dmin ops )
+       tmin (:tmin ops)]
+  (str "<h3>" titl "</h3>"
+       "<table>"
+       "<tr><td>Dmin</td><td>" (if (number? dmin) (int (* 1852 dmin))) " m</td></tr>"
+       "<tr><td>Tmin</td><td>" (if (number? tmin) (int (* 60 tmin))) " min</td></tr>"
+       "<tr><td>Alt-diff</td><td>" adif " ft</td></tr>"
+       "</table>")))
+
+(defn add-link [ids options]
+  (let [ops (clj->js options)
+       tmin (:tmin options)
+       del (if (number? tmin)
+               (int (* 60000 tmin))
+               30000)
+       llg (collect-llga ids)
+       lnk (js/L.polyline llg ops)]
+  (.addLayer @CHART lnk)
+  (.bindPopup lnk (linkPopup ids options))
+  (vswap! LINKS assoc ids lnk)
+  (if (> del 0)
+    (asp/delayer #(do (.removeLayer @CHART lnk)
+	     (vswap! LINKS dissoc ids)) del))))
+
 (defn instructions-handler [response]
   (doseq [{:keys [instruct] :as ins} (read-transit response)]
   ;;(println [:INSTRUCT ins])
@@ -194,6 +230,8 @@
     :create-placemark (let [{:keys [iname lat lon feature]} ins]
                       (create-placemark iname lat lon feature))
     :clear-placemarks (clear-placemarks)
+    :add-link (let [{:keys [ids options]} ins]
+                  (add-link ids options))
     (println (str "Unknown instruction: " [instruct ins])))))
 
 (defn receive-instructions []
@@ -332,6 +370,11 @@
   (GET (str (:command URL) "trail?id=" id)
   {:handler (fn [response])
    :error-handler error-handler}))
+
+(defn question [q]
+  (condp = q
+  "questions" nil
+  (am/ask-server {:whom "es" :predicate q})))
 
 
 (set! (.-onload js/window) (on-load-chart))
