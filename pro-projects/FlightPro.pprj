@@ -1,4 +1,4 @@
-; Sun Feb 19 20:03:15 MSK 2017
+; Mon Feb 20 23:24:53 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -20,7 +20,7 @@
 
 ([BROWSER_SLOT_NAMES] of  Property_List
 
-	(properties [FlightPro_ProjectKB_Class960]))
+	(properties [FlightPro_ProjectKB_Class981]))
 
 ([CLSES_TAB] of  Widget
 
@@ -203,52 +203,52 @@
 ([FlightPro_ProjectKB_Class638] of  Property_List
 )
 
-([FlightPro_ProjectKB_Class960] of  String
+([FlightPro_ProjectKB_Class981] of  String
 
 	(name "Airport")
 	(string_value "title"))
 
-([FlightPro_ProjectKB_Class961] of  Map
+([FlightPro_ProjectKB_Class982] of  Map
 
 	(entries
-		[FlightPro_ProjectKB_Class962]
-		[FlightPro_ProjectKB_Class963]
-		[FlightPro_ProjectKB_Class964]
-		[FlightPro_ProjectKB_Class965]))
+		[FlightPro_ProjectKB_Class983]
+		[FlightPro_ProjectKB_Class984]
+		[FlightPro_ProjectKB_Class985]
+		[FlightPro_ProjectKB_Class986]))
 
-([FlightPro_ProjectKB_Class962] of  Map_Entry
+([FlightPro_ProjectKB_Class983] of  Map_Entry
 
 	(key "FlightPro_Class670004")
 	(key_class "edu.stanford.smi.protege.model.Frame")
 	(value "-2 441 224 146")
 	(value_class "java.awt.Rectangle"))
 
-([FlightPro_ProjectKB_Class963] of  Map_Entry
+([FlightPro_ProjectKB_Class984] of  Map_Entry
 
 	(key "FlightPro_Class320015")
 	(key_class "edu.stanford.smi.protege.model.Frame")
 	(value "-8 584 224 146")
 	(value_class "java.awt.Rectangle"))
 
-([FlightPro_ProjectKB_Class964] of  Map_Entry
+([FlightPro_ProjectKB_Class985] of  Map_Entry
 
 	(key "FlightPro_Class290004")
 	(key_class "edu.stanford.smi.protege.model.Frame")
 	(value "-3 351 224 146")
 	(value_class "java.awt.Rectangle"))
 
-([FlightPro_ProjectKB_Class965] of  Map_Entry
+([FlightPro_ProjectKB_Class986] of  Map_Entry
 
 	(key "FlightPro_Class290003")
 	(key_class "edu.stanford.smi.protege.model.Frame")
 	(value "-5 349 224 146")
 	(value_class "java.awt.Rectangle"))
 
-([FlightPro_ProjectKB_Class966] of  Map_Entry
+([FlightPro_ProjectKB_Class987] of  Map_Entry
 
 	(key "InstanceDisplay.yellow_stickies")
 	(key_class "java.lang.String")
-	(value "FlightPro_ProjectKB_Class961")
+	(value "FlightPro_ProjectKB_Class982")
 	(value_class "java.util.Map"))
 
 ([FORMS_TAB] of  Widget
@@ -288,8 +288,8 @@
 
 ([KB_102576_Class1] of  Map
 
-	(entries [FlightPro_ProjectKB_Class966])
-	(referenced_maps [FlightPro_ProjectKB_Class961]))
+	(entries [FlightPro_ProjectKB_Class987])
+	(referenced_maps [FlightPro_ProjectKB_Class982]))
 
 ([KB_102576_Class11] of  Property_List
 
@@ -532,48 +532,48 @@
 	(boolean_value FALSE)
 	(name "ButtonDisplayed-Стереть Выделенный Экземпляр"))
 
-([KB_475689_Class953] of  Map
+([KB_760998_Class953] of  Map
 
 	(entries
-		[KB_475689_Class954]
-		[KB_475689_Class957]
-		[KB_475689_Class958]
-		[KB_475689_Class959])
-	(referenced_maps [KB_475689_Class955]))
+		[KB_760998_Class954]
+		[KB_760998_Class957]
+		[KB_760998_Class958]
+		[KB_760998_Class959])
+	(referenced_maps [KB_760998_Class955]))
 
-([KB_475689_Class954] of  Map_Entry
+([KB_760998_Class954] of  Map_Entry
 
 	(key "suppress_instance_counting")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_475689_Class955] of  Map
+([KB_760998_Class955] of  Map
 
-	(entries [KB_475689_Class956]))
+	(entries [KB_760998_Class956]))
 
-([KB_475689_Class956] of  Map_Entry
+([KB_760998_Class956] of  Map_Entry
 
 	(key "WikipediaGIS_Class2")
 	(key_class "edu.stanford.smi.protege.model.Frame")
 	(value "12 479 212 124")
 	(value_class "java.awt.Rectangle"))
 
-([KB_475689_Class957] of  Map_Entry
+([KB_760998_Class957] of  Map_Entry
 
 	(key "InstanceDisplay.yellow_stickies")
 	(key_class "java.lang.String")
-	(value "KB_475689_Class955")
+	(value "KB_760998_Class955")
 	(value_class "java.util.Map"))
 
-([KB_475689_Class958] of  Map_Entry
+([KB_760998_Class958] of  Map_Entry
 
 	(key "add_name_on_instance_form")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_475689_Class959] of  Map_Entry
+([KB_760998_Class959] of  Map_Entry
 
 	(key "change_tracking_active")
 	(key_class "java.lang.String")

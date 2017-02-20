@@ -1,4 +1,4 @@
-; Sun Feb 19 20:03:15 MSK 2017
+; Mon Feb 20 23:24:53 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -1151,7 +1151,7 @@
 
 ([FlightPro_Class310000] of  CloFunction
 
-	(source "(println [:CMD-INFO params])\n(let [id (:id params)]\n  (if (.startsWith id \"pm\")\n    (asp/pump-in (:instructions CHN) \n      (exd/placemark-popup-instruct (.substring id 2)))\n    (let [inf (or (get @MY-INFOS id) (fr24/fl-info id))\n           cal (if-let[d (fr24/dat id)]\n                   (fr24/callsign d)\n                   id)]\n      (if inf\n        (let [apt (inf \"airport\")\n               acr (inf \"aircraft\")\n               tim (inf \"time\")\n               img (get (first (get-in acr [\"images\" \"thumbnails\"])) \"src\")\n               [lat lon] (fr24/coord id)\n               dat   [[\"from\" (or (get-in apt [\"origin\" \"name\"]) \"-\")]\n	[\"to\" (or (get-in apt [\"destination\" \"name\"]) \"-\")]\n	[\"airline\" (or (get-in inf [\"airline\" \"short\"]) \"-\")]\n	[\"real-departure\" (or (get-in tim [\"real\" \"departure\"]) \"-\")]\n	[\"scheduled-arrival\" (or (get-in tim [\"scheduled\" \"arrival\"]) \"-\")]\n	[\"aircraft\" (or (get-in acr [\"model\" \"text\"]) \"-\")]\n	[\"latitude\" (or lat \"-\")]\n	[\"longitude\" (or lon \"-\")]\n	[\"course\" (or (fr24/course id) \"-\")]\n	[\"speed\" (or (fr24/speed id) \"-\")]\n	[\"altitude\" (or (fr24/altitude id) \"-\")]\n	[(str \"<input type='button' style='color:purple' value='Trail'\n		onclick='chart.client.trail(\\\"\" id \"\\\")' >\")\n	 (str \"<input type='button' style='color:blue' value='Follow'\n		onclick='chart.client.follow(\\\"\" id \"\\\")' >\")]\n	[\"\"\n	 \"<input type='button' style='color:red' value='Stop'\n		onclick='chart.client.stopfollow()' >\"]]\n                       htm (make-info-html cal img dat)]\n          (asp/pump-in (:instructions CHN)\n            {:instruct :popup\n             :id (:id params)\n             :html htm\n             :time (:popup TIM)}))))))\n\"\"")
+	(source "(println [:CMD-INFO params])\n(let [id (:id params)]\n  (if (.startsWith id \"pm\")\n    (when-let [dati (.getInstance (.substring id 2))]\n      (exd/point-out-place dati)\n      (asp/pump-in (:instructions CHN) \n        (exd/placemark-popup-instruct dati)))\n    (let [inf (or (get @MY-INFOS id) (fr24/fl-info id))\n           cal (if-let[d (fr24/dat id)]\n                   (fr24/callsign d)\n                   id)]\n      (if inf\n        (let [apt (inf \"airport\")\n               acr (inf \"aircraft\")\n               tim (inf \"time\")\n               img (get (first (get-in acr [\"images\" \"thumbnails\"])) \"src\")\n               [lat lon] (fr24/coord id)\n               dat   [[\"from\" (or (get-in apt [\"origin\" \"name\"]) \"-\")]\n	[\"to\" (or (get-in apt [\"destination\" \"name\"]) \"-\")]\n	[\"airline\" (or (get-in inf [\"airline\" \"short\"]) \"-\")]\n	[\"real-departure\" (or (get-in tim [\"real\" \"departure\"]) \"-\")]\n	[\"scheduled-arrival\" (or (get-in tim [\"scheduled\" \"arrival\"]) \"-\")]\n	[\"aircraft\" (or (get-in acr [\"model\" \"text\"]) \"-\")]\n	[\"latitude\" (or lat \"-\")]\n	[\"longitude\" (or lon \"-\")]\n	[\"course\" (or (fr24/course id) \"-\")]\n	[\"speed\" (or (fr24/speed id) \"-\")]\n	[\"altitude\" (or (fr24/altitude id) \"-\")]\n	[(str \"<input type='button' style='color:purple' value='Trail'\n		onclick='chart.client.trail(\\\"\" id \"\\\")' >\")\n	 (str \"<input type='button' style='color:blue' value='Follow'\n		onclick='chart.client.follow(\\\"\" id \"\\\")' >\")]\n	[\"\"\n	 \"<input type='button' style='color:red' value='Stop'\n		onclick='chart.client.stopfollow()' >\"]]\n                       htm (make-info-html cal img dat)]\n          (asp/pump-in (:instructions CHN)\n            {:instruct :popup\n             :id (:id params)\n             :html htm\n             :time (:popup TIM)}))))))\n\"\"")
 	(title "info [params]"))
 
 ([FlightPro_Class310001] of  CloVar
@@ -1582,7 +1582,7 @@
 
 ([FlightPro_Class420021] of  CloFunction
 
-	(source "(println [:CMD-MOVE-TO params])\n(let [{:keys [country airport]} params]\n  (if-let [apt (get-in (fr24/airports-by-country) [country airport])]\n    (let [iata (apt \"iata\")\n           alt (apt \"alt\")\n           crd [(apt \"lat\") (apt \"lon\")]]\n      (foc-apt-ins apt)\n      (if (= TERRAIN \"yes\")\n        (def APT-ALT alt))\n      (asp/pump-in (:instructions CHN)\n        {:instruct :map-center\n         :coord crd})\n      (println :Airport country airport iata crd alt))))\n\"\"")
+	(source "(println [:CMD-MOVE-TO params])\n(let [{:keys [country airport]} params]\n  (if-let [apt (get-in (fr24/airports-by-country) [country airport])]\n    (let [iata (apt \"iata\")\n           alt (apt \"alt\")\n           crd [(apt \"lat\") (apt \"lon\")]]\n      (foc-apt-ins apt)\n      (if (= TERRAIN \"yes\")\n        (def APT-ALT alt)) \n      (set-map-view crd)\n      (println :Airport country airport iata crd alt))))\n\"\"")
 	(title "move-to [params]"))
 
 ([FlightPro_Class430000] of  CloFunction
@@ -2174,7 +2174,7 @@
 
 ([FlightPro_Class660000] of  CloFunction
 
-	(source "(let [[n s w e] (vec (map read-string bbx))\n       [n0 s0 w0 e0] (:bbx @wiki)]\n  (if (or (>= s n0)\n           (<= n s0)\n           (<= e w0)\n           (>= w e0))\n     (invoke-later\n       (let [bbi (foc \"BBX\" \"title\" \"Current\")\n              rqi (fainst (cls-instances \"BBXWiki\") \"Current BBXWiki Request\")]\n         (if (and bbi rqi)\n           (do\n             (ssvs bbi \"wsen\" (vec (map float [w s e n])))\n             (ssv rqi \"bbx\" bbi)\n             (ssvs rqi \"responses\" [])\n             (with-timeout (:ext-data TIO)\n	(wig/submit-bbx (itm rqi 0) rqi))\n             (let [rr (svs rqi \"responses\")]\n               (when (seq rr)\n	(asp/pump-in chn {:instruct :clear-placemarks})\n	(doseq [r rr]\n	  (asp/pump-in chn (placemark-instruct r)))\n	(vswap! wiki assoc :bbx [n s w e]))))\n           (println \"Instance of \\\"Current BBXWiki Request\\\" not found!\"))))))")
+	(source "(let [[n s w e] (vec (map read-string bbx))\n       [n0 s0 w0 e0] (:bbx @wiki)]\n  (vswap! wiki assoc :our-center (our-center n s w e)\n	          :our-radius (our-radius n s))\n  (if (or (>= s n0)\n           (<= n s0)\n           (<= e w0)\n           (>= w e0))\n     (invoke-later\n       (let [bbi (foc \"BBX\" \"title\" \"Current\")\n              rqi (fainst (cls-instances \"BBXWiki\") \"Current BBXWiki Request\")]\n         (if (and bbi rqi)\n           (do\n             (ssvs bbi \"wsen\" (vec (map float [w s e n])))\n             (ssv rqi \"bbx\" bbi)\n             (ssvs rqi \"responses\" [])\n             (with-timeout (:ext-data TIO)\n	(wig/submit-bbx (itm rqi 0) rqi))\n             (let [rr (svs rqi \"responses\")]\n               (when (seq rr)\n	(asp/pump-in chn {:instruct :clear-placemarks})\n	(doseq [r rr]\n	  (point-out-place r)\n	  (asp/pump-in chn (placemark-instruct r)))\n	(vswap! wiki assoc :bbx [n s w e]))))\n           (println \"Instance of \\\"Current BBXWiki Request\\\" not found!\"))))))")
 	(title "pump-wiki [bbx chn wiki]"))
 
 ([FlightPro_Class660006] of  BBXWiki
@@ -2201,6 +2201,9 @@
 		[FlightPro_Class670006]
 		[FlightPro_Class670265]
 		[FlightPro_Class670266]
+		[FlightPro_Class700002]
+		[FlightPro_Class700003]
+		[FlightPro_Class700000]
 		[FlightPro_Class660000])
 	(cloNamespace [FlightPro_Class670001])
 	(cloVars [FlightPro_Class330004])
@@ -2208,7 +2211,7 @@
 
 ([FlightPro_Class670001] of  CloNamespace
 
-	(source "(:use protege.core)\n(:require \n  [wiki.gis :as wig]\n  [async.proc :as asp])")
+	(source "(:use protege.core)\n(:require \n  [wiki.gis :as wig]\n  [cesium.core :as cz]\n  [calc.geo :as geo]\n  [async.proc :as asp])")
 	(title "ext.data"))
 
 ([FlightPro_Class670004] of  %3AINSTANCE-ANNOTATION
@@ -2271,8 +2274,8 @@
 
 ([FlightPro_Class670266] of  CloFunction
 
-	(source "(if-let [dati (ins inam)]\n  (let [head (str \"<h3>\" (sv dati \"title\") \"</h3>\")\n         itag (str \"<img src=\\\"\" (sv dati \"thumbnailImg\") \"\\\">\")\n         summ (sv dati \"summary\")\n         addr (str \"http://\" (sv dati \"wikipediaUrl\") \"\\\"\")\n         wiki (str \"<a href=\\\"\" addr \"\\\">\" addr \"</a>\")\n         html (str head itag \"<br>\" summ \"<br>\" wiki)]\n    {:instruct :popup\n     :lat (sv dati \"lat\")\n     :lon (sv dati \"lng\")\n     :html html\n     :time (:ext-data-popup TIO)}))")
-	(title "placemark-popup-instruct [inam]"))
+	(source "(let [head (str \"<h3>\" (sv dati \"title\") \"</h3>\")\n       itag (str \"<img src=\\\"\" (sv dati \"thumbnailImg\") \"\\\">\")\n       summ (sv dati \"summary\")\n       addr (str \"http://\" (sv dati \"wikipediaUrl\") \"\\\"\")\n       wiki (str \"<a href=\\\"\" addr \"\\\">\" addr \"</a>\")\n       html (str head itag \"<br>\" summ \"<br>\" wiki)]\n  {:instruct :popup\n    :lat (sv dati \"lat\")\n    :lon (sv dati \"lng\")\n    :html html\n    :time (:ext-data-popup TIO)})")
+	(title "placemark-popup-instruct [dati]"))
 
 ([FlightPro_Class670268] of  CloFuncall
 
@@ -2416,6 +2419,25 @@
 
 	(source "\"http://localhost:\"")
 	(title "HOST"))
+
+([FlightPro_Class700000] of  CloFunction
+
+	(source "(let [lat (sv dati \"lat\")\n       lon (sv dati \"lng\")\n       dis (geo/distance-nm (our-center) [lat lon])]\n  (cz/point-out (sv dati \"title\") [lat lon] dis (our-radius)))")
+	(title "point-out-place [dati]"))
+
+([FlightPro_Class700001] of  CloFuncall
+
+	(source "(ru.rules/dr)"))
+
+([FlightPro_Class700002] of  CloFunction
+
+	(source "[(/ (+ n s) 2) (/ (+ w e) 2)]")
+	(title "our-center [n s w e]"))
+
+([FlightPro_Class700003] of  CloFunction
+
+	(source "(/ (* (- n s) 60) 2)")
+	(title "our-radius [n s]"))
 
 ([FlightPro_Class70001] of  CloFunction
 

@@ -2,6 +2,8 @@
 (:use protege.core)
 (:require 
   [wiki.gis :as wig]
+  [cesium.core :as cz]
+  [calc.geo :as geo]
   [async.proc :as asp]))
 
 (def TIO {:carrier 1000
@@ -32,23 +34,36 @@
  :lon (sv dati "lng")
  :feature (sv dati "feature")})
 
-(defn placemark-popup-instruct [inam]
-  (if-let [dati (ins inam)]
+(defn placemark-popup-instruct [dati]
   (let [head (str "<h3>" (sv dati "title") "</h3>")
-         itag (str "<img src=\"" (sv dati "thumbnailImg") "\">")
-         summ (sv dati "summary")
-         addr (str "http://" (sv dati "wikipediaUrl") "\"")
-         wiki (str "<a href=\"" addr "\">" addr "</a>")
-         html (str head itag "<br>" summ "<br>" wiki)]
-    {:instruct :popup
-     :lat (sv dati "lat")
-     :lon (sv dati "lng")
-     :html html
-     :time (:ext-data-popup TIO)})))
+       itag (str "<img src=\"" (sv dati "thumbnailImg") "\">")
+       summ (sv dati "summary")
+       addr (str "http://" (sv dati "wikipediaUrl") "\"")
+       wiki (str "<a href=\"" addr "\">" addr "</a>")
+       html (str head itag "<br>" summ "<br>" wiki)]
+  {:instruct :popup
+    :lat (sv dati "lat")
+    :lon (sv dati "lng")
+    :html html
+    :time (:ext-data-popup TIO)}))
+
+(defn our-center [n s w e]
+  [(/ (+ n s) 2) (/ (+ w e) 2)])
+
+(defn our-radius [n s]
+  (/ (* (- n s) 60) 2))
+
+(defn point-out-place [dati]
+  (let [lat (sv dati "lat")
+       lon (sv dati "lng")
+       dis (geo/distance-nm (our-center) [lat lon])]
+  (cz/point-out (sv dati "title") [lat lon] dis (our-radius))))
 
 (defn pump-wiki [bbx chn wiki]
   (let [[n s w e] (vec (map read-string bbx))
        [n0 s0 w0 e0] (:bbx @wiki)]
+  (vswap! wiki assoc :our-center (our-center n s w e)
+	          :our-radius (our-radius n s))
   (if (or (>= s n0)
            (<= n s0)
            (<= e w0)
@@ -67,6 +82,7 @@
                (when (seq rr)
 	(asp/pump-in chn {:instruct :clear-placemarks})
 	(doseq [r rr]
+	  (point-out-place r)
 	  (asp/pump-in chn (placemark-instruct r)))
 	(vswap! wiki assoc :bbx [n s w e]))))
            (println "Instance of \"Current BBXWiki Request\" not found!")))))))

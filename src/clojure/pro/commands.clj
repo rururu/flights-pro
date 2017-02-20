@@ -124,8 +124,10 @@
   (println [:CMD-INFO params])
 (let [id (:id params)]
   (if (.startsWith id "pm")
-    (asp/pump-in (:instructions CHN) 
-      (exd/placemark-popup-instruct (.substring id 2)))
+    (when-let [dati (.getInstance (.substring id 2))]
+      (exd/point-out-place dati)
+      (asp/pump-in (:instructions CHN) 
+        (exd/placemark-popup-instruct dati)))
     (let [inf (or (get @MY-INFOS id) (fr24/fl-info id))
            cal (if-let[d (fr24/dat id)]
                    (fr24/callsign d)
@@ -253,10 +255,8 @@ TERRAIN)
            crd [(apt "lat") (apt "lon")]]
       (foc-apt-ins apt)
       (if (= TERRAIN "yes")
-        (def APT-ALT alt))
-      (asp/pump-in (:instructions CHN)
-        {:instruct :map-center
-         :coord crd})
+        (def APT-ALT alt)) 
+      (set-map-view crd)
       (println :Airport country airport iata crd alt))))
 "")
 
