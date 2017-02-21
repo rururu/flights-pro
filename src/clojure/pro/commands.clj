@@ -124,8 +124,8 @@
   (println [:CMD-INFO params])
 (let [id (:id params)]
   (if (.startsWith id "pm")
-    (when-let [dati (.getInstance (.substring id 2))]
-      (exd/point-out-place dati)
+    (when-let [dati (.getInstance *kb* (.substring id 2))]
+      (exd/point-out-place dati @WIKI)
       (asp/pump-in (:instructions CHN) 
         (exd/placemark-popup-instruct dati)))
     (let [inf (or (get @MY-INFOS id) (fr24/fl-info id))

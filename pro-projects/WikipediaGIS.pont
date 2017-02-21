@@ -1,4 +1,4 @@
-; Thu Feb 16 18:00:31 MSK 2017
+; Tue Feb 21 22:56:31 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -7,8 +7,13 @@
 (defclass %3ACLIPS_TOP_LEVEL_SLOT_CLASS "Fake class to save top-level slot information"
 	(is-a USER)
 	(role abstract)
-	(multislot label
-;+		(type ANY)
+	(single-slot feature
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot guid
+		(type STRING)
+;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot button-bbx
 		(type STRING)
@@ -27,18 +32,29 @@
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
-	(multislot components
-;+		(type ANY)
+	(single-slot pubDate
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot population
+		(type INTEGER)
+;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot link
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
-	(multislot Longitude
-;+		(type ANY)
+	(single-slot summary
+		(type STRING)
+;+		(cardinality 0 1)
 		(create-accessor read-write))
-	(multislot startUpLayers
-;+		(type ANY)
+	(multislot wsen
+		(type FLOAT)
+		(create-accessor read-write))
+	(single-slot button-open-site
+		(type STRING)
+		(default "Open Site/wiki.gis/open-site")
+;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot radius-km
 		(type INTEGER)
@@ -50,14 +66,30 @@
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
+	(single-slot lang
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot button-rss
 		(type STRING)
 		(default "submit/wiki.gis/submit-rss")
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
+	(single-slot distance
+		(type FLOAT)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot max-responses
 		(type INTEGER)
 		(default 5)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot countryCode
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot elevation
+		(type INTEGER)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot button-nearby
@@ -69,6 +101,21 @@
 		(type INSTANCE)
 ;+		(allowed-classes GeoRSSItem)
 		(create-accessor read-write))
+	(multislot feedURL
+		(type STRING)
+		(create-accessor read-write))
+	(single-slot lat
+		(type FLOAT)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot dc%3Adate
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot lng
+		(type FLOAT)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot language
 		(type SYMBOL)
 		(allowed-values English-en Russian-ru)
@@ -79,55 +126,11 @@
 		(type INSTANCE)
 ;+		(allowed-classes WikiArticle)
 		(create-accessor read-write))
+	(single-slot thumbnailImg
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot text
-		(type STRING)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(single-slot bbx
-		(type INSTANCE)
-;+		(allowed-classes BBX)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(single-slot button-clear-rss
-		(type STRING)
-		(default "Clear RSS/wiki.gis/clear-rss")
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(single-slot guid
-		(type STRING)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(multislot page
-;+		(type ANY)
-		(create-accessor read-write))
-	(single-slot pubDate
-		(type STRING)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(multislot Scale
-;+		(type ANY)
-		(create-accessor read-write))
-	(multislot BackgroundColor
-;+		(type ANY)
-		(create-accessor read-write))
-	(multislot wsen
-		(type FLOAT)
-		(create-accessor read-write))
-	(single-slot button-open-site
-		(type STRING)
-		(default "Open Site/wiki.gis/open-site")
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(multislot Latitude
-;+		(type ANY)
-		(create-accessor read-write))
-	(multislot layers
-;+		(type ANY)
-		(create-accessor read-write))
-	(multislot feedURL
-		(type STRING)
-		(create-accessor read-write))
-	(single-slot dc%3Adate
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
@@ -136,52 +139,63 @@
 		(default "Clear Articles/wiki.gis/clear-articles")
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
+	(single-slot bbx
+		(type INSTANCE)
+;+		(allowed-classes BBX)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot rank
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot button-search
 		(type STRING)
 		(default "submit/wiki.gis/submit-search")
 ;+		(cardinality 0 1)
-		(create-accessor read-write)))
-
-(defclass WikipediaGIS
-	(is-a USER)
-	(role abstract))
-
-(defclass BBX
-	(is-a WikipediaGIS)
-	(role concrete)
-	(single-slot title
+		(create-accessor read-write))
+	(single-slot wikipediaUrl
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
-	(multislot wsen
-		(type FLOAT)
+	(single-slot button-clear-rss
+		(type STRING)
+		(default "Clear RSS/wiki.gis/clear-rss")
+;+		(cardinality 0 1)
 		(create-accessor read-write)))
 
-(defclass GeoRSSItem
-	(is-a WikipediaGIS)
+(defclass WikiArticle
+	(is-a USER)
 	(role concrete)
+	(single-slot feature
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot button-open-site
 		(type STRING)
 		(default "Open Site/wiki.gis/open-site")
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
-	(single-slot guid
+	(single-slot rank
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot lat
+		(type FLOAT)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot lang
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
-	(single-slot geo%3Alat
-		(type STRING)
+	(single-slot lng
+		(type FLOAT)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
-	(single-slot pubDate
-		(type STRING)
+	(single-slot population
+		(type INTEGER)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
-	(single-slot description
-		(type STRING)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(single-slot geo%3Along
+	(single-slot wikipediaUrl
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
@@ -189,21 +203,33 @@
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
-	(single-slot link
+	(single-slot summary
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
-	(single-slot category
+	(single-slot countryCode
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
-	(single-slot dc%3Adate
+	(single-slot elevation
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot thumbnailImg
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write)))
 
+(defclass WikiNearArticle
+	(is-a WikiArticle)
+	(role concrete)
+	(single-slot distance
+		(type FLOAT)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
 (defclass Request
-	(is-a WikipediaGIS)
+	(is-a USER)
 	(role abstract)
 	(single-slot language
 		(type SYMBOL)
@@ -257,7 +283,7 @@
 	(is-a Request)
 	(role concrete)
 	(single-slot lat
-		(type STRING)
+		(type FLOAT)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot radius-km
@@ -272,12 +298,57 @@
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot lng
+		(type FLOAT)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass GeoRSSItem
+	(is-a USER)
+	(role concrete)
+	(single-slot button-open-site
+		(type STRING)
+		(default "Open Site/wiki.gis/open-site")
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot guid
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot geo%3Alat
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot pubDate
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot description
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot geo%3Along
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot title
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot link
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot category
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot dc%3Adate
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write)))
 
 (defclass RSSRequest
-	(is-a WikipediaGIS)
+	(is-a USER)
 	(role concrete)
 	(single-slot bbx
 		(type INSTANCE)
@@ -302,59 +373,13 @@
 ;+		(allowed-classes GeoRSSItem)
 		(create-accessor read-write)))
 
-(defclass WikiArticle
-	(is-a WikipediaGIS)
+(defclass BBX
+	(is-a USER)
 	(role concrete)
-	(single-slot feature
-		(type STRING)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(single-slot button-open-site
-		(type STRING)
-		(default "Open Site/wiki.gis/open-site")
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(single-slot rank
-		(type STRING)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(single-slot lat
-		(type STRING)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(single-slot lang
-		(type STRING)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(single-slot lng
-		(type STRING)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(single-slot population
-		(type STRING)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(single-slot wikipediaUrl
-		(type STRING)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
 	(single-slot title
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
-	(single-slot summary
-		(type STRING)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(single-slot countryCode
-		(type STRING)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(single-slot elevation
-		(type STRING)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(single-slot thumbnailImg
-		(type STRING)
-;+		(cardinality 0 1)
+	(multislot wsen
+		(type FLOAT)
 		(create-accessor read-write)))

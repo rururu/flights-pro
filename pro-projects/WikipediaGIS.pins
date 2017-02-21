@@ -1,4 +1,4 @@
-; Thu Feb 16 18:00:31 MSK 2017
+; Tue Feb 21 22:56:31 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -29,7 +29,7 @@
 
 ([WikipediaGIS_Class10003] of  CloFunction
 
-	(source "([hm inst]\n  (let [mp (into {} hm)\n         max (mp \"max-responses\")\n         lang (request-lang (mp \"language\"))\n         [west south east north] (seq (svs (mp \"bbx\") \"wsen\"))]\n    (ssvs inst \"responses\" \n      (if-let [resp (call-wiki-bbx north west south east max lang)]\n        (filter some? (map article-from-map resp))\n        [])) ))\n([inst bbx-title bbx]\n  (if-let [bbx-inst (fifos \"BBX\" \"title\" bbx-title)]\n    (ssv inst \"bbx\" bbx-inst)\n    (let [[w s e n] bbx]\n      (ssv inst \"bbx\" (bbx-of-list [[n w] [s e]] bbx-title))))\n  (submit-bbx (itm inst 0) inst)\n  inst)")
+	(source "([hm inst]\n  (let [mp (into {} hm)\n         max (mp \"max-responses\")\n         lang (request-lang (mp \"language\"))\n         [west south east north] (seq (svs (mp \"bbx\") \"wsen\"))]\n    (ssvs inst \"responses\" \n      (if-let [resp (call-wiki-bbx north west south east max lang)]\n        (filter some? (map #(article-from-map % \"WikiArticle\") resp))\n        [])) ))\n([inst bbx-title bbx]\n  (if-let [bbx-inst (fifos \"BBX\" \"title\" bbx-title)]\n    (ssv inst \"bbx\" bbx-inst)\n    (let [[w s e n] bbx]\n      (ssv inst \"bbx\" (bbx-of-list [[n w] [s e]] bbx-title))))\n  (submit-bbx (itm inst 0) inst)\n  inst)")
 	(title "submit-bbx"))
 
 ([WikipediaGIS_Class11] of  CloFunction
@@ -39,13 +39,13 @@
 
 ([WikipediaGIS_Class17] of  CloFunction
 
-	(source "([hm inst]\n  (let [mp (into {} hm)\n         max (mp \"max-responses\")\n         lang (request-lang (mp \"language\"))\n         text (mp \"text\")]\n    (ssvs inst \"responses\" \n      (if-let [resp (call-wiki-search text max lang)]\n        (filter some? (map article-from-map resp))\n        [])) ))\n([inst any txt]\n  (ssv inst \"text\" txt)\n  (ssvs inst \"responses\" \n    (if-let [resp (call-wiki-search txt \n	(sv inst \"max-responses\") \n	(request-lang (sv inst  \"language\")))]\n      (filter some? (map article-from-map resp))\n      []))\n  inst)")
+	(source "([hm inst]\n  (let [mp (into {} hm)\n         max (mp \"max-responses\")\n         lang (request-lang (mp \"language\"))\n         text (mp \"text\")]\n    (ssvs inst \"responses\" \n      (if-let [resp (call-wiki-search text max lang)]\n        (filter some? (map #(article-from-map % \"WikiArticle\") resp))\n        [])) ))\n([inst any txt]\n  (ssv inst \"text\" txt)\n  (ssvs inst \"responses\" \n    (if-let [resp (call-wiki-search txt \n	(sv inst \"max-responses\") \n	(request-lang (sv inst  \"language\")))]\n      (filter some? (map #(article-from-map % \"WikiArticle\") resp))\n      []))\n  inst)")
 	(title "submit-search"))
 
 ([WikipediaGIS_Class18] of  CloFunction
 
-	(source "(if-let [tit (mp \"title\")]\n  (map-into-inst mp (foc \"WikiArticle\" \"title\" tit)))")
-	(title "article-from-map [mp]"))
+	(source "(mti (assoc mp :DIRTYP typ :DEPTH 0))")
+	(title "article-from-map [mp typ]"))
 
 ([WikipediaGIS_Class2] of  %3AINSTANCE-ANNOTATION
 
@@ -89,8 +89,34 @@
 
 ([WikipediaGIS_Class40028] of  CloFunction
 
-	(source "([hm inst]\n  (let [mp (into {} hm)\n         max (mp \"max-responses\")\n         lang (request-lang (mp \"language\"))\n         radius-km (mp \"radius-km\")\n         lat (mp \"lat\")\n         lon (mp \"lng\")]\n    (ssvs inst \"responses\" \n      (if-let [resp (call-wiki-nearby lat lon radius-km max lang)]\n        (filter some? (map article-from-map resp))\n        [])) ))\n([inst lat lon]\n  (ssv inst \"lat\" (str lat))\n  (ssv inst \"lng\" (str lon))\n  (submit-nearby (itm inst 0) inst)\n  inst)")
+	(source "([hm inst]\n  (let [mp (into {} hm)\n         max (mp \"max-responses\")\n         lang (request-lang (mp \"language\"))\n         radius-km (mp \"radius-km\")\n         lat (mp \"lat\")\n         lon (mp \"lng\")]\n    (ssvs inst \"responses\" \n      (if-let [resp (call-wiki-nearby lat lon radius-km max lang)]\n        (filter some? (map #(article-from-map % \"WikiNearArticle\") resp))\n        [])) ))\n([inst lat lon]\n  (ssv inst \"lat\" lat)\n  (ssv inst \"lng\" lon)\n  (submit-nearby (itm inst 0) inst)\n  inst)")
 	(title "submit-nearby"))
+
+([WikipediaGIS_Class50001] of  BBXWiki
+
+	(bbx [WikipediaGIS_Class30013])
+	(button-bbx "submit/wiki.gis/submit-bbx")
+	(button-clear-articles "Clear Articles/wiki.gis/clear-articles")
+	(language English-en)
+	(max-responses 12))
+
+([WikipediaGIS_Class50002] of  FulltextSearch
+
+	(button-clear-articles "Clear Articles/wiki.gis/clear-articles")
+	(button-search "submit/wiki.gis/submit-search")
+	(language English-en)
+	(max-responses 5)
+	(text "hollywood"))
+
+([WikipediaGIS_Class50003] of  NearbySearch
+
+	(button-clear-articles "Clear Articles/wiki.gis/clear-articles")
+	(button-nearby "submit/wiki.gis/submit-nearby")
+	(language English-en)
+	(lat 60.0)
+	(lng 30.0)
+	(max-responses 12)
+	(radius-km 20))
 
 ([WikipediaGIS_Class50049] of  CloFunction
 
@@ -106,3 +132,11 @@
 
 	(source "(let [ans (JOptionPane/showConfirmDialog nil \"Are you shure?\")]\n  (if (= ans (JOptionPane/YES_OPTION))\n      (doall (map delin (cls-instances \"GeoRSSItem\"))) ))")
 	(title "clear-rss [hm inst]"))
+
+([WikipediaGIS_Class60090] of  RSSRequest
+
+	(button-clear-rss "Clear RSS/wiki.gis/clear-rss")
+	(button-rss "submit/wiki.gis/submit-rss")
+	(feedURL
+		"http://feeds.reuters.com/reuters/worldNews"
+		"http://news.nationalgeographic.com/index.rss"))

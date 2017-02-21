@@ -1,4 +1,4 @@
-; Thu Feb 16 18:00:31 MSK 2017
+; Tue Feb 21 22:56:31 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -21,9 +21,9 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[WikipediaGIS_ProjectKB_Class432]
-		[WikipediaGIS_ProjectKB_Class433]
-		[WikipediaGIS_ProjectKB_Class434]))
+		[WikipediaGIS_ProjectKB_Class10531]
+		[WikipediaGIS_ProjectKB_Class10532]
+		[WikipediaGIS_ProjectKB_Class10533]))
 
 ([CLSES_TAB] of  Widget
 
@@ -113,28 +113,28 @@
 	(is_hidden FALSE)
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
 
-([KB_403659_Class426] of  Map
+([KB_004944_Class426] of  Map
 
 	(entries
-		[KB_403659_Class427]
-		[KB_403659_Class428]
-		[KB_403659_Class429]))
+		[KB_004944_Class427]
+		[KB_004944_Class428]
+		[KB_004944_Class429]))
 
-([KB_403659_Class427] of  Map_Entry
+([KB_004944_Class427] of  Map_Entry
 
 	(key "suppress_instance_counting")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_403659_Class428] of  Map_Entry
+([KB_004944_Class428] of  Map_Entry
 
 	(key "add_name_on_instance_form")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_403659_Class429] of  Map_Entry
+([KB_004944_Class429] of  Map_Entry
 
 	(key "change_tracking_active")
 	(key_class "java.lang.String")
@@ -148,8 +148,8 @@
 
 ([KB_727229_Class1] of  Map
 
-	(entries [WikipediaGIS_ProjectKB_Class437])
-	(referenced_maps [WikipediaGIS_ProjectKB_Class435]))
+	(entries [WikipediaGIS_ProjectKB_Class10536])
+	(referenced_maps [WikipediaGIS_ProjectKB_Class10534]))
 
 ([KB_727229_Class13] of  Property_List
 
@@ -334,7 +334,8 @@
 		[WikipediaGIS_ProjectKB_Class10731]
 		[WikipediaGIS_ProjectKB_Class783]
 		[WikipediaGIS_ProjectKB_Class754]
-		[STANDARD_FACET_FORM_WIDGET])
+		[STANDARD_FACET_FORM_WIDGET]
+		[WikipediaGIS_ProjectKB_Class10450])
 	(default_cls_metaclass ":STANDARD-CLASS")
 	(default_facet_metaclass ":STANDARD-FACET")
 	(default_instance_widget_class_name "edu.stanford.smi.protege.widget.FormWidget")
@@ -682,38 +683,269 @@
 	(boolean_value FALSE)
 	(name "ButtonDisplayed-Delete Instance"))
 
-([WikipediaGIS_ProjectKB_Class10315] of  Widget
-
-	(height 60)
-	(is_hidden FALSE)
-	(name "lat")
-	(property_list [WikipediaGIS_ProjectKB_Class10316])
-	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
-	(width 200)
-	(x 0)
-	(y 60))
-
-([WikipediaGIS_ProjectKB_Class10316] of  Property_List
-)
-
-([WikipediaGIS_ProjectKB_Class10317] of  Widget
-
-	(height 60)
-	(is_hidden FALSE)
-	(name "lng")
-	(property_list [WikipediaGIS_ProjectKB_Class10318])
-	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
-	(width 200)
-	(x 0)
-	(y 120))
-
-([WikipediaGIS_ProjectKB_Class10318] of  Property_List
-)
-
 ([WikipediaGIS_ProjectKB_Class10319] of  Boolean
 
 	(boolean_value FALSE)
 	(name "ButtonDisplayed-Delete Instance"))
+
+([WikipediaGIS_ProjectKB_Class10450] of  Widget
+
+	(is_hidden FALSE)
+	(name "WikiNearArticle")
+	(property_list [WikipediaGIS_ProjectKB_Class10495])
+	(widget_class_name "edu.stanford.smi.protege.widget.FormWidget"))
+
+([WikipediaGIS_ProjectKB_Class10495] of  Property_List
+
+	(properties
+		[WikipediaGIS_ProjectKB_Class10496]
+		[WikipediaGIS_ProjectKB_Class10497]
+		[WikipediaGIS_ProjectKB_Class10499]
+		[WikipediaGIS_ProjectKB_Class10501]
+		[WikipediaGIS_ProjectKB_Class10503]
+		[WikipediaGIS_ProjectKB_Class10505]
+		[WikipediaGIS_ProjectKB_Class10507]
+		[WikipediaGIS_ProjectKB_Class10509]
+		[WikipediaGIS_ProjectKB_Class10511]
+		[WikipediaGIS_ProjectKB_Class10513]
+		[WikipediaGIS_ProjectKB_Class10515]
+		[WikipediaGIS_ProjectKB_Class10517]
+		[WikipediaGIS_ProjectKB_Class10519]
+		[WikipediaGIS_ProjectKB_Class10521]
+		[WikipediaGIS_ProjectKB_Class10523]))
+
+([WikipediaGIS_ProjectKB_Class10496] of  Property_List
+
+	(name "layout properties"))
+
+([WikipediaGIS_ProjectKB_Class10497] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "countryCode")
+	(property_list [WikipediaGIS_ProjectKB_Class10498])
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(width 200)
+	(x 200)
+	(y 260))
+
+([WikipediaGIS_ProjectKB_Class10498] of  Property_List
+)
+
+([WikipediaGIS_ProjectKB_Class10499] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "lang")
+	(property_list [WikipediaGIS_ProjectKB_Class10500])
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(width 200)
+	(x 200)
+	(y 200))
+
+([WikipediaGIS_ProjectKB_Class10500] of  Property_List
+)
+
+([WikipediaGIS_ProjectKB_Class10501] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "title")
+	(property_list [WikipediaGIS_ProjectKB_Class10502])
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(width 200)
+	(x 0)
+	(y 0))
+
+([WikipediaGIS_ProjectKB_Class10502] of  Property_List
+)
+
+([WikipediaGIS_ProjectKB_Class10503] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "wikipediaUrl")
+	(property_list [WikipediaGIS_ProjectKB_Class10504])
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(width 400)
+	(x 0)
+	(y 500))
+
+([WikipediaGIS_ProjectKB_Class10504] of  Property_List
+)
+
+([WikipediaGIS_ProjectKB_Class10505] of  Widget
+
+	(height 140)
+	(is_hidden FALSE)
+	(name "thumbnailImg")
+	(property_list [WikipediaGIS_ProjectKB_Class10506])
+	(widget_class_name "edu.stanford.smi.protege.widget.ImageWidget")
+	(width 200)
+	(x 200)
+	(y 60))
+
+([WikipediaGIS_ProjectKB_Class10506] of  Property_List
+)
+
+([WikipediaGIS_ProjectKB_Class10507] of  Widget
+
+	(height 320)
+	(is_hidden FALSE)
+	(name "summary")
+	(property_list [WikipediaGIS_ProjectKB_Class10508])
+	(widget_class_name "edu.stanford.smi.protege.widget.TextAreaWidget")
+	(width 200)
+	(x 0)
+	(y 60))
+
+([WikipediaGIS_ProjectKB_Class10508] of  Property_List
+)
+
+([WikipediaGIS_ProjectKB_Class10509] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "feature")
+	(property_list [WikipediaGIS_ProjectKB_Class10510])
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(width 200)
+	(x 200)
+	(y 320))
+
+([WikipediaGIS_ProjectKB_Class10510] of  Property_List
+)
+
+([WikipediaGIS_ProjectKB_Class10511] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "button-open-site")
+	(property_list [WikipediaGIS_ProjectKB_Class10512])
+	(widget_class_name "clojuretab.ClojureActionButton")
+	(width 200)
+	(x 200)
+	(y 560))
+
+([WikipediaGIS_ProjectKB_Class10512] of  Property_List
+)
+
+([WikipediaGIS_ProjectKB_Class10513] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "rank")
+	(property_list [WikipediaGIS_ProjectKB_Class10514])
+	(widget_class_name "edu.stanford.smi.protege.widget.IntegerFieldWidget")
+	(width 100)
+	(x 300)
+	(y 440))
+
+([WikipediaGIS_ProjectKB_Class10514] of  Property_List
+)
+
+([WikipediaGIS_ProjectKB_Class10515] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "lat")
+	(property_list [WikipediaGIS_ProjectKB_Class10516])
+	(widget_class_name "edu.stanford.smi.protege.widget.FloatFieldWidget")
+	(width 200)
+	(x 0)
+	(y 380))
+
+([WikipediaGIS_ProjectKB_Class10516] of  Property_List
+)
+
+([WikipediaGIS_ProjectKB_Class10517] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "lng")
+	(property_list [WikipediaGIS_ProjectKB_Class10518])
+	(widget_class_name "edu.stanford.smi.protege.widget.FloatFieldWidget")
+	(width 200)
+	(x 0)
+	(y 440))
+
+([WikipediaGIS_ProjectKB_Class10518] of  Property_List
+)
+
+([WikipediaGIS_ProjectKB_Class10519] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "population")
+	(property_list [WikipediaGIS_ProjectKB_Class10520])
+	(widget_class_name "edu.stanford.smi.protege.widget.IntegerFieldWidget")
+	(width 200)
+	(x 200)
+	(y 380))
+
+([WikipediaGIS_ProjectKB_Class10520] of  Property_List
+)
+
+([WikipediaGIS_ProjectKB_Class10521] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "elevation")
+	(property_list [WikipediaGIS_ProjectKB_Class10522])
+	(widget_class_name "edu.stanford.smi.protege.widget.IntegerFieldWidget")
+	(width 100)
+	(x 200)
+	(y 440))
+
+([WikipediaGIS_ProjectKB_Class10522] of  Property_List
+)
+
+([WikipediaGIS_ProjectKB_Class10523] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "distance")
+	(property_list [WikipediaGIS_ProjectKB_Class10524])
+	(widget_class_name "edu.stanford.smi.protege.widget.FloatFieldWidget")
+	(width 200)
+	(x 0)
+	(y 560))
+
+([WikipediaGIS_ProjectKB_Class10524] of  Property_List
+)
+
+([WikipediaGIS_ProjectKB_Class10531] of  String
+
+	(name "BBX")
+	(string_value "title"))
+
+([WikipediaGIS_ProjectKB_Class10532] of  String
+
+	(name "GeoRSSItem")
+	(string_value "title"))
+
+([WikipediaGIS_ProjectKB_Class10533] of  String
+
+	(name "WikiArticle")
+	(string_value "title"))
+
+([WikipediaGIS_ProjectKB_Class10534] of  Map
+
+	(entries [WikipediaGIS_ProjectKB_Class10535]))
+
+([WikipediaGIS_ProjectKB_Class10535] of  Map_Entry
+
+	(key "WikipediaGIS_Class2")
+	(key_class "edu.stanford.smi.protege.model.Frame")
+	(value "12 479 212 124")
+	(value_class "java.awt.Rectangle"))
+
+([WikipediaGIS_ProjectKB_Class10536] of  Map_Entry
+
+	(key "InstanceDisplay.yellow_stickies")
+	(key_class "java.lang.String")
+	(value "WikipediaGIS_ProjectKB_Class10534")
+	(value_class "java.util.Map"))
 
 ([WikipediaGIS_ProjectKB_Class10731] of  Widget
 
@@ -1051,7 +1283,7 @@
 	(widget_class_name "clojuretab.ClojureActionButton")
 	(width 200)
 	(x 200)
-	(y 380))
+	(y 560))
 
 ([WikipediaGIS_ProjectKB_Class30737] of  Property_List
 )
@@ -1252,8 +1484,8 @@
 		[WikipediaGIS_ProjectKB_Class40754]
 		[WikipediaGIS_ProjectKB_Class40731]
 		[WikipediaGIS_ProjectKB_Class11100]
-		[WikipediaGIS_ProjectKB_Class10315]
-		[WikipediaGIS_ProjectKB_Class10317]))
+		[WikipediaGIS_ProjectKB_Class466]
+		[WikipediaGIS_ProjectKB_Class468]))
 
 ([WikipediaGIS_ProjectKB_Class40733] of  Property_List
 
@@ -1404,38 +1636,103 @@
 ([WikipediaGIS_ProjectKB_Class431] of  Property_List
 )
 
-([WikipediaGIS_ProjectKB_Class432] of  String
+([WikipediaGIS_ProjectKB_Class444] of  Widget
 
-	(name "BBX")
-	(string_value "title"))
+	(height 60)
+	(is_hidden FALSE)
+	(name "rank")
+	(property_list [WikipediaGIS_ProjectKB_Class445])
+	(widget_class_name "edu.stanford.smi.protege.widget.IntegerFieldWidget")
+	(width 100)
+	(x 300)
+	(y 440))
 
-([WikipediaGIS_ProjectKB_Class433] of  String
+([WikipediaGIS_ProjectKB_Class445] of  Property_List
+)
 
-	(name "GeoRSSItem")
-	(string_value "title"))
+([WikipediaGIS_ProjectKB_Class446] of  Widget
 
-([WikipediaGIS_ProjectKB_Class434] of  String
+	(height 60)
+	(is_hidden FALSE)
+	(name "lat")
+	(property_list [WikipediaGIS_ProjectKB_Class447])
+	(widget_class_name "edu.stanford.smi.protege.widget.FloatFieldWidget")
+	(width 200)
+	(x 0)
+	(y 380))
 
-	(name "WikiArticle")
-	(string_value "title"))
+([WikipediaGIS_ProjectKB_Class447] of  Property_List
+)
 
-([WikipediaGIS_ProjectKB_Class435] of  Map
+([WikipediaGIS_ProjectKB_Class448] of  Widget
 
-	(entries [WikipediaGIS_ProjectKB_Class436]))
+	(height 60)
+	(is_hidden FALSE)
+	(name "lng")
+	(property_list [WikipediaGIS_ProjectKB_Class449])
+	(widget_class_name "edu.stanford.smi.protege.widget.FloatFieldWidget")
+	(width 200)
+	(x 0)
+	(y 440))
 
-([WikipediaGIS_ProjectKB_Class436] of  Map_Entry
+([WikipediaGIS_ProjectKB_Class449] of  Property_List
+)
 
-	(key "WikipediaGIS_Class2")
-	(key_class "edu.stanford.smi.protege.model.Frame")
-	(value "12 479 212 124")
-	(value_class "java.awt.Rectangle"))
+([WikipediaGIS_ProjectKB_Class450] of  Widget
 
-([WikipediaGIS_ProjectKB_Class437] of  Map_Entry
+	(height 60)
+	(is_hidden FALSE)
+	(name "population")
+	(property_list [WikipediaGIS_ProjectKB_Class451])
+	(widget_class_name "edu.stanford.smi.protege.widget.IntegerFieldWidget")
+	(width 200)
+	(x 200)
+	(y 380))
 
-	(key "InstanceDisplay.yellow_stickies")
-	(key_class "java.lang.String")
-	(value "WikipediaGIS_ProjectKB_Class435")
-	(value_class "java.util.Map"))
+([WikipediaGIS_ProjectKB_Class451] of  Property_List
+)
+
+([WikipediaGIS_ProjectKB_Class452] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "elevation")
+	(property_list [WikipediaGIS_ProjectKB_Class453])
+	(widget_class_name "edu.stanford.smi.protege.widget.IntegerFieldWidget")
+	(width 100)
+	(x 200)
+	(y 440))
+
+([WikipediaGIS_ProjectKB_Class453] of  Property_List
+)
+
+([WikipediaGIS_ProjectKB_Class466] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "lat")
+	(property_list [WikipediaGIS_ProjectKB_Class467])
+	(widget_class_name "edu.stanford.smi.protege.widget.FloatFieldWidget")
+	(width 200)
+	(x 0)
+	(y 60))
+
+([WikipediaGIS_ProjectKB_Class467] of  Property_List
+)
+
+([WikipediaGIS_ProjectKB_Class468] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "lng")
+	(property_list [WikipediaGIS_ProjectKB_Class469])
+	(widget_class_name "edu.stanford.smi.protege.widget.FloatFieldWidget")
+	(width 200)
+	(x 0)
+	(y 120))
+
+([WikipediaGIS_ProjectKB_Class469] of  Property_List
+)
 
 ([WikipediaGIS_ProjectKB_Class50732] of  Property_List
 )
@@ -1775,16 +2072,16 @@
 		[WikipediaGIS_ProjectKB_Class786]
 		[WikipediaGIS_ProjectKB_Class788]
 		[WikipediaGIS_ProjectKB_Class790]
-		[WikipediaGIS_ProjectKB_Class792]
-		[WikipediaGIS_ProjectKB_Class794]
 		[WikipediaGIS_ProjectKB_Class796]
-		[WikipediaGIS_ProjectKB_Class798]
 		[WikipediaGIS_ProjectKB_Class800]
-		[WikipediaGIS_ProjectKB_Class802]
 		[WikipediaGIS_ProjectKB_Class804]
-		[WikipediaGIS_ProjectKB_Class806]
 		[WikipediaGIS_ProjectKB_Class808]
-		[WikipediaGIS_ProjectKB_Class30736]))
+		[WikipediaGIS_ProjectKB_Class30736]
+		[WikipediaGIS_ProjectKB_Class444]
+		[WikipediaGIS_ProjectKB_Class446]
+		[WikipediaGIS_ProjectKB_Class448]
+		[WikipediaGIS_ProjectKB_Class450]
+		[WikipediaGIS_ProjectKB_Class452]))
 
 ([WikipediaGIS_ProjectKB_Class785] of  Property_List
 
@@ -1832,34 +2129,6 @@
 ([WikipediaGIS_ProjectKB_Class791] of  Property_List
 )
 
-([WikipediaGIS_ProjectKB_Class792] of  Widget
-
-	(height 60)
-	(is_hidden FALSE)
-	(name "population")
-	(property_list [WikipediaGIS_ProjectKB_Class793])
-	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
-	(width 200)
-	(x 200)
-	(y 320))
-
-([WikipediaGIS_ProjectKB_Class793] of  Property_List
-)
-
-([WikipediaGIS_ProjectKB_Class794] of  Widget
-
-	(height 60)
-	(is_hidden FALSE)
-	(name "lng")
-	(property_list [WikipediaGIS_ProjectKB_Class795])
-	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
-	(width 200)
-	(x 200)
-	(y 440))
-
-([WikipediaGIS_ProjectKB_Class795] of  Property_List
-)
-
 ([WikipediaGIS_ProjectKB_Class796] of  Widget
 
 	(height 60)
@@ -1867,25 +2136,11 @@
 	(name "wikipediaUrl")
 	(property_list [WikipediaGIS_ProjectKB_Class797])
 	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
-	(width 200)
+	(width 400)
 	(x 0)
-	(y 380))
+	(y 500))
 
 ([WikipediaGIS_ProjectKB_Class797] of  Property_List
-)
-
-([WikipediaGIS_ProjectKB_Class798] of  Widget
-
-	(height 60)
-	(is_hidden FALSE)
-	(name "lat")
-	(property_list [WikipediaGIS_ProjectKB_Class799])
-	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
-	(width 200)
-	(x 0)
-	(y 440))
-
-([WikipediaGIS_ProjectKB_Class799] of  Property_List
 )
 
 ([WikipediaGIS_ProjectKB_Class800] of  Widget
@@ -1902,20 +2157,6 @@
 ([WikipediaGIS_ProjectKB_Class801] of  Property_List
 )
 
-([WikipediaGIS_ProjectKB_Class802] of  Widget
-
-	(height 60)
-	(is_hidden FALSE)
-	(name "rank")
-	(property_list [WikipediaGIS_ProjectKB_Class803])
-	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
-	(width 200)
-	(x 0)
-	(y 560))
-
-([WikipediaGIS_ProjectKB_Class803] of  Property_List
-)
-
 ([WikipediaGIS_ProjectKB_Class804] of  Widget
 
 	(height 320)
@@ -1930,20 +2171,6 @@
 ([WikipediaGIS_ProjectKB_Class805] of  Property_List
 )
 
-([WikipediaGIS_ProjectKB_Class806] of  Widget
-
-	(height 60)
-	(is_hidden FALSE)
-	(name "elevation")
-	(property_list [WikipediaGIS_ProjectKB_Class807])
-	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
-	(width 200)
-	(x 200)
-	(y 500))
-
-([WikipediaGIS_ProjectKB_Class807] of  Property_List
-)
-
 ([WikipediaGIS_ProjectKB_Class808] of  Widget
 
 	(height 60)
@@ -1952,8 +2179,8 @@
 	(property_list [WikipediaGIS_ProjectKB_Class809])
 	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
 	(width 200)
-	(x 0)
-	(y 500))
+	(x 200)
+	(y 320))
 
 ([WikipediaGIS_ProjectKB_Class809] of  Property_List
 )

@@ -1,4 +1,4 @@
-; Tue Feb 14 16:24:35 MSK 2017
+; Tue Feb 21 22:23:05 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -146,7 +146,7 @@
 
 ([Clojure_Class210000] of  CloFunction
 
-	(source ";; instance to map\n;; val - instance\n;; dep - depth of unfolding inner instances\n(if (instance? Instance val)\n  (let [typ (.getDirectType val)\n         sls (.getTemplateSlots typ)\n         mp (apply hash-map (mapcat #(list (.getName %)\n		(if (.getAllowsMultipleValues %)\n		  (if (= dep 0)\n		    (vec (.getOwnSlotValues val %))\n		    (vec (map (fn [x] (itm x (dec dep))) (.getOwnSlotValues val %))))\n		  (if (= dep 0)\n		    (.getOwnSlotValue val %)\n		    (itm (.getOwnSlotValue val %) (dec dep))))) sls))]\n    (assoc mp :DIRTYP (.getName typ) :DEPTH dep))\n  val)")
+	(source ";; instance to map\n;; val - instance\n;; dep - depth of unfolding inner instances\n(if (instance? Instance val)\n  (let [typ (.getDirectType val)\n         sls (.getTemplateSlots typ)\n         mp (apply hash-map (mapcat #(list (.getName %)\n		(if (.getAllowsMultipleValues %)\n		  (if (= dep 0)\n		    (vec (svs val %))\n		    (vec (map (fn [x] (itm x (dec dep))) (svs val %))))\n		  (if (= dep 0)\n		    (sv val %)\n		    (itm (sv val %) (dec dep))))) sls))]\n    (assoc mp :DIRTYP (.getName typ) :DEPTH dep))\n  val)")
 	(title "itm [val dep]"))
 
 ([Clojure_Class220000] of  CloFunction
@@ -171,7 +171,7 @@
 
 ([Clojure_Class260000] of  CloFunction
 
-	(source ";; map to instance\n;; mp - itm\n([mp]\n  (if (and (map? mp) (>= (:DEPTH mp) 0))\n    (mti mp (:DEPTH mp))))\n([mp dep]\n  (if (< dep 0)\n    mp\n    (if-let [clz (cls (str (:DIRTYP mp)))]\n      (reduce-kv #(mti %1 (str %2) %3 (type %3) dep) \n	(crin (str (:DIRTYP mp)))\n	(dissoc mp :DIRTYP :DEPTH)))))\n([ins slt vmis typ dep]\n  (cond\n    (vector? vmis) (ssvs ins slt (map #(mti % (dec dep)) vmis))\n    (map? vmis) (ssv ins slt (mti vmis (dec dep)))\n    (symbol? vmis) (ssv ins slt (name vmis))\n    (= typ java.lang.Long) (ssv ins slt (int vmis))\n    (= typ java.lang.Double) (ssv ins slt (float vmis))\n    (or (string? vmis)\n         (= typ java.lang.Boolean)\n         (instance? Instance vmis))\n	(ssv ins slt vmis))\n  ins)")
+	(source ";; map to instance\n;; mp - itm\n([mp]\n  (if (and (map? mp) (>= (:DEPTH mp) 0))\n    (mti mp (:DEPTH mp))))\n([mp dep]\n  (if (< dep 0)\n    mp\n    (if-let [clz (cls (str (:DIRTYP mp)))]\n      (reduce-kv #(mti %1 (str %2) %3 dep) \n	(crin (str (:DIRTYP mp)))\n	(dissoc mp :DIRTYP :DEPTH)))))\n([ins sn vmis dep]\n  (if-let [sl (slt sn)]\n    (let [st (.getValueType sl)\n           sc (.getAllowsMultipleValues sl)\n           vmis (if (symbol? vmis) (name vmis) vmis)\n           tonum (fn [x] (if (number? x) x (read-string x)))\n           toinst (fn [x] (if (instance? Instance x) x (.getInstance *kb* x)))]\n      (cond\n        (and sc (vector? vmis)) (ssvs ins sn (map #(mti % (dec dep)) vmis))\n        (and sc (map? vmis)) (ssv ins sn (mti vmis (dec dep)))\n        (or (= st (ValueType/STRING)) (= st (ValueType/SYMBOL))) (ssv ins sn (str vmis))\n        (= st (ValueType/INTEGER)) (ssv ins sn (int (tonum vmis)))\n        (= st (ValueType/FLOAT)) (ssv ins sn (float (tonum vmis)))\n        (= st (ValueType/INSTANCE)) (ssv ins sn (toinst vmis))\n        (= st (ValueType/BOOLEAN)) (ssv ins sn (and (not= vmis false) (not (nil? vmis)))))\n      ins)\n    (do (println (str \"Slot \" sn \" not found!\"))\n      ins)))")
 	(title "mti"))
 
 ([Clojure_Class270000] of  CloFunction

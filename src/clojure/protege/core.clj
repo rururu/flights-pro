@@ -162,11 +162,11 @@ s)
          mp (apply hash-map (mapcat #(list (.getName %)
 		(if (.getAllowsMultipleValues %)
 		  (if (= dep 0)
-		    (vec (.getOwnSlotValues val %))
-		    (vec (map (fn [x] (itm x (dec dep))) (.getOwnSlotValues val %))))
+		    (vec (svs val %))
+		    (vec (map (fn [x] (itm x (dec dep))) (svs val %))))
 		  (if (= dep 0)
-		    (.getOwnSlotValue val %)
-		    (itm (.getOwnSlotValue val %) (dec dep))))) sls))]
+		    (sv val %)
+		    (itm (sv val %) (dec dep))))) sls))]
     (assoc mp :DIRTYP (.getName typ) :DEPTH dep))
   val))
 
@@ -180,21 +180,27 @@ s)
   (if (< dep 0)
     mp
     (if-let [clz (cls (str (:DIRTYP mp)))]
-      (reduce-kv #(mti %1 (str %2) %3 (type %3) dep) 
+      (reduce-kv #(mti %1 (str %2) %3 dep) 
 	(crin (str (:DIRTYP mp)))
 	(dissoc mp :DIRTYP :DEPTH)))))
-([ins slt vmis typ dep]
-  (cond
-    (vector? vmis) (ssvs ins slt (map #(mti % (dec dep)) vmis))
-    (map? vmis) (ssv ins slt (mti vmis (dec dep)))
-    (symbol? vmis) (ssv ins slt (name vmis))
-    (= typ java.lang.Long) (ssv ins slt (int vmis))
-    (= typ java.lang.Double) (ssv ins slt (float vmis))
-    (or (string? vmis)
-         (= typ java.lang.Boolean)
-         (instance? Instance vmis))
-	(ssv ins slt vmis))
-  ins))
+([ins sn vmis dep]
+  (if-let [sl (slt sn)]
+    (let [st (.getValueType sl)
+           sc (.getAllowsMultipleValues sl)
+           vmis (if (symbol? vmis) (name vmis) vmis)
+           tonum (fn [x] (if (number? x) x (read-string x)))
+           toinst (fn [x] (if (instance? Instance x) x (.getInstance *kb* x)))]
+      (cond
+        (and sc (vector? vmis)) (ssvs ins sn (map #(mti % (dec dep)) vmis))
+        (and sc (map? vmis)) (ssv ins sn (mti vmis (dec dep)))
+        (or (= st (ValueType/STRING)) (= st (ValueType/SYMBOL))) (ssv ins sn (str vmis))
+        (= st (ValueType/INTEGER)) (ssv ins sn (int (tonum vmis)))
+        (= st (ValueType/FLOAT)) (ssv ins sn (float (tonum vmis)))
+        (= st (ValueType/INSTANCE)) (ssv ins sn (toinst vmis))
+        (= st (ValueType/BOOLEAN)) (ssv ins sn (and (not= vmis false) (not (nil? vmis)))))
+      ins)
+    (do (println (str "Slot " sn " not found!"))
+      ins))))
 
 (defn get-itm [itm path]
   ;; get in itm

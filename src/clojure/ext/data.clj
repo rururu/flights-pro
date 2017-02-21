@@ -53,11 +53,11 @@
 (defn our-radius [n s]
   (/ (* (- n s) 60) 2))
 
-(defn point-out-place [dati]
-  (let [lat (sv dati "lat")
-       lon (sv dati "lng")
-       dis (geo/distance-nm (our-center) [lat lon])]
-  (cz/point-out (sv dati "title") [lat lon] dis (our-radius))))
+(defn point-out-place [dati wiki]
+  (let [lat (read-string (sv dati "lat"))
+       lon (read-string (sv dati "lng"))
+       dis (geo/distance-nm (:our-center wiki) [lat lon])]
+  (cz/point-out (sv dati "title") [lat lon] dis (:our-radius wiki))))
 
 (defn pump-wiki [bbx chn wiki]
   (let [[n s w e] (vec (map read-string bbx))
@@ -82,7 +82,7 @@
                (when (seq rr)
 	(asp/pump-in chn {:instruct :clear-placemarks})
 	(doseq [r rr]
-	  (point-out-place r)
+	  (point-out-place r @wiki)
 	  (asp/pump-in chn (placemark-instruct r)))
 	(vswap! wiki assoc :bbx [n s w e]))))
            (println "Instance of \"Current BBXWiki Request\" not found!")))))))

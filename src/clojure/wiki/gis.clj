@@ -9,9 +9,8 @@
   (let [spl (.split sv "-")]
   (aget spl 1)))
 
-(defn article-from-map [mp]
-  (if-let [tit (mp "title")]
-  (map-into-inst mp (foc "WikiArticle" "title" tit))))
+(defn article-from-map [mp typ]
+  (mti (assoc mp :DIRTYP typ :DEPTH 0)))
 
 (defn bbx-of-list
   ;; crds = ([lat lon]..)
@@ -40,7 +39,7 @@
          [west south east north] (seq (svs (mp "bbx") "wsen"))]
     (ssvs inst "responses" 
       (if-let [resp (call-wiki-bbx north west south east max lang)]
-        (filter some? (map article-from-map resp))
+        (filter some? (map #(article-from-map % "WikiArticle") resp))
         [])) ))
 ([inst bbx-title bbx]
   (if-let [bbx-inst (fifos "BBX" "title" bbx-title)]
@@ -58,7 +57,7 @@
          text (mp "text")]
     (ssvs inst "responses" 
       (if-let [resp (call-wiki-search text max lang)]
-        (filter some? (map article-from-map resp))
+        (filter some? (map #(article-from-map % "WikiArticle") resp))
         [])) ))
 ([inst any txt]
   (ssv inst "text" txt)
@@ -66,7 +65,7 @@
     (if-let [resp (call-wiki-search txt 
 	(sv inst "max-responses") 
 	(request-lang (sv inst  "language")))]
-      (filter some? (map article-from-map resp))
+      (filter some? (map #(article-from-map % "WikiArticle") resp))
       []))
   inst))
 
@@ -85,11 +84,11 @@
          lon (mp "lng")]
     (ssvs inst "responses" 
       (if-let [resp (call-wiki-nearby lat lon radius-km max lang)]
-        (filter some? (map article-from-map resp))
+        (filter some? (map #(article-from-map % "WikiNearArticle") resp))
         [])) ))
 ([inst lat lon]
-  (ssv inst "lat" (str lat))
-  (ssv inst "lng" (str lon))
+  (ssv inst "lat" lat)
+  (ssv inst "lng" lon)
   (submit-nearby (itm inst 0) inst)
   inst))
 
