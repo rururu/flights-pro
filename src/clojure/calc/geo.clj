@@ -93,3 +93,13 @@
    (< x 0) (+ x 360)
    true x))
 
+(defn rough-distance [[lat1 lon1] [lat2 lon2]]
+  (letfn [(smround [n]
+	(/ (float (Math/round (* n 10))) 10))]
+  (let [dlat (- lat1 lat2)
+          dlon (- lon1 lon2)
+          lad (* (if (>= dlat 0) dlat (- 0 dlat)) 60)
+          lod (* (if (>= dlon 0) dlon (- 0 dlon)) 60)
+          dia (Math/sqrt (+ (* lad lad) (* lod lod)))]
+     (if (< dia 1) (smround dia) (Math/round dia)))))
+

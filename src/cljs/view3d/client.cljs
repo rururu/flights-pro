@@ -165,8 +165,8 @@
   ;;(println [:DIRECTIVE dir])
   (condp = directive
     :manual (do (if (= (:mode @CARRIER) "?")
-	  (carrier "MANUAL" (manual-vehicle))
-	  (vswap! CARRIER assoc :mode "MANUAL"))
+	    (carrier "MANUAL" (manual-vehicle))
+	    (vswap! CARRIER assoc :mode "MANUAL"))
 	(asp/start-process CAM-PROC #(camera-move CARRIER) (:camera TIO)))
     :callsigns (let [{:keys [list]} dir]
             (ctl/callsigns (conj list "manual")))

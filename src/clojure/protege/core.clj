@@ -162,11 +162,11 @@ s)
          mp (apply hash-map (mapcat #(list (.getName %)
 		(if (.getAllowsMultipleValues %)
 		  (if (= dep 0)
-		    (vec (svs val %))
-		    (vec (map (fn [x] (itm x (dec dep))) (svs val %))))
+		    (vec (.getOwnSlotValues val %))
+		    (vec (map (fn [x] (itm x (dec dep))) (.getOwnSlotValues val %))))
 		  (if (= dep 0)
-		    (sv val %)
-		    (itm (sv val %) (dec dep))))) sls))]
+		    (.getOwnSlotValue val %)
+		    (itm (.getOwnSlotValue val %) (dec dep))))) sls))]
     (assoc mp :DIRTYP (.getName typ) :DEPTH dep))
   val))
 

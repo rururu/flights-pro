@@ -1362,3 +1362,19 @@ Was expecting one of:
 2017.02.21 22:21:32.007 MSK INFO: UI display time = 0 sec -- ProjectManager$2.run()
 2017.02.21 22:23:12.033 MSK INFO: Project load time for file:/home/ru/clojure/flights-pro/pro-projects/WikipediaGIS.pprj: 0 sec -- ProjectChooser.loadProject()
 2017.02.21 22:23:12.817 MSK INFO: UI display time = 0 sec -- ProjectManager$2.run()
+2017.02.22 11:51:42.065 MSK INFO: *** SYSTEM START ***
+2017.02.22 11:51:42.119 MSK WARNING: Look and feel not found: com.apple.laf.AquaLookAndFeel -- SystemUtilities.setLookAndFeel()
+2017.02.22 11:51:42.530 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.02.22 11:52:00.935 MSK INFO: Load time for file:/home/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 1 sec (project) + 8 sec (ui) -- ProjectManager$3.run()
+2017.02.22 12:17:54.842 MSK INFO: *** SYSTEM START ***
+2017.02.22 12:17:54.931 MSK WARNING: Look and feel not found: com.apple.laf.AquaLookAndFeel -- SystemUtilities.setLookAndFeel()
+2017.02.22 12:17:55.522 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.02.22 12:18:20.564 MSK INFO: Load time for file:/home/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 2 sec (project) + 15 sec (ui) -- ProjectManager$3.run()
+2017.02.22 12:18:29.712 MSK INFO: Project load time for file:/home/ru/clojure/flights-pro/pro-projects/Clojure.pprj: 0 sec -- ProjectChooser.loadProject()
+2017.02.22 12:18:31.329 MSK INFO: UI display time = 1 sec -- ProjectManager$2.run()
+2017.02.22 12:20:48.607 MSK INFO: Project load time for file:/home/ru/clojure/flights-pro/pro-projects/FlightPro.pprj: 1 sec -- ProjectChooser.loadProject()
+2017.02.22 12:20:51.036 MSK INFO: UI display time = 2 sec -- ProjectManager$2.run()
+2017.02.22 16:59:57.143 MSK INFO: *** SYSTEM START ***
+2017.02.22 16:59:57.203 MSK WARNING: Look and feel not found: com.apple.laf.AquaLookAndFeel -- SystemUtilities.setLookAndFeel()
+2017.02.22 16:59:57.616 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.02.22 17:00:28.500 MSK INFO: Load time for file:/home/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 1 sec (project) + 9 sec (ui) -- ProjectManager$3.run()

@@ -4,7 +4,8 @@
   [wiki.gis :as wig]
   [cesium.core :as cz]
   [calc.geo :as geo]
-  [async.proc :as asp]))
+  [async.proc :as asp]
+  [geo.names :as gn]))
 
 (def TIO {:carrier 1000
  :camera 2222
@@ -54,8 +55,8 @@
   (/ (* (- n s) 60) 2))
 
 (defn point-out-place [dati wiki]
-  (let [lat (read-string (sv dati "lat"))
-       lon (read-string (sv dati "lng"))
+  (let [lat (sv dati "lat")
+       lon (sv dati "lng")
        dis (geo/distance-nm (:our-center wiki) [lat lon])]
   (cz/point-out (sv dati "title") [lat lon] dis (:our-radius wiki))))
 
@@ -86,4 +87,41 @@
 	  (asp/pump-in chn (placemark-instruct r)))
 	(vswap! wiki assoc :bbx [n s w e]))))
            (println "Instance of \"Current BBXWiki Request\" not found!")))))))
+
+(defn pump-weather [chn wiki]
+  (let [[lat lon] (:our-center wiki)]
+  (if-let [rsp 	(gn/call-geonames-weather lat lon)]
+    (let [lat2 	(read-string (rsp "lat"))
+            lon2 	(read-string (rsp "lng"))
+            bear 	(gn/bearing lat lon lat2 lon2)
+            dir 	(gn/direction bear)
+            dis 	(geo/rough-distance lat lon lat2 lon2)
+            name 	(rsp "stationName")
+            wcd 	(rsp "weatherCondition")
+            hym 	(rsp "hymidity")
+            tmp 	(rsp "temperature")
+            wind 	(rsp "windDirection")
+            bwnd 	(if (some? wind)
+	  (let [b (+ (read-string wind) 180)] (if (> b 360) (- b 360) b)))
+            win 	(if (some? bwnd)
+	  (gn/direction bwnd)
+	  "n/a")
+            wins 	(rsp "windSpeed")
+            tim 	(rsp "observationTime")
+            loc 	(str dis " miles to " dir " from here")
+            mess	(str name " Weather Station<br>"
+	  "location: " loc "<br>"
+	  "observation time: " tim "<br>"
+	  "weather conditions: " wcd "<br>"
+	  "temperature: " tmp " Celsius<br>"
+	  "hymidity: " hym "<br>"
+	  "wind: " win ", " wins " Knots")
+            html	(str "<h3>Weather</h3>" mess)]
+        (asp/pump-in chn 
+	{:instruct :popup
+	 :lat lat
+	 :lon lon
+	 :html html
+	 :time (:ext-data-popup TIO)}))
+    (println "Weather information unavailable!"))))
 

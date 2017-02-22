@@ -1,4 +1,4 @@
-; Tue Feb 21 22:23:05 MSK 2017
+; Wed Feb 22 12:20:31 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -146,7 +146,7 @@
 
 ([Clojure_Class210000] of  CloFunction
 
-	(source ";; instance to map\n;; val - instance\n;; dep - depth of unfolding inner instances\n(if (instance? Instance val)\n  (let [typ (.getDirectType val)\n         sls (.getTemplateSlots typ)\n         mp (apply hash-map (mapcat #(list (.getName %)\n		(if (.getAllowsMultipleValues %)\n		  (if (= dep 0)\n		    (vec (svs val %))\n		    (vec (map (fn [x] (itm x (dec dep))) (svs val %))))\n		  (if (= dep 0)\n		    (sv val %)\n		    (itm (sv val %) (dec dep))))) sls))]\n    (assoc mp :DIRTYP (.getName typ) :DEPTH dep))\n  val)")
+	(source ";; instance to map\n;; val - instance\n;; dep - depth of unfolding inner instances\n(if (instance? Instance val)\n  (let [typ (.getDirectType val)\n         sls (.getTemplateSlots typ)\n         mp (apply hash-map (mapcat #(list (.getName %)\n		(if (.getAllowsMultipleValues %)\n		  (if (= dep 0)\n		    (vec (.getOwnSlotValues val %))\n		    (vec (map (fn [x] (itm x (dec dep))) (.getOwnSlotValues val %))))\n		  (if (= dep 0)\n		    (.getOwnSlotValue val %)\n		    (itm (.getOwnSlotValue val %) (dec dep))))) sls))]\n    (assoc mp :DIRTYP (.getName typ) :DEPTH dep))\n  val)")
 	(title "itm [val dep]"))
 
 ([Clojure_Class220000] of  CloFunction

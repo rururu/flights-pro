@@ -1,4 +1,4 @@
-; Tue Feb 21 13:08:16 MSK 2017
+; Thu Feb 23 00:38:53 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -155,7 +155,9 @@
 		[FlightPro_Class330006]
 		[FlightPro_Class330005]
 		[FlightPro_Class140004]
+		[FlightPro_Class730000]
 		[FlightPro_Class140003]
+		[FlightPro_Class730001]
 		[FlightPro_Class140007]
 		[FlightPro_Class270001])
 	(cloNamespace [FlightPro_Class140002])
@@ -168,8 +170,8 @@
 
 ([FlightPro_Class140003] of  CloFunction
 
-	(source "(set-html! \"autopilot\" \"<h4>Autopilot</h4>\")\n(set-html! \"accel\" \"accel\")\n(set-html! \"course\" \"Course: 000\")\n(set-html! \"speed\" \"Speed: 000\")\n(set-html! \"altitude\" \"Altitude: 00000\")\n(set-html! \"lat\" \"Latitude: 00.0000\")\n(set-html! \"lon\" \"Longitude: 00.0000\")\n(set-html! \"camera\" \"<h4>Camera</h4>\")\n(set-html! \"onboard\" \"Onboard:\")\n(set-html! \"onboard-fld\" \n  \"<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>\n   <option value='callsign'>callsign</option>\n   <option value='manual'>manual</option>\n   <option value='select'>select</option>\")\n(set-html! \"view\" \"View:\")\n(set-html! \"view-fld\" \n  \"<select onchange='javascript:view3d.client.view(this.value)' style='width:96px'>\n   <option value='FORWARD'>FORWARD</option>\n   <option value='BACKWARD'>BACKWARD</option>\n   <option value='RIGHT'>RIGHT</option>\n   <option value='LEFT'>LEFT</option>\n   <option value='UP'>UP</option>\n   <option value='DOWN'>DOWN</option>\n   <option value='FORWARD-RIGHT'>FORWARD-RIGHT</option>\n   <option value='FORWARD'>FORWARD</option>\n   <option value='BACKWARD-RIGHT'>BACKWARD-RIGHT</option>\n   <option value='BACKWARD-LEFT'>BACKWARD-LEFT</option>\n   </select>\")\n(set-html! \"pitch\" \"Pitch:\")\n(set-html! \"pitch-fld\" \n  \"<input value='-20' style='width:90px'\n               onchange='javascript:view3d.client.pitch(this.value)'>\")\n(set-html! \"roll\" \"Roll:\")\n(set-html! \"roll-fld\" \n  \"<input value='0' style='width:90px'\n               onchange='javascript:view3d.client.roll(this.value)'>\")\n(set-html! \"course-fld\" \n  \"<input value='180' style='width:38px' id='input-crs'\n                     onchange='javascript:view3d.client.course(this.value)'>\")\n(set-html! \"speed-fld\" \n  \"<input value='210' style='width:38px' id='input-spd'\n               onchange='javascript:view3d.client.speed(this.value)'>\")\n(set-html! \"altitude-fld\" \n  \"<input value='4000' style='width:38px' id='input-alt'\n               onchange='javascript:view3d.client.altitude(this.value)'>\")\n(set-html! \"speed-acl\" \n  (str \"<select style='width:44px'\n                onchange='javascript:view3d.client.accel_speed(this.value)'>\"\n         (apply str (for [n (range 1 11)]\n                           (str \"<option value='\" n \"'>\" n \"</option>\")))))\n(set-html! \"altitude-acl\" \n  (str \"<select style='width:44px'\n                onchange='javascript:view3d.client.accel_altitude(this.value)'>\"\n         (apply str (for [n (range 1 11)]\n                           (str \"<option value='\" n \"'>\" n \"</option>\")))))\n(set-html! \"latitude-fld\" \n  \"<input value='40.8' style='width:84px' id='input-lat'\n               onchange='javascript:view3d.client.latitude(this.value)'>\")\n(set-html! \"longitude-fld\" \n  \"<input value='-74.0' style='width:84px' id='input-lon'\n               onchange='javascript:view3d.client.longitude(this.value)'>\")")
-	(title "show-controls []"))
+	(source "(set-html! \"autopilot\" \"<h4>Autopilot</h4>\")\n(set-html! \"accel\" \"accel\")\n(set-html! \"course\" \"Course: 000\")\n(set-html! \"course-fld\" \n  \"<input value='180' style='width:38px' id='input-crs'\n                     onchange='javascript:view3d.client.course(this.value)'>\")\n(set-html! \"speed\" \"Speed: 000\")\n(set-html! \"speed-fld\" \n  \"<input value='210' style='width:38px' id='input-spd'\n               onchange='javascript:view3d.client.speed(this.value)'>\")\n(set-html! \"speed-acl\" \n  (str \"<select style='width:44px'\n                onchange='javascript:view3d.client.accel_speed(this.value)'>\"\n         (apply str (for [n (range 1 11)]\n                           (str \"<option value='\" n \"'>\" n \"</option>\")))))\n(set-html! \"altitude\" \"Altitude: 00000\")\n(set-html! \"altitude-fld\" \n  \"<input value='4000' style='width:38px' id='input-alt'\n               onchange='javascript:view3d.client.altitude(this.value)'>\")\n(set-html! \"altitude-acl\" \n  (str \"<select style='width:44px'\n                onchange='javascript:view3d.client.accel_altitude(this.value)'>\"\n         (apply str (for [n (range 1 11)]\n                           (str \"<option value='\" n \"'>\" n \"</option>\")))))\n(set-html! \"lat\" \"Latitude: 00.0000\")\n(set-html! \"latitude-fld\" \n  \"<input value='40.8' style='width:84px' id='input-lat'\n               onchange='javascript:view3d.client.latitude(this.value)'>\")\n(set-html! \"lon\" \"Longitude: 00.0000\")\n(set-html! \"longitude-fld\" \n  \"<input value='-74.0' style='width:84px' id='input-lon'\n               onchange='javascript:view3d.client.longitude(this.value)'>\")")
+	(title "right-controls []"))
 
 ([FlightPro_Class140004] of  CloFunction
 
@@ -840,7 +842,8 @@
 		[FlightPro_Class250008]
 		[FlightPro_Class250009]
 		[FlightPro_Class390001]
-		[FlightPro_Class10002])
+		[FlightPro_Class10002]
+		[FlightPro_Class730004])
 	(cloNamespace [FlightPro_Class240005])
 	(title "Geo"))
 
@@ -956,7 +959,7 @@
 
 ([FlightPro_Class270000] of  CloFunction
 
-	(source "(println [:CMD-ONBOARD params])\n(let [cls (:callsign params)]\n  (condp = cls\n    \"manual\" (do\n                     (asp/pump-in (:directives CHN)\n	{:directive :manual})\n                     (rete/assert-frame ['Onboard 'callsign \"STOP\"]))\n   \"select\" (let [lst (vec (sort (map fr24/callsign (keys @fr24/FLIGHTS))))\n                       lst (filter #(not (empty? %)) lst)]\n                  (asp/pump-in (:directives CHN)\n	{:directive :callsigns\n	 :list lst}))\n    (rete/assert-frame ['Onboard 'callsign cls 'time 0])))\n\"\"")
+	(source "(println [:CMD-ONBOARD params])\n(let [cls (:callsign params)]\n  (condp = cls\n    \"manual\" (do (asp/pump-in (:directives CHN)\n	{:directive :manual})\n                     (rete/assert-frame ['Onboard 'callsign \"STOP\"]))\n   \"select\" (let [lst (vec (sort (map fr24/callsign (keys @fr24/FLIGHTS))))\n                       lst (filter #(not (empty? %)) lst)]\n                  (asp/pump-in (:directives CHN)\n	{:directive :callsigns\n	 :list lst}))\n    (rete/assert-frame ['Onboard 'callsign cls 'time 0])))\n\"\"")
 	(title "onboard [params]"))
 
 ([FlightPro_Class270001] of  CloFunction
@@ -1079,7 +1082,8 @@
 
 	(rules
 		[FlightPro_Class690000]
-		[FlightPro_Class690007])
+		[FlightPro_Class690007]
+		[FlightPro_Class730002])
 	(templates [Question])
 	(title "Questions"))
 
@@ -1997,8 +2001,8 @@
 	(button-clear-articles "Clear Articles/wiki.gis/clear-articles")
 	(button-nearby "submit/wiki.gis/submit-nearby")
 	(language English-en)
-	(lat "60.3")
-	(lng "25.0")
+	(lat 60.3)
+	(lng 25.0)
 	(max-responses 5)
 	(radius-km 10))
 
@@ -2183,7 +2187,48 @@
 	(button-bbx "submit/wiki.gis/submit-bbx")
 	(button-clear-articles "Clear Articles/wiki.gis/clear-articles")
 	(language English-en)
-	(max-responses 40))
+	(max-responses 40)
+	(responses
+		[FlightPro_Class720041]
+		[FlightPro_Class720042]
+		[FlightPro_Class720043]
+		[FlightPro_Class720044]
+		[FlightPro_Class720045]
+		[FlightPro_Class720046]
+		[FlightPro_Class720047]
+		[FlightPro_Class720048]
+		[FlightPro_Class720049]
+		[FlightPro_Class720050]
+		[FlightPro_Class720051]
+		[FlightPro_Class720052]
+		[FlightPro_Class720053]
+		[FlightPro_Class720054]
+		[FlightPro_Class720055]
+		[FlightPro_Class720056]
+		[FlightPro_Class720057]
+		[FlightPro_Class720058]
+		[FlightPro_Class720059]
+		[FlightPro_Class720060]
+		[FlightPro_Class720061]
+		[FlightPro_Class720062]
+		[FlightPro_Class720063]
+		[FlightPro_Class720064]
+		[FlightPro_Class720065]
+		[FlightPro_Class720066]
+		[FlightPro_Class720067]
+		[FlightPro_Class720068]
+		[FlightPro_Class720069]
+		[FlightPro_Class720070]
+		[FlightPro_Class720071]
+		[FlightPro_Class720072]
+		[FlightPro_Class720073]
+		[FlightPro_Class720074]
+		[FlightPro_Class720075]
+		[FlightPro_Class720076]
+		[FlightPro_Class720077]
+		[FlightPro_Class720078]
+		[FlightPro_Class720079]
+		[FlightPro_Class720080]))
 
 ([FlightPro_Class660024] of  CloFunction
 
@@ -2204,14 +2249,15 @@
 		[FlightPro_Class700002]
 		[FlightPro_Class700003]
 		[FlightPro_Class700000]
-		[FlightPro_Class660000])
+		[FlightPro_Class660000]
+		[FlightPro_Class730003])
 	(cloNamespace [FlightPro_Class670001])
 	(cloVars [FlightPro_Class330004])
 	(title "External Data"))
 
 ([FlightPro_Class670001] of  CloNamespace
 
-	(source "(:use protege.core)\n(:require \n  [wiki.gis :as wig]\n  [cesium.core :as cz]\n  [calc.geo :as geo]\n  [async.proc :as asp])")
+	(source "(:use protege.core)\n(:require \n  [wiki.gis :as wig]\n  [cesium.core :as cz]\n  [calc.geo :as geo]\n  [async.proc :as asp]\n  [geo.names :as gn])")
 	(title "ext.data"))
 
 ([FlightPro_Class670004] of  %3AINSTANCE-ANNOTATION
@@ -2233,7 +2279,7 @@
 ([FlightPro_Class670008] of  BBX
 
 	(title "Current")
-	(wsen 24.404755 59.97632 25.681915 60.617977))
+	(wsen 23.168793 59.249733 24.412994 59.905468))
 
 ([FlightPro_Class670009] of  CloFuncall
 
@@ -2422,7 +2468,7 @@
 
 ([FlightPro_Class700000] of  CloFunction
 
-	(source "(let [lat (read-string (sv dati \"lat\"))\n       lon (read-string (sv dati \"lng\"))\n       dis (geo/distance-nm (:our-center wiki) [lat lon])]\n  (cz/point-out (sv dati \"title\") [lat lon] dis (:our-radius wiki)))")
+	(source "(let [lat (sv dati \"lat\")\n       lon (sv dati \"lng\")\n       dis (geo/distance-nm (:our-center wiki) [lat lon])]\n  (cz/point-out (sv dati \"title\") [lat lon] dis (:our-radius wiki)))")
 	(title "point-out-place [dati wiki]"))
 
 ([FlightPro_Class700001] of  CloFuncall
@@ -2512,6 +2558,26 @@
 	(source "(chan)")
 	(title "mk-chan []"))
 
+([FlightPro_Class710000] of  Airport
+
+	(altitude 57)
+	(coord 60.25388 25.04416)
+	(country "Finland")
+	(iata "HEM")
+	(icao "EFHF")
+	(runways 0)
+	(title "Helsinki Malmi Airport"))
+
+([FlightPro_Class710001] of  Airport
+
+	(altitude 219)
+	(coord 58.30746 26.69042)
+	(country "Estonia")
+	(iata "TAY")
+	(icao "EETU")
+	(runways 0)
+	(title "Tartu Airport"))
+
 ([FlightPro_Class710089] of  CloFuncall
 
 	(source "(ext.data/WIKI)"))
@@ -2519,6 +2585,1090 @@
 ([FlightPro_Class710093] of  CloFuncall
 
 	(source "pro.commands/WIKI"))
+
+([FlightPro_Class720000] of  Airport
+
+	(altitude 18)
+	(coord 58.99075 22.83073)
+	(country "Estonia")
+	(iata "KDL")
+	(icao "EEKA")
+	(runways 0)
+	(title "Kardla Airport"))
+
+([FlightPro_Class720001] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.1667)
+	(lng 24.9333)
+	(population 620982)
+	(rank 100)
+	(summary "Helsinki is the capital and largest city of Finland. It is in the region of Uusimaa, in southern Finland, on the shore of the Gulf of Finland, an arm of the Baltic Sea. Helsinki has a population of , an urban population of 1.2 million (31 December 2013), and a metropolitan population of 1 (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/21000/thumb-20063-100.jpg")
+	(title "Helsinki")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Helsinki"))
+
+([FlightPro_Class720002] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 60.2333)
+	(lng 25.1167)
+	(rank 100)
+	(summary "The Helsinki Metro , is a rapid transit system serving Helsinki, Finland. It is the world's most northern metro system, and the only one in Finland. The system was opened to the general public on 2 August 1982 after 27 years of planning (...)")
+	(title "Helsinki Metro")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Helsinki_Metro"))
+
+([FlightPro_Class720003] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(feature "railwaystation")
+	(lang "en")
+	(lat 60.1719)
+	(lng 24.9413)
+	(rank 98)
+	(summary "Helsinki Central railway station is a widely recognised landmark in Kluuvi, part of central Helsinki, Finland, and the focal point of public transport in the Greater Helsinki area. The station is used by approximately 200,000 passengers per day, making it Finland's most-visited building (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/147000/thumb-146731-100.jpg")
+	(title "Helsinki Central railway station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Helsinki_Central_railway_station"))
+
+([FlightPro_Class720004] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "edu")
+	(lang "en")
+	(lat 60.1858)
+	(lng 24.8278)
+	(rank 98)
+	(summary "Aalto University is a university primarily located in Greater Helsinki, Finland. It was established in 2010 as a merger of three major Finnish universities: the Helsinki University of Technology (established 1849), the Helsinki School of Economics (established 1904), and the University of Art and (...)")
+	(title "Aalto University")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Aalto_University"))
+
+([FlightPro_Class720005] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 60.1706)
+	(lng 24.8286)
+	(rank 98)
+	(summary "Nokia Corporation is a Finnish multinational communications and information technology company, founded in 1865. Nokia is headquartered in Espoo, Uusimaa, in the greater Helsinki metropolitan area. In 2014, Nokia employed 61,656 people across 120 countries, conducts sales in more than 150 countries (...)")
+	(title "Nokia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Nokia"))
+
+([FlightPro_Class720006] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.2167)
+	(lng 24.7333)
+	(rank 98)
+	(summary "Kauniainen is a small town and a municipality of inhabitants in the Helsinki Metropolitan Area, Finland. It is surrounded by the City of Espoo, in Greater Helsinki. Kauniainen was founded by a corporation in 1906, AB Grankulla, that parcelled land and created a suburb for villas; Kauniainen received (...)")
+	(title "Kauniainen")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kauniainen"))
+
+([FlightPro_Class720007] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.4031)
+	(lng 25.0253)
+	(rank 98)
+	(summary "Tuusula is a municipality of Finland. It belongs to the Helsinki sub-region of the Uusimaa region. The municipality has a population of .  (...)")
+	(title "Tuusula")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Tuusula"))
+
+([FlightPro_Class720008] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(lang "en")
+	(lat 60.2031)
+	(lng 24.9255)
+	(rank 97)
+	(summary "Yleisradio Oy (Finnish), also known as Rundradion (Swedish) or the Finnish Broadcasting Company (English), abbreviated to Yle (pronounced ; previously stylised as YLE before March 2012 corporate rebrand), is Finland's national public-broadcasting company, founded in 1926 (...)")
+	(title "Yle")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Yle"))
+
+([FlightPro_Class720009] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.4667)
+	(lng 24.8083)
+	(rank 96)
+	(summary "Nurmijärvi is the most populated rural municipality of Finland, located north of the capital Helsinki. The close proximity to Helsinki has led to a considerable growth of the major villages such as Klaukkala and Rajamäki, which nowadays are considered dormitory towns of Helsinki (...)")
+	(title "Nurmijärvi")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Nurmij%C3%A4rvi"))
+
+([FlightPro_Class720010] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1725)
+	(lng 24.9331)
+	(rank 96)
+	(summary "The Eduskunta (or , or) is the parliament of Finland. The unicameral parliament has 200 members and normally meets in the Parliament House in Helsinki. However, during the 2015–2017 renovation of the Parliament House, the parliament meets in the nearby Sibelius Academy (...)")
+	(title "Parliament of Finland")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Parliament_of_Finland"))
+
+([FlightPro_Class720011] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1683)
+	(lng 24.9422)
+	(rank 95)
+	(summary "The Stockmann department store is a culturally significant business building and department store located in the centre of Helsinki, Finland. It is one of many department stores owned by the Stockmann corporation (...)")
+	(title "Stockmann, Helsinki centre")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Stockmann%2C_Helsinki_centre"))
+
+([FlightPro_Class720012] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 60.1783)
+	(lng 24.915)
+	(rank 94)
+	(summary "The Finnish Environment Institute (SYKE) is a research institute and government agency under the Ministry of the Environment, located in Helsinki, Finland. It is both a research institute, and a centre for environmental expertise (...)")
+	(title "Finnish Environment Institute")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Finnish_Environment_Institute"))
+
+([FlightPro_Class720013] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.169)
+	(lng 24.951)
+	(rank 93)
+	(summary "Aleksanterinkatu is a street in the centre of Helsinki, Finland. In the city plan by Carl Ludvig Engel, it was the Decumanus Maximus, the main east-west street in the city, crossing the Cardo, Unioninkatu (Union Street) at the corner of the Senate Square (...)")
+	(title "Aleksanterinkatu")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Aleksanterinkatu"))
+
+([FlightPro_Class720014] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 60.1708)
+	(lng 24.9375)
+	(rank 93)
+	(summary "The 2015 Veikkausliiga was the eighty-fifth season of top-tier football in Finland. HJK Helsinki were the defending champions. The season was won by SJK.  (...)")
+	(title "2015 Veikkausliiga")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/2015_Veikkausliiga"))
+
+([FlightPro_Class720015] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.2719)
+	(lng 24.9728)
+	(rank 93)
+	(summary "Suunto Oy is a company that manufactures and markets sports watches, dive computers, compasses and precision instruments. Headquartered in Vantaa, Finland, Suunto employs more than 300 people worldwide, and its products are sold in over 100 countries (...)")
+	(title "Suunto")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Suunto"))
+
+([FlightPro_Class720016] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.2)
+	(lng 24.9325)
+	(rank 92)
+	(summary "is a suburb in Helsinki, Finland. It is a central-northern neighbourhood, bordering Alppila to the south, Central Park (Keskuspuisto) to the west and Vallila to the east. The eastern and western part of Pasila are separated by a large railroad classification yard, which, as Central Pasila, is (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/130000/thumb-129253-100.jpg")
+	(title "Pasila")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Pasila"))
+
+([FlightPro_Class720017] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1877)
+	(lng 24.9227)
+	(rank 92)
+	(summary "Sonera Stadium (until August 2010 Finnair Stadium; also known as Töölön jalkapallostadion, \"Töölö football stadium\") is a football stadium in Helsinki, Finland. The stadium was inaugurated in 2000. It has a capacity of 10,770 spectators (...)")
+	(title "Sonera Stadium")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Sonera_Stadium"))
+
+([FlightPro_Class720018] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.1833)
+	(lng 24.8333)
+	(rank 91)
+	(summary "Otaniemi (Finnish), or Otnäs (Swedish), is a district of Espoo, Finland. It is located near the border of Helsinki, the capital of Finland. Otaniemi is the home of the Aalto University engineering schools campus, thus \"Otaniemi\" is often used as a synonym for Aalto (...)")
+	(title "Otaniemi")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Otaniemi"))
+
+([FlightPro_Class720019] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.175)
+	(lng 24.9319)
+	(rank 90)
+	(summary "The National Museum of Finland presents Finnish history from the Stone Age to the present day, through objects and cultural history. The Finnish National Romantic style building is located in central Helsinki and is a part of the National Board of Antiquities , under the Ministry of Culture and (...)")
+	(title "National Museum of Finland")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/National_Museum_of_Finland"))
+
+([FlightPro_Class720020] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.475)
+	(lng 25.375)
+	(rank 90)
+	(summary "Pornainen is a municipality of Finland. It is located in the province of Southern Finland and is part of the Uusimaa region. The municipality has a population of and covers an area of of which is water. The population density is . The municipality is unilingually Finnish.  (...)")
+	(title "Pornainen")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Pornainen"))
+
+([FlightPro_Class720021] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1722)
+	(lng 24.9437)
+	(rank 90)
+	(summary "The Finnish National Theatre , founded in 1872 in the city of Pori, is a theatre located in central Helsinki on the northern side of the Helsinki Central Railway Station Square. The Finnish National Theatre is the oldest Finnish speaking professional theatre in Finland (...)")
+	(title "Finnish National Theatre")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Finnish_National_Theatre"))
+
+([FlightPro_Class720022] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1747)
+	(lng 24.9836)
+	(rank 89)
+	(summary "Korkeasaari is an island in Helsinki, Finland where the country's biggest zoo is situated. The English name of the zoo is Helsinki Zoo. The zoo is located on a rocky island, connected to the mainland via a bridge to the Helsinki district of Mustikkamaa, where there is access to the zoo all year (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/10000/thumb-9385-100.jpg")
+	(title "Korkeasaari")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Korkeasaari"))
+
+([FlightPro_Class720023] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.159)
+	(lng 24.949)
+	(rank 89)
+	(summary "is the southern-most city district of Helsinki, in Finland. The name Ullanlinna refers to the fortification line that was built at the southern edge of the area during the 18th century (no longer visible), as part of the town fortifications, which also included the fortress of  (...)")
+	(title "Ullanlinna")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ullanlinna"))
+
+([FlightPro_Class720024] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "city")
+	(lang "en")
+	(lat 60.2931)
+	(lng 25.0439)
+	(rank 89)
+	(summary "Tikkurila is a district and major region of the municipality of Vantaa, Finland. Located in the eastern half of the Helsinki conurbation, some north of the capital's downtown district, it is the administrative and commercial hub of Vantaa, although Myyrmäki is a rival commercial hub within the (...)")
+	(title "Tikkurila")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Tikkurila"))
+
+([FlightPro_Class720025] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "city")
+	(lang "en")
+	(lat 60.1864)
+	(lng 24.9681)
+	(rank 89)
+	(summary "Sörnäinen (; Sörkkä or Sörkka in Helsinki slang) is a neighbourhood in the city of Helsinki, Finland. Sörnäinen is located a little more than one kilometre north from the coastal centre of Helsinki, near the district of Hakaniemi. The east side of Sörnäinen borders the sea (...)")
+	(title "Sörnäinen")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/S%C3%B6rn%C3%A4inen"))
+
+([FlightPro_Class720026] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1722)
+	(lng 24.9475)
+	(rank 89)
+	(summary "University of Helsinki is a station on the Helsinki Metro. It serves the central Helsinki district of Kaisaniemi and was known by this name until the end of 2014. The station is 27 metres below ground level and 22 metres below sea level (...)")
+	(title "University of Helsinki metro station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/University_of_Helsinki_metro_station"))
+
+([FlightPro_Class720027] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.175)
+	(lng 24.96)
+	(rank 88)
+	(summary "The Military Museum of Finland is the central museum of the Finnish Defence Forces and the national special museum of military history. It is located in Helsinki and it is part of the Finnish National Defence University (...)")
+	(title "Military Museum of Finland")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Military_Museum_of_Finland"))
+
+([FlightPro_Class720028] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1717)
+	(lng 24.9369)
+	(rank 88)
+	(summary "Kiasma is a contemporary art museum located on Mannerheimintie in Helsinki, Finland. Its name kiasma, Finnish for chiasma, alludes to the basic conceptual idea of its architect, Steven Holl. The museum exhibits the contemporary art collection of the Finnish National Gallery founded in 1990 (...)")
+	(title "Kiasma")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kiasma"))
+
+([FlightPro_Class720029] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "isle")
+	(lang "en")
+	(lat 60.1861)
+	(lng 25.0069)
+	(rank 88)
+	(summary "Kulosaari is an island and a suburb in Helsinki, Finland. It is also the 42nd neighbourhood of the city. Construction of villas on the island started in the beginning of the 20th century, and a bridge from Sörnäinen was opened in 1919 (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/139000/thumb-138317-100.jpg")
+	(title "Kulosaari")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kulosaari"))
+
+([FlightPro_Class720030] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.2503)
+	(lng 25.0097)
+	(population 22336)
+	(rank 88)
+	(summary "Oulunkylä (also known as Ogeli) is a suburb and a neighbourhood of Helsinki, the capital of Finland. It is located north from the center of the city. It has been inhabited since the 13th century. Earlier an independent municipality, it was made part of Helsinki in 1946 (...)")
+	(title "Oulunkylä")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Oulunkyl%C3%A4"))
+
+([FlightPro_Class720031] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.1714)
+	(lng 24.9461)
+	(rank 88)
+	(summary "Kluuvi is the commercial centre of Helsinki, Finland, and a neighbourhood in the Vironniemi district of Helsinki. The Helsinki Central railway station, the Helsinki main post office, the Stockmann and Sokos department stores, the Kluuvi shopping centre and the main offices of Finnish banks are (...)")
+	(title "Kluuvi")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kluuvi"))
+
+([FlightPro_Class720032] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "city")
+	(lang "en")
+	(lat 60.1617)
+	(lng 24.9381)
+	(rank 87)
+	(summary "Punavuori is a neighbourhood in Helsinki, the capital of Finland. The name Punavuori (English: Red mountain) refers to red cliffs located between Sepänkatu and Punavuorenkatu. They were still visible in the 19th century, nowadays they are covered with buildings and pavement (...)")
+	(title "Punavuori")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Punavuori"))
+
+([FlightPro_Class720033] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "city")
+	(lang "en")
+	(lat 60.162)
+	(lng 24.914)
+	(rank 87)
+	(summary "Ruoholahti (Swedish: Gräsviken) is a quarter in Helsinki, part of the Länsisatama neighbourhood and Kampinmalmi district. The name means Grass Bay and is pronounced . Ruoholahti is located in the southwestern part of the central city area of Helsinki, close to the Lauttasaari island, and it (...)")
+	(title "Ruoholahti")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ruoholahti"))
+
+([FlightPro_Class720034] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 60.2167)
+	(lng 24.95)
+	(rank 87)
+	(summary "Uusimaa (Swedish: Nyland), is a historical province in the south of Finland. It borders Finland Proper, Tavastia, Savonia, and Karelia. The English translation would be \"new land\". From the Middle Ages to 1809, most of the present-day Finland was a part of Sweden (...)")
+	(title "Uusimaa (historical province)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Uusimaa_%28historical_province%29"))
+
+([FlightPro_Class720035] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "isle")
+	(lang "en")
+	(lat 60.1456)
+	(lng 25.0442)
+	(rank 87)
+	(summary "Santahamina is an island and neighbourhood of Eastern Helsinki, Finland. At present it is a military base housing the Guard Jaeger Regiment, making access restricted. The Finnish National Defence University (NDU) is also located on the island (...)")
+	(title "Santahamina")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Santahamina"))
+
+([FlightPro_Class720036] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1676)
+	(lng 24.9548)
+	(rank 87)
+	(summary "The Market Square (Kauppatori in Finnish, Salutorget in Swedish) is a central square in Helsinki, Finland, and one of the most famous market places and tourist attractions in the city. The Market Square is located near the centre of Helsinki, at the eastern end of Esplanadi and bordering the Baltic (...)")
+	(title "Market Square, Helsinki")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Market_Square%2C_Helsinki"))
+
+([FlightPro_Class720037] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1703)
+	(lng 24.9508)
+	(rank 87)
+	(summary "The National Library of Finland is the foremost research library in Finland. Administratively the library is part of the University of Helsinki. Until 1 August 2006, it was known as the Helsinki University Library. The National Library is responsible for storing the Finnish cultural heritage (...)")
+	(title "National Library of Finland")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/National_Library_of_Finland"))
+
+([FlightPro_Class720038] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 60.3508)
+	(lng 25.0778)
+	(rank 87)
+	(summary "Korso is a district and major region in northeastern Vantaa, Finland. The district has 7,402 inhabitants (as of 1 January 2014). Since 2007, the Korso major region has included the following nine districts: Matari, Korso, Mikkola, Metsola, Leppäkorpi, Jokivarsi, Nikinmäki, Vierumäki and Vallinoja (...)")
+	(title "Korso")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Korso"))
+
+([FlightPro_Class720039] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 60.2144)
+	(lng 24.9506)
+	(rank 86)
+	(summary "Käpylä is a neighbourhood of Helsinki with 7,600 inhabitants. Administratively speaking, Käpylä is a part of the Vanhakaupunki district. It is located between Kumpula, Oulunkylä and Koskela. Käpylä has a terminus for route-1 of the Helsinki tram network (...)")
+	(title "Käpylä")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/K%C3%A4pyl%C3%A4"))
+
+([FlightPro_Class720040] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.21)
+	(lng 24.89)
+	(population 2377)
+	(rank 86)
+	(summary "Huopalahti was a municipality during the years 1920–1945 in Uusimaa, Finland. The municipality was bilingual. Current areas of Munkkiniemi, Lauttasaari and parts of northern Pasila were parts of Huopalahti. The area was separated from former Helsinki parish in 1920 (...)")
+	(title "Huopalahti")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Huopalahti"))
+
+([FlightPro_Class720041] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 18)
+	(lang "en")
+	(lat 59.35)
+	(lng 24.0583)
+	(rank 98)
+	(summary "Paldiski is a town and Baltic Sea port situated on the Pakri peninsula of north-western Estonia. Originally a Swedish settlement known as Rågervik, it became a Russian naval base in the 18th century. The Russians renamed it Балтийский Порт (\"Baltiyskiy Port\", i.e. Baltic Port) in 1762 (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/61000/thumb-60631-100.jpg")
+	(title "Paldiski")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Paldiski"))
+
+([FlightPro_Class720042] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 8)
+	(feature "isle")
+	(lang "en")
+	(lat 59.2917)
+	(lng 23.3861)
+	(rank 92)
+	(summary "Osmussaar is an Estonian island situated in the mouth of the Gulf of Finland in the Baltic Sea, 7.5 km off the Estonian mainland. Administratively the island is part of Noarootsi Parish in Lääne County. Its area is  (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/89000/thumb-88583-100.jpg")
+	(title "Osmussaar")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Osmussaar"))
+
+([FlightPro_Class720043] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 7)
+	(lang "en")
+	(lat 59.35)
+	(lng 24.05)
+	(rank 90)
+	(summary "The Estonian Land Forces is the name of the unified ground forces among the Estonian Defence Forces where it has an offensive military formation role. It is currently also the largest military branch with the average size during the peacetime with around 6,000 soldiers, conscripts and officers (...)")
+	(title "Maavägi")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Maav%C3%A4gi"))
+
+([FlightPro_Class720044] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 8)
+	(feature "isle")
+	(lang "en")
+	(lat 59.3227)
+	(lng 23.924)
+	(rank 85)
+	(summary "Pakri Islands are two Estonian islands in the Finnish Gulf: Suur-Pakri and Väike-Pakri (and). Administratively they belong to the town of Paldiski. For centuries the islands had been inhabited by Estonian Swedes, until during the Second World War the entire population was forced to leave.  (...)")
+	(title "Pakri Islands")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Pakri_Islands"))
+
+([FlightPro_Class720045] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "LV")
+	(lang "en")
+	(lat 59.3)
+	(lng 23.35)
+	(rank 83)
+	(summary "SMS Magdeburg (\"His Majesty's Ship Magdeburg\") was a lead ship of the of light cruisers in the German Kaiserliche Marine (Imperial Navy). Her class included three other ships: , , and . Magdeburg was built at the AG Weser shipyard in Bremen from 1910 to August 1912, when she was commissioned into (...)")
+	(title "SMS Magdeburg")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/SMS_Magdeburg"))
+
+([FlightPro_Class720046] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 12)
+	(feature "river")
+	(lang "en")
+	(lat 59.4036)
+	(lng 24.2802)
+	(rank 81)
+	(summary "Keila River is a river in Northern Estonia.  (...)")
+	(title "Keila River")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Keila_River"))
+
+([FlightPro_Class720047] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 18)
+	(feature "city")
+	(lang "en")
+	(lat 59.32)
+	(lng 24.214)
+	(rank 80)
+	(summary "Klooga is a small borough in Keila Parish in Harju County in northern Estonia. As of 2011 Census, the settlement's population was 1,203, of which the Estonians were 642 (53.4%). During the German occupation in World War II a Nazi labor camp was situated there (...)")
+	(title "Klooga")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Klooga"))
+
+([FlightPro_Class720048] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 29)
+	(feature "city")
+	(lang "en")
+	(lat 59.3883)
+	(lng 24.4119)
+	(rank 80)
+	(summary "Vääna is a village in Harku Parish, Harju County in northern Estonia. It has a population of 266 (as of 1 June 2010). Vääna is located about from the capital Tallinn.  (...)")
+	(title "Vääna")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/V%C3%A4%C3%A4na"))
+
+([FlightPro_Class720049] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 18)
+	(feature "landmark")
+	(lang "en")
+	(lat 59.3201)
+	(lng 24.2134)
+	(rank 80)
+	(summary "Klooga was a Nazi labor subcamp of the Vaivara concentration camp complex established in September 1943 in Harju County, during World War II, in German-occupied Estonia near the northern Estonian village Klooga (...)")
+	(title "Klooga concentration camp")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Klooga_concentration_camp"))
+
+([FlightPro_Class720050] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 19)
+	(feature "airport")
+	(lang "en")
+	(lat 59.2603)
+	(lng 24.2085)
+	(rank 78)
+	(summary "Ämari Air Base (also given in references as Suurküla (original Estonian name), Vasalemma, Emari, Suurkyul, Shuurkyul, and Shuurkul - last forms of the Estonian names are derivates of names Russian-speaking military personnel used when it was used by the Soviet military (...)")
+	(title "Ämari Air Base")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/%C3%84mari_Air_Base"))
+
+([FlightPro_Class720051] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 31)
+	(feature "city")
+	(lang "en")
+	(lat 59.3986)
+	(lng 24.2986)
+	(rank 76)
+	(summary "Keila-Joa is a small borough in Keila Parish, Harju County, northern Estonia. It has a population of 309 (as of 1 January 2004).  (...)")
+	(title "Keila-Joa")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Keila-Joa"))
+
+([FlightPro_Class720052] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 14)
+	(feature "city")
+	(lang "en")
+	(lat 59.435)
+	(lng 24.3581)
+	(rank 75)
+	(summary "Vääna-Jõesuu is a village in Harku Parish, Harju County in northern Estonia. It has a population of 686 (as of 1 June 2010).  (...)")
+	(title "Vääna-Jõesuu")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/V%C3%A4%C3%A4na-J%C3%B5esuu"))
+
+([FlightPro_Class720053] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "landmark")
+	(lang "en")
+	(lat 59.8203)
+	(lng 23.4525)
+	(rank 74)
+	(summary "Ekenäs Archipelago National Park is situated in the Ekenäs archipelago, in the Uusimaa region of Finland. It was established in 1989 and covers . The park is maintained by Metsähallitus (Ministry of Forestry). Most of the park's area is composed of rock islets near the open sea, and the water areas (...)")
+	(title "Ekenäs Archipelago National Park")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Eken%C3%A4s_Archipelago_National_Park"))
+
+([FlightPro_Class720054] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 27)
+	(feature "landmark")
+	(lang "en")
+	(lat 59.396)
+	(lng 24.2947)
+	(rank 72)
+	(summary "The Keila Waterfall is a waterfall in Northern Estonia on Keila River. It is the third most powerful waterfall in Estonia after Narva and Jägala. It is 6 meters high and 60–70 meters wide.  (...)")
+	(title "Keila Waterfall")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Keila_Waterfall"))
+
+([FlightPro_Class720055] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 28)
+	(feature "city")
+	(lang "en")
+	(lat 59.4106)
+	(lng 24.3089)
+	(population 499)
+	(rank 71)
+	(summary "Türisalu is a village in Harku Parish, Harju County in northern Estonia. It has a population of 499 (as of 1 June 2010). An infamous suicide place Türisalu cliff is located in the village.  (...)")
+	(title "Türisalu")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/T%C3%BCrisalu"))
+
+([FlightPro_Class720056] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 9)
+	(lang "en")
+	(lat 59.3616)
+	(lng 24.247)
+	(rank 70)
+	(summary "Kloogaranna is a village in Keila Parish, Harju County, Estonia. It has a population of 121 (1 January 2004). Kloogaranna has a station on the Elektriraudtee rail line.  (...)")
+	(title "Kloogaranna")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kloogaranna"))
+
+([FlightPro_Class720057] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 21)
+	(feature "city")
+	(lang "en")
+	(lat 59.2897)
+	(lng 24.1231)
+	(rank 65)
+	(summary "Madise is a village in Padise Parish, Harju County, Estonia. It is the birthplace of Bengt Gottfried Forselius.  (...)")
+	(title "Madise, Harju County")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Madise%2C_Harju_County"))
+
+([FlightPro_Class720058] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 23)
+	(feature "city")
+	(lang "en")
+	(lat 59.4692)
+	(lng 24.3839)
+	(population 756)
+	(rank 64)
+	(summary "Suurupi is a village in Harku Parish, Harju County in northern Estonia. It has a population of 756 (as of 1 June 2010).  (...)")
+	(title "Suurupi")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Suurupi"))
+
+([FlightPro_Class720059] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 32)
+	(lang "en")
+	(lat 59.3586)
+	(lng 24.3958)
+	(rank 64)
+	(summary "Humala is a village in Harku Parish, Harju County in northern Estonia. It has a population of 33 (as of 1 June 2010).  (...)")
+	(title "Humala, Estonia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Humala%2C_Estonia"))
+
+([FlightPro_Class720060] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 27)
+	(lang "en")
+	(lat 59.4017)
+	(lng 24.4006)
+	(rank 64)
+	(summary "Vaila is a village in Harku Parish, Harju County in northern Estonia. It has a population of 79 (as of 1 June 2010).  (...)")
+	(title "Vaila, Estonia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Vaila%2C_Estonia"))
+
+([FlightPro_Class720061] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 11)
+	(lang "en")
+	(lat 59.3253)
+	(lng 24.1272)
+	(rank 63)
+	(summary "Laoküla is a village in Keila Parish, Harju County in northern Estonia. Laoküla has a station on the Elektriraudtee western route.")
+	(title "Laoküla")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Laok%C3%BCla"))
+
+([FlightPro_Class720062] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 21)
+	(feature "city")
+	(lang "en")
+	(lat 59.3167)
+	(lng 24.1667)
+	(rank 63)
+	(summary "Põllküla is a village in Keila Parish in Harju County in northern Estonia. It had the population of 38 (1 January 2004). Põllküla has a station on the Elektriraudtee western route.  (...)")
+	(title "Põllküla")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/P%C3%B5llk%C3%BCla"))
+
+([FlightPro_Class720063] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 30)
+	(feature "city")
+	(lang "en")
+	(lat 59.3)
+	(lng 24.3167)
+	(rank 62)
+	(summary "Niitvälja is a village in Keila Parish, Harju County in northern Estonia. Baltics first 18 hole golf course is located in Niitvälja.")
+	(title "Niitvälja")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Niitv%C3%A4lja"))
+
+([FlightPro_Class720064] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 45)
+	(feature "city")
+	(lang "en")
+	(lat 59.3392)
+	(lng 24.3928)
+	(rank 62)
+	(summary "Karjaküla is a small borough in Keila Parish, Harju County, northern Estonia. It has a population of 387 (as of 1 January 2004). Russian military leader Ivan Gannibal (1735–1801), was born in Karjaküla Manor.  (...)")
+	(title "Karjaküla")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Karjak%C3%BCla"))
+
+([FlightPro_Class720065] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 36)
+	(lang "en")
+	(lat 59.4458)
+	(lng 24.38)
+	(rank 61)
+	(summary "Viti is a village in Harku Parish, Harju County in northern Estonia. It has a population of 331 (as of 1 June 2010).  (...)")
+	(title "Viti, Estonia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Viti%2C_Estonia"))
+
+([FlightPro_Class720066] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 35)
+	(lang "en")
+	(lat 59.37)
+	(lng 24.3744)
+	(rank 61)
+	(summary "Adra is a village in Harku Parish, Harju County in northern Estonia. It has a population of 87 (as of 1 June 2010).  (...)")
+	(title "Adra, Estonia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Adra%2C_Estonia"))
+
+([FlightPro_Class720067] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 24)
+	(feature "city")
+	(lang "en")
+	(lat 59.4056)
+	(lng 24.3625)
+	(population 124)
+	(rank 60)
+	(summary "Naage is a village in Harku Parish, Harju County in northern Estonia. It has a population of 124 (as of 1 June 2010).  (...)")
+	(title "Naage")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Naage"))
+
+([FlightPro_Class720068] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 31)
+	(feature "city")
+	(lang "en")
+	(lat 59.2833)
+	(lng 24.3333)
+	(rank 59)
+	(summary "Kulna is a village in Keila Parish, Harju County in northern Estonia. Kulna has a station on the Elektriraudtee western route.")
+	(title "Kulna")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kulna"))
+
+([FlightPro_Class720069] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 11)
+	(feature "city")
+	(lang "en")
+	(lat 59.2667)
+	(lng 24.0167)
+	(rank 59)
+	(summary "Kurkse is a village in Padise Parish, Harju County in northern Estonia.  (...)")
+	(title "Kurkse")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kurkse"))
+
+([FlightPro_Class720070] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 25)
+	(feature "city")
+	(lang "en")
+	(lat 59.3667)
+	(lng 24.2667)
+	(rank 59)
+	(summary "Käesalu is a village in Keila Parish, Harju County in northern Estonia.")
+	(title "Käesalu")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/K%C3%A4esalu"))
+
+([FlightPro_Class720071] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 28)
+	(lang "en")
+	(lat 59.3808)
+	(lng 24.245)
+	(rank 58)
+	(summary "Laulasmaa is a village in Keila Parish, Harju County, in northwestern Estonia. It's located about west of the capital Tallinn, west of Keila-Joa, north of Kloogaranna, by the Lahepere Bay (part of the Gulf of Finland). Laulasmaa had the population of 309 (1 January 2004) (...)")
+	(title "Laulasmaa")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Laulasmaa"))
+
+([FlightPro_Class720072] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 15)
+	(feature "city")
+	(lang "en")
+	(lat 59.3942)
+	(lng 24.1975)
+	(rank 57)
+	(summary "Lohusalu is a village in Keila Parish, Harju County, Estonia. The village spans the Lohusalu peninsula. In 2000, it had the population of 221.\"Arengukava 2004-2014\" (in Estonian). Keila Vald http://www.keilavald.ee. http://www.keilavald (...)")
+	(title "Lohusalu")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Lohusalu"))
+
+([FlightPro_Class720073] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 21)
+	(feature "city")
+	(lang "en")
+	(lat 59.2669)
+	(lng 24.2161)
+	(population 542)
+	(rank 57)
+	(summary "Ämari is a small borough in Vasalemma Parish, Harju County, northern Estonia. As of 2011 Census, the settlement's population was 542, of which the Estonians were 190 (35.1%).  (...)")
+	(title "Ämari")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/%C3%84mari"))
+
+([FlightPro_Class720074] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 31)
+	(feature "city")
+	(lang "en")
+	(lat 59.2833)
+	(lng 24.3667)
+	(rank 56)
+	(summary "Ohtu is a village in Keila Parish, Harju County in northern Estonia.  (...)")
+	(title "Ohtu")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ohtu"))
+
+([FlightPro_Class720075] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 30)
+	(lang "en")
+	(lat 59.2933)
+	(lng 24.3233)
+	(rank 56)
+	(summary "Lehola is a settlement in Keila Parish, Harju County in northwestern Estonia. It had the population of 486 (1 January 2004).  (...)")
+	(title "Lehola")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Lehola"))
+
+([FlightPro_Class720076] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 21)
+	(feature "city")
+	(lang "en")
+	(lat 59.2667)
+	(lng 23.7833)
+	(rank 55)
+	(summary "Alliklepa is a village in Padise Parish, Harju County in northern Estonia.")
+	(title "Alliklepa")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Alliklepa"))
+
+([FlightPro_Class720077] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 23)
+	(lang "en")
+	(lat 59.2606)
+	(lng 24.1817)
+	(rank 55)
+	(summary "Suurküla is a village in Padise Parish, Harju County in northern Estonia.")
+	(title "Suurküla, Harju County")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Suurk%C3%BCla%2C_Harju_County"))
+
+([FlightPro_Class720078] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 20)
+	(feature "city")
+	(lang "en")
+	(lat 59.2667)
+	(lng 23.8667)
+	(rank 55)
+	(summary "Vintse is a village in Padise Parish, Harju County in northern Estonia.")
+	(title "Vintse")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Vintse"))
+
+([FlightPro_Class720079] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 38)
+	(feature "city")
+	(lang "en")
+	(lat 59.3289)
+	(lng 24.3597)
+	(population 138)
+	(rank 51)
+	(summary "Valkse is a village in Keila Parish, Harju County in northwestern Estonia. As of 2011 Census, the settlement's population was 138.  (...)")
+	(title "Valkse")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Valkse"))
+
+([FlightPro_Class720080] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "EE")
+	(elevation 11)
+	(feature "city")
+	(lang "en")
+	(lat 59.2667)
+	(lng 23.7667)
+	(rank 49)
+	(summary "Moosi, Estonia is a village in Leisi Parish, Saare County in western Estonia.")
+	(title "Moosi, Estonia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Moosi%2C_Estonia"))
+
+([FlightPro_Class730000] of  CloFunction
+
+	(source "(set-html! \"camera\" \"<h4>Camera</h4>\")\n(set-html! \"onboard\" \"Onboard:\")\n(set-html! \"onboard-fld\" \n  \"<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>\n   <option value='callsign'>callsign</option>\n   <option value='manual'>manual</option>\n   <option value='select'>select</option>\")\n(set-html! \"view\" \"View:\")\n(set-html! \"view-fld\" \n  \"<select onchange='javascript:view3d.client.view(this.value)' style='width:96px'>\n   <option value='FORWARD'>FORWARD</option>\n   <option value='BACKWARD'>BACKWARD</option>\n   <option value='RIGHT'>RIGHT</option>\n   <option value='LEFT'>LEFT</option>\n   <option value='UP'>UP</option>\n   <option value='DOWN'>DOWN</option>\n   <option value='FORWARD-RIGHT'>FORWARD-RIGHT</option>\n   <option value='FORWARD-LEFT'>FORWARD-LEFT</option>\n   <option value='BACKWARD-RIGHT'>BACKWARD-RIGHT</option>\n   <option value='BACKWARD-LEFT'>BACKWARD-LEFT</option>\n   </select>\")\n(set-html! \"pitch\" \"Pitch:\")\n(set-html! \"pitch-fld\" \n  \"<input value='-20' style='width:90px'\n               onchange='javascript:view3d.client.pitch(this.value)'>\")\n(set-html! \"roll\" \"Roll:\")\n(set-html! \"roll-fld\" \n  \"<input value='0' style='width:90px'\n               onchange='javascript:view3d.client.roll(this.value)'>\")")
+	(title "left-controls []"))
+
+([FlightPro_Class730001] of  CloFunction
+
+	(source "(left-controls)\n(right-controls)")
+	(title "show-controls []"))
+
+([FlightPro_Class730002] of  Rule
+
+	(lhs "?q (Question predicate \"weather\")")
+	(rhs "(ext.data/pump-weather (:instructions pro.commands/CHN)\n		pro.commands/WIKI)")
+	(salience 0)
+	(title "qq:Weather"))
+
+([FlightPro_Class730003] of  CloFunction
+
+	(source "(let [[lat lon] (:our-center wiki)]\n  (if-let [rsp 	(gn/call-geonames-weather lat lon)]\n    (let [lat2 	(read-string (rsp \"lat\"))\n            lon2 	(read-string (rsp \"lng\"))\n            bear 	(gn/bearing lat lon lat2 lon2)\n            dir 	(gn/direction bear)\n            dis 	(geo/rough-distance lat lon lat2 lon2)\n            name 	(rsp \"stationName\")\n            wcd 	(rsp \"weatherCondition\")\n            hym 	(rsp \"hymidity\")\n            tmp 	(rsp \"temperature\")\n            wind 	(rsp \"windDirection\")\n            bwnd 	(if (some? wind)\n	  (let [b (+ (read-string wind) 180)] (if (> b 360) (- b 360) b)))\n            win 	(if (some? bwnd)\n	  (gn/direction bwnd)\n	  \"n/a\")\n            wins 	(rsp \"windSpeed\")\n            tim 	(rsp \"observationTime\")\n            loc 	(str dis \" miles to \" dir \" from here\")\n            mess	(str name \" Weather Station<br>\"\n	  \"location: \" loc \"<br>\"\n	  \"observation time: \" tim \"<br>\"\n	  \"weather conditions: \" wcd \"<br>\"\n	  \"temperature: \" tmp \" Celsius<br>\"\n	  \"hymidity: \" hym \"<br>\"\n	  \"wind: \" win \", \" wins \" Knots\")\n            html	(str \"<h3>Weather</h3>\" mess)]\n        (asp/pump-in chn \n	{:instruct :popup\n	 :lat lat\n	 :lon lon\n	 :html html\n	 :time (:ext-data-popup TIO)}))\n    (println \"Weather information unavailable!\")))")
+	(title "pump-weather [chn wiki]"))
+
+([FlightPro_Class730004] of  CloFunction
+
+	(source "(letfn [(smround [n]\n	(/ (float (Math/round (* n 10))) 10))]\n  (let [dlat (- lat1 lat2)\n          dlon (- lon1 lon2)\n          lad (* (if (>= dlat 0) dlat (- 0 dlat)) 60)\n          lod (* (if (>= dlon 0) dlon (- 0 dlon)) 60)\n          dia (Math/sqrt (+ (* lad lad) (* lod lod)))]\n     (if (< dia 1) (smround dia) (Math/round dia))))")
+	(title "rough-distance [[lat1 lon1] [lat2 lon2]]"))
 
 ([FlightPro_Class8] of  CloFunction
 
@@ -2542,7 +3692,7 @@
 
 ([FlightPro_Class80003] of  CloFunction
 
-	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :manual (do (if (= (:mode @CARRIER) \"?\")\n	  (carrier \"MANUAL\" (manual-vehicle))\n	  (vswap! CARRIER assoc :mode \"MANUAL\"))\n	(asp/start-process CAM-PROC #(camera-move CARRIER) (:camera TIO)))\n    :callsigns (let [{:keys [list]} dir]\n            (ctl/callsigns (conj list \"manual\")))\n    :carrier (let [{:keys [callsign vehicle]} dir]\n            (asp/stop-process CAM-PROC)\n            (carrier callsign vehicle)\n            (camera-move CARRIER))\n    :fly-onboard (let [{:keys [callsign vehicle period]} dir]\n            (carrier callsign vehicle)\n            (camera-move CARRIER period))\n    (println (str \"Unknown directive: \" [directive dir]))))")
+	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :manual (do (if (= (:mode @CARRIER) \"?\")\n	    (carrier \"MANUAL\" (manual-vehicle))\n	    (vswap! CARRIER assoc :mode \"MANUAL\"))\n	(asp/start-process CAM-PROC #(camera-move CARRIER) (:camera TIO)))\n    :callsigns (let [{:keys [list]} dir]\n            (ctl/callsigns (conj list \"manual\")))\n    :carrier (let [{:keys [callsign vehicle]} dir]\n            (asp/stop-process CAM-PROC)\n            (carrier callsign vehicle)\n            (camera-move CARRIER))\n    :fly-onboard (let [{:keys [callsign vehicle period]} dir]\n            (carrier callsign vehicle)\n            (camera-move CARRIER period))\n    (println (str \"Unknown directive: \" [directive dir]))))")
 	(title "directives-handler [response]"))
 
 ([FlightPro_Class80004] of  CloFunction

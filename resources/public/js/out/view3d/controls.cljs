@@ -18,15 +18,8 @@
 (defn set-html! [id msg]
   (set! (.-innerHTML (by-id id)) msg))
 
-(defn show-controls []
-  (set-html! "autopilot" "<h4>Autopilot</h4>")
-(set-html! "accel" "accel")
-(set-html! "course" "Course: 000")
-(set-html! "speed" "Speed: 000")
-(set-html! "altitude" "Altitude: 00000")
-(set-html! "lat" "Latitude: 00.0000")
-(set-html! "lon" "Longitude: 00.0000")
-(set-html! "camera" "<h4>Camera</h4>")
+(defn left-controls []
+  (set-html! "camera" "<h4>Camera</h4>")
 (set-html! "onboard" "Onboard:")
 (set-html! "onboard-fld" 
   "<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>
@@ -43,7 +36,7 @@
    <option value='UP'>UP</option>
    <option value='DOWN'>DOWN</option>
    <option value='FORWARD-RIGHT'>FORWARD-RIGHT</option>
-   <option value='FORWARD'>FORWARD</option>
+   <option value='FORWARD-LEFT'>FORWARD-LEFT</option>
    <option value='BACKWARD-RIGHT'>BACKWARD-RIGHT</option>
    <option value='BACKWARD-LEFT'>BACKWARD-LEFT</option>
    </select>")
@@ -54,32 +47,45 @@
 (set-html! "roll" "Roll:")
 (set-html! "roll-fld" 
   "<input value='0' style='width:90px'
-               onchange='javascript:view3d.client.roll(this.value)'>")
+               onchange='javascript:view3d.client.roll(this.value)'>"))
+
+(defn right-controls []
+  (set-html! "autopilot" "<h4>Autopilot</h4>")
+(set-html! "accel" "accel")
+(set-html! "course" "Course: 000")
 (set-html! "course-fld" 
   "<input value='180' style='width:38px' id='input-crs'
                      onchange='javascript:view3d.client.course(this.value)'>")
+(set-html! "speed" "Speed: 000")
 (set-html! "speed-fld" 
   "<input value='210' style='width:38px' id='input-spd'
                onchange='javascript:view3d.client.speed(this.value)'>")
-(set-html! "altitude-fld" 
-  "<input value='4000' style='width:38px' id='input-alt'
-               onchange='javascript:view3d.client.altitude(this.value)'>")
 (set-html! "speed-acl" 
   (str "<select style='width:44px'
                 onchange='javascript:view3d.client.accel_speed(this.value)'>"
          (apply str (for [n (range 1 11)]
                            (str "<option value='" n "'>" n "</option>")))))
+(set-html! "altitude" "Altitude: 00000")
+(set-html! "altitude-fld" 
+  "<input value='4000' style='width:38px' id='input-alt'
+               onchange='javascript:view3d.client.altitude(this.value)'>")
 (set-html! "altitude-acl" 
   (str "<select style='width:44px'
                 onchange='javascript:view3d.client.accel_altitude(this.value)'>"
          (apply str (for [n (range 1 11)]
                            (str "<option value='" n "'>" n "</option>")))))
+(set-html! "lat" "Latitude: 00.0000")
 (set-html! "latitude-fld" 
   "<input value='40.8' style='width:84px' id='input-lat'
                onchange='javascript:view3d.client.latitude(this.value)'>")
+(set-html! "lon" "Longitude: 00.0000")
 (set-html! "longitude-fld" 
   "<input value='-74.0' style='width:84px' id='input-lon'
                onchange='javascript:view3d.client.longitude(this.value)'>"))
+
+(defn show-controls []
+  (left-controls)
+(right-controls))
 
 (defn show-flight-data [carr]
   (let [{:keys [coord course speed altitude]} @carr]

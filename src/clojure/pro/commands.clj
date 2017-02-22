@@ -168,8 +168,7 @@
   (println [:CMD-ONBOARD params])
 (let [cls (:callsign params)]
   (condp = cls
-    "manual" (do
-                     (asp/pump-in (:directives CHN)
+    "manual" (do (asp/pump-in (:directives CHN)
 	{:directive :manual})
                      (rete/assert-frame ['Onboard 'callsign "STOP"]))
    "select" (let [lst (vec (sort (map fr24/callsign (keys @fr24/FLIGHTS))))
