@@ -48,23 +48,15 @@
     :html html
     :time (:ext-data-popup TIO)}))
 
-(defn our-center [n s w e]
-  [(/ (+ n s) 2) (/ (+ w e) 2)])
-
-(defn our-radius [n s]
-  (/ (* (- n s) 60) 2))
-
 (defn point-out-place [dati wiki]
   (let [lat (sv dati "lat")
        lon (sv dati "lng")
        dis (geo/distance-nm (:our-center wiki) [lat lon])]
   (cz/point-out (sv dati "title") [lat lon] dis (:our-radius wiki))))
 
-(defn pump-wiki [bbx chn wiki]
+(defn pump-wiki [bbx chn edata]
   (let [[n s w e] (vec (map read-string bbx))
-       [n0 s0 w0 e0] (:bbx @wiki)]
-  (vswap! wiki assoc :our-center (our-center n s w e)
-	          :our-radius (our-radius n s))
+       [n0 s0 w0 e0] (:bbx @edata)]
   (if (or (>= s n0)
            (<= n s0)
            (<= e w0)
@@ -83,19 +75,25 @@
                (when (seq rr)
 	(asp/pump-in chn {:instruct :clear-placemarks})
 	(doseq [r rr]
-	  (point-out-place r @wiki)
+	  (point-out-place r @edata)
 	  (asp/pump-in chn (placemark-instruct r)))
-	(vswap! wiki assoc :bbx [n s w e]))))
+	(vswap! edata assoc :bbx [n s w e]))))
            (println "Instance of \"Current BBXWiki Request\" not found!")))))))
 
-(defn pump-weather [chn wiki]
-  (let [[lat lon] (:our-center wiki)]
-  (if-let [rsp 	(gn/call-geonames-weather lat lon)]
+(defn pump-weather [chn edata]
+  (let [[lat lon] (:our-center @edata)
+        [n s w e] (:bbx @edata)
+        rsp	(gn/call-geonames-weather lat lon)]
+  (if (and rsp (not (empty? rsp)))
     (let [lat2 	(read-string (rsp "lat"))
             lon2 	(read-string (rsp "lng"))
-            bear 	(gn/bearing lat lon lat2 lon2)
-            dir 	(gn/direction bear)
-            dis 	(geo/rough-distance lat lon lat2 lon2)
+            [lat3 lon3 loc] (if (and (> n lat2 s) (< w lon2 e))
+		[lat2 lon2 (format "%.4f %.4f" lat2 lon2)]
+		[lat lon
+		 (str (geo/rough-distance [lat lon] [lat2 lon2])
+		       " miles to " 
+		       (gn/direction (gn/bearing lat lon lat2 lon2))
+		       " from here")])
             name 	(rsp "stationName")
             wcd 	(rsp "weatherCondition")
             hym 	(rsp "hymidity")
@@ -108,7 +106,6 @@
 	  "n/a")
             wins 	(rsp "windSpeed")
             tim 	(rsp "observationTime")
-            loc 	(str dis " miles to " dir " from here")
             mess	(str name " Weather Station<br>"
 	  "location: " loc "<br>"
 	  "observation time: " tim "<br>"

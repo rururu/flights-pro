@@ -36,9 +36,11 @@
    "airline" {"short" "Ru Airlines"}}}))
 (def TERRAIN "no")
 (def APT-ALT 0)
-(def WIKI (volatile! 
-  {:on false
-   :bbx [0 0 0 0]}))
+(def E-DATA (volatile! 
+  {:wiki false
+    :bbx [0 0 0 0]
+    :our-center [0 0]
+    :our-radius 0}))
 (defn current-time []
   (int (/ (System/currentTimeMillis) 1000)))
 
@@ -125,7 +127,7 @@
 (let [id (:id params)]
   (if (.startsWith id "pm")
     (when-let [dati (.getInstance *kb* (.substring id 2))]
-      (exd/point-out-place dati @WIKI)
+      (exd/point-out-place dati @E-DATA)
       (asp/pump-in (:instructions CHN) 
         (exd/placemark-popup-instruct dati)))
     (let [inf (or (get @MY-INFOS id) (fr24/fl-info id))
@@ -193,8 +195,10 @@ TERRAIN)
 (defn visible [params]
   (println [:CMD-VISIBLE params])
 (let [{:keys [n s w e]} params]
-  (if (:on @WIKI)
-    (exd/pump-wiki [n s w e] (:instructions CHN) WIKI))
+  (vswap! E-DATA assoc :our-center [(/ (+ n s) 2) (/ (+ w e) 2)]
+	               :our-radius (/ (* (- n s) 60) 2))
+  (if (:wiki @E-DATA)
+    (exd/pump-wiki [n s w e] (:instructions CHN) E-DATA))
   (fr24/set-bbx n s w e))
 "")
 
@@ -303,15 +307,11 @@ TERRAIN)
 
 (defn wikipedia [params]
   (println [:CMD-WIKIPEDIA params])
-(if (:on @WIKI)
-  (do (vswap! WIKI assoc :on false)
+(if (:wiki @E-DATA)
+  (do (vswap! E-DATA assoc :wiki false)
     (asp/pump-in (:instructions CHN)
-	 {:instruct :clear-placemarks})
-    (vswap! WIKI assoc :bbx [0 0 0 0]))
-  (let [[n s w e] @fr24/BBX]
-    (vswap! WIKI assoc :on true)
-    (visible {:n (str n) :s (str s) :w (str w) :e (str e)})))
-(println [:WIKI (:on @WIKI)])
+	 {:instruct :clear-placemarks}))
+  (vswap! E-DATA assoc :wiki true))
 "")
 
 (defn go-initial-airport []
