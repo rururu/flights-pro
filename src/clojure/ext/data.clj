@@ -48,19 +48,27 @@
     :html html
     :time (:ext-data-popup TIO)}))
 
-(defn point-out-place [dati wiki]
-  (let [lat (sv dati "lat")
-       lon (sv dati "lng")
-       dis (geo/distance-nm (:our-center wiki) [lat lon])]
-  (cz/point-out (sv dati "title") [lat lon] dis (:our-radius wiki))))
+(defn our-center [n s w e]
+  [(/ (+ n s) 2) (/ (+ w e) 2)])
 
-(defn pump-wiki [bbx chn edata]
-  (let [[n s w e] (vec (map read-string bbx))
-       [n0 s0 w0 e0] (:bbx @edata)]
-  (if (or (>= s n0)
-           (<= n s0)
-           (<= e w0)
-           (>= w e0))
+(defn our-radius [n s w e]
+  (/ (* (- n s) 60) 2))
+
+(defn point-out-place [dati edt]
+  (let [[n s w e] (:visible edt)
+       lat (sv dati "lat")
+       lon (sv dati "lng")
+       dis (geo/distance-nm (our-center n s w e) [lat lon])]
+  (cz/point-out (sv dati "title") [lat lon] dis (our-radius n s w e))))
+
+(defn pump-wiki [chn edata]
+  (let [[n s w e] (:visible @edata)
+       [lat lon] (our-center n s w e)
+       [n0 s0 w0 e0] (:wiki-bbx @edata)]
+  (if (or (> s0 lat)
+           (< n0 lat)
+           (< e0 lon)
+           (> w0 lon))
      (invoke-later
        (let [bbi (foc "BBX" "title" "Current")
               rqi (fainst (cls-instances "BBXWiki") "Current BBXWiki Request")]
@@ -77,12 +85,12 @@
 	(doseq [r rr]
 	  (point-out-place r @edata)
 	  (asp/pump-in chn (placemark-instruct r)))
-	(vswap! edata assoc :bbx [n s w e]))))
+	(vswap! edata assoc :wiki-bbx [n s w e]))))
            (println "Instance of \"Current BBXWiki Request\" not found!")))))))
 
 (defn pump-weather [chn edata]
-  (let [[lat lon] (:our-center @edata)
-        [n s w e] (:bbx @edata)
+  (let [[n s w e] (:visible @edata)
+        [lat lon] (our-center n s w e)
         rsp	(gn/call-geonames-weather lat lon)]
   (if (and rsp (not (empty? rsp)))
     (let [lat2 	(read-string (rsp "lat"))

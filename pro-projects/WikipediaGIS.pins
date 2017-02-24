@@ -1,4 +1,4 @@
-; Tue Feb 21 22:56:31 MSK 2017
+; Fri Feb 24 12:53:40 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -44,7 +44,7 @@
 
 ([WikipediaGIS_Class18] of  CloFunction
 
-	(source "(mti (assoc mp :DIRTYP typ :DEPTH 0))")
+	(source "(if-let [ins (fifos \"WikiArticle\" \"title\" (mp \"title\"))]\n  (delin ins))\n(if-let [ins (fifos \"WikiNearArticle\" \"title\" (mp \"title\"))]\n  (delin ins))\n(mti (assoc mp :DIRTYP typ :DEPTH 0))")
 	(title "article-from-map [mp typ]"))
 
 ([WikipediaGIS_Class2] of  %3AINSTANCE-ANNOTATION

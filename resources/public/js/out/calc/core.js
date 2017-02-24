@@ -20,21 +20,21 @@ return true;
 }
 }
 });
-calc.core.linint = (function calc$core$linint(x,p__10709,p__10710){
-var vec__10717 = p__10709;
-var x1 = cljs.core.nth.call(null,vec__10717,(0),null);
-var y1 = cljs.core.nth.call(null,vec__10717,(1),null);
-var vec__10720 = p__10710;
-var x2 = cljs.core.nth.call(null,vec__10720,(0),null);
-var y2 = cljs.core.nth.call(null,vec__10720,(1),null);
+calc.core.linint = (function calc$core$linint(x,p__9715,p__9716){
+var vec__9723 = p__9715;
+var x1 = cljs.core.nth.call(null,vec__9723,(0),null);
+var y1 = cljs.core.nth.call(null,vec__9723,(1),null);
+var vec__9726 = p__9716;
+var x2 = cljs.core.nth.call(null,vec__9726,(0),null);
+var y2 = cljs.core.nth.call(null,vec__9726,(1),null);
 return (y1 + (((y2 - y1) * (x - x1)) / (x2 - x1)));
 });
 calc.core.tabfun = (function calc$core$tabfun(x,table){
-var vec__10727 = cljs.core.split_with.call(null,(function (p1__10723_SHARP_){
-return (cljs.core.first.call(null,p1__10723_SHARP_) < x);
+var vec__9733 = cljs.core.split_with.call(null,(function (p1__9729_SHARP_){
+return (cljs.core.first.call(null,p1__9729_SHARP_) < x);
 }),table);
-var lo = cljs.core.nth.call(null,vec__10727,(0),null);
-var hi = cljs.core.nth.call(null,vec__10727,(1),null);
+var lo = cljs.core.nth.call(null,vec__9733,(0),null);
+var hi = cljs.core.nth.call(null,vec__9733,(1),null);
 if(cljs.core.seq.call(null,lo)){
 if(cljs.core.seq.call(null,hi)){
 return calc.core.linint.call(null,x,cljs.core.last.call(null,lo),cljs.core.first.call(null,hi));
@@ -46,8 +46,8 @@ return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMP
 }
 });
 calc.core.i_mono_tabfun = (function calc$core$i_mono_tabfun(y,table){
-return calc.core.tabfun.call(null,y,cljs.core.map.call(null,(function (p1__10730_SHARP_){
-return (new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[cljs.core.second.call(null,p1__10730_SHARP_),cljs.core.first.call(null,p1__10730_SHARP_)],null));
+return calc.core.tabfun.call(null,y,cljs.core.map.call(null,(function (p1__9736_SHARP_){
+return (new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[cljs.core.second.call(null,p1__9736_SHARP_),cljs.core.first.call(null,p1__9736_SHARP_)],null));
 }),table));
 });
 calc.core.smooth_tabfun = (function calc$core$smooth_tabfun(x,table){

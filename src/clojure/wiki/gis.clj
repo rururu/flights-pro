@@ -10,7 +10,11 @@
   (aget spl 1)))
 
 (defn article-from-map [mp typ]
-  (mti (assoc mp :DIRTYP typ :DEPTH 0)))
+  (if-let [ins (fifos "WikiArticle" "title" (mp "title"))]
+  (delin ins))
+(if-let [ins (fifos "WikiNearArticle" "title" (mp "title"))]
+  (delin ins))
+(mti (assoc mp :DIRTYP typ :DEPTH 0)))
 
 (defn bbx-of-list
   ;; crds = ([lat lon]..)

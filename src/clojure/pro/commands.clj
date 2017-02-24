@@ -37,10 +37,9 @@
 (def TERRAIN "no")
 (def APT-ALT 0)
 (def E-DATA (volatile! 
-  {:wiki false
-    :bbx [0 0 0 0]
-    :our-center [0 0]
-    :our-radius 0}))
+  {:visible [0 0 0 0]
+    :wiki-bbx [0 0 0 0]
+    :wiki false}))
 (defn current-time []
   (int (/ (System/currentTimeMillis) 1000)))
 
@@ -98,6 +97,16 @@
     (fr24/set-bbx n s w e)
     (fr24/start process-flights)
     "")))
+
+(defn visible [params]
+  (println [:CMD-VISIBLE params])
+(let [{:keys [n s w e]} params
+       [n s w e] (map read-string [n s w e])]
+  (vswap! E-DATA assoc :visible [n s w e])
+  (if (:wiki @E-DATA)
+    (exd/pump-wiki (:instructions CHN) E-DATA))
+  (fr24/set-bbx n s w e))
+"")
 
 (defn update-watch-area []
   (if (= @fr24/STATUS "RUN")
@@ -191,16 +200,6 @@ TERRAIN)
 (let [id (:id params)]
   (if (fr24/dat id)
     (rete/assert-frame ['Follow 'id id 'time 0]))))
-
-(defn visible [params]
-  (println [:CMD-VISIBLE params])
-(let [{:keys [n s w e]} params]
-  (vswap! E-DATA assoc :our-center [(/ (+ n s) 2) (/ (+ w e) 2)]
-	               :our-radius (/ (* (- n s) 60) 2))
-  (if (:wiki @E-DATA)
-    (exd/pump-wiki [n s w e] (:instructions CHN) E-DATA))
-  (fr24/set-bbx n s w e))
-"")
 
 (defn trail [params]
   (println [:CMD-TRAIL params])
@@ -299,7 +298,7 @@ TERRAIN)
 
 (defn get-manual-data [params]
   (vswap! fr24/MANUAL-DATA assoc "MANUAL"
-          (volatile! {:callsign "MANUAL"
+          (volatile! {:mode "MANUAL"
 	 :coord (read-string (:coord params))
 	 :course (read-string (:course params))
 	 :speed (read-string (:speed params))
@@ -311,7 +310,11 @@ TERRAIN)
   (do (vswap! E-DATA assoc :wiki false)
     (asp/pump-in (:instructions CHN)
 	 {:instruct :clear-placemarks}))
-  (vswap! E-DATA assoc :wiki true))
+  (let [[n s w e] (map str (:visible @E-DATA))]
+    (vswap! E-DATA assoc :wiki-bbx [0 0 0 0]) 
+    (vswap! E-DATA assoc :wiki true)
+    (visible {:n n :s s :w w :e e})))
+(println "Wikipedia: " (:wiki @E-DATA)) 
 "")
 
 (defn go-initial-airport []

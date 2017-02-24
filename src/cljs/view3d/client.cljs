@@ -175,8 +175,9 @@
             (carrier callsign vehicle)
             (camera-move CARRIER))
     :fly-onboard (let [{:keys [callsign vehicle period]} dir]
-            (carrier callsign vehicle)
-            (camera-move CARRIER period))
+            (when (not (= (:mode @CARRIER) "MANUAL"))
+              (carrier callsign vehicle)
+              (camera-move CARRIER period)))
     (println (str "Unknown directive: " [directive dir])))))
 
 (defn receive-directives []
