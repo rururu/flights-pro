@@ -5,7 +5,8 @@
   [cesium.core :as cz]
   [calc.geo :as geo]
   [async.proc :as asp]
-  [geo.names :as gn]))
+  [geo.names :as gn]
+  [fr24.client :refer [json-web-data]]))
 
 (def TIO {:carrier 1000
  :camera 2222
@@ -16,6 +17,7 @@
  :manual-data 6000
  :ext-data 15000
  :ext-data-popup 60000})
+(def WEATHER2-API "http://www.myweather2.com/developer/forecast.ashx?uac=Pyih5WakI3&output=json&query=")
 (defmacro with-timeout [msec & body]
   `(let [f# (future (do ~@body))
          v# (gensym)
@@ -88,10 +90,8 @@
 	(vswap! edata assoc :wiki-bbx [n s w e]))))
            (println "Instance of \"Current BBXWiki Request\" not found!")))))))
 
-(defn pump-weather [chn edata]
-  (let [[n s w e] (:visible @edata)
-        [lat lon] (our-center n s w e)
-        rsp	(gn/call-geonames-weather lat lon)]
+(defn gn-weather-html [lat lon n s w e]
+  (let [rsp (gn/call-geonames-weather lat lon)]
   (if (and rsp (not (empty? rsp)))
     (let [lat2 	(read-string (rsp "lat"))
             lon2 	(read-string (rsp "lng"))
@@ -120,13 +120,46 @@
 	  "weather conditions: " wcd "<br>"
 	  "temperature: " tmp " Celsius<br>"
 	  "hymidity: " hym "<br>"
-	  "wind: " win ", " wins " Knots")
-            html	(str "<h3>Weather</h3>" mess)]
-        (asp/pump-in chn 
+	  "wind: " win ", " wins " Knots")]
+         (str "<h3>Weather by GeoNames</h3>" mess))))
+nil)
+
+(defn w2-weather-html [lat lon n s w e]
+  (letfn [(wind [w]
+	(let [e (first (w "wind"))]
+	  (str "Wind: " (e "dir") ", " (e "speed") " " (e "wind_unit") "<br>")))
+           (weather [w]
+	(str "Weather: " (w "weather_text") "<br>" (wind w)))
+           (day [w] (str "Date: " (w "date") "<br>" 
+	         (weather (first (w "day")))
+	         "Day max temp: " (w "day_max_temp") " " (w "temp_unit") "<br>"
+	         "Night min temp: " (w "night_min_temp") " " (w "temp_unit") "<br>"))]
+  (let [w2 (json-web-data (str ext.data/WEATHER2-API lat "," lon))]
+    (if (and w2 (not (empty? w2)))
+      (let [w (first ((w2 "weather") "curren_weather"))
+              f ((w2 "weather") "forecast")
+              d1 (first f)
+              d2 (second f)]
+         (str "<h3>Weather by WEATHER2</h3>"
+                "<a href='http://www.myweather2.com'>www.myweather2.com</a><br><br>"
+                "<h4>Current weather</h4>"
+                "Temperature: " (w "temp") " " (w "temp_unit") "<br>"
+                "Pressure: " (w "pressure") "<br>"
+                "Humidity: " (w "humidity") "<br>"
+                (weather w) "<br>"
+                "<h4>Forcast</h4>"
+                (day d1) "<br>"
+                (day d2)))))))
+
+(defn pump-weather [chn edata fun]
+  (let [[n s w e] (:visible @edata)
+        [lat lon] (our-center n s w e)
+        html (or (fun lat lon n s w e)
+	"Weather information unavailable!")]
+    (asp/pump-in chn 
 	{:instruct :popup
 	 :lat lat
 	 :lon lon
 	 :html html
-	 :time (:ext-data-popup TIO)}))
-    (println "Weather information unavailable!"))))
+	 :time (:ext-data-popup TIO)})))
 

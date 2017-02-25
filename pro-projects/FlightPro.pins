@@ -1,4 +1,4 @@
-; Sat Feb 25 00:28:05 MSK 2017
+; Sat Feb 25 22:10:26 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -798,7 +798,7 @@
 
 ([FlightPro_Class220026] of  CloFunction
 
-	(source "(set-html! \"commands-header\" \"<h4>Commands</h4>\")\n(set-html! \"commands\"\n  \"<select onchange='javascript:chart.client.command(this.value)'>\n   <option value='commands'>Commands</option>\n   <option value='watch-visible'>Watch visible area</option>\n   <option value='intersect'>Intersections</option>\n   <option value='move-to'>Move to Airport</option>\n   <option value='schedule'>Schedule Flight</option>\n   <option value='wikipedia'>Toggle Wikipedia</option>\n   <option value='clear'>Clear</option>\n   </select>\")\n(set-html! \"questions-header\" \"<h4>Questions</h4>\")\n(set-html! \"questions\"\n  \"<select onchange='javascript:chart.client.question(this.value)'>\n   <option value='questions'>Questions</option>\n   <option value='intersect'>Intersections</option>\n   <option value='weather'>Weather</option>\n   </select>\")")
+	(source "(set-html! \"commands-header\" \"<h4>Commands</h4>\")\n(set-html! \"commands\"\n  \"<select onchange='javascript:chart.client.command(this.value)'>\n   <option value='commands'>Commands</option>\n   <option value='watch-visible'>Watch visible area</option>\n   <option value='intersect'>Intersections</option>\n   <option value='move-to'>Move to Airport</option>\n   <option value='schedule'>Schedule Flight</option>\n   <option value='wikipedia'>Toggle Wikipedia</option>\n   <option value='clear'>Clear</option>\n   </select>\")\n(set-html! \"questions-header\" \"<h4>Questions</h4>\")\n(set-html! \"questions\"\n  \"<select onchange='javascript:chart.client.question(this.value)'>\n   <option value='questions'>Questions</option>\n   <option value='intersect'>Intersections</option>\n   <option value='weather-gn'>Weather GeoNames</option>\n   <option value='weather-w2'>Weather2</option>\n   </select>\")")
 	(title "show-chart-controls []"))
 
 ([FlightPro_Class220027] of  CloFunction
@@ -1083,7 +1083,8 @@
 	(rules
 		[FlightPro_Class690000]
 		[FlightPro_Class690007]
-		[FlightPro_Class730002])
+		[FlightPro_Class730002]
+		[FlightPro_Class750009])
 	(templates [Question])
 	(title "Questions"))
 
@@ -2209,14 +2210,18 @@
 		[FlightPro_Class740003]
 		[FlightPro_Class700000]
 		[FlightPro_Class660000]
+		[FlightPro_Class750004]
+		[FlightPro_Class750005]
 		[FlightPro_Class730003])
 	(cloNamespace [FlightPro_Class670001])
-	(cloVars [FlightPro_Class330004])
+	(cloVars
+		[FlightPro_Class330004]
+		[FlightPro_Class750000])
 	(title "External Data"))
 
 ([FlightPro_Class670001] of  CloNamespace
 
-	(source "(:use protege.core)\n(:require \n  [wiki.gis :as wig]\n  [cesium.core :as cz]\n  [calc.geo :as geo]\n  [async.proc :as asp]\n  [geo.names :as gn])")
+	(source "(:use protege.core)\n(:require \n  [wiki.gis :as wig]\n  [cesium.core :as cz]\n  [calc.geo :as geo]\n  [async.proc :as asp]\n  [geo.names :as gn]\n  [fr24.client :refer [json-web-data]])")
 	(title "ext.data"))
 
 ([FlightPro_Class670004] of  %3AINSTANCE-ANNOTATION
@@ -2334,10 +2339,6 @@
 ([FlightPro_Class680042] of  CloFuncall
 
 	(source "(geo.names/call-geonames-weather 40 -74)"))
-
-([FlightPro_Class680083] of  CloFuncall
-
-	(source "(geo.names/call-geonames-weather 40.7 -73.8)"))
 
 ([FlightPro_Class690000] of  Rule
 
@@ -2541,15 +2542,15 @@
 
 ([FlightPro_Class730002] of  Rule
 
-	(lhs "?q (Question predicate \"weather\")")
-	(rhs "(ext.data/pump-weather (:instructions pro.commands/CHN)\n		pro.commands/E-DATA)")
+	(lhs "?q (Question predicate \"weather-gn\")")
+	(rhs "(ext.data/pump-weather (:instructions pro.commands/CHN)\n		pro.commands/E-DATA\n		ext.data/gn-weather-html)")
 	(salience 0)
-	(title "qq:Weather"))
+	(title "qq:WeatherGeoNames"))
 
 ([FlightPro_Class730003] of  CloFunction
 
-	(source "(let [[n s w e] (:visible @edata)\n        [lat lon] (our-center n s w e)\n        rsp	(gn/call-geonames-weather lat lon)]\n  (if (and rsp (not (empty? rsp)))\n    (let [lat2 	(read-string (rsp \"lat\"))\n            lon2 	(read-string (rsp \"lng\"))\n            [lat3 lon3 loc] (if (and (> n lat2 s) (< w lon2 e))\n		[lat2 lon2 (format \"%.4f %.4f\" lat2 lon2)]\n		[lat lon\n		 (str (geo/rough-distance [lat lon] [lat2 lon2])\n		       \" miles to \" \n		       (gn/direction (gn/bearing lat lon lat2 lon2))\n		       \" from here\")])\n            name 	(rsp \"stationName\")\n            wcd 	(rsp \"weatherCondition\")\n            hym 	(rsp \"hymidity\")\n            tmp 	(rsp \"temperature\")\n            wind 	(rsp \"windDirection\")\n            bwnd 	(if (some? wind)\n	  (let [b (+ (read-string wind) 180)] (if (> b 360) (- b 360) b)))\n            win 	(if (some? bwnd)\n	  (gn/direction bwnd)\n	  \"n/a\")\n            wins 	(rsp \"windSpeed\")\n            tim 	(rsp \"observationTime\")\n            mess	(str name \" Weather Station<br>\"\n	  \"location: \" loc \"<br>\"\n	  \"observation time: \" tim \"<br>\"\n	  \"weather conditions: \" wcd \"<br>\"\n	  \"temperature: \" tmp \" Celsius<br>\"\n	  \"hymidity: \" hym \"<br>\"\n	  \"wind: \" win \", \" wins \" Knots\")\n            html	(str \"<h3>Weather</h3>\" mess)]\n        (asp/pump-in chn \n	{:instruct :popup\n	 :lat lat\n	 :lon lon\n	 :html html\n	 :time (:ext-data-popup TIO)}))\n    (println \"Weather information unavailable!\")))")
-	(title "pump-weather [chn edata]"))
+	(source "(let [[n s w e] (:visible @edata)\n        [lat lon] (our-center n s w e)\n        html (or (fun lat lon n s w e)\n	\"Weather information unavailable!\")]\n    (asp/pump-in chn \n	{:instruct :popup\n	 :lat lat\n	 :lon lon\n	 :html html\n	 :time (:ext-data-popup TIO)}))")
+	(title "pump-weather [chn edata fun]"))
 
 ([FlightPro_Class730004] of  CloFunction
 
@@ -2596,21 +2597,51 @@
 	(runways 0)
 	(title "Brasilia International Airport"))
 
-([FlightPro_Class760000] of  CloFuncall
+([FlightPro_Class750000] of  CloVar
 
-	(source "pro.commands/MY-INFOS"))
+	(source "\"http://www.myweather2.com/developer/forecast.ashx?uac=Pyih5WakI3&output=json&query=\"")
+	(title "WEATHER2-API"))
 
-([FlightPro_Class760001] of  CloFuncall
+([FlightPro_Class750001] of  CloFuncall
 
-	(source "(rete.core/facts-for-slot-value 'Flight 'id = \"MANUAL\")"))
+	(source "(slurp (str ext.data/WEATHER2-API \"60.26,24\"))"))
 
-([FlightPro_Class760002] of  CloFuncall
+([FlightPro_Class750002] of  CloFuncall
 
-	(source "(rete.core/facts-with-slot-value 'Flight 'id = \"MANUAL\")"))
+	(source "(json-web-data (str ext.data/WEATHER2-API \"60.26,24\"))"))
 
-([FlightPro_Class760003] of  CloFuncall
+([FlightPro_Class750003] of  CloFuncall
 
-	(source "fr24.client/MANUAL-DATA"))
+	(source "(in-ns 'ext.data)"))
+
+([FlightPro_Class750004] of  CloFunction
+
+	(source "(let [rsp (gn/call-geonames-weather lat lon)]\n  (if (and rsp (not (empty? rsp)))\n    (let [lat2 	(read-string (rsp \"lat\"))\n            lon2 	(read-string (rsp \"lng\"))\n            [lat3 lon3 loc] (if (and (> n lat2 s) (< w lon2 e))\n		[lat2 lon2 (format \"%.4f %.4f\" lat2 lon2)]\n		[lat lon\n		 (str (geo/rough-distance [lat lon] [lat2 lon2])\n		       \" miles to \" \n		       (gn/direction (gn/bearing lat lon lat2 lon2))\n		       \" from here\")])\n            name 	(rsp \"stationName\")\n            wcd 	(rsp \"weatherCondition\")\n            hym 	(rsp \"hymidity\")\n            tmp 	(rsp \"temperature\")\n            wind 	(rsp \"windDirection\")\n            bwnd 	(if (some? wind)\n	  (let [b (+ (read-string wind) 180)] (if (> b 360) (- b 360) b)))\n            win 	(if (some? bwnd)\n	  (gn/direction bwnd)\n	  \"n/a\")\n            wins 	(rsp \"windSpeed\")\n            tim 	(rsp \"observationTime\")\n            mess	(str name \" Weather Station<br>\"\n	  \"location: \" loc \"<br>\"\n	  \"observation time: \" tim \"<br>\"\n	  \"weather conditions: \" wcd \"<br>\"\n	  \"temperature: \" tmp \" Celsius<br>\"\n	  \"hymidity: \" hym \"<br>\"\n	  \"wind: \" win \", \" wins \" Knots\")]\n         (str \"<h3>Weather by GeoNames</h3>\" mess))))\nnil")
+	(title "gn-weather-html [lat lon n s w e]"))
+
+([FlightPro_Class750005] of  CloFunction
+
+	(source "(letfn [(wind [w]\n	(let [e (first (w \"wind\"))]\n	  (str \"Wind: \" (e \"dir\") \", \" (e \"speed\") \" \" (e \"wind_unit\") \"<br>\")))\n           (weather [w]\n	(str \"Weather: \" (w \"weather_text\") \"<br>\" (wind w)))\n           (day [w] (str \"Date: \" (w \"date\") \"<br>\" \n	         (weather (first (w \"day\")))\n	         \"Day max temp: \" (w \"day_max_temp\") \" \" (w \"temp_unit\") \"<br>\"\n	         \"Night min temp: \" (w \"night_min_temp\") \" \" (w \"temp_unit\") \"<br>\"))]\n  (let [w2 (json-web-data (str ext.data/WEATHER2-API lat \",\" lon))]\n    (if (and w2 (not (empty? w2)))\n      (let [w (first ((w2 \"weather\") \"curren_weather\"))\n              f ((w2 \"weather\") \"forecast\")\n              d1 (first f)\n              d2 (second f)]\n         (str \"<h3>Weather by WEATHER2</h3>\"\n                \"<a href='http://www.myweather2.com'>www.myweather2.com</a><br><br>\"\n                \"<h4>Current weather</h4>\"\n                \"Temperature: \" (w \"temp\") \" \" (w \"temp_unit\") \"<br>\"\n                \"Pressure: \" (w \"pressure\") \"<br>\"\n                \"Humidity: \" (w \"humidity\") \"<br>\"\n                (weather w) \"<br>\"\n                \"<h4>Forcast</h4>\"\n                (day d1) \"<br>\"\n                (day d2))))))")
+	(title "w2-weather-html [lat lon n s w e]"))
+
+([FlightPro_Class750006] of  CloDocumentation
+
+	(source "<html>\n  <head>\n    <style type=\"text/css\">\n      <!--\n        body { font-family: arial; font-size: 12pt }\n        p { font-family: arial; margin-top: 2; margin-right: 2; margin-bottom: 2; margin-left: 2 }\n      -->\n    </style>\n    \n  </head>\n  <body>\n          { &quot;weather&quot;: <br>        { &quot;curren_weather&quot;: <br>          [ {&quot;humidity&quot;: &quot;73&quot;, <br>              &quot;pressure&quot;: &quot;998&quot;, <br>              &quot;temp&quot;: &quot;-6&quot;, &quot;temp_unit&quot;: &quot;c&quot;, <br>              &quot;weather_code&quot;: &quot;1&quot;, <br>              &quot;weather_text&quot;: &quot;Partly cloudy&quot;,  <br>              &quot;wind&quot;: [ {&quot;dir&quot;: &quot;W&quot;, <br>                             &quot;speed&quot;: &quot;5&quot;, <br>                             &quot;wind_unit&quot;: &quot;kph&quot; } ] } ],  <br>        &quot;forecast&quot;: [ {&quot;date&quot;: &quot;2017-02-25&quot;,  <br>                              &quot;day&quot;: [ {&quot;weather_code&quot;: &quot;3&quot;, <br>                                            &quot;weather_text&quot;: &quot;Overcast skies&quot;,  <br>                                            &quot;wind&quot;: [ {&quot;dir&quot;: &quot;NW&quot;, <br>                                                           &quot;dir_degree&quot;:   &quot;314&quot;, <br>                                                           &quot;speed&quot;: &quot;22&quot;, <br>                                                           &quot;wind_unit&quot;: &quot;kph&quot;   } ] } ], <br>                             &quot;day_max_temp&quot;: &quot;-3&quot;,  <br>                             &quot;night&quot;: [ {&quot;weather_code&quot;: &quot;0&quot;, <br>                                             &quot;weather_text&quot;: &quot;Clear skies&quot;,  <br>                                             &quot;wind&quot;: [ {&quot;dir&quot;: &quot;W&quot;, <br>                                                             &quot;dir_degree&quot;:   &quot;274&quot;, <br>                                                             &quot;speed&quot;: &quot;22&quot;, <br>                                                             &quot;wind_unit&quot;:   &quot;kph&quot; } ] } ], <br>                             &quot;night_min_temp&quot;: &quot;-7&quot;, <br>                             &quot;temp_unit&quot;: &quot;c&quot; }, <br>                           {&quot;date&quot;: &quot;2017-02-26&quot;,  <br>                             &quot;day&quot;: [ {&quot;weather_code&quot;: &quot;73&quot;, <br>                                           &quot;weather_text&quot;: &quot;Moderate snow&quot;,  <br>                                           &quot;wind&quot;: [ {&quot;dir&quot;: &quot;ESE&quot;, <br>                                           &quot;dir_degree&quot;: &quot;117&quot;, <br>                                           &quot;speed&quot;: &quot;22&quot;, <br>                                           &quot;wind_unit&quot;: &quot;kph&quot; } ] } ], <br>                             &quot;day_max_temp&quot;: &quot;-1&quot;,  <br>                             &quot;night&quot;: [ {&quot;weather_code&quot;: &quot;10&quot;, <br>                                              &quot;weather_text&quot;: &quot;Mist&quot;,  <br>                                              &quot;wind&quot;: [ {&quot;dir&quot;: &quot;ENE&quot;, <br>                                                              &quot;dir_degree&quot;:   &quot;57&quot;, <br>                                                              &quot;speed&quot;: &quot;18&quot;, <br>                                                              &quot;wind_unit&quot;:   &quot;kph&quot; } ] } ], <br>                             &quot;night_min_temp&quot;: &quot;-10&quot;, <br>                             &quot;temp_unit&quot;: &quot;c&quot; } ] }}</body>\n</html>"))
+
+([FlightPro_Class750007] of  CloFuncall
+
+	(source "(w2-weather-html [60.26 24])"))
+
+([FlightPro_Class750008] of  CloFuncall
+
+	(source "(w2-weather-html 60.26 24)"))
+
+([FlightPro_Class750009] of  Rule
+
+	(lhs "?q (Question predicate \"weather-w2\")")
+	(rhs "(ext.data/pump-weather (:instructions pro.commands/CHN)\n		pro.commands/E-DATA\n		ext.data/w2-weather-html)")
+	(salience 0)
+	(title "qq:Weather2"))
 
 ([FlightPro_Class760004] of  Airport
 

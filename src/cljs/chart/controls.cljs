@@ -32,6 +32,7 @@
   "<select onchange='javascript:chart.client.question(this.value)'>
    <option value='questions'>Questions</option>
    <option value='intersect'>Intersections</option>
-   <option value='weather'>Weather</option>
+   <option value='weather-gn'>Weather GeoNames</option>
+   <option value='weather-w2'>Weather2</option>
    </select>"))
 
