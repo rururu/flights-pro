@@ -1,4 +1,4 @@
-; Sat Feb 25 22:10:26 MSK 2017
+; Mon Feb 27 00:15:15 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -424,7 +424,8 @@
 		[FlightPro_Class210009]
 		[FlightPro_Class210012]
 		[FlightPro_Class210013]
-		[FlightPro_Class260002])
+		[FlightPro_Class260002]
+		[FlightPro_Class770011])
 	(cloNamespace [FlightPro_Class180003])
 	(cloVars
 		[FlightPro_Class210011]
@@ -2257,26 +2258,6 @@
 
 	(source "(wiki.gis/bbx-of-list [[60.1 29.9][59.9 30.1]] \"QQ\")"))
 
-([FlightPro_Class670013] of  CloFuncall
-
-	(source "(wiki.gis/bbx-of-list [[60.2 29.9][59.8 30.1]] \"QQ\")"))
-
-([FlightPro_Class670020] of  CloFuncall
-
-	(source "(vec (ext.data/get-bbx-wiki 60.3 60.1 29.8 30.2))"))
-
-([FlightPro_Class670036] of  CloFuncall
-
-	(source "(count (ext.data/get-bbx-wiki 40.9 40.7 -74.3 -74.1 29.8))"))
-
-([FlightPro_Class670037] of  CloFuncall
-
-	(source "(count (ext.data/get-bbx-wiki 40.9 40.7 -74.3 -74.1))"))
-
-([FlightPro_Class670113] of  CloFuncall
-
-	(source "(count (ext.data/get-bbx-wiki 40.7 40.5 -74.7 -74.3))"))
-
 ([FlightPro_Class670265] of  CloFunction
 
 	(source "{:instruct :create-placemark\n :iname (.getName dati)\n :lat (sv dati \"lat\")\n :lon (sv dati \"lng\")\n :feature (sv dati \"feature\")}")
@@ -2286,26 +2267,6 @@
 
 	(source "(let [head (str \"<h3>\" (sv dati \"title\") \"</h3>\")\n       itag (str \"<img src=\\\"\" (sv dati \"thumbnailImg\") \"\\\">\")\n       summ (sv dati \"summary\")\n       addr (str \"http://\" (sv dati \"wikipediaUrl\") \"\\\"\")\n       wiki (str \"<a href=\\\"\" addr \"\\\">\" addr \"</a>\")\n       html (str head itag \"<br>\" summ \"<br>\" wiki)]\n  {:instruct :popup\n    :lat (sv dati \"lat\")\n    :lon (sv dati \"lng\")\n    :html html\n    :time (:ext-data-popup TIO)})")
 	(title "placemark-popup-instruct [dati]"))
-
-([FlightPro_Class670268] of  CloFuncall
-
-	(source "(in-ns 'protege.core)"))
-
-([FlightPro_Class670269] of  CloFuncall
-
-	(source "(ins \"FlightPro_Class670205\")"))
-
-([FlightPro_Class670270] of  CloFuncall
-
-	(source "(.show *prj* (ins \"FlightPro_Class670205\"))"))
-
-([FlightPro_Class670271] of  CloFuncall
-
-	(source "(def dati (ins \"FlightPro_Class670205\"))"))
-
-([FlightPro_Class670272] of  CloFuncall
-
-	(source "(name dati)"))
 
 ([FlightPro_Class670311] of  CloFunction
 
@@ -2331,14 +2292,6 @@
 	(icao "HEGN")
 	(runways 0)
 	(title "Hurghada International Airport"))
-
-([FlightPro_Class680041] of  CloFuncall
-
-	(source "(geo.names/call-geonames-weather 60 29)"))
-
-([FlightPro_Class680042] of  CloFuncall
-
-	(source "(geo.names/call-geonames-weather 40 -74)"))
 
 ([FlightPro_Class690000] of  Rule
 
@@ -2602,18 +2555,6 @@
 	(source "\"http://www.myweather2.com/developer/forecast.ashx?uac=Pyih5WakI3&output=json&query=\"")
 	(title "WEATHER2-API"))
 
-([FlightPro_Class750001] of  CloFuncall
-
-	(source "(slurp (str ext.data/WEATHER2-API \"60.26,24\"))"))
-
-([FlightPro_Class750002] of  CloFuncall
-
-	(source "(json-web-data (str ext.data/WEATHER2-API \"60.26,24\"))"))
-
-([FlightPro_Class750003] of  CloFuncall
-
-	(source "(in-ns 'ext.data)"))
-
 ([FlightPro_Class750004] of  CloFunction
 
 	(source "(let [rsp (gn/call-geonames-weather lat lon)]\n  (if (and rsp (not (empty? rsp)))\n    (let [lat2 	(read-string (rsp \"lat\"))\n            lon2 	(read-string (rsp \"lng\"))\n            [lat3 lon3 loc] (if (and (> n lat2 s) (< w lon2 e))\n		[lat2 lon2 (format \"%.4f %.4f\" lat2 lon2)]\n		[lat lon\n		 (str (geo/rough-distance [lat lon] [lat2 lon2])\n		       \" miles to \" \n		       (gn/direction (gn/bearing lat lon lat2 lon2))\n		       \" from here\")])\n            name 	(rsp \"stationName\")\n            wcd 	(rsp \"weatherCondition\")\n            hym 	(rsp \"hymidity\")\n            tmp 	(rsp \"temperature\")\n            wind 	(rsp \"windDirection\")\n            bwnd 	(if (some? wind)\n	  (let [b (+ (read-string wind) 180)] (if (> b 360) (- b 360) b)))\n            win 	(if (some? bwnd)\n	  (gn/direction bwnd)\n	  \"n/a\")\n            wins 	(rsp \"windSpeed\")\n            tim 	(rsp \"observationTime\")\n            mess	(str name \" Weather Station<br>\"\n	  \"location: \" loc \"<br>\"\n	  \"observation time: \" tim \"<br>\"\n	  \"weather conditions: \" wcd \"<br>\"\n	  \"temperature: \" tmp \" Celsius<br>\"\n	  \"hymidity: \" hym \"<br>\"\n	  \"wind: \" win \", \" wins \" Knots\")]\n         (str \"<h3>Weather by GeoNames</h3>\" mess))))\nnil")
@@ -2628,20 +2569,28 @@
 
 	(source "<html>\n  <head>\n    <style type=\"text/css\">\n      <!--\n        body { font-family: arial; font-size: 12pt }\n        p { font-family: arial; margin-top: 2; margin-right: 2; margin-bottom: 2; margin-left: 2 }\n      -->\n    </style>\n    \n  </head>\n  <body>\n          { &quot;weather&quot;: <br>        { &quot;curren_weather&quot;: <br>          [ {&quot;humidity&quot;: &quot;73&quot;, <br>              &quot;pressure&quot;: &quot;998&quot;, <br>              &quot;temp&quot;: &quot;-6&quot;, &quot;temp_unit&quot;: &quot;c&quot;, <br>              &quot;weather_code&quot;: &quot;1&quot;, <br>              &quot;weather_text&quot;: &quot;Partly cloudy&quot;,  <br>              &quot;wind&quot;: [ {&quot;dir&quot;: &quot;W&quot;, <br>                             &quot;speed&quot;: &quot;5&quot;, <br>                             &quot;wind_unit&quot;: &quot;kph&quot; } ] } ],  <br>        &quot;forecast&quot;: [ {&quot;date&quot;: &quot;2017-02-25&quot;,  <br>                              &quot;day&quot;: [ {&quot;weather_code&quot;: &quot;3&quot;, <br>                                            &quot;weather_text&quot;: &quot;Overcast skies&quot;,  <br>                                            &quot;wind&quot;: [ {&quot;dir&quot;: &quot;NW&quot;, <br>                                                           &quot;dir_degree&quot;:   &quot;314&quot;, <br>                                                           &quot;speed&quot;: &quot;22&quot;, <br>                                                           &quot;wind_unit&quot;: &quot;kph&quot;   } ] } ], <br>                             &quot;day_max_temp&quot;: &quot;-3&quot;,  <br>                             &quot;night&quot;: [ {&quot;weather_code&quot;: &quot;0&quot;, <br>                                             &quot;weather_text&quot;: &quot;Clear skies&quot;,  <br>                                             &quot;wind&quot;: [ {&quot;dir&quot;: &quot;W&quot;, <br>                                                             &quot;dir_degree&quot;:   &quot;274&quot;, <br>                                                             &quot;speed&quot;: &quot;22&quot;, <br>                                                             &quot;wind_unit&quot;:   &quot;kph&quot; } ] } ], <br>                             &quot;night_min_temp&quot;: &quot;-7&quot;, <br>                             &quot;temp_unit&quot;: &quot;c&quot; }, <br>                           {&quot;date&quot;: &quot;2017-02-26&quot;,  <br>                             &quot;day&quot;: [ {&quot;weather_code&quot;: &quot;73&quot;, <br>                                           &quot;weather_text&quot;: &quot;Moderate snow&quot;,  <br>                                           &quot;wind&quot;: [ {&quot;dir&quot;: &quot;ESE&quot;, <br>                                           &quot;dir_degree&quot;: &quot;117&quot;, <br>                                           &quot;speed&quot;: &quot;22&quot;, <br>                                           &quot;wind_unit&quot;: &quot;kph&quot; } ] } ], <br>                             &quot;day_max_temp&quot;: &quot;-1&quot;,  <br>                             &quot;night&quot;: [ {&quot;weather_code&quot;: &quot;10&quot;, <br>                                              &quot;weather_text&quot;: &quot;Mist&quot;,  <br>                                              &quot;wind&quot;: [ {&quot;dir&quot;: &quot;ENE&quot;, <br>                                                              &quot;dir_degree&quot;:   &quot;57&quot;, <br>                                                              &quot;speed&quot;: &quot;18&quot;, <br>                                                              &quot;wind_unit&quot;:   &quot;kph&quot; } ] } ], <br>                             &quot;night_min_temp&quot;: &quot;-10&quot;, <br>                             &quot;temp_unit&quot;: &quot;c&quot; } ] }}</body>\n</html>"))
 
-([FlightPro_Class750007] of  CloFuncall
-
-	(source "(w2-weather-html [60.26 24])"))
-
-([FlightPro_Class750008] of  CloFuncall
-
-	(source "(w2-weather-html 60.26 24)"))
-
 ([FlightPro_Class750009] of  Rule
 
 	(lhs "?q (Question predicate \"weather-w2\")")
 	(rhs "(ext.data/pump-weather (:instructions pro.commands/CHN)\n		pro.commands/E-DATA\n		ext.data/w2-weather-html)")
 	(salience 0)
 	(title "qq:Weather2"))
+
+([FlightPro_Class760000] of  CloFuncall
+
+	(source "(def aps (fr24.client/airports-by-country))"))
+
+([FlightPro_Class760001] of  CloFuncall
+
+	(source "(count aps)"))
+
+([FlightPro_Class760002] of  CloFuncall
+
+	(source "(apply + (map count aps))"))
+
+([FlightPro_Class760003] of  CloFuncall
+
+	(source "(doseq [[k v] (seq aps)] (println (count v)))"))
 
 ([FlightPro_Class760004] of  Airport
 
@@ -2672,6 +2621,55 @@
 	(icao "WSSS")
 	(runways 0)
 	(title "Singapore Changi Airport"))
+
+([FlightPro_Class770004] of  CloFuncall
+
+	(source "(loop [c (seq aps) s 0] (if (seq c) (recur  (rest c) (+ s (count (first c)))) s))"))
+
+([FlightPro_Class770005] of  CloFuncall
+
+	(source "(def aa (mapcat vals aps))"))
+
+([FlightPro_Class770006] of  CloFuncall
+
+	(source "(first aa)"))
+
+([FlightPro_Class770007] of  CloFuncall
+
+	(source "(type aa)"))
+
+([FlightPro_Class770008] of  CloFuncall
+
+	(source "(take 1 aa)"))
+
+([FlightPro_Class770009] of  CloFuncall
+
+	(source "(def aa (mapcat vals (vals aps)))"))
+
+([FlightPro_Class770010] of  CloFuncall
+
+	(source "(take 2 aa)"))
+
+([FlightPro_Class770011] of  CloFunction
+
+	(source "(letfn [(inside [x]\n	(let [lat (x \"lat\")\n	       lon (x \"lon\")]\n	  (and (<= lat n)(>= lat s)(<= lon e)(>= lon w))))]\n  (->> (airports-by-country)\n           vals\n           (mapcat vals)\n           (filter inside)))")
+	(title "airports-in-bbx [n s w e]"))
+
+([FlightPro_Class770012] of  CloFuncall
+
+	(source "((first aa) \"lat\")"))
+
+([FlightPro_Class770013] of  CloFuncall
+
+	(source "(type ((first aa) \"lat\"))"))
+
+([FlightPro_Class770014] of  CloFuncall
+
+	(source "(airports-in-bbx 61 59 24 31)"))
+
+([FlightPro_Class770015] of  CloFuncall
+
+	(source "(fr24.client/airports-in-bbx 61 59 24 31)"))
 
 ([FlightPro_Class8] of  CloFunction
 

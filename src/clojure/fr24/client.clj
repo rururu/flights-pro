@@ -123,3 +123,13 @@
 (defn clear-flights []
   (vreset! FLIGHTS {}))
 
+(defn airports-in-bbx [n s w e]
+  (letfn [(inside [x]
+	(let [lat (x "lat")
+	       lon (x "lon")]
+	  (and (<= lat n)(>= lat s)(<= lon e)(>= lon w))))]
+  (->> (airports-by-country)
+           vals
+           (mapcat vals)
+           (filter inside))))
+

@@ -1,4 +1,4 @@
-; Sat Feb 25 22:10:26 MSK 2017
+; Mon Feb 27 00:15:15 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -20,7 +20,7 @@
 
 ([BROWSER_SLOT_NAMES] of  Property_List
 
-	(properties [FlightPro_ProjectKB_Class1103]))
+	(properties [FlightPro_ProjectKB_Class998]))
 
 ([CLSES_TAB] of  Widget
 
@@ -35,6 +35,41 @@
 
 	(name ":CREATOR"))
 
+([FlightPro_ProjectKB_Class1000] of  Map_Entry
+
+	(key "FlightPro_Class670004")
+	(key_class "edu.stanford.smi.protege.model.Frame")
+	(value "-2 441 224 146")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1001] of  Map_Entry
+
+	(key "FlightPro_Class320015")
+	(key_class "edu.stanford.smi.protege.model.Frame")
+	(value "-8 584 224 146")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1002] of  Map_Entry
+
+	(key "FlightPro_Class290004")
+	(key_class "edu.stanford.smi.protege.model.Frame")
+	(value "-3 351 224 146")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1003] of  Map_Entry
+
+	(key "FlightPro_Class290003")
+	(key_class "edu.stanford.smi.protege.model.Frame")
+	(value "-5 349 224 146")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1004] of  Map_Entry
+
+	(key "InstanceDisplay.yellow_stickies")
+	(key_class "java.lang.String")
+	(value "FlightPro_ProjectKB_Class999")
+	(value_class "java.util.Map"))
+
 ([FlightPro_ProjectKB_Class10628] of  Widget
 
 	(height 120)
@@ -48,54 +83,6 @@
 
 ([FlightPro_ProjectKB_Class10629] of  Property_List
 )
-
-([FlightPro_ProjectKB_Class1103] of  String
-
-	(name "Airport")
-	(string_value "title"))
-
-([FlightPro_ProjectKB_Class1104] of  Map
-
-	(entries
-		[FlightPro_ProjectKB_Class1105]
-		[FlightPro_ProjectKB_Class1106]
-		[FlightPro_ProjectKB_Class1107]
-		[FlightPro_ProjectKB_Class1108]))
-
-([FlightPro_ProjectKB_Class1105] of  Map_Entry
-
-	(key "FlightPro_Class670004")
-	(key_class "edu.stanford.smi.protege.model.Frame")
-	(value "-2 441 224 146")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class1106] of  Map_Entry
-
-	(key "FlightPro_Class320015")
-	(key_class "edu.stanford.smi.protege.model.Frame")
-	(value "-8 584 224 146")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class1107] of  Map_Entry
-
-	(key "FlightPro_Class290004")
-	(key_class "edu.stanford.smi.protege.model.Frame")
-	(value "-3 351 224 146")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class1108] of  Map_Entry
-
-	(key "FlightPro_Class290003")
-	(key_class "edu.stanford.smi.protege.model.Frame")
-	(value "-5 349 224 146")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class1109] of  Map_Entry
-
-	(key "InstanceDisplay.yellow_stickies")
-	(key_class "java.lang.String")
-	(value "FlightPro_ProjectKB_Class1104")
-	(value_class "java.util.Map"))
 
 ([FlightPro_ProjectKB_Class35] of  String
 
@@ -251,6 +238,19 @@
 ([FlightPro_ProjectKB_Class638] of  Property_List
 )
 
+([FlightPro_ProjectKB_Class998] of  String
+
+	(name "Airport")
+	(string_value "title"))
+
+([FlightPro_ProjectKB_Class999] of  Map
+
+	(entries
+		[FlightPro_ProjectKB_Class1000]
+		[FlightPro_ProjectKB_Class1001]
+		[FlightPro_ProjectKB_Class1002]
+		[FlightPro_ProjectKB_Class1003]))
+
 ([FORMS_TAB] of  Widget
 
 	(is_hidden FALSE)
@@ -288,8 +288,8 @@
 
 ([KB_102576_Class1] of  Map
 
-	(entries [FlightPro_ProjectKB_Class1109])
-	(referenced_maps [FlightPro_ProjectKB_Class1104]))
+	(entries [FlightPro_ProjectKB_Class1004])
+	(referenced_maps [FlightPro_ProjectKB_Class999]))
 
 ([KB_102576_Class11] of  Property_List
 
@@ -532,48 +532,48 @@
 	(boolean_value FALSE)
 	(name "ButtonDisplayed-Стереть Выделенный Экземпляр"))
 
-([KB_331613_Class984] of  Map
+([KB_307518_Class984] of  Map
 
 	(entries
-		[KB_331613_Class985]
-		[KB_331613_Class988]
-		[KB_331613_Class989]
-		[KB_331613_Class990])
-	(referenced_maps [KB_331613_Class986]))
+		[KB_307518_Class985]
+		[KB_307518_Class988]
+		[KB_307518_Class989]
+		[KB_307518_Class990])
+	(referenced_maps [KB_307518_Class986]))
 
-([KB_331613_Class985] of  Map_Entry
+([KB_307518_Class985] of  Map_Entry
 
 	(key "suppress_instance_counting")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_331613_Class986] of  Map
+([KB_307518_Class986] of  Map
 
-	(entries [KB_331613_Class987]))
+	(entries [KB_307518_Class987]))
 
-([KB_331613_Class987] of  Map_Entry
+([KB_307518_Class987] of  Map_Entry
 
 	(key "WikipediaGIS_Class2")
 	(key_class "edu.stanford.smi.protege.model.Frame")
 	(value "12 479 212 124")
 	(value_class "java.awt.Rectangle"))
 
-([KB_331613_Class988] of  Map_Entry
+([KB_307518_Class988] of  Map_Entry
 
 	(key "InstanceDisplay.yellow_stickies")
 	(key_class "java.lang.String")
-	(value "KB_331613_Class986")
+	(value "KB_307518_Class986")
 	(value_class "java.util.Map"))
 
-([KB_331613_Class989] of  Map_Entry
+([KB_307518_Class989] of  Map_Entry
 
 	(key "add_name_on_instance_form")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_331613_Class990] of  Map_Entry
+([KB_307518_Class990] of  Map_Entry
 
 	(key "change_tracking_active")
 	(key_class "java.lang.String")
