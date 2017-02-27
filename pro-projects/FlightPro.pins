@@ -1,4 +1,4 @@
-; Mon Feb 27 00:15:15 MSK 2017
+; Mon Feb 27 23:23:21 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -390,7 +390,7 @@
 
 ([FlightPro_Class170005] of  CloFunction
 
-	(source "(doseq [{:keys [instruct] :as ins} (read-transit response)]\n  ;;(println [:INSTRUCT ins])\n  (condp = instruct\n    :create-update (let [{:keys [id vehicle]} ins]\n	(create-update-vehicle id vehicle))\n    :delete (let [{:keys [id]} ins]\n	(delete-vehicle id))\n    :clear (clear-vehicles)\n    :popup (let [{:keys [id lat lon html time]} ins]\n	(cond\n	  id (popup id html time)\n	  (and lat lon) (popup lat lon html time)))\n    :trail (let [{:keys [id points options time]} ins]\n	(add-trail id points options time))\n    :map-center (let [{:keys [coord]} ins]\n	(map-center coord))\n    :create-placemark (let [{:keys [iname lat lon feature]} ins]\n                      (create-placemark iname lat lon feature))\n    :clear-placemarks (clear-placemarks)\n    :add-link (let [{:keys [ids options]} ins]\n                  (add-link ids options))\n    (println (str \"Unknown instruction: \" [instruct ins]))))")
+	(source "(doseq [{:keys [instruct] :as ins} (read-transit response)]\n  ;;(println [:INSTRUCT ins])\n  (condp = instruct\n    :create-update (let [{:keys [id vehicle]} ins]\n	(create-update-vehicle id vehicle))\n    :delete (let [{:keys [id]} ins]\n	(delete-vehicle id))\n    :clear (clear-vehicles)\n    :popup (let [{:keys [id lat lon html time width height]} ins]\n	(cond\n	  id (popup id html time)\n	  (and  width height lat lon) (popup lat lon html time width height)\n	  (and lat lon) (popup lat lon html time)))\n    :trail (let [{:keys [id points options time]} ins]\n	(add-trail id points options time))\n    :map-center (let [{:keys [coord]} ins]\n	(map-center coord))\n    :create-placemark (let [{:keys [iname lat lon feature]} ins]\n                      (create-placemark iname lat lon feature))\n    :clear-placemarks (clear-placemarks)\n    :add-link (let [{:keys [ids options]} ins]\n                  (add-link ids options))\n    (println (str \"Unknown instruction: \" [instruct ins]))))")
 	(title "instructions-handler [response]"))
 
 ([FlightPro_Class180000] of  CloFunction
@@ -425,7 +425,8 @@
 		[FlightPro_Class210012]
 		[FlightPro_Class210013]
 		[FlightPro_Class260002]
-		[FlightPro_Class770011])
+		[FlightPro_Class770011]
+		[FlightPro_Class770000])
 	(cloNamespace [FlightPro_Class180003])
 	(cloVars
 		[FlightPro_Class210011]
@@ -439,7 +440,7 @@
 
 ([FlightPro_Class180003] of  CloNamespace
 
-	(source "(:require\n  [org.httpkit.client :as client]\n  [clj-json.core :as json]\n  [async.proc :as asp]\n  [my.flights.move :as mfs])")
+	(source "(:require\n  [org.httpkit.client :as client]\n  [clj-json.core :as json]\n  [async.proc :as asp]\n  [my.flights.move :as mfs]\n  [calc.geo :refer [distance-nm]])")
 	(title "fr24.client"))
 
 ([FlightPro_Class190000] of  CloFunction
@@ -799,7 +800,7 @@
 
 ([FlightPro_Class220026] of  CloFunction
 
-	(source "(set-html! \"commands-header\" \"<h4>Commands</h4>\")\n(set-html! \"commands\"\n  \"<select onchange='javascript:chart.client.command(this.value)'>\n   <option value='commands'>Commands</option>\n   <option value='watch-visible'>Watch visible area</option>\n   <option value='intersect'>Intersections</option>\n   <option value='move-to'>Move to Airport</option>\n   <option value='schedule'>Schedule Flight</option>\n   <option value='wikipedia'>Toggle Wikipedia</option>\n   <option value='clear'>Clear</option>\n   </select>\")\n(set-html! \"questions-header\" \"<h4>Questions</h4>\")\n(set-html! \"questions\"\n  \"<select onchange='javascript:chart.client.question(this.value)'>\n   <option value='questions'>Questions</option>\n   <option value='intersect'>Intersections</option>\n   <option value='weather-gn'>Weather GeoNames</option>\n   <option value='weather-w2'>Weather2</option>\n   </select>\")")
+	(source "(set-html! \"commands-header\" \"<h4>Commands</h4>\")\n(set-html! \"commands\"\n  \"<select onchange='javascript:chart.client.command(this.value)'>\n   <option value='commands'>Commands</option>\n   <option value='watch-visible'>Watch visible area</option>\n   <option value='move-to'>Move to Airport</option>\n   <option value='schedule'>Schedule Flight</option>\n   <option value='wikipedia'>Toggle Wikipedia</option>\n   <option value='clear'>Clear</option>\n   </select>\")\n(set-html! \"questions-header\" \"<h4>Questions</h4>\")\n(set-html! \"questions\"\n  \"<select onchange='javascript:chart.client.question(this.value)'>\n   <option value='questions'>Questions</option>\n   <option value='intersect'>Intersections</option>\n   <option value='weather-gn'>Weather GeoNames</option>\n   <option value='weather-w2'>Weather2</option>\n   <option value='nearest-airports'>Nearest Airports</option>\n   </select>\")")
 	(title "show-chart-controls []"))
 
 ([FlightPro_Class220027] of  CloFunction
@@ -1085,7 +1086,8 @@
 		[FlightPro_Class690000]
 		[FlightPro_Class690007]
 		[FlightPro_Class730002]
-		[FlightPro_Class750009])
+		[FlightPro_Class750009]
+		[FlightPro_Class780020])
 	(templates [Question])
 	(title "Questions"))
 
@@ -1167,7 +1169,7 @@
 
 ([FlightPro_Class310002] of  CloFunction
 
-	(source "([id html time]\n  (let [vmp (@VEHICLES id)\n         [lat lon] (:coord @vmp)]\n    (popup lat lon html time)))\n([lat lon html time]\n  (let [pop (-> js/L (.popup {:maxWidth 600 :maxHeight 800 })\n                (.setLatLng (array lat lon))\n                (.setContent html))]\n    (.addLayer @CHART pop)\n    (if (> time 0)\n        (asp/delayer #(.removeLayer @CHART pop) time))))")
+	(source "([id html time]\n  (let [vmp (@VEHICLES id)\n         [lat lon] (:coord @vmp)]\n    (popup lat lon html time)))\n([lat lon html time]\n  (popup lat lon html time 600 800))\n([lat lon html time w h]\n  (let [pop (-> js/L (.popup {:maxWidth w :maxHeight h})\n                (.setLatLng (array lat lon))\n                (.setContent html))]\n    (.addLayer @CHART pop)\n    (if (> time 0)\n        (asp/delayer #(.removeLayer @CHART pop) time))))")
 	(title "popup"))
 
 ([FlightPro_Class310003] of  CloFunction
@@ -2213,7 +2215,8 @@
 		[FlightPro_Class660000]
 		[FlightPro_Class750004]
 		[FlightPro_Class750005]
-		[FlightPro_Class730003])
+		[FlightPro_Class730003]
+		[FlightPro_Class780021])
 	(cloNamespace [FlightPro_Class670001])
 	(cloVars
 		[FlightPro_Class330004]
@@ -2222,7 +2225,7 @@
 
 ([FlightPro_Class670001] of  CloNamespace
 
-	(source "(:use protege.core)\n(:require \n  [wiki.gis :as wig]\n  [cesium.core :as cz]\n  [calc.geo :as geo]\n  [async.proc :as asp]\n  [geo.names :as gn]\n  [fr24.client :refer [json-web-data]])")
+	(source "(:use protege.core)\n(:require \n  [wiki.gis :as wig]\n  [cesium.core :as cz]\n  [calc.geo :as geo]\n  [async.proc :as asp]\n  [geo.names :as gn]\n  [fr24.client :as fr24])")
 	(title "ext.data"))
 
 ([FlightPro_Class670004] of  %3AINSTANCE-ANNOTATION
@@ -2253,10 +2256,6 @@
 ([FlightPro_Class670010] of  CloFuncall
 
 	(source "(vec (ext.data/get-bbx-wiki 60.2 59.8 29.7 30.3))"))
-
-([FlightPro_Class670011] of  CloFuncall
-
-	(source "(wiki.gis/bbx-of-list [[60.1 29.9][59.9 30.1]] \"QQ\")"))
 
 ([FlightPro_Class670265] of  CloFunction
 
@@ -2562,7 +2561,7 @@
 
 ([FlightPro_Class750005] of  CloFunction
 
-	(source "(letfn [(wind [w]\n	(let [e (first (w \"wind\"))]\n	  (str \"Wind: \" (e \"dir\") \", \" (e \"speed\") \" \" (e \"wind_unit\") \"<br>\")))\n           (weather [w]\n	(str \"Weather: \" (w \"weather_text\") \"<br>\" (wind w)))\n           (day [w] (str \"Date: \" (w \"date\") \"<br>\" \n	         (weather (first (w \"day\")))\n	         \"Day max temp: \" (w \"day_max_temp\") \" \" (w \"temp_unit\") \"<br>\"\n	         \"Night min temp: \" (w \"night_min_temp\") \" \" (w \"temp_unit\") \"<br>\"))]\n  (let [w2 (json-web-data (str ext.data/WEATHER2-API lat \",\" lon))]\n    (if (and w2 (not (empty? w2)))\n      (let [w (first ((w2 \"weather\") \"curren_weather\"))\n              f ((w2 \"weather\") \"forecast\")\n              d1 (first f)\n              d2 (second f)]\n         (str \"<h3>Weather by WEATHER2</h3>\"\n                \"<a href='http://www.myweather2.com'>www.myweather2.com</a><br><br>\"\n                \"<h4>Current weather</h4>\"\n                \"Temperature: \" (w \"temp\") \" \" (w \"temp_unit\") \"<br>\"\n                \"Pressure: \" (w \"pressure\") \"<br>\"\n                \"Humidity: \" (w \"humidity\") \"<br>\"\n                (weather w) \"<br>\"\n                \"<h4>Forcast</h4>\"\n                (day d1) \"<br>\"\n                (day d2))))))")
+	(source "(letfn [(wind [w]\n	(let [e (first (w \"wind\"))]\n	  (str \"Wind: \" (e \"dir\") \", \" (e \"speed\") \" \" (e \"wind_unit\") \"<br>\")))\n           (weather [w]\n	(str \"Weather: \" (w \"weather_text\") \"<br>\" (wind w)))\n           (day [w] (str \"Date: \" (w \"date\") \"<br>\" \n	         (weather (first (w \"day\")))\n	         \"Day max temp: \" (w \"day_max_temp\") \" \" (w \"temp_unit\") \"<br>\"\n	         \"Night min temp: \" (w \"night_min_temp\") \" \" (w \"temp_unit\") \"<br>\"))]\n  (let [w2 (fr24/json-web-data (str ext.data/WEATHER2-API lat \",\" lon))]\n    (if (and w2 (not (empty? w2)))\n      (let [w (first ((w2 \"weather\") \"curren_weather\"))\n              f ((w2 \"weather\") \"forecast\")\n              d1 (first f)\n              d2 (second f)]\n         (str \"<h3>Weather by WEATHER2</h3>\"\n                \"<a href='http://www.myweather2.com'>www.myweather2.com</a><br><br>\"\n                \"<h4>Current weather</h4>\"\n                \"Temperature: \" (w \"temp\") \" \" (w \"temp_unit\") \"<br>\"\n                \"Pressure: \" (w \"pressure\") \"<br>\"\n                \"Humidity: \" (w \"humidity\") \"<br>\"\n                (weather w) \"<br>\"\n                \"<h4>Forcast</h4>\"\n                (day d1) \"<br>\"\n                (day d2))))))")
 	(title "w2-weather-html [lat lon n s w e]"))
 
 ([FlightPro_Class750006] of  CloDocumentation
@@ -2575,22 +2574,6 @@
 	(rhs "(ext.data/pump-weather (:instructions pro.commands/CHN)\n		pro.commands/E-DATA\n		ext.data/w2-weather-html)")
 	(salience 0)
 	(title "qq:Weather2"))
-
-([FlightPro_Class760000] of  CloFuncall
-
-	(source "(def aps (fr24.client/airports-by-country))"))
-
-([FlightPro_Class760001] of  CloFuncall
-
-	(source "(count aps)"))
-
-([FlightPro_Class760002] of  CloFuncall
-
-	(source "(apply + (map count aps))"))
-
-([FlightPro_Class760003] of  CloFuncall
-
-	(source "(doseq [[k v] (seq aps)] (println (count v)))"))
 
 ([FlightPro_Class760004] of  Airport
 
@@ -2622,54 +2605,103 @@
 	(runways 0)
 	(title "Singapore Changi Airport"))
 
-([FlightPro_Class770004] of  CloFuncall
+([FlightPro_Class770000] of  CloFunction
 
-	(source "(loop [c (seq aps) s 0] (if (seq c) (recur  (rest c) (+ s (count (first c)))) s))"))
+	(source "(letfn [(closer [ap1 ap2]\n	(let [crd1 [(ap1 \"lat\")(ap1 \"lon\")]\n	       crd2 [(ap2 \"lat\")(ap2 \"lon\")]]\n	  (<= (distance-nm [lat lon] crd1)\n	         (distance-nm [lat lon] crd2))))]\n  (->> (airports-by-country)\n           vals\n           (mapcat vals)\n           (sort closer)\n           (take n)))")
+	(title "nearest-airports [n [lat lon]]"))
 
-([FlightPro_Class770005] of  CloFuncall
+([FlightPro_Class770001] of  CloFuncall
 
-	(source "(def aa (mapcat vals aps))"))
+	(source "(s"))
 
-([FlightPro_Class770006] of  CloFuncall
+([FlightPro_Class770002] of  CloFuncall
 
-	(source "(first aa)"))
+	(source "(sort-by > [1 7 2 8 4 9])"))
 
-([FlightPro_Class770007] of  CloFuncall
+([FlightPro_Class770003] of  CloFuncall
 
-	(source "(type aa)"))
-
-([FlightPro_Class770008] of  CloFuncall
-
-	(source "(take 1 aa)"))
-
-([FlightPro_Class770009] of  CloFuncall
-
-	(source "(def aa (mapcat vals (vals aps)))"))
-
-([FlightPro_Class770010] of  CloFuncall
-
-	(source "(take 2 aa)"))
+	(source "(sort > [1 7 2 8 4 9])"))
 
 ([FlightPro_Class770011] of  CloFunction
 
 	(source "(letfn [(inside [x]\n	(let [lat (x \"lat\")\n	       lon (x \"lon\")]\n	  (and (<= lat n)(>= lat s)(<= lon e)(>= lon w))))]\n  (->> (airports-by-country)\n           vals\n           (mapcat vals)\n           (filter inside)))")
 	(title "airports-in-bbx [n s w e]"))
 
-([FlightPro_Class770012] of  CloFuncall
+([FlightPro_Class780004] of  CloFuncall
 
-	(source "((first aa) \"lat\")"))
+	(source "(sort < [1 7 2 8 4 9])"))
 
-([FlightPro_Class770013] of  CloFuncall
+([FlightPro_Class780005] of  CloFuncall
 
-	(source "(type ((first aa) \"lat\"))"))
+	(source "(sort #(< %1 %2) [1 7 2 8 4 9])"))
 
-([FlightPro_Class770014] of  CloFuncall
+([FlightPro_Class780006] of  CloFuncall
 
-	(source "(airports-in-bbx 61 59 24 31)"))
+	(source "(sort #(> %1 %2) [1 7 2 8 4 9])"))
 
-([FlightPro_Class770015] of  CloFuncall
+([FlightPro_Class780007] of  CloFuncall
 
-	(source "(fr24.client/airports-in-bbx 61 59 24 31)"))
+	(source "(sort #(if (> %1 %2)) [1 7 2 8 4 9])"))
+
+([FlightPro_Class780008] of  CloFuncall
+
+	(source "(sort #(if (> %1 %2) true false) [1 7 2 8 4 9])"))
+
+([FlightPro_Class780009] of  CloFuncall
+
+	(source "(sort #(if (< %1 %2) true false) [1 7 2 8 4 9])"))
+
+([FlightPro_Class780010] of  CloFuncall
+
+	(source "(sort #(if (< %1 %2) true) [1 7 2 8 4 9])"))
+
+([FlightPro_Class780011] of  CloFuncall
+
+	(source "(sort #(if (< %1 %2) 0 1) [1 7 2 8 4 9])"))
+
+([FlightPro_Class780012] of  CloFuncall
+
+	(source "(sort #(if (< %1 %2) -1 1) [1 7 2 8 4 9])"))
+
+([FlightPro_Class780013] of  CloFuncall
+
+	(source "(sort #(if (< %1 %2) 1 -1) [1 7 2 8 4 9])"))
+
+([FlightPro_Class780014] of  CloFuncall
+
+	(source "(fr24.client/nearest-airports 4 [60.3 24.9])"))
+
+([FlightPro_Class780015] of  CloFuncall
+
+	(source "(fr24.client/nearest-airports 4 [67.3 34.9])"))
+
+([FlightPro_Class780016] of  CloFuncall
+
+	(source "(fr24.client/nearest-airports 4 [37.3 34.9])"))
+
+([FlightPro_Class780017] of  CloFuncall
+
+	(source "(fr24.client/nearest-airports 4 [17.3 34.9])"))
+
+([FlightPro_Class780018] of  CloFuncall
+
+	(source "(fr24.client/nearest-airports 4 [0 0])"))
+
+([FlightPro_Class780019] of  CloFuncall
+
+	(source "(fr24.client/nearest-airports 4 [-32 -124])"))
+
+([FlightPro_Class780020] of  Rule
+
+	(lhs "?q (Question predicate \"nearest-airports\")")
+	(rhs "(ext.data/pump-nearest-airports (:instructions pro.commands/CHN)\n		pro.commands/E-DATA\n		4)")
+	(salience 0)
+	(title "qq:NearestAirports"))
+
+([FlightPro_Class780021] of  CloFunction
+
+	(source "(let [[n s w e] (:visible @edata)\n        ocr (our-center n s w e)\n        nas (fr24/nearest-airports n ocr)\n        dis (map #(geo/distance-nm ocr [(% \"lat\")(% \"lon\")]) nas)\n        bea (map #(geo/bear-deg ocr [(% \"lat\")(% \"lon\")]) nas)\n        html (str \"<h3>Nearest Airports</h3>\"\n	(apply str (for [i (range k)]\n	  (str (inc i) \". \" (get (nth nas i) \"name\") \", \"\n		(get (nth nas i) \"country\") \" (\"\n		(get (nth nas i) \"iata\") \"), \"\n		(format \"distance: %.1f\" (nth dis i)) \" NM, \"\n		\"direction: \" (int (nth bea i)) \"<br>\"))))] \n    (asp/pump-in chn \n	{:instruct :popup\n	 :lat (first ocr)\n	 :lon (second ocr)\n	 :html html\n	 :width 1200\n	 :height 1000\n	 :time (:ext-data-popup TIO)}))")
+	(title "pump-nearest-airports [chn edata k]"))
 
 ([FlightPro_Class8] of  CloFunction
 

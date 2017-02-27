@@ -3,7 +3,8 @@
   [org.httpkit.client :as client]
   [clj-json.core :as json]
   [async.proc :as asp]
-  [my.flights.move :as mfs]))
+  [my.flights.move :as mfs]
+  [calc.geo :refer [distance-nm]]))
 
 (def F24 {:url-flights "http://data-live.flightradar24.com/zones/fcgi/feed.js"
  :url-airports "http://www.flightradar24.com/_json/airports.php"
@@ -132,4 +133,16 @@
            vals
            (mapcat vals)
            (filter inside))))
+
+(defn nearest-airports [n [lat lon]]
+  (letfn [(closer [ap1 ap2]
+	(let [crd1 [(ap1 "lat")(ap1 "lon")]
+	       crd2 [(ap2 "lat")(ap2 "lon")]]
+	  (<= (distance-nm [lat lon] crd1)
+	         (distance-nm [lat lon] crd2))))]
+  (->> (airports-by-country)
+           vals
+           (mapcat vals)
+           (sort closer)
+           (take n))))
 

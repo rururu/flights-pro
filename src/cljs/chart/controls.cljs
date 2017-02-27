@@ -21,7 +21,6 @@
   "<select onchange='javascript:chart.client.command(this.value)'>
    <option value='commands'>Commands</option>
    <option value='watch-visible'>Watch visible area</option>
-   <option value='intersect'>Intersections</option>
    <option value='move-to'>Move to Airport</option>
    <option value='schedule'>Schedule Flight</option>
    <option value='wikipedia'>Toggle Wikipedia</option>
@@ -34,5 +33,6 @@
    <option value='intersect'>Intersections</option>
    <option value='weather-gn'>Weather GeoNames</option>
    <option value='weather-w2'>Weather2</option>
+   <option value='nearest-airports'>Nearest Airports</option>
    </select>"))
 

@@ -6,7 +6,7 @@
   [calc.geo :as geo]
   [async.proc :as asp]
   [geo.names :as gn]
-  [fr24.client :refer [json-web-data]]))
+  [fr24.client :as fr24]))
 
 (def TIO {:carrier 1000
  :camera 2222
@@ -134,7 +134,7 @@ nil)
 	         (weather (first (w "day")))
 	         "Day max temp: " (w "day_max_temp") " " (w "temp_unit") "<br>"
 	         "Night min temp: " (w "night_min_temp") " " (w "temp_unit") "<br>"))]
-  (let [w2 (json-web-data (str ext.data/WEATHER2-API lat "," lon))]
+  (let [w2 (fr24/json-web-data (str ext.data/WEATHER2-API lat "," lon))]
     (if (and w2 (not (empty? w2)))
       (let [w (first ((w2 "weather") "curren_weather"))
               f ((w2 "weather") "forecast")
@@ -161,5 +161,27 @@ nil)
 	 :lat lat
 	 :lon lon
 	 :html html
+	 :time (:ext-data-popup TIO)})))
+
+(defn pump-nearest-airports [chn edata k]
+  (let [[n s w e] (:visible @edata)
+        ocr (our-center n s w e)
+        nas (fr24/nearest-airports n ocr)
+        dis (map #(geo/distance-nm ocr [(% "lat")(% "lon")]) nas)
+        bea (map #(geo/bear-deg ocr [(% "lat")(% "lon")]) nas)
+        html (str "<h3>Nearest Airports</h3>"
+	(apply str (for [i (range k)]
+	  (str (inc i) ". " (get (nth nas i) "name") ", "
+		(get (nth nas i) "country") " ("
+		(get (nth nas i) "iata") "), "
+		(format "distance: %.1f" (nth dis i)) " NM, "
+		"direction: " (int (nth bea i)) "<br>"))))] 
+    (asp/pump-in chn 
+	{:instruct :popup
+	 :lat (first ocr)
+	 :lon (second ocr)
+	 :html html
+	 :width 1200
+	 :height 1000
 	 :time (:ext-data-popup TIO)})))
 

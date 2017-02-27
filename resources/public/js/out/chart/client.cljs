@@ -138,7 +138,9 @@
          [lat lon] (:coord @vmp)]
     (popup lat lon html time)))
 ([lat lon html time]
-  (let [pop (-> js/L (.popup {:maxWidth 600 :maxHeight 800 })
+  (popup lat lon html time 600 800))
+([lat lon html time w h]
+  (let [pop (-> js/L (.popup {:maxWidth w :maxHeight h})
                 (.setLatLng (array lat lon))
                 (.setContent html))]
     (.addLayer @CHART pop)
@@ -219,9 +221,10 @@
     :delete (let [{:keys [id]} ins]
 	(delete-vehicle id))
     :clear (clear-vehicles)
-    :popup (let [{:keys [id lat lon html time]} ins]
+    :popup (let [{:keys [id lat lon html time width height]} ins]
 	(cond
 	  id (popup id html time)
+	  (and  width height lat lon) (popup lat lon html time width height)
 	  (and lat lon) (popup lat lon html time)))
     :trail (let [{:keys [id points options time]} ins]
 	(add-trail id points options time))
