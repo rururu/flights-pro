@@ -1,4 +1,4 @@
-; Mon Feb 27 23:23:21 MSK 2017
+; Wed Mar 01 00:04:54 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -246,7 +246,7 @@
 
 ([FlightPro_Class150001] of  CSS
 
-	(source "#map {\n    position: absolute;\n    top: 0px;\n    bottom: 0;\n    left: 0;\n    right: 0;\n}\n#mousepos {\n  position:fixed;\n  bottom:10px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#commands-header {\n  position:fixed;\n  bottom:50px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#commands {\n  position:fixed;\n  bottom:40px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#element1 {\n  position:fixed;\n  bottom:40px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element2 {\n  position:fixed;\n  bottom:60px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element3 {\n  position:fixed;\n  bottom:80px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element4 {\n  position:fixed;\n  bottom:100px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element5 {\n  position:fixed;\n  bottom:120px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}#element6 {\n  position:fixed;\n  bottom:140px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#questions-header {\n  position:fixed;\n  bottom:50px;\n  right:10px;\n  padding:5px;\n  z-index:100;\n}\n#questions {\n  position:fixed;\n  bottom:40px;\n  right:10px;\n  padding:5px;\n  z-index:100;\n}")
+	(source "#map {\n    position: absolute;\n    top: 0px;\n    bottom: 0;\n    left: 0;\n    right: 0;\n    z-index: -1;\n}\n#mousepos {\n  position:fixed;\n  bottom:10px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#commands-header {\n  position:fixed;\n  bottom:50px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#commands {\n  position:fixed;\n  bottom:40px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#element1 {\n  position:fixed;\n  bottom:40px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element2 {\n  position:fixed;\n  bottom:60px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element3 {\n  position:fixed;\n  bottom:80px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element4 {\n  position:fixed;\n  bottom:100px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element5 {\n  position:fixed;\n  bottom:120px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}#element6 {\n  position:fixed;\n  bottom:140px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#questions-header {\n  position:fixed;\n  bottom:50px;\n  right:10px;\n  padding:5px;\n  z-index:100;\n}\n#questions {\n  position:fixed;\n  bottom:40px;\n  right:10px;\n  padding:5px;\n  z-index:100;\n}")
 	(store-in "resources/public/css")
 	(title "leaflet"))
 
@@ -335,7 +335,7 @@
 
 ([FlightPro_Class160004] of  CloFunction
 
-	(source "(delete-vehicle id)\n(let [ms (volatile! \"START\")\n       mp (assoc mp :marker (create-update-marker nil mp)\n                              :step-hrs (double (/ (:vehicles TIO) 3600000))\n	      :movst ms\n                              :mover (asp/start-process ms #(move-vehicle id) (:vehicles TIO)))\n         carr (volatile! mp)]\n    (mov/set-turn-point carr)\n    (vswap! VEHICLES assoc id carr))")
+	(source "(delete-vehicle id)\n(let [ms (volatile! \"START\")\n       mp (assoc mp :marker (create-update-marker nil mp)\n                              :step-hrs (double (/ (:vehicles TIO) 3600000))\n	        :movst ms\n                              :mover (asp/start-process ms #(move-vehicle id) (:vehicles TIO)))\n         carr (volatile! mp)]\n    (mov/set-turn-point carr)\n    (vswap! VEHICLES assoc id carr))")
 	(title "create-update-vehicle [id mp]"))
 
 ([FlightPro_Class160005] of  CloVar
@@ -350,7 +350,7 @@
 
 ([FlightPro_Class160008] of  CloFunction
 
-	(source "(if mrk\n  (.removeLayer @CHART mrk))\n(let [[lat lon] (:coord mp)\n       pos (js/L.LatLng. lat lon)\n       ico (js/L.icon #js{:iconUrl (URL-ICO (:status mp)) \n                                  :iconSize #js[32, 32]})\n       opt #js{:icon ico \n                   :draggable true}\n       mrk (-> js/L (.rotatedMarker pos opt))]\n    (.on mrk \"click\"\n         (fn [e]\n           (info (ffirst (filter #(= (:marker @(second %)) (.-target e)) \n                                      (seq @VEHICLES))))))\n    (.addTo mrk @CHART)\n    (set! (.. mrk -options -angle) (:course mp))\n    mrk)")
+	(source "(if mrk\n  (.removeLayer @CHART mrk))\n(let [[lat lon] (:coord mp)\n       pos (js/L.LatLng. lat lon)\n       ico (js/L.icon #js{:iconUrl (URL-ICO (:status mp)) \n                                  :iconSize #js[32, 32]})\n       opt #js{:icon ico \n                   :draggable true}\n       mrk (-> js/L (.rotatedMarker pos opt))]\n    (.on mrk \"click\"\n         (fn [e]\n           (info (ffirst (filter #(= (:marker @(second %)) (.-target e)) \n                                      (seq @VEHICLES))))))\n    (.addTo mrk @CHART)\n    (.bindTooltip mrk (:callsign mp) #js{:opacity 1.0})\n    (set! (.. mrk -options -angle) (:course mp))\n    mrk)")
 	(title "create-update-marker [mrk mp]"))
 
 ([FlightPro_Class160009] of  CloVar
@@ -365,7 +365,7 @@
 
 ([FlightPro_Class160011] of  CloFunction
 
-	(source "(println :INIT-CHART)\n(let [m (-> js/L\n              (.map \"map\")\n              (.setView (array 60.3, 25.0) 10)) ;; New York 40.8, -74.0\n        tile1 (-> js/L (.tileLayer \"http://{s}.tile.osm.org/{z}/{x}/{y}.png\"\n                                   #js{:maxZoom 16\n                                       :attribution \"Ru, OpenStreetMap &copy;\"}))\n        tile2 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile3 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile4 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile5 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        base (clj->js {\"OpenStreetMap\" tile1\n                       \"Google Satellite\" tile2\n                       \"Google Streets\" tile3\n                       \"Google Hybrid\" tile4\n                       \"Google Terrain\" tile5})\n        ctrl (-> js/L (.control.layers base nil))]\n  (.addTo tile1 m)\n  (.addTo ctrl m)\n  (.on m \"mousemove\"\n         (fn [e] (ctl/mouse-move (.. e -latlng -lat) (.. e -latlng -lng))))\n  (vreset! CHART m))")
+	(source "(println :INIT-CHART)\n(let [m (-> js/L\n              (.map \"map\")\n              (.setView (array 60.3, 25.0) 10)) ;; New York 40.8, -74.0\n        tile1 (-> js/L (.tileLayer \"http://{s}.tile.osm.org/{z}/{x}/{y}.png\"\n                                   #js{:maxZoom 16\n                                       :attribution \"Ru, OpenStreetMap &copy;\"}))\n        tile2 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile3 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile4 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile5 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        base (clj->js {\"OpenStreetMap\" tile1\n                       \"Google Satellite\" tile2\n                       \"Google Streets\" tile3\n                       \"Google Hybrid\" tile4\n                       \"Google Terrain\" tile5})\n        ctrl (-> js/L (.control.layers base nil))]\n    (try\n      (.addTo tile1 m)\n      (catch js/Error e (println e)))\n    (.addTo ctrl m)\n    (.on m \"mousemove\"\n         (fn [e] (ctl/mouse-move (.. e -latlng -lat) (.. e -latlng -lng))))\n    (vreset! CHART m))")
 	(title "init-chart []"))
 
 ([FlightPro_Class160012] of  CloFunction
@@ -1055,15 +1055,15 @@
 
 ([FlightPro_Class290005] of  Rule
 
-	(lhs "(Flight id ?id\n           coord ?crd\n           course ?crs\n           speed ?spd\n           status ?sts\n           age \"NEW\")")
-	(rhs "(es/put-on-map ?id ?crd ?crs ?spd ?sts)")
+	(lhs "(Flight id ?id\n           callsign ?cs\n           coord ?crd\n           course ?crs\n           speed ?spd\n           status ?sts\n           age \"NEW\")")
+	(rhs "(es/put-on-map ?id ?cs ?crd ?crs ?spd ?sts)")
 	(salience 0)
 	(title "af:PutFlightOnMap"))
 
 ([FlightPro_Class290006] of  CloFunction
 
-	(source "(asp/pump-in (:instructions  cmd/CHN)\n	{:instruct :create-update\n	 :id id\n	 :vehicle {:coord crd\n	               :course crs\n	               :speed spd\n	               :status sts}})")
-	(title "put-on-map [id crd crs spd sts]"))
+	(source "(asp/pump-in (:instructions  cmd/CHN)\n	{:instruct :create-update\n	 :id id\n	 :vehicle {:callsign cs\n	               :coord crd\n	               :course crs\n	               :speed spd\n	               :status sts}})")
+	(title "put-on-map [id cs crd crs spd sts]"))
 
 ([FlightPro_Class3] of  CloVar
 
@@ -1159,7 +1159,7 @@
 
 ([FlightPro_Class310000] of  CloFunction
 
-	(source "(println [:CMD-INFO params])\n(let [id (:id params)]\n  (if (.startsWith id \"pm\")\n    (when-let [dati (.getInstance *kb* (.substring id 2))]\n      (exd/point-out-place dati @E-DATA)\n      (asp/pump-in (:instructions CHN) \n        (exd/placemark-popup-instruct dati)))\n    (let [inf (or (get @MY-INFOS id) (fr24/fl-info id))\n           cal (if-let[d (fr24/dat id)]\n                   (fr24/callsign d)\n                   id)]\n      (if inf\n        (let [apt (inf \"airport\")\n               acr (inf \"aircraft\")\n               tim (inf \"time\")\n               img (get (first (get-in acr [\"images\" \"thumbnails\"])) \"src\")\n               [lat lon] (fr24/coord id)\n               dat   [[\"from\" (or (get-in apt [\"origin\" \"name\"]) \"-\")]\n	[\"to\" (or (get-in apt [\"destination\" \"name\"]) \"-\")]\n	[\"airline\" (or (get-in inf [\"airline\" \"short\"]) \"-\")]\n	[\"real-departure\" (or (get-in tim [\"real\" \"departure\"]) \"-\")]\n	[\"scheduled-arrival\" (or (get-in tim [\"scheduled\" \"arrival\"]) \"-\")]\n	[\"aircraft\" (or (get-in acr [\"model\" \"text\"]) \"-\")]\n	[\"latitude\" (or lat \"-\")]\n	[\"longitude\" (or lon \"-\")]\n	[\"course\" (or (fr24/course id) \"-\")]\n	[\"speed\" (or (fr24/speed id) \"-\")]\n	[\"altitude\" (or (fr24/altitude id) \"-\")]\n	[(str \"<input type='button' style='color:purple' value='Trail'\n		onclick='chart.client.trail(\\\"\" id \"\\\")' >\")\n	 (str \"<input type='button' style='color:blue' value='Follow'\n		onclick='chart.client.follow(\\\"\" id \"\\\")' >\")]\n	[\"\"\n	 \"<input type='button' style='color:red' value='Stop'\n		onclick='chart.client.stopfollow()' >\"]]\n                       htm (make-info-html cal img dat)]\n          (asp/pump-in (:instructions CHN)\n            {:instruct :popup\n             :id (:id params)\n             :html htm\n             :time (:popup TIM)}))))))\n\"\"")
+	(source "(println [:CMD-INFO params])\n(let [id (:id params)]\n  (if (.startsWith id \"pm\")\n    (when-let [dati (.getInstance *kb* (.substring id 2))]\n      (exd/point-out-place @E-DATA {:instance dati})\n      (asp/pump-in (:instructions CHN) \n        (exd/placemark-popup-instruct dati)))\n    (let [inf (or (get @MY-INFOS id) (fr24/fl-info id))\n           cal (if-let[d (fr24/dat id)]\n                   (fr24/callsign d)\n                   id)]\n      (if inf\n        (let [apt (inf \"airport\")\n               acr (inf \"aircraft\")\n               tim (inf \"time\")\n               img (get (first (get-in acr [\"images\" \"thumbnails\"])) \"src\")\n               [lat lon] (fr24/coord id)\n               dat   [[\"from\" (or (get-in apt [\"origin\" \"name\"]) \"-\")]\n	[\"to\" (or (get-in apt [\"destination\" \"name\"]) \"-\")]\n	[\"airline\" (or (get-in inf [\"airline\" \"short\"]) \"-\")]\n	[\"real-departure\" (or (get-in tim [\"real\" \"departure\"]) \"-\")]\n	[\"scheduled-arrival\" (or (get-in tim [\"scheduled\" \"arrival\"]) \"-\")]\n	[\"aircraft\" (or (get-in acr [\"model\" \"text\"]) \"-\")]\n	[\"latitude\" (or lat \"-\")]\n	[\"longitude\" (or lon \"-\")]\n	[\"course\" (or (fr24/course id) \"-\")]\n	[\"speed\" (or (fr24/speed id) \"-\")]\n	[\"altitude\" (or (fr24/altitude id) \"-\")]\n	[(str \"<input type='button' style='color:purple' value='Trail'\n		onclick='chart.client.trail(\\\"\" id \"\\\")' >\")\n	 (str \"<input type='button' style='color:blue' value='Follow'\n		onclick='chart.client.follow(\\\"\" id \"\\\")' >\")]\n	[\"\"\n	 \"<input type='button' style='color:red' value='Stop'\n		onclick='chart.client.stopfollow()' >\"]]\n                       htm (make-info-html cal img dat)]\n          (asp/pump-in (:instructions CHN)\n            {:instruct :popup\n             :id (:id params)\n             :html htm\n             :time (:popup TIM)}))))))\n\"\"")
 	(title "info [params]"))
 
 ([FlightPro_Class310001] of  CloVar
@@ -1169,7 +1169,7 @@
 
 ([FlightPro_Class310002] of  CloFunction
 
-	(source "([id html time]\n  (let [vmp (@VEHICLES id)\n         [lat lon] (:coord @vmp)]\n    (popup lat lon html time)))\n([lat lon html time]\n  (popup lat lon html time 600 800))\n([lat lon html time w h]\n  (let [pop (-> js/L (.popup {:maxWidth w :maxHeight h})\n                (.setLatLng (array lat lon))\n                (.setContent html))]\n    (.addLayer @CHART pop)\n    (if (> time 0)\n        (asp/delayer #(.removeLayer @CHART pop) time))))")
+	(source "([id html time]\n  (let [vmp (@VEHICLES id)\n         [lat lon] (:coord @vmp)]\n    (popup lat lon html time)))\n([lat lon html time]\n  (popup lat lon html time 600 800))\n([lat lon html time w h]\n  (let [pop (-> js/L (.popup #js{:maxWidth w :maxHeight h})\n                (.setLatLng (array lat lon))\n                (.setContent html))]\n    (.addLayer @CHART pop)\n    (if (> time 0)\n        (asp/delayer #(.removeLayer @CHART pop) time))))")
 	(title "popup"))
 
 ([FlightPro_Class310003] of  CloFunction
@@ -1230,15 +1230,15 @@
 
 ([FlightPro_Class320012] of  Rule
 
-	(lhs "(Flight id ?id altitude ?a1 age \"OLD\")\n(Flight id ?id altitude ?a2 age \"CURRENT\")\n?fl (Flight id ?id altitude ?a3 age \"NEW\"\n	status ?s3 \n	coord ?crd3 \n	course ?crs3\n	speed ?spd3\n	((not= ?s3 \"DESCEND\")\n	 (> ?a1 ?a2 ?a3)))")
-	(rhs "(modify ?fl status \"DESCEND\")\n(es/put-on-map ?id ?crd3 ?crs3 ?spd3 ?s3)")
+	(lhs "(Flight id ?id altitude ?a1 age \"OLD\")\n(Flight id ?id altitude ?a2 age \"CURRENT\")\n?fl (Flight id ?id altitude ?a3 age \"NEW\"\n	callsign ?cs\n	status ?s3 \n	coord ?crd3 \n	course ?crs3\n	speed ?spd3\n	((not= ?s3 \"DESCEND\")\n	 (> ?a1 ?a2 ?a3)))")
+	(rhs "(modify ?fl status \"DESCEND\")\n(es/put-on-map ?id ?cs ?crd3 ?crs3 ?spd3 ?s3)")
 	(salience 0)
 	(title "af:DescendMark"))
 
 ([FlightPro_Class320013] of  Rule
 
-	(lhs "(Flight id ?id altitude ?a1 age \"OLD\")\n(Flight id ?id altitude ?a2 age \"CURRENT\")\n?fl (Flight id ?id altitude ?a3 age \"NEW\"\n	status ?s3 \n	coord ?crd3 \n	course ?crs3\n	speed ?spd3\n	((not= ?s3 \"CLIMB\")\n	 (< ?a1 ?a2 ?a3)))")
-	(rhs "(modify ?fl status \"CLIMB\")\n(es/put-on-map ?id ?crd3 ?crs3 ?spd3 ?s3)")
+	(lhs "(Flight id ?id altitude ?a1 age \"OLD\")\n(Flight id ?id altitude ?a2 age \"CURRENT\")\n?fl (Flight id ?id altitude ?a3 age \"NEW\"\n	callsign ?cs\n	status ?s3 \n	coord ?crd3 \n	course ?crs3\n	speed ?spd3\n	((not= ?s3 \"CLIMB\")\n	 (< ?a1 ?a2 ?a3)))")
+	(rhs "(modify ?fl status \"CLIMB\")\n(es/put-on-map ?id ?cs ?crd3 ?crs3 ?spd3 ?s3)")
 	(salience 0)
 	(title "af:ClimbMark"))
 
@@ -2182,7 +2182,7 @@
 
 ([FlightPro_Class660000] of  CloFunction
 
-	(source "(let [[n s w e] (:visible @edata)\n       [lat lon] (our-center n s w e)\n       [n0 s0 w0 e0] (:wiki-bbx @edata)]\n  (if (or (> s0 lat)\n           (< n0 lat)\n           (< e0 lon)\n           (> w0 lon))\n     (invoke-later\n       (let [bbi (foc \"BBX\" \"title\" \"Current\")\n              rqi (fainst (cls-instances \"BBXWiki\") \"Current BBXWiki Request\")]\n         (if (and bbi rqi)\n           (do\n             (ssvs bbi \"wsen\" (vec (map float [w s e n])))\n             (ssv rqi \"bbx\" bbi)\n             (ssvs rqi \"responses\" [])\n             (with-timeout (:ext-data TIO)\n	(wig/submit-bbx (itm rqi 0) rqi))\n             (let [rr (svs rqi \"responses\")]\n               (when (seq rr)\n	(asp/pump-in chn {:instruct :clear-placemarks})\n	(doseq [r rr]\n	  (point-out-place r @edata)\n	  (asp/pump-in chn (placemark-instruct r)))\n	(vswap! edata assoc :wiki-bbx [n s w e]))))\n           (println \"Instance of \\\"Current BBXWiki Request\\\" not found!\"))))))")
+	(source "(let [[n s w e] (:visible @edata)\n       [lat lon] (our-center n s w e)\n       [n0 s0 w0 e0] (:wiki-bbx @edata)]\n  (if (or (> s0 lat)\n           (< n0 lat)\n           (< e0 lon)\n           (> w0 lon))\n     (invoke-later\n       (let [bbi (foc \"BBX\" \"title\" \"Current\")\n              rqi (fainst (cls-instances \"BBXWiki\") \"Current BBXWiki Request\")]\n         (if (and bbi rqi)\n           (do\n             (ssvs bbi \"wsen\" (vec (map float [w s e n])))\n             (ssv rqi \"bbx\" bbi)\n             (ssvs rqi \"responses\" [])\n             (with-timeout (:ext-data TIO)\n	(wig/submit-bbx (itm rqi 0) rqi))\n             (let [rr (svs rqi \"responses\")]\n               (when (seq rr)\n	(asp/pump-in chn {:instruct :clear-placemarks})\n	(doseq [r rr]\n	  (point-out-place @edata {:instance r})\n	  (asp/pump-in chn (placemark-instruct r)))\n	(vswap! edata assoc :wiki-bbx [n s w e]))))\n           (println \"Instance of \\\"Current BBXWiki Request\\\" not found!\"))))))")
 	(title "pump-wiki [chn edata]"))
 
 ([FlightPro_Class660006] of  BBXWiki
@@ -2259,8 +2259,8 @@
 
 ([FlightPro_Class670265] of  CloFunction
 
-	(source "{:instruct :create-placemark\n :iname (.getName dati)\n :lat (sv dati \"lat\")\n :lon (sv dati \"lng\")\n :feature (sv dati \"feature\")}")
-	(title "placemark-instruct [dati]"))
+	(source "(let [{:keys [instance airport feature]} parmap]\n  {:instruct :create-placemark\n    :iname (or (some-> instance .getName) (some-> airport (get \"name\")))\n    :lat (or (some-> instance (sv \"lat\")) (some-> airport (get \"lat\")))\n    :lon (or (some-> instance (sv \"lon\")) (some-> airport (get \"lon\")))\n    :feature (or (some-> instance (sv \"feature\")) (some-> feature))})")
+	(title "placemark-instruct [parmap]"))
 
 ([FlightPro_Class670266] of  CloFunction
 
@@ -2269,7 +2269,7 @@
 
 ([FlightPro_Class670311] of  CloFunction
 
-	(source "(let [pos (js/L.LatLng. lat lon)\n       ico (js/L.icon #js{:iconUrl (or (URL-ICO feature) \n		     (URL-ICO \"default\"))\n	           :iconSize #js[24, 24]})\n       opt #js{:icon ico :draggable true}\n       mrk (-> js/L (.rotatedMarker pos opt))]\n    (.on mrk \"click\"\n         (fn [e]\n           (info (str \"pm\" iname))))\n    (.addTo mrk @CHART)\n    (vswap! PLACEMARKS assoc iname mrk))")
+	(source "(let [pos (js/L.LatLng. lat lon)\n       ico (js/L.icon #js{:iconUrl (or (URL-ICO feature) \n		     (URL-ICO \"default\"))\n	           :iconSize #js[24, 24]})\n       opt #js{:icon ico :draggable true}\n       mrk (-> js/L (.rotatedMarker pos opt))]\n    (.on mrk \"click\"\n         (fn [e]\n           (info (str \"pm\" iname))))\n    (.addTo mrk @CHART)\n    (.bindTooltip mrk iname #js{:opacity 1.0})\n    (vswap! PLACEMARKS assoc iname mrk))")
 	(title "create-placemark [iname lat lon feature]"))
 
 ([FlightPro_Class670312] of  CloVar
@@ -2376,8 +2376,8 @@
 
 ([FlightPro_Class700000] of  CloFunction
 
-	(source "(let [[n s w e] (:visible edt)\n       lat (sv dati \"lat\")\n       lon (sv dati \"lng\")\n       dis (geo/distance-nm (our-center n s w e) [lat lon])]\n  (cz/point-out (sv dati \"title\") [lat lon] dis (our-radius n s w e)))")
-	(title "point-out-place [dati edt]"))
+	(source "(let [[n s w e] (:visible edata)\n       {:keys [instance airport]} parmap\n       lat (or (some-> instance (sv \"lat\")) (some-> airport (get \"lat\")))\n       lon (or (some-> instance (sv \"lon\")) (some-> airport (get \"lon\")))\n       nam (or (some-> instance (sv \"title\")) (some-> airport (get \"name\")))\n       iata (some-> airport (get \"iata\"))\n       txt (if airport (str nam \" (\" iata \")\") nam)\n       dis (geo/distance-nm (our-center n s w e) [lat lon])]\n  (cz/point-out txt [lat lon] dis (our-radius n s w e)))")
+	(title "point-out-place [edata parmap]"))
 
 ([FlightPro_Class70001] of  CloFunction
 
@@ -2575,6 +2575,24 @@
 	(salience 0)
 	(title "qq:Weather2"))
 
+([FlightPro_Class760000] of  Airport
+
+	(altitude 60)
+	(coord 12.50138 -70.0152)
+	(country "Aruba")
+	(iata "AUA")
+	(icao "TNCA")
+	(runways 0)
+	(title "Oranjestad Queen Beatrix International Airport"))
+
+([FlightPro_Class760002] of  CloFuncall
+
+	(source "(def x 5)"))
+
+([FlightPro_Class760003] of  CloFuncall
+
+	(source "(some-> x)"))
+
 ([FlightPro_Class760004] of  Airport
 
 	(altitude 349)
@@ -2622,6 +2640,34 @@
 
 	(source "(sort > [1 7 2 8 4 9])"))
 
+([FlightPro_Class770004] of  CloFuncall
+
+	(source "(def x nil)"))
+
+([FlightPro_Class770005] of  CloFuncall
+
+	(source "(some->> x)"))
+
+([FlightPro_Class770006] of  CloFuncall
+
+	(source "ext.data/E-DATA"))
+
+([FlightPro_Class770007] of  CloFuncall
+
+	(source "pro.commands/E-DATA"))
+
+([FlightPro_Class770008] of  CloFuncall
+
+	(source "(async.proc/pump-in (:instructions pro"))
+
+([FlightPro_Class770009] of  CloFuncall
+
+	(source "(async.proc/pump-in (:instructions pro.commands/CHN) {:instruct :clear-placemarks})"))
+
+([FlightPro_Class770010] of  CloFuncall
+
+	(source "(async.proc/pump-in (:instructions pro.commands/CHN) {:instruct :create-placemark :iname \"QQ\" :lat 60.2 :lon 24.9})"))
+
 ([FlightPro_Class770011] of  CloFunction
 
 	(source "(letfn [(inside [x]\n	(let [lat (x \"lat\")\n	       lon (x \"lon\")]\n	  (and (<= lat n)(>= lat s)(<= lon e)(>= lon w))))]\n  (->> (airports-by-country)\n           vals\n           (mapcat vals)\n           (filter inside)))")
@@ -2643,54 +2689,6 @@
 
 	(source "(sort #(if (> %1 %2)) [1 7 2 8 4 9])"))
 
-([FlightPro_Class780008] of  CloFuncall
-
-	(source "(sort #(if (> %1 %2) true false) [1 7 2 8 4 9])"))
-
-([FlightPro_Class780009] of  CloFuncall
-
-	(source "(sort #(if (< %1 %2) true false) [1 7 2 8 4 9])"))
-
-([FlightPro_Class780010] of  CloFuncall
-
-	(source "(sort #(if (< %1 %2) true) [1 7 2 8 4 9])"))
-
-([FlightPro_Class780011] of  CloFuncall
-
-	(source "(sort #(if (< %1 %2) 0 1) [1 7 2 8 4 9])"))
-
-([FlightPro_Class780012] of  CloFuncall
-
-	(source "(sort #(if (< %1 %2) -1 1) [1 7 2 8 4 9])"))
-
-([FlightPro_Class780013] of  CloFuncall
-
-	(source "(sort #(if (< %1 %2) 1 -1) [1 7 2 8 4 9])"))
-
-([FlightPro_Class780014] of  CloFuncall
-
-	(source "(fr24.client/nearest-airports 4 [60.3 24.9])"))
-
-([FlightPro_Class780015] of  CloFuncall
-
-	(source "(fr24.client/nearest-airports 4 [67.3 34.9])"))
-
-([FlightPro_Class780016] of  CloFuncall
-
-	(source "(fr24.client/nearest-airports 4 [37.3 34.9])"))
-
-([FlightPro_Class780017] of  CloFuncall
-
-	(source "(fr24.client/nearest-airports 4 [17.3 34.9])"))
-
-([FlightPro_Class780018] of  CloFuncall
-
-	(source "(fr24.client/nearest-airports 4 [0 0])"))
-
-([FlightPro_Class780019] of  CloFuncall
-
-	(source "(fr24.client/nearest-airports 4 [-32 -124])"))
-
 ([FlightPro_Class780020] of  Rule
 
 	(lhs "?q (Question predicate \"nearest-airports\")")
@@ -2700,7 +2698,7 @@
 
 ([FlightPro_Class780021] of  CloFunction
 
-	(source "(let [[n s w e] (:visible @edata)\n        ocr (our-center n s w e)\n        nas (fr24/nearest-airports n ocr)\n        dis (map #(geo/distance-nm ocr [(% \"lat\")(% \"lon\")]) nas)\n        bea (map #(geo/bear-deg ocr [(% \"lat\")(% \"lon\")]) nas)\n        html (str \"<h3>Nearest Airports</h3>\"\n	(apply str (for [i (range k)]\n	  (str (inc i) \". \" (get (nth nas i) \"name\") \", \"\n		(get (nth nas i) \"country\") \" (\"\n		(get (nth nas i) \"iata\") \"), \"\n		(format \"distance: %.1f\" (nth dis i)) \" NM, \"\n		\"direction: \" (int (nth bea i)) \"<br>\"))))] \n    (asp/pump-in chn \n	{:instruct :popup\n	 :lat (first ocr)\n	 :lon (second ocr)\n	 :html html\n	 :width 1200\n	 :height 1000\n	 :time (:ext-data-popup TIO)}))")
+	(source "(let [[n s w e] (:visible @edata)\n        ocr (our-center n s w e)\n        nas (fr24/nearest-airports n ocr)\n        dis (map #(geo/distance-nm ocr [(% \"lat\")(% \"lon\")]) nas)\n        bea (map #(geo/bear-deg ocr [(% \"lat\")(% \"lon\")]) nas)\n        html (str \"<h3>Nearest Airports</h3>\"\n	(apply str (for [i (range k)]\n	  (str (inc i) \". \" (get (nth nas i) \"name\") \", \"\n		(get (nth nas i) \"country\") \" (\"\n		(get (nth nas i) \"iata\") \"), \"\n		(format \"distance: %.1f\" (nth dis i)) \" NM, \"\n		\"direction: \" (int (nth bea i)) \"<br>\"))))] \n  (asp/pump-in chn \n	{:instruct :popup\n	 :lat (first ocr)\n	 :lon (second ocr)\n	 :html html\n	 :width 1200\n	 :height 1000\n	 :time (:ext-data-popup TIO)})\n  (asp/pump-in chn {:instruct :clear-placemarks})\n  (doseq [apt (take k nas)]\n    (point-out-place @edata {:airport apt})\n    (asp/pump-in chn (placemark-instruct {:airport apt :feature \"airport\"}))))")
 	(title "pump-nearest-airports [chn edata k]"))
 
 ([FlightPro_Class8] of  CloFunction

@@ -30,12 +30,13 @@
         nil)
       result#)))
 
-(defn placemark-instruct [dati]
+(defn placemark-instruct [parmap]
+  (let [{:keys [instance airport feature]} parmap]
   {:instruct :create-placemark
- :iname (.getName dati)
- :lat (sv dati "lat")
- :lon (sv dati "lng")
- :feature (sv dati "feature")})
+    :iname (or (some-> instance .getName) (some-> airport (get "name")))
+    :lat (or (some-> instance (sv "lat")) (some-> airport (get "lat")))
+    :lon (or (some-> instance (sv "lon")) (some-> airport (get "lon")))
+    :feature (or (some-> instance (sv "feature")) (some-> feature))}))
 
 (defn placemark-popup-instruct [dati]
   (let [head (str "<h3>" (sv dati "title") "</h3>")
@@ -56,12 +57,16 @@
 (defn our-radius [n s w e]
   (/ (* (- n s) 60) 2))
 
-(defn point-out-place [dati edt]
-  (let [[n s w e] (:visible edt)
-       lat (sv dati "lat")
-       lon (sv dati "lng")
+(defn point-out-place [edata parmap]
+  (let [[n s w e] (:visible edata)
+       {:keys [instance airport]} parmap
+       lat (or (some-> instance (sv "lat")) (some-> airport (get "lat")))
+       lon (or (some-> instance (sv "lon")) (some-> airport (get "lon")))
+       nam (or (some-> instance (sv "title")) (some-> airport (get "name")))
+       iata (some-> airport (get "iata"))
+       txt (if airport (str nam " (" iata ")") nam)
        dis (geo/distance-nm (our-center n s w e) [lat lon])]
-  (cz/point-out (sv dati "title") [lat lon] dis (our-radius n s w e))))
+  (cz/point-out txt [lat lon] dis (our-radius n s w e))))
 
 (defn pump-wiki [chn edata]
   (let [[n s w e] (:visible @edata)
@@ -85,7 +90,7 @@
                (when (seq rr)
 	(asp/pump-in chn {:instruct :clear-placemarks})
 	(doseq [r rr]
-	  (point-out-place r @edata)
+	  (point-out-place @edata {:instance r})
 	  (asp/pump-in chn (placemark-instruct r)))
 	(vswap! edata assoc :wiki-bbx [n s w e]))))
            (println "Instance of \"Current BBXWiki Request\" not found!")))))))
@@ -176,12 +181,16 @@ nil)
 		(get (nth nas i) "iata") "), "
 		(format "distance: %.1f" (nth dis i)) " NM, "
 		"direction: " (int (nth bea i)) "<br>"))))] 
-    (asp/pump-in chn 
+  (asp/pump-in chn 
 	{:instruct :popup
 	 :lat (first ocr)
 	 :lon (second ocr)
 	 :html html
 	 :width 1200
 	 :height 1000
-	 :time (:ext-data-popup TIO)})))
+	 :time (:ext-data-popup TIO)})
+  (asp/pump-in chn {:instruct :clear-placemarks})
+  (doseq [apt (take k nas)]
+    (point-out-place @edata {:airport apt})
+    (asp/pump-in chn (placemark-instruct {:airport apt :feature "airport"})))))
 

@@ -100,6 +100,7 @@
            (info (ffirst (filter #(= (:marker @(second %)) (.-target e)) 
                                       (seq @VEHICLES))))))
     (.addTo mrk @CHART)
+    (.bindTooltip mrk (:callsign mp) #js{:opacity 1.0})
     (set! (.. mrk -options -angle) (:course mp))
     mrk))
 
@@ -108,7 +109,7 @@
 (let [ms (volatile! "START")
        mp (assoc mp :marker (create-update-marker nil mp)
                               :step-hrs (double (/ (:vehicles TIO) 3600000))
-	      :movst ms
+	        :movst ms
                               :mover (asp/start-process ms #(move-vehicle id) (:vehicles TIO)))
          carr (volatile! mp)]
     (mov/set-turn-point carr)
@@ -125,6 +126,7 @@
          (fn [e]
            (info (str "pm" iname))))
     (.addTo mrk @CHART)
+    (.bindTooltip mrk iname #js{:opacity 1.0})
     (vswap! PLACEMARKS assoc iname mrk)))
 
 (defn clear-placemarks []
@@ -140,7 +142,7 @@
 ([lat lon html time]
   (popup lat lon html time 600 800))
 ([lat lon html time w h]
-  (let [pop (-> js/L (.popup {:maxWidth w :maxHeight h})
+  (let [pop (-> js/L (.popup #js{:maxWidth w :maxHeight h})
                 (.setLatLng (array lat lon))
                 (.setContent html))]
     (.addLayer @CHART pop)
@@ -347,11 +349,13 @@
                        "Google Hybrid" tile4
                        "Google Terrain" tile5})
         ctrl (-> js/L (.control.layers base nil))]
-  (.addTo tile1 m)
-  (.addTo ctrl m)
-  (.on m "mousemove"
+    (try
+      (.addTo tile1 m)
+      (catch js/Error e (println e)))
+    (.addTo ctrl m)
+    (.on m "mousemove"
          (fn [e] (ctl/mouse-move (.. e -latlng -lat) (.. e -latlng -lng))))
-  (vreset! CHART m)))
+    (vreset! CHART m)))
 
 (defn on-load-chart []
   (enable-console-print!)

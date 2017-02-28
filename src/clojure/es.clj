@@ -62,11 +62,12 @@
     r
     (+ r p))))
 
-(defn put-on-map [id crd crs spd sts]
+(defn put-on-map [id cs crd crs spd sts]
   (asp/pump-in (:instructions  cmd/CHN)
 	{:instruct :create-update
 	 :id id
-	 :vehicle {:coord crd
+	 :vehicle {:callsign cs
+	               :coord crd
 	               :course crs
 	               :speed spd
 	               :status sts}}))
