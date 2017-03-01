@@ -33,16 +33,17 @@
 (defn placemark-instruct [parmap]
   (let [{:keys [instance airport feature]} parmap]
   {:instruct :create-placemark
-    :iname (or (some-> instance .getName) (some-> airport (get "name")))
+    :iname (or (some-> instance .getName) (some-> airport (get "iata")))
+    :tip (or (some-> instance (sv "title")) (some-> airport (get "name")))
     :lat (or (some-> instance (sv "lat")) (some-> airport (get "lat")))
-    :lon (or (some-> instance (sv "lon")) (some-> airport (get "lon")))
+    :lon (or (some-> instance (sv "lng")) (some-> airport (get "lon")))
     :feature (or (some-> instance (sv "feature")) (some-> feature))}))
 
 (defn placemark-popup-instruct [dati]
   (let [head (str "<h3>" (sv dati "title") "</h3>")
        itag (str "<img src=\"" (sv dati "thumbnailImg") "\">")
        summ (sv dati "summary")
-       addr (str "http://" (sv dati "wikipediaUrl") "\"")
+       addr (sv dati "wikipediaUrl")
        wiki (str "<a href=\"" addr "\">" addr "</a>")
        html (str head itag "<br>" summ "<br>" wiki)]
   {:instruct :popup
@@ -61,7 +62,7 @@
   (let [[n s w e] (:visible edata)
        {:keys [instance airport]} parmap
        lat (or (some-> instance (sv "lat")) (some-> airport (get "lat")))
-       lon (or (some-> instance (sv "lon")) (some-> airport (get "lon")))
+       lon (or (some-> instance (sv "lng")) (some-> airport (get "lon")))
        nam (or (some-> instance (sv "title")) (some-> airport (get "name")))
        iata (some-> airport (get "iata"))
        txt (if airport (str nam " (" iata ")") nam)
@@ -91,7 +92,7 @@
 	(asp/pump-in chn {:instruct :clear-placemarks})
 	(doseq [r rr]
 	  (point-out-place @edata {:instance r})
-	  (asp/pump-in chn (placemark-instruct r)))
+	  (asp/pump-in chn (placemark-instruct {:instance r})))
 	(vswap! edata assoc :wiki-bbx [n s w e]))))
            (println "Instance of \"Current BBXWiki Request\" not found!")))))))
 

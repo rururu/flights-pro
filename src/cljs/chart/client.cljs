@@ -93,15 +93,16 @@
        ico (js/L.icon #js{:iconUrl (URL-ICO (:status mp)) 
                                   :iconSize #js[32, 32]})
        opt #js{:icon ico 
-                   :draggable true}
-       mrk (-> js/L (.rotatedMarker pos opt))]
+                    :rotationAngle (:course mp)
+                    :rotationOrigin "center center"
+                    :title (:callsign mp)
+                    :draggable false}
+       mrk (-> js/L (.marker pos opt))]
     (.on mrk "click"
          (fn [e]
            (info (ffirst (filter #(= (:marker @(second %)) (.-target e)) 
                                       (seq @VEHICLES))))))
     (.addTo mrk @CHART)
-    (.bindTooltip mrk (:callsign mp) #js{:opacity 1.0})
-    (set! (.. mrk -options -angle) (:course mp))
     mrk))
 
 (defn create-update-vehicle [id mp]
@@ -115,18 +116,19 @@
     (mov/set-turn-point carr)
     (vswap! VEHICLES assoc id carr)))
 
-(defn create-placemark [iname lat lon feature]
+(defn create-placemark [iname tip lat lon feature]
   (let [pos (js/L.LatLng. lat lon)
        ico (js/L.icon #js{:iconUrl (or (URL-ICO feature) 
 		     (URL-ICO "default"))
 	           :iconSize #js[24, 24]})
-       opt #js{:icon ico :draggable true}
+       opt #js{:icon ico
+                     :draggable false
+                     :title tip}
        mrk (-> js/L (.rotatedMarker pos opt))]
     (.on mrk "click"
          (fn [e]
            (info (str "pm" iname))))
     (.addTo mrk @CHART)
-    (.bindTooltip mrk iname #js{:opacity 1.0})
     (vswap! PLACEMARKS assoc iname mrk)))
 
 (defn clear-placemarks []
@@ -140,7 +142,7 @@
          [lat lon] (:coord @vmp)]
     (popup lat lon html time)))
 ([lat lon html time]
-  (popup lat lon html time 600 800))
+  (popup lat lon html time 240 480))
 ([lat lon html time w h]
   (let [pop (-> js/L (.popup #js{:maxWidth w :maxHeight h})
                 (.setLatLng (array lat lon))
@@ -232,8 +234,8 @@
 	(add-trail id points options time))
     :map-center (let [{:keys [coord]} ins]
 	(map-center coord))
-    :create-placemark (let [{:keys [iname lat lon feature]} ins]
-                      (create-placemark iname lat lon feature))
+    :create-placemark (let [{:keys [iname tip lat lon feature]} ins]
+                      (create-placemark iname tip lat lon feature))
     :clear-placemarks (clear-placemarks)
     :add-link (let [{:keys [ids options]} ins]
                   (add-link ids options))

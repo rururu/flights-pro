@@ -1429,3 +1429,23 @@ Was expecting one of:
 2017.02.28 17:23:58.401 MSK WARNING: Look and feel not found: com.apple.laf.AquaLookAndFeel -- SystemUtilities.setLookAndFeel()
 2017.02.28 17:23:58.830 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
 2017.02.28 17:24:13.184 MSK INFO: Load time for file:/home/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 1 sec (project) + 8 sec (ui) -- ProjectManager$3.run()
+2017.03.01 12:37:18.803 MSK INFO: *** SYSTEM START ***
+2017.03.01 12:37:18.878 MSK WARNING: Look and feel not found: com.apple.laf.AquaLookAndFeel -- SystemUtilities.setLookAndFeel()
+2017.03.01 12:37:19.253 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.03.01 12:37:38.397 MSK INFO: Load time for file:/home/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 2 sec (project) + 11 sec (ui) -- ProjectManager$3.run()
+2017.03.01 17:04:31.756 MSK INFO: *** SYSTEM START ***
+2017.03.01 17:04:31.842 MSK WARNING: Look and feel not found: com.apple.laf.AquaLookAndFeel -- SystemUtilities.setLookAndFeel()
+2017.03.01 17:04:32.490 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.03.01 17:04:57.869 MSK INFO: Load time for file:/home/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 3 sec (project) + 16 sec (ui) -- ProjectManager$3.run()
+2017.03.01 19:12:58.657 MSK INFO: *** SYSTEM START ***
+2017.03.01 19:12:58.715 MSK WARNING: Look and feel not found: com.apple.laf.AquaLookAndFeel -- SystemUtilities.setLookAndFeel()
+2017.03.01 19:12:59.121 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.03.01 19:13:16.921 MSK INFO: Load time for file:/home/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 1 sec (project) + 9 sec (ui) -- ProjectManager$3.run()
+2017.03.01 22:10:17.241 MSK INFO: *** SYSTEM START ***
+2017.03.01 22:10:17.333 MSK WARNING: Look and feel not found: com.apple.laf.AquaLookAndFeel -- SystemUtilities.setLookAndFeel()
+2017.03.01 22:10:17.984 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.03.01 22:10:40.720 MSK INFO: Load time for file:/home/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 2 sec (project) + 15 sec (ui) -- ProjectManager$3.run()
+2017.03.02 01:20:09.166 MSK INFO: *** SYSTEM START ***
+2017.03.02 01:20:09.224 MSK WARNING: Look and feel not found: com.apple.laf.AquaLookAndFeel -- SystemUtilities.setLookAndFeel()
+2017.03.02 01:20:09.639 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.03.02 01:20:28.574 MSK INFO: Load time for file:/home/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 2 sec (project) + 8 sec (ui) -- ProjectManager$3.run()
