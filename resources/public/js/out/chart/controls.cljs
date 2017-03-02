@@ -20,7 +20,7 @@
 (set-html! "commands"
   "<select onchange='javascript:chart.client.command(this.value)'>
    <option value='commands'>Commands</option>
-   <option value='watch-visible'>Watch visible area</option>
+   <option value='watch-visible'>Watch Visible Area</option>
    <option value='move-to'>Move to Airport</option>
    <option value='schedule'>Schedule Flight</option>
    <option value='wikipedia'>Toggle Wikipedia</option>

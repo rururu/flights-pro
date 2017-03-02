@@ -18,8 +18,8 @@
  "CLIMB" 	(str HOST PORT "/img/bluepln32.png")
  "LEVEL" 	(str HOST PORT "/img/purplepln32.png")
  "GROUND" 	(str HOST PORT "/img/greypln32.png")
- "COUNTER"	(str HOST PORT "/img/b.png")
- "FOLLOWING"	(str HOST PORT "/img/r.png")
+ "COUNTER"	(str HOST PORT "/img/r.png")
+ "FOLLOWING"	(str HOST PORT "/img/b.png")
  "default"	(str HOST PORT "/img/info.png")
  "landmark"	(str HOST PORT "/img/landmark.png")
  "edu"	(str HOST PORT "/img/edu.png")
@@ -48,7 +48,7 @@
    :altitude-graph
      [[0.1 0][0.5 15][2 600][7 2000]] ;; x - dist, y - alt
    :spdeed-graph
-     [[0.0 0][0.1 10][0.5 100][3 180]]} ;; x - dist, y - spd
+     [[0.0 0][0.1 10][0.5 100][3 120]]} ;; x - dist, y - spd
 })
 (def ONB-PAUSE false)
 (def INTS-TIME ;; forcast time for intersection in hours (6 min)

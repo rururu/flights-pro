@@ -1,4 +1,4 @@
-; Thu Mar 02 02:12:34 MSK 2017
+; Thu Mar 02 16:56:40 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -20,7 +20,9 @@
 
 ([BROWSER_SLOT_NAMES] of  Property_List
 
-	(properties [FlightPro_ProjectKB_Class1026]))
+	(properties
+		[FlightPro_ProjectKB_Class1007]
+		[FlightPro_ProjectKB_Class1008]))
 
 ([CLSES_TAB] of  Widget
 
@@ -35,52 +37,57 @@
 
 	(name ":CREATOR"))
 
-([FlightPro_ProjectKB_Class1026] of  String
+([FlightPro_ProjectKB_Class1007] of  String
 
 	(name "Airport")
 	(string_value "title"))
 
-([FlightPro_ProjectKB_Class1027] of  Map
+([FlightPro_ProjectKB_Class1008] of  String
+
+	(name "BBXWiki")
+	(string_value "bbx"))
+
+([FlightPro_ProjectKB_Class1009] of  Map
 
 	(entries
-		[FlightPro_ProjectKB_Class1028]
-		[FlightPro_ProjectKB_Class1029]
-		[FlightPro_ProjectKB_Class1030]
-		[FlightPro_ProjectKB_Class1031]))
+		[FlightPro_ProjectKB_Class1010]
+		[FlightPro_ProjectKB_Class1011]
+		[FlightPro_ProjectKB_Class1012]
+		[FlightPro_ProjectKB_Class1013]))
 
-([FlightPro_ProjectKB_Class1028] of  Map_Entry
+([FlightPro_ProjectKB_Class1010] of  Map_Entry
 
 	(key "FlightPro_Class670004")
 	(key_class "edu.stanford.smi.protege.model.Frame")
 	(value "-2 441 224 146")
 	(value_class "java.awt.Rectangle"))
 
-([FlightPro_ProjectKB_Class1029] of  Map_Entry
+([FlightPro_ProjectKB_Class1011] of  Map_Entry
 
 	(key "FlightPro_Class320015")
 	(key_class "edu.stanford.smi.protege.model.Frame")
 	(value "38 584 224 146")
 	(value_class "java.awt.Rectangle"))
 
-([FlightPro_ProjectKB_Class1030] of  Map_Entry
+([FlightPro_ProjectKB_Class1012] of  Map_Entry
 
 	(key "FlightPro_Class290004")
 	(key_class "edu.stanford.smi.protege.model.Frame")
 	(value "-3 351 224 146")
 	(value_class "java.awt.Rectangle"))
 
-([FlightPro_ProjectKB_Class1031] of  Map_Entry
+([FlightPro_ProjectKB_Class1013] of  Map_Entry
 
 	(key "FlightPro_Class290003")
 	(key_class "edu.stanford.smi.protege.model.Frame")
 	(value "-5 349 224 146")
 	(value_class "java.awt.Rectangle"))
 
-([FlightPro_ProjectKB_Class1032] of  Map_Entry
+([FlightPro_ProjectKB_Class1014] of  Map_Entry
 
 	(key "InstanceDisplay.yellow_stickies")
 	(key_class "java.lang.String")
-	(value "FlightPro_ProjectKB_Class1027")
+	(value "FlightPro_ProjectKB_Class1009")
 	(value_class "java.util.Map"))
 
 ([FlightPro_ProjectKB_Class10628] of  Widget
@@ -288,8 +295,8 @@
 
 ([KB_102576_Class1] of  Map
 
-	(entries [FlightPro_ProjectKB_Class1032])
-	(referenced_maps [FlightPro_ProjectKB_Class1027]))
+	(entries [FlightPro_ProjectKB_Class1014])
+	(referenced_maps [FlightPro_ProjectKB_Class1009]))
 
 ([KB_102576_Class11] of  Property_List
 
@@ -532,48 +539,48 @@
 	(boolean_value FALSE)
 	(name "ButtonDisplayed-Стереть Выделенный Экземпляр"))
 
-([KB_346289_Class984] of  Map
+([KB_534801_Class984] of  Map
 
 	(entries
-		[KB_346289_Class985]
-		[KB_346289_Class988]
-		[KB_346289_Class989]
-		[KB_346289_Class990])
-	(referenced_maps [KB_346289_Class986]))
+		[KB_534801_Class985]
+		[KB_534801_Class988]
+		[KB_534801_Class989]
+		[KB_534801_Class990])
+	(referenced_maps [KB_534801_Class986]))
 
-([KB_346289_Class985] of  Map_Entry
+([KB_534801_Class985] of  Map_Entry
 
 	(key "suppress_instance_counting")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_346289_Class986] of  Map
+([KB_534801_Class986] of  Map
 
-	(entries [KB_346289_Class987]))
+	(entries [KB_534801_Class987]))
 
-([KB_346289_Class987] of  Map_Entry
+([KB_534801_Class987] of  Map_Entry
 
 	(key "WikipediaGIS_Class2")
 	(key_class "edu.stanford.smi.protege.model.Frame")
 	(value "12 479 212 124")
 	(value_class "java.awt.Rectangle"))
 
-([KB_346289_Class988] of  Map_Entry
+([KB_534801_Class988] of  Map_Entry
 
 	(key "InstanceDisplay.yellow_stickies")
 	(key_class "java.lang.String")
-	(value "KB_346289_Class986")
+	(value "KB_534801_Class986")
 	(value_class "java.util.Map"))
 
-([KB_346289_Class989] of  Map_Entry
+([KB_534801_Class989] of  Map_Entry
 
 	(key "add_name_on_instance_form")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_346289_Class990] of  Map_Entry
+([KB_534801_Class990] of  Map_Entry
 
 	(key "change_tracking_active")
 	(key_class "java.lang.String")
