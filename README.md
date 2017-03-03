@@ -22,13 +22,15 @@ When the Pro server starts, open two browser windows, one on the address: http:/
 
 In the chart view select in the "Commands" selector the item "Watch Visible Area". This begins a process of collection and display information of flights in the visible area. Black icons means aircrafts on the ground, green ones are descending, blue ones are climbing and purple - on a level flight.
 
-If you want to see an air traffic around any other airport, execute the command "Move to Airport", select a country and an airport in this country.
+If you want to see an air traffic around some other airport, execute the command "Move to Airport", select a country and an airport in this country.
 
 A click on the aircraft icon brings up a popup with general data of the flight and 3 buttons. The button "Trail" draws the current way of the aircraft. The button "Follow" starts moving of the visible area along this flight and periodically displays the trail of the flight. The button "Stop" ends up this moving.
 
 You can plan your own flights. To do this, use the command "Schedule Flight". Input a call sign of your flight, a time of departure, select a country and an airport of departure and a country and an airport of arrival. That's all. When your flight starts you can follow it.
 
 The Command "Toggle Wikipedia" starts/ends a process of search of Wikipedia articles about places of interest in the visible area. This places would be shown on the chart with the special icons and summaries of articles would be stored in Protege ontology as the instances of a class "WikiArticle". A click on the icon brings up a popup with the summary.
+
+#### Questions
 
 Copyright and license
 ----

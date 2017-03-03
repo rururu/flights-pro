@@ -20,6 +20,7 @@
 (def ^:dynamic *username* "liikalanjoki")
 (def ^:dynamic *strm3-url* "http://api.geonames.org/srtm3")
 (def ^:dynamic *gtopo30* "http://api.geonames.org/gtopo30")
+(def ^:dynamic *hierarchy-url* "http://api.geonames.org/hierarchy")
 (defn map-into-inst [mp inst]
   (doseq [[k v] mp]
    (if (slt k)
@@ -86,7 +87,7 @@ inst)
 
 (defn call-geonames-ocean [lat lng]
   ; Get ocean from Geonames Web Service
-(let [url (str *ocean-url* "?lat=" lat "&lng=" lng)]
+(let [url (str *ocean-url* "?lat=" lat "&lng=" lng "&username=" *username*)]
  (try
   (if-let [xml (clojure.xml/parse url)]
     (if-let [mes (:message (:attrs (first (:content xml))))]
@@ -285,4 +286,17 @@ inst)
   ;; Get Wikipedia articles of title
 (let [url (str *wiki-search* "?title=" (java.net.URLEncoder/encode title "utf-8") "&lang=" lang "&maxRows=" max)]
   (seq (ws-map-list url))))
+
+(defn call-geonames-hierarchy [gid]
+  ;; Returns all GeoNames higher up in the hierarchy of a place name.
+(let [url (str *hierarchy-url* "?geonameId=" gid "&username=" *username*)]
+(ctpl url)
+ (try
+   (when-let [xml (clojure.xml/parse url)]
+      (ctpl xml)
+      (ctpl (count (:content xml)))
+      (map xml-to-map (:content xml)))
+ (catch Exception e
+   (ctpl e)
+   nil))))
 

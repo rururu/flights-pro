@@ -1,4 +1,4 @@
-; Thu Mar 02 16:56:40 MSK 2017
+; Sat Mar 04 00:50:10 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -123,7 +123,7 @@
 
 ([FlightPro_Class130000] of  HTML
 
-	(source "<!DOCTYPE html>\n<html>\n<head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n  <link rel=\"stylesheet\" href=\"css/leaflet.css\" />\n  <link rel=\"stylesheet\" href=\"leaflet/leaflet.css\"/>\n  <script src=\"leaflet/leaflet.js\"></script>\n  <script src=\"js/leaflet.rotatedMarker.js\"></script>\n</head>\n<body>\n  <div id=\"map\"></div>\n  <div id=\"mousepos\"></div>\n  <div id=\"commands-header\"></div>\n  <div id=\"commands\"></div>\n  <div id=\"element1\"></div>\n  <div id=\"element2\"></div>\n  <div id=\"element3\"></div>\n  <div id=\"element4\"></div>\n  <div id=\"element5\"></div>\n  <div id=\"element6\"></div>\n  <div id=\"questions-header\"></div>\n  <div id=\"questions\"></div>\n  <script src=\"js/chart.js\"></script>\n</body>\n</html>")
+	(source "<!DOCTYPE html>\n<html>\n<head>\n  <title>Chart View</title>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n  <link rel=\"stylesheet\" href=\"css/leaflet.css\" />\n  <link rel=\"stylesheet\" href=\"leaflet/leaflet.css\"/>\n  <script src=\"leaflet/leaflet.js\"></script>\n  <script src=\"js/leaflet.rotatedMarker.js\"></script>\n</head>\n<body>\n  <div id=\"map\"></div>\n  <div id=\"mousepos\"></div>\n  <div id=\"commands-header\"></div>\n  <div id=\"commands\"></div>\n  <div id=\"element1\"></div>\n  <div id=\"element2\"></div>\n  <div id=\"element3\"></div>\n  <div id=\"element4\"></div>\n  <div id=\"element5\"></div>\n  <div id=\"element6\"></div>\n  <div id=\"questions-header\"></div>\n  <div id=\"questions\"></div>\n  <script src=\"js/chart.js\"></script>\n</body>\n</html>")
 	(store-in "resources/public")
 	(title "leaflet"))
 
@@ -800,7 +800,7 @@
 
 ([FlightPro_Class220026] of  CloFunction
 
-	(source "(set-html! \"commands-header\" \"<h4>Commands</h4>\")\n(set-html! \"commands\"\n  \"<select onchange='javascript:chart.client.command(this.value)'>\n   <option value='commands'>Commands</option>\n   <option value='watch-visible'>Watch Visible Area</option>\n   <option value='move-to'>Move to Airport</option>\n   <option value='schedule'>Schedule Flight</option>\n   <option value='wikipedia'>Toggle Wikipedia</option>\n   <option value='clear'>Clear</option>\n   </select>\")\n(set-html! \"questions-header\" \"<h4>Questions</h4>\")\n(set-html! \"questions\"\n  \"<select onchange='javascript:chart.client.question(this.value)'>\n   <option value='questions'>Questions</option>\n   <option value='intersect'>Intersections</option>\n   <option value='weather-gn'>Weather GeoNames</option>\n   <option value='weather-w2'>Weather2</option>\n   <option value='nearest-airports'>Nearest Airports</option>\n   </select>\")")
+	(source "(set-html! \"commands-header\" \"<h4>Commands</h4>\")\n(set-html! \"commands\"\n  \"<select onchange='javascript:chart.client.command(this.value)'>\n   <option value='commands'>Commands</option>\n   <option value='watch-visible'>Watch Visible Area</option>\n   <option value='move-to'>Move to Airport</option>\n   <option value='schedule'>Schedule Flight</option>\n   <option value='wikipedia'>Toggle Wikipedia</option>\n   <option value='clear'>Clear</option>\n   </select>\")\n(set-html! \"questions-header\" \"<h4>Questions</h4>\")\n(set-html! \"questions\"\n  \"<select onchange='javascript:chart.client.question(this.value)'>\n   <option value='questions'>Questions</option>\n   <option value='intersect'>Intersections</option>\n   <option value='weather-gn'>Weather GeoNames</option>\n   <option value='weather-w2'>Weather2</option>\n   <option value='nearest-airports'>Nearest Airports</option>\n   <option value='where-we-are'>Where We Are?</option>\n   </select>\")")
 	(title "show-chart-controls []"))
 
 ([FlightPro_Class220027] of  CloFunction
@@ -1087,7 +1087,8 @@
 		[FlightPro_Class690007]
 		[FlightPro_Class730002]
 		[FlightPro_Class750009]
-		[FlightPro_Class780020])
+		[FlightPro_Class780020]
+		[FlightPro_Class810007])
 	(templates [Question])
 	(title "Questions"))
 
@@ -2212,15 +2213,17 @@
 		[FlightPro_Class740002]
 		[FlightPro_Class740003]
 		[FlightPro_Class700000]
-		[FlightPro_Class660000]
 		[FlightPro_Class750004]
 		[FlightPro_Class750005]
+		[FlightPro_Class660000]
 		[FlightPro_Class730003]
-		[FlightPro_Class780021])
+		[FlightPro_Class780021]
+		[FlightPro_Class810000])
 	(cloNamespace [FlightPro_Class670001])
 	(cloVars
 		[FlightPro_Class330004]
-		[FlightPro_Class750000])
+		[FlightPro_Class750000]
+		[FlightPro_Class810006])
 	(title "External Data"))
 
 ([FlightPro_Class670001] of  CloNamespace
@@ -2521,8 +2524,8 @@
 
 ([FlightPro_Class740002] of  CloFunction
 
-	(source "[(/ (+ n s) 2) (/ (+ w e) 2)]")
-	(title "our-center [n s w e]"))
+	(source "([edata]\n  (apply our-center (:visible @edata)))\n([n s w e]\n  [(/ (+ n s) 2) (/ (+ w e) 2)])")
+	(title "our-center"))
 
 ([FlightPro_Class740003] of  CloFunction
 
@@ -2585,14 +2588,6 @@
 	(runways 0)
 	(title "Oranjestad Queen Beatrix International Airport"))
 
-([FlightPro_Class760002] of  CloFuncall
-
-	(source "(def x 5)"))
-
-([FlightPro_Class760003] of  CloFuncall
-
-	(source "(some-> x)"))
-
 ([FlightPro_Class760004] of  Airport
 
 	(altitude 349)
@@ -2628,46 +2623,6 @@
 	(source "(letfn [(closer [ap1 ap2]\n	(let [crd1 [(ap1 \"lat\")(ap1 \"lon\")]\n	       crd2 [(ap2 \"lat\")(ap2 \"lon\")]]\n	  (<= (distance-nm [lat lon] crd1)\n	         (distance-nm [lat lon] crd2))))]\n  (->> (airports-by-country)\n           vals\n           (mapcat vals)\n           (sort closer)\n           (take n)))")
 	(title "nearest-airports [n [lat lon]]"))
 
-([FlightPro_Class770001] of  CloFuncall
-
-	(source "(s"))
-
-([FlightPro_Class770002] of  CloFuncall
-
-	(source "(sort-by > [1 7 2 8 4 9])"))
-
-([FlightPro_Class770003] of  CloFuncall
-
-	(source "(sort > [1 7 2 8 4 9])"))
-
-([FlightPro_Class770004] of  CloFuncall
-
-	(source "(def x nil)"))
-
-([FlightPro_Class770005] of  CloFuncall
-
-	(source "(some->> x)"))
-
-([FlightPro_Class770006] of  CloFuncall
-
-	(source "ext.data/E-DATA"))
-
-([FlightPro_Class770007] of  CloFuncall
-
-	(source "pro.commands/E-DATA"))
-
-([FlightPro_Class770008] of  CloFuncall
-
-	(source "(async.proc/pump-in (:instructions pro"))
-
-([FlightPro_Class770009] of  CloFuncall
-
-	(source "(async.proc/pump-in (:instructions pro.commands/CHN) {:instruct :clear-placemarks})"))
-
-([FlightPro_Class770010] of  CloFuncall
-
-	(source "(async.proc/pump-in (:instructions pro.commands/CHN) {:instruct :create-placemark :iname \"QQ\" :lat 60.2 :lon 24.9})"))
-
 ([FlightPro_Class770011] of  CloFunction
 
 	(source "(letfn [(inside [x]\n	(let [lat (x \"lat\")\n	       lon (x \"lon\")]\n	  (and (<= lat n)(>= lat s)(<= lon e)(>= lon w))))]\n  (->> (airports-by-country)\n           vals\n           (mapcat vals)\n           (filter inside)))")
@@ -2693,22 +2648,6 @@
 	(runways 0)
 	(title "Amsterdam Schiphol Airport"))
 
-([FlightPro_Class780004] of  CloFuncall
-
-	(source "(sort < [1 7 2 8 4 9])"))
-
-([FlightPro_Class780005] of  CloFuncall
-
-	(source "(sort #(< %1 %2) [1 7 2 8 4 9])"))
-
-([FlightPro_Class780006] of  CloFuncall
-
-	(source "(sort #(> %1 %2) [1 7 2 8 4 9])"))
-
-([FlightPro_Class780007] of  CloFuncall
-
-	(source "(sort #(if (> %1 %2)) [1 7 2 8 4 9])"))
-
 ([FlightPro_Class780020] of  Rule
 
 	(lhs "?q (Question predicate \"nearest-airports\")")
@@ -2718,12 +2657,48 @@
 
 ([FlightPro_Class780021] of  CloFunction
 
-	(source "(let [[n s w e] (:visible @edata)\n        ocr (our-center n s w e)\n        nas (fr24/nearest-airports n ocr)\n        dis (map #(geo/distance-nm ocr [(% \"lat\")(% \"lon\")]) nas)\n        bea (map #(geo/bear-deg ocr [(% \"lat\")(% \"lon\")]) nas)\n        html (str \"<h3>Nearest Airports</h3>\"\n	(apply str (for [i (range k)]\n	  (str (inc i) \". \" (get (nth nas i) \"name\") \", \"\n		(get (nth nas i) \"country\") \" (\"\n		(get (nth nas i) \"iata\") \"), \"\n		(format \"distance: %.1f\" (nth dis i)) \" NM, \"\n		\"direction: \" (int (nth bea i)) \"<br>\"))))] \n  (asp/pump-in chn \n	{:instruct :popup\n	 :lat (first ocr)\n	 :lon (second ocr)\n	 :html html\n	 :width 1200\n	 :height 1000\n	 :time (:ext-data-popup TIO)})\n  (asp/pump-in chn {:instruct :clear-placemarks})\n  (doseq [apt (take k nas)]\n    (point-out-place @edata {:airport apt})\n    (asp/pump-in chn (placemark-instruct {:airport apt :feature \"airport\"}))))")
+	(source "(let [ocr (our-center edata)\n        nas (fr24/nearest-airports k ocr)\n        dis (map #(geo/distance-nm ocr [(% \"lat\")(% \"lon\")]) nas)\n        bea (map #(geo/bear-deg ocr [(% \"lat\")(% \"lon\")]) nas)\n        html (str \"<h3>Nearest Airports</h3>\"\n	(apply str (for [i (range k)]\n	  (str (inc i) \". \" (get (nth nas i) \"name\") \", \"\n		(get (nth nas i) \"country\") \" (\"\n		(get (nth nas i) \"iata\") \"), \"\n		(format \"distance: %.1f\" (nth dis i)) \" NM, \"\n		\"direction: \" (int (nth bea i)) \"<br>\"))))] \n  (asp/pump-in chn \n	{:instruct :popup\n	 :lat (first ocr)\n	 :lon (second ocr)\n	 :html html\n	 :width 1200\n	 :height 1000\n	 :time (:ext-data-popup TIO)})\n  (asp/pump-in chn {:instruct :clear-placemarks})\n  (doseq [apt (take k nas)]\n    (point-out-place @edata {:airport apt})\n    (asp/pump-in chn (placemark-instruct {:airport apt :feature \"airport\"}))))")
 	(title "pump-nearest-airports [chn edata k]"))
 
 ([FlightPro_Class790000] of  CloFuncall
 
-	(source "(slurp \"http://data-live.flightradar24.com/clickhandler/?version=1.5&flight=IBK772\")"))
+	(source "(pro.commands/set-map-view [40.7 -70.7])"))
+
+([FlightPro_Class790001] of  CloFuncall
+
+	(source "(pro.commands/set-map-view [56.7 2.7])"))
+
+([FlightPro_Class790002] of  CloFuncall
+
+	(source "(pro.commands/set-map-view [56.0 18.7])"))
+
+([FlightPro_Class790003] of  CloFuncall
+
+	(source "(pro.commands/set-map-view [61.7 19.1])"))
+
+([FlightPro_Class790004] of  CloFuncall
+
+	(source "(pro.commands/set-map-view [60 27.3])"))
+
+([FlightPro_Class790005] of  CloFuncall
+
+	(source "(pro.commands/set-map-view [60.0 27.3])"))
+
+([FlightPro_Class790006] of  CloFuncall
+
+	(source "pro.commands/E-DATA"))
+
+([FlightPro_Class790007] of  CloFuncall
+
+	(source "(pro.commands/set-map-view [60.0 29.44])"))
+
+([FlightPro_Class790008] of  CloFuncall
+
+	(source "(pro.commands/set-map-view [59.9 30.0])"))
+
+([FlightPro_Class790009] of  CloFuncall
+
+	(source "(pro.commands/set-map-view [59.85 30.0])"))
 
 ([FlightPro_Class8] of  CloFunction
 
@@ -2734,10 +2709,6 @@
 
 	(source "(vswap! carr assoc :altitude alt)")
 	(title "set-altitude [carr alt]"))
-
-([FlightPro_Class800000] of  CloFuncall
-
-	(source "(ru.rules/sp 'Follow)"))
 
 ([FlightPro_Class80001] of  CloFunction
 
@@ -2768,6 +2739,39 @@
 	(icao "EFTU")
 	(runways 0)
 	(title "Turku Airport"))
+
+([FlightPro_Class810000] of  CloFunction
+
+	(source "(let [[lat lon] (our-center edata)\n        ocn (gn/call-geonames-ocean lat lon)\n        pro \"<html><head><meta charset=\\\"UTF-8\\\"/></meta></head>\"\n        hdr \"<h3>Where we are?</h3>\"\n        html (if (= ocn \"Land\")\n	(let [nby (gn/call-geonames-nearby lat lon)\n_ (println :NBY nby)\n	       gid (nby \"geonameId\")\n	       hir (gn/call-geonames-hierarchy gid)\n	       nam (nby \"name\")\n	       cty (nby \"countryName\")\n	       adm (nby \"adminName1\")\n	       cnt (nby \"continentCode\")\n	       lat1 (read-string (nby \"lat\"))\n	       lon1 (read-string (nby \"lng\"))\n                             dis (read-string (nby \"distance\"))\n	       dir (gn/direction (gn/bearing lat1 lon1 lat lon))]\n    (println :GID gid :HIR hir)\n	   (str pro hdr \"We are in \" (format \"%.0f\" dis)\n		\" miles to \" dir\n		\" from the \" nam \",<br>\"\n		cty \" (\" adm \"),<br>\"  \n		(CONTINENT cnt)))\n                      (str pro hdr \"We are above the \" ocn))]\n    (println edata)\n    (println lat lon)\n    (asp/pump-in chn \n	{:instruct :popup\n	 :lat lat\n	 :lon lon\n	 :html html\n	 :width 600\n	 :height 800\n	 :time (:ext-data-popup TIO)}))")
+	(title "pump-where-we-are [chn edata]"))
+
+([FlightPro_Class810001] of  CloFuncall
+
+	(source "(ext.data/pump-where-we-are (:instructions pro.commands/CHN) @pro.commands/E-DATA)"))
+
+([FlightPro_Class810002] of  CloFuncall
+
+	(source "(ext.data/pump-where-we-are (:instructions pro.commands/CHN) pro.commands/E-DATA)"))
+
+([FlightPro_Class810003] of  CloFuncall
+
+	(source "(ext.data/our-center pro.commands/E-DATA)"))
+
+([FlightPro_Class810004] of  CloFuncall
+
+	(source "(pro.commands/set-map-view [60.7 31.7])"))
+
+([FlightPro_Class810006] of  CloVar
+
+	(source "{\"AF\" \"Africa\"\n  \"AN\" \"Antarctica\"\n  \"AS\" \"Asia\"\n  \"EU\" \"Europe\"\n  \"NA\" \"North America\"\n  \"OC\" \"Oceania\"\n  \"SA\" \"South America\"}")
+	(title "CONTINENT"))
+
+([FlightPro_Class810007] of  Rule
+
+	(lhs "?q (Question predicate \"where-we-are\")")
+	(rhs "(ext.data/pump-where-we-are (:instructions pro.commands/CHN)\n		pro.commands/E-DATA)")
+	(salience 0)
+	(title "qq:WhereWeAre"))
 
 ([FlightPro_Class9] of  CloFunction
 

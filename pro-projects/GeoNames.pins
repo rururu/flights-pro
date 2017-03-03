@@ -1,4 +1,4 @@
-; Tue Feb 21 13:27:47 MSK 2017
+; Sat Mar 04 00:04:49 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -32,7 +32,8 @@
 		[GeoNames_Class20000]
 		[GeoNames_Class30006]
 		[GeoNames_Class30010]
-		[GeoNames_Class50002])
+		[GeoNames_Class50002]
+		[GeoNames_Class60000])
 	(cloNamespace [Example_Class10001])
 	(cloVars
 		[Example_Class10002]
@@ -49,7 +50,8 @@
 		[GeoNames_Class30000]
 		[GeoNames_Class20004]
 		[GeoNames_Class70001]
-		[GeoNames_Class50000])
+		[GeoNames_Class50000]
+		[GeoNames_Class90001])
 	(title "geonames"))
 
 ([Example_Class10001] of  CloNamespace
@@ -64,7 +66,7 @@
 
 ([Example_Class10003] of  CloFunction
 
-	(source "; Get ocean from Geonames Web Service\n(let [url (str *ocean-url* \"?lat=\" lat \"&lng=\" lng)]\n (try\n  (if-let [xml (clojure.xml/parse url)]\n    (if-let [mes (:message (:attrs (first (:content xml))))]\n       \"Land\"\n       (first (:content (first (:content (first (:content xml)))))) ))\n  (catch Exception e\n   (ctpl e)\n   ())))")
+	(source "; Get ocean from Geonames Web Service\n(let [url (str *ocean-url* \"?lat=\" lat \"&lng=\" lng \"&username=\" *username*)]\n (try\n  (if-let [xml (clojure.xml/parse url)]\n    (if-let [mes (:message (:attrs (first (:content xml))))]\n       \"Land\"\n       (first (:content (first (:content (first (:content xml)))))) ))\n  (catch Exception e\n   (ctpl e)\n   ())))")
 	(title "call-geonames-ocean [lat lng]"))
 
 ([Example_Class20000] of  CloFunction
@@ -242,6 +244,11 @@
 	(source ";; Get Wikipedia articles of title\n(let [url (str *wiki-search* \"?title=\" (java.net.URLEncoder/encode title \"utf-8\") \"&lang=\" lang \"&maxRows=\" max)]\n  (seq (ws-map-list url)))")
 	(title "gn-wiki-title [title max lang]"))
 
+([GeoNames_Class60000] of  CloFunction
+
+	(source ";; Returns all GeoNames higher up in the hierarchy of a place name.\n(let [url (str *hierarchy-url* \"?geonameId=\" gid \"&username=\" *username*)]\n(ctpl url)\n (try\n   (when-let [xml (clojure.xml/parse url)]\n      (ctpl xml)\n      (ctpl (count (:content xml)))\n      (map xml-to-map (:content xml)))\n (catch Exception e\n   (ctpl e)\n   nil)))")
+	(title "call-geonames-hierarchy [gid]"))
+
 ([GeoNames_Class60001] of  CloFunction
 
 	(source "(java.io.ByteArrayInputStream.  (.getBytes s java.nio.charset.StandardCharsets/UTF_8))")
@@ -262,6 +269,10 @@
 	(source "; Get Wikipedia articles containing text\n(let [url (str *wiki-search* \"?q=\" (java.net.URLEncoder/encode text \"utf-8\") \"&lang=\" lang \"&maxRows=\" max \"&username=\" *username*)]\n  (seq (ws-map-list url)))")
 	(title "call-wiki-search [text max lang]"))
 
+([GeoNames_Class70000] of  CloFuncall
+
+	(source "(geo.names/call-geonames-ocean 54 -16)"))
+
 ([GeoNames_Class70001] of  CloVar
 
 	(source "\"http://api.geonames.org/srtm3\"")
@@ -271,3 +282,8 @@
 
 	(source "; Get Elevation - GTOPO30\n(let [url (str *gtopo30* \"?lat=\" lat \"&lng=\" lng \"&username=\"  *username*)]\n (try\n   (if-let [gtp (slurp url)]\n     (read-string gtp))\n (catch Exception e\n   (ctpl e)\n   nil)))")
 	(title "call-geonames-gtopo30 [lat lng]"))
+
+([GeoNames_Class90001] of  CloVar
+
+	(source "\"http://api.geonames.org/hierarchy\"")
+	(title "^:dynamic *hierarchy-url*"))

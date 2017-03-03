@@ -1457,3 +1457,23 @@ Was expecting one of:
 2017.03.02 12:32:46.536 MSK WARNING: Look and feel not found: com.apple.laf.AquaLookAndFeel -- SystemUtilities.setLookAndFeel()
 2017.03.02 12:32:46.946 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
 2017.03.02 12:33:35.130 MSK INFO: Load time for file:/home/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 1 sec (project) + 8 sec (ui) -- ProjectManager$3.run()
+2017.03.02 17:08:39.654 MSK INFO: *** SYSTEM START ***
+2017.03.02 17:08:39.721 MSK WARNING: Look and feel not found: com.apple.laf.AquaLookAndFeel -- SystemUtilities.setLookAndFeel()
+2017.03.02 17:08:40.161 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.03.02 17:08:55.875 MSK INFO: Load time for file:/home/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 1 sec (project) + 9 sec (ui) -- ProjectManager$3.run()
+2017.03.03 13:06:00.437 MSK INFO: *** SYSTEM START ***
+2017.03.03 13:06:00.496 MSK WARNING: Look and feel not found: com.apple.laf.AquaLookAndFeel -- SystemUtilities.setLookAndFeel()
+2017.03.03 13:06:00.897 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.03.03 13:06:16.312 MSK INFO: Load time for file:/home/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 1 sec (project) + 8 sec (ui) -- ProjectManager$3.run()
+2017.03.03 13:17:05.127 MSK INFO: Project load time for file:/home/ru/clojure/flights-pro/pro-projects/GeoNames.pprj: 0 sec -- ProjectChooser.loadProject()
+2017.03.03 13:17:06.082 MSK INFO: UI display time = 0 sec -- ProjectManager$2.run()
+2017.03.03 13:38:09.013 MSK INFO: *** SYSTEM START ***
+2017.03.03 13:38:09.065 MSK WARNING: Look and feel not found: com.apple.laf.AquaLookAndFeel -- SystemUtilities.setLookAndFeel()
+2017.03.03 13:38:09.451 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.03.03 13:38:44.564 MSK INFO: Load time for file:/home/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 1 sec (project) + 9 sec (ui) -- ProjectManager$3.run()
+2017.03.03 23:58:18.386 MSK INFO: *** SYSTEM START ***
+2017.03.03 23:58:18.445 MSK WARNING: Look and feel not found: com.apple.laf.AquaLookAndFeel -- SystemUtilities.setLookAndFeel()
+2017.03.03 23:58:19.159 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.03.03 23:58:36.958 MSK INFO: Load time for file:/home/ru/clojure/flights-pro/pro-projects/GeoNames.pprj = 0 sec (project) + 8 sec (ui) -- ProjectManager$3.run()
+2017.03.04 00:05:00.142 MSK INFO: Project load time for file:/home/ru/clojure/flights-pro/pro-projects/FlightPro.pprj: 1 sec -- ProjectChooser.loadProject()
+2017.03.04 00:05:01.198 MSK INFO: UI display time = 1 sec -- ProjectManager$2.run()

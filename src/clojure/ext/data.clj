@@ -18,6 +18,13 @@
  :ext-data 15000
  :ext-data-popup 60000})
 (def WEATHER2-API "http://www.myweather2.com/developer/forecast.ashx?uac=Pyih5WakI3&output=json&query=")
+(def CONTINENT {"AF" "Africa"
+  "AN" "Antarctica"
+  "AS" "Asia"
+  "EU" "Europe"
+  "NA" "North America"
+  "OC" "Oceania"
+  "SA" "South America"})
 (defmacro with-timeout [msec & body]
   `(let [f# (future (do ~@body))
          v# (gensym)
@@ -52,8 +59,11 @@
     :html html
     :time (:ext-data-popup TIO)}))
 
-(defn our-center [n s w e]
-  [(/ (+ n s) 2) (/ (+ w e) 2)])
+(defn our-center
+  ([edata]
+  (apply our-center (:visible @edata)))
+([n s w e]
+  [(/ (+ n s) 2) (/ (+ w e) 2)]))
 
 (defn our-radius [n s w e]
   (/ (* (- n s) 60) 2))
@@ -68,33 +78,6 @@
        txt (if airport (str nam " (" iata ")") nam)
        dis (geo/distance-nm (our-center n s w e) [lat lon])]
   (cz/point-out txt [lat lon] dis (our-radius n s w e))))
-
-(defn pump-wiki [chn edata]
-  (let [[n s w e] (:visible @edata)
-       [lat lon] (our-center n s w e)
-       [n0 s0 w0 e0] (:wiki-bbx @edata)]
-  (if (or (> s0 lat)
-           (< n0 lat)
-           (< e0 lon)
-           (> w0 lon))
-     (invoke-later
-       (let [bbi (foc "BBX" "title" "Current")
-              rqi (fainst (cls-instances "BBXWiki") "Current BBXWiki Request")]
-         (if (and bbi rqi)
-           (do
-             (ssvs bbi "wsen" (vec (map float [w s e n])))
-             (ssv rqi "bbx" bbi)
-             (ssvs rqi "responses" [])
-             (with-timeout (:ext-data TIO)
-	(wig/submit-bbx (itm rqi 0) rqi))
-             (let [rr (svs rqi "responses")]
-               (when (seq rr)
-	(asp/pump-in chn {:instruct :clear-placemarks})
-	(doseq [r rr]
-	  (point-out-place @edata {:instance r})
-	  (asp/pump-in chn (placemark-instruct {:instance r})))
-	(vswap! edata assoc :wiki-bbx [n s w e]))))
-           (println "Instance of \"Current BBXWiki Request\" not found!")))))))
 
 (defn gn-weather-html [lat lon n s w e]
   (let [rsp (gn/call-geonames-weather lat lon)]
@@ -157,6 +140,33 @@ nil)
                 (day d1) "<br>"
                 (day d2)))))))
 
+(defn pump-wiki [chn edata]
+  (let [[n s w e] (:visible @edata)
+       [lat lon] (our-center n s w e)
+       [n0 s0 w0 e0] (:wiki-bbx @edata)]
+  (if (or (> s0 lat)
+           (< n0 lat)
+           (< e0 lon)
+           (> w0 lon))
+     (invoke-later
+       (let [bbi (foc "BBX" "title" "Current")
+              rqi (fainst (cls-instances "BBXWiki") "Current BBXWiki Request")]
+         (if (and bbi rqi)
+           (do
+             (ssvs bbi "wsen" (vec (map float [w s e n])))
+             (ssv rqi "bbx" bbi)
+             (ssvs rqi "responses" [])
+             (with-timeout (:ext-data TIO)
+	(wig/submit-bbx (itm rqi 0) rqi))
+             (let [rr (svs rqi "responses")]
+               (when (seq rr)
+	(asp/pump-in chn {:instruct :clear-placemarks})
+	(doseq [r rr]
+	  (point-out-place @edata {:instance r})
+	  (asp/pump-in chn (placemark-instruct {:instance r})))
+	(vswap! edata assoc :wiki-bbx [n s w e]))))
+           (println "Instance of \"Current BBXWiki Request\" not found!")))))))
+
 (defn pump-weather [chn edata fun]
   (let [[n s w e] (:visible @edata)
         [lat lon] (our-center n s w e)
@@ -170,9 +180,8 @@ nil)
 	 :time (:ext-data-popup TIO)})))
 
 (defn pump-nearest-airports [chn edata k]
-  (let [[n s w e] (:visible @edata)
-        ocr (our-center n s w e)
-        nas (fr24/nearest-airports n ocr)
+  (let [ocr (our-center edata)
+        nas (fr24/nearest-airports k ocr)
         dis (map #(geo/distance-nm ocr [(% "lat")(% "lon")]) nas)
         bea (map #(geo/bear-deg ocr [(% "lat")(% "lon")]) nas)
         html (str "<h3>Nearest Airports</h3>"
@@ -194,4 +203,40 @@ nil)
   (doseq [apt (take k nas)]
     (point-out-place @edata {:airport apt})
     (asp/pump-in chn (placemark-instruct {:airport apt :feature "airport"})))))
+
+(defn pump-where-we-are [chn edata]
+  (let [[lat lon] (our-center edata)
+        ocn (gn/call-geonames-ocean lat lon)
+        pro "<html><head><meta charset=\"UTF-8\"/></meta></head>"
+        hdr "<h3>Where we are?</h3>"
+        html (if (= ocn "Land")
+	(let [nby (gn/call-geonames-nearby lat lon)
+_ (println :NBY nby)
+	       gid (nby "geonameId")
+	       hir (gn/call-geonames-hierarchy gid)
+	       nam (nby "name")
+	       cty (nby "countryName")
+	       adm (nby "adminName1")
+	       cnt (nby "continentCode")
+	       lat1 (read-string (nby "lat"))
+	       lon1 (read-string (nby "lng"))
+                             dis (read-string (nby "distance"))
+	       dir (gn/direction (gn/bearing lat1 lon1 lat lon))]
+    (println :GID gid :HIR hir)
+	   (str pro hdr "We are in " (format "%.0f" dis)
+		" miles to " dir
+		" from the " nam ",<br>"
+		cty " (" adm "),<br>"  
+		(CONTINENT cnt)))
+                      (str pro hdr "We are above the " ocn))]
+    (println edata)
+    (println lat lon)
+    (asp/pump-in chn 
+	{:instruct :popup
+	 :lat lat
+	 :lon lon
+	 :html html
+	 :width 600
+	 :height 800
+	 :time (:ext-data-popup TIO)})))
 

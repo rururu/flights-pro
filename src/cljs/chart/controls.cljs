@@ -34,5 +34,6 @@
    <option value='weather-gn'>Weather GeoNames</option>
    <option value='weather-w2'>Weather2</option>
    <option value='nearest-airports'>Nearest Airports</option>
+   <option value='where-we-are'>Where We Are?</option>
    </select>"))
 

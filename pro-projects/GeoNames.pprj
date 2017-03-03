@@ -1,4 +1,4 @@
-; Tue Feb 21 13:27:47 MSK 2017
+; Sat Mar 04 00:04:49 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -107,6 +107,34 @@
 	(is_hidden FALSE)
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
 
+([KB_550179_Class353] of  Map
+
+	(entries
+		[KB_550179_Class354]
+		[KB_550179_Class355]
+		[KB_550179_Class356]))
+
+([KB_550179_Class354] of  Map_Entry
+
+	(key "suppress_instance_counting")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([KB_550179_Class355] of  Map_Entry
+
+	(key "add_name_on_instance_form")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([KB_550179_Class356] of  Map_Entry
+
+	(key "change_tracking_active")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
 ([KB_773074_Class0] of  String
 
 	(name "factory_class_name")
@@ -203,34 +231,6 @@
 
 	(name "instances_file_name")
 	(string_value "GeoNames.pins"))
-
-([KB_791531_Class353] of  Map
-
-	(entries
-		[KB_791531_Class354]
-		[KB_791531_Class355]
-		[KB_791531_Class356]))
-
-([KB_791531_Class354] of  Map_Entry
-
-	(key "suppress_instance_counting")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([KB_791531_Class355] of  Map_Entry
-
-	(key "add_name_on_instance_form")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([KB_791531_Class356] of  Map_Entry
-
-	(key "change_tracking_active")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
 
 ([LAYOUT_PROPERTIES] of  Property_List
 
