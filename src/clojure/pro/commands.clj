@@ -5,7 +5,7 @@
   [fr24.client :as fr24]
   [async.proc :as asp]
   [rete.core :as rete]
-  [cesium.core :refer [iso8601curt]]
+  [cesium.core :as czs]
   [ext.data :as exd]))
 
 (def HOST "http://localhost:")
@@ -59,7 +59,7 @@
 	'speed (fr24/speed v)
 	'altitude alt
 	'time crt
-	'point4d [lat lon (int (/ alt 3.28084)) (iso8601curt)]
+	'point4d [lat lon (int (/ alt 3.28084)) (czs/iso8601curt)]
 	'age "NEW"
 	'status (if (> alt APT-ALT)
                                      "LEVEL"
@@ -323,7 +323,8 @@ TERRAIN)
 	:airport (sv api "title")})
   (println "Annotated Initial Airport not found!")))
 
-(defn intersect [params]
-  (println [:CMD-INTERSECT params])
+(defn new-czml-doc [params]
+  (println [:CMD-NEW-CZML-DOC params])
+(czs/new-doc)
 "")
 

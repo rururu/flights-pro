@@ -37,3 +37,6 @@
    <option value='where-we-are'>Where We Are?</option>
    </select>"))
 
+(defn display-zoom [z]
+  (set-html! "zoom" (str "zoom " z)))
+

@@ -36,7 +36,7 @@
                :speed 0
                :course 0
                :step-hrs (double (/ (:carrier TIO) 3600000))
-               :bank-params [16 16 64 2]
+               :bank-params [12 16 64 2]
                :rudder {:target 0
                             :step 3
 	    :accel 1
@@ -87,7 +87,7 @@
   (vswap! CARRIER assoc :mode callsign))
 (let [old-crs (:course @CARRIER)
        new-crs (:course vehicle)]
-  (vswap! CARRIER merge vehicle)
+  (vswap! CARRIER merge (dissoc vehicle :course))
   (mov/set-turn-point CARRIER)
   (if (not= new-crs old-crs)
     (turn-and-bank CARRIER new-crs))))
@@ -200,6 +200,9 @@
 (GET (str (:command URL) "terrain")
 	{:handler (fn [response]
 		(czm/init-3D-view (:base URL) response))
+	 :error-handler error-handler})
+(GET (str (:command URL) "new-czml-doc")
+	{:handler (fn [response])
 	 :error-handler error-handler})
 (asp/repeater mov/move CARRIER (:carrier TIO))
 (asp/repeater ctl/show-flight-data CARRIER (:display TIO))

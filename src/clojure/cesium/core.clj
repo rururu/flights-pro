@@ -109,3 +109,6 @@
        scl (+ min-scl (* (- 1 min-scl) (- 1 (/ dist max-dist))))]
   (location txt scl "img/arrdn.png" lat lon 100 40)))
 
+(defn new-doc []
+  (def DOC-SND true))
+

@@ -211,9 +211,6 @@ nil)
         hdr "<h3>Where we are?</h3>"
         html (if (= ocn "Land")
 	(let [nby (gn/call-geonames-nearby lat lon)
-_ (println :NBY nby)
-	       gid (nby "geonameId")
-	       hir (gn/call-geonames-hierarchy gid)
 	       nam (nby "name")
 	       cty (nby "countryName")
 	       adm (nby "adminName1")
@@ -222,15 +219,12 @@ _ (println :NBY nby)
 	       lon1 (read-string (nby "lng"))
                              dis (read-string (nby "distance"))
 	       dir (gn/direction (gn/bearing lat1 lon1 lat lon))]
-    (println :GID gid :HIR hir)
 	   (str pro hdr "We are in " (format "%.0f" dis)
 		" miles to " dir
 		" from the " nam ",<br>"
 		cty " (" adm "),<br>"  
 		(CONTINENT cnt)))
                       (str pro hdr "We are above the " ocn))]
-    (println edata)
-    (println lat lon)
     (asp/pump-in chn 
 	{:instruct :popup
 	 :lat lat

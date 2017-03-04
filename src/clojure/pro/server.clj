@@ -6,7 +6,7 @@
               [compojure.route :as route]
               [cognitect.transit :as t]
               [async.proc :as asp]
-              [cesium.core :as czs]
+              [cesium.core :refer [iso8601curt]]
               [pro.commands :as cmd])
 (:import java.io.ByteArrayOutputStream))
 

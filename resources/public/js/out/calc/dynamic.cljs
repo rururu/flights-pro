@@ -60,15 +60,19 @@
 	      (<= dif 180)
 	    (< dif 0) 
 	      (< dif -180))))]
-  (let [arc (calc/abs (- old-crs new-crs))
-         arc (if (> arc 180)
-                 (- 360 arc)
-                 arc)
-         bnk (cond
+  (if (= old-crs new-crs)
+    0
+    (let [arc (calc/abs (- old-crs new-crs))
+           arc (cond 
+	(> arc 180) (- 360 arc)
+	(< arc - 180) (+ 360 arc)
+	(< arc 0) (- 0 arc)
+	true arc)
+           bnk (cond
                   (< arc small-arc) (int (/ right-bank factor)) 
                   (> arc big-arc) (* right-bank factor)
                   true right-bank)]
-    (if (turn-right? old-crs new-crs)
-        bnk
-        (- bnk)))))
+      (if (turn-right? old-crs new-crs)
+          bnk
+          (- bnk))))))
 

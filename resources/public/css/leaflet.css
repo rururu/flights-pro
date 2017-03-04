@@ -13,6 +13,13 @@
   padding:5px;
   z-index:100;
 }
+#zoom {
+  position:fixed;
+  bottom:10px;
+  left:170px;
+  padding:5px;
+  z-index:100;
+}
 #commands-header {
   position:fixed;
   bottom:50px;

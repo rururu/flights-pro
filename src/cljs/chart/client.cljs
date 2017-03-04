@@ -122,9 +122,9 @@
 		     (URL-ICO "default"))
 	           :iconSize #js[24, 24]})
        opt #js{:icon ico
-                     :draggable false
-                     :title tip}
-       mrk (-> js/L (.rotatedMarker pos opt))]
+                    :draggable false
+                    :title tip}
+       mrk (-> js/L (.marker pos opt))]
     (.on mrk "click"
          (fn [e]
            (info (str "pm" iname))))
@@ -319,7 +319,8 @@
 	       (GET (str (:command URL) cmd prm) no-handler))
   "move-to" (move-to)
   "schedule" (schedule)
-  (GET (str (:command URL) cmd) no-handler)))
+  (GET (str (:command URL) cmd) no-handler))
+(ctl/show-chart-controls))
 
 (defn init-chart []
   (println :INIT-CHART)
@@ -357,6 +358,9 @@
     (.addTo ctrl m)
     (.on m "mousemove"
          (fn [e] (ctl/mouse-move (.. e -latlng -lat) (.. e -latlng -lng))))
+    (.on m "zoomend"
+         (fn [e] (ctl/display-zoom (.getZoom m))))
+    (ctl/display-zoom (.getZoom m))
     (vreset! CHART m)))
 
 (defn on-load-chart []
@@ -383,7 +387,8 @@
 (defn question [q]
   (condp = q
   "questions" nil
-  (am/ask-server {:whom "es" :predicate q})))
+  (am/ask-server {:whom "es" :predicate q}))
+(ctl/show-chart-controls))
 
 
 (set! (.-onload js/window) (on-load-chart))
