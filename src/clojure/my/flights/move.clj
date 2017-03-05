@@ -21,7 +21,7 @@
                :speed 0
                :course 0
                :step-hrs (double (/ (:carrier TIO) 3600000))
-               :bank-params [16 16 64 2]
+               :bank-params [12 16 64 2]
                :rudder {:target 0
                             :step 3
 	    :accel 1

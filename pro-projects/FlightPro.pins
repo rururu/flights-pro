@@ -1,4 +1,4 @@
-; Sun Mar 05 01:13:34 MSK 2017
+; Sun Mar 05 21:30:47 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -490,8 +490,8 @@
 		[FlightPro_Class70000]
 		[FlightPro_Class20005]
 		[FlightPro_Class330003]
-		[FlightPro_Class330004]
 		[FlightPro_Class100025]
+		[FlightPro_Class330004]
 		[FlightPro_Class330002]
 		[FlightPro_Class80002])
 	(css [FlightPro_Class120000])
@@ -552,7 +552,7 @@
 
 ([FlightPro_Class20001] of  CloNamespace
 
-	(source "(:require [ring.adapter.jetty :as jetty]\n              [ring.util.response :as r]\n              [compojure.core :refer [defroutes GET]]\n              [compojure.handler :as handler]\n              [compojure.route :as route]\n              [cognitect.transit :as t]\n              [async.proc :as asp]\n              [cesium.core :refer [iso8601curt]]\n              [pro.commands :as cmd])\n(:import java.io.ByteArrayOutputStream)")
+	(source "(:require [ring.adapter.jetty :as jetty]\n              [ring.util.response :as r]\n              [compojure.core :refer [defroutes GET]]\n              [compojure.handler :as handler]\n              [compojure.route :as route]\n              [cognitect.transit :as t]\n              [async.proc :as asp]\n              [cesium.core :as czs]\n              [pro.commands :as cmd])\n(:import java.io.ByteArrayOutputStream)")
 	(title "pro.server"))
 
 ([FlightPro_Class200010] of  CloFunction
