@@ -1,4 +1,4 @@
-; Sat Mar 04 00:04:49 MSK 2017
+; Thu Mar 09 17:15:05 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -25,6 +25,8 @@
 		[GeoNames_Class30]
 		[GeoNames_Class40000]
 		[GeoNames_Class80001]
+		[GeoNames_Class60000]
+		[GeoNames_Class100001]
 		[GeoNames_Class40001]
 		[GeoNames_Class20028]
 		[GeoNames_Class30001]
@@ -32,8 +34,7 @@
 		[GeoNames_Class20000]
 		[GeoNames_Class30006]
 		[GeoNames_Class30010]
-		[GeoNames_Class50002]
-		[GeoNames_Class60000])
+		[GeoNames_Class50002])
 	(cloNamespace [Example_Class10001])
 	(cloVars
 		[Example_Class10002]
@@ -51,7 +52,8 @@
 		[GeoNames_Class20004]
 		[GeoNames_Class70001]
 		[GeoNames_Class50000]
-		[GeoNames_Class90001])
+		[GeoNames_Class90001]
+		[GeoNames_Class80000])
 	(title "geonames"))
 
 ([Example_Class10001] of  CloNamespace
@@ -128,6 +130,11 @@
 
 	(source "\"http://api.geonames.org/astergdemXML\"")
 	(title "^:dynamic *elev30-url*"))
+
+([GeoNames_Class100001] of  CloFunction
+
+	(source ";; Finds the nearest points of interests for a given lat/lng pair.\n;; max rows = 50, max radius = 1\n(let [url (str *pois-osm-url* \"?lat=\" lat \"&lng=\" lng \"&username=\" *username*)\n       url (if (and (some? maxr) (<= maxr 50)) (str url \"&maxRows=\" maxr) url)\n       url (if (and (some? rad) (<= rad 1)) (str url \"&radius=\" rad) url)]\n (try\n   (if-let [xml (clojure.xml/parse url)]\n      (map xml-to-map (:content xml)) )\n (catch Exception e\n   (ctpl e)\n   nil)))")
+	(title "call-geonames-pois-osm [lat lng maxr rad]"))
 
 ([GeoNames_Class10001] of  CloFunction
 
@@ -269,14 +276,15 @@
 	(source "; Get Wikipedia articles containing text\n(let [url (str *wiki-search* \"?q=\" (java.net.URLEncoder/encode text \"utf-8\") \"&lang=\" lang \"&maxRows=\" max \"&username=\" *username*)]\n  (seq (ws-map-list url)))")
 	(title "call-wiki-search [text max lang]"))
 
-([GeoNames_Class70000] of  CloFuncall
-
-	(source "(geo.names/call-geonames-ocean 54 -16)"))
-
 ([GeoNames_Class70001] of  CloVar
 
 	(source "\"http://api.geonames.org/srtm3\"")
 	(title "^:dynamic *strm3-url*"))
+
+([GeoNames_Class80000] of  CloVar
+
+	(source "\"http://api.geonames.org/findNearbyPOIsOSM\"")
+	(title "^:dynamic *pois-osm-url*"))
 
 ([GeoNames_Class80001] of  CloFunction
 

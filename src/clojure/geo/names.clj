@@ -21,6 +21,7 @@
 (def ^:dynamic *strm3-url* "http://api.geonames.org/srtm3")
 (def ^:dynamic *gtopo30* "http://api.geonames.org/gtopo30")
 (def ^:dynamic *hierarchy-url* "http://api.geonames.org/hierarchy")
+(def ^:dynamic *pois-osm-url* "http://api.geonames.org/findNearbyPOIsOSM")
 (defn map-into-inst [mp inst]
   (doseq [[k v] mp]
    (if (slt k)
@@ -215,6 +216,32 @@ inst)
    (ctpl e)
    nil))))
 
+(defn call-geonames-hierarchy [gid]
+  ;; Returns all GeoNames higher up in the hierarchy of a place name.
+(let [url (str *hierarchy-url* "?geonameId=" gid "&username=" *username*)]
+(ctpl url)
+ (try
+   (when-let [xml (clojure.xml/parse url)]
+      (ctpl xml)
+      (ctpl (count (:content xml)))
+      (map xml-to-map (:content xml)))
+ (catch Exception e
+   (ctpl e)
+   nil))))
+
+(defn call-geonames-pois-osm [lat lng maxr rad]
+  ;; Finds the nearest points of interests for a given lat/lng pair.
+;; max rows = 50, max radius = 1
+(let [url (str *pois-osm-url* "?lat=" lat "&lng=" lng "&username=" *username*)
+       url (if (and (some? maxr) (<= maxr 50)) (str url "&maxRows=" maxr) url)
+       url (if (and (some? rad) (<= rad 1)) (str url "&radius=" rad) url)]
+ (try
+   (if-let [xml (clojure.xml/parse url)]
+      (map xml-to-map (:content xml)) )
+ (catch Exception e
+   (ctpl e)
+   nil))))
+
 (defn tag-con-map [lst]
   (letfn [(tac? [x] (let [cnt (:content x)]
 	(not (or (nil? (:tag x)) (not (or (nil? cnt) (seq cnt))) ) )))
@@ -286,17 +313,4 @@ inst)
   ;; Get Wikipedia articles of title
 (let [url (str *wiki-search* "?title=" (java.net.URLEncoder/encode title "utf-8") "&lang=" lang "&maxRows=" max)]
   (seq (ws-map-list url))))
-
-(defn call-geonames-hierarchy [gid]
-  ;; Returns all GeoNames higher up in the hierarchy of a place name.
-(let [url (str *hierarchy-url* "?geonameId=" gid "&username=" *username*)]
-(ctpl url)
- (try
-   (when-let [xml (clojure.xml/parse url)]
-      (ctpl xml)
-      (ctpl (count (:content xml)))
-      (map xml-to-map (:content xml)))
- (catch Exception e
-   (ctpl e)
-   nil))))
 

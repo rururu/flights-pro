@@ -1,4 +1,4 @@
-; Fri Feb 24 12:53:39 MSK 2017
+; Thu Mar 09 17:55:33 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -163,8 +163,38 @@
 ;+		(cardinality 0 1)
 		(create-accessor read-write)))
 
-(defclass WikiArticle
+(defclass WikiGIS+Onto
 	(is-a USER)
+	(role abstract))
+
+(defclass RSSRequest
+	(is-a WikiGIS+Onto)
+	(role concrete)
+	(single-slot bbx
+		(type INSTANCE)
+;+		(allowed-classes BBX)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot feedURL
+		(type STRING)
+		(create-accessor read-write))
+	(single-slot button-rss
+		(type STRING)
+		(default "submit/wiki.gis/submit-rss")
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot button-clear-rss
+		(type STRING)
+		(default "Clear RSS/wiki.gis/clear-rss")
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot georss_items
+		(type INSTANCE)
+;+		(allowed-classes GeoRSSItem)
+		(create-accessor read-write)))
+
+(defclass WikiArticle
+	(is-a WikiGIS+Onto)
 	(role concrete)
 	(single-slot feature
 		(type STRING)
@@ -229,7 +259,7 @@
 		(create-accessor read-write)))
 
 (defclass Request
-	(is-a USER)
+	(is-a WikiGIS+Onto)
 	(role abstract)
 	(single-slot language
 		(type SYMBOL)
@@ -303,7 +333,7 @@
 		(create-accessor read-write)))
 
 (defclass GeoRSSItem
-	(is-a USER)
+	(is-a WikiGIS+Onto)
 	(role concrete)
 	(single-slot button-open-site
 		(type STRING)
@@ -347,34 +377,8 @@
 ;+		(cardinality 0 1)
 		(create-accessor read-write)))
 
-(defclass RSSRequest
-	(is-a USER)
-	(role concrete)
-	(single-slot bbx
-		(type INSTANCE)
-;+		(allowed-classes BBX)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(multislot feedURL
-		(type STRING)
-		(create-accessor read-write))
-	(single-slot button-rss
-		(type STRING)
-		(default "submit/wiki.gis/submit-rss")
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(single-slot button-clear-rss
-		(type STRING)
-		(default "Clear RSS/wiki.gis/clear-rss")
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(multislot georss_items
-		(type INSTANCE)
-;+		(allowed-classes GeoRSSItem)
-		(create-accessor read-write)))
-
 (defclass BBX
-	(is-a USER)
+	(is-a WikiGIS+Onto)
 	(role concrete)
 	(single-slot title
 		(type STRING)

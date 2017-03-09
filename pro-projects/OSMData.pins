@@ -1,0 +1,120 @@
+; Thu Mar 09 23:04:27 MSK 2017
+; 
+;+ (version "3.5")
+;+ (build "Build 663")
+
+([OSMData_Class0] of  ShareOnto
+
+	(but-deep-copy "Deep Copy Instance/share.onto/deep-copy")
+	(but-del-fil "Delete Filtered Instances/share.onto/delfil")
+	(but-del-unref "Delete Unreferenced/share.onto/delete-unref")
+	(but-find-unref "Find Unreferenced/share.onto/find-unref")
+	(but-load-prj "Load Source Project/share.onto/load-src-prj")
+	(but-shal-copy "Shallow Copy Instances/share.onto/shal-copy")
+	(source-project "DefaultKnowledgeBase(FlightPro)"))
+
+([OSMData_Class1] of  CloProgram
+
+	(cloFunctions
+		[OSMData_Class5]
+		[OSMData_Class6]
+		[OSMData_Class7]
+		[OSMData_Class8]
+		[OSMData_Class9]
+		[OSMData_Class10]
+		[OSMData_Class11]
+		[OSMData_Class30]
+		[OSMData_Class29])
+	(cloNamespace [OSMData_Class2])
+	(cloVars
+		[OSMData_Class3]
+		[OSMData_Class4])
+	(title "OSM Data"))
+
+([OSMData_Class10] of  CloFunction
+
+	(source "(sort (set (mapcat keys data)))")
+	(title "tags [data]"))
+
+([OSMData_Class11] of  CloFunction
+
+	(source "(let [sta (for [t (tags @DATA)]\n	(let [fl (filter-k t @DATA)]\n	  [t (count fl)]))\n        sta  (filter #(> (second %) 0) sta)]\n  (sort second sta))")
+	(title "tag-stat []"))
+
+([OSMData_Class2] of  CloNamespace
+
+	(source "(:use protege.core)\n(:require \n  clojure.xml\n  [geo.names :as gn])")
+	(title "osm.data"))
+
+([OSMData_Class28] of  POIRequest
+
+	(lat 62.92)
+	(lng 34.487)
+	(max-rows 50)
+	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
+	(radius 1.0))
+
+([OSMData_Class29] of  CloFunction
+
+	(source "([hm inst]\n  (let [mp (into {} hm)\n         max (mp \"max-rows\")\n         rad (mp \"radius\")\n         lat (mp \"lat\")\n         lon (mp \"lng\")]\n    (let [rss (gn/call-geonames-pois-osm lat lon max rad)]\n      (if (seq rss)\n        (ssvs inst \"osm-responses\" (map mk-poi-from-resp rss))))))\n([inst lat lon]\n  (ssv inst \"lat\" lat)\n  (ssv inst \"lng\" lon)\n  (poi-request (itm inst 0) inst)\n  inst)")
+	(title "poi-request"))
+
+([OSMData_Class3] of  CloVar
+
+	(source "(volatile! [])")
+	(title "DATA"))
+
+([OSMData_Class30] of  CloFunction
+
+	(source "(let [tyc (foc \"TypeClass\" \"name\" (resp \"typeClass\"))\n       tyn (foc \"TypeName\" \"name\" (resp \"typeName\"))\n       ins (crin \"PointOfInterest\")]\n  (ssv ins \"name\" (resp \"name\"))\n  (ssv ins \"lat\" (float (read-string (resp \"lat\"))))\n  (ssv ins \"lng\" (float (read-string (resp \"lng\"))))\n  (ssv ins \"distance\" (float (read-string (resp \"distance\"))))\n  (ssv ins \"typeClass\" tyc)\n  (ssv ins \"typeName\" tyn)\n  ins)")
+	(title "mk-poi-from-resp [resp]"))
+
+([OSMData_Class31] of  TypeClass
+
+	(name "shop"))
+
+([OSMData_Class32] of  TypeName
+
+	(name "computer"))
+
+([OSMData_Class34] of  TypeName
+
+	(name "yes"))
+
+([OSMData_Class38] of  TypeName
+
+	(name "hardware"))
+
+([OSMData_Class4] of  CloVar
+
+	(source "\"http://api.openstreetmap.org/api/0.6/map\"")
+	(title "OSM-API"))
+
+([OSMData_Class40] of  TypeName
+
+	(name "supermarket"))
+
+([OSMData_Class5] of  CloFunction
+
+	(source "(let [cnt (:content tag)\n       tt (filter #(= (:tag %) :tag) cnt)\n       m {\"id\" (:id (:attrs tag))\n             \"lat\" (read-string (:lat (:attrs tag)))\n             \"lon\" (read-string (:lon (:attrs tag)))}\n       ml (cons m (map #(assoc {} (:k (:attrs %)) (:v (:attrs %))) tt))]\n  (apply merge ml))")
+	(title "tag-tags-namcor [tag]"))
+
+([OSMData_Class6] of  CloFunction
+
+	(source "([[lat lon] rad]\n  (let [d (/ rad 60)\n         bbx [(- lon d) (- lat d) (+ lon d) (+ lat d)]]\n    (osm-data bbx)))\n([bbx]\n  (try\n    (let [[w s e n] bbx\n           curl (str OSM-API \"?bbox=\" w \",\" s \",\" e \",\" n)\n           xml (clojure.xml/parse curl)\n           cnt (:content xml)\n           nods (filter #(= (:tag %) :node) cnt)\n           nnn (filter #(some? (:content %)) nods)]\n        (vreset! DATA (map tag-tags-namcor nnn)))\n    (catch Exception e\n      (println e)\n      nil)))")
+	(title "osm-data"))
+
+([OSMData_Class7] of  CloFunction
+
+	(source "(filter #(some? (get % k)) data)")
+	(title "filter-k [k data]"))
+
+([OSMData_Class8] of  CloFunction
+
+	(source "(filter #(= (get % k) v) data)")
+	(title "filter-kv [k v data]"))
+
+([OSMData_Class9] of  CloFunction
+
+	(source "(filter #(not= (get % k) v) data)")
+	(title "filter-kv-not [k v data]"))

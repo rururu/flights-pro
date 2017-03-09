@@ -112,3 +112,12 @@
 2016.11.28 18:18:59.991 MSK INFO: *** SYSTEM START ***
 2016.11.28 18:19:01.016 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
 2016.11.28 18:19:06.753 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 2 sec (ui) -- ProjectManager$3.run()
+2017.03.09 13:30:38.207 MSK INFO: *** SYSTEM START ***
+2017.03.09 17:14:21.819 MSK INFO: *** SYSTEM START ***
+2017.03.09 17:16:23.850 MSK INFO: *** SYSTEM START ***
+2017.03.09 17:20:11.640 MSK INFO: *** SYSTEM START ***
+2017.03.09 17:24:38.940 MSK INFO: *** SYSTEM START ***
+2017.03.09 17:24:39.801 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.03.09 17:25:04.706 MSK INFO: Project load time for file:/Users/ru/clojure/fligts-pro/pro-projects/WikipediaGIS.pprj: 0 sec -- ProjectChooser.loadProject()
+2017.03.09 17:25:07.267 MSK INFO: UI display time = 2 sec -- ProjectManager$2.run()
+2017.03.09 17:27:22.007 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/OSMData.pprj = 0 sec (project) + 0 sec (ui) -- ProjectManager$3.run()

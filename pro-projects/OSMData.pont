@@ -1,0 +1,139 @@
+; Thu Mar 09 23:04:27 MSK 2017
+; 
+;+ (version "3.5")
+;+ (build "Build 663")
+
+
+(defclass %3ACLIPS_TOP_LEVEL_SLOT_CLASS "Fake class to save top-level slot information"
+	(is-a USER)
+	(role abstract)
+	(single-slot name_
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot poi-req-butt
+		(type STRING)
+		(default "Get Points Of Interest/osm.data/poi-request")
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot typeName
+		(type INSTANCE)
+;+		(allowed-classes TypeName)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot osm-responses
+		(type INSTANCE)
+;+		(allowed-classes PointOfInterest)
+		(create-accessor read-write))
+	(single-slot distance
+		(type FLOAT)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot radius
+		(type FLOAT)
+		(range %3FVARIABLE 1.0)
+		(default 1.0)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot lat
+		(type FLOAT)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot lng
+		(type FLOAT)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot max-rows
+		(type INTEGER)
+		(range %3FVARIABLE 50)
+		(default 50)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot typeClass
+		(type INSTANCE)
+;+		(allowed-classes TypeClass)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass OSM+Onto
+	(is-a USER)
+	(role abstract))
+
+(defclass PointOfInterest
+	(is-a OSM+Onto)
+	(role concrete)
+	(single-slot typeName
+		(type INSTANCE)
+;+		(allowed-classes TypeName)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot name_
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot lat
+		(type FLOAT)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot typeClass
+		(type INSTANCE)
+;+		(allowed-classes TypeClass)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot lng
+		(type FLOAT)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot distance
+		(type FLOAT)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass TypeClass
+	(is-a OSM+Onto)
+	(role concrete)
+	(single-slot name_
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass TypeName
+	(is-a OSM+Onto)
+	(role concrete)
+	(single-slot name_
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass POIRequest
+	(is-a OSM+Onto)
+	(role concrete)
+	(single-slot radius
+		(type FLOAT)
+		(range %3FVARIABLE 1.0)
+		(default 1.0)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot lat
+		(type FLOAT)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot osm-responses
+		(type INSTANCE)
+;+		(allowed-classes PointOfInterest)
+		(create-accessor read-write))
+	(single-slot max-rows
+		(type INTEGER)
+		(range %3FVARIABLE 50)
+		(default 50)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot lng
+		(type FLOAT)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot poi-req-butt
+		(type STRING)
+		(default "Get Points Of Interest/osm.data/poi-request")
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
