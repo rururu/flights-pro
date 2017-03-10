@@ -1,4 +1,4 @@
-; Thu Mar 09 18:25:24 MSK 2017
+; Fri Mar 10 23:27:29 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -35,6 +35,7 @@
 		[RuleEngine_Class30000]
 		[Example_Class10000]
 		[GeoNamesWikipedia_Class0]
+		[OSMData_Class1]
 		[FlightPro_Class670000]
 		[FlightPro_Class400000]
 		[FlightPro_Class20000]
@@ -366,7 +367,7 @@
 
 ([FlightPro_Class160011] of  CloFunction
 
-	(source "(println :INIT-CHART)\n(let [m (-> js/L\n              (.map \"map\")\n              (.setView (array 60.3, 25.0) 10)) ;; New York 40.8, -74.0\n        tile1 (-> js/L (.tileLayer \"http://{s}.tile.osm.org/{z}/{x}/{y}.png\"\n                                   #js{:maxZoom 16\n                                       :attribution \"Ru, OpenStreetMap &copy;\"}))\n        tile2 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile3 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile4 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile5 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        base (clj->js {\"OpenStreetMap\" tile1\n                       \"Google Satellite\" tile2\n                       \"Google Streets\" tile3\n                       \"Google Hybrid\" tile4\n                       \"Google Terrain\" tile5})\n        ctrl (-> js/L (.control.layers base nil))]\n    (try\n      (.addTo tile1 m)\n      (catch js/Error e (println e)))\n    (.addTo ctrl m)\n    (.on m \"mousemove\"\n         (fn [e] (ctl/mouse-move (.. e -latlng -lat) (.. e -latlng -lng))))\n    (.on m \"zoomend\"\n         (fn [e] (ctl/display-zoom (.getZoom m))))\n    (ctl/display-zoom (.getZoom m))\n    (vreset! CHART m))")
+	(source "(println :INIT-CHART)\n(let [m (-> js/L\n              (.map \"map\")\n              (.setView (array 60.3, 25.0) 10)) ;; New York 40.8, -74.0\n        tile1 (-> js/L (.tileLayer \"http://{s}.tile.osm.org/{z}/{x}/{y}.png\"\n                                   #js{:maxZoom 20\n                                       :attribution \"Ru, OpenStreetMap &copy;\"}))\n        tile2 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile3 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile4 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        tile5 (-> js/L (.tileLayer \"http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}\"\n                                   #js{:maxZoom 20\n                                       :subdomains #js[\"mt0\" \"mt1\" \"mt2\" \"mt3\"]\n                                       :attribution \"Ru, Google &copy;\"}))\n        base (clj->js {\"OpenStreetMap\" tile1\n                       \"Google Satellite\" tile2\n                       \"Google Streets\" tile3\n                       \"Google Hybrid\" tile4\n                       \"Google Terrain\" tile5})\n        ctrl (-> js/L (.control.layers base nil))]\n    (try\n      (.addTo tile1 m)\n      (catch js/Error e (println e)))\n    (.addTo ctrl m)\n    (.on m \"mousemove\"\n         (fn [e] (ctl/mouse-move (.. e -latlng -lat) (.. e -latlng -lng))))\n    (.on m \"zoomend\"\n         (fn [e] (ctl/display-zoom (.getZoom m))))\n    (ctl/display-zoom (.getZoom m))\n    (vreset! CHART m))")
 	(title "init-chart []"))
 
 ([FlightPro_Class160012] of  CloFunction
@@ -391,7 +392,7 @@
 
 ([FlightPro_Class170005] of  CloFunction
 
-	(source "(doseq [{:keys [instruct] :as ins} (read-transit response)]\n  ;;(println [:INSTRUCT ins])\n  (condp = instruct\n    :create-update (let [{:keys [id vehicle]} ins]\n	(create-update-vehicle id vehicle))\n    :delete (let [{:keys [id]} ins]\n	(delete-vehicle id))\n    :clear (clear-vehicles)\n    :popup (let [{:keys [id lat lon html time width height]} ins]\n	(cond\n	  id (popup id html time)\n	  (and  width height lat lon) (popup lat lon html time width height)\n	  (and lat lon) (popup lat lon html time)))\n    :trail (let [{:keys [id points options time]} ins]\n	(add-trail id points options time))\n    :map-center (let [{:keys [coord]} ins]\n	(map-center coord))\n    :create-placemark (let [{:keys [iname tip lat lon feature]} ins]\n                      (create-placemark iname tip lat lon feature))\n    :clear-placemarks (clear-placemarks)\n    :add-link (let [{:keys [ids options]} ins]\n                  (add-link ids options))\n    (println (str \"Unknown instruction: \" [instruct ins]))))")
+	(source "(doseq [{:keys [instruct] :as ins} (read-transit response)]\n  ;;(println [:INSTRUCT ins])\n  (condp = instruct\n    :create-update (let [{:keys [id vehicle]} ins]\n	(create-update-vehicle id vehicle))\n    :delete (let [{:keys [id]} ins]\n	(delete-vehicle id))\n    :clear (clear-vehicles)\n    :popup (let [{:keys [id lat lon html time width height]} ins]\n	(cond\n	  id (popup id html time)\n	  (and  width height lat lon) (popup lat lon html time width height)\n	  (and lat lon) (popup lat lon html time)))\n    :trail (let [{:keys [id points options time]} ins]\n	(add-trail id points options time))\n    :map-center (let [{:keys [coord zoom]} ins]\n	(map-center coord zoom))\n    :create-placemark (let [{:keys [iname tip lat lon feature]} ins]\n	(create-placemark iname tip lat lon feature))\n    :clear-placemarks (clear-placemarks)\n    :add-link (let [{:keys [ids options]} ins]\n	(add-link ids options))\n    (println (str \"Unknown instruction: \" [instruct ins]))))")
 	(title "instructions-handler [response]"))
 
 ([FlightPro_Class180000] of  CloFunction
@@ -1014,6 +1015,270 @@
 	(source "(:use protege.core)\n(:require\n  [pro.commands :as cmd]\n  [async.proc :as asp]\n  [cesium.core :as czs]\n  [calc.core :as calc]\n  [calc.geo :as geo]\n  [fr24.client :as fr24]\n  [my.flights.move :as mfs])\n(:import\n  java.util.Calendar)")
 	(title "es"))
 
+([FlightPro_Class280040] of  CloFunction
+
+	(source "(if-let [dati (.getInstance *kb* (.substring id 2))]\n  (condp = INFO-DISPLAY\n    \"PRO\" (decorate-instance dati)\n    \"POPUP\" (do (point-out-place edata {:instance dati})\n	(asp/pump-in chn (placemark-popup-instruct dati)))))")
+	(title "placemark-info [id edata chn]"))
+
+([FlightPro_Class280041] of  CloVar
+
+	(source ";; \"POPUP\"\n \"PRO\"")
+	(title "INFO-DISPLAY"))
+
+([FlightPro_Class280085] of  POIRequest
+
+	(lat 60.1667)
+	(lng 24.9333)
+	(max-rows 50)
+	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
+	(radius 1.0))
+
+([FlightPro_Class280086] of  TypeClass
+
+	(name "shop"))
+
+([FlightPro_Class280087] of  TypeName
+
+	(name "hifi"))
+
+([FlightPro_Class280089] of  TypeName
+
+	(name "convenience"))
+
+([FlightPro_Class280091] of  TypeClass
+
+	(name "amenity"))
+
+([FlightPro_Class280092] of  TypeName
+
+	(name "fast_food"))
+
+([FlightPro_Class280094] of  TypeName
+
+	(name "vending_machine"))
+
+([FlightPro_Class280096] of  TypeName
+
+	(name "art"))
+
+([FlightPro_Class280098] of  TypeClass
+
+	(name "man_made"))
+
+([FlightPro_Class280099] of  TypeName
+
+	(name "surveillance"))
+
+([FlightPro_Class280101] of  TypeName
+
+	(name "nightclub"))
+
+([FlightPro_Class280105] of  TypeName
+
+	(name "pub"))
+
+([FlightPro_Class280107] of  TypeName
+
+	(name "restaurant"))
+
+([FlightPro_Class280109] of  TypeName
+
+	(name "kiosk"))
+
+([FlightPro_Class280113] of  TypeName
+
+	(name "cinema"))
+
+([FlightPro_Class280115] of  TypeName
+
+	(name "hairdresser"))
+
+([FlightPro_Class280118] of  TypeName
+
+	(name "bar"))
+
+([FlightPro_Class280120] of  TypeName
+
+	(name "hardware"))
+
+([FlightPro_Class280123] of  TypeName
+
+	(name "pharmacy"))
+
+([FlightPro_Class280125] of  TypeName
+
+	(name "toilets"))
+
+([FlightPro_Class280128] of  TypeName
+
+	(name "school"))
+
+([FlightPro_Class280131] of  TypeName
+
+	(name "greengrocer"))
+
+([FlightPro_Class280136] of  TypeName
+
+	(name "post_box"))
+
+([FlightPro_Class280139] of  TypeClass
+
+	(name "tourism"))
+
+([FlightPro_Class280140] of  TypeName
+
+	(name "hotel"))
+
+([FlightPro_Class280146] of  TypeName
+
+	(name "second_hand"))
+
+([FlightPro_Class280148] of  TypeName
+
+	(name "fire_hydrant"))
+
+([FlightPro_Class280150] of  TypeName
+
+	(name "travel_agency"))
+
+([FlightPro_Class280161] of  TypeName
+
+	(name "nail_salon"))
+
+([FlightPro_Class280164] of  CloFunction
+
+	(source "(if (instance? Instance pois)\n  {:instruct :create-placemark\n    :iname (.getName pois)\n    :tip (sv pois \"name\")\n    :lat (sv pois \"lat\")\n    :lon (sv pois \"lng\")\n    :feature \"default\"}\n  (map pois-instruct pois))")
+	(title "pois-instruct [pois]"))
+
+([FlightPro_Class280167] of  CloFuncall
+
+	(source "(def ins (first (cls-instances \""))
+
+([FlightPro_Class280168] of  CloFuncall
+
+	(source "(def ins (first (cls-instances \"POIRequest\")))"))
+
+([FlightPro_Class280169] of  CloFuncall
+
+	(source "(def inst (first (cls-instances \"POIRequest\")))"))
+
+([FlightPro_Class280170] of  CloFuncall
+
+	(source "inst"))
+
+([FlightPro_Class280171] of  CloFuncall
+
+	(source "(def inst (second (cls-instances \"POIRequest\")))"))
+
+([FlightPro_Class280172] of  CloFuncall
+
+	(source "(async.proc/pump-in (:instructions pro.commands/CHN) (pois-instruct (sv inst \"osm-respnses\")))"))
+
+([FlightPro_Class280173] of  CloFuncall
+
+	(source "(async.proc/pump-in (:instructions pro.commands/CHN) (pois-instruct (sv inst \"osm-responses\")))"))
+
+([FlightPro_Class280174] of  CloFuncall
+
+	(source "(async.proc/pump-in (:instructions pro.commands/CHN) (pois-instruct (svs inst \"osm-responses\")))"))
+
+([FlightPro_Class280175] of  CloFuncall
+
+	(source "(type (svs inst \"osm-responses\"))"))
+
+([FlightPro_Class280176] of  CloFuncall
+
+	(source "(seq? (svs inst \"osm-responses\"))"))
+
+([FlightPro_Class280177] of  CloFuncall
+
+	(source "(map async.proc/pump-in (:instructions pro.commands/CHN) (pois-instruct (svs inst \"osm-responses\")))"))
+
+([FlightPro_Class280178] of  CloFuncall
+
+	(source "(doseq [poi (pois-instruct (svs inst \"osm-responses\"))] (async.proc/pump-in (:instructions pro.commands/CHN) poi))"))
+
+([FlightPro_Class280179] of  CloFuncall
+
+	(source "(async.proc/pump-in (:instructions pro.commands/CHN) {:instruct :map-center :coord [60 30] :zoom 18})"))
+
+([FlightPro_Class280180] of  CloFuncall
+
+	(source "(async.proc/pump-in (:instructions pro.commands/CHN) {:instruct :map-center :coord [60.1667 30] :zoom 18})"))
+
+([FlightPro_Class280181] of  CloFuncall
+
+	(source "(async.proc/pump-in (:instructions pro.commands/CHN) {:instruct :map-center :coord [60.1667 24.9333] :zoom 19})"))
+
+([FlightPro_Class280182] of  CloFunction
+
+	(source "(if-let [bbi (fifos \"BBX\" \"title\" \"Current\")]\n  (if-let [bbr (fifos \"BBXWiki\" \"bbx\" bbi)]\n    (if-let [flt (seq (filter #(and (= (sv % \"feature\") fea)\n	           (= (sv % \"title\") tit)) (svs bbr \"responses\")))]\n      (if-let [osr (fainst (cls-instances \"POIRequest\") \"Current\")]\n        (let [wai (first flt)\n               lat (sv wai \"lat\")\n               lon (sv wai \"lng\")]\n          [lat lon])))))")
+	(title "pump-feature-pois [chn edata fea tit]"))
+
+([FlightPro_Class280183] of  %3AINSTANCE-ANNOTATION
+
+	(%3AANNOTATED-INSTANCE [FlightPro_Class280085])
+	(%3AANNOTATION-TEXT "Current")
+	(%3ACREATION-TIMESTAMP "2017.03.10 18:56:41.210 MSK")
+	(%3ACREATOR "ru"))
+
+([FlightPro_Class280184] of  CloFuncall
+
+	(source "(pump-feature-pois nil nil \"city\" \"Helsinki"))
+
+([FlightPro_Class280185] of  CloFuncall
+
+	(source "(pump-feature-pois nil nil \"city\" \"Helsinki)"))
+
+([FlightPro_Class280186] of  CloFuncall
+
+	(source "(pump-feature-pois nil nil \"city\" \"Helsinki\")"))
+
+([FlightPro_Class280188] of  CloFuncall
+
+	(source "(def hel (fifos \""))
+
+([FlightPro_Class280189] of  CloFuncall
+
+	(source "(def hel (fifos \"WikiArticle\" \"title\" \"Helsinki\"))"))
+
+([FlightPro_Class280190] of  CloFuncall
+
+	(source "hel"))
+
+([FlightPro_Class280191] of  CloFuncall
+
+	(source "(.setDirectType hel (cls \"WikiArticleDetails\"))"))
+
+([FlightPro_Class280192] of  CloFuncall
+
+	(source "(.setDirectType hel (cls \"WikiArticle\"))"))
+
+([FlightPro_Class280193] of  CloFuncall
+
+	(source "(slt \"poi-req-but\")"))
+
+([FlightPro_Class280194] of  CloFuncall
+
+	(source "(.getDefaultValues (slt \"poi-req-but\"))"))
+
+([FlightPro_Class280195] of  CloFuncall
+
+	(source "(.getDefaultValues (slt \"poi-req-butt\"))"))
+
+([FlightPro_Class280196] of  CloFuncall
+
+	(source "(first (.getDefaultValues (slt \"poi-req-butt\")))"))
+
+([FlightPro_Class280197] of  CloFuncall
+
+	(source "(ssv hel \"poi-req-butt\" (first (.getDefaultValues (slt \"poi-req-butt\"))))"))
+
+([FlightPro_Class280198] of  CloFunction
+
+	(source "(condp = (typ dati)\n  \"WikiArticle\"	(invoke-later (do\n	  (.setDirectType dati (cls \"WikiArticleDetails\"))\n	  (ssv dati \"max-rows\" (int 50))\n	  (ssv dati \"radius\" (float 1))\n	  (ssv dati \"poi-req-butt\" \n	    (first (.getDefaultValues (slt \"poi-req-butt\"))))\n	  (ssv dati \"butt-display\" \n	    \"Display on Chart/ext.data/disp-on-chart\")\n	  (ssv dati \"butt-return\" \n	    \"Return to Flight/ext.data/ret-to-flight\")\n	  (let [frm (.show *prj* dati)]\n	    (.setLocationRelativeTo frm nil)\n	    (.setAlwaysOnTop frm true)\n	    (.setVisible true))))\n  false)")
+	(title "decorate-instance [dati]"))
+
 ([FlightPro_Class290000] of  CloFunction
 
 	(source "([carr]\n  (camera-move carr (/ (:camera TIO) 1000)))\n([carr period]\n  (let [car @carr\n         [lat lon] (:coord car)\n         crs (:course car)\n         alt (int (/ (:altitude car) 3.28084))\n         alt (if (< alt 20) 20 alt)]\n      (czm/fly-to lat lon alt crs period))\n  true)")
@@ -1142,7 +1407,7 @@
 
 ([FlightPro_Class310000] of  CloFunction
 
-	(source "(println [:CMD-INFO params])\n(let [id (:id params)]\n  (if (.startsWith id \"pm\")\n    (when-let [dati (.getInstance *kb* (.substring id 2))]\n      (exd/point-out-place @E-DATA {:instance dati})\n      (asp/pump-in (:instructions CHN) \n        (exd/placemark-popup-instruct dati)))\n    (let [inf (or (get @MY-INFOS id) (fr24/fl-info id))\n           cal (if-let[d (fr24/dat id)]\n                   (fr24/callsign d)\n                   id)]\n      (if inf\n        (let [apt (inf \"airport\")\n               acr (inf \"aircraft\")\n               tim (inf \"time\")\n               img (get (first (get-in acr [\"images\" \"thumbnails\"])) \"src\")\n               [lat lon] (fr24/coord id)\n               dat   [[\"from\" (or (get-in apt [\"origin\" \"name\"]) \"-\")]\n	[\"to\" (or (get-in apt [\"destination\" \"name\"]) \"-\")]\n	[\"airline\" (or (get-in inf [\"airline\" \"short\"]) \"-\")]\n	[\"real-departure\" (or (get-in tim [\"real\" \"departure\"]) \"-\")]\n	[\"scheduled-arrival\" (or (get-in tim [\"scheduled\" \"arrival\"]) \"-\")]\n	[\"aircraft\" (or (get-in acr [\"model\" \"text\"]) \"-\")]\n	[\"latitude\" (or lat \"-\")]\n	[\"longitude\" (or lon \"-\")]\n	[\"course\" (or (fr24/course id) \"-\")]\n	[\"speed\" (or (fr24/speed id) \"-\")]\n	[\"altitude\" (or (fr24/altitude id) \"-\")]\n	[(str \"<input type='button' style='color:purple' value='Trail'\n		onclick='chart.client.trail(\\\"\" id \"\\\")' >\")\n	 (str \"<input type='button' style='color:blue' value='Follow'\n		onclick='chart.client.follow(\\\"\" id \"\\\")' >\")]\n	[\"\"\n	 \"<input type='button' style='color:red' value='Stop'\n		onclick='chart.client.stopfollow()' >\"]]\n                       htm (make-info-html cal img dat)]\n          (asp/pump-in (:instructions CHN)\n            {:instruct :popup\n             :id (:id params)\n             :html htm\n             :time (:popup TIM)}))))))\n\"\"")
+	(source "(println [:CMD-INFO params])\n(let [id (:id params)]\n  (if (.startsWith id \"pm\")\n    (exd/placemark-info id @E-DATA (:instructions CHN))\n    (let [inf (or (get @MY-INFOS id) (fr24/fl-info id))\n           cal (if-let[d (fr24/dat id)]\n                   (fr24/callsign d)\n                   id)]\n      (if inf\n        (let [apt (inf \"airport\")\n               acr (inf \"aircraft\")\n               tim (inf \"time\")\n               img (get (first (get-in acr [\"images\" \"thumbnails\"])) \"src\")\n               [lat lon] (fr24/coord id)\n               dat   [[\"from\" (or (get-in apt [\"origin\" \"name\"]) \"-\")]\n	[\"to\" (or (get-in apt [\"destination\" \"name\"]) \"-\")]\n	[\"airline\" (or (get-in inf [\"airline\" \"short\"]) \"-\")]\n	[\"real-departure\" (or (get-in tim [\"real\" \"departure\"]) \"-\")]\n	[\"scheduled-arrival\" (or (get-in tim [\"scheduled\" \"arrival\"]) \"-\")]\n	[\"aircraft\" (or (get-in acr [\"model\" \"text\"]) \"-\")]\n	[\"latitude\" (or lat \"-\")]\n	[\"longitude\" (or lon \"-\")]\n	[\"course\" (or (fr24/course id) \"-\")]\n	[\"speed\" (or (fr24/speed id) \"-\")]\n	[\"altitude\" (or (fr24/altitude id) \"-\")]\n	[(str \"<input type='button' style='color:purple' value='Trail'\n		onclick='chart.client.trail(\\\"\" id \"\\\")' >\")\n	 (str \"<input type='button' style='color:blue' value='Follow'\n		onclick='chart.client.follow(\\\"\" id \"\\\")' >\")]\n	[\"\"\n	 \"<input type='button' style='color:red' value='Stop'\n		onclick='chart.client.stopfollow()' >\"]]\n                       htm (make-info-html cal img dat)]\n          (asp/pump-in (:instructions CHN)\n            {:instruct :popup\n             :id (:id params)\n             :html htm\n             :time (:popup TIM)}))))))\n\"\"")
 	(title "info [params]"))
 
 ([FlightPro_Class310001] of  CloVar
@@ -1294,6 +1559,616 @@
 	(source "(.-value (by-id id))")
 	(title "get-value [id]"))
 
+([FlightPro_Class330040] of  TypeName
+
+	(name "utility_pole"))
+
+([FlightPro_Class330041] of  PointOfInterest
+
+	(distance 0.02)
+	(lat 60.198288)
+	(lng 24.876375)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class330042] of  TypeName
+
+	(name "ice_cream"))
+
+([FlightPro_Class330043] of  PointOfInterest
+
+	(distance 0.02)
+	(lat 60.19822)
+	(lng 24.87642)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330042]))
+
+([FlightPro_Class330044] of  PointOfInterest
+
+	(distance 0.02)
+	(lat 60.19822)
+	(lng 24.87642)
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class280109]))
+
+([FlightPro_Class330045] of  TypeName
+
+	(name "taxi"))
+
+([FlightPro_Class330046] of  PointOfInterest
+
+	(distance 0.02)
+	(lat 60.1984)
+	(lng 24.876421)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330045]))
+
+([FlightPro_Class330047] of  PointOfInterest
+
+	(distance 0.03)
+	(lat 60.19855)
+	(lng 24.875757)
+	(name "Munkkiniemen Posti 33")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280136]))
+
+([FlightPro_Class330048] of  TypeName
+
+	(name "flagpole"))
+
+([FlightPro_Class330049] of  PointOfInterest
+
+	(distance 0.05)
+	(lat 60.19878)
+	(lng 24.87615)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330048]))
+
+([FlightPro_Class330050] of  PointOfInterest
+
+	(distance 0.06)
+	(lat 60.19774)
+	(lng 24.876404)
+	(name "Mumu")
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class280089]))
+
+([FlightPro_Class330051] of  PointOfInterest
+
+	(distance 0.07)
+	(lat 60.198917)
+	(lng 24.876608)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280148]))
+
+([FlightPro_Class330052] of  TypeClass
+
+	(name "railway"))
+
+([FlightPro_Class330053] of  TypeName
+
+	(name "tram_stop"))
+
+([FlightPro_Class330054] of  PointOfInterest
+
+	(distance 0.08)
+	(lat 60.197903)
+	(lng 24.877338)
+	(name "Laajalahden aukio")
+	(typeClass [FlightPro_Class330052])
+	(typeName [FlightPro_Class330053]))
+
+([FlightPro_Class330055] of  PointOfInterest
+
+	(distance 0.08)
+	(lat 60.197613)
+	(lng 24.87555)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class330056] of  TypeName
+
+	(name "supermarket"))
+
+([FlightPro_Class330057] of  PointOfInterest
+
+	(distance 0.01)
+	(lat 60.236156)
+	(lng 25.083712)
+	(name "Kontumarket")
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class330056]))
+
+([FlightPro_Class330058] of  TypeName
+
+	(name "station"))
+
+([FlightPro_Class330059] of  PointOfInterest
+
+	(distance 0.02)
+	(lat 60.235924)
+	(lng 25.083527)
+	(name "Kontula")
+	(typeClass [FlightPro_Class330052])
+	(typeName [FlightPro_Class330058]))
+
+([FlightPro_Class330060] of  PointOfInterest
+
+	(distance 0.03)
+	(lat 60.23604)
+	(lng 25.083136)
+	(name "Metro Mini")
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class280109]))
+
+([FlightPro_Class330061] of  PointOfInterest
+
+	(distance 0.04)
+	(lat 60.236397)
+	(lng 25.08332)
+	(name "Deja Vu")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280105]))
+
+([FlightPro_Class330062] of  TypeName
+
+	(name "bicycle"))
+
+([FlightPro_Class330063] of  PointOfInterest
+
+	(distance 0.04)
+	(lat 60.23636)
+	(lng 25.083187)
+	(name "Kontulan pyörähuolto")
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class330062]))
+
+([FlightPro_Class330064] of  PointOfInterest
+
+	(distance 0.04)
+	(lat 60.235897)
+	(lng 25.084127)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330045]))
+
+([FlightPro_Class330065] of  PointOfInterest
+
+	(distance 0.04)
+	(lat 60.236183)
+	(lng 25.082888)
+	(name "Pizza Taxi")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280092]))
+
+([FlightPro_Class330066] of  TypeName
+
+	(name "atm"))
+
+([FlightPro_Class330067] of  PointOfInterest
+
+	(distance 0.04)
+	(lat 60.2363)
+	(lng 25.08428)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330066]))
+
+([FlightPro_Class330068] of  TypeName
+
+	(name "subway_entrance"))
+
+([FlightPro_Class330069] of  PointOfInterest
+
+	(distance 0.05)
+	(lat 60.23591)
+	(lng 25.082825)
+	(name "Kontula")
+	(typeClass [FlightPro_Class330052])
+	(typeName [FlightPro_Class330068]))
+
+([FlightPro_Class330070] of  PointOfInterest
+
+	(distance 0.05)
+	(lat 60.236225)
+	(lng 25.084558)
+	(name "Kontula")
+	(typeClass [FlightPro_Class330052])
+	(typeName [FlightPro_Class330068]))
+
+([FlightPro_Class330071] of  PointOfInterest
+
+	(distance 0.05)
+	(lat 60.236446)
+	(lng 25.084303)
+	(name "Helmi Grilli")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280107]))
+
+([FlightPro_Class330072] of  PointOfInterest
+
+	(distance 0.07)
+	(lat 60.235664)
+	(lng 25.082771)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class330073] of  TypeName
+
+	(name "bank"))
+
+([FlightPro_Class330074] of  PointOfInterest
+
+	(distance 0.07)
+	(lat 60.23665)
+	(lng 25.0841)
+	(name "Nordea")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330073]))
+
+([FlightPro_Class330075] of  PointOfInterest
+
+	(distance 0.07)
+	(lat 60.236053)
+	(lng 25.084848)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280136]))
+
+([FlightPro_Class330076] of  PointOfInterest
+
+	(distance 0.07)
+	(lat 60.236683)
+	(lng 25.08406)
+	(name "Pizzeria & Bar Paris")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280105]))
+
+([FlightPro_Class330077] of  PointOfInterest
+
+	(distance 0.07)
+	(lat 60.236298)
+	(lng 25.084822)
+	(name "Sagun Nepal")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280107]))
+
+([FlightPro_Class330078] of  PointOfInterest
+
+	(distance 0.08)
+	(lat 60.236767)
+	(lng 25.08378)
+	(name "S-market")
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class330056]))
+
+([FlightPro_Class330079] of  PointOfInterest
+
+	(distance 0.08)
+	(lat 60.2364)
+	(lng 25.084827)
+	(name "Kontulankaaren apteekki")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280123]))
+
+([FlightPro_Class330080] of  PointOfInterest
+
+	(distance 0.08)
+	(lat 60.23669)
+	(lng 25.08287)
+	(name "Iso Merikarhu")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280105]))
+
+([FlightPro_Class330081] of  PointOfInterest
+
+	(distance 0.08)
+	(lat 60.23561)
+	(lng 25.082588)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class330082] of  PointOfInterest
+
+	(distance 0.08)
+	(lat 60.23656)
+	(lng 25.082441)
+	(name "Pub 94")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280105]))
+
+([FlightPro_Class330083] of  PointOfInterest
+
+	(distance 0.09)
+	(lat 60.236866)
+	(lng 25.0835)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330066]))
+
+([FlightPro_Class330084] of  PointOfInterest
+
+	(distance 0.09)
+	(lat 60.235435)
+	(lng 25.082735)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class330085] of  TypeName
+
+	(name "cafe"))
+
+([FlightPro_Class330086] of  PointOfInterest
+
+	(distance 0.09)
+	(lat 60.236717)
+	(lng 25.084785)
+	(name "Marian konditoria")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330085]))
+
+([FlightPro_Class330087] of  PointOfInterest
+
+	(distance 0.1)
+	(lat 60.235546)
+	(lng 25.082214)
+	(name "Kontula")
+	(typeClass [FlightPro_Class330052])
+	(typeName [FlightPro_Class330068]))
+
+([FlightPro_Class330088] of  PointOfInterest
+
+	(distance 0.1)
+	(lat 60.23679)
+	(lng 25.084717)
+	(name "Wenla")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280105]))
+
+([FlightPro_Class330089] of  PointOfInterest
+
+	(distance 0.1)
+	(lat 60.236748)
+	(lng 25.084888)
+	(name "London")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280105]))
+
+([FlightPro_Class330090] of  PointOfInterest
+
+	(distance 0.1)
+	(lat 60.235203)
+	(lng 25.083118)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class330091] of  PointOfInterest
+
+	(distance 0.11)
+	(lat 60.236553)
+	(lng 25.085274)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330066]))
+
+([FlightPro_Class330092] of  PointOfInterest
+
+	(distance 0.11)
+	(lat 60.23698)
+	(lng 25.084492)
+	(name "Pub Merikarhu")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280105]))
+
+([FlightPro_Class330093] of  TypeClass
+
+	(name "place"))
+
+([FlightPro_Class330094] of  TypeName
+
+	(name "locality"))
+
+([FlightPro_Class330095] of  PointOfInterest
+
+	(distance 0.11)
+	(lat 60.237103)
+	(lng 25.083504)
+	(name "Lastenaukio")
+	(typeClass [FlightPro_Class330093])
+	(typeName [FlightPro_Class330094]))
+
+([FlightPro_Class330096] of  PointOfInterest
+
+	(distance 0.11)
+	(lat 60.236996)
+	(lng 25.08454)
+	(name "Kippari Pub")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280105]))
+
+([FlightPro_Class330097] of  PointOfInterest
+
+	(distance 0.11)
+	(lat 60.236828)
+	(lng 25.08216)
+	(name "Kontulan Pizza & Kebab")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280105]))
+
+([FlightPro_Class330098] of  PointOfInterest
+
+	(distance 0.12)
+	(lat 60.23702)
+	(lng 25.084612)
+	(name "Kontulan katukeittiö")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280092]))
+
+([FlightPro_Class330099] of  PointOfInterest
+
+	(distance 0.12)
+	(lat 60.237175)
+	(lng 25.083906)
+	(name "Lidl Kontula")
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class330056]))
+
+([FlightPro_Class330100] of  PointOfInterest
+
+	(distance 0.13)
+	(lat 60.23723)
+	(lng 25.0835)
+	(name "R-kioski")
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class280109]))
+
+([FlightPro_Class330101] of  PointOfInterest
+
+	(distance 0.14)
+	(lat 60.236996)
+	(lng 25.085287)
+	(name "Pub Kontula")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280105]))
+
+([FlightPro_Class330102] of  PointOfInterest
+
+	(distance 0.14)
+	(lat 60.23733)
+	(lng 25.083712)
+	(name "McDonald's")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280092]))
+
+([FlightPro_Class330103] of  PointOfInterest
+
+	(distance 0.14)
+	(lat 60.23734)
+	(lng 25.08333)
+	(name "Wing Wah")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280105]))
+
+([FlightPro_Class330104] of  PointOfInterest
+
+	(distance 0.14)
+	(lat 60.23702)
+	(lng 25.085379)
+	(name "Al Zobeidi")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280107]))
+
+([FlightPro_Class330105] of  TypeName
+
+	(name "alcohol"))
+
+([FlightPro_Class330106] of  PointOfInterest
+
+	(distance 0.15)
+	(lat 60.237404)
+	(lng 25.083643)
+	(name "Alko")
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class330105]))
+
+([FlightPro_Class330107] of  TypeClass
+
+	(name "leisure"))
+
+([FlightPro_Class330108] of  TypeName
+
+	(name "sports_centre"))
+
+([FlightPro_Class330109] of  PointOfInterest
+
+	(distance 0.15)
+	(lat 60.23717)
+	(lng 25.085157)
+	(name "Kontulan uimahalli")
+	(typeClass [FlightPro_Class330107])
+	(typeName [FlightPro_Class330108]))
+
+([FlightPro_Class330110] of  PointOfInterest
+
+	(distance 0.15)
+	(lat 60.2373)
+	(lng 25.084843)
+	(name "Aapelin Baari")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280105]))
+
+([FlightPro_Class330111] of  PointOfInterest
+
+	(distance 0.15)
+	(lat 60.237473)
+	(lng 25.083157)
+	(name "OP")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330073]))
+
+([FlightPro_Class330112] of  PointOfInterest
+
+	(distance 0.16)
+	(lat 60.237503)
+	(lng 25.08349)
+	(name "Kontulan Apteekki")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280123]))
+
+([FlightPro_Class330113] of  TypeName
+
+	(name "recycling"))
+
+([FlightPro_Class330114] of  PointOfInterest
+
+	(distance 0.16)
+	(lat 60.237476)
+	(lng 25.08269)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330113]))
+
+([FlightPro_Class330115] of  PointOfInterest
+
+	(distance 0.17)
+	(lat 60.237617)
+	(lng 25.083374)
+	(name "Wanha Rouva")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280105]))
+
+([FlightPro_Class330116] of  TypeName
+
+	(name "hospital"))
+
+([FlightPro_Class330117] of  PointOfInterest
+
+	(distance 0.19)
+	(lat 60.237755)
+	(lng 25.084291)
+	(name "Kontulan terveysasema")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330116]))
+
+([FlightPro_Class330118] of  TypeName
+
+	(name "library"))
+
+([FlightPro_Class330119] of  PointOfInterest
+
+	(distance 0.19)
+	(lat 60.23765)
+	(lng 25.085217)
+	(name "Kontulan kirjasto")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330118]))
+
+([FlightPro_Class330120] of  TypeName
+
+	(name "survey_point"))
+
+([FlightPro_Class330121] of  PointOfInterest
+
+	(distance 0.2)
+	(lat 60.234436)
+	(lng 25.082304)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330120]))
+
 ([FlightPro_Class340000] of  CloFunction
 
 	(source "(println [:CMD-TERRAIN params])\n(println \"Terrain: \" TERRAIN)\nTERRAIN")
@@ -1325,8 +2200,8 @@
 
 ([FlightPro_Class370000] of  CloFunction
 
-	(source "(let [cen (js/L.LatLng. lat lon)\n        zom (.getZoom @CHART)]\n  (.setView @CHART cen zom {})\n  (new-visible))")
-	(title "map-center [[lat lon]]"))
+	(source "(let [cen (js/L.LatLng. lat lon)\n        zom (or zoom (.getZoom @CHART))]\n  (.setView @CHART cen zom {})\n  (new-visible))")
+	(title "map-center [[lat lon] zoom]"))
 
 ([FlightPro_Class370001] of  CloFunction
 
@@ -1857,12 +2732,20 @@
 	(source ";; Calculates time (hrs)\n(if (= ini-alt fin-alt)\n  0\n  (let [step (* alt-stp alt-acl)\n         tioh (float (/ alt-tio 3600000))\n         adif (if (> ini-alt fin-alt) (- ini-alt fin-alt) (- fin-alt ini-alt))]\n    (* (/ adif step) tioh)))")
 	(title "altitude-variation [[ini-alt x] [fin-alt alt-acl] alt-stp alt-tio]"))
 
+([FlightPro_Class570000] of  CloFuncall
+
+	(source "(in-ns 'ext.data)"))
+
 ([FlightPro_Class570001] of  Rule
 
 	(lhs "?fp (FlightPlan id ?id\n	status \"LANDING\"\n	spec-plan ?spp\n	landing ?lnd)\n(Flight age \"CURRENT\" \n	id ?id\n	coord ?crd\n	course ?crs\n	speed ?spd\n                        [(= ?spd 0)\n	 (calc.geo/abaft ?crs ?crd (:finish-crd ?spp))])")
 	(rhs "(println [:LandingDone ?id ?crd])\n(es/put-off-map ?id)\n(my.flights.move/rem-my-flight ?id)\n(modify ?fp status \"GROUND\" \n	landing \"DONE\")")
 	(salience 1)
 	(title "mf:LandingDone"))
+
+([FlightPro_Class580001] of  CloFuncall
+
+	(source "(typ hel)"))
 
 ([FlightPro_Class590000] of  CloFunction
 
@@ -2147,22 +3030,27 @@
 		[FlightPro_Class740002]
 		[FlightPro_Class740003]
 		[FlightPro_Class700000]
+		[FlightPro_Class280198]
+		[FlightPro_Class280040]
 		[FlightPro_Class750004]
 		[FlightPro_Class750005]
 		[FlightPro_Class660000]
 		[FlightPro_Class730003]
 		[FlightPro_Class780021]
-		[FlightPro_Class810000])
+		[FlightPro_Class810000]
+		[FlightPro_Class280164]
+		[FlightPro_Class280182])
 	(cloNamespace [FlightPro_Class670001])
 	(cloVars
 		[FlightPro_Class330004]
 		[FlightPro_Class750000]
-		[FlightPro_Class810006])
+		[FlightPro_Class810006]
+		[FlightPro_Class280041])
 	(title "External Data"))
 
 ([FlightPro_Class670001] of  CloNamespace
 
-	(source "(:use protege.core)\n(:require \n  [wiki.gis :as wig]\n  [cesium.core :as cz]\n  [calc.geo :as geo]\n  [async.proc :as asp]\n  [geo.names :as gn]\n  [fr24.client :as fr24])")
+	(source "(:use protege.core)\n(:require \n  [wiki.gis :as wig]\n  [cesium.core :as cz]\n  [calc.geo :as geo]\n  [async.proc :as asp]\n  [geo.names :as gn]\n  [fr24.client :as fr24]\n  [osm.data :as osm])\n(:import\n  edu.stanford.smi.protege.model.Instance)")
 	(title "ext.data"))
 
 ([FlightPro_Class670004] of  %3AINSTANCE-ANNOTATION
@@ -2180,7 +3068,7 @@
 ([FlightPro_Class670008] of  BBX
 
 	(title "Current")
-	(wsen 11.277466 46.993366 12.514801 47.86938))
+	(wsen 24.325104 59.934376 25.585785 60.588318))
 
 ([FlightPro_Class670265] of  CloFunction
 
@@ -2669,168 +3557,10 @@
 	(runways 0)
 	(title "Paris Charles de Gaulle Airport"))
 
-([FlightPro_Class840000] of  CloProgram
-
-	(cloFunctions
-		[FlightPro_Class840004]
-		[FlightPro_Class840005]
-		[FlightPro_Class840006]
-		[FlightPro_Class840007]
-		[FlightPro_Class840008]
-		[FlightPro_Class840009]
-		[FlightPro_Class840012])
-	(cloNamespace [FlightPro_Class840001])
-	(cloVars
-		[FlightPro_Class840002]
-		[FlightPro_Class840013])
-	(title "OSM Data"))
-
-([FlightPro_Class840001] of  CloNamespace
-
-	(source "(:require\n  [clojure.xml :as x])")
-	(title "osm.data"))
-
-([FlightPro_Class840002] of  CloVar
-
-	(source "(volatile! [])")
-	(title "DATA"))
-
-([FlightPro_Class840004] of  CloFunction
-
-	(source "(let [cnt (:content tag)\n       tt (filter #(= (:tag %) :tag) cnt)\n       m {\"id\" (:id (:attrs tag))\n             \"lat\" (read-string (:lat (:attrs tag)))\n             \"lon\" (read-string (:lon (:attrs tag)))}\n       ml (cons m (map #(assoc {} (:k (:attrs %)) (:v (:attrs %))) tt))]\n  (apply merge ml))")
-	(title "tag-tags-namcor [tag]"))
-
-([FlightPro_Class840005] of  CloFunction
-
-	(source "([[lat lon] rad]\n  (let [d (/ rad 60)\n         bbx [(- lon d) (- lat d) (+ lon d) (+ lat d)]]\n    (osm-data bbx)))\n([bbx]\n  (try\n    (let [[w s e n] bbx\n           curl (str OSM-API \"?bbox=\" w \",\" s \",\" e \",\" n)\n           xml (x/parse curl)\n           cnt (:content xml)\n           nods (filter #(= (:tag %) :node) cnt)\n           nnn (filter #(some? (:content %)) nods)]\n        (vreset! DATA (map tag-tags-namcor nnn)))\n    (catch Exception e\n      (println e)\n      nil)))")
-	(title "osm-data"))
-
-([FlightPro_Class840006] of  CloFunction
-
-	(source "(filter #(some? (get % k)) data)")
-	(title "filter-k [k data]"))
-
-([FlightPro_Class840007] of  CloFunction
-
-	(source "(filter #(= (get % k) v) data)")
-	(title "filter-kv [k v data]"))
-
-([FlightPro_Class840008] of  CloFunction
-
-	(source "(filter #(not= (get % k) v) data)")
-	(title "filter-kv-not [k v data]"))
-
-([FlightPro_Class840009] of  CloFunction
-
-	(source "(sort (set (mapcat keys data)))")
-	(title "tags [data]"))
-
 ([FlightPro_Class840011] of  CloFunction
 
 	(source "(or (> (Math/abs (- lat1 lat2)) 0.02)\n     (> (Math/abs (- lon1 lon2)) 0.02))")
 	(title "obsolete [[lat1 lon1] [lat2 lon2]]"))
-
-([FlightPro_Class840012] of  CloFunction
-
-	(source "(let [sta (for [t (tags @DATA)]\n	(let [fl (filter-k t @DATA)]\n	  [t (count fl)]))\n        sta  (filter #(> (second %) 0) sta)]\n  (sort second sta))")
-	(title "tag-stat []"))
-
-([FlightPro_Class840013] of  CloVar
-
-	(source "\"http://api.openstreetmap.org/api/0.6/map\"")
-	(title "OSM-API"))
-
-([FlightPro_Class850004] of  CloFuncall
-
-	(source "(osm.data/osm-data [29.95 60.05 30.0 60.1])"))
-
-([FlightPro_Class850005] of  CloFuncall
-
-	(source "(osm.data/osm-data [60.05 30.0] 1)"))
-
-([FlightPro_Class850006] of  CloFuncall
-
-	(source "(count osm.data/DATA)"))
-
-([FlightPro_Class850007] of  CloFuncall
-
-	(source "(count @osm.data/DATA)"))
-
-([FlightPro_Class850008] of  CloFuncall
-
-	(source "(nth @osm.data/DATA 0)"))
-
-([FlightPro_Class850009] of  CloFuncall
-
-	(source "(dotimes [i 5] (protege.core/ctpl [i (nth @osm.data/DATA 0)]))"))
-
-([FlightPro_Class850010] of  CloFuncall
-
-	(source "(dseq [i (range 6 12)] (protege.core/ctpl [i (nth @osm.data/DATA 0)]))"))
-
-([FlightPro_Class850011] of  CloFuncall
-
-	(source "(doseq [i (range 6 12)] (protege.core/ctpl [i (nth @osm.data/DATA 0)]))"))
-
-([FlightPro_Class850012] of  CloFuncall
-
-	(source "(doseq [i (range 116 122)] (protege.core/ctpl [i (nth @osm.data/DATA 0)]))"))
-
-([FlightPro_Class850013] of  CloFuncall
-
-	(source "(doseq [i (range 316 322)] (protege.core/ctpl [i (nth @osm.data/DATA 0)]))"))
-
-([FlightPro_Class850014] of  CloFuncall
-
-	(source "(doseq [i (range 416 422)] (protege.core/ctpl [i (nth @osm.data/DATA 0)]))"))
-
-([FlightPro_Class850015] of  CloFuncall
-
-	(source "(doseq [i (range 316 422)] (protege.core/ctpl [i (nth @osm.data/DATA 0)]))"))
-
-([FlightPro_Class850016] of  CloFuncall
-
-	(source "(doseq [i (range 0 429)] (protege.core/ctpl [i (nth @osm.data/DATA 0)]))"))
-
-([FlightPro_Class850017] of  CloFuncall
-
-	(source "(doseq [i (range 0 429)] (protege.core/ctpl [i (nth @osm.data/DATA i)]))"))
-
-([FlightPro_Class850018] of  CloFuncall
-
-	(source "(osm.data/osm-data [60.5876 24.4899] 1)"))
-
-([FlightPro_Class850019] of  CloFuncall
-
-	(source "(dotimes [i (count @osm.data/DATA)] (protege.core/ctpl [i (nth @osm.data/DATA i)]))"))
-
-([FlightPro_Class850020] of  CloFuncall
-
-	(source "(osm.data/osm-data [60.5876 24.4899] 5)"))
-
-([FlightPro_Class850021] of  CloFuncall
-
-	(source "(osm.data/osm-data [67.3948 37.4744] 5)"))
-
-([FlightPro_Class850022] of  CloFuncall
-
-	(source "(osm.data/osm-data [67.3948 37.4744] 20)"))
-
-([FlightPro_Class850023] of  CloFuncall
-
-	(source "(osm.data/osm-data [62.82 35.387] 5)"))
-
-([FlightPro_Class850024] of  CloFuncall
-
-	(source "(osm.data/osm-data [62.82 35.387] 15)"))
-
-([FlightPro_Class850025] of  CloFuncall
-
-	(source "(osm.data/osm-data [62.8282 34.7615] 5)"))
-
-([FlightPro_Class850026] of  CloFuncall
-
-	(source "(osm.data/osm-data [62.8282 34.7615] 2)"))
 
 ([FlightPro_Class9] of  CloFunction
 

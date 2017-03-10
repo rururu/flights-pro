@@ -1,4 +1,4 @@
-; Thu Mar 09 23:04:27 MSK 2017
+; Fri Mar 10 13:01:19 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -36,6 +36,12 @@
 	(source "(sort (set (mapcat keys data)))")
 	(title "tags [data]"))
 
+([OSMData_Class10003] of  POIRequest
+
+	(max-rows 50)
+	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
+	(radius 1.0))
+
 ([OSMData_Class11] of  CloFunction
 
 	(source "(let [sta (for [t (tags @DATA)]\n	(let [fl (filter-k t @DATA)]\n	  [t (count fl)]))\n        sta  (filter #(> (second %) 0) sta)]\n  (sort second sta))")
@@ -45,14 +51,6 @@
 
 	(source "(:use protege.core)\n(:require \n  clojure.xml\n  [geo.names :as gn])")
 	(title "osm.data"))
-
-([OSMData_Class28] of  POIRequest
-
-	(lat 62.92)
-	(lng 34.487)
-	(max-rows 50)
-	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
-	(radius 1.0))
 
 ([OSMData_Class29] of  CloFunction
 
@@ -69,30 +67,10 @@
 	(source "(let [tyc (foc \"TypeClass\" \"name\" (resp \"typeClass\"))\n       tyn (foc \"TypeName\" \"name\" (resp \"typeName\"))\n       ins (crin \"PointOfInterest\")]\n  (ssv ins \"name\" (resp \"name\"))\n  (ssv ins \"lat\" (float (read-string (resp \"lat\"))))\n  (ssv ins \"lng\" (float (read-string (resp \"lng\"))))\n  (ssv ins \"distance\" (float (read-string (resp \"distance\"))))\n  (ssv ins \"typeClass\" tyc)\n  (ssv ins \"typeName\" tyn)\n  ins)")
 	(title "mk-poi-from-resp [resp]"))
 
-([OSMData_Class31] of  TypeClass
-
-	(name "shop"))
-
-([OSMData_Class32] of  TypeName
-
-	(name "computer"))
-
-([OSMData_Class34] of  TypeName
-
-	(name "yes"))
-
-([OSMData_Class38] of  TypeName
-
-	(name "hardware"))
-
 ([OSMData_Class4] of  CloVar
 
 	(source "\"http://api.openstreetmap.org/api/0.6/map\"")
 	(title "OSM-API"))
-
-([OSMData_Class40] of  TypeName
-
-	(name "supermarket"))
 
 ([OSMData_Class5] of  CloFunction
 

@@ -1,4 +1,4 @@
-; Wed Feb 22 12:20:31 MSK 2017
+; Fri Mar 10 22:29:38 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -47,7 +47,8 @@
 		[Clojure_Class250000]
 		[Clojure_Class270000]
 		[Clojure_Class280000]
-		[Clojure_Class320000])
+		[Clojure_Class320000]
+		[Clojure_Class330000])
 	(cloNamespace [Clojure_Class9])
 	(cloVars
 		[Clojure_Class10]
@@ -269,6 +270,11 @@
 
 	(source "`(javax.swing.SwingUtilities/invokeLater\n    (proxy [Runnable] [] (run [] ~code)))")
 	(title "invoke-later [code]"))
+
+([Clojure_Class330000] of  CloFunction
+
+	(source "(.getName (.getDirectType instance))")
+	(title "typ [instance]"))
 
 ([Clojure_Class40000] of  CloFunction
 

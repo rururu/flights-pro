@@ -6,7 +6,10 @@
   [calc.geo :as geo]
   [async.proc :as asp]
   [geo.names :as gn]
-  [fr24.client :as fr24]))
+  [fr24.client :as fr24]
+  [osm.data :as osm])
+(:import
+  edu.stanford.smi.protege.model.Instance))
 
 (def TIO {:carrier 1000
  :camera 2222
@@ -25,6 +28,8 @@
   "NA" "North America"
   "OC" "Oceania"
   "SA" "South America"})
+(def INFO-DISPLAY ;; "POPUP"
+ "PRO")
 (defmacro with-timeout [msec & body]
   `(let [f# (future (do ~@body))
          v# (gensym)
@@ -78,6 +83,31 @@
        txt (if airport (str nam " (" iata ")") nam)
        dis (geo/distance-nm (our-center n s w e) [lat lon])]
   (cz/point-out txt [lat lon] dis (our-radius n s w e))))
+
+(defn decorate-instance [dati]
+  (condp = (typ dati)
+  "WikiArticle"	(invoke-later (do
+	  (.setDirectType dati (cls "WikiArticleDetails"))
+	  (ssv dati "max-rows" (int 50))
+	  (ssv dati "radius" (float 1))
+	  (ssv dati "poi-req-butt" 
+	    (first (.getDefaultValues (slt "poi-req-butt"))))
+	  (ssv dati "butt-display" 
+	    "Display on Chart/ext.data/disp-on-chart")
+	  (ssv dati "butt-return" 
+	    "Return to Flight/ext.data/ret-to-flight")
+	  (let [frm (.show *prj* dati)]
+	    (.setLocationRelativeTo frm nil)
+	    (.setAlwaysOnTop frm true)
+	    (.setVisible true))))
+  false))
+
+(defn placemark-info [id edata chn]
+  (if-let [dati (.getInstance *kb* (.substring id 2))]
+  (condp = INFO-DISPLAY
+    "PRO" (decorate-instance dati)
+    "POPUP" (do (point-out-place edata {:instance dati})
+	(asp/pump-in chn (placemark-popup-instruct dati))))))
 
 (defn gn-weather-html [lat lon n s w e]
   (let [rsp (gn/call-geonames-weather lat lon)]
@@ -233,4 +263,25 @@ nil)
 	 :width 600
 	 :height 800
 	 :time (:ext-data-popup TIO)})))
+
+(defn pois-instruct [pois]
+  (if (instance? Instance pois)
+  {:instruct :create-placemark
+    :iname (.getName pois)
+    :tip (sv pois "name")
+    :lat (sv pois "lat")
+    :lon (sv pois "lng")
+    :feature "default"}
+  (map pois-instruct pois)))
+
+(defn pump-feature-pois [chn edata fea tit]
+  (if-let [bbi (fifos "BBX" "title" "Current")]
+  (if-let [bbr (fifos "BBXWiki" "bbx" bbi)]
+    (if-let [flt (seq (filter #(and (= (sv % "feature") fea)
+	           (= (sv % "title") tit)) (svs bbr "responses")))]
+      (if-let [osr (fainst (cls-instances "POIRequest") "Current")]
+        (let [wai (first flt)
+               lat (sv wai "lat")
+               lon (sv wai "lng")]
+          [lat lon]))))))
 

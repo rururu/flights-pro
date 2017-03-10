@@ -135,10 +135,7 @@
   (println [:CMD-INFO params])
 (let [id (:id params)]
   (if (.startsWith id "pm")
-    (when-let [dati (.getInstance *kb* (.substring id 2))]
-      (exd/point-out-place @E-DATA {:instance dati})
-      (asp/pump-in (:instructions CHN) 
-        (exd/placemark-popup-instruct dati)))
+    (exd/placemark-info id @E-DATA (:instructions CHN))
     (let [inf (or (get @MY-INFOS id) (fr24/fl-info id))
            cal (if-let[d (fr24/dat id)]
                    (fr24/callsign d)

@@ -1,5 +1,8 @@
 (ns osm.data
-(:require clojure.xml))
+(:use protege.core)
+(:require 
+  clojure.xml
+  [geo.names :as gn]))
 
 (def DATA (volatile! []))
 (def OSM-API "http://api.openstreetmap.org/api/0.6/map")
@@ -48,4 +51,32 @@
 	  [t (count fl)]))
         sta  (filter #(> (second %) 0) sta)]
   (sort second sta)))
+
+(defn mk-poi-from-resp [resp]
+  (let [tyc (foc "TypeClass" "name" (resp "typeClass"))
+       tyn (foc "TypeName" "name" (resp "typeName"))
+       ins (crin "PointOfInterest")]
+  (ssv ins "name" (resp "name"))
+  (ssv ins "lat" (float (read-string (resp "lat"))))
+  (ssv ins "lng" (float (read-string (resp "lng"))))
+  (ssv ins "distance" (float (read-string (resp "distance"))))
+  (ssv ins "typeClass" tyc)
+  (ssv ins "typeName" tyn)
+  ins))
+
+(defn poi-request
+  ([hm inst]
+  (let [mp (into {} hm)
+         max (mp "max-rows")
+         rad (mp "radius")
+         lat (mp "lat")
+         lon (mp "lng")]
+    (let [rss (gn/call-geonames-pois-osm lat lon max rad)]
+      (if (seq rss)
+        (ssvs inst "osm-responses" (map mk-poi-from-resp rss))))))
+([inst lat lon]
+  (ssv inst "lat" lat)
+  (ssv inst "lng" lon)
+  (poi-request (itm inst 0) inst)
+  inst))
 

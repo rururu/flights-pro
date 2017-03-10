@@ -174,9 +174,9 @@
     (GET url {:handler (fn [response])
               :error-handler error-handler})))
 
-(defn map-center [[lat lon]]
+(defn map-center [[lat lon] zoom]
   (let [cen (js/L.LatLng. lat lon)
-        zom (.getZoom @CHART)]
+        zom (or zoom (.getZoom @CHART))]
   (.setView @CHART cen zom {})
   (new-visible)))
 
@@ -232,13 +232,13 @@
 	  (and lat lon) (popup lat lon html time)))
     :trail (let [{:keys [id points options time]} ins]
 	(add-trail id points options time))
-    :map-center (let [{:keys [coord]} ins]
-	(map-center coord))
+    :map-center (let [{:keys [coord zoom]} ins]
+	(map-center coord zoom))
     :create-placemark (let [{:keys [iname tip lat lon feature]} ins]
-                      (create-placemark iname tip lat lon feature))
+	(create-placemark iname tip lat lon feature))
     :clear-placemarks (clear-placemarks)
     :add-link (let [{:keys [ids options]} ins]
-                  (add-link ids options))
+	(add-link ids options))
     (println (str "Unknown instruction: " [instruct ins])))))
 
 (defn receive-instructions []
@@ -328,7 +328,7 @@
               (.map "map")
               (.setView (array 60.3, 25.0) 10)) ;; New York 40.8, -74.0
         tile1 (-> js/L (.tileLayer "http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-                                   #js{:maxZoom 16
+                                   #js{:maxZoom 20
                                        :attribution "Ru, OpenStreetMap &copy;"}))
         tile2 (-> js/L (.tileLayer "http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
                                    #js{:maxZoom 20

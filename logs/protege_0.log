@@ -1520,3 +1520,23 @@ Was expecting one of:
 2017.03.09 18:25:05.045 MSK INFO: Project load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj: 0 sec -- ProjectChooser.loadProject()
 2017.03.09 18:25:05.288 MSK INFO: UI display time = 0 sec -- ProjectManager$2.run()
 2017.03.09 18:25:24.875 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 0 sec (ui) -- ProjectManager$3.run()
+2017.03.10 12:57:07.739 MSK INFO: *** SYSTEM START ***
+2017.03.10 12:57:10.732 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.03.10 12:57:24.413 MSK INFO: Project load time for file:/Users/ru/clojure/fligts-pro/pro-projects/OSMData.pprj: 0 sec -- ProjectChooser.loadProject()
+2017.03.10 12:57:28.296 MSK INFO: UI display time = 3 sec -- ProjectManager$2.run()
+2017.03.10 13:01:27.215 MSK INFO: Project load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj: 0 sec -- ProjectChooser.loadProject()
+2017.03.10 13:01:27.475 MSK INFO: UI display time = 0 sec -- ProjectManager$2.run()
+2017.03.10 18:55:09.417 MSK SEVERE: no direct type: FlightPro_Class840000 -- Project.createRuntimeClsWidget()
+2017.03.10 18:55:09.619 MSK SEVERE: no direct type: FlightPro_Class840000 -- Project.createRuntimeClsWidget()
+2017.03.10 18:55:13.962 MSK SEVERE: no direct type: FlightPro_Class840000 -- Project.createRuntimeClsWidget()
+2017.03.10 18:55:14.130 MSK SEVERE: no direct type: FlightPro_Class840000 -- Project.createRuntimeClsWidget()
+2017.03.10 22:28:18.686 MSK INFO: Project load time for file:/Users/ru/clojure/fligts-pro/pro-projects/Clojure.pprj: 0 sec -- ProjectChooser.loadProject()
+2017.03.10 22:28:18.921 MSK INFO: UI display time = 0 sec -- ProjectManager$2.run()
+2017.03.10 22:30:03.378 MSK INFO: Project load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj: 0 sec -- ProjectChooser.loadProject()
+2017.03.10 22:30:03.619 MSK INFO: UI display time = 0 sec -- ProjectManager$2.run()
+2017.03.10 22:30:38.536 MSK INFO: *** SYSTEM START ***
+2017.03.10 22:30:39.443 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.03.10 22:30:46.831 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 2 sec (ui) -- ProjectManager$3.run()
+2017.03.10 23:05:30.962 MSK INFO: *** SYSTEM START ***
+2017.03.10 23:05:31.693 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.03.10 23:05:38.248 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 2 sec (ui) -- ProjectManager$3.run()

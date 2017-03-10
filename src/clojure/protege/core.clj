@@ -260,3 +260,6 @@ s)
   `(javax.swing.SwingUtilities/invokeLater
     (proxy [Runnable] [] (run [] ~code))))
 
+(defn typ [instance]
+  (.getName (.getDirectType instance)))
+

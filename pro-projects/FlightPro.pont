@@ -1,4 +1,4 @@
-; Thu Mar 09 18:25:24 MSK 2017
+; Fri Mar 10 23:27:29 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -13,6 +13,11 @@
 		(create-accessor read-write))
 	(single-slot age
 		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot butt-display
+		(type STRING)
+		(default "Display on Chart/ext.data/disp-on-chart")
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot id
@@ -72,6 +77,11 @@
 	(multislot coord
 		(type FLOAT)
 		(create-accessor read-write))
+	(single-slot butt-return
+		(type STRING)
+		(default "Return to Flight/ext.data/ret-to-flight")
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot time
 		(type STRING)
 ;+		(cardinality 0 1)
@@ -107,6 +117,20 @@
 		(create-accessor read-write))
 	(single-slot subject
 		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass WikiArticleDetails
+	(is-a WikiArticle POIRequest)
+	(role concrete)
+	(single-slot butt-display
+		(type STRING)
+		(default "Display on Chart/ext.data/disp-on-chart")
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot butt-return
+		(type STRING)
+		(default "Return to Flight/ext.data/ret-to-flight")
 ;+		(cardinality 0 1)
 		(create-accessor read-write)))
 
