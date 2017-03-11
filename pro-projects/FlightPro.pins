@@ -1,4 +1,4 @@
-; Fri Mar 10 23:27:29 MSK 2017
+; Sat Mar 11 22:08:01 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -816,6 +816,10 @@
 	(source "([]\n  (let [[n s w e] @fr24/BBX]\n    (watch-visible {:n n :s s :w w :e e})))\n([params]\n  (println [:WATCH-VISIBLE params])\n  (let [{:keys [n s w e]} params]\n    (clear)\n    (fr24/set-bbx n s w e)\n    (fr24/start process-flights)\n    \"\"))")
 	(title "watch-visible"))
 
+([FlightPro_Class230000] of  CloFuncall
+
+	(source "ext.data/COMM"))
+
 ([FlightPro_Class230001] of  CloFunction
 
 	(source "(let [ldiff (- lambda lambda0)\n       cosphi (Math/cos phi)]\n  (Math/atan2 (* cosphi (Math/sin ldiff))\n                      (- (* (Math/cos phi1) (Math/sin phi)) \n                          (* (Math/sin phi1) cosphi (Math/cos ldiff)))))")
@@ -1017,8 +1021,8 @@
 
 ([FlightPro_Class280040] of  CloFunction
 
-	(source "(if-let [dati (.getInstance *kb* (.substring id 2))]\n  (condp = INFO-DISPLAY\n    \"PRO\" (decorate-instance dati)\n    \"POPUP\" (do (point-out-place edata {:instance dati})\n	(asp/pump-in chn (placemark-popup-instruct dati)))))")
-	(title "placemark-info [id edata chn]"))
+	(source "(if-let [dati (.getInstance *kb* (.substring id 2))]\n  (condp = INFO-DISPLAY\n    \"PRO\" (decorate-instance dati)\n    \"POPUP\" (do (point-out-place {:instance dati})\n	(asp/pump-in (:ins-chn @COMM) \n		(placemark-popup-instruct dati)))))")
+	(title "placemark-info [id]"))
 
 ([FlightPro_Class280041] of  CloVar
 
@@ -1212,8 +1216,8 @@
 
 ([FlightPro_Class280182] of  CloFunction
 
-	(source "(if-let [bbi (fifos \"BBX\" \"title\" \"Current\")]\n  (if-let [bbr (fifos \"BBXWiki\" \"bbx\" bbi)]\n    (if-let [flt (seq (filter #(and (= (sv % \"feature\") fea)\n	           (= (sv % \"title\") tit)) (svs bbr \"responses\")))]\n      (if-let [osr (fainst (cls-instances \"POIRequest\") \"Current\")]\n        (let [wai (first flt)\n               lat (sv wai \"lat\")\n               lon (sv wai \"lng\")]\n          [lat lon])))))")
-	(title "pump-feature-pois [chn edata fea tit]"))
+	(source "(let [mp (into {} hm)\n       lat (mp \"lat\")\n       lon (mp \"lng\")\n       zoo 18\n       chn (:ins-chn @COMM)\n       rss (mp \"osm-responses\")]\n  (asp/pump-in chn\n	{:instruct :map-center\n	 :coord [lat lon]\n	 :zoom zoo})\n  (doseq [rs rss]\n    (asp/pump-in chn (pois-instruct rs))))")
+	(title "show-on-map [hm inst]"))
 
 ([FlightPro_Class280183] of  %3AINSTANCE-ANNOTATION
 
@@ -1276,7 +1280,7 @@
 
 ([FlightPro_Class280198] of  CloFunction
 
-	(source "(condp = (typ dati)\n  \"WikiArticle\"	(invoke-later (do\n	  (.setDirectType dati (cls \"WikiArticleDetails\"))\n	  (ssv dati \"max-rows\" (int 50))\n	  (ssv dati \"radius\" (float 1))\n	  (ssv dati \"poi-req-butt\" \n	    (first (.getDefaultValues (slt \"poi-req-butt\"))))\n	  (ssv dati \"butt-display\" \n	    \"Display on Chart/ext.data/disp-on-chart\")\n	  (ssv dati \"butt-return\" \n	    \"Return to Flight/ext.data/ret-to-flight\")\n	  (let [frm (.show *prj* dati)]\n	    (.setLocationRelativeTo frm nil)\n	    (.setAlwaysOnTop frm true)\n	    (.setVisible true))))\n  false)")
+	(source "(condp = (typ dati)\n  \"WikiArticle\"	(invoke-later (do\n	  (.setDirectType dati (cls \"WikiArticleDetails\"))\n	  (ssv dati \"max-rows\" (int 50))\n	  (ssv dati \"radius\" (float 1))\n	  (ssv dati \"poi-req-butt\" \n	    (first (.getDefaultValues (slt \"poi-req-butt\"))))\n	  (ssv dati \"butt-show-pois\" \n	    \"Show on Map/ext.data/show-on-map\")\n	  (ssv dati \"butt-del-pois\" \n	    \"Delete POIs/ext.data/delete-pois\")\n	  (ssv dati \"butt-return\" \n	    \"Return to Flight/ext.data/ret-to-flight\")\n	  (let [frm (.show *prj* dati)]\n	    (.setLocationRelativeTo frm nil)\n	    (.setAlwaysOnTop frm true)\n	    (.setVisible frm true))))\n  false)")
 	(title "decorate-instance [dati]"))
 
 ([FlightPro_Class290000] of  CloFunction
@@ -1311,6 +1315,26 @@
 
 	(source "(asp/pump-in (:instructions  cmd/CHN)\n	{:instruct :create-update\n	 :id id\n	 :vehicle {:callsign cs\n	               :coord crd\n	               :course crs\n	               :speed spd\n	               :status sts}})")
 	(title "put-on-map [id cs crd crs spd sts]"))
+
+([FlightPro_Class290041] of  TypeName
+
+	(name "town"))
+
+([FlightPro_Class290043] of  TypeClass
+
+	(name "power"))
+
+([FlightPro_Class290044] of  TypeName
+
+	(name "pole"))
+
+([FlightPro_Class290046] of  TypeName
+
+	(name "buffer_stop"))
+
+([FlightPro_Class290052] of  TypeName
+
+	(name "tower"))
 
 ([FlightPro_Class3] of  CloVar
 
@@ -1407,7 +1431,7 @@
 
 ([FlightPro_Class310000] of  CloFunction
 
-	(source "(println [:CMD-INFO params])\n(let [id (:id params)]\n  (if (.startsWith id \"pm\")\n    (exd/placemark-info id @E-DATA (:instructions CHN))\n    (let [inf (or (get @MY-INFOS id) (fr24/fl-info id))\n           cal (if-let[d (fr24/dat id)]\n                   (fr24/callsign d)\n                   id)]\n      (if inf\n        (let [apt (inf \"airport\")\n               acr (inf \"aircraft\")\n               tim (inf \"time\")\n               img (get (first (get-in acr [\"images\" \"thumbnails\"])) \"src\")\n               [lat lon] (fr24/coord id)\n               dat   [[\"from\" (or (get-in apt [\"origin\" \"name\"]) \"-\")]\n	[\"to\" (or (get-in apt [\"destination\" \"name\"]) \"-\")]\n	[\"airline\" (or (get-in inf [\"airline\" \"short\"]) \"-\")]\n	[\"real-departure\" (or (get-in tim [\"real\" \"departure\"]) \"-\")]\n	[\"scheduled-arrival\" (or (get-in tim [\"scheduled\" \"arrival\"]) \"-\")]\n	[\"aircraft\" (or (get-in acr [\"model\" \"text\"]) \"-\")]\n	[\"latitude\" (or lat \"-\")]\n	[\"longitude\" (or lon \"-\")]\n	[\"course\" (or (fr24/course id) \"-\")]\n	[\"speed\" (or (fr24/speed id) \"-\")]\n	[\"altitude\" (or (fr24/altitude id) \"-\")]\n	[(str \"<input type='button' style='color:purple' value='Trail'\n		onclick='chart.client.trail(\\\"\" id \"\\\")' >\")\n	 (str \"<input type='button' style='color:blue' value='Follow'\n		onclick='chart.client.follow(\\\"\" id \"\\\")' >\")]\n	[\"\"\n	 \"<input type='button' style='color:red' value='Stop'\n		onclick='chart.client.stopfollow()' >\"]]\n                       htm (make-info-html cal img dat)]\n          (asp/pump-in (:instructions CHN)\n            {:instruct :popup\n             :id (:id params)\n             :html htm\n             :time (:popup TIM)}))))))\n\"\"")
+	(source "(println [:CMD-INFO params])\n(let [id (:id params)]\n  (if (.startsWith id \"pm\")\n    (exd/placemark-info id)\n    (let [inf (or (get @MY-INFOS id) (fr24/fl-info id))\n           cal (if-let[d (fr24/dat id)]\n                   (fr24/callsign d)\n                   id)]\n      (if inf\n        (let [apt (inf \"airport\")\n               acr (inf \"aircraft\")\n               tim (inf \"time\")\n               img (get (first (get-in acr [\"images\" \"thumbnails\"])) \"src\")\n               [lat lon] (fr24/coord id)\n               dat   [[\"from\" (or (get-in apt [\"origin\" \"name\"]) \"-\")]\n	[\"to\" (or (get-in apt [\"destination\" \"name\"]) \"-\")]\n	[\"airline\" (or (get-in inf [\"airline\" \"short\"]) \"-\")]\n	[\"real-departure\" (or (get-in tim [\"real\" \"departure\"]) \"-\")]\n	[\"scheduled-arrival\" (or (get-in tim [\"scheduled\" \"arrival\"]) \"-\")]\n	[\"aircraft\" (or (get-in acr [\"model\" \"text\"]) \"-\")]\n	[\"latitude\" (or lat \"-\")]\n	[\"longitude\" (or lon \"-\")]\n	[\"course\" (or (fr24/course id) \"-\")]\n	[\"speed\" (or (fr24/speed id) \"-\")]\n	[\"altitude\" (or (fr24/altitude id) \"-\")]\n	[(str \"<input type='button' style='color:purple' value='Trail'\n		onclick='chart.client.trail(\\\"\" id \"\\\")' >\")\n	 (str \"<input type='button' style='color:blue' value='Follow'\n		onclick='chart.client.follow(\\\"\" id \"\\\")' >\")]\n	[\"\"\n	 \"<input type='button' style='color:red' value='Stop'\n		onclick='chart.client.stopfollow()' >\"]]\n                       htm (make-info-html cal img dat)]\n          (asp/pump-in (:instructions CHN)\n            {:instruct :popup\n             :id (:id params)\n             :html htm\n             :time (:popup TIM)}))))))\n\"\"")
 	(title "info [params]"))
 
 ([FlightPro_Class310001] of  CloVar
@@ -1563,83 +1587,17 @@
 
 	(name "utility_pole"))
 
-([FlightPro_Class330041] of  PointOfInterest
-
-	(distance 0.02)
-	(lat 60.198288)
-	(lng 24.876375)
-	(typeClass [FlightPro_Class280098])
-	(typeName [FlightPro_Class330040]))
-
 ([FlightPro_Class330042] of  TypeName
 
 	(name "ice_cream"))
-
-([FlightPro_Class330043] of  PointOfInterest
-
-	(distance 0.02)
-	(lat 60.19822)
-	(lng 24.87642)
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class330042]))
-
-([FlightPro_Class330044] of  PointOfInterest
-
-	(distance 0.02)
-	(lat 60.19822)
-	(lng 24.87642)
-	(typeClass [FlightPro_Class280086])
-	(typeName [FlightPro_Class280109]))
 
 ([FlightPro_Class330045] of  TypeName
 
 	(name "taxi"))
 
-([FlightPro_Class330046] of  PointOfInterest
-
-	(distance 0.02)
-	(lat 60.1984)
-	(lng 24.876421)
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class330045]))
-
-([FlightPro_Class330047] of  PointOfInterest
-
-	(distance 0.03)
-	(lat 60.19855)
-	(lng 24.875757)
-	(name "Munkkiniemen Posti 33")
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class280136]))
-
 ([FlightPro_Class330048] of  TypeName
 
 	(name "flagpole"))
-
-([FlightPro_Class330049] of  PointOfInterest
-
-	(distance 0.05)
-	(lat 60.19878)
-	(lng 24.87615)
-	(typeClass [FlightPro_Class280098])
-	(typeName [FlightPro_Class330048]))
-
-([FlightPro_Class330050] of  PointOfInterest
-
-	(distance 0.06)
-	(lat 60.19774)
-	(lng 24.876404)
-	(name "Mumu")
-	(typeClass [FlightPro_Class280086])
-	(typeName [FlightPro_Class280089]))
-
-([FlightPro_Class330051] of  PointOfInterest
-
-	(distance 0.07)
-	(lat 60.198917)
-	(lng 24.876608)
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class280148]))
 
 ([FlightPro_Class330052] of  TypeClass
 
@@ -1649,311 +1607,33 @@
 
 	(name "tram_stop"))
 
-([FlightPro_Class330054] of  PointOfInterest
-
-	(distance 0.08)
-	(lat 60.197903)
-	(lng 24.877338)
-	(name "Laajalahden aukio")
-	(typeClass [FlightPro_Class330052])
-	(typeName [FlightPro_Class330053]))
-
-([FlightPro_Class330055] of  PointOfInterest
-
-	(distance 0.08)
-	(lat 60.197613)
-	(lng 24.87555)
-	(typeClass [FlightPro_Class280098])
-	(typeName [FlightPro_Class330040]))
-
 ([FlightPro_Class330056] of  TypeName
 
 	(name "supermarket"))
-
-([FlightPro_Class330057] of  PointOfInterest
-
-	(distance 0.01)
-	(lat 60.236156)
-	(lng 25.083712)
-	(name "Kontumarket")
-	(typeClass [FlightPro_Class280086])
-	(typeName [FlightPro_Class330056]))
 
 ([FlightPro_Class330058] of  TypeName
 
 	(name "station"))
 
-([FlightPro_Class330059] of  PointOfInterest
-
-	(distance 0.02)
-	(lat 60.235924)
-	(lng 25.083527)
-	(name "Kontula")
-	(typeClass [FlightPro_Class330052])
-	(typeName [FlightPro_Class330058]))
-
-([FlightPro_Class330060] of  PointOfInterest
-
-	(distance 0.03)
-	(lat 60.23604)
-	(lng 25.083136)
-	(name "Metro Mini")
-	(typeClass [FlightPro_Class280086])
-	(typeName [FlightPro_Class280109]))
-
-([FlightPro_Class330061] of  PointOfInterest
-
-	(distance 0.04)
-	(lat 60.236397)
-	(lng 25.08332)
-	(name "Deja Vu")
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class280105]))
-
 ([FlightPro_Class330062] of  TypeName
 
 	(name "bicycle"))
-
-([FlightPro_Class330063] of  PointOfInterest
-
-	(distance 0.04)
-	(lat 60.23636)
-	(lng 25.083187)
-	(name "Kontulan pyörähuolto")
-	(typeClass [FlightPro_Class280086])
-	(typeName [FlightPro_Class330062]))
-
-([FlightPro_Class330064] of  PointOfInterest
-
-	(distance 0.04)
-	(lat 60.235897)
-	(lng 25.084127)
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class330045]))
-
-([FlightPro_Class330065] of  PointOfInterest
-
-	(distance 0.04)
-	(lat 60.236183)
-	(lng 25.082888)
-	(name "Pizza Taxi")
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class280092]))
 
 ([FlightPro_Class330066] of  TypeName
 
 	(name "atm"))
 
-([FlightPro_Class330067] of  PointOfInterest
-
-	(distance 0.04)
-	(lat 60.2363)
-	(lng 25.08428)
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class330066]))
-
 ([FlightPro_Class330068] of  TypeName
 
 	(name "subway_entrance"))
-
-([FlightPro_Class330069] of  PointOfInterest
-
-	(distance 0.05)
-	(lat 60.23591)
-	(lng 25.082825)
-	(name "Kontula")
-	(typeClass [FlightPro_Class330052])
-	(typeName [FlightPro_Class330068]))
-
-([FlightPro_Class330070] of  PointOfInterest
-
-	(distance 0.05)
-	(lat 60.236225)
-	(lng 25.084558)
-	(name "Kontula")
-	(typeClass [FlightPro_Class330052])
-	(typeName [FlightPro_Class330068]))
-
-([FlightPro_Class330071] of  PointOfInterest
-
-	(distance 0.05)
-	(lat 60.236446)
-	(lng 25.084303)
-	(name "Helmi Grilli")
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class280107]))
-
-([FlightPro_Class330072] of  PointOfInterest
-
-	(distance 0.07)
-	(lat 60.235664)
-	(lng 25.082771)
-	(typeClass [FlightPro_Class280098])
-	(typeName [FlightPro_Class330040]))
 
 ([FlightPro_Class330073] of  TypeName
 
 	(name "bank"))
 
-([FlightPro_Class330074] of  PointOfInterest
-
-	(distance 0.07)
-	(lat 60.23665)
-	(lng 25.0841)
-	(name "Nordea")
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class330073]))
-
-([FlightPro_Class330075] of  PointOfInterest
-
-	(distance 0.07)
-	(lat 60.236053)
-	(lng 25.084848)
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class280136]))
-
-([FlightPro_Class330076] of  PointOfInterest
-
-	(distance 0.07)
-	(lat 60.236683)
-	(lng 25.08406)
-	(name "Pizzeria & Bar Paris")
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class280105]))
-
-([FlightPro_Class330077] of  PointOfInterest
-
-	(distance 0.07)
-	(lat 60.236298)
-	(lng 25.084822)
-	(name "Sagun Nepal")
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class280107]))
-
-([FlightPro_Class330078] of  PointOfInterest
-
-	(distance 0.08)
-	(lat 60.236767)
-	(lng 25.08378)
-	(name "S-market")
-	(typeClass [FlightPro_Class280086])
-	(typeName [FlightPro_Class330056]))
-
-([FlightPro_Class330079] of  PointOfInterest
-
-	(distance 0.08)
-	(lat 60.2364)
-	(lng 25.084827)
-	(name "Kontulankaaren apteekki")
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class280123]))
-
-([FlightPro_Class330080] of  PointOfInterest
-
-	(distance 0.08)
-	(lat 60.23669)
-	(lng 25.08287)
-	(name "Iso Merikarhu")
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class280105]))
-
-([FlightPro_Class330081] of  PointOfInterest
-
-	(distance 0.08)
-	(lat 60.23561)
-	(lng 25.082588)
-	(typeClass [FlightPro_Class280098])
-	(typeName [FlightPro_Class330040]))
-
-([FlightPro_Class330082] of  PointOfInterest
-
-	(distance 0.08)
-	(lat 60.23656)
-	(lng 25.082441)
-	(name "Pub 94")
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class280105]))
-
-([FlightPro_Class330083] of  PointOfInterest
-
-	(distance 0.09)
-	(lat 60.236866)
-	(lng 25.0835)
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class330066]))
-
-([FlightPro_Class330084] of  PointOfInterest
-
-	(distance 0.09)
-	(lat 60.235435)
-	(lng 25.082735)
-	(typeClass [FlightPro_Class280098])
-	(typeName [FlightPro_Class330040]))
-
 ([FlightPro_Class330085] of  TypeName
 
 	(name "cafe"))
-
-([FlightPro_Class330086] of  PointOfInterest
-
-	(distance 0.09)
-	(lat 60.236717)
-	(lng 25.084785)
-	(name "Marian konditoria")
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class330085]))
-
-([FlightPro_Class330087] of  PointOfInterest
-
-	(distance 0.1)
-	(lat 60.235546)
-	(lng 25.082214)
-	(name "Kontula")
-	(typeClass [FlightPro_Class330052])
-	(typeName [FlightPro_Class330068]))
-
-([FlightPro_Class330088] of  PointOfInterest
-
-	(distance 0.1)
-	(lat 60.23679)
-	(lng 25.084717)
-	(name "Wenla")
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class280105]))
-
-([FlightPro_Class330089] of  PointOfInterest
-
-	(distance 0.1)
-	(lat 60.236748)
-	(lng 25.084888)
-	(name "London")
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class280105]))
-
-([FlightPro_Class330090] of  PointOfInterest
-
-	(distance 0.1)
-	(lat 60.235203)
-	(lng 25.083118)
-	(typeClass [FlightPro_Class280098])
-	(typeName [FlightPro_Class330040]))
-
-([FlightPro_Class330091] of  PointOfInterest
-
-	(distance 0.11)
-	(lat 60.236553)
-	(lng 25.085274)
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class330066]))
-
-([FlightPro_Class330092] of  PointOfInterest
-
-	(distance 0.11)
-	(lat 60.23698)
-	(lng 25.084492)
-	(name "Pub Merikarhu")
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class280105]))
 
 ([FlightPro_Class330093] of  TypeClass
 
@@ -1963,108 +1643,9 @@
 
 	(name "locality"))
 
-([FlightPro_Class330095] of  PointOfInterest
-
-	(distance 0.11)
-	(lat 60.237103)
-	(lng 25.083504)
-	(name "Lastenaukio")
-	(typeClass [FlightPro_Class330093])
-	(typeName [FlightPro_Class330094]))
-
-([FlightPro_Class330096] of  PointOfInterest
-
-	(distance 0.11)
-	(lat 60.236996)
-	(lng 25.08454)
-	(name "Kippari Pub")
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class280105]))
-
-([FlightPro_Class330097] of  PointOfInterest
-
-	(distance 0.11)
-	(lat 60.236828)
-	(lng 25.08216)
-	(name "Kontulan Pizza & Kebab")
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class280105]))
-
-([FlightPro_Class330098] of  PointOfInterest
-
-	(distance 0.12)
-	(lat 60.23702)
-	(lng 25.084612)
-	(name "Kontulan katukeittiö")
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class280092]))
-
-([FlightPro_Class330099] of  PointOfInterest
-
-	(distance 0.12)
-	(lat 60.237175)
-	(lng 25.083906)
-	(name "Lidl Kontula")
-	(typeClass [FlightPro_Class280086])
-	(typeName [FlightPro_Class330056]))
-
-([FlightPro_Class330100] of  PointOfInterest
-
-	(distance 0.13)
-	(lat 60.23723)
-	(lng 25.0835)
-	(name "R-kioski")
-	(typeClass [FlightPro_Class280086])
-	(typeName [FlightPro_Class280109]))
-
-([FlightPro_Class330101] of  PointOfInterest
-
-	(distance 0.14)
-	(lat 60.236996)
-	(lng 25.085287)
-	(name "Pub Kontula")
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class280105]))
-
-([FlightPro_Class330102] of  PointOfInterest
-
-	(distance 0.14)
-	(lat 60.23733)
-	(lng 25.083712)
-	(name "McDonald's")
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class280092]))
-
-([FlightPro_Class330103] of  PointOfInterest
-
-	(distance 0.14)
-	(lat 60.23734)
-	(lng 25.08333)
-	(name "Wing Wah")
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class280105]))
-
-([FlightPro_Class330104] of  PointOfInterest
-
-	(distance 0.14)
-	(lat 60.23702)
-	(lng 25.085379)
-	(name "Al Zobeidi")
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class280107]))
-
 ([FlightPro_Class330105] of  TypeName
 
 	(name "alcohol"))
-
-([FlightPro_Class330106] of  PointOfInterest
-
-	(distance 0.15)
-	(lat 60.237404)
-	(lng 25.083643)
-	(name "Alko")
-	(typeClass [FlightPro_Class280086])
-	(typeName [FlightPro_Class330105]))
 
 ([FlightPro_Class330107] of  TypeClass
 
@@ -2074,100 +1655,21 @@
 
 	(name "sports_centre"))
 
-([FlightPro_Class330109] of  PointOfInterest
-
-	(distance 0.15)
-	(lat 60.23717)
-	(lng 25.085157)
-	(name "Kontulan uimahalli")
-	(typeClass [FlightPro_Class330107])
-	(typeName [FlightPro_Class330108]))
-
-([FlightPro_Class330110] of  PointOfInterest
-
-	(distance 0.15)
-	(lat 60.2373)
-	(lng 25.084843)
-	(name "Aapelin Baari")
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class280105]))
-
-([FlightPro_Class330111] of  PointOfInterest
-
-	(distance 0.15)
-	(lat 60.237473)
-	(lng 25.083157)
-	(name "OP")
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class330073]))
-
-([FlightPro_Class330112] of  PointOfInterest
-
-	(distance 0.16)
-	(lat 60.237503)
-	(lng 25.08349)
-	(name "Kontulan Apteekki")
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class280123]))
-
 ([FlightPro_Class330113] of  TypeName
 
 	(name "recycling"))
-
-([FlightPro_Class330114] of  PointOfInterest
-
-	(distance 0.16)
-	(lat 60.237476)
-	(lng 25.08269)
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class330113]))
-
-([FlightPro_Class330115] of  PointOfInterest
-
-	(distance 0.17)
-	(lat 60.237617)
-	(lng 25.083374)
-	(name "Wanha Rouva")
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class280105]))
 
 ([FlightPro_Class330116] of  TypeName
 
 	(name "hospital"))
 
-([FlightPro_Class330117] of  PointOfInterest
-
-	(distance 0.19)
-	(lat 60.237755)
-	(lng 25.084291)
-	(name "Kontulan terveysasema")
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class330116]))
-
 ([FlightPro_Class330118] of  TypeName
 
 	(name "library"))
 
-([FlightPro_Class330119] of  PointOfInterest
-
-	(distance 0.19)
-	(lat 60.23765)
-	(lng 25.085217)
-	(name "Kontulan kirjasto")
-	(typeClass [FlightPro_Class280091])
-	(typeName [FlightPro_Class330118]))
-
 ([FlightPro_Class330120] of  TypeName
 
 	(name "survey_point"))
-
-([FlightPro_Class330121] of  PointOfInterest
-
-	(distance 0.2)
-	(lat 60.234436)
-	(lng 25.082304)
-	(typeClass [FlightPro_Class280098])
-	(typeName [FlightPro_Class330120]))
 
 ([FlightPro_Class340000] of  CloFunction
 
@@ -2249,7 +1751,7 @@
 
 ([FlightPro_Class380004] of  CloFunction
 
-	(source "(println [:CMD-VISIBLE params])\n(let [{:keys [n s w e]} params\n       [n s w e] (map read-string [n s w e])]\n  (vswap! E-DATA assoc :visible [n s w e])\n  (if (:wiki @E-DATA)\n    (exd/pump-wiki (:instructions CHN) E-DATA))\n  (fr24/set-bbx n s w e))\n\"\"")
+	(source "(println [:CMD-VISIBLE params])\n(let [{:keys [n s w e]} params\n       [n s w e] (map read-string [n s w e])]\n  (vswap! exd/COMM assoc \n	:visible [n s w e]\n	:ins-chn (:instructions CHN))\n  (if (:wiki @exd/COMM)\n    (exd/pump-wiki))\n  (fr24/set-bbx n s w e))\n\"\"")
 	(title "visible [params]"))
 
 ([FlightPro_Class390000] of  Rule
@@ -2329,8 +1831,7 @@
 		[FlightPro_Class310001]
 		[FlightPro_Class510001]
 		[FlightPro_Class610000]
-		[FlightPro_Class630000]
-		[FlightPro_Class660025])
+		[FlightPro_Class630000])
 	(title "Pro Commands"))
 
 ([FlightPro_Class400001] of  CloNamespace
@@ -2776,6 +2277,2711 @@
 	(source "\"no\"")
 	(title "TERRAIN"))
 
+([FlightPro_Class610039] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 60.2144)
+	(lng 24.9506)
+	(rank 86)
+	(summary "Käpylä is a neighbourhood of Helsinki with 7,600 inhabitants. Administratively speaking, Käpylä is a part of the Vanhakaupunki district. It is located between Kumpula, Oulunkylä and Koskela. Käpylä has a terminus for route-1 of the Helsinki tram network (...)")
+	(title "Käpylä")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/K%C3%A4pyl%C3%A4"))
+
+([FlightPro_Class610040] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "adm2nd")
+	(lang "en")
+	(lat 60.25)
+	(lng 24.5)
+	(rank 100)
+	(summary "Uusimaa (Finnish) or Nyland (Swedish) (both names mean “new land”) is a region in Finland. It borders the regions Finland Proper, Tavastia Proper, Päijänne Tavastia and Kymenlaakso. Finland’s capital Helsinki and its second largest city Espoo are both located centrally in Uusimaa, making it by far (...)")
+	(title "Uusimaa")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Uusimaa"))
+
+([FlightPro_Class610043] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(lang "en")
+	(lat 60.1238)
+	(lng 24.4357)
+	(rank 95)
+	(summary "Kirkkonummi is a municipality of inhabitants in southern Finland. The literal meaning of the words \"Kirkkonummi\" and \"Kyrkslätt\" in English is \"church moor\". The municipality is located just outside the Helsinki Metropolitan Area, bordering the city of Espoo in the east (...)")
+	(title "Kirkkonummi")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kirkkonummi"))
+
+([FlightPro_Class610044] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(lang "en")
+	(lat 60.5331)
+	(lng 24.1831)
+	(rank 94)
+	(summary "Karkkila is a town and a municipality of Finland.  (...)")
+	(title "Karkkila")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Karkkila"))
+
+([FlightPro_Class610045] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 60.375)
+	(lng 25.2667)
+	(rank 94)
+	(summary "Sipoo is a municipality of Finland. Its seat is in Nikkilä/Nickby. It is the eastern neighbour of Helsinki and is located in the Uusimaa region. The municipality has a population of and covers an area of of which is water. The population density is  (...)")
+	(title "Sipoo")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Sipoo"))
+
+([FlightPro_Class610046] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(lang "en")
+	(lat 60.5331)
+	(lng 25.6)
+	(rank 93)
+	(summary "Askola is a municipality of Finland. It is located in the Uusimaa region. The municipality has a population of and covers an area of of which is water. The population density is . The municipality is unilingually Finnish.  (...)")
+	(title "Askola")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Askola"))
+
+([FlightPro_Class610047] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(lang "en")
+	(lat 60.1983)
+	(lng 24.8761)
+	(rank 91)
+	(summary "Munkkiniemi (in slang Munkka) is a neighbourhood in Helsinki. Subdivisions within the district are Vanha Munkkiniemi, Kuusisaari, Lehtisaari, Munkkivuori, Niemenmäki and Talinranta. The land in Munkkiniemi was from the 17th century a part of Munksnäs manor (...)")
+	(title "Munkkiniemi")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Munkkiniemi"))
+
+([FlightPro_Class610049] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "JP")
+	(lang "en")
+	(lat 60.4167)
+	(lng 24.3331)
+	(rank 91)
+	(summary "Vihti is a small municipality located in the Uusimaa region of province of Southern Finland, approximately northwest of the capital city Helsinki. Its seat is Nummela. The municipality has a population of and covers an area of of which is water. The population density is .  (...)")
+	(title "Vihti")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Vihti"))
+
+([FlightPro_Class610051] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 60.2539)
+	(lng 25.0442)
+	(rank 88)
+	(summary "Helsinki-Malmi Airport is an airport in the city of Helsinki, Finland, located in the district of Malmi, north north-east of the city centre. Until the opening of the Helsinki-Vantaa Airport in 1952 it was the main airport of Helsinki and all Finland (...)")
+	(title "Helsinki-Malmi Airport")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Helsinki-Malmi_Airport"))
+
+([FlightPro_Class610052] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 60.1756)
+	(lng 24.9342)
+	(rank 87)
+	(summary "The World Federation of the Deaf (WFD) is an international non-governmental organization that acts as a peak body for national associations of Deaf people, with a focus on Deaf people who use sign language and their family and friends (...)")
+	(title "World Federation of the Deaf")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/World_Federation_of_the_Deaf"))
+
+([FlightPro_Class610055] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1712)
+	(lng 24.9525)
+	(rank 87)
+	(summary "The Bank of Finland is the central bank of Finland. It is the fourth oldest central bank in the world.  (...)")
+	(title "Bank of Finland")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Bank_of_Finland"))
+
+([FlightPro_Class610056] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "city")
+	(lang "en")
+	(lat 60.1047)
+	(lng 24.9741)
+	(rank 87)
+	(summary "Sailing/Yachting is an Olympic sport starting from the Games of the 1st Olympiad (1896 Olympics in Athens). With the exception of 1904 and possible 1916 sailing was always a part of the Olympic program. The Sailing program of 1952 consisted of a total of five sailing classes (disciplines) (...)")
+	(title "Sailing at the 1952 Summer Olympics")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Sailing_at_the_1952_Summer_Olympics"))
+
+([FlightPro_Class610057] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.2103)
+	(lng 25.0781)
+	(rank 87)
+	(summary "Itäkeskus (Finnish) or Östra centrum (Swedish) is a ground-level station on the Helsinki Metro. It serves the Itäkeskus shopping centre and surrounding areas in East Helsinki. After the Itäkeskus station, there is a fork in the metro line: one branch continues north towards Mellunmäki, while another (...)")
+	(title "Itäkeskus metro station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/It%C3%A4keskus_metro_station"))
+
+([FlightPro_Class610058] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 60.1831)
+	(lng 24.1997)
+	(rank 86)
+	(summary "Siuntio is a municipality of Finland. It is located in the province of Southern Finland and is part of the Uusimaa region. The municipality has a population of and covers an area of of which is water. The population density is  (...)")
+	(title "Siuntio")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Siuntio"))
+
+([FlightPro_Class610060] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.2)
+	(lng 25.05)
+	(rank 85)
+	(summary "Herttoniemi is a neighbourhood and a suburb of Helsinki, the Finnish capital. It is located about 7 km east of the city centre and can be easily reached by metro in 10 minutes. It has an older northern suburb and a newer coastal suburb with ferry connections to the city centre (...)")
+	(title "Herttoniemi")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Herttoniemi"))
+
+([FlightPro_Class610061] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 60.6331)
+	(lng 25.3167)
+	(rank 84)
+	(summary "Mäntsälä is a municipality in the province of Southern Finland, and is part of the Uusimaa region. It has a population of and covers an area of of which is water. The population density is . Mäntsälä lies about north of Helsinki, the capital of Finland (...)")
+	(title "Mäntsälä")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/M%C3%A4nts%C3%A4l%C3%A4"))
+
+([FlightPro_Class610062] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1706)
+	(lng 24.9406)
+	(rank 84)
+	(summary "Rautatientori metro station or Central railway station metro station is a station on the Helsinki Metro in Finland. The entrance is located in the Asematunneli main hall, which has an exit to the Helsinki Central Railway Station (...)")
+	(title "Rautatientori metro station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Rautatientori_metro_station"))
+
+([FlightPro_Class610063] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.6264)
+	(lng 24.8506)
+	(rank 84)
+	(summary "This is a list of locomotives and multiple units that have been used in Finland. VR Group (privatised in 1995, previously Valtionrautatiet, Finnish state railways) has a monopoly on passenger traffic and is currently the only freight operator on the Finnish rail network (...)")
+	(title "List of Finnish locomotives")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/List_of_Finnish_locomotives"))
+
+([FlightPro_Class610064] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1694)
+	(lng 24.9178)
+	(rank 83)
+	(summary "The Hietaniemi cemetery is located mainly in the Lapinlahti quarter and partly in the Etu-Töölö district of Helsinki, the capital of Finland. It is the location for Finnish state funeral services. The cemetery includes a large military cemetery section for soldiers from the capital fallen in the (...)")
+	(title "Hietaniemi cemetery")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Hietaniemi_cemetery"))
+
+([FlightPro_Class610066] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "city")
+	(lang "en")
+	(lat 60.2167)
+	(lng 24.8167)
+	(rank 83)
+	(summary "Leppävaara (Finnish) or Alberga (Swedish) is a district of Espoo, a city in Finland. A major traffic hub in the Greater Helsinki region, the Rantarata rail line and Kehä I, the busiest road in Finland, cross in Leppävaara. The Sello Shopping Centre is also located there (...)")
+	(title "Leppävaara")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Lepp%C3%A4vaara"))
+
+([FlightPro_Class610067] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.18)
+	(lng 24.9506)
+	(rank 83)
+	(summary "Hakaniemi (Finnish) or Hagnäs (Swedish) is a station on the Helsinki Metro. It serves the central Helsinki districts of Hakaniemi and Kallio. The station was among the first metro stations opened in Helsinki, on 1 June 1982, and was designed by Mirja Castrén, Juhani Jauhiainen, and Marja Nuuttila (...)")
+	(title "Hakaniemi metro station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Hakaniemi_metro_station"))
+
+([FlightPro_Class610068] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1889)
+	(lng 25.0081)
+	(rank 83)
+	(summary "Kulosaari (Finnish) or Brändö (Swedish) is a ground-level station on the Helsinki Metro. It serves the island district of Kulosaari in East Helsinki. The station was one of the first metro stations opened in Helsinki, on 1 June 1982, and was designed by Jaakko Ylinen and Jarmo Maunula (...)")
+	(title "Kulosaari metro station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kulosaari_metro_station"))
+
+([FlightPro_Class610070] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1722)
+	(lng 24.9475)
+	(rank 83)
+	(summary "Kaisaniemi (Finnish) or Kajsaniemi (Swedish) is a station on the Helsinki Metro. It serves the central Helsinki district of Kaisaniemi. It is the only station whose name is announced in only one language: whether this is Finnish or Swedish is unknown and irrelevant, because the Finnish 'Kaisaniemi' (...)")
+	(title "Kaisaniemi metro station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kaisaniemi_metro_station"))
+
+([FlightPro_Class610072] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.2333)
+	(lng 25.0167)
+	(rank 82)
+	(summary "Viikki is a neighbourhood of about 5,500 inhabitants in Helsinki, Finland. It is located at the bottom of Vanhankaupunginlahti bay, some 7–10 km from the city centre. The district hosts the Viikki Campus with four of the faculties of the University of Helsinki (biosciences, pharmacy, veterinary (...)")
+	(title "Viikki")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Viikki"))
+
+([FlightPro_Class610073] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1689)
+	(lng 24.9319)
+	(rank 82)
+	(summary "The Kamppi metro station is a station on the Helsinki Metro. In addition to serving the area around Kamppi in central Helsinki, the station is integrated with the Kamppi Center bus terminal and shopping complex (...)")
+	(title "Kamppi metro station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kamppi_metro_station"))
+
+([FlightPro_Class610074] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1875)
+	(lng 24.9611)
+	(rank 82)
+	(summary "Sörnäinen (Finnish) or Sörnäs (Swedish) is a station on the Helsinki Metro. It serves the central Helsinki districts of Sörnäinen and Kallio. When heading east, Sörnäinen is the last station that is actually underground - the eastern part of the metro service is mostly above ground (part of Vuosaari (...)")
+	(title "Sörnäinen metro station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/S%C3%B6rn%C3%A4inen_metro_station"))
+
+([FlightPro_Class610076] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.195)
+	(lng 25.0308)
+	(rank 82)
+	(summary "Herttoniemi (Finnish) or Hertonäs (Swedish) is a ground-level station on the Helsinki Metro. It serves the district of Herttoniemi in East Helsinki. The station was one of the first metro stations opened in Helsinki, on 1 June 1982, and was designed by Jaakko Ylinen and Jarmo Maunula (...)")
+	(title "Herttoniemi metro station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Herttoniemi_metro_station"))
+
+([FlightPro_Class610077] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1875)
+	(lng 24.9769)
+	(rank 82)
+	(summary "Kalasatama (Finnish) or Fiskehamnen (Swedish) is a station on the Helsinki Metro, in the capital city of Finland. The station was opened on 1 January 2007, and it serves the eastern part of the central Helsinki district of Sörnäinen (...)")
+	(title "Kalasatama metro station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kalasatama_metro_station"))
+
+([FlightPro_Class610078] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "railwaystation")
+	(lang "en")
+	(lat 60.2392)
+	(lng 25.1108)
+	(rank 81)
+	(summary "Mellunmäki (Finnish) or Mellungsbacka (Swedish) is a ground-level bridge station on the northern branch (Itäkeskus - Mellunmäki) of the Helsinki Metro. It serves the district of Mellunmäki in East Helsinki, Finland and is the terminus of the northern branch (...)")
+	(title "Mellunmäki metro station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Mellunm%C3%A4ki_metro_station"))
+
+([FlightPro_Class610079] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.2072)
+	(lng 25.1422)
+	(rank 81)
+	(summary "Vuosaari (Finnish) or Nordsjö (Swedish) is a ground-level station on the southern branch (Itäkeskus - Vuosaari) of the Helsinki Metro. It serves the district of Vuosaari in East Helsinki, and is the terminus of the branch (...)")
+	(title "Vuosaari metro station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Vuosaari_metro_station"))
+
+([FlightPro_Class610098] of  TypeName
+
+	(name "parking"))
+
+([FlightPro_Class610101] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.1667)
+	(lng 24.9333)
+	(population 620982)
+	(rank 100)
+	(summary "Helsinki is the capital and largest city of Finland. It is in the region of Uusimaa, in southern Finland, on the shore of the Gulf of Finland, an arm of the Baltic Sea. Helsinki has a population of , an urban population of 1.2 million (31 December 2013), and a metropolitan population of 1 (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/21000/thumb-20063-100.jpg")
+	(title "Helsinki")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Helsinki"))
+
+([FlightPro_Class610102] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 60.2333)
+	(lng 25.1167)
+	(rank 100)
+	(summary "The Helsinki Metro , is a rapid transit system serving Helsinki, Finland. It is the world's most northern metro system, and the only one in Finland. The system was opened to the general public on 2 August 1982 after 27 years of planning (...)")
+	(title "Helsinki Metro")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Helsinki_Metro"))
+
+([FlightPro_Class610104] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "edu")
+	(lang "en")
+	(lat 60.1858)
+	(lng 24.8278)
+	(rank 98)
+	(summary "Aalto University is a university primarily located in Greater Helsinki, Finland. It was established in 2010 as a merger of three major Finnish universities: the Helsinki University of Technology (established 1849), the Helsinki School of Economics (established 1904), and the University of Art and (...)")
+	(title "Aalto University")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Aalto_University"))
+
+([FlightPro_Class610105] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 60.1706)
+	(lng 24.8286)
+	(rank 98)
+	(summary "Nokia Corporation is a Finnish multinational communications and information technology company, founded in 1865. Nokia is headquartered in Espoo, Uusimaa, in the greater Helsinki metropolitan area. In 2014, Nokia employed 61,656 people across 120 countries, conducts sales in more than 150 countries (...)")
+	(title "Nokia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Nokia"))
+
+([FlightPro_Class610106] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.2167)
+	(lng 24.7333)
+	(rank 98)
+	(summary "Kauniainen is a small town and a municipality of inhabitants in the Helsinki Metropolitan Area, Finland. It is surrounded by the City of Espoo, in Greater Helsinki. Kauniainen was founded by a corporation in 1906, AB Grankulla, that parcelled land and created a suburb for villas; Kauniainen received (...)")
+	(title "Kauniainen")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kauniainen"))
+
+([FlightPro_Class610107] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.4031)
+	(lng 25.0253)
+	(rank 98)
+	(summary "Tuusula is a municipality of Finland. It belongs to the Helsinki sub-region of the Uusimaa region. The municipality has a population of .  (...)")
+	(title "Tuusula")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Tuusula"))
+
+([FlightPro_Class610108] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(lang "en")
+	(lat 60.2031)
+	(lng 24.9255)
+	(rank 97)
+	(summary "Yleisradio Oy (Finnish), also known as Rundradion (Swedish) or the Finnish Broadcasting Company (English), abbreviated to Yle (pronounced ; previously stylised as YLE before March 2012 corporate rebrand), is Finland's national public-broadcasting company, founded in 1926 (...)")
+	(title "Yle")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Yle"))
+
+([FlightPro_Class610109] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.4667)
+	(lng 24.8083)
+	(rank 96)
+	(summary "Nurmijärvi is the most populated rural municipality of Finland, located north of the capital Helsinki. The close proximity to Helsinki has led to a considerable growth of the major villages such as Klaukkala and Rajamäki, which nowadays are considered dormitory towns of Helsinki (...)")
+	(title "Nurmijärvi")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Nurmij%C3%A4rvi"))
+
+([FlightPro_Class610110] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "adm1st")
+	(lang "en")
+	(lat 60.5)
+	(lng 26.0)
+	(rank 96)
+	(summary "Southern Finland was a province of Finland from 1997 to 2009. It bordered the provinces of Western Finland and Eastern Finland. It also bordered the Gulf of Finland and Russia.  (...)")
+	(title "Southern Finland Province")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Southern_Finland_Province"))
+
+([FlightPro_Class610111] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1725)
+	(lng 24.9331)
+	(rank 96)
+	(summary "The Eduskunta (or , or) is the parliament of Finland. The unicameral parliament has 200 members and normally meets in the Parliament House in Helsinki. However, during the 2015–2017 renovation of the Parliament House, the parliament meets in the nearby Sibelius Academy (...)")
+	(title "Parliament of Finland")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Parliament_of_Finland"))
+
+([FlightPro_Class610112] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1683)
+	(lng 24.9422)
+	(rank 95)
+	(summary "The Stockmann department store is a culturally significant business building and department store located in the centre of Helsinki, Finland. It is one of many department stores owned by the Stockmann corporation (...)")
+	(title "Stockmann, Helsinki centre")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Stockmann%2C_Helsinki_centre"))
+
+([FlightPro_Class610113] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "adm2nd")
+	(lang "en")
+	(lat 60.5)
+	(lng 26.0)
+	(rank 94)
+	(summary "Eastern Uusimaa was a region in Finland, until it was consolidated with the region of Uusimaa on January 1, 2011. It bordered the regions Uusimaa, Päijänne Tavastia, and Kymenlaakso.  (...)")
+	(title "Eastern Uusimaa")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Eastern_Uusimaa"))
+
+([FlightPro_Class610114] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 60.1783)
+	(lng 24.915)
+	(rank 94)
+	(summary "The Finnish Environment Institute (SYKE) is a research institute and government agency under the Ministry of the Environment, located in Helsinki, Finland. It is both a research institute, and a centre for environmental expertise (...)")
+	(title "Finnish Environment Institute")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Finnish_Environment_Institute"))
+
+([FlightPro_Class610115] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.169)
+	(lng 24.951)
+	(rank 93)
+	(summary "Aleksanterinkatu is a street in the centre of Helsinki, Finland. In the city plan by Carl Ludvig Engel, it was the Decumanus Maximus, the main east-west street in the city, crossing the Cardo, Unioninkatu (Union Street) at the corner of the Senate Square (...)")
+	(title "Aleksanterinkatu")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Aleksanterinkatu"))
+
+([FlightPro_Class610116] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 60.1708)
+	(lng 24.9375)
+	(rank 93)
+	(summary "The 2015 Veikkausliiga was the eighty-fifth season of top-tier football in Finland. HJK Helsinki were the defending champions. The season was won by SJK.  (...)")
+	(title "2015 Veikkausliiga")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/2015_Veikkausliiga"))
+
+([FlightPro_Class610117] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.2719)
+	(lng 24.9728)
+	(rank 93)
+	(summary "Suunto Oy is a company that manufactures and markets sports watches, dive computers, compasses and precision instruments. Headquartered in Vantaa, Finland, Suunto employs more than 300 people worldwide, and its products are sold in over 100 countries (...)")
+	(title "Suunto")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Suunto"))
+
+([FlightPro_Class610119] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1877)
+	(lng 24.9227)
+	(rank 92)
+	(summary "Sonera Stadium (until August 2010 Finnair Stadium; also known as Töölön jalkapallostadion, \"Töölö football stadium\") is a football stadium in Helsinki, Finland. The stadium was inaugurated in 2000. It has a capacity of 10,770 spectators (...)")
+	(title "Sonera Stadium")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Sonera_Stadium"))
+
+([FlightPro_Class610120] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.1833)
+	(lng 24.8333)
+	(rank 91)
+	(summary "Otaniemi (Finnish), or Otnäs (Swedish), is a district of Espoo, Finland. It is located near the border of Helsinki, the capital of Finland. Otaniemi is the home of the Aalto University engineering schools campus, thus \"Otaniemi\" is often used as a synonym for Aalto (...)")
+	(title "Otaniemi")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Otaniemi"))
+
+([FlightPro_Class610121] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.175)
+	(lng 24.9319)
+	(rank 90)
+	(summary "The National Museum of Finland presents Finnish history from the Stone Age to the present day, through objects and cultural history. The Finnish National Romantic style building is located in central Helsinki and is a part of the National Board of Antiquities , under the Ministry of Culture and (...)")
+	(title "National Museum of Finland")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/National_Museum_of_Finland"))
+
+([FlightPro_Class610122] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.475)
+	(lng 25.375)
+	(rank 90)
+	(summary "Pornainen is a municipality of Finland. It is located in the province of Southern Finland and is part of the Uusimaa region. The municipality has a population of and covers an area of of which is water. The population density is . The municipality is unilingually Finnish.  (...)")
+	(title "Pornainen")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Pornainen"))
+
+([FlightPro_Class610124] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1747)
+	(lng 24.9836)
+	(rank 89)
+	(summary "Korkeasaari is an island in Helsinki, Finland where the country's biggest zoo is situated. The English name of the zoo is Helsinki Zoo. The zoo is located on a rocky island, connected to the mainland via a bridge to the Helsinki district of Mustikkamaa, where there is access to the zoo all year (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/10000/thumb-9385-100.jpg")
+	(title "Korkeasaari")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Korkeasaari"))
+
+([FlightPro_Class610125] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.159)
+	(lng 24.949)
+	(rank 89)
+	(summary "is the southern-most city district of Helsinki, in Finland. The name Ullanlinna refers to the fortification line that was built at the southern edge of the area during the 18th century (no longer visible), as part of the town fortifications, which also included the fortress of  (...)")
+	(title "Ullanlinna")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ullanlinna"))
+
+([FlightPro_Class610126] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "city")
+	(lang "en")
+	(lat 60.2931)
+	(lng 25.0439)
+	(rank 89)
+	(summary "Tikkurila is a district and major region of the municipality of Vantaa, Finland. Located in the eastern half of the Helsinki conurbation, some north of the capital's downtown district, it is the administrative and commercial hub of Vantaa, although Myyrmäki is a rival commercial hub within the (...)")
+	(title "Tikkurila")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Tikkurila"))
+
+([FlightPro_Class610127] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "city")
+	(lang "en")
+	(lat 60.1864)
+	(lng 24.9681)
+	(rank 89)
+	(summary "Sörnäinen (; Sörkkä or Sörkka in Helsinki slang) is a neighbourhood in the city of Helsinki, Finland. Sörnäinen is located a little more than one kilometre north from the coastal centre of Helsinki, near the district of Hakaniemi. The east side of Sörnäinen borders the sea (...)")
+	(title "Sörnäinen")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/S%C3%B6rn%C3%A4inen"))
+
+([FlightPro_Class610128] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1722)
+	(lng 24.9475)
+	(rank 89)
+	(summary "University of Helsinki is a station on the Helsinki Metro. It serves the central Helsinki district of Kaisaniemi and was known by this name until the end of 2014. The station is 27 metres below ground level and 22 metres below sea level (...)")
+	(title "University of Helsinki metro station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/University_of_Helsinki_metro_station"))
+
+([FlightPro_Class610129] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.175)
+	(lng 24.96)
+	(rank 88)
+	(summary "The Military Museum of Finland is the central museum of the Finnish Defence Forces and the national special museum of military history. It is located in Helsinki and it is part of the Finnish National Defence University (...)")
+	(title "Military Museum of Finland")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Military_Museum_of_Finland"))
+
+([FlightPro_Class610130] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1717)
+	(lng 24.9369)
+	(rank 88)
+	(summary "Kiasma is a contemporary art museum located on Mannerheimintie in Helsinki, Finland. Its name kiasma, Finnish for chiasma, alludes to the basic conceptual idea of its architect, Steven Holl. The museum exhibits the contemporary art collection of the Finnish National Gallery founded in 1990 (...)")
+	(title "Kiasma")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kiasma"))
+
+([FlightPro_Class610131] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "isle")
+	(lang "en")
+	(lat 60.1861)
+	(lng 25.0069)
+	(rank 88)
+	(summary "Kulosaari is an island and a suburb in Helsinki, Finland. It is also the 42nd neighbourhood of the city. Construction of villas on the island started in the beginning of the 20th century, and a bridge from Sörnäinen was opened in 1919 (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/139000/thumb-138317-100.jpg")
+	(title "Kulosaari")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kulosaari"))
+
+([FlightPro_Class610132] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.2503)
+	(lng 25.0097)
+	(population 22336)
+	(rank 88)
+	(summary "Oulunkylä (also known as Ogeli) is a suburb and a neighbourhood of Helsinki, the capital of Finland. It is located north from the center of the city. It has been inhabited since the 13th century. Earlier an independent municipality, it was made part of Helsinki in 1946 (...)")
+	(title "Oulunkylä")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Oulunkyl%C3%A4"))
+
+([FlightPro_Class610133] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.1714)
+	(lng 24.9461)
+	(rank 88)
+	(summary "Kluuvi is the commercial centre of Helsinki, Finland, and a neighbourhood in the Vironniemi district of Helsinki. The Helsinki Central railway station, the Helsinki main post office, the Stockmann and Sokos department stores, the Kluuvi shopping centre and the main offices of Finnish banks are (...)")
+	(title "Kluuvi")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kluuvi"))
+
+([FlightPro_Class610134] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "city")
+	(lang "en")
+	(lat 60.1617)
+	(lng 24.9381)
+	(rank 87)
+	(summary "Punavuori is a neighbourhood in Helsinki, the capital of Finland. The name Punavuori (English: Red mountain) refers to red cliffs located between Sepänkatu and Punavuorenkatu. They were still visible in the 19th century, nowadays they are covered with buildings and pavement (...)")
+	(title "Punavuori")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Punavuori"))
+
+([FlightPro_Class610135] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "city")
+	(lang "en")
+	(lat 60.162)
+	(lng 24.914)
+	(rank 87)
+	(summary "Ruoholahti (Swedish: Gräsviken) is a quarter in Helsinki, part of the Länsisatama neighbourhood and Kampinmalmi district. The name means Grass Bay and is pronounced . Ruoholahti is located in the southwestern part of the central city area of Helsinki, close to the Lauttasaari island, and it (...)")
+	(title "Ruoholahti")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ruoholahti"))
+
+([FlightPro_Class610136] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 60.2167)
+	(lng 24.95)
+	(rank 87)
+	(summary "Uusimaa (Swedish: Nyland), is a historical province in the south of Finland. It borders Finland Proper, Tavastia, Savonia, and Karelia. The English translation would be \"new land\". From the Middle Ages to 1809, most of the present-day Finland was a part of Sweden (...)")
+	(title "Uusimaa (historical province)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Uusimaa_%28historical_province%29"))
+
+([FlightPro_Class610137] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "isle")
+	(lang "en")
+	(lat 60.1456)
+	(lng 25.0442)
+	(rank 87)
+	(summary "Santahamina is an island and neighbourhood of Eastern Helsinki, Finland. At present it is a military base housing the Guard Jaeger Regiment, making access restricted. The Finnish National Defence University (NDU) is also located on the island (...)")
+	(title "Santahamina")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Santahamina"))
+
+([FlightPro_Class610138] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1676)
+	(lng 24.9548)
+	(rank 87)
+	(summary "The Market Square (Kauppatori in Finnish, Salutorget in Swedish) is a central square in Helsinki, Finland, and one of the most famous market places and tourist attractions in the city. The Market Square is located near the centre of Helsinki, at the eastern end of Esplanadi and bordering the Baltic (...)")
+	(title "Market Square, Helsinki")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Market_Square%2C_Helsinki"))
+
+([FlightPro_Class610139] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1703)
+	(lng 24.9508)
+	(rank 87)
+	(summary "The National Library of Finland is the foremost research library in Finland. Administratively the library is part of the University of Helsinki. Until 1 August 2006, it was known as the Helsinki University Library. The National Library is responsible for storing the Finnish cultural heritage (...)")
+	(title "National Library of Finland")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/National_Library_of_Finland"))
+
+([FlightPro_Class610140] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 60.3508)
+	(lng 25.0778)
+	(rank 87)
+	(summary "Korso is a district and major region in northeastern Vantaa, Finland. The district has 7,402 inhabitants (as of 1 January 2014). Since 2007, the Korso major region has included the following nine districts: Matari, Korso, Mikkola, Metsola, Leppäkorpi, Jokivarsi, Nikinmäki, Vierumäki and Vallinoja (...)")
+	(title "Korso")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Korso"))
+
+([FlightPro_Class610141] of  PointOfInterest
+
+	(distance 0.0)
+	(lat 60.29311)
+	(lng 25.043873)
+	(name "R-kioski")
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class280109]))
+
+([FlightPro_Class610142] of  TypeName
+
+	(name "florist"))
+
+([FlightPro_Class610143] of  PointOfInterest
+
+	(distance 0.02)
+	(lat 60.293133)
+	(lng 25.044176)
+	(name "Kaivokukka")
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class610142]))
+
+([FlightPro_Class610144] of  PointOfInterest
+
+	(distance 0.02)
+	(lat 60.292946)
+	(lng 25.043814)
+	(name "Picnic")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330085]))
+
+([FlightPro_Class610145] of  PointOfInterest
+
+	(distance 0.03)
+	(lat 60.29287)
+	(lng 25.04379)
+	(name "La Pasteria Italiana")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280107]))
+
+([FlightPro_Class610146] of  PointOfInterest
+
+	(distance 0.03)
+	(lat 60.293106)
+	(lng 25.04451)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280094]))
+
+([FlightPro_Class610147] of  PointOfInterest
+
+	(distance 0.03)
+	(lat 60.2928)
+	(lng 25.04377)
+	(name "Hao King")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280107]))
+
+([FlightPro_Class610148] of  TypeName
+
+	(name "confectionery"))
+
+([FlightPro_Class610149] of  PointOfInterest
+
+	(distance 0.04)
+	(lat 60.293404)
+	(lng 25.04427)
+	(name "Karkkitori")
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class610148]))
+
+([FlightPro_Class610150] of  PointOfInterest
+
+	(distance 0.04)
+	(lat 60.29271)
+	(lng 25.043734)
+	(name "Grande Parilla")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280107]))
+
+([FlightPro_Class610151] of  PointOfInterest
+
+	(distance 0.05)
+	(lat 60.29269)
+	(lng 25.043621)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280094]))
+
+([FlightPro_Class610152] of  PointOfInterest
+
+	(distance 0.05)
+	(lat 60.29353)
+	(lng 25.044127)
+	(name "S-market")
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class330056]))
+
+([FlightPro_Class610153] of  TypeName
+
+	(name "ticket"))
+
+([FlightPro_Class610154] of  PointOfInterest
+
+	(distance 0.05)
+	(lat 60.292625)
+	(lng 25.043653)
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class610153]))
+
+([FlightPro_Class610155] of  PointOfInterest
+
+	(distance 0.06)
+	(lat 60.29275)
+	(lng 25.044615)
+	(name "Tikkurila")
+	(typeClass [FlightPro_Class330052])
+	(typeName [FlightPro_Class330058]))
+
+([FlightPro_Class610156] of  TypeName
+
+	(name "bus_station"))
+
+([FlightPro_Class610157] of  PointOfInterest
+
+	(distance 0.08)
+	(lat 60.293766)
+	(lng 25.044106)
+	(name "Tikkurila")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610156]))
+
+([FlightPro_Class610158] of  TypeName
+
+	(name "bicycle_parking"))
+
+([FlightPro_Class610159] of  PointOfInterest
+
+	(distance 0.11)
+	(lat 60.29217)
+	(lng 25.043476)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610158]))
+
+([FlightPro_Class610160] of  PointOfInterest
+
+	(distance 0.12)
+	(lat 60.29231)
+	(lng 25.042446)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330045]))
+
+([FlightPro_Class610161] of  PointOfInterest
+
+	(distance 0.12)
+	(lat 60.29201)
+	(lng 25.043568)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610158]))
+
+([FlightPro_Class610162] of  PointOfInterest
+
+	(distance 0.14)
+	(lat 60.29189)
+	(lng 25.043726)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280094]))
+
+([FlightPro_Class610163] of  PointOfInterest
+
+	(distance 0.14)
+	(lat 60.29245)
+	(lng 25.041706)
+	(name "Vantaan 10. asema-apteekki")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280123]))
+
+([FlightPro_Class610164] of  PointOfInterest
+
+	(distance 0.14)
+	(lat 60.293156)
+	(lng 25.041344)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610098]))
+
+([FlightPro_Class610165] of  PointOfInterest
+
+	(distance 0.16)
+	(lat 60.292027)
+	(lng 25.042063)
+	(name "Golden Rax Pizzabuffet Tikkurila")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280107]))
+
+([FlightPro_Class610166] of  PointOfInterest
+
+	(distance 0.17)
+	(lat 60.292885)
+	(lng 25.040894)
+	(name "Nordea Vantaa-Tikkurila")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330073]))
+
+([FlightPro_Class610167] of  PointOfInterest
+
+	(distance 0.17)
+	(lat 60.294613)
+	(lng 25.043911)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280107]))
+
+([FlightPro_Class610168] of  PointOfInterest
+
+	(distance 0.18)
+	(lat 60.29261)
+	(lng 25.040804)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280125]))
+
+([FlightPro_Class610169] of  PointOfInterest
+
+	(distance 0.19)
+	(lat 60.292984)
+	(lng 25.040548)
+	(name "Danske Bank")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330073]))
+
+([FlightPro_Class610170] of  PointOfInterest
+
+	(distance 0.19)
+	(lat 60.29301)
+	(lng 25.040487)
+	(name "Otto.")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330066]))
+
+([FlightPro_Class610171] of  TypeName
+
+	(name "crossing"))
+
+([FlightPro_Class610172] of  PointOfInterest
+
+	(distance 0.19)
+	(lat 60.29304)
+	(lng 25.047365)
+	(typeClass [FlightPro_Class330052])
+	(typeName [FlightPro_Class610171]))
+
+([FlightPro_Class610173] of  PointOfInterest
+
+	(distance 0.19)
+	(lat 60.292446)
+	(lng 25.040625)
+	(name "Hesburger Tikkurila")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280092]))
+
+([FlightPro_Class610174] of  TypeName
+
+	(name "car_wash"))
+
+([FlightPro_Class610175] of  PointOfInterest
+
+	(distance 0.2)
+	(lat 60.29198)
+	(lng 25.041132)
+	(name "Autopesu Tikkuri")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610174]))
+
+([FlightPro_Class610176] of  PointOfInterest
+
+	(distance 0.2)
+	(lat 60.292755)
+	(lng 25.040361)
+	(name "Marian konditoria")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330085]))
+
+([FlightPro_Class610177] of  PointOfInterest
+
+	(distance 0.2)
+	(lat 60.2927)
+	(lng 25.040325)
+	(name "Thai Palace")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280107]))
+
+([FlightPro_Class610178] of  TypeName
+
+	(name "parking_entrance"))
+
+([FlightPro_Class610179] of  PointOfInterest
+
+	(distance 0.2)
+	(lat 60.291855)
+	(lng 25.04116)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610178]))
+
+([FlightPro_Class610180] of  PointOfInterest
+
+	(distance 0.21)
+	(lat 60.29188)
+	(lng 25.04098)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610178]))
+
+([FlightPro_Class610181] of  TypeName
+
+	(name "townhall"))
+
+([FlightPro_Class610182] of  PointOfInterest
+
+	(distance 0.21)
+	(lat 60.293625)
+	(lng 25.04021)
+	(name "Vantaan kaupungintalo")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610181]))
+
+([FlightPro_Class610183] of  PointOfInterest
+
+	(distance 0.21)
+	(lat 60.291893)
+	(lng 25.040903)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610178]))
+
+([FlightPro_Class610184] of  PointOfInterest
+
+	(distance 0.21)
+	(lat 60.294968)
+	(lng 25.044752)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330045]))
+
+([FlightPro_Class610185] of  PointOfInterest
+
+	(distance 0.22)
+	(lat 60.291912)
+	(lng 25.040777)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610178]))
+
+([FlightPro_Class610186] of  PointOfInterest
+
+	(distance 0.25)
+	(lat 60.292072)
+	(lng 25.03993)
+	(name "Oriental House")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280107]))
+
+([FlightPro_Class610187] of  PointOfInterest
+
+	(distance 0.27)
+	(lat 60.290817)
+	(lng 25.04205)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330045]))
+
+([FlightPro_Class610188] of  PointOfInterest
+
+	(distance 0.29)
+	(lat 60.295475)
+	(lng 25.046276)
+	(typeClass [FlightPro_Class330052])
+	(typeName [FlightPro_Class290046]))
+
+([FlightPro_Class610189] of  PointOfInterest
+
+	(distance 0.3)
+	(lat 60.29062)
+	(lng 25.041645)
+	(name "Sokos Hotel Vantaa")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280101]))
+
+([FlightPro_Class610190] of  PointOfInterest
+
+	(distance 0.3)
+	(lat 60.29062)
+	(lng 25.041645)
+	(name "Sokos Hotel Vantaa")
+	(typeClass [FlightPro_Class280139])
+	(typeName [FlightPro_Class280140]))
+
+([FlightPro_Class610191] of  PointOfInterest
+
+	(distance 0.32)
+	(lat 60.290535)
+	(lng 25.041279)
+	(name "Pub Hertas")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280105]))
+
+([FlightPro_Class610192] of  TypeName
+
+	(name "waste_basket"))
+
+([FlightPro_Class610193] of  PointOfInterest
+
+	(distance 0.32)
+	(lat 60.29053)
+	(lng 25.046566)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610192]))
+
+([FlightPro_Class610194] of  PointOfInterest
+
+	(distance 0.38)
+	(lat 60.289646)
+	(lng 25.044235)
+	(name "Vernissa-Kahvila")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330085]))
+
+([FlightPro_Class610195] of  TypeName
+
+	(name "theatre"))
+
+([FlightPro_Class610196] of  PointOfInterest
+
+	(distance 0.4)
+	(lat 60.289543)
+	(lng 25.043863)
+	(name "Tikkurilan Teatteri")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610195]))
+
+([FlightPro_Class610197] of  PointOfInterest
+
+	(distance 0.4)
+	(lat 60.296486)
+	(lng 25.04617)
+	(typeClass [FlightPro_Class330052])
+	(typeName [FlightPro_Class290046]))
+
+([FlightPro_Class610198] of  TypeName
+
+	(name "viewpoint"))
+
+([FlightPro_Class610199] of  PointOfInterest
+
+	(distance 0.43)
+	(lat 60.289314)
+	(lng 25.04502)
+	(typeClass [FlightPro_Class280139])
+	(typeName [FlightPro_Class610198]))
+
+([FlightPro_Class610200] of  TypeName
+
+	(name "bench"))
+
+([FlightPro_Class610201] of  PointOfInterest
+
+	(distance 0.45)
+	(lat 60.289055)
+	(lng 25.044249)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610200]))
+
+([FlightPro_Class610202] of  PointOfInterest
+
+	(distance 0.46)
+	(lat 60.288975)
+	(lng 25.044052)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610200]))
+
+([FlightPro_Class610203] of  TypeName
+
+	(name "fountain"))
+
+([FlightPro_Class610204] of  PointOfInterest
+
+	(distance 0.46)
+	(lat 60.288967)
+	(lng 25.043512)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610203]))
+
+([FlightPro_Class610205] of  Airport
+
+	(altitude 430)
+	(coord 60.6544 24.8811)
+	(country "Finland")
+	(iata "HYV")
+	(icao "EFHV")
+	(runways 0)
+	(title "Hyvinkaa Airport"))
+
+([FlightPro_Class610206] of  PointOfInterest
+
+	(distance 0.1)
+	(lat 60.199833)
+	(lng 24.934229)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class610207] of  PointOfInterest
+
+	(distance 0.1)
+	(lat 60.19951)
+	(lng 24.934057)
+	(name "Pasilan asema")
+	(typeClass [FlightPro_Class330052])
+	(typeName [FlightPro_Class330053]))
+
+([FlightPro_Class610208] of  PointOfInterest
+
+	(distance 0.11)
+	(lat 60.20048)
+	(lng 24.934225)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280148]))
+
+([FlightPro_Class610209] of  PointOfInterest
+
+	(distance 0.11)
+	(lat 60.20089)
+	(lng 24.933372)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class610210] of  PointOfInterest
+
+	(distance 0.11)
+	(lat 60.200207)
+	(lng 24.934532)
+	(name "Eestin herkut")
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class280089]))
+
+([FlightPro_Class610211] of  PointOfInterest
+
+	(distance 0.12)
+	(lat 60.200436)
+	(lng 24.93447)
+	(name "Ratakivi")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280107]))
+
+([FlightPro_Class610212] of  PointOfInterest
+
+	(distance 0.13)
+	(lat 60.19889)
+	(lng 24.933018)
+	(name "Marian konditoria")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330085]))
+
+([FlightPro_Class610213] of  PointOfInterest
+
+	(distance 0.13)
+	(lat 60.198833)
+	(lng 24.932674)
+	(name "Baguette & Co.")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280092]))
+
+([FlightPro_Class610214] of  PointOfInterest
+
+	(distance 0.13)
+	(lat 60.199883)
+	(lng 24.93485)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class280099]))
+
+([FlightPro_Class610215] of  PointOfInterest
+
+	(distance 0.13)
+	(lat 60.200897)
+	(lng 24.934061)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280148]))
+
+([FlightPro_Class610216] of  PointOfInterest
+
+	(distance 0.13)
+	(lat 60.199154)
+	(lng 24.934214)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610158]))
+
+([FlightPro_Class610217] of  PointOfInterest
+
+	(distance 0.13)
+	(lat 60.19888)
+	(lng 24.933418)
+	(name "R-kioski")
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class280109]))
+
+([FlightPro_Class610218] of  PointOfInterest
+
+	(distance 0.14)
+	(lat 60.200806)
+	(lng 24.934357)
+	(name "South China")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280107]))
+
+([FlightPro_Class610219] of  PointOfInterest
+
+	(distance 0.14)
+	(lat 60.19902)
+	(lng 24.934008)
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class610142]))
+
+([FlightPro_Class610220] of  PointOfInterest
+
+	(distance 0.14)
+	(lat 60.198727)
+	(lng 24.932692)
+	(name "Piccolo pizza")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280092]))
+
+([FlightPro_Class610221] of  PointOfInterest
+
+	(distance 0.14)
+	(lat 60.198814)
+	(lng 24.933533)
+	(name "Pasilan apteekki")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280123]))
+
+([FlightPro_Class610222] of  TypeName
+
+	(name "grit_bin"))
+
+([FlightPro_Class610223] of  PointOfInterest
+
+	(distance 0.14)
+	(lat 60.19954)
+	(lng 24.934935)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610222]))
+
+([FlightPro_Class610224] of  PointOfInterest
+
+	(distance 0.15)
+	(lat 60.199013)
+	(lng 24.934214)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280148]))
+
+([FlightPro_Class610225] of  PointOfInterest
+
+	(distance 0.15)
+	(lat 60.199013)
+	(lng 24.93428)
+	(name "Pasilan asema")
+	(typeClass [FlightPro_Class330052])
+	(typeName [FlightPro_Class330053]))
+
+([FlightPro_Class610226] of  PointOfInterest
+
+	(distance 0.15)
+	(lat 60.20096)
+	(lng 24.934353)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class610227] of  PointOfInterest
+
+	(distance 0.15)
+	(lat 60.199245)
+	(lng 24.934803)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280148]))
+
+([FlightPro_Class610228] of  PointOfInterest
+
+	(distance 0.15)
+	(lat 60.19888)
+	(lng 24.934097)
+	(name "Cafe Express")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280092]))
+
+([FlightPro_Class610229] of  PointOfInterest
+
+	(distance 0.15)
+	(lat 60.19894)
+	(lng 24.934273)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610158]))
+
+([FlightPro_Class610230] of  PointOfInterest
+
+	(distance 0.15)
+	(lat 60.20133)
+	(lng 24.933313)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class610231] of  PointOfInterest
+
+	(distance 0.16)
+	(lat 60.201126)
+	(lng 24.93423)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class610232] of  PointOfInterest
+
+	(distance 0.16)
+	(lat 60.19866)
+	(lng 24.933483)
+	(name "Pasila")
+	(typeClass [FlightPro_Class330052])
+	(typeName [FlightPro_Class330058]))
+
+([FlightPro_Class610233] of  PointOfInterest
+
+	(distance 0.16)
+	(lat 60.201355)
+	(lng 24.933525)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class610234] of  PointOfInterest
+
+	(distance 0.17)
+	(lat 60.19853)
+	(lng 24.933184)
+	(name "Hesburger Pasila")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280092]))
+
+([FlightPro_Class610235] of  PointOfInterest
+
+	(distance 0.17)
+	(lat 60.198807)
+	(lng 24.934425)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610158]))
+
+([FlightPro_Class610236] of  PointOfInterest
+
+	(distance 0.17)
+	(lat 60.198433)
+	(lng 24.932762)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330066]))
+
+([FlightPro_Class610237] of  PointOfInterest
+
+	(distance 0.18)
+	(lat 60.201046)
+	(lng 24.934883)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class610238] of  PointOfInterest
+
+	(distance 0.18)
+	(lat 60.201557)
+	(lng 24.9331)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610158]))
+
+([FlightPro_Class610239] of  PointOfInterest
+
+	(distance 0.18)
+	(lat 60.198555)
+	(lng 24.933817)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330045]))
+
+([FlightPro_Class610240] of  PointOfInterest
+
+	(distance 0.18)
+	(lat 60.19896)
+	(lng 24.934948)
+	(name "Pasilan asema")
+	(typeClass [FlightPro_Class330052])
+	(typeName [FlightPro_Class330053]))
+
+([FlightPro_Class610241] of  PointOfInterest
+
+	(distance 0.18)
+	(lat 60.198616)
+	(lng 24.934145)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280136]))
+
+([FlightPro_Class610242] of  PointOfInterest
+
+	(distance 0.19)
+	(lat 60.198345)
+	(lng 24.932924)
+	(name "K-Market Pasila")
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class280089]))
+
+([FlightPro_Class610243] of  PointOfInterest
+
+	(distance 0.19)
+	(lat 60.19875)
+	(lng 24.934755)
+	(name "Veturiparkki")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610098]))
+
+([FlightPro_Class610244] of  PointOfInterest
+
+	(distance 0.19)
+	(lat 60.198296)
+	(lng 24.93316)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class280099]))
+
+([FlightPro_Class610245] of  PointOfInterest
+
+	(distance 0.2)
+	(lat 60.198254)
+	(lng 24.933012)
+	(name "Nelmanni")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280107]))
+
+([FlightPro_Class610246] of  PointOfInterest
+
+	(distance 0.2)
+	(lat 60.198357)
+	(lng 24.933865)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280094]))
+
+([FlightPro_Class610247] of  PointOfInterest
+
+	(distance 0.2)
+	(lat 60.198456)
+	(lng 24.934366)
+	(name "Danske Bank")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330073]))
+
+([FlightPro_Class610248] of  PointOfInterest
+
+	(distance 0.2)
+	(lat 60.198524)
+	(lng 24.934607)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class610249] of  TypeName
+
+	(name "college"))
+
+([FlightPro_Class610250] of  PointOfInterest
+
+	(distance 0.21)
+	(lat 60.201653)
+	(lng 24.93421)
+	(name "Haaga-Helia")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610249]))
+
+([FlightPro_Class610251] of  PointOfInterest
+
+	(distance 0.22)
+	(lat 60.201813)
+	(lng 24.933954)
+	(name "Haaga Helia Library")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330118]))
+
+([FlightPro_Class610252] of  PointOfInterest
+
+	(distance 0.22)
+	(lat 60.19824)
+	(lng 24.934258)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610158]))
+
+([FlightPro_Class610253] of  PointOfInterest
+
+	(distance 0.22)
+	(lat 60.198265)
+	(lng 24.934404)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610192]))
+
+([FlightPro_Class610254] of  PointOfInterest
+
+	(distance 0.23)
+	(lat 60.198097)
+	(lng 24.934296)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class610255] of  PointOfInterest
+
+	(distance 0.24)
+	(lat 60.197857)
+	(lng 24.93244)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class610256] of  PointOfInterest
+
+	(distance 0.24)
+	(lat 60.197956)
+	(lng 24.933916)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class610257] of  PointOfInterest
+
+	(distance 0.24)
+	(lat 60.198)
+	(lng 24.934343)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class610258] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.2)
+	(lng 24.9325)
+	(population 8338)
+	(rank 89)
+	(summary "is a suburb in Helsinki, Finland. It is a central-northern neighbourhood, bordering Alppila to the south, Central Park (Keskuspuisto) to the west and Vallila to the east. The eastern and western part of Pasila are separated by a large railroad classification yard, which, as Central Pasila, is (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/130000/thumb-129253-100.jpg")
+	(title "Pasila")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Pasila"))
+
+([FlightPro_Class610259] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "railwaystation")
+	(lang "en")
+	(lat 60.1994)
+	(lng 24.9328)
+	(rank 74)
+	(summary "Pasila railway station is a railway station in Helsinki, Finland, approximately north of Helsinki Central railway station. It is the second busiest railway station in Finland, after Helsinki Central, and takes up a large part of the district of Pasila. The station was first opened in 1862 (...)")
+	(title "Pasila railway station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Pasila_railway_station"))
+
+([FlightPro_Class610260] of  PointOfInterest
+
+	(distance 0.06)
+	(lat 60.19889)
+	(lng 24.933018)
+	(name "Marian konditoria")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330085]))
+
+([FlightPro_Class610261] of  PointOfInterest
+
+	(distance 0.06)
+	(lat 60.198833)
+	(lng 24.932674)
+	(name "Baguette & Co.")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280092]))
+
+([FlightPro_Class610262] of  PointOfInterest
+
+	(distance 0.07)
+	(lat 60.19888)
+	(lng 24.933418)
+	(name "R-kioski")
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class280109]))
+
+([FlightPro_Class610263] of  PointOfInterest
+
+	(distance 0.07)
+	(lat 60.19951)
+	(lng 24.934057)
+	(name "Pasilan asema")
+	(typeClass [FlightPro_Class330052])
+	(typeName [FlightPro_Class330053]))
+
+([FlightPro_Class610264] of  PointOfInterest
+
+	(distance 0.08)
+	(lat 60.198727)
+	(lng 24.932692)
+	(name "Piccolo pizza")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280092]))
+
+([FlightPro_Class610265] of  PointOfInterest
+
+	(distance 0.08)
+	(lat 60.198814)
+	(lng 24.933533)
+	(name "Pasilan apteekki")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280123]))
+
+([FlightPro_Class610266] of  PointOfInterest
+
+	(distance 0.08)
+	(lat 60.19902)
+	(lng 24.934008)
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class610142]))
+
+([FlightPro_Class610267] of  PointOfInterest
+
+	(distance 0.08)
+	(lat 60.199154)
+	(lng 24.934214)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610158]))
+
+([FlightPro_Class610268] of  PointOfInterest
+
+	(distance 0.09)
+	(lat 60.199013)
+	(lng 24.934214)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280148]))
+
+([FlightPro_Class610269] of  PointOfInterest
+
+	(distance 0.09)
+	(lat 60.19866)
+	(lng 24.933483)
+	(name "Pasila")
+	(typeClass [FlightPro_Class330052])
+	(typeName [FlightPro_Class330058]))
+
+([FlightPro_Class610270] of  PointOfInterest
+
+	(distance 0.09)
+	(lat 60.19888)
+	(lng 24.934097)
+	(name "Cafe Express")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280092]))
+
+([FlightPro_Class610271] of  PointOfInterest
+
+	(distance 0.09)
+	(lat 60.199833)
+	(lng 24.934229)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class610272] of  PointOfInterest
+
+	(distance 0.09)
+	(lat 60.199013)
+	(lng 24.93428)
+	(name "Pasilan asema")
+	(typeClass [FlightPro_Class330052])
+	(typeName [FlightPro_Class330053]))
+
+([FlightPro_Class610273] of  PointOfInterest
+
+	(distance 0.1)
+	(lat 60.19894)
+	(lng 24.934273)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610158]))
+
+([FlightPro_Class610274] of  PointOfInterest
+
+	(distance 0.1)
+	(lat 60.19853)
+	(lng 24.933184)
+	(name "Hesburger Pasila")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280092]))
+
+([FlightPro_Class610275] of  PointOfInterest
+
+	(distance 0.11)
+	(lat 60.198433)
+	(lng 24.932762)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330066]))
+
+([FlightPro_Class610276] of  PointOfInterest
+
+	(distance 0.11)
+	(lat 60.198555)
+	(lng 24.933817)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330045]))
+
+([FlightPro_Class610277] of  PointOfInterest
+
+	(distance 0.11)
+	(lat 60.198807)
+	(lng 24.934425)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610158]))
+
+([FlightPro_Class610278] of  PointOfInterest
+
+	(distance 0.11)
+	(lat 60.199245)
+	(lng 24.934803)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280148]))
+
+([FlightPro_Class610279] of  PointOfInterest
+
+	(distance 0.11)
+	(lat 60.198967)
+	(lng 24.934662)
+	(name "Veturiparkki")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610098]))
+
+([FlightPro_Class610280] of  PointOfInterest
+
+	(distance 0.11)
+	(lat 60.198616)
+	(lng 24.934145)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280136]))
+
+([FlightPro_Class610281] of  PointOfInterest
+
+	(distance 0.12)
+	(lat 60.198345)
+	(lng 24.932924)
+	(name "K-Market Pasila")
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class280089]))
+
+([FlightPro_Class610282] of  PointOfInterest
+
+	(distance 0.12)
+	(lat 60.19954)
+	(lng 24.934935)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610222]))
+
+([FlightPro_Class610283] of  PointOfInterest
+
+	(distance 0.12)
+	(lat 60.198296)
+	(lng 24.93316)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class280099]))
+
+([FlightPro_Class610284] of  PointOfInterest
+
+	(distance 0.13)
+	(lat 60.199883)
+	(lng 24.93485)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class280099]))
+
+([FlightPro_Class610285] of  PointOfInterest
+
+	(distance 0.13)
+	(lat 60.198254)
+	(lng 24.933012)
+	(name "Nelmanni")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280107]))
+
+([FlightPro_Class610286] of  PointOfInterest
+
+	(distance 0.13)
+	(lat 60.19896)
+	(lng 24.934948)
+	(name "Pasilan asema")
+	(typeClass [FlightPro_Class330052])
+	(typeName [FlightPro_Class330053]))
+
+([FlightPro_Class610287] of  PointOfInterest
+
+	(distance 0.13)
+	(lat 60.198364)
+	(lng 24.933863)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280094]))
+
+([FlightPro_Class610288] of  TypeName
+
+	(name "public_building"))
+
+([FlightPro_Class610289] of  PointOfInterest
+
+	(distance 0.13)
+	(lat 60.199127)
+	(lng 24.935078)
+	(name "Maanmittauslaitos")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610288]))
+
+([FlightPro_Class610290] of  PointOfInterest
+
+	(distance 0.13)
+	(lat 60.200207)
+	(lng 24.934532)
+	(name "Eestin herkut")
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class280089]))
+
+([FlightPro_Class610291] of  PointOfInterest
+
+	(distance 0.13)
+	(lat 60.198936)
+	(lng 24.935007)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class280099]))
+
+([FlightPro_Class610292] of  PointOfInterest
+
+	(distance 0.14)
+	(lat 60.198456)
+	(lng 24.934366)
+	(name "Danske Bank")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330073]))
+
+([FlightPro_Class610293] of  PointOfInterest
+
+	(distance 0.14)
+	(lat 60.198524)
+	(lng 24.934607)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class610294] of  PointOfInterest
+
+	(distance 0.14)
+	(lat 60.20048)
+	(lng 24.934225)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280148]))
+
+([FlightPro_Class610295] of  PointOfInterest
+
+	(distance 0.15)
+	(lat 60.200436)
+	(lng 24.93447)
+	(name "Ratakivi")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280107]))
+
+([FlightPro_Class610296] of  PointOfInterest
+
+	(distance 0.15)
+	(lat 60.198555)
+	(lng 24.934864)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class610297] of  PointOfInterest
+
+	(distance 0.15)
+	(lat 60.19995)
+	(lng 24.93531)
+	(name "Ravintola Vaunu")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280107]))
+
+([FlightPro_Class610298] of  PointOfInterest
+
+	(distance 0.15)
+	(lat 60.19824)
+	(lng 24.934258)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610158]))
+
+([FlightPro_Class610299] of  PointOfInterest
+
+	(distance 0.15)
+	(lat 60.198265)
+	(lng 24.934404)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610192]))
+
+([FlightPro_Class610300] of  PointOfInterest
+
+	(distance 0.17)
+	(lat 60.198097)
+	(lng 24.934296)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class610301] of  PointOfInterest
+
+	(distance 0.17)
+	(lat 60.20089)
+	(lng 24.933372)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class610302] of  PointOfInterest
+
+	(distance 0.17)
+	(lat 60.197857)
+	(lng 24.93244)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class610303] of  PointOfInterest
+
+	(distance 0.18)
+	(lat 60.198)
+	(lng 24.934343)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class610304] of  PointOfInterest
+
+	(distance 0.18)
+	(lat 60.200806)
+	(lng 24.934357)
+	(name "South China")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280107]))
+
+([FlightPro_Class610305] of  PointOfInterest
+
+	(distance 0.18)
+	(lat 60.200897)
+	(lng 24.934061)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280148]))
+
+([FlightPro_Class610306] of  PointOfInterest
+
+	(distance 0.19)
+	(lat 60.20096)
+	(lng 24.934353)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class610307] of  TypeName
+
+	(name "utlity_pole"))
+
+([FlightPro_Class610308] of  PointOfInterest
+
+	(distance 0.21)
+	(lat 60.201126)
+	(lng 24.93423)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class610307]))
+
+([FlightPro_Class610309] of  PointOfInterest
+
+	(distance 0.22)
+	(lat 60.20133)
+	(lng 24.933313)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class610310] of  PointOfInterest
+
+	(distance 0.22)
+	(lat 60.201355)
+	(lng 24.933525)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330040]))
+
+([FlightPro_Class610311] of  PointOfInterest
+
+	(distance 0.24)
+	(lat 60.201557)
+	(lng 24.9331)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610158]))
+
+([FlightPro_Class610313] of  CloFunction
+
+	(source "(let [mp (into {} hm)\n       rss (mp \"osm-resourses\")]\n  (doseq [rs rss]\n    (delin rs)))")
+	(title "delete-pois [hm inst]"))
+
+([FlightPro_Class610314] of  CloFuncall
+
+	(source "(def inst (.getInstance \"FlightPro_Class610103\"))"))
+
+([FlightPro_Class610315] of  CloFuncall
+
+	(source "(def inst (.getInstance *kb* \"FlightPro_Class610103\"))"))
+
+([FlightPro_Class610316] of  CloFuncall
+
+	(source "(in-ns 'protege.core)"))
+
+([FlightPro_Class610317] of  CloFuncall
+
+	(source "(ext.data/decorate-instance inst)"))
+
+([FlightPro_Class610318] of  PointOfInterest
+
+	(distance 0.04)
+	(lat 60.17172)
+	(lng 24.94072)
+	(name "Nordea")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330073]))
+
+([FlightPro_Class610319] of  PointOfInterest
+
+	(distance 0.04)
+	(lat 60.171898)
+	(lng 24.94055)
+	(name "Namaskaar India express")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280092]))
+
+([FlightPro_Class610320] of  PointOfInterest
+
+	(distance 0.05)
+	(lat 60.17171)
+	(lng 24.940542)
+	(name "Apteekki Eliel")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280123]))
+
+([FlightPro_Class610321] of  PointOfInterest
+
+	(distance 0.05)
+	(lat 60.171623)
+	(lng 24.940567)
+	(name "Amin's cafe")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330085]))
+
+([FlightPro_Class610322] of  PointOfInterest
+
+	(distance 0.06)
+	(lat 60.171535)
+	(lng 24.940567)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330066]))
+
+([FlightPro_Class610323] of  PointOfInterest
+
+	(distance 0.06)
+	(lat 60.172333)
+	(lng 24.94067)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class280099]))
+
+([FlightPro_Class610324] of  PointOfInterest
+
+	(distance 0.06)
+	(lat 60.17223)
+	(lng 24.940363)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class280099]))
+
+([FlightPro_Class610325] of  PointOfInterest
+
+	(distance 0.07)
+	(lat 60.171318)
+	(lng 24.941456)
+	(name "Helsinki")
+	(typeClass [FlightPro_Class330052])
+	(typeName [FlightPro_Class330058]))
+
+([FlightPro_Class610326] of  PointOfInterest
+
+	(distance 0.07)
+	(lat 60.171852)
+	(lng 24.942478)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class280099]))
+
+([FlightPro_Class610327] of  PointOfInterest
+
+	(distance 0.07)
+	(lat 60.171432)
+	(lng 24.940577)
+	(name "Ooster")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280105]))
+
+([FlightPro_Class610328] of  PointOfInterest
+
+	(distance 0.07)
+	(lat 60.172344)
+	(lng 24.940441)
+	(name "Alepa")
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class280089]))
+
+([FlightPro_Class610329] of  PointOfInterest
+
+	(distance 0.07)
+	(lat 60.171272)
+	(lng 24.940838)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class280099]))
+
+([FlightPro_Class610330] of  PointOfInterest
+
+	(distance 0.08)
+	(lat 60.171318)
+	(lng 24.940584)
+	(name "Food& Jones")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280092]))
+
+([FlightPro_Class610331] of  PointOfInterest
+
+	(distance 0.08)
+	(lat 60.17122)
+	(lng 24.94149)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280136]))
+
+([FlightPro_Class610332] of  PointOfInterest
+
+	(distance 0.08)
+	(lat 60.171207)
+	(lng 24.941332)
+	(name "Baguette & Co")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280092]))
+
+([FlightPro_Class610333] of  PointOfInterest
+
+	(distance 0.08)
+	(lat 60.171215)
+	(lng 24.94163)
+	(name "Stop station")
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class280109]))
+
+([FlightPro_Class610334] of  PointOfInterest
+
+	(distance 0.08)
+	(lat 60.1712)
+	(lng 24.941133)
+	(name "Hesburger Rautatieasema")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280107]))
+
+([FlightPro_Class610335] of  PointOfInterest
+
+	(distance 0.08)
+	(lat 60.171577)
+	(lng 24.942564)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330045]))
+
+([FlightPro_Class610336] of  PointOfInterest
+
+	(distance 0.08)
+	(lat 60.171307)
+	(lng 24.942183)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class280099]))
+
+([FlightPro_Class610337] of  TypeName
+
+	(name "information"))
+
+([FlightPro_Class610338] of  PointOfInterest
+
+	(distance 0.08)
+	(lat 60.17137)
+	(lng 24.940205)
+	(name "Juna-aikataulu")
+	(typeClass [FlightPro_Class280139])
+	(typeName [FlightPro_Class610337]))
+
+([FlightPro_Class610339] of  PointOfInterest
+
+	(distance 0.08)
+	(lat 60.171223)
+	(lng 24.942001)
+	(name "Aseman wursti")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280092]))
+
+([FlightPro_Class610340] of  PointOfInterest
+
+	(distance 0.08)
+	(lat 60.17121)
+	(lng 24.94063)
+	(name "R-Kioski")
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class280109]))
+
+([FlightPro_Class610341] of  TypeName
+
+	(name "tickets"))
+
+([FlightPro_Class610342] of  PointOfInterest
+
+	(distance 0.09)
+	(lat 60.17112)
+	(lng 24.941423)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610341]))
+
+([FlightPro_Class610343] of  PointOfInterest
+
+	(distance 0.09)
+	(lat 60.17112)
+	(lng 24.941494)
+	(name "R-Kioski")
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class280109]))
+
+([FlightPro_Class610344] of  PointOfInterest
+
+	(distance 0.09)
+	(lat 60.17108)
+	(lng 24.941395)
+	(name "Minuuttibaari")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280105]))
+
+([FlightPro_Class610345] of  PointOfInterest
+
+	(distance 0.09)
+	(lat 60.171085)
+	(lng 24.940968)
+	(name "Robert's Coffee")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330085]))
+
+([FlightPro_Class610346] of  PointOfInterest
+
+	(distance 0.09)
+	(lat 60.172466)
+	(lng 24.94007)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330113]))
+
+([FlightPro_Class610347] of  TypeName
+
+	(name "car_rental"))
+
+([FlightPro_Class610348] of  PointOfInterest
+
+	(distance 0.09)
+	(lat 60.172363)
+	(lng 24.939903)
+	(name "Europcar")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610347]))
+
+([FlightPro_Class610349] of  PointOfInterest
+
+	(distance 0.09)
+	(lat 60.17242)
+	(lng 24.939972)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class280099]))
+
+([FlightPro_Class610350] of  PointOfInterest
+
+	(distance 0.1)
+	(lat 60.17114)
+	(lng 24.942293)
+	(name "The Pullman Bar")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280105]))
+
+([FlightPro_Class610351] of  PointOfInterest
+
+	(distance 0.1)
+	(lat 60.172764)
+	(lng 24.942059)
+	(name "R-Kioski")
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class280109]))
+
+([FlightPro_Class610352] of  PointOfInterest
+
+	(distance 0.11)
+	(lat 60.170963)
+	(lng 24.94156)
+	(name "Otto.")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class330066]))
+
+([FlightPro_Class610353] of  PointOfInterest
+
+	(distance 0.11)
+	(lat 60.170933)
+	(lng 24.941381)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280136]))
+
+([FlightPro_Class610354] of  TypeName
+
+	(name "bureau_de_change"))
+
+([FlightPro_Class610355] of  PointOfInterest
+
+	(distance 0.12)
+	(lat 60.170906)
+	(lng 24.941954)
+	(name "Forex")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class610354]))
+
+([FlightPro_Class610356] of  PointOfInterest
+
+	(distance 0.12)
+	(lat 60.170837)
+	(lng 24.94151)
+	(typeClass [FlightPro_Class330052])
+	(typeName [FlightPro_Class330068]))
+
+([FlightPro_Class610357] of  PointOfInterest
+
+	(distance 0.12)
+	(lat 60.170795)
+	(lng 24.941355)
+	(name "R-Kioski")
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class280109]))
+
+([FlightPro_Class610358] of  PointOfInterest
+
+	(distance 0.12)
+	(lat 60.170906)
+	(lng 24.942286)
+	(name "Burger King")
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280107]))
+
+([FlightPro_Class610359] of  PointOfInterest
+
+	(distance 0.13)
+	(lat 60.170795)
+	(lng 24.941843)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class280099]))
+
+([FlightPro_Class610360] of  TypeName
+
+	(name "artwork"))
+
+([FlightPro_Class610361] of  PointOfInterest
+
+	(distance 0.13)
+	(lat 60.170715)
+	(lng 24.941257)
+	(typeClass [FlightPro_Class280139])
+	(typeName [FlightPro_Class610360]))
+
+([FlightPro_Class610362] of  PointOfInterest
+
+	(distance 0.13)
+	(lat 60.17071)
+	(lng 24.941217)
+	(typeClass [FlightPro_Class280139])
+	(typeName [FlightPro_Class610360]))
+
+([FlightPro_Class610363] of  PointOfInterest
+
+	(distance 0.13)
+	(lat 60.170727)
+	(lng 24.941755)
+	(typeClass [FlightPro_Class280139])
+	(typeName [FlightPro_Class610360]))
+
+([FlightPro_Class610364] of  PointOfInterest
+
+	(distance 0.13)
+	(lat 60.17073)
+	(lng 24.941797)
+	(typeClass [FlightPro_Class280139])
+	(typeName [FlightPro_Class610360]))
+
+([FlightPro_Class610365] of  PointOfInterest
+
+	(distance 0.13)
+	(lat 60.170708)
+	(lng 24.940872)
+	(typeClass [FlightPro_Class330052])
+	(typeName [FlightPro_Class330068]))
+
+([FlightPro_Class610366] of  PointOfInterest
+
+	(distance 0.14)
+	(lat 60.170727)
+	(lng 24.940647)
+	(typeClass [FlightPro_Class280098])
+	(typeName [FlightPro_Class330048]))
+
+([FlightPro_Class610367] of  PointOfInterest
+
+	(distance 0.14)
+	(lat 60.170753)
+	(lng 24.942123)
+	(typeClass [FlightPro_Class330052])
+	(typeName [FlightPro_Class330068]))
+
+([FlightPro_Class610368] of  PointOfInterest
+
+	(distance 0.15)
+	(lat 60.170593)
+	(lng 24.941746)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280094]))
+
+([FlightPro_Class610369] of  PointOfInterest
+
+	(distance 0.15)
+	(lat 60.17059)
+	(lng 24.940744)
+	(name "K-Market Kotikontu")
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class280089]))
+
+([FlightPro_Class610370] of  PointOfInterest
+
+	(distance 0.15)
+	(lat 60.170567)
+	(lng 24.940647)
+	(typeClass [FlightPro_Class280091])
+	(typeName [FlightPro_Class280094]))
+
+([FlightPro_Class610371] of  TypeName
+
+	(name "music"))
+
+([FlightPro_Class610372] of  PointOfInterest
+
+	(distance 0.16)
+	(lat 60.1705)
+	(lng 24.940987)
+	(name "Levykauppa Äx")
+	(typeClass [FlightPro_Class280086])
+	(typeName [FlightPro_Class610371]))
+
+([FlightPro_Class610373] of  PointOfInterest
+
+	(distance 0.17)
+	(lat 60.170357)
+	(lng 24.941252)
+	(name "Rautatieasema")
+	(typeClass [FlightPro_Class330052])
+	(typeName [FlightPro_Class330053]))
+
+([FlightPro_Class610374] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(feature "railwaystation")
+	(lang "en")
+	(lat 60.1719)
+	(lng 24.9413)
+	(rank 98)
+	(summary "Helsinki Central railway station is a widely recognised landmark in Kluuvi, part of central Helsinki, Finland, and the focal point of public transport in the Greater Helsinki area. The station is used by approximately 200,000 passengers per day, making it Finland's most-visited building (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/147000/thumb-146731-100.jpg")
+	(title "Helsinki Central railway station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Helsinki_Central_railway_station"))
+
+([FlightPro_Class610375] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1722)
+	(lng 24.9437)
+	(rank 90)
+	(summary "The Finnish National Theatre , founded in 1872 in the city of Pori, is a theatre located in central Helsinki on the northern side of the Helsinki Central Railway Station Square. The Finnish National Theatre is the oldest Finnish speaking professional theatre in Finland (...)")
+	(title "Finnish National Theatre")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Finnish_National_Theatre"))
+
+([FlightPro_Class610376] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1711)
+	(lng 24.9439)
+	(rank 82)
+	(summary "Helsinki Railway Square is an open square immediately to the east of the Helsinki Central railway station in central Helsinki in Finland. The square serves as Helsinki's secondary bus station along with the main Kamppi Center bus station (...)")
+	(title "Helsinki Railway Square")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Helsinki_Railway_Square"))
+
 ([FlightPro_Class620001] of  CloVar
 
 	(source "(volatile! {})")
@@ -3000,8 +5206,8 @@
 
 ([FlightPro_Class660000] of  CloFunction
 
-	(source "(let [[n s w e] (:visible @edata)\n       [lat lon] (our-center n s w e)\n       [n0 s0 w0 e0] (:wiki-bbx @edata)]\n  (if (or (> s0 lat)\n           (< n0 lat)\n           (< e0 lon)\n           (> w0 lon))\n     (invoke-later\n       (let [bbi (foc \"BBX\" \"title\" \"Current\")\n              rqi (fainst (cls-instances \"BBXWiki\") \"Current BBXWiki Request\")]\n         (if (and bbi rqi)\n           (do\n             (ssvs bbi \"wsen\" (vec (map float [w s e n])))\n             (ssv rqi \"bbx\" bbi)\n             (ssvs rqi \"responses\" [])\n             (with-timeout (:ext-data TIO)\n	(wig/submit-bbx (itm rqi 0) rqi))\n             (let [rr (svs rqi \"responses\")]\n               (when (seq rr)\n	(asp/pump-in chn {:instruct :clear-placemarks})\n	(doseq [r rr]\n	  (point-out-place @edata {:instance r})\n	  (asp/pump-in chn (placemark-instruct {:instance r})))\n	(vswap! edata assoc :wiki-bbx [n s w e]))))\n           (println \"Instance of \\\"Current BBXWiki Request\\\" not found!\"))))))")
-	(title "pump-wiki [chn edata]"))
+	(source "(let [[n s w e] (:visible @COMM)\n       [lat lon] (our-center n s w e)\n       [n0 s0 w0 e0] (:wiki-bbx @COMM)]\n  (if (or (> s0 lat)\n           (< n0 lat)\n           (< e0 lon)\n           (> w0 lon))\n     (invoke-later\n       (let [bbi (foc \"BBX\" \"title\" \"Current\")\n              rqi (fainst (cls-instances \"BBXWiki\") \"Current BBXWiki Request\")]\n         (if (and bbi rqi)\n           (do\n             (ssvs bbi \"wsen\" (vec (map float [w s e n])))\n             (ssv rqi \"bbx\" bbi)\n             (ssvs rqi \"responses\" [])\n             (with-timeout (:ext-data TIO)\n	(wig/submit-bbx (itm rqi 0) rqi))\n             (let [rr (svs rqi \"responses\")\n                    chn (:ins-chn @COMM)]\n               (when (seq rr)\n	(asp/pump-in chn {:instruct :clear-placemarks})\n	(doseq [r rr]\n	  (point-out-place {:instance r})\n	  (asp/pump-in chn (placemark-instruct {:instance r})))\n	(vswap! COMM assoc :wiki-bbx [n s w e]))))\n           (println \"Instance of \\\"Current BBXWiki Request\\\" not found!\"))))))")
+	(title "pump-wiki []"))
 
 ([FlightPro_Class660006] of  BBXWiki
 
@@ -3009,17 +5215,21 @@
 	(button-bbx "submit/wiki.gis/submit-bbx")
 	(button-clear-articles "Clear Articles/wiki.gis/clear-articles")
 	(language English-en)
-	(max-responses 40))
+	(max-responses 40)
+	(responses
+		[FlightPro_Class610374]
+		[FlightPro_Class610375]
+		[FlightPro_Class610376]))
 
 ([FlightPro_Class660024] of  CloFunction
 
-	(source "(println [:CMD-WIKIPEDIA params])\n(if (:wiki @E-DATA)\n  (do (vswap! E-DATA assoc :wiki false)\n    (asp/pump-in (:instructions CHN)\n	 {:instruct :clear-placemarks}))\n  (let [[n s w e] (map str (:visible @E-DATA))]\n    (vswap! E-DATA assoc :wiki-bbx [0 0 0 0]) \n    (vswap! E-DATA assoc :wiki true)\n    (visible {:n n :s s :w w :e e})))\n(println \"Wikipedia: \" (:wiki @E-DATA)) \n\"\"")
+	(source "(println [:CMD-WIKIPEDIA params])\n(if (:wiki @exd/COMM)\n  (do (vswap! exd/COMM assoc :wiki false)\n    (asp/pump-in (:instructions CHN)\n	 {:instruct :clear-placemarks}))\n  (let [[n s w e] (map str (:visible @exd/COMM))]\n    (vswap! exd/COMM assoc :wiki-bbx [0 0 0 0]) \n    (vswap! exd/COMM assoc :wiki true)\n    (visible {:n n :s s :w w :e e})))\n(println \"Wikipedia: \" (:wiki @exd/COMM)) \n\"\"")
 	(title "wikipedia [params]"))
 
 ([FlightPro_Class660025] of  CloVar
 
-	(source "(volatile! \n  {:visible [0 0 0 0]\n    :wiki-bbx [0 0 0 0]\n    :wiki false})")
-	(title "E-DATA"))
+	(source "(defonce COMM\n  (volatile! \n    {:visible [0 0 0 0]\n     :wiki-bbx [0 0 0 0]\n     :wiki false\n     :ins-chn 7}))")
+	(title "defCOMM"))
 
 ([FlightPro_Class670000] of  CloProgram
 
@@ -3039,13 +5249,15 @@
 		[FlightPro_Class780021]
 		[FlightPro_Class810000]
 		[FlightPro_Class280164]
-		[FlightPro_Class280182])
+		[FlightPro_Class280182]
+		[FlightPro_Class610313])
 	(cloNamespace [FlightPro_Class670001])
 	(cloVars
 		[FlightPro_Class330004]
 		[FlightPro_Class750000]
 		[FlightPro_Class810006]
-		[FlightPro_Class280041])
+		[FlightPro_Class280041]
+		[FlightPro_Class660025])
 	(title "External Data"))
 
 ([FlightPro_Class670001] of  CloNamespace
@@ -3068,7 +5280,7 @@
 ([FlightPro_Class670008] of  BBX
 
 	(title "Current")
-	(wsen 24.325104 59.934376 25.585785 60.588318))
+	(wsen 24.937908 60.17062 24.944689 60.17318))
 
 ([FlightPro_Class670265] of  CloFunction
 
@@ -3184,8 +5396,8 @@
 
 ([FlightPro_Class700000] of  CloFunction
 
-	(source "(let [[n s w e] (:visible edata)\n       {:keys [instance airport]} parmap\n       lat (or (some-> instance (sv \"lat\")) (some-> airport (get \"lat\")))\n       lon (or (some-> instance (sv \"lng\")) (some-> airport (get \"lon\")))\n       nam (or (some-> instance (sv \"title\")) (some-> airport (get \"name\")))\n       iata (some-> airport (get \"iata\"))\n       txt (if airport (str nam \" (\" iata \")\") nam)\n       dis (geo/distance-nm (our-center n s w e) [lat lon])]\n  (cz/point-out txt [lat lon] dis (our-radius n s w e)))")
-	(title "point-out-place [edata parmap]"))
+	(source "(let [[n s w e] (:visible @COMM)\n       {:keys [instance airport]} parmap\n       lat (or (some-> instance (sv \"lat\")) (some-> airport (get \"lat\")))\n       lon (or (some-> instance (sv \"lng\")) (some-> airport (get \"lon\")))\n       nam (or (some-> instance (sv \"title\")) (some-> airport (get \"name\")))\n       iata (some-> airport (get \"iata\"))\n       txt (if airport (str nam \" (\" iata \")\") nam)\n       dis (geo/distance-nm (our-center n s w e) [lat lon])]\n  (cz/point-out txt [lat lon] dis (our-radius n s w e)))")
+	(title "point-out-place [parmap]"))
 
 ([FlightPro_Class70001] of  CloFunction
 
@@ -3303,14 +5515,14 @@
 ([FlightPro_Class730002] of  Rule
 
 	(lhs "?q (Question predicate \"weather-gn\")")
-	(rhs "(ext.data/pump-weather (:instructions pro.commands/CHN)\n		pro.commands/E-DATA\n		ext.data/gn-weather-html)")
+	(rhs "(ext.data/pump-weather ext.data/gn-weather-html)")
 	(salience 0)
 	(title "qq:WeatherGeoNames"))
 
 ([FlightPro_Class730003] of  CloFunction
 
-	(source "(let [[n s w e] (:visible @edata)\n        [lat lon] (our-center n s w e)\n        html (or (fun lat lon n s w e)\n	\"Weather information unavailable!\")]\n    (asp/pump-in chn \n	{:instruct :popup\n	 :lat lat\n	 :lon lon\n	 :html html\n	 :time (:ext-data-popup TIO)}))")
-	(title "pump-weather [chn edata fun]"))
+	(source "(let [[n s w e] (:visible @COMM)\n        [lat lon] (our-center n s w e)\n        html (or (fun lat lon n s w e)\n	\"Weather information unavailable!\")]\n    (asp/pump-in (:ins-chn @COMM) \n	{:instruct :popup\n	 :lat lat\n	 :lon lon\n	 :html html\n	 :time (:ext-data-popup TIO)}))")
+	(title "pump-weather [fun]"))
 
 ([FlightPro_Class730004] of  CloFunction
 
@@ -3329,7 +5541,7 @@
 
 ([FlightPro_Class740002] of  CloFunction
 
-	(source "([edata]\n  (apply our-center (:visible @edata)))\n([n s w e]\n  [(/ (+ n s) 2) (/ (+ w e) 2)])")
+	(source "([]\n  (apply our-center (:visible @COMM)))\n([n s w e]\n  [(/ (+ n s) 2) (/ (+ w e) 2)])")
 	(title "our-center"))
 
 ([FlightPro_Class740003] of  CloFunction
@@ -3379,7 +5591,7 @@
 ([FlightPro_Class750009] of  Rule
 
 	(lhs "?q (Question predicate \"weather-w2\")")
-	(rhs "(ext.data/pump-weather (:instructions pro.commands/CHN)\n		pro.commands/E-DATA\n		ext.data/w2-weather-html)")
+	(rhs "(ext.data/pump-weather ext.data/w2-weather-html)")
 	(salience 0)
 	(title "qq:Weather2"))
 
@@ -3456,14 +5668,14 @@
 ([FlightPro_Class780020] of  Rule
 
 	(lhs "?q (Question predicate \"nearest-airports\")")
-	(rhs "(ext.data/pump-nearest-airports (:instructions pro.commands/CHN)\n		pro.commands/E-DATA\n		4)")
+	(rhs "(ext.data/pump-nearest-airports 4)")
 	(salience 0)
 	(title "qq:NearestAirports"))
 
 ([FlightPro_Class780021] of  CloFunction
 
-	(source "(let [ocr (our-center edata)\n        nas (fr24/nearest-airports k ocr)\n        dis (map #(geo/distance-nm ocr [(% \"lat\")(% \"lon\")]) nas)\n        bea (map #(geo/bear-deg ocr [(% \"lat\")(% \"lon\")]) nas)\n        html (str \"<h3>Nearest Airports</h3>\"\n	(apply str (for [i (range k)]\n	  (str (inc i) \". \" (get (nth nas i) \"name\") \", \"\n		(get (nth nas i) \"country\") \" (\"\n		(get (nth nas i) \"iata\") \"), \"\n		(format \"distance: %.1f\" (nth dis i)) \" NM, \"\n		\"direction: \" (int (nth bea i)) \"<br>\"))))] \n  (asp/pump-in chn \n	{:instruct :popup\n	 :lat (first ocr)\n	 :lon (second ocr)\n	 :html html\n	 :width 1200\n	 :height 1000\n	 :time (:ext-data-popup TIO)})\n  (asp/pump-in chn {:instruct :clear-placemarks})\n  (doseq [apt (take k nas)]\n    (point-out-place @edata {:airport apt})\n    (asp/pump-in chn (placemark-instruct {:airport apt :feature \"airport\"}))))")
-	(title "pump-nearest-airports [chn edata k]"))
+	(source "(let [ocr (our-center)\n        nas (fr24/nearest-airports k ocr)\n        dis (map #(geo/distance-nm ocr [(% \"lat\")(% \"lon\")]) nas)\n        bea (map #(geo/bear-deg ocr [(% \"lat\")(% \"lon\")]) nas)\n        html (str \"<h3>Nearest Airports</h3>\"\n	(apply str (for [i (range k)]\n	  (str (inc i) \". \" (get (nth nas i) \"name\") \", \"\n		(get (nth nas i) \"country\") \" (\"\n		(get (nth nas i) \"iata\") \"), \"\n		(format \"distance: %.1f\" (nth dis i)) \" NM, \"\n		\"direction: \" (int (nth bea i)) \"<br>\"))))\n        chn (:ins-chn @COMM)]\n  (asp/pump-in chn\n	{:instruct :popup\n	 :lat (first ocr)\n	 :lon (second ocr)\n	 :html html\n	 :width 1200\n	 :height 1000\n	 :time (:ext-data-popup TIO)})\n  (asp/pump-in chn {:instruct :clear-placemarks})\n  (doseq [apt (take k nas)]\n    (point-out-place {:airport apt})\n    (asp/pump-in chn (placemark-instruct {:airport apt :feature \"airport\"}))))")
+	(title "pump-nearest-airports [k]"))
 
 ([FlightPro_Class8] of  CloFunction
 
@@ -3507,8 +5719,8 @@
 
 ([FlightPro_Class810000] of  CloFunction
 
-	(source "(let [[lat lon] (our-center edata)\n        ocn (gn/call-geonames-ocean lat lon)\n        pro \"<html><head><meta charset=\\\"UTF-8\\\"/></meta></head>\"\n        hdr \"<h3>Where we are?</h3>\"\n        html (if (= ocn \"Land\")\n	(let [nby (gn/call-geonames-nearby lat lon)\n	       nam (nby \"name\")\n	       cty (nby \"countryName\")\n	       adm (nby \"adminName1\")\n	       cnt (nby \"continentCode\")\n	       lat1 (read-string (nby \"lat\"))\n	       lon1 (read-string (nby \"lng\"))\n                             dis (read-string (nby \"distance\"))\n	       dir (gn/direction (gn/bearing lat1 lon1 lat lon))]\n	   (str pro hdr \"We are in \" (format \"%.0f\" dis)\n		\" miles to \" dir\n		\" from the \" nam \",<br>\"\n		cty \" (\" adm \"),<br>\"  \n		(CONTINENT cnt)))\n                      (str pro hdr \"We are above the \" ocn))]\n    (asp/pump-in chn \n	{:instruct :popup\n	 :lat lat\n	 :lon lon\n	 :html html\n	 :width 600\n	 :height 800\n	 :time (:ext-data-popup TIO)}))")
-	(title "pump-where-we-are [chn edata]"))
+	(source "(let [[lat lon] (our-center)\n        ocn (gn/call-geonames-ocean lat lon)\n        pro \"<html><head><meta charset=\\\"UTF-8\\\"/></meta></head>\"\n        hdr \"<h3>Where we are?</h3>\"\n        html (if (= ocn \"Land\")\n	(let [nby (gn/call-geonames-nearby lat lon)\n	       nam (nby \"name\")\n	       cty (nby \"countryName\")\n	       adm (nby \"adminName1\")\n	       cnt (nby \"continentCode\")\n	       lat1 (read-string (nby \"lat\"))\n	       lon1 (read-string (nby \"lng\"))\n                               dis (read-string (nby \"distance\"))\n	       dir (gn/direction (gn/bearing lat1 lon1 lat lon))]\n	   (str pro hdr \"We are in \" (format \"%.0f\" dis)\n		\" miles to \" dir\n		\" from the \" nam \",<br>\"\n		cty \" (\" adm \"),<br>\"  \n		(CONTINENT cnt)))\n                      (str pro hdr \"We are above the \" ocn))]\n    (asp/pump-in (:ins-chn @COMM)\n	{:instruct :popup\n	 :lat lat\n	 :lon lon\n	 :html html\n	 :width 600\n	 :height 800\n	 :time (:ext-data-popup TIO)}))")
+	(title "pump-where-we-are []"))
 
 ([FlightPro_Class810006] of  CloVar
 
@@ -3518,7 +5730,7 @@
 ([FlightPro_Class810007] of  Rule
 
 	(lhs "?q (Question predicate \"where-we-are\")")
-	(rhs "(ext.data/pump-where-we-are (:instructions pro.commands/CHN)\n		pro.commands/E-DATA)")
+	(rhs "(ext.data/pump-where-we-are)")
 	(salience 0)
 	(title "qq:WhereWeAre"))
 

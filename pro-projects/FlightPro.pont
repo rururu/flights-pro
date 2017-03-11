@@ -1,4 +1,4 @@
-; Fri Mar 10 23:27:29 MSK 2017
+; Sat Mar 11 22:08:01 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -13,11 +13,6 @@
 		(create-accessor read-write))
 	(single-slot age
 		(type STRING)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(single-slot butt-display
-		(type STRING)
-		(default "Display on Chart/ext.data/disp-on-chart")
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot id
@@ -38,6 +33,11 @@
 		(create-accessor read-write))
 	(single-slot point4d
 		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot butt-del-pois
+		(type STRING)
+		(default "Delete POIs/ext.data/delete-pois")
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot callsign
@@ -72,6 +72,11 @@
 		(create-accessor read-write))
 	(single-slot vertical-status
 		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot butt-show-pois
+		(type STRING)
+		(default "Show on Map/ext.data/show-on-map")
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(multislot coord
@@ -123,9 +128,14 @@
 (defclass WikiArticleDetails
 	(is-a WikiArticle POIRequest)
 	(role concrete)
-	(single-slot butt-display
+	(single-slot butt-del-pois
 		(type STRING)
-		(default "Display on Chart/ext.data/disp-on-chart")
+		(default "Delete POIs/ext.data/delete-pois")
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot butt-show-pois
+		(type STRING)
+		(default "Show on Map/ext.data/show-on-map")
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot butt-return

@@ -30,6 +30,12 @@
   "SA" "South America"})
 (def INFO-DISPLAY ;; "POPUP"
  "PRO")
+(def defCOMM (defonce COMM
+  (volatile! 
+    {:visible [0 0 0 0]
+     :wiki-bbx [0 0 0 0]
+     :wiki false
+     :ins-chn 7})))
 (defmacro with-timeout [msec & body]
   `(let [f# (future (do ~@body))
          v# (gensym)
@@ -65,16 +71,16 @@
     :time (:ext-data-popup TIO)}))
 
 (defn our-center
-  ([edata]
-  (apply our-center (:visible @edata)))
+  ([]
+  (apply our-center (:visible @COMM)))
 ([n s w e]
   [(/ (+ n s) 2) (/ (+ w e) 2)]))
 
 (defn our-radius [n s w e]
   (/ (* (- n s) 60) 2))
 
-(defn point-out-place [edata parmap]
-  (let [[n s w e] (:visible edata)
+(defn point-out-place [parmap]
+  (let [[n s w e] (:visible @COMM)
        {:keys [instance airport]} parmap
        lat (or (some-> instance (sv "lat")) (some-> airport (get "lat")))
        lon (or (some-> instance (sv "lng")) (some-> airport (get "lon")))
@@ -92,22 +98,25 @@
 	  (ssv dati "radius" (float 1))
 	  (ssv dati "poi-req-butt" 
 	    (first (.getDefaultValues (slt "poi-req-butt"))))
-	  (ssv dati "butt-display" 
-	    "Display on Chart/ext.data/disp-on-chart")
+	  (ssv dati "butt-show-pois" 
+	    "Show on Map/ext.data/show-on-map")
+	  (ssv dati "butt-del-pois" 
+	    "Delete POIs/ext.data/delete-pois")
 	  (ssv dati "butt-return" 
 	    "Return to Flight/ext.data/ret-to-flight")
 	  (let [frm (.show *prj* dati)]
 	    (.setLocationRelativeTo frm nil)
 	    (.setAlwaysOnTop frm true)
-	    (.setVisible true))))
+	    (.setVisible frm true))))
   false))
 
-(defn placemark-info [id edata chn]
+(defn placemark-info [id]
   (if-let [dati (.getInstance *kb* (.substring id 2))]
   (condp = INFO-DISPLAY
     "PRO" (decorate-instance dati)
-    "POPUP" (do (point-out-place edata {:instance dati})
-	(asp/pump-in chn (placemark-popup-instruct dati))))))
+    "POPUP" (do (point-out-place {:instance dati})
+	(asp/pump-in (:ins-chn @COMM) 
+		(placemark-popup-instruct dati))))))
 
 (defn gn-weather-html [lat lon n s w e]
   (let [rsp (gn/call-geonames-weather lat lon)]
@@ -170,10 +179,10 @@ nil)
                 (day d1) "<br>"
                 (day d2)))))))
 
-(defn pump-wiki [chn edata]
-  (let [[n s w e] (:visible @edata)
+(defn pump-wiki []
+  (let [[n s w e] (:visible @COMM)
        [lat lon] (our-center n s w e)
-       [n0 s0 w0 e0] (:wiki-bbx @edata)]
+       [n0 s0 w0 e0] (:wiki-bbx @COMM)]
   (if (or (> s0 lat)
            (< n0 lat)
            (< e0 lon)
@@ -188,29 +197,30 @@ nil)
              (ssvs rqi "responses" [])
              (with-timeout (:ext-data TIO)
 	(wig/submit-bbx (itm rqi 0) rqi))
-             (let [rr (svs rqi "responses")]
+             (let [rr (svs rqi "responses")
+                    chn (:ins-chn @COMM)]
                (when (seq rr)
 	(asp/pump-in chn {:instruct :clear-placemarks})
 	(doseq [r rr]
-	  (point-out-place @edata {:instance r})
+	  (point-out-place {:instance r})
 	  (asp/pump-in chn (placemark-instruct {:instance r})))
-	(vswap! edata assoc :wiki-bbx [n s w e]))))
+	(vswap! COMM assoc :wiki-bbx [n s w e]))))
            (println "Instance of \"Current BBXWiki Request\" not found!")))))))
 
-(defn pump-weather [chn edata fun]
-  (let [[n s w e] (:visible @edata)
+(defn pump-weather [fun]
+  (let [[n s w e] (:visible @COMM)
         [lat lon] (our-center n s w e)
         html (or (fun lat lon n s w e)
 	"Weather information unavailable!")]
-    (asp/pump-in chn 
+    (asp/pump-in (:ins-chn @COMM) 
 	{:instruct :popup
 	 :lat lat
 	 :lon lon
 	 :html html
 	 :time (:ext-data-popup TIO)})))
 
-(defn pump-nearest-airports [chn edata k]
-  (let [ocr (our-center edata)
+(defn pump-nearest-airports [k]
+  (let [ocr (our-center)
         nas (fr24/nearest-airports k ocr)
         dis (map #(geo/distance-nm ocr [(% "lat")(% "lon")]) nas)
         bea (map #(geo/bear-deg ocr [(% "lat")(% "lon")]) nas)
@@ -220,8 +230,9 @@ nil)
 		(get (nth nas i) "country") " ("
 		(get (nth nas i) "iata") "), "
 		(format "distance: %.1f" (nth dis i)) " NM, "
-		"direction: " (int (nth bea i)) "<br>"))))] 
-  (asp/pump-in chn 
+		"direction: " (int (nth bea i)) "<br>"))))
+        chn (:ins-chn @COMM)]
+  (asp/pump-in chn
 	{:instruct :popup
 	 :lat (first ocr)
 	 :lon (second ocr)
@@ -231,11 +242,11 @@ nil)
 	 :time (:ext-data-popup TIO)})
   (asp/pump-in chn {:instruct :clear-placemarks})
   (doseq [apt (take k nas)]
-    (point-out-place @edata {:airport apt})
+    (point-out-place {:airport apt})
     (asp/pump-in chn (placemark-instruct {:airport apt :feature "airport"})))))
 
-(defn pump-where-we-are [chn edata]
-  (let [[lat lon] (our-center edata)
+(defn pump-where-we-are []
+  (let [[lat lon] (our-center)
         ocn (gn/call-geonames-ocean lat lon)
         pro "<html><head><meta charset=\"UTF-8\"/></meta></head>"
         hdr "<h3>Where we are?</h3>"
@@ -247,7 +258,7 @@ nil)
 	       cnt (nby "continentCode")
 	       lat1 (read-string (nby "lat"))
 	       lon1 (read-string (nby "lng"))
-                             dis (read-string (nby "distance"))
+                               dis (read-string (nby "distance"))
 	       dir (gn/direction (gn/bearing lat1 lon1 lat lon))]
 	   (str pro hdr "We are in " (format "%.0f" dis)
 		" miles to " dir
@@ -255,7 +266,7 @@ nil)
 		cty " (" adm "),<br>"  
 		(CONTINENT cnt)))
                       (str pro hdr "We are above the " ocn))]
-    (asp/pump-in chn 
+    (asp/pump-in (:ins-chn @COMM)
 	{:instruct :popup
 	 :lat lat
 	 :lon lon
@@ -274,14 +285,23 @@ nil)
     :feature "default"}
   (map pois-instruct pois)))
 
-(defn pump-feature-pois [chn edata fea tit]
-  (if-let [bbi (fifos "BBX" "title" "Current")]
-  (if-let [bbr (fifos "BBXWiki" "bbx" bbi)]
-    (if-let [flt (seq (filter #(and (= (sv % "feature") fea)
-	           (= (sv % "title") tit)) (svs bbr "responses")))]
-      (if-let [osr (fainst (cls-instances "POIRequest") "Current")]
-        (let [wai (first flt)
-               lat (sv wai "lat")
-               lon (sv wai "lng")]
-          [lat lon]))))))
+(defn show-on-map [hm inst]
+  (let [mp (into {} hm)
+       lat (mp "lat")
+       lon (mp "lng")
+       zoo 18
+       chn (:ins-chn @COMM)
+       rss (mp "osm-responses")]
+  (asp/pump-in chn
+	{:instruct :map-center
+	 :coord [lat lon]
+	 :zoom zoo})
+  (doseq [rs rss]
+    (asp/pump-in chn (pois-instruct rs)))))
+
+(defn delete-pois [hm inst]
+  (let [mp (into {} hm)
+       rss (mp "osm-resourses")]
+  (doseq [rs rss]
+    (delin rs))))
 

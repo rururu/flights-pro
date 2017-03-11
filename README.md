@@ -11,7 +11,7 @@ It uses [Flightradar24] (http://www.flightradar24.com) web service, [Leaflet] (h
 $ cd <..>/flights-pro
 $ lein run
 ```
-In the opened Protege GUI execute the menu item Edit -> Clojure Work.
+In a Protege GUI open a project FlightPro.pprj from a folder <..>/pro-projects and execute a menu item Edit -> Clojure Work.
 When the Pro server starts, open two browser windows, one on the address: http://localhost:4444 (Cockpit view), second on the address: http://localhost:4444/chart (Chart view).
 
 ## Usage
@@ -20,7 +20,7 @@ When the Pro server starts, open two browser windows, one on the address: http:/
 
 #### Commands
 
-In the chart view select in the "Commands" selector the item "Watch Visible Area". This begins a process of collection and display information of flights in the visible area. Black icons means aircrafts on the ground, green ones are descending, blue ones are climbing and purple - on a level flight.
+In the chart view select in the "Commands" selector the item "Watch Visible Area". This begins a process of collection and display information of the flights in the visible area. Black icons means aircrafts on the ground, green ones are descending, blue ones are climbing and purple - on a level flight.
 
 If you want to see an air traffic around some other airport, execute the command "Move to Airport", select a country and an airport in this country.
 

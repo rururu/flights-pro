@@ -36,10 +36,6 @@
    "airline" {"short" "Ru Airlines"}}}))
 (def TERRAIN "no")
 (def APT-ALT 0)
-(def E-DATA (volatile! 
-  {:visible [0 0 0 0]
-    :wiki-bbx [0 0 0 0]
-    :wiki false}))
 (defn current-time []
   (int (/ (System/currentTimeMillis) 1000)))
 
@@ -102,9 +98,11 @@
   (println [:CMD-VISIBLE params])
 (let [{:keys [n s w e]} params
        [n s w e] (map read-string [n s w e])]
-  (vswap! E-DATA assoc :visible [n s w e])
-  (if (:wiki @E-DATA)
-    (exd/pump-wiki (:instructions CHN) E-DATA))
+  (vswap! exd/COMM assoc 
+	:visible [n s w e]
+	:ins-chn (:instructions CHN))
+  (if (:wiki @exd/COMM)
+    (exd/pump-wiki))
   (fr24/set-bbx n s w e))
 "")
 
@@ -135,7 +133,7 @@
   (println [:CMD-INFO params])
 (let [id (:id params)]
   (if (.startsWith id "pm")
-    (exd/placemark-info id @E-DATA (:instructions CHN))
+    (exd/placemark-info id)
     (let [inf (or (get @MY-INFOS id) (fr24/fl-info id))
            cal (if-let[d (fr24/dat id)]
                    (fr24/callsign d)
@@ -303,15 +301,15 @@ TERRAIN)
 
 (defn wikipedia [params]
   (println [:CMD-WIKIPEDIA params])
-(if (:wiki @E-DATA)
-  (do (vswap! E-DATA assoc :wiki false)
+(if (:wiki @exd/COMM)
+  (do (vswap! exd/COMM assoc :wiki false)
     (asp/pump-in (:instructions CHN)
 	 {:instruct :clear-placemarks}))
-  (let [[n s w e] (map str (:visible @E-DATA))]
-    (vswap! E-DATA assoc :wiki-bbx [0 0 0 0]) 
-    (vswap! E-DATA assoc :wiki true)
+  (let [[n s w e] (map str (:visible @exd/COMM))]
+    (vswap! exd/COMM assoc :wiki-bbx [0 0 0 0]) 
+    (vswap! exd/COMM assoc :wiki true)
     (visible {:n n :s s :w w :e e})))
-(println "Wikipedia: " (:wiki @E-DATA)) 
+(println "Wikipedia: " (:wiki @exd/COMM)) 
 "")
 
 (defn go-initial-airport []
