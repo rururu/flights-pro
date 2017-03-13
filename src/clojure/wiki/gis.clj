@@ -5,14 +5,25 @@
 (:import
   javax.swing.JOptionPane))
 
+(def TIMEOUT 15000)
+(defmacro with-timeout [msec & body]
+  `(let [f# (future (do ~@body))
+         v# (gensym)
+         result# (deref f# ~msec v#)]
+    (if (= v# result#)
+      (do
+        (println :FUTURE-CANCELLING)
+        (future-cancel f#)
+        (println :FUTURE-CANCELLED)
+        nil)
+      result#)))
+
 (defn request-lang [sv]
   (let [spl (.split sv "-")]
   (aget spl 1)))
 
 (defn article-from-map [mp typ]
-  (if-let [ins (fifos "WikiArticle" "title" (mp "title"))]
-  (delin ins))
-(if-let [ins (fifos "WikiNearArticle" "title" (mp "title"))]
+  (if-let [ins (fifos typ "title" (mp "title"))]
   (delin ins))
 (mti (assoc mp :DIRTYP typ :DEPTH 0)))
 
@@ -42,7 +53,8 @@
          lang (request-lang (mp "language"))
          [west south east north] (seq (svs (mp "bbx") "wsen"))]
     (ssvs inst "responses" 
-      (if-let [resp (call-wiki-bbx north west south east max lang)]
+      (if-let [resp (with-timeout TIMEOUT
+	   (call-wiki-bbx north west south east max lang))]
         (filter some? (map #(article-from-map % "WikiArticle") resp))
         [])) ))
 ([inst bbx-title bbx]
@@ -60,7 +72,8 @@
          lang (request-lang (mp "language"))
          text (mp "text")]
     (ssvs inst "responses" 
-      (if-let [resp (call-wiki-search text max lang)]
+      (if-let [resp (with-timeout TIMEOUT
+	   (call-wiki-search text max lang))]
         (filter some? (map #(article-from-map % "WikiArticle") resp))
         [])) ))
 ([inst any txt]
@@ -87,7 +100,8 @@
          lat (mp "lat")
          lon (mp "lng")]
     (ssvs inst "responses" 
-      (if-let [resp (call-wiki-nearby lat lon radius-km max lang)]
+      (if-let [resp (with-timeout TIMEOUT
+	   (call-wiki-nearby lat lon radius-km max lang))]
         (filter some? (map #(article-from-map % "WikiNearArticle") resp))
         [])) ))
 ([inst lat lon]
@@ -112,7 +126,8 @@
   (let [mp (into {} hm)
          url (first (selection mp "feedURL"))]
     (if url
-      (if-let [resp (call-geonames-rss url)]
+      (if-let [resp (with-timeout TIMEOUT
+	   (call-geonames-rss url))]
           (let [[inss bbx] (irss-bbx url resp)]
              (ssvs inst "georss_items" inss)
              (ssv inst "bbx" bbx))) )))

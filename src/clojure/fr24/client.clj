@@ -4,13 +4,14 @@
   [clj-json.core :as json]
   [async.proc :as asp]
   [my.flights.move :as mfs]
-  [calc.geo :refer [distance-nm]]))
+  [calc.geo :refer [distance-nm]]
+  [calc.core :refer [abs]]))
 
 (def F24 {:url-flights "http://data-live.flightradar24.com/zones/fcgi/feed.js"
  :url-airports "http://www.flightradar24.com/_json/airports.php"
  :url-flight-data "http://data-live.flightradar24.com/clickhandler/?version=1.5&flight="
  :time-out 12000})
-(def BBX (volatile! [0 0 0 0]))
+(def BBX (volatile! {:n 0 :s 0 :w 0 :e 0 :z 0}))
 (def FLIGHTS (volatile! {}))
 (def AIRPORTS (volatile! nil))
 (def FL-INFOS (volatile! {}))
@@ -64,7 +65,7 @@
     ff)))
 
 (defn flights-in-bbx []
-  (let [[n s w e] @BBX]
+  (let [{:keys [n s w e]} @BBX]
   (if-let [ff (json-web-data (str (:url-flights F24) "?bounds=" n "," s "," w "," e))]
     (vreset! FLIGHTS 
       (->> ff
@@ -106,8 +107,14 @@
   (if-let [[id dat] (by-call cs)]
   dat))
 
-(defn set-bbx [n s w e]
-  (vreset! BBX [n s w e]))
+(defn set-bbx
+  ([lat lon]
+  (let [{:keys [n s w e]} @BBX
+         hla (/ (abs (- n s)) 2)
+         hlo (/ (abs (- e w)) 2)]
+    (vswap! BBX merge {:n (+ lat hla) :s (- lat hla) :w (- lon hlo) :e (+ lon hlo)}))) 
+([mp]
+  (vswap! BBX merge mp)))
 
 (defn start [process-fn]
   (println [:FLIGHTS-PROCESS 

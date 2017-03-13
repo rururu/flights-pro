@@ -1,4 +1,4 @@
-; Thu Mar 09 17:55:33 MSK 2017
+; Mon Mar 13 18:20:55 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -21,9 +21,9 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[WikipediaGIS_ProjectKB_Class432]
-		[WikipediaGIS_ProjectKB_Class433]
-		[WikipediaGIS_ProjectKB_Class434]))
+		[WikipediaGIS_ProjectKB_Class10444]
+		[WikipediaGIS_ProjectKB_Class10445]
+		[WikipediaGIS_ProjectKB_Class10446]))
 
 ([CLSES_TAB] of  Widget
 
@@ -113,6 +113,34 @@
 	(is_hidden FALSE)
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
 
+([KB_692662_Class426] of  Map
+
+	(entries
+		[KB_692662_Class427]
+		[KB_692662_Class428]
+		[KB_692662_Class429]))
+
+([KB_692662_Class427] of  Map_Entry
+
+	(key "suppress_instance_counting")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([KB_692662_Class428] of  Map_Entry
+
+	(key "add_name_on_instance_form")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([KB_692662_Class429] of  Map_Entry
+
+	(key "change_tracking_active")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
 ([KB_727229_Class0] of  String
 
 	(name "factory_class_name")
@@ -120,8 +148,8 @@
 
 ([KB_727229_Class1] of  Map
 
-	(entries [WikipediaGIS_ProjectKB_Class437])
-	(referenced_maps [WikipediaGIS_ProjectKB_Class435]))
+	(entries [WikipediaGIS_ProjectKB_Class10449])
+	(referenced_maps [WikipediaGIS_ProjectKB_Class10447]))
 
 ([KB_727229_Class13] of  Property_List
 
@@ -211,34 +239,6 @@
 
 	(name "instances_file_name")
 	(string_value "WikipediaGIS.pins"))
-
-([KB_961301_Class426] of  Map
-
-	(entries
-		[KB_961301_Class427]
-		[KB_961301_Class428]
-		[KB_961301_Class429]))
-
-([KB_961301_Class427] of  Map_Entry
-
-	(key "suppress_instance_counting")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([KB_961301_Class428] of  Map_Entry
-
-	(key "add_name_on_instance_form")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([KB_961301_Class429] of  Map_Entry
-
-	(key "change_tracking_active")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
 
 ([LAYOUT_PROPERTIES] of  Property_List
 
@@ -687,6 +687,39 @@
 
 	(boolean_value FALSE)
 	(name "ButtonDisplayed-Delete Instance"))
+
+([WikipediaGIS_ProjectKB_Class10444] of  String
+
+	(name "BBX")
+	(string_value "title"))
+
+([WikipediaGIS_ProjectKB_Class10445] of  String
+
+	(name "GeoRSSItem")
+	(string_value "title"))
+
+([WikipediaGIS_ProjectKB_Class10446] of  String
+
+	(name "WikiArticle")
+	(string_value "title"))
+
+([WikipediaGIS_ProjectKB_Class10447] of  Map
+
+	(entries [WikipediaGIS_ProjectKB_Class10448]))
+
+([WikipediaGIS_ProjectKB_Class10448] of  Map_Entry
+
+	(key "WikipediaGIS_Class2")
+	(key_class "edu.stanford.smi.protege.model.Frame")
+	(value "12 479 212 124")
+	(value_class "java.awt.Rectangle"))
+
+([WikipediaGIS_ProjectKB_Class10449] of  Map_Entry
+
+	(key "InstanceDisplay.yellow_stickies")
+	(key_class "java.lang.String")
+	(value "WikipediaGIS_ProjectKB_Class10447")
+	(value_class "java.util.Map"))
 
 ([WikipediaGIS_ProjectKB_Class10450] of  Widget
 
@@ -1602,39 +1635,6 @@
 
 ([WikipediaGIS_ProjectKB_Class431] of  Property_List
 )
-
-([WikipediaGIS_ProjectKB_Class432] of  String
-
-	(name "BBX")
-	(string_value "title"))
-
-([WikipediaGIS_ProjectKB_Class433] of  String
-
-	(name "GeoRSSItem")
-	(string_value "title"))
-
-([WikipediaGIS_ProjectKB_Class434] of  String
-
-	(name "WikiArticle")
-	(string_value "title"))
-
-([WikipediaGIS_ProjectKB_Class435] of  Map
-
-	(entries [WikipediaGIS_ProjectKB_Class436]))
-
-([WikipediaGIS_ProjectKB_Class436] of  Map_Entry
-
-	(key "WikipediaGIS_Class2")
-	(key_class "edu.stanford.smi.protege.model.Frame")
-	(value "12 479 212 124")
-	(value_class "java.awt.Rectangle"))
-
-([WikipediaGIS_ProjectKB_Class437] of  Map_Entry
-
-	(key "InstanceDisplay.yellow_stickies")
-	(key_class "java.lang.String")
-	(value "WikipediaGIS_ProjectKB_Class435")
-	(value_class "java.util.Map"))
 
 ([WikipediaGIS_ProjectKB_Class444] of  Widget
 

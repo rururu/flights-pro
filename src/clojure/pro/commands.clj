@@ -67,7 +67,6 @@
   ([params]
   (clear))
 ([]
-  (fr24/stop)
   (fr24/clear-flights)
   (rete/reset)
   (asp/pump-in (:instructions CHN)
@@ -84,26 +83,23 @@
 
 (defn watch-visible
   ([]
-  (let [[n s w e] @fr24/BBX]
-    (watch-visible {:n n :s s :w w :e e})))
+  (watch-visible @fr24/BBX))
 ([params]
-  (println [:WATCH-VISIBLE params])
-  (let [{:keys [n s w e]} params]
-    (clear)
-    (fr24/set-bbx n s w e)
-    (fr24/start process-flights)
-    "")))
+  (println [:CMD-WATCH-VISIBLE params])
+  (fr24/set-bbx (reduce-kv #(assoc %1 %2 (read-string %3)) {} params))
+  (if (not= @fr24/STATUS "RUN")
+    (fr24/start process-flights))
+  ""))
 
 (defn visible [params]
   (println [:CMD-VISIBLE params])
-(let [{:keys [n s w e]} params
-       [n s w e] (map read-string [n s w e])]
+(let [bbz (reduce-kv #(assoc %1 %2 (read-string %3)) {} params)]
   (vswap! exd/COMM assoc 
-	:visible [n s w e]
+	:visible [(:n bbz) (:s  bbz) (:w bbz) (:e bbz)]
 	:ins-chn (:instructions CHN))
   (if (:wiki @exd/COMM)
     (exd/pump-wiki))
-  (fr24/set-bbx n s w e))
+  (fr24/set-bbx bbz))
 "")
 
 (defn update-watch-area []
@@ -125,9 +121,11 @@
          :time (:trail TIM)}))))
 
 (defn set-map-view [coord]
+  (if (= (:fr24-bbx-ctrl @exd/COMM) :client)
   (asp/pump-in (:instructions CHN)
 	{:instruct :map-center
-	 :coord coord}))
+	 :coord coord})
+  (fr24/set-bbx (first coord) (second coord))))
 
 (defn info [params]
   (println [:CMD-INFO params])

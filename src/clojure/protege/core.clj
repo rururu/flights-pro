@@ -256,9 +256,9 @@ s)
 (defn pins? [x]
   (instance? Instance x))
 
-(defmacro invoke-later [code]
+(defmacro invoke-later [& code]
   `(javax.swing.SwingUtilities/invokeLater
-    (proxy [Runnable] [] (run [] ~code))))
+    (proxy [Runnable] [] (run [] ~@code))))
 
 (defn typ [instance]
   (.getName (.getDirectType instance)))

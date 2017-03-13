@@ -28,14 +28,13 @@
   "NA" "North America"
   "OC" "Oceania"
   "SA" "South America"})
-(def INFO-DISPLAY ;; "POPUP"
- "PRO")
 (def defCOMM (defonce COMM
   (volatile! 
     {:visible [0 0 0 0]
      :wiki-bbx [0 0 0 0]
      :wiki false
-     :ins-chn 7})))
+     :ins-chn nil
+     :fr24-bbx-ctrl :client})))
 (defmacro with-timeout [msec & body]
   `(let [f# (future (do ~@body))
          v# (gensym)
@@ -111,12 +110,11 @@
   false))
 
 (defn placemark-info [id]
-  (if-let [dati (.getInstance *kb* (.substring id 2))]
-  (condp = INFO-DISPLAY
-    "PRO" (decorate-instance dati)
-    "POPUP" (do (point-out-place {:instance dati})
-	(asp/pump-in (:ins-chn @COMM) 
-		(placemark-popup-instruct dati))))))
+  (when-let [dati (.getInstance *kb* (.substring id 2))]
+  (decorate-instance dati)
+  (point-out-place {:instance dati})
+  (asp/pump-in (:ins-chn @COMM) 
+	(placemark-popup-instruct dati))))
 
 (defn gn-weather-html [lat lon n s w e]
   (let [rsp (gn/call-geonames-weather lat lon)]
@@ -277,31 +275,58 @@ nil)
 
 (defn pois-instruct [pois]
   (if (instance? Instance pois)
-  {:instruct :create-placemark
-    :iname (.getName pois)
-    :tip (sv pois "name")
-    :lat (sv pois "lat")
-    :lon (sv pois "lng")
-    :feature "default"}
+  (let [tyc (sv pois "typeClass") 
+         ins {:instruct :create-placemark
+	:iname (.getName pois)
+	:tip (sv pois "name")
+	:lat (sv pois "lat")
+	:lon (sv pois "lng")}]
+    (if-let [url (sv tyc "url")]
+      (assoc ins :url-ico url)
+      (assoc ins :feature "default-pois")))
   (map pois-instruct pois)))
+
+(defn map-view-ctrl [who]
+  (condp = who
+  :server (vswap! COMM assoc :fr24-bbx-ctrl who)
+  :client (let [{:keys [n s w e z]} @fr24/BBX]
+               (asp/pump-in (:ins-chn @COMM)
+	{:instruct :map-center
+	 :coord [(/ (+ n s) 2) (/ (+ e w) 2)]
+	 :zoom z})
+               (vswap! COMM assoc :fr24-bbx-ctrl who))))
 
 (defn show-on-map [hm inst]
   (let [mp (into {} hm)
        lat (mp "lat")
        lon (mp "lng")
-       zoo 18
+       zoo 15
        chn (:ins-chn @COMM)
        rss (mp "osm-responses")]
+  (map-view-ctrl :server)
   (asp/pump-in chn
 	{:instruct :map-center
 	 :coord [lat lon]
-	 :zoom zoo})
+	 :zoom zoo
+	 :lock true})
   (doseq [rs rss]
     (asp/pump-in chn (pois-instruct rs)))))
 
 (defn delete-pois [hm inst]
   (let [mp (into {} hm)
-       rss (mp "osm-resourses")]
-  (doseq [rs rss]
-    (delin rs))))
+       rss (mp "osm-responses")]
+  (invoke-later
+    (doseq [rs rss]
+      (asp/pump-in (:ins-chn @COMM)
+	{:instruct :delete-placemark
+	 :iname (.getName rs)})
+      (delin rs)))))
+
+(defn ret-to-flight [hm inst]
+  (let [{:keys [n s w e z]} @fr24/BBX]
+  (map-view-ctrl :client)
+  (asp/pump-in (:ins-chn @COMM)
+	{:instruct :map-center
+	 :coord [(/ (+ n s) 2) (/ (+ w e) 2)]
+	 :zoom z})))
 

@@ -36,6 +36,7 @@
  "COUNTER"	(str HOST PORT "/img/r.png")
  "FOLLOWING"	(str HOST PORT "/img/b.png")
  "default"	(str HOST PORT "/img/info.png")
+ "default-pois"	(str HOST PORT "/img/place3.jpeg")
  "landmark"	(str HOST PORT "/img/landmark.png")
  "edu"	(str HOST PORT "/img/edu.png")
  "mountain"	(str HOST PORT "/img/mountain.png")
@@ -116,9 +117,10 @@
     (mov/set-turn-point carr)
     (vswap! VEHICLES assoc id carr)))
 
-(defn create-placemark [iname tip lat lon feature]
+(defn create-placemark [iname tip lat lon feature url-ico]
   (let [pos (js/L.LatLng. lat lon)
-       ico (js/L.icon #js{:iconUrl (or (URL-ICO feature) 
+       ico (js/L.icon #js{:iconUrl (or url-ico
+		     (URL-ICO feature) 
 		     (URL-ICO "default"))
 	           :iconSize #js[24, 24]})
        opt #js{:icon ico
@@ -130,6 +132,11 @@
            (info (str "pm" iname))))
     (.addTo mrk @CHART)
     (vswap! PLACEMARKS assoc iname mrk)))
+
+(defn delete-placemark [iname]
+  (when-let [mrk (@PLACEMARKS iname)]
+  (.removeLayer @CHART mrk)
+  (vswap! PLACEMARKS dissoc iname)))
 
 (defn clear-placemarks []
   (doseq [mrk (vals @PLACEMARKS)]
@@ -170,15 +177,21 @@
 
 (defn new-visible []
   (let [[n s w e] (visible-map)
-        url (str (:command URL) "visible?n=" n "&s=" s "&w=" w "&e=" e)]
+        z (.getZoom @CHART)
+        url (str (:command URL) "visible?z=" z
+		"&n=" n 
+		"&s=" s 
+		"&w=" w 
+		"&e=" e)]
     (GET url {:handler (fn [response])
               :error-handler error-handler})))
 
-(defn map-center [[lat lon] zoom]
+(defn map-center [[lat lon] zoom lock]
   (let [cen (js/L.LatLng. lat lon)
         zom (or zoom (.getZoom @CHART))]
   (.setView @CHART cen zom {})
-  (new-visible)))
+  (if (not lock)
+    (new-visible))))
 
 (defn collect-llga [ids]
   (let [vhs (filter some? (map #(@VEHICLES %) ids))
@@ -232,10 +245,12 @@
 	  (and lat lon) (popup lat lon html time)))
     :trail (let [{:keys [id points options time]} ins]
 	(add-trail id points options time))
-    :map-center (let [{:keys [coord zoom]} ins]
-	(map-center coord zoom))
-    :create-placemark (let [{:keys [iname tip lat lon feature]} ins]
-	(create-placemark iname tip lat lon feature))
+    :map-center (let [{:keys [coord zoom lock]} ins]
+	(map-center coord zoom lock))
+    :create-placemark (let [{:keys [iname tip lat lon feature url-ico]} ins]
+	(create-placemark iname tip lat lon feature url-ico))
+    :delete-placemark (let [{:keys [iname]} ins]
+	(delete-placemark iname))
     :clear-placemarks (clear-placemarks)
     :add-link (let [{:keys [ids options]} ins]
 	(add-link ids options))
@@ -315,7 +330,8 @@
 	          prm (str "?n=" (.getNorth bnd)
 		"&s=" (.getSouth bnd)
 		"&w=" (.getWest bnd)
-		"&e=" (.getEast bnd))]
+		"&e=" (.getEast bnd)
+		"&z=" (.getZoom @CHART))]
 	       (GET (str (:command URL) cmd prm) no-handler))
   "move-to" (move-to)
   "schedule" (schedule)
