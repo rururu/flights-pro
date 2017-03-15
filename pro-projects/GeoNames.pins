@@ -1,4 +1,4 @@
-; Thu Mar 09 17:15:05 MSK 2017
+; Wed Mar 15 21:41:23 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -150,6 +150,429 @@
 
 	(source "(let [cnt (:content xml)\n       keys (map #(name (:tag %)) cnt)\n       vals (map #(first (:content %)) cnt)]\n  (apply hash-map (interleave keys vals)))")
 	(title "xml-to-map [xml]"))
+
+([GeoNames_Class110003] of  FeatureClass
+
+	(code "A")
+	(features [GeoNames_Class110014])
+	(title "Administrative Boundary Features"))
+
+([GeoNames_Class110004] of  FeatureClass
+
+	(code "H")
+	(features
+		[GeoNames_Class110015]
+		[GeoNames_Class110016]
+		[GeoNames_Class110017]
+		[GeoNames_Class110019]
+		[GeoNames_Class110020]
+		[GeoNames_Class110022]
+		[GeoNames_Class110023]
+		[GeoNames_Class110024]
+		[GeoNames_Class110025]
+		[GeoNames_Class110021])
+	(title "Hydrographic Features"))
+
+([GeoNames_Class110005] of  FeatureClass
+
+	(code "L")
+	(title "Area Features"))
+
+([GeoNames_Class110006] of  FeatureClass
+
+	(code "P")
+	(features
+		[GeoNames_Class110026]
+		[GeoNames_Class110027])
+	(title "Populated Place Features"))
+
+([GeoNames_Class110007] of  FeatureClass
+
+	(code "R")
+	(features
+		[GeoNames_Class110028]
+		[GeoNames_Class110029]
+		[GeoNames_Class110030])
+	(title "Road / Railroad Features"))
+
+([GeoNames_Class110008] of  FeatureClass
+
+	(code "S")
+	(features
+		[GeoNames_Class110031]
+		[GeoNames_Class110032]
+		[GeoNames_Class110033]
+		[GeoNames_Class110034]
+		[GeoNames_Class110035]
+		[GeoNames_Class110036]
+		[GeoNames_Class110037]
+		[GeoNames_Class110038]
+		[GeoNames_Class110039]
+		[GeoNames_Class110040]
+		[GeoNames_Class110041]
+		[GeoNames_Class110042]
+		[GeoNames_Class110043]
+		[GeoNames_Class110044]
+		[GeoNames_Class110045]
+		[GeoNames_Class110046])
+	(title "Spot Features"))
+
+([GeoNames_Class110009] of  FeatureClass
+
+	(code "T")
+	(features
+		[GeoNames_Class110047]
+		[GeoNames_Class110048]
+		[GeoNames_Class110049]
+		[GeoNames_Class110050]
+		[GeoNames_Class110051]
+		[GeoNames_Class110052]
+		[GeoNames_Class110053]
+		[GeoNames_Class110054]
+		[GeoNames_Class110055]
+		[GeoNames_Class110056]
+		[GeoNames_Class110057]
+		[GeoNames_Class110058]
+		[GeoNames_Class110059])
+	(title "Hypsographic Features"))
+
+([GeoNames_Class110010] of  FeatureClass
+
+	(code "U")
+	(features
+		[GeoNames_Class110060]
+		[GeoNames_Class110061]
+		[GeoNames_Class110062])
+	(title "Undersea Features"))
+
+([GeoNames_Class110011] of  FeatureClass
+
+	(code "V")
+	(features
+		[GeoNames_Class110063]
+		[GeoNames_Class110064]
+		[GeoNames_Class110065]
+		[GeoNames_Class110066]
+		[GeoNames_Class110067])
+	(title "Vegetation Features"))
+
+([GeoNames_Class110014] of  Feature
+
+	(code "ADM1")
+	(featureClass [GeoNames_Class110003])
+	(title "first-order administrative division"))
+
+([GeoNames_Class110015] of  Feature
+
+	(code "BAY")
+	(featureClass [GeoNames_Class110004])
+	(title "bay"))
+
+([GeoNames_Class110016] of  Feature
+
+	(code "GULF")
+	(featureClass [GeoNames_Class110004])
+	(title "gulf"))
+
+([GeoNames_Class110017] of  Feature
+
+	(code "HBR")
+	(featureClass [GeoNames_Class110004])
+	(title "harbor(s)"))
+
+([GeoNames_Class110019] of  Feature
+
+	(code "LK")
+	(featureClass [GeoNames_Class110004])
+	(title "lake"))
+
+([GeoNames_Class110020] of  Feature
+
+	(code "OCN")
+	(featureClass [GeoNames_Class110004])
+	(title "ocean"))
+
+([GeoNames_Class110021] of  Feature
+
+	(code "PND")
+	(featureClass [GeoNames_Class110004])
+	(title "pond"))
+
+([GeoNames_Class110022] of  Feature
+
+	(code "RF")
+	(featureClass [GeoNames_Class110004])
+	(title "reef(s)"))
+
+([GeoNames_Class110023] of  Feature
+
+	(code "SEA")
+	(featureClass [GeoNames_Class110004])
+	(title "sea"))
+
+([GeoNames_Class110024] of  Feature
+
+	(code "SHOL")
+	(featureClass [GeoNames_Class110004])
+	(title "shoal(s)"))
+
+([GeoNames_Class110025] of  Feature
+
+	(code "STM")
+	(featureClass [GeoNames_Class110004])
+	(title "stream"))
+
+([GeoNames_Class110026] of  Feature
+
+	(code "PPL")
+	(featureClass [GeoNames_Class110006])
+	(title "populated place"))
+
+([GeoNames_Class110027] of  Feature
+
+	(code "PPLC")
+	(featureClass [GeoNames_Class110006])
+	(title "capital of a political entity"))
+
+([GeoNames_Class110028] of  Feature
+
+	(code "RD")
+	(featureClass [GeoNames_Class110007])
+	(title "road"))
+
+([GeoNames_Class110029] of  Feature
+
+	(code "RR")
+	(featureClass [GeoNames_Class110007])
+	(title "railroad"))
+
+([GeoNames_Class110030] of  Feature
+
+	(code "ST")
+	(featureClass [GeoNames_Class110007])
+	(title "street"))
+
+([GeoNames_Class110031] of  Feature
+
+	(code "AIRB")
+	(featureClass [GeoNames_Class110008])
+	(title "airbase"))
+
+([GeoNames_Class110032] of  Feature
+
+	(code "AIRP")
+	(featureClass [GeoNames_Class110008])
+	(title "airport"))
+
+([GeoNames_Class110033] of  Feature
+
+	(code "ANS")
+	(featureClass [GeoNames_Class110008])
+	(title "ancient site"))
+
+([GeoNames_Class110034] of  Feature
+
+	(code "BANK")
+	(featureClass [GeoNames_Class110008])
+	(title "bank"))
+
+([GeoNames_Class110035] of  Feature
+
+	(code "BDG")
+	(featureClass [GeoNames_Class110008])
+	(title "bridge"))
+
+([GeoNames_Class110036] of  Feature
+
+	(code "CH")
+	(featureClass [GeoNames_Class110008])
+	(title "church"))
+
+([GeoNames_Class110037] of  Feature
+
+	(code "CMTY")
+	(featureClass [GeoNames_Class110008])
+	(title "cemetery"))
+
+([GeoNames_Class110038] of  Feature
+
+	(code "COMC")
+	(featureClass [GeoNames_Class110008])
+	(title "communication center"))
+
+([GeoNames_Class110039] of  Feature
+
+	(code "CSTL")
+	(featureClass [GeoNames_Class110008])
+	(title "castle"))
+
+([GeoNames_Class110040] of  Feature
+
+	(code "FRM")
+	(featureClass [GeoNames_Class110008])
+	(title "farm"))
+
+([GeoNames_Class110041] of  Feature
+
+	(code "HSP")
+	(featureClass [GeoNames_Class110008])
+	(title "hospital"))
+
+([GeoNames_Class110042] of  Feature
+
+	(code "HTL")
+	(featureClass [GeoNames_Class110008])
+	(title "hotel"))
+
+([GeoNames_Class110043] of  Feature
+
+	(code "LTHSE")
+	(featureClass [GeoNames_Class110008])
+	(title "lighthouse"))
+
+([GeoNames_Class110044] of  Feature
+
+	(code "MN")
+	(featureClass [GeoNames_Class110008])
+	(title "mine(s)"))
+
+([GeoNames_Class110045] of  Feature
+
+	(code "SCH")
+	(featureClass [GeoNames_Class110008])
+	(title "school"))
+
+([GeoNames_Class110046] of  Feature
+
+	(code "UNIV")
+	(featureClass [GeoNames_Class110008])
+	(title "university"))
+
+([GeoNames_Class110047] of  Feature
+
+	(code "BCH")
+	(featureClass [GeoNames_Class110009])
+	(title "beach"))
+
+([GeoNames_Class110048] of  Feature
+
+	(code "CAPE")
+	(featureClass [GeoNames_Class110009])
+	(title "cape"))
+
+([GeoNames_Class110049] of  Feature
+
+	(code "DSRT")
+	(featureClass [GeoNames_Class110009])
+	(title "desert"))
+
+([GeoNames_Class110050] of  Feature
+
+	(code "HLL")
+	(featureClass [GeoNames_Class110009])
+	(title "hill"))
+
+([GeoNames_Class110051] of  Feature
+
+	(code "ISL")
+	(featureClass [GeoNames_Class110009])
+	(title "island"))
+
+([GeoNames_Class110052] of  Feature
+
+	(code "MT")
+	(featureClass [GeoNames_Class110009])
+	(title "mountain"))
+
+([GeoNames_Class110053] of  Feature
+
+	(code "MTS")
+	(featureClass [GeoNames_Class110009])
+	(title "mountains"))
+
+([GeoNames_Class110054] of  Feature
+
+	(code "PEN")
+	(featureClass [GeoNames_Class110009])
+	(title "peninsula"))
+
+([GeoNames_Class110055] of  Feature
+
+	(code "PK")
+	(featureClass [GeoNames_Class110009])
+	(title "peak"))
+
+([GeoNames_Class110056] of  Feature
+
+	(code "PLAT")
+	(featureClass [GeoNames_Class110009])
+	(title "plateau"))
+
+([GeoNames_Class110057] of  Feature
+
+	(code "SHOR")
+	(featureClass [GeoNames_Class110009])
+	(title "shore"))
+
+([GeoNames_Class110058] of  Feature
+
+	(code "VAL")
+	(featureClass [GeoNames_Class110009])
+	(title "valley"))
+
+([GeoNames_Class110059] of  Feature
+
+	(code "VLC")
+	(featureClass [GeoNames_Class110009])
+	(title "volcano"))
+
+([GeoNames_Class110060] of  Feature
+
+	(code "BNKU")
+	(featureClass [GeoNames_Class110010])
+	(title "bank"))
+
+([GeoNames_Class110061] of  Feature
+
+	(code "RFU")
+	(featureClass [GeoNames_Class110010])
+	(title "reef"))
+
+([GeoNames_Class110062] of  Feature
+
+	(code "SHLU")
+	(featureClass [GeoNames_Class110010])
+	(title "shoal"))
+
+([GeoNames_Class110063] of  Feature
+
+	(code "BUSH")
+	(featureClass [GeoNames_Class110011])
+	(title "bush(es)"))
+
+([GeoNames_Class110064] of  Feature
+
+	(code "FRST")
+	(featureClass [GeoNames_Class110011])
+	(title "forest(s)"))
+
+([GeoNames_Class110065] of  Feature
+
+	(code "CULT")
+	(featureClass [GeoNames_Class110011])
+	(title "cultivated area"))
+
+([GeoNames_Class110066] of  Feature
+
+	(code "GRSLD")
+	(featureClass [GeoNames_Class110011])
+	(title "grassland"))
+
+([GeoNames_Class110067] of  Feature
+
+	(code "TUND")
+	(featureClass [GeoNames_Class110011])
+	(title "tundra"))
 
 ([GeoNames_Class2] of  CloVar
 

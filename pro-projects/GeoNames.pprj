@@ -1,4 +1,4 @@
-; Thu Mar 09 17:15:05 MSK 2017
+; Wed Mar 15 21:41:23 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -18,7 +18,10 @@
 	(y 0))
 
 ([BROWSER_SLOT_NAMES] of  Property_List
-)
+
+	(properties
+		[GeoNames_ProjectKB_Class396]
+		[GeoNames_ProjectKB_Class397]))
 
 ([CLSES_TAB] of  Widget
 
@@ -83,6 +86,205 @@
 ([GeoNames_ProjectKB_Class358] of  Property_List
 )
 
+([GeoNames_ProjectKB_Class359] of  Widget
+
+	(is_hidden FALSE)
+	(name "FeatureClass")
+	(property_list [GeoNames_ProjectKB_Class360])
+	(widget_class_name "edu.stanford.smi.protege.widget.FormWidget"))
+
+([GeoNames_ProjectKB_Class360] of  Property_List
+
+	(properties
+		[GeoNames_ProjectKB_Class361]
+		[GeoNames_ProjectKB_Class362]
+		[GeoNames_ProjectKB_Class364]
+		[GeoNames_ProjectKB_Class388]))
+
+([GeoNames_ProjectKB_Class361] of  Property_List
+
+	(name "layout properties"))
+
+([GeoNames_ProjectKB_Class362] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "title")
+	(property_list [GeoNames_ProjectKB_Class363])
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(width 200)
+	(x 0)
+	(y 0))
+
+([GeoNames_ProjectKB_Class363] of  Property_List
+)
+
+([GeoNames_ProjectKB_Class364] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "code")
+	(property_list [GeoNames_ProjectKB_Class365])
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(width 200)
+	(x 0)
+	(y 60))
+
+([GeoNames_ProjectKB_Class365] of  Property_List
+)
+
+([GeoNames_ProjectKB_Class368] of  Widget
+
+	(is_hidden FALSE)
+	(name "Feature")
+	(property_list [GeoNames_ProjectKB_Class369])
+	(widget_class_name "edu.stanford.smi.protege.widget.FormWidget"))
+
+([GeoNames_ProjectKB_Class369] of  Property_List
+
+	(properties
+		[GeoNames_ProjectKB_Class370]
+		[GeoNames_ProjectKB_Class371]
+		[GeoNames_ProjectKB_Class373]
+		[GeoNames_ProjectKB_Class377]))
+
+([GeoNames_ProjectKB_Class370] of  Property_List
+
+	(name "layout properties"))
+
+([GeoNames_ProjectKB_Class371] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "title")
+	(property_list [GeoNames_ProjectKB_Class372])
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(width 200)
+	(x 0)
+	(y 0))
+
+([GeoNames_ProjectKB_Class372] of  Property_List
+)
+
+([GeoNames_ProjectKB_Class373] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "featureClass")
+	(property_list [GeoNames_ProjectKB_Class374])
+	(widget_class_name "edu.stanford.smi.protege.widget.InstanceFieldWidget")
+	(width 200)
+	(x 0)
+	(y 60))
+
+([GeoNames_ProjectKB_Class374] of  Property_List
+
+	(properties
+		[GeoNames_ProjectKB_Class375]
+		[GeoNames_ProjectKB_Class376]))
+
+([GeoNames_ProjectKB_Class375] of  Boolean
+
+	(boolean_value FALSE)
+	(name "ButtonDisplayed-View References to Value"))
+
+([GeoNames_ProjectKB_Class376] of  Boolean
+
+	(boolean_value FALSE)
+	(name "ButtonDisplayed-Delete Instance"))
+
+([GeoNames_ProjectKB_Class377] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "code")
+	(property_list [GeoNames_ProjectKB_Class378])
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(width 200)
+	(x 0)
+	(y 120))
+
+([GeoNames_ProjectKB_Class378] of  Property_List
+)
+
+([GeoNames_ProjectKB_Class382] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "features")
+	(property_list [GeoNames_ProjectKB_Class383])
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(width 200)
+	(x 0)
+	(y 120))
+
+([GeoNames_ProjectKB_Class383] of  Property_List
+)
+
+([GeoNames_ProjectKB_Class384] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "features")
+	(property_list [GeoNames_ProjectKB_Class385])
+	(widget_class_name "edu.stanford.smi.protege.widget.InstanceFieldWidget")
+	(width 200)
+	(x 0)
+	(y 120))
+
+([GeoNames_ProjectKB_Class385] of  Property_List
+
+	(properties
+		[GeoNames_ProjectKB_Class386]
+		[GeoNames_ProjectKB_Class387]))
+
+([GeoNames_ProjectKB_Class386] of  Boolean
+
+	(boolean_value FALSE)
+	(name "ButtonDisplayed-View References to Value"))
+
+([GeoNames_ProjectKB_Class387] of  Boolean
+
+	(boolean_value FALSE)
+	(name "ButtonDisplayed-Delete Instance"))
+
+([GeoNames_ProjectKB_Class388] of  Widget
+
+	(height 300)
+	(is_hidden FALSE)
+	(name "features")
+	(property_list [GeoNames_ProjectKB_Class389])
+	(widget_class_name "edu.stanford.smi.protege.widget.InstanceListWidget")
+	(width 200)
+	(x 0)
+	(y 120))
+
+([GeoNames_ProjectKB_Class389] of  Property_List
+
+	(properties
+		[GeoNames_ProjectKB_Class390]
+		[GeoNames_ProjectKB_Class391]))
+
+([GeoNames_ProjectKB_Class390] of  Boolean
+
+	(boolean_value FALSE)
+	(name "ButtonDisplayed-View References to Value"))
+
+([GeoNames_ProjectKB_Class391] of  Boolean
+
+	(boolean_value FALSE)
+	(name "ButtonDisplayed-Delete Instance"))
+
+([GeoNames_ProjectKB_Class396] of  String
+
+	(name "FeatureClass")
+	(string_value "title"))
+
+([GeoNames_ProjectKB_Class397] of  String
+
+	(name "Feature")
+	(string_value "title"))
+
 ([INSTANCE_ANNOTATION_FORM_WIDGET] of  Widget
 
 	(height 476)
@@ -106,6 +308,34 @@
 
 	(is_hidden FALSE)
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
+
+([KB_293107_Class353] of  Map
+
+	(entries
+		[KB_293107_Class354]
+		[KB_293107_Class355]
+		[KB_293107_Class356]))
+
+([KB_293107_Class354] of  Map_Entry
+
+	(key "suppress_instance_counting")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([KB_293107_Class355] of  Map_Entry
+
+	(key "add_name_on_instance_form")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([KB_293107_Class356] of  Map_Entry
+
+	(key "change_tracking_active")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
 
 ([KB_773074_Class0] of  String
 
@@ -204,34 +434,6 @@
 	(name "instances_file_name")
 	(string_value "GeoNames.pins"))
 
-([KB_887751_Class353] of  Map
-
-	(entries
-		[KB_887751_Class354]
-		[KB_887751_Class355]
-		[KB_887751_Class356]))
-
-([KB_887751_Class354] of  Map_Entry
-
-	(key "suppress_instance_counting")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([KB_887751_Class355] of  Map_Entry
-
-	(key "add_name_on_instance_form")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([KB_887751_Class356] of  Map_Entry
-
-	(key "change_tracking_active")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
 ([LAYOUT_PROPERTIES] of  Property_List
 
 	(name "layout properties")
@@ -316,10 +518,12 @@
 	(browser_slot_names [BROWSER_SLOT_NAMES])
 	(customized_instance_widgets
 		[STANDARD_CLASS_FORM_WIDGET]
+		[GeoNames_ProjectKB_Class359]
 		[STANDARD_SLOT_FORM_WIDGET]
 		[INSTANCE_ANNOTATION_FORM_WIDGET]
 		[STANDARD_FACET_FORM_WIDGET]
-		[PAL_FORM_WIDGET])
+		[PAL_FORM_WIDGET]
+		[GeoNames_ProjectKB_Class368])
 	(default_cls_metaclass ":STANDARD-CLASS")
 	(default_facet_metaclass ":STANDARD-FACET")
 	(default_instance_widget_class_name "edu.stanford.smi.protege.widget.FormWidget")

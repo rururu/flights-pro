@@ -21,6 +21,7 @@
  "COUNTER"	(str HOST PORT "/img/r.png")
  "FOLLOWING"	(str HOST PORT "/img/b.png")
  "default"	(str HOST PORT "/img/info.png")
+ "default-pois"	(str HOST PORT "/img/place3.jpeg")
  "landmark"	(str HOST PORT "/img/landmark.png")
  "edu"	(str HOST PORT "/img/edu.png")
  "mountain"	(str HOST PORT "/img/mountain.png")

@@ -18,7 +18,6 @@
  :vehicles 200
  :display 831
  :manual-data 6000
- :ext-data 15000
  :ext-data-popup 60000})
 (def WEATHER2-API "http://www.myweather2.com/developer/forecast.ashx?uac=Pyih5WakI3&output=json&query=")
 (def CONTINENT {"AF" "Africa"
@@ -193,8 +192,7 @@ nil)
              (ssvs bbi "wsen" (vec (map float [w s e n])))
              (ssv rqi "bbx" bbi)
              (ssvs rqi "responses" [])
-             (with-timeout (:ext-data TIO)
-	(wig/submit-bbx (itm rqi 0) rqi))
+             (wig/submit-bbx (itm rqi 0) rqi)
              (let [rr (svs rqi "responses")
                     chn (:ins-chn @COMM)]
                (when (seq rr)
@@ -275,15 +273,19 @@ nil)
 
 (defn pois-instruct [pois]
   (if (instance? Instance pois)
-  (let [tyc (sv pois "typeClass") 
-         ins {:instruct :create-placemark
+  (let [ins {:instruct :create-placemark
 	:iname (.getName pois)
-	:tip (sv pois "name")
+	:tip (or (sv pois "name")
+	            (if-let [ntn (sv (sv pois "typeName") "name")]
+		ntn
+		"unnamed"))
 	:lat (sv pois "lat")
 	:lon (sv pois "lng")}]
-    (if-let [url (sv tyc "url")]
+    (if-let [url (sv (sv pois "typeName") "url")]
       (assoc ins :url-ico url)
-      (assoc ins :feature "default-pois")))
+      (if-let [url (sv (sv pois "typeClass") "url")]
+        (assoc ins :url-ico url)
+        (assoc ins :feature "default-pois"))))
   (map pois-instruct pois)))
 
 (defn map-view-ctrl [who]
