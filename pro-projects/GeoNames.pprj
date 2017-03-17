@@ -1,4 +1,4 @@
-; Wed Mar 15 21:41:23 MSK 2017
+; Fri Mar 17 19:58:53 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -20,8 +20,8 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[GeoNames_ProjectKB_Class396]
-		[GeoNames_ProjectKB_Class397]))
+		[GeoNames_ProjectKB_Class10378]
+		[GeoNames_ProjectKB_Class10379]))
 
 ([CLSES_TAB] of  Widget
 
@@ -76,6 +76,16 @@
 
 	(is_hidden FALSE)
 	(widget_class_name "edu.stanford.smi.protege.widget.FormsTab"))
+
+([GeoNames_ProjectKB_Class10378] of  String
+
+	(name "FeatureClass")
+	(string_value "title"))
+
+([GeoNames_ProjectKB_Class10379] of  String
+
+	(name "Feature")
+	(string_value "title"))
 
 ([GeoNames_ProjectKB_Class357] of  Widget
 
@@ -207,47 +217,6 @@
 ([GeoNames_ProjectKB_Class378] of  Property_List
 )
 
-([GeoNames_ProjectKB_Class382] of  Widget
-
-	(height 60)
-	(is_hidden FALSE)
-	(name "features")
-	(property_list [GeoNames_ProjectKB_Class383])
-	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
-	(width 200)
-	(x 0)
-	(y 120))
-
-([GeoNames_ProjectKB_Class383] of  Property_List
-)
-
-([GeoNames_ProjectKB_Class384] of  Widget
-
-	(height 60)
-	(is_hidden FALSE)
-	(name "features")
-	(property_list [GeoNames_ProjectKB_Class385])
-	(widget_class_name "edu.stanford.smi.protege.widget.InstanceFieldWidget")
-	(width 200)
-	(x 0)
-	(y 120))
-
-([GeoNames_ProjectKB_Class385] of  Property_List
-
-	(properties
-		[GeoNames_ProjectKB_Class386]
-		[GeoNames_ProjectKB_Class387]))
-
-([GeoNames_ProjectKB_Class386] of  Boolean
-
-	(boolean_value FALSE)
-	(name "ButtonDisplayed-View References to Value"))
-
-([GeoNames_ProjectKB_Class387] of  Boolean
-
-	(boolean_value FALSE)
-	(name "ButtonDisplayed-Delete Instance"))
-
 ([GeoNames_ProjectKB_Class388] of  Widget
 
 	(height 300)
@@ -275,16 +244,6 @@
 	(boolean_value FALSE)
 	(name "ButtonDisplayed-Delete Instance"))
 
-([GeoNames_ProjectKB_Class396] of  String
-
-	(name "FeatureClass")
-	(string_value "title"))
-
-([GeoNames_ProjectKB_Class397] of  String
-
-	(name "Feature")
-	(string_value "title"))
-
 ([INSTANCE_ANNOTATION_FORM_WIDGET] of  Widget
 
 	(height 476)
@@ -309,28 +268,28 @@
 	(is_hidden FALSE)
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
 
-([KB_293107_Class353] of  Map
+([KB_322001_Class353] of  Map
 
 	(entries
-		[KB_293107_Class354]
-		[KB_293107_Class355]
-		[KB_293107_Class356]))
+		[KB_322001_Class354]
+		[KB_322001_Class355]
+		[KB_322001_Class356]))
 
-([KB_293107_Class354] of  Map_Entry
+([KB_322001_Class354] of  Map_Entry
 
 	(key "suppress_instance_counting")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_293107_Class355] of  Map_Entry
+([KB_322001_Class355] of  Map_Entry
 
 	(key "add_name_on_instance_form")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_293107_Class356] of  Map_Entry
+([KB_322001_Class356] of  Map_Entry
 
 	(key "change_tracking_active")
 	(key_class "java.lang.String")

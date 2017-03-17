@@ -120,9 +120,14 @@ inst)
    (ctpl e)
    ()))))
 
-(defn call-geonames-nearby [lat lng]
-  ; Get near by place from Geonames Web Service
-(let [url (str *nearby-url* "?lat=" lat "&lng=" lng "&username=" *username* "&style=full")]
+(defn call-geonames-nearby [lat lng fea-class fea-code maxr rad]
+  ;; Get near by place from Geonames Web Service
+;; max radius = 300
+(let [url (str *nearby-url* "?lat=" lat "&lng=" lng "&username=" *username*)
+       url (if (some? fea-class) (str url "&featureClass=" fea-class) url)
+       url (if (some? fea-code) (str url "&featureCode=" fea-code) url)
+       url (if (number? maxr) (str url "&maxRows=" maxr) url)
+       url (if (and (number? rad) (<= rad 300)) (str url "&radius=" rad) url)]
  (try
    (if-let [xml (clojure.xml/parse url)]
       (xml-to-map (first (:content xml))) )
@@ -233,8 +238,8 @@ inst)
   ;; Finds the nearest points of interests for a given lat/lng pair.
 ;; max rows = 50, max radius = 1
 (let [url (str *pois-osm-url* "?lat=" lat "&lng=" lng "&username=" *username*)
-       url (if (and (some? maxr) (<= maxr 50)) (str url "&maxRows=" maxr) url)
-       url (if (and (some? rad) (<= rad 1)) (str url "&radius=" rad) url)]
+       url (if (and (number? maxr) (<= maxr 50)) (str url "&maxRows=" maxr) url)
+       url (if (and (number? rad) (<= rad 1)) (str url "&radius=" rad) url)]
  (try
    (if-let [xml (clojure.xml/parse url)]
       (map xml-to-map (:content xml)) )

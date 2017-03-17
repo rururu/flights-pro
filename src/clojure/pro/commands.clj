@@ -34,7 +34,7 @@
                "scheduled" {"arrival" "unk"}}
 
    "airline" {"short" "Ru Airlines"}}}))
-(def TERRAIN "no")
+(def TERRAIN "yes")
 (def APT-ALT 0)
 (defn current-time []
   (int (/ (System/currentTimeMillis) 1000)))

@@ -29,59 +29,18 @@
     :count  (apply str (for [i (range (count lst))]
                             (str "<option value='" i "'>" (nth lst i) "</option>")))))
 
-(defn input1 [ns header wid]
-  (let [inp (str "<input type='text' onchange='javascript:" ns ".handler1(this.value)'
+(defn input [element k ns header wid]
+  (let [inp (str "<input type='text' onchange='javascript:" ns ".handler" k "(this.value)'
 	style='width:" wid "px' 
 	value='" header "'>")]
-  (set-html! "element1" inp)))
+  (set-html! (str element k) inp)))
 
-(defn input2 [ns header wid]
-  (let [inp (str "<input type='text' onchange='javascript:" ns ".handler2(this.value)'
-	style='width:" wid "px' 
-	value='" header "'>")]
-  (set-html! "element2" inp)))
-
-(defn selector1 [ns header lst typ wid]
-  (let [sel (str "<select onchange='javascript:" ns ".handler1(this.value)' style='width:" wid "px'>"
+(defn selector [element k ns header lst typ wid]
+  (let [sel (str "<select onchange='javascript:" ns ".handler" k "(this.value)' style='width:" wid "px'>"
                  "<option value='-1'>" header "</option>"
                  (options lst typ)
                  "</select>")]
-  (set-html! "element1" sel)))
-
-(defn selector2 [ns header lst typ wid]
-  (let [sel (str "<select onchange='javascript:" ns ".handler2(this.value)' style='width:" wid "px'>"
-                 "<option value='-1'>" header "</option>"
-                 (options lst typ)
-                 "</select>")]
-    (set-html! "element2" sel)))
-
-(defn selector3 [ns header lst typ wid]
-  (let [sel (str "<select onchange='javascript:" ns ".handler3(this.value)' style='width:" wid "px'>"
-                 "<option value='-1'>" header "</option>"
-                 (options lst typ)
-                 "</select>")]
-    (set-html! "element3" sel)))
-
-(defn selector4 [ns header lst typ wid]
-  (let [sel (str "<select onchange='javascript:" ns ".handler4(this.value)' style='width:" wid "px'>"
-                 "<option value='-1'>" header "</option>"
-                 (options lst typ)
-                 "</select>")]
-    (set-html! "element4" sel)))
-
-(defn selector5 [ns header lst typ wid]
-  (let [sel (str "<select onchange='javascript:" ns ".handler5(this.value)' style='width:" wid "px'>"
-                 "<option value='-1'>" header "</option>"
-                 (options lst typ)
-                 "</select>")]
-    (set-html! "element5" sel)))
-
-(defn selector6 [ns header lst typ wid]
-  (let [sel (str "<select onchange='javascript:" ns ".handler6(this.value)' style='width:" wid "px'>"
-                 "<option value='-1'>" header "</option>"
-                 (options lst typ)
-                 "</select>")]
-    (set-html! "element6" sel)))
+  (set-html! (str element k) sel)))
 
 (defn ask-server [params]
   (GET (:question URL) 

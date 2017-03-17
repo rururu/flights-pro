@@ -26,7 +26,6 @@
  :vehicles 200
  :display 831
  :manual-data 6000
- :ext-data 15000
  :ext-data-popup 60000})
 (def URL-ICO {"INTERSECT" 	(str HOST PORT "/img/redpln32.png")
  "DESCEND" 	(str HOST PORT "/img/greenpln32.png")
@@ -266,14 +265,14 @@
 	    :question "countries"})
   (am/get-answer move-to))
 ([cns]
-  (am/selector1 "chart.client" "countries" cns :itself 130)
+  (am/selector "element" 1 "chart.client" "countries" cns :itself 130)
   (defn handler1 [sel]
     (am/ask-server {:whom "direct"
 	       :question "airports"
 	       :country sel})
     (am/get-answer #(move-to sel %))))
 ([cnt aps]
-  (am/selector2 "chart.client" "airports" aps :itself 130)
+  (am/selector "element" 2 "chart.client" "airports" aps :itself 130)
   (defn handler2 [sel]
     (let [prm (str "?country=" cnt
 	"&airport=" sel)]
@@ -282,9 +281,9 @@
 
 (defn schedule
   ([]
-  (am/input1 "chart.client" "new callsign" 80)
+  (am/input "element" 1 "chart.client" "new callsign" 80)
   (defn handler1 [call]
-    (am/input2 "chart.client" "hh:mm" 80)
+    (am/input "element" 2 "chart.client" "hh:mm" 80)
       (defn handler2 [tim]
         (schedule call tim))))
 ([call tim]
@@ -292,27 +291,27 @@
 	    :question "countries"})
   (am/get-answer #(schedule call tim %)))
 ([call tim cns1]
-  (am/selector3 "chart.client" "from country" cns1 :itself 130)
+  (am/selector "element" 3 "chart.client" "from country" cns1 :itself 130)
   (defn handler3 [sel]
     (am/ask-server {:whom "direct"
 	       :question "airports"
 	       :country sel})
     (am/get-answer #(schedule call tim sel %))))
 ([call tim cnt1 aps1]
-  (am/selector4 "chart.client" "from airport" aps1 :itself 130)
+  (am/selector "element" 4 "chart.client" "from airport" aps1 :itself 130)
   (defn handler4 [sel]
     (am/ask-server {:whom "direct"
 	    :question "countries"})
     (am/get-answer #(schedule call tim cnt1 sel %))))
 ([call tim cnt1 apt1 cns2]
-  (am/selector5 "chart.client" "to county" cns2 :itself 130)
+  (am/selector "element" 5 "chart.client" "to county" cns2 :itself 130)
   (defn handler5 [sel]
     (am/ask-server {:whom "direct"
 	       :question "airports"
 	       :country sel})
     (am/get-answer #(schedule call tim cnt1 apt1 sel %))))
 ([call tim cnt1 apt1 cnt2 aps2]
-  (am/selector6 "chart.client" "to airport" aps2 :itself 130)
+  (am/selector "element" 6 "chart.client" "to airport" aps2 :itself 130)
   (defn handler6 [sel]
     (let [prm (str "?callsign=" call
 	"&time=" tim

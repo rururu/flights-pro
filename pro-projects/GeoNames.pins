@@ -1,4 +1,4 @@
-; Wed Mar 15 21:41:23 MSK 2017
+; Fri Mar 17 19:58:53 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -98,8 +98,8 @@
 
 ([Example_Class20021] of  CloFunction
 
-	(source "; Get near by place from Geonames Web Service\n(let [url (str *nearby-url* \"?lat=\" lat \"&lng=\" lng \"&username=\" *username* \"&style=full\")]\n (try\n   (if-let [xml (clojure.xml/parse url)]\n      (xml-to-map (first (:content xml))) )\n (catch Exception e\n   (ctpl e)\n   nil)))")
-	(title "call-geonames-nearby [lat lng]"))
+	(source ";; Get near by place from Geonames Web Service\n;; max radius = 300\n(let [url (str *nearby-url* \"?lat=\" lat \"&lng=\" lng \"&username=\" *username*)\n       url (if (some? fea-class) (str url \"&featureClass=\" fea-class) url)\n       url (if (some? fea-code) (str url \"&featureCode=\" fea-code) url)\n       url (if (number? maxr) (str url \"&maxRows=\" maxr) url)\n       url (if (and (number? rad) (<= rad 300)) (str url \"&radius=\" rad) url)]\n (try\n   (if-let [xml (clojure.xml/parse url)]\n      (xml-to-map (first (:content xml))) )\n (catch Exception e\n   (ctpl e)\n   nil)))")
+	(title "call-geonames-nearby [lat lng fea-class fea-code maxr rad]"))
 
 ([Example_Class20050] of  CloFunction
 
@@ -133,7 +133,7 @@
 
 ([GeoNames_Class100001] of  CloFunction
 
-	(source ";; Finds the nearest points of interests for a given lat/lng pair.\n;; max rows = 50, max radius = 1\n(let [url (str *pois-osm-url* \"?lat=\" lat \"&lng=\" lng \"&username=\" *username*)\n       url (if (and (some? maxr) (<= maxr 50)) (str url \"&maxRows=\" maxr) url)\n       url (if (and (some? rad) (<= rad 1)) (str url \"&radius=\" rad) url)]\n (try\n   (if-let [xml (clojure.xml/parse url)]\n      (map xml-to-map (:content xml)) )\n (catch Exception e\n   (ctpl e)\n   nil)))")
+	(source ";; Finds the nearest points of interests for a given lat/lng pair.\n;; max rows = 50, max radius = 1\n(let [url (str *pois-osm-url* \"?lat=\" lat \"&lng=\" lng \"&username=\" *username*)\n       url (if (and (number? maxr) (<= maxr 50)) (str url \"&maxRows=\" maxr) url)\n       url (if (and (number? rad) (<= rad 1)) (str url \"&radius=\" rad) url)]\n (try\n   (if-let [xml (clojure.xml/parse url)]\n      (map xml-to-map (:content xml)) )\n (catch Exception e\n   (ctpl e)\n   nil)))")
 	(title "call-geonames-pois-osm [lat lng maxr rad]"))
 
 ([GeoNames_Class10001] of  CloFunction
