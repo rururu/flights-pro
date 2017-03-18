@@ -1,4 +1,4 @@
-; Fri Mar 17 21:38:47 MSK 2017
+; Sat Mar 18 22:07:13 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -2165,6 +2165,159 @@
 
 	(source "(volatile! {\"MANUAL\"\n  {\"airport\" {\"origin\" {\"name\" \"unk\" \"code\" {\"iata\" \"unk\"}}\n                  \"destination\" {\"name\" \"unk\" \"code\" {\"iata\" \"unk\"}}}\n\n   \"aircraft\" {\"model\" {\"text\" \"Ru Lentokone\"}\n                   \"images\" {\"thumbnails\" [{\"src\" \"img/5.jpg\"}]}}\n\n   \"time\" {\"real\" {\"departure\" \"unk\"}\n               \"scheduled\" {\"arrival\" \"unk\"}}\n\n   \"airline\" {\"short\" \"Ru Airlines\"}}})")
 	(title "MY-INFOS"))
+
+([FlightPro_Class510024] of  QuestionTree
+
+	(branches [FlightPro_Class510026])
+	(name "How many"))
+
+([FlightPro_Class510026] of  QuestionTree
+
+	(branches
+		[FlightPro_Class510027]
+		[FlightPro_Class510028])
+	(name "airplanes"))
+
+([FlightPro_Class510027] of  QuestionTree
+
+	(name "in the air"))
+
+([FlightPro_Class510028] of  QuestionTree
+
+	(name "on the ground"))
+
+([FlightPro_Class510029] of  QuestionTree
+
+	(branches [FlightPro_Class510030])
+	(name "How far"))
+
+([FlightPro_Class510030] of  QuestionTree
+
+	(name "airport"))
+
+([FlightPro_Class510032] of  QuestionTree
+
+	(branches
+		[FlightPro_Class510029]
+		[FlightPro_Class510024]
+		[FlightPro_Class510033]
+		[FlightPro_Class510038])
+	(name "QTree"))
+
+([FlightPro_Class510033] of  QuestionTree
+
+	(branches
+		[FlightPro_Class510034]
+		[FlightPro_Class510035])
+	(name "What"))
+
+([FlightPro_Class510034] of  QuestionTree
+
+	(name "Intersections"))
+
+([FlightPro_Class510035] of  QuestionTree
+
+	(branches
+		[FlightPro_Class510036]
+		[FlightPro_Class510037])
+	(name "weather"))
+
+([FlightPro_Class510036] of  QuestionTree
+
+	(name "by GeoNames"))
+
+([FlightPro_Class510037] of  QuestionTree
+
+	(name "by Weather2"))
+
+([FlightPro_Class510038] of  QuestionTree
+
+	(branches
+		[FlightPro_Class510039]
+		[FlightPro_Class510040])
+	(name "Where"))
+
+([FlightPro_Class510039] of  QuestionTree
+
+	(name "we are"))
+
+([FlightPro_Class510040] of  QuestionTree
+
+	(branches
+		[FlightPro_Class510041]
+		[FlightPro_Class510042]
+		[FlightPro_Class510043]
+		[FlightPro_Class510044]
+		[FlightPro_Class510045]
+		[FlightPro_Class510046]
+		[FlightPro_Class510047]
+		[FlightPro_Class510048]
+		[FlightPro_Class510049])
+	(name "nearest"))
+
+([FlightPro_Class510041] of  QuestionTree
+
+	(name "airports"))
+
+([FlightPro_Class510042] of  QuestionTree
+
+	(name "island"))
+
+([FlightPro_Class510043] of  QuestionTree
+
+	(name "Question Tree Chart"))
+
+([FlightPro_Class510044] of  QuestionTree
+
+	(name "lake"))
+
+([FlightPro_Class510045] of  QuestionTree
+
+	(name "mountine"))
+
+([FlightPro_Class510046] of  QuestionTree
+
+	(name "road"))
+
+([FlightPro_Class510047] of  QuestionTree
+
+	(name "bank"))
+
+([FlightPro_Class510048] of  QuestionTree
+
+	(name "shoal"))
+
+([FlightPro_Class510049] of  QuestionTree
+
+	(name "coast"))
+
+([FlightPro_Class510052] of  QTreeChart
+
+	(chart
+		[FlightPro_Class510026]
+		[FlightPro_Class510030]
+		[FlightPro_Class510041]
+		[FlightPro_Class510047]
+		[FlightPro_Class510036]
+		[FlightPro_Class510037]
+		[FlightPro_Class510049]
+		[FlightPro_Class510029]
+		[FlightPro_Class510024]
+		[FlightPro_Class510027]
+		[FlightPro_Class510034]
+		[FlightPro_Class510042]
+		[FlightPro_Class510044]
+		[FlightPro_Class510045]
+		[FlightPro_Class510040]
+		[FlightPro_Class510028]
+		[FlightPro_Class510032]
+		[FlightPro_Class510043]
+		[FlightPro_Class510046]
+		[FlightPro_Class510048]
+		[FlightPro_Class510039]
+		[FlightPro_Class510035]
+		[FlightPro_Class510033]
+		[FlightPro_Class510038]))
 
 ([FlightPro_Class520000] of  CloFunction
 

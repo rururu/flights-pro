@@ -1,4 +1,4 @@
-; Fri Mar 17 21:38:47 MSK 2017
+; Sat Mar 18 22:07:13 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -44,6 +44,10 @@
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
+	(multislot branches
+		(type INSTANCE)
+;+		(allowed-classes Tree)
+		(create-accessor read-write))
 	(single-slot spec-plan
 		(type STRING)
 ;+		(cardinality 0 1)
@@ -63,6 +67,10 @@
 	(single-slot landing
 		(type STRING)
 ;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot chart
+		(type INSTANCE)
+;+		(allowed-classes QuestionTree)
 		(create-accessor read-write))
 	(single-slot altitude
 		(type INTEGER)
@@ -320,5 +328,29 @@
 		(type INTEGER)
 		(range 0 %3FVARIABLE)
 		(default 0)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass QTreeChart
+	(is-a Flights+Ontology)
+	(role concrete)
+	(multislot chart
+		(type INSTANCE)
+;+		(allowed-classes QuestionTree)
+		(create-accessor read-write)))
+
+(defclass Tree
+	(is-a USER)
+	(role concrete)
+	(multislot branches
+		(type INSTANCE)
+;+		(allowed-classes Tree)
+		(create-accessor read-write)))
+
+(defclass QuestionTree
+	(is-a Flights+Ontology Tree)
+	(role concrete)
+	(single-slot name_
+		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write)))

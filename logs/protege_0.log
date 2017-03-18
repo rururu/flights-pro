@@ -1601,3 +1601,6 @@ Was expecting one of:
 2017.03.17 17:59:39.033 MSK INFO: UI display time = 0 sec -- ProjectManager$2.run()
 2017.03.17 20:23:44.850 MSK INFO: Project load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj: 0 sec -- ProjectChooser.loadProject()
 2017.03.17 20:23:45.117 MSK INFO: UI display time = 0 sec -- ProjectManager$2.run()
+2017.03.18 19:48:02.735 MSK INFO: *** SYSTEM START ***
+2017.03.18 19:48:06.224 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.03.18 19:48:30.169 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 4 sec (ui) -- ProjectManager$3.run()
