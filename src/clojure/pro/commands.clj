@@ -204,18 +204,40 @@ TERRAIN)
 (rete/assert-frame ['Follow 'id "STOP" 'time 0])
 "")
 
+(defn objects [pred subj qt]
+  (if-let [flt (seq (filter #(= (sv % "name") pred) (svs qt "branches")))]
+  (if-let [flt (seq (filter #(= (sv % "name") subj) (svs (first flt) "branches")))]
+    (map #(sv % "name") (svs (first flt) "branches"))
+    "")))
+
+(defn subjects [pred qt]
+  (if-let [flt (seq (filter #(= (sv % "name") pred) (svs qt "branches")))]
+  (map #(sv % "name") (svs (first flt) "branches"))))
+
+(defn predicates [qt]
+  (map #(sv % "name") (svs qt "branches")))
+
 (defn direct-question [pp]
   (condp = (:question pp)
-  "countries" (->> (fr24/airports-by-country)
-	keys
-	sort)
-  "airports" (->> (get (fr24/airports-by-country) (:country pp))
-	keys
-	sort)
+  "countries"	(->> (fr24/airports-by-country)
+	  keys
+	  sort)
+  "airports"	(->> (get (fr24/airports-by-country) (:country pp))
+	  keys
+	  sort)
+  "predicates"	(predicates 
+	  (fainst (cls-instances "QuestionTree") nil))
+  "subjects"	(subjects 
+	  (:predicate pp) 
+	  (fainst (cls-instances "QuestionTree") nil))
+  "objects"	(objects
+	  (:predicate pp)  
+	  (:subject pp) 
+	  (fainst (cls-instances "QuestionTree") nil))
   true ""))
 
 (defn question [pp]
-  ;;(println [:QUESTION pp])
+  (println [:QUESTION pp])
 (if (= (:whom pp) "direct")
   (asp/pump-in (:answer CHN) (direct-question pp))
   (do (rete/assert-frame 

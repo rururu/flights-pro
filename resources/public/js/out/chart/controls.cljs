@@ -24,17 +24,8 @@
    <option value='move-to'>Move to Airport</option>
    <option value='schedule'>Schedule Flight</option>
    <option value='wikipedia'>Toggle Wikipedia</option>
+   <option value='question'>Ask Question</option>
    <option value='clear'>Clear</option>
-   </select>")
-(set-html! "questions-header" "<h4>Questions</h4>")
-(set-html! "questions"
-  "<select onchange='javascript:chart.client.question(this.value)'>
-   <option value='questions'>Questions</option>
-   <option value='intersect'>Intersections</option>
-   <option value='weather-gn'>Weather GeoNames</option>
-   <option value='weather-w2'>Weather2</option>
-   <option value='nearest-airports'>Nearest Airports</option>
-   <option value='where-we-are'>Where We Are?</option>
    </select>"))
 
 (defn display-zoom [z]

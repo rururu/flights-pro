@@ -79,13 +79,13 @@ return csasync.proc.start_process.call(null,new cljs.core.Keyword(null,"cdad-sta
 return proc_fn.call(null,carr);
 }),cljs.core.get_in.call(null,cljs.core.deref.call(null,carr),tio_pth));
 });
-calc.dynamic.bank = (function calc$dynamic$bank(old_crs,new_crs,p__40690){
-var vec__40694 = p__40690;
-var right_bank = cljs.core.nth.call(null,vec__40694,(0),null);
-var small_arc = cljs.core.nth.call(null,vec__40694,(1),null);
-var big_arc = cljs.core.nth.call(null,vec__40694,(2),null);
-var factor = cljs.core.nth.call(null,vec__40694,(3),null);
-var turn_right_QMARK_ = ((function (vec__40694,right_bank,small_arc,big_arc,factor){
+calc.dynamic.bank = (function calc$dynamic$bank(old_crs,new_crs,p__30846){
+var vec__30850 = p__30846;
+var right_bank = cljs.core.nth.call(null,vec__30850,(0),null);
+var small_arc = cljs.core.nth.call(null,vec__30850,(1),null);
+var big_arc = cljs.core.nth.call(null,vec__30850,(2),null);
+var factor = cljs.core.nth.call(null,vec__30850,(3),null);
+var turn_right_QMARK_ = ((function (vec__30850,right_bank,small_arc,big_arc,factor){
 return (function calc$dynamic$bank_$_turn_right_QMARK_(from,to){
 var dif = (to - from);
 if((dif > (0))){
@@ -97,7 +97,7 @@ return (dif < (-180));
 return null;
 }
 }
-});})(vec__40694,right_bank,small_arc,big_arc,factor))
+});})(vec__30850,right_bank,small_arc,big_arc,factor))
 ;
 if(cljs.core._EQ_.call(null,old_crs,new_crs)){
 return (0);

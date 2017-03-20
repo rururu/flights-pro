@@ -68,24 +68,25 @@
   left:160px;
   padding:5px;
   z-index:100;
-}#element6 {
+}
+#element6 {
   position:fixed;
   bottom:140px;
   left:160px;
   padding:5px;
   z-index:100;
 }
-#questions-header {
+#element20 {
   position:fixed;
-  bottom:50px;
-  right:10px;
+  bottom:40px;
+  left:300px;
   padding:5px;
   z-index:100;
 }
-#questions {
+#element30 {
   position:fixed;
   bottom:40px;
-  right:10px;
+  left:440px;
   padding:5px;
   z-index:100;
 }

@@ -322,6 +322,37 @@
       (GET (str (:command URL) "schedule" prm) no-handler)
       (am/clear-dialog)))))
 
+(defn question
+  ([]
+  (am/ask-server {:whom "direct"
+	    :question "predicates"})
+  (am/get-answer question))
+([predicates]
+  (am/selector "element" 1 "chart.client" "?" predicates :itself 130)
+  (defn handler1 [sel]
+    (println 1 sel)
+    (am/ask-server {:whom "direct"
+	       :question "subjects"
+	       :predicate sel})
+    (am/get-answer #(question sel %))))
+([pred subjects]
+  (am/selector "element" 20 "chart.client" "?" subjects :itself 130)
+  (defn handler20 [sel]
+    (println 20 sel)
+    (am/ask-server {:whom "direct"
+	       :question "objects"
+	       :predicate pred
+	       :subject sel})
+    (am/get-answer #(question pred sel %))))
+([pred subj objects]
+  (am/selector "element" 30 "chart.client" "?" objects :itself 130)
+  (defn handler30 [sel]
+    (println 30 sel)
+    (am/ask-server {:whom "es"
+	       :predicate pred
+	       :subject subj
+	       :object sel}))))
+
 (defn command [cmd]
   (condp = cmd
   "commands" nil
@@ -334,6 +365,7 @@
 	       (GET (str (:command URL) cmd prm) no-handler))
   "move-to" (move-to)
   "schedule" (schedule)
+  "question" (question)
   (GET (str (:command URL) cmd) no-handler))
 (ctl/show-chart-controls))
 
@@ -398,12 +430,6 @@
   (GET (str (:command URL) "trail?id=" id)
   {:handler (fn [response])
    :error-handler error-handler}))
-
-(defn question [q]
-  (condp = q
-  "questions" nil
-  (am/ask-server {:whom "es" :predicate q}))
-(ctl/show-chart-controls))
 
 
 (set! (.-onload js/window) (on-load-chart))

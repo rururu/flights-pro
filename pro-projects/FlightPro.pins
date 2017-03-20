@@ -1,4 +1,4 @@
-; Sat Mar 18 22:07:13 MSK 2017
+; Mon Mar 20 23:07:49 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -124,7 +124,7 @@
 
 ([FlightPro_Class130000] of  HTML
 
-	(source "<!DOCTYPE html>\n<html>\n<head>\n  <title>Chart View</title>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n  <link rel=\"stylesheet\" href=\"css/leaflet.css\" />\n  <link rel=\"stylesheet\" href=\"leaflet/leaflet.css\"/>\n  <script src=\"leaflet/leaflet.js\"></script>\n  <script src=\"js/leaflet.rotatedMarker.js\"></script>\n</head>\n<body>\n  <div id=\"map\"></div>\n  <div id=\"mousepos\"></div>\n  <div id=\"zoom\"></div>\n  <div id=\"commands-header\"></div>\n  <div id=\"commands\"></div>\n  <div id=\"element1\"></div>\n  <div id=\"element2\"></div>\n  <div id=\"element3\"></div>\n  <div id=\"element4\"></div>\n  <div id=\"element5\"></div>\n  <div id=\"element6\"></div>\n  <div id=\"questions-header\"></div>\n  <div id=\"questions\"></div>\n  <script src=\"js/chart.js\"></script>\n</body>\n</html>")
+	(source "<!DOCTYPE html>\n<html>\n<head>\n  <title>Chart View</title>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n  <link rel=\"stylesheet\" href=\"css/leaflet.css\" />\n  <link rel=\"stylesheet\" href=\"leaflet/leaflet.css\"/>\n  <script src=\"leaflet/leaflet.js\"></script>\n  <script src=\"js/leaflet.rotatedMarker.js\"></script>\n</head>\n<body>\n  <div id=\"map\"></div>\n  <div id=\"mousepos\"></div>\n  <div id=\"zoom\"></div>\n  <div id=\"commands-header\"></div>\n  <div id=\"commands\"></div>\n  <div id=\"element1\"></div>\n  <div id=\"element2\"></div>\n  <div id=\"element3\"></div>\n  <div id=\"element4\"></div>\n  <div id=\"element5\"></div>\n  <div id=\"element6\"></div>\n  <div id=\"element20\"></div>\n  <div id=\"element30\"></div>\n  <script src=\"js/chart.js\"></script>\n</body>\n</html>")
 	(store-in "resources/public")
 	(title "leaflet"))
 
@@ -248,7 +248,7 @@
 
 ([FlightPro_Class150001] of  CSS
 
-	(source "#map {\n    position: absolute;\n    top: 0px;\n    bottom: 0;\n    left: 0;\n    right: 0;\n    z-index: -1;\n}\n#mousepos {\n  position:fixed;\n  bottom:10px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#zoom {\n  position:fixed;\n  bottom:10px;\n  left:170px;\n  padding:5px;\n  z-index:100;\n}\n#commands-header {\n  position:fixed;\n  bottom:50px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#commands {\n  position:fixed;\n  bottom:40px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#element1 {\n  position:fixed;\n  bottom:40px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element2 {\n  position:fixed;\n  bottom:60px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element3 {\n  position:fixed;\n  bottom:80px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element4 {\n  position:fixed;\n  bottom:100px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element5 {\n  position:fixed;\n  bottom:120px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}#element6 {\n  position:fixed;\n  bottom:140px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#questions-header {\n  position:fixed;\n  bottom:50px;\n  right:10px;\n  padding:5px;\n  z-index:100;\n}\n#questions {\n  position:fixed;\n  bottom:40px;\n  right:10px;\n  padding:5px;\n  z-index:100;\n}")
+	(source "#map {\n    position: absolute;\n    top: 0px;\n    bottom: 0;\n    left: 0;\n    right: 0;\n    z-index: -1;\n}\n#mousepos {\n  position:fixed;\n  bottom:10px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#zoom {\n  position:fixed;\n  bottom:10px;\n  left:170px;\n  padding:5px;\n  z-index:100;\n}\n#commands-header {\n  position:fixed;\n  bottom:50px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#commands {\n  position:fixed;\n  bottom:40px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#element1 {\n  position:fixed;\n  bottom:40px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element2 {\n  position:fixed;\n  bottom:60px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element3 {\n  position:fixed;\n  bottom:80px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element4 {\n  position:fixed;\n  bottom:100px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element5 {\n  position:fixed;\n  bottom:120px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element6 {\n  position:fixed;\n  bottom:140px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element20 {\n  position:fixed;\n  bottom:40px;\n  left:300px;\n  padding:5px;\n  z-index:100;\n}\n#element30 {\n  position:fixed;\n  bottom:40px;\n  left:440px;\n  padding:5px;\n  z-index:100;\n}")
 	(store-in "resources/public/css")
 	(title "leaflet"))
 
@@ -279,13 +279,13 @@
 		[FlightPro_Class170004]
 		[FlightPro_Class430000]
 		[FlightPro_Class440000]
+		[FlightPro_Class690008]
 		[FlightPro_Class220027]
 		[FlightPro_Class160011]
 		[FlightPro_Class160002]
 		[FlightPro_Class180000]
 		[FlightPro_Class380000]
-		[FlightPro_Class380001]
-		[FlightPro_Class690008])
+		[FlightPro_Class380001])
 	(cloNamespace [FlightPro_Class150003])
 	(cloVars
 		[FlightPro_Class70000]
@@ -804,12 +804,12 @@
 
 ([FlightPro_Class220026] of  CloFunction
 
-	(source "(set-html! \"commands-header\" \"<h4>Commands</h4>\")\n(set-html! \"commands\"\n  \"<select onchange='javascript:chart.client.command(this.value)'>\n   <option value='commands'>Commands</option>\n   <option value='watch-visible'>Watch Visible Area</option>\n   <option value='move-to'>Move to Airport</option>\n   <option value='schedule'>Schedule Flight</option>\n   <option value='wikipedia'>Toggle Wikipedia</option>\n   <option value='clear'>Clear</option>\n   </select>\")\n(set-html! \"questions-header\" \"<h4>Questions</h4>\")\n(set-html! \"questions\"\n  \"<select onchange='javascript:chart.client.question(this.value)'>\n   <option value='questions'>Questions</option>\n   <option value='intersect'>Intersections</option>\n   <option value='weather-gn'>Weather GeoNames</option>\n   <option value='weather-w2'>Weather2</option>\n   <option value='nearest-airports'>Nearest Airports</option>\n   <option value='where-we-are'>Where We Are?</option>\n   </select>\")")
+	(source "(set-html! \"commands-header\" \"<h4>Commands</h4>\")\n(set-html! \"commands\"\n  \"<select onchange='javascript:chart.client.command(this.value)'>\n   <option value='commands'>Commands</option>\n   <option value='watch-visible'>Watch Visible Area</option>\n   <option value='move-to'>Move to Airport</option>\n   <option value='schedule'>Schedule Flight</option>\n   <option value='wikipedia'>Toggle Wikipedia</option>\n   <option value='question'>Ask Question</option>\n   <option value='clear'>Clear</option>\n   </select>\")")
 	(title "show-chart-controls []"))
 
 ([FlightPro_Class220027] of  CloFunction
 
-	(source "(condp = cmd\n  \"commands\" nil\n  \"watch-visible\" (let [bnd (.getBounds @CHART)\n	          prm (str \"?n=\" (.getNorth bnd)\n		\"&s=\" (.getSouth bnd)\n		\"&w=\" (.getWest bnd)\n		\"&e=\" (.getEast bnd)\n		\"&z=\" (.getZoom @CHART))]\n	       (GET (str (:command URL) cmd prm) no-handler))\n  \"move-to\" (move-to)\n  \"schedule\" (schedule)\n  (GET (str (:command URL) cmd) no-handler))\n(ctl/show-chart-controls)")
+	(source "(condp = cmd\n  \"commands\" nil\n  \"watch-visible\" (let [bnd (.getBounds @CHART)\n	          prm (str \"?n=\" (.getNorth bnd)\n		\"&s=\" (.getSouth bnd)\n		\"&w=\" (.getWest bnd)\n		\"&e=\" (.getEast bnd)\n		\"&z=\" (.getZoom @CHART))]\n	       (GET (str (:command URL) cmd prm) no-handler))\n  \"move-to\" (move-to)\n  \"schedule\" (schedule)\n  \"question\" (question)\n  (GET (str (:command URL) cmd) no-handler))\n(ctl/show-chart-controls)")
 	(title "command [cmd]"))
 
 ([FlightPro_Class220030] of  CloFunction
@@ -1816,6 +1816,9 @@
 		[FlightPro_Class290001]
 		[FlightPro_Class380002]
 		[FlightPro_Class390003]
+		[FlightPro_Class500003]
+		[FlightPro_Class500002]
+		[FlightPro_Class460001]
 		[FlightPro_Class420001]
 		[FlightPro_Class420000]
 		[FlightPro_Class640008]
@@ -1893,12 +1896,12 @@
 
 ([FlightPro_Class420000] of  CloFunction
 
-	(source ";;(println [:QUESTION pp])\n(if (= (:whom pp) \"direct\")\n  (asp/pump-in (:answer CHN) (direct-question pp))\n  (do (rete/assert-frame \n	['Question\n	 'predicate (:predicate pp)\n	 'subject (:subject pp)\n	 'object (:object pp)])\n        (rete/fire)))\n{:status 204}")
+	(source "(println [:QUESTION pp])\n(if (= (:whom pp) \"direct\")\n  (asp/pump-in (:answer CHN) (direct-question pp))\n  (do (rete/assert-frame \n	['Question\n	 'predicate (:predicate pp)\n	 'subject (:subject pp)\n	 'object (:object pp)])\n        (rete/fire)))\n{:status 204}")
 	(title "question [pp]"))
 
 ([FlightPro_Class420001] of  CloFunction
 
-	(source "(condp = (:question pp)\n  \"countries\" (->> (fr24/airports-by-country)\n	keys\n	sort)\n  \"airports\" (->> (get (fr24/airports-by-country) (:country pp))\n	keys\n	sort)\n  true \"\")")
+	(source "(condp = (:question pp)\n  \"countries\"	(->> (fr24/airports-by-country)\n	  keys\n	  sort)\n  \"airports\"	(->> (get (fr24/airports-by-country) (:country pp))\n	  keys\n	  sort)\n  \"predicates\"	(predicates \n	  (fainst (cls-instances \"QuestionTree\") nil))\n  \"subjects\"	(subjects \n	  (:predicate pp) \n	  (fainst (cls-instances \"QuestionTree\") nil))\n  \"objects\"	(objects\n	  (:predicate pp)  \n	  (:subject pp) \n	  (fainst (cls-instances \"QuestionTree\") nil))\n  true \"\")")
 	(title "direct-question [pp]"))
 
 ([FlightPro_Class420008] of  ClsRequired
@@ -1976,6 +1979,21 @@
 
 	(source "(set-html! \"element1\" \"\")\n(set-html! \"element2\" \"\")\n(set-html! \"element3\" \"\")\n(set-html! \"element4\" \"\")\n(set-html! \"element5\" \"\")\n(set-html! \"element6\" \"\")\n(show-chart-controls)")
 	(title "clear-dialog []"))
+
+([FlightPro_Class460000] of  Airport
+
+	(altitude 280)
+	(coord 62.06362 -7.27721)
+	(country "Faroe Islands")
+	(iata "FAE")
+	(icao "EKVG")
+	(runways 0)
+	(title "Vagar Airport"))
+
+([FlightPro_Class460001] of  CloFunction
+
+	(source "(map #(sv % \"name\") (svs qt \"branches\"))")
+	(title "predicates [qt]"))
 
 ([FlightPro_Class460002] of  CloFunction
 
@@ -2094,6 +2112,16 @@
 	(salience 0)
 	(title "mf:Cruise"))
 
+([FlightPro_Class500002] of  CloFunction
+
+	(source "(if-let [flt (seq (filter #(= (sv % \"name\") pred) (svs qt \"branches\")))]\n  (map #(sv % \"name\") (svs (first flt) \"branches\")))")
+	(title "subjects [pred qt]"))
+
+([FlightPro_Class500003] of  CloFunction
+
+	(source "(if-let [flt (seq (filter #(= (sv % \"name\") pred) (svs qt \"branches\")))]\n  (if-let [flt (seq (filter #(= (sv % \"name\") subj) (svs (first flt) \"branches\")))]\n    (map #(sv % \"name\") (svs (first flt) \"branches\"))\n    \"\"))")
+	(title "objects [pred subj qt]"))
+
 ([FlightPro_Class500004] of  TypeName
 
 	(name "seafood"))
@@ -2165,6 +2193,12 @@
 
 	(source "(volatile! {\"MANUAL\"\n  {\"airport\" {\"origin\" {\"name\" \"unk\" \"code\" {\"iata\" \"unk\"}}\n                  \"destination\" {\"name\" \"unk\" \"code\" {\"iata\" \"unk\"}}}\n\n   \"aircraft\" {\"model\" {\"text\" \"Ru Lentokone\"}\n                   \"images\" {\"thumbnails\" [{\"src\" \"img/5.jpg\"}]}}\n\n   \"time\" {\"real\" {\"departure\" \"unk\"}\n               \"scheduled\" {\"arrival\" \"unk\"}}\n\n   \"airline\" {\"short\" \"Ru Airlines\"}}})")
 	(title "MY-INFOS"))
+
+([FlightPro_Class510004] of  %3AINSTANCE-ANNOTATION
+
+	(%3AANNOTATED-INSTANCE [FlightPro_Class510032])
+	(%3ACREATION-TIMESTAMP "2017.03.20 22:47:13.432 MSK")
+	(%3ACREATOR "ru"))
 
 ([FlightPro_Class510024] of  QuestionTree
 
@@ -2246,7 +2280,6 @@
 	(branches
 		[FlightPro_Class510041]
 		[FlightPro_Class510042]
-		[FlightPro_Class510043]
 		[FlightPro_Class510044]
 		[FlightPro_Class510045]
 		[FlightPro_Class510046]
@@ -2262,10 +2295,6 @@
 ([FlightPro_Class510042] of  QuestionTree
 
 	(name "island"))
-
-([FlightPro_Class510043] of  QuestionTree
-
-	(name "Question Tree Chart"))
 
 ([FlightPro_Class510044] of  QuestionTree
 
@@ -2311,7 +2340,6 @@
 		[FlightPro_Class510040]
 		[FlightPro_Class510028]
 		[FlightPro_Class510032]
-		[FlightPro_Class510043]
 		[FlightPro_Class510046]
 		[FlightPro_Class510048]
 		[FlightPro_Class510039]
@@ -3151,8 +3179,8 @@
 
 ([FlightPro_Class690008] of  CloFunction
 
-	(source "(condp = q\n  \"questions\" nil\n  (am/ask-server {:whom \"es\" :predicate q}))\n(ctl/show-chart-controls)")
-	(title "question [q]"))
+	(source "([]\n  (am/ask-server {:whom \"direct\"\n	    :question \"predicates\"})\n  (am/get-answer question))\n([predicates]\n  (am/selector \"element\" 1 \"chart.client\" \"?\" predicates :itself 130)\n  (defn handler1 [sel]\n    (println 1 sel)\n    (am/ask-server {:whom \"direct\"\n	       :question \"subjects\"\n	       :predicate sel})\n    (am/get-answer #(question sel %))))\n([pred subjects]\n  (am/selector \"element\" 20 \"chart.client\" \"?\" subjects :itself 130)\n  (defn handler20 [sel]\n    (println 20 sel)\n    (am/ask-server {:whom \"direct\"\n	       :question \"objects\"\n	       :predicate pred\n	       :subject sel})\n    (am/get-answer #(question pred sel %))))\n([pred subj objects]\n  (am/selector \"element\" 30 \"chart.client\" \"?\" objects :itself 130)\n  (defn handler30 [sel]\n    (println 30 sel)\n    (am/ask-server {:whom \"es\"\n	       :predicate pred\n	       :subject subj\n	       :object sel})))")
+	(title "question"))
 
 ([FlightPro_Class690009] of  CloFunction
 
