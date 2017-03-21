@@ -90,3 +90,10 @@
   padding:5px;
   z-index:100;
 }
+#element40 {
+  position:fixed;
+  bottom:40px;
+  left:580px;
+  padding:5px;
+  z-index:100;
+}

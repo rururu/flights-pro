@@ -1,4 +1,4 @@
-; Mon Mar 20 23:07:49 MSK 2017
+; Tue Mar 21 22:37:40 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -124,7 +124,7 @@
 
 ([FlightPro_Class130000] of  HTML
 
-	(source "<!DOCTYPE html>\n<html>\n<head>\n  <title>Chart View</title>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n  <link rel=\"stylesheet\" href=\"css/leaflet.css\" />\n  <link rel=\"stylesheet\" href=\"leaflet/leaflet.css\"/>\n  <script src=\"leaflet/leaflet.js\"></script>\n  <script src=\"js/leaflet.rotatedMarker.js\"></script>\n</head>\n<body>\n  <div id=\"map\"></div>\n  <div id=\"mousepos\"></div>\n  <div id=\"zoom\"></div>\n  <div id=\"commands-header\"></div>\n  <div id=\"commands\"></div>\n  <div id=\"element1\"></div>\n  <div id=\"element2\"></div>\n  <div id=\"element3\"></div>\n  <div id=\"element4\"></div>\n  <div id=\"element5\"></div>\n  <div id=\"element6\"></div>\n  <div id=\"element20\"></div>\n  <div id=\"element30\"></div>\n  <script src=\"js/chart.js\"></script>\n</body>\n</html>")
+	(source "<!DOCTYPE html>\n<html>\n<head>\n  <title>Chart View</title>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n  <link rel=\"stylesheet\" href=\"css/leaflet.css\" />\n  <link rel=\"stylesheet\" href=\"leaflet/leaflet.css\"/>\n  <script src=\"leaflet/leaflet.js\"></script>\n  <script src=\"js/leaflet.rotatedMarker.js\"></script>\n</head>\n<body>\n  <div id=\"map\"></div>\n  <div id=\"mousepos\"></div>\n  <div id=\"zoom\"></div>\n  <div id=\"commands-header\"></div>\n  <div id=\"commands\"></div>\n  <div id=\"element1\"></div>\n  <div id=\"element2\"></div>\n  <div id=\"element3\"></div>\n  <div id=\"element4\"></div>\n  <div id=\"element5\"></div>\n  <div id=\"element6\"></div>\n  <div id=\"element20\"></div>\n  <div id=\"element30\"></div>\n  <div id=\"element40\"></div>\n  <script src=\"js/chart.js\"></script>\n</body>\n</html>")
 	(store-in "resources/public")
 	(title "leaflet"))
 
@@ -248,7 +248,7 @@
 
 ([FlightPro_Class150001] of  CSS
 
-	(source "#map {\n    position: absolute;\n    top: 0px;\n    bottom: 0;\n    left: 0;\n    right: 0;\n    z-index: -1;\n}\n#mousepos {\n  position:fixed;\n  bottom:10px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#zoom {\n  position:fixed;\n  bottom:10px;\n  left:170px;\n  padding:5px;\n  z-index:100;\n}\n#commands-header {\n  position:fixed;\n  bottom:50px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#commands {\n  position:fixed;\n  bottom:40px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#element1 {\n  position:fixed;\n  bottom:40px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element2 {\n  position:fixed;\n  bottom:60px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element3 {\n  position:fixed;\n  bottom:80px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element4 {\n  position:fixed;\n  bottom:100px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element5 {\n  position:fixed;\n  bottom:120px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element6 {\n  position:fixed;\n  bottom:140px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element20 {\n  position:fixed;\n  bottom:40px;\n  left:300px;\n  padding:5px;\n  z-index:100;\n}\n#element30 {\n  position:fixed;\n  bottom:40px;\n  left:440px;\n  padding:5px;\n  z-index:100;\n}")
+	(source "#map {\n    position: absolute;\n    top: 0px;\n    bottom: 0;\n    left: 0;\n    right: 0;\n    z-index: -1;\n}\n#mousepos {\n  position:fixed;\n  bottom:10px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#zoom {\n  position:fixed;\n  bottom:10px;\n  left:170px;\n  padding:5px;\n  z-index:100;\n}\n#commands-header {\n  position:fixed;\n  bottom:50px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#commands {\n  position:fixed;\n  bottom:40px;\n  left:10px;\n  padding:5px;\n  z-index:100;\n}\n#element1 {\n  position:fixed;\n  bottom:40px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element2 {\n  position:fixed;\n  bottom:60px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element3 {\n  position:fixed;\n  bottom:80px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element4 {\n  position:fixed;\n  bottom:100px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element5 {\n  position:fixed;\n  bottom:120px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element6 {\n  position:fixed;\n  bottom:140px;\n  left:160px;\n  padding:5px;\n  z-index:100;\n}\n#element20 {\n  position:fixed;\n  bottom:40px;\n  left:300px;\n  padding:5px;\n  z-index:100;\n}\n#element30 {\n  position:fixed;\n  bottom:40px;\n  left:440px;\n  padding:5px;\n  z-index:100;\n}\n#element40 {\n  position:fixed;\n  bottom:40px;\n  left:580px;\n  padding:5px;\n  z-index:100;\n}")
 	(store-in "resources/public/css")
 	(title "leaflet"))
 
@@ -1356,7 +1356,6 @@
 
 	(rules
 		[FlightPro_Class690000]
-		[FlightPro_Class690007]
 		[FlightPro_Class730002]
 		[FlightPro_Class750009]
 		[FlightPro_Class780020]
@@ -1801,6 +1800,7 @@
 ([FlightPro_Class400000] of  CloProgram
 
 	(cloFunctions
+		[FlightPro_Class20013]
 		[FlightPro_Class320022]
 		[FlightPro_Class190000]
 		[FlightPro_Class210001]
@@ -1816,10 +1816,11 @@
 		[FlightPro_Class290001]
 		[FlightPro_Class380002]
 		[FlightPro_Class390003]
+		[FlightPro_Class610013]
+		[FlightPro_Class610012]
 		[FlightPro_Class500003]
 		[FlightPro_Class500002]
 		[FlightPro_Class460001]
-		[FlightPro_Class420001]
 		[FlightPro_Class420000]
 		[FlightPro_Class640008]
 		[FlightPro_Class420021]
@@ -1843,7 +1844,7 @@
 
 ([FlightPro_Class400001] of  CloNamespace
 
-	(source "(:use protege.core)\n(:require \n  [compojure.core :refer [GET]]\n  [fr24.client :as fr24]\n  [async.proc :as asp]\n  [rete.core :as rete]\n  [cesium.core :as czs]\n  [ext.data :as exd])")
+	(source "(:use protege.core)\n(:require \n  [compojure.core :refer [GET]]\n  [fr24.client :as fr24]\n  [async.proc :as asp]\n  [rete.core :as rete]\n  [cesium.core :as czs]\n              [cognitect.transit :as t]\n  [ext.data :as exd])\n(:import java.io.ByteArrayOutputStream)")
 	(title "pro.commands"))
 
 ([FlightPro_Class400003] of  CloNamespace
@@ -1896,13 +1897,8 @@
 
 ([FlightPro_Class420000] of  CloFunction
 
-	(source "(println [:QUESTION pp])\n(if (= (:whom pp) \"direct\")\n  (asp/pump-in (:answer CHN) (direct-question pp))\n  (do (rete/assert-frame \n	['Question\n	 'predicate (:predicate pp)\n	 'subject (:subject pp)\n	 'object (:object pp)])\n        (rete/fire)))\n{:status 204}")
+	(source ";;(println [:QUESTION pp])\n(write-transit \n  (condp = (:question pp)\n    \"es\"	(ask-es (:predicate pp) (:subject pp) (:object pp) (:adjunct pp))\n    \"countries\"	(->> (fr24/airports-by-country)\n	  keys\n	  sort)\n    \"airports\"	(->> (get (fr24/airports-by-country) (:country pp))\n	  keys\n	  sort)\n    \"predicates\" (predicates \n	  (fainst (cls-instances \"QuestionTree\") nil))\n    \"subjects\"	(subjects \n	  (:predicate pp) \n	  (fainst (cls-instances \"QuestionTree\") nil))\n    \"objects\"	(objects\n	  (:predicate pp)  \n	  (:subject pp) \n	  (fainst (cls-instances \"QuestionTree\") nil))\n    \"adjuncts\"	(adjuncts\n	  (:predicate pp)  \n	  (:subject pp) \n	  (:object pp)\n	  (fainst (cls-instances \"QuestionTree\") nil))\n    false))")
 	(title "question [pp]"))
-
-([FlightPro_Class420001] of  CloFunction
-
-	(source "(condp = (:question pp)\n  \"countries\"	(->> (fr24/airports-by-country)\n	  keys\n	  sort)\n  \"airports\"	(->> (get (fr24/airports-by-country) (:country pp))\n	  keys\n	  sort)\n  \"predicates\"	(predicates \n	  (fainst (cls-instances \"QuestionTree\") nil))\n  \"subjects\"	(subjects \n	  (:predicate pp) \n	  (fainst (cls-instances \"QuestionTree\") nil))\n  \"objects\"	(objects\n	  (:predicate pp)  \n	  (:subject pp) \n	  (fainst (cls-instances \"QuestionTree\") nil))\n  true \"\")")
-	(title "direct-question [pp]"))
 
 ([FlightPro_Class420008] of  ClsRequired
 
@@ -1912,7 +1908,7 @@
 		[FlightPro_Class420010]
 		[FlightPro_Class440001]
 		[FlightPro_Class420011]
-		[FlightPro_Class420019]
+		[FlightPro_Class600000]
 		[FlightPro_Class420020]
 		[FlightPro_Class450000])
 	(cloNamespace [FlightPro_Class420009])
@@ -1938,11 +1934,6 @@
 	(source "(let [sel (str \"<select onchange='javascript:\" ns \".handler\" k \"(this.value)' style='width:\" wid \"px'>\"\n                 \"<option value='-1'>\" header \"</option>\"\n                 (options lst typ)\n                 \"</select>\")]\n  (set-html! (str element k) sel))")
 	(title "selector [element k ns header lst typ wid]"))
 
-([FlightPro_Class420019] of  CloFunction
-
-	(source "(GET (:question URL) \n    {:params params\n     :error-handler error-handler\n     :response-format :transit})")
-	(title "ask-server [params]"))
-
 ([FlightPro_Class420020] of  CloFunction
 
 	(source "(GET (:answer URL) \n  {:handler handler\n   :error-handler error-handler\n   :response-format :transit})")
@@ -1955,7 +1946,7 @@
 
 ([FlightPro_Class430000] of  CloFunction
 
-	(source "([]\n  (am/ask-server {:whom \"direct\"\n	    :question \"countries\"})\n  (am/get-answer move-to))\n([cns]\n  (am/selector \"element\" 1 \"chart.client\" \"countries\" cns :itself 130)\n  (defn handler1 [sel]\n    (am/ask-server {:whom \"direct\"\n	       :question \"airports\"\n	       :country sel})\n    (am/get-answer #(move-to sel %))))\n([cnt aps]\n  (am/selector \"element\" 2 \"chart.client\" \"airports\" aps :itself 130)\n  (defn handler2 [sel]\n    (let [prm (str \"?country=\" cnt\n	\"&airport=\" sel)]\n      (GET (str (:command URL) \"move-to\" prm) no-handler)\n      (am/clear-dialog))))")
+	(source "([]\n  (am/ask-server {:question \"countries\"}\n	move-to))\n([cns]\n  (am/selector \"element\" 1 \"chart.client\" \"countries\" cns :itself 130)\n  (defn handler1 [sel]\n    (am/ask-server {:question \"airports\"\n	       :country sel}\n	#(move-to sel %))))\n([cnt aps]\n  (am/selector \"element\" 2 \"chart.client\" \"airports\" aps :itself 130)\n  (defn handler2 [sel]\n    (let [prm (str \"?country=\" cnt\n	\"&airport=\" sel)]\n      (GET (str (:command URL) \"move-to\" prm) no-handler)\n      (am/clear-dialog))))")
 	(title "move-to"))
 
 ([FlightPro_Class430010] of  Rule
@@ -1967,7 +1958,7 @@
 
 ([FlightPro_Class440000] of  CloFunction
 
-	(source "([]\n  (am/input \"element\" 1 \"chart.client\" \"new callsign\" 80)\n  (defn handler1 [call]\n    (am/input \"element\" 2 \"chart.client\" \"hh:mm\" 80)\n      (defn handler2 [tim]\n        (schedule call tim))))\n([call tim]\n  (am/ask-server {:whom \"direct\"\n	    :question \"countries\"})\n  (am/get-answer #(schedule call tim %)))\n([call tim cns1]\n  (am/selector \"element\" 3 \"chart.client\" \"from country\" cns1 :itself 130)\n  (defn handler3 [sel]\n    (am/ask-server {:whom \"direct\"\n	       :question \"airports\"\n	       :country sel})\n    (am/get-answer #(schedule call tim sel %))))\n([call tim cnt1 aps1]\n  (am/selector \"element\" 4 \"chart.client\" \"from airport\" aps1 :itself 130)\n  (defn handler4 [sel]\n    (am/ask-server {:whom \"direct\"\n	    :question \"countries\"})\n    (am/get-answer #(schedule call tim cnt1 sel %))))\n([call tim cnt1 apt1 cns2]\n  (am/selector \"element\" 5 \"chart.client\" \"to county\" cns2 :itself 130)\n  (defn handler5 [sel]\n    (am/ask-server {:whom \"direct\"\n	       :question \"airports\"\n	       :country sel})\n    (am/get-answer #(schedule call tim cnt1 apt1 sel %))))\n([call tim cnt1 apt1 cnt2 aps2]\n  (am/selector \"element\" 6 \"chart.client\" \"to airport\" aps2 :itself 130)\n  (defn handler6 [sel]\n    (let [prm (str \"?callsign=\" call\n	\"&time=\" tim\n	\"&country1=\" cnt1\n	\"&airport1=\" apt1\n	\"&country2=\" cnt2\n	\"&airport2=\" sel)]\n      (GET (str (:command URL) \"schedule\" prm) no-handler)\n      (am/clear-dialog))))")
+	(source "([]\n  (am/input \"element\" 1 \"chart.client\" \"new callsign\" 80)\n  (defn handler1 [call]\n    (am/input \"element\" 2 \"chart.client\" \"hh:mm\" 80)\n      (defn handler2 [tim]\n        (schedule call tim))))\n([call tim]\n  (am/ask-server {:question \"countries\"}\n	#(schedule call tim %)))\n([call tim cns1]\n  (am/selector \"element\" 3 \"chart.client\" \"from country\" cns1 :itself 130)\n  (defn handler3 [sel]\n    (am/ask-server {:question \"airports\"\n	       :country sel}\n	#(schedule call tim sel %))))\n([call tim cnt1 aps1]\n  (am/selector \"element\" 4 \"chart.client\" \"from airport\" aps1 :itself 130)\n  (defn handler4 [sel]\n    (am/ask-server {:question \"countries\"}\n	#(schedule call tim cnt1 sel %))))\n([call tim cnt1 apt1 cns2]\n  (am/selector \"element\" 5 \"chart.client\" \"to county\" cns2 :itself 130)\n  (defn handler5 [sel]\n    (am/ask-server {:question \"airports\"\n	       :country sel}\n	#(schedule call tim cnt1 apt1 sel %))))\n([call tim cnt1 apt1 cnt2 aps2]\n  (am/selector \"element\" 6 \"chart.client\" \"to airport\" aps2 :itself 130)\n  (defn handler6 [sel]\n    (let [prm (str \"?callsign=\" call\n	\"&time=\" tim\n	\"&country1=\" cnt1\n	\"&airport1=\" apt1\n	\"&country2=\" cnt2\n	\"&airport2=\" sel)]\n      (GET (str (:command URL) \"schedule\" prm) no-handler)\n      (am/clear-dialog))))")
 	(title "schedule"))
 
 ([FlightPro_Class440001] of  CloFunction
@@ -1977,7 +1968,7 @@
 
 ([FlightPro_Class450000] of  CloFunction
 
-	(source "(set-html! \"element1\" \"\")\n(set-html! \"element2\" \"\")\n(set-html! \"element3\" \"\")\n(set-html! \"element4\" \"\")\n(set-html! \"element5\" \"\")\n(set-html! \"element6\" \"\")\n(show-chart-controls)")
+	(source "(set-html! \"element1\" \"\")\n(set-html! \"element2\" \"\")\n(set-html! \"element3\" \"\")\n(set-html! \"element4\" \"\")\n(set-html! \"element5\" \"\")\n(set-html! \"element6\" \"\")\n(set-html! \"element20\" \"\")\n(set-html! \"element30\" \"\")\n(set-html! \"element40\" \"\")\n(show-chart-controls)")
 	(title "clear-dialog []"))
 
 ([FlightPro_Class460000] of  Airport
@@ -2119,7 +2110,7 @@
 
 ([FlightPro_Class500003] of  CloFunction
 
-	(source "(if-let [flt (seq (filter #(= (sv % \"name\") pred) (svs qt \"branches\")))]\n  (if-let [flt (seq (filter #(= (sv % \"name\") subj) (svs (first flt) \"branches\")))]\n    (map #(sv % \"name\") (svs (first flt) \"branches\"))\n    \"\"))")
+	(source "(if-let [flt (seq (filter #(= (sv % \"name\") pred) (svs qt \"branches\")))]\n  (if-let [flt (seq (filter #(= (sv % \"name\") subj) (svs (first flt) \"branches\")))]\n    (if-let [bb (seq (svs (first flt) \"branches\"))]\n      (map #(sv % \"name\") bb)\n      (ask-es pred subj nil nil))))")
 	(title "objects [pred subj qt]"))
 
 ([FlightPro_Class500004] of  TypeName
@@ -2214,6 +2205,9 @@
 
 ([FlightPro_Class510027] of  QuestionTree
 
+	(branches
+		[FlightPro_Class790000]
+		[FlightPro_Class790001])
 	(name "in the air"))
 
 ([FlightPro_Class510028] of  QuestionTree
@@ -2345,7 +2339,9 @@
 		[FlightPro_Class510039]
 		[FlightPro_Class510035]
 		[FlightPro_Class510033]
-		[FlightPro_Class510038]))
+		[FlightPro_Class510038]
+		[FlightPro_Class790000]
+		[FlightPro_Class790001]))
 
 ([FlightPro_Class520000] of  CloFunction
 
@@ -2460,6 +2456,31 @@
 
 	(source "<html>\n  <head>\n    <style type=\"text/css\">\n      <!--\n        body { font-family: arial; font-size: 12pt }\n        p { font-family: arial; margin-top: 2; margin-right: 2; margin-bottom: 2; margin-left: 2 }\n      -->\n    </style>\n    \n  </head>\n  <body>\n    <b>Cesium Client<br></b><br>API<br><br>1. fly-to [lat lon alt crs per]<br>2. camera [key val], keys: :view, :altitude, :pitch, :roll<br><br>CZML rendering support<br><br>Initialization: (init-3D-view)</body>\n</html>"))
 
+([FlightPro_Class600000] of  CloFunction
+
+	(source "(GET (:question URL) \n    {:params params\n     :handler handler\n     :error-handler error-handler\n     :response-format :transit})")
+	(title "ask-server [params handler]"))
+
+([FlightPro_Class600001] of  Airport
+
+	(altitude 29)
+	(coord 12.18885 -68.9598)
+	(country "Curacao")
+	(iata "CUR")
+	(icao "TNCC")
+	(runways 0)
+	(title "Willemstad Curacao Hato International Airport"))
+
+([FlightPro_Class600002] of  Airport
+
+	(altitude 126)
+	(coord 41.41474 19.72056)
+	(country "Albania")
+	(iata "TIA")
+	(icao "LATI")
+	(runways 0)
+	(title "Tirana International Airport"))
+
 ([FlightPro_Class600003] of  CloFunction
 
 	(source "(let [carr @CARRIER]\n  (if (= (:mode carr) \"MANUAL\")\n    (GET (str (:manual-data URL) \n	\"?coord=\" (:coord carr)\n	\"&course=\" (:course carr)\n	\"&speed= \" (:speed carr)\n	\"&altitude=\" (:altitude carr))\n	{:handler (fn[response])\n	 :error-handler error-handler})))")
@@ -2483,6 +2504,72 @@
 ([FlightPro_Class610002] of  CloFuncall
 
 	(source "(reduce-kv #(assoc %1 %2 (* %3 %3)) {:a 2 :b 3})"))
+
+([FlightPro_Class610003] of  Airport
+
+	(altitude 2697)
+	(coord 35.759167 6.3225)
+	(country "Algeria")
+	(iata "BLJ")
+	(icao "DABT")
+	(runways 0)
+	(title "Batna International Airport"))
+
+([FlightPro_Class610004] of  Airport
+
+	(altitude 169)
+	(coord 13.0746 -59.4924)
+	(country "Barbados")
+	(iata "BGI")
+	(icao "TBPB")
+	(runways 0)
+	(title "Bridgetown Grantley Adams International Airport"))
+
+([FlightPro_Class610005] of  Airport
+
+	(altitude 16)
+	(coord 25.03895 -77.4662)
+	(country "Bahamas")
+	(iata "NAS")
+	(icao "MYNN")
+	(runways 0)
+	(title "Nassau Lynden Pindling International Airport"))
+
+([FlightPro_Class610006] of  Airport
+
+	(altitude 3338)
+	(coord 31.51363 65.86105)
+	(country "Afghanistan")
+	(iata "KDH")
+	(icao "OAKN")
+	(runways 0)
+	(title "Kandahar Airport"))
+
+([FlightPro_Class610007] of  CloFuncall
+
+	(source "(ru.rules/pp 'Question)"))
+
+([FlightPro_Class610008] of  CloFuncall
+
+	(source "(ru.rules/pp :all)"))
+
+([FlightPro_Class610009] of  CloFuncall
+
+	(source "(defn (symbol (str \"func\" 33)) [x y] (+ x y))"))
+
+([FlightPro_Class610010] of  CloFuncall
+
+	(source "(def (symbol (str \"func\" 33)) (fn [x y] (+ x y)))"))
+
+([FlightPro_Class610012] of  CloFunction
+
+	(source "(if-let [flt (seq (filter #(= (sv % \"name\") pred) (svs qt \"branches\")))]\n  (if-let [flt (seq (filter #(= (sv % \"name\") subj) (svs (first flt) \"branches\")))]\n    (if-let [flt (seq (filter #(= (sv % \"name\") obj) (svs (first flt) \"branches\")))]\n      (if-let [bb (seq (svs (first flt) \"branches\"))]\n        (map #(sv % \"name\") bb)\n        (ask-es pred subj obj nil)))))")
+	(title "adjuncts [pred subj obj qt]"))
+
+([FlightPro_Class610013] of  CloFunction
+
+	(source "(println [:ASK-ES pred subj obj adj])\n(rete/assert-frame \n	['Question\n	 'predicate pred\n	 'subject subj\n	 'object obj\n	 'adjunct adj])\n(rete/fire)")
+	(title "ask-es [pred subj obj adj]"))
 
 ([FlightPro_Class610041] of  TypeName
 
@@ -2720,14 +2807,6 @@
 
 	(name "funeral_directors"))
 
-([FlightPro_Class620105] of  CloFuncall
-
-	(source "(def x [1 2 3 4])"))
-
-([FlightPro_Class620106] of  CloFuncall
-
-	(source "(let [[a b] x] (println b a))"))
-
 ([FlightPro_Class630000] of  CloVar
 
 	(source "0")
@@ -2748,10 +2827,6 @@
 ([FlightPro_Class630108] of  TypeName
 
 	(name "abandoned_station"))
-
-([FlightPro_Class630146] of  CloFuncall
-
-	(source "fr24.client/BBX"))
 
 ([FlightPro_Class630231] of  TypeName
 
@@ -3179,7 +3254,7 @@
 
 ([FlightPro_Class690008] of  CloFunction
 
-	(source "([]\n  (am/ask-server {:whom \"direct\"\n	    :question \"predicates\"})\n  (am/get-answer question))\n([predicates]\n  (am/selector \"element\" 1 \"chart.client\" \"?\" predicates :itself 130)\n  (defn handler1 [sel]\n    (println 1 sel)\n    (am/ask-server {:whom \"direct\"\n	       :question \"subjects\"\n	       :predicate sel})\n    (am/get-answer #(question sel %))))\n([pred subjects]\n  (am/selector \"element\" 20 \"chart.client\" \"?\" subjects :itself 130)\n  (defn handler20 [sel]\n    (println 20 sel)\n    (am/ask-server {:whom \"direct\"\n	       :question \"objects\"\n	       :predicate pred\n	       :subject sel})\n    (am/get-answer #(question pred sel %))))\n([pred subj objects]\n  (am/selector \"element\" 30 \"chart.client\" \"?\" objects :itself 130)\n  (defn handler30 [sel]\n    (println 30 sel)\n    (am/ask-server {:whom \"es\"\n	       :predicate pred\n	       :subject subj\n	       :object sel})))")
+	(source "([]\n  (am/ask-server {:question \"predicates\"}\n	question))\n([predicates]\n  (am/selector \"element\" 1 \"chart.client\" \"?\" predicates :itself 130)\n  (defn handler1 [sel]\n    (am/ask-server {:question \"subjects\"\n	       :predicate sel}\n	#(question sel %))))\n([pred subjects]\n  (am/selector \"element\" 20 \"chart.client\" \"?\" subjects :itself 130)\n  (defn handler20 [sel]\n    (am/ask-server {:question \"objects\"\n	       :predicate pred\n	       :subject sel}\n	#(question pred sel %))))\n([pred subj objects]\n  (if objects\n    (do (am/selector \"element\" 30 \"chart.client\" \"?\" objects :itself 130)\n      (defn handler30 [sel]\n        (am/ask-server {:question \"adjuncts\"\n	          :predicate pred\n	          :subject subj\n	          :object sel} \n	#(question pred subj sel %))))\n    (am/clear-dialog)))\n([pred subj obj adjuncts]\n  (if adjuncts\n    (do (am/selector \"element\" 40 \"chart.client\" \"?\" adjuncts :itself 130)\n      (defn handler40 [sel]\n        (am/ask-server {:question \"es\"\n	          :predicate pred\n	          :subject subj\n	          :object obj\n                                  :adjunct sel} \n	(fn [r]))\n        (am/clear-dialog)))\n    (am/clear-dialog)))")
 	(title "question"))
 
 ([FlightPro_Class690009] of  CloFunction
@@ -3507,6 +3582,14 @@
 
 	(source "(let [ocr (our-center)\n        nas (fr24/nearest-airports k ocr)\n        dis (map #(geo/distance-nm ocr [(% \"lat\")(% \"lon\")]) nas)\n        bea (map #(geo/bear-deg ocr [(% \"lat\")(% \"lon\")]) nas)\n        html (str \"<h3>Nearest Airports</h3>\"\n	(apply str (for [i (range k)]\n	  (str (inc i) \". \" (get (nth nas i) \"name\") \", \"\n		(get (nth nas i) \"country\") \" (\"\n		(get (nth nas i) \"iata\") \"), \"\n		(format \"distance: %.1f\" (nth dis i)) \" NM, \"\n		\"direction: \" (int (nth bea i)) \"<br>\"))))\n        chn (:ins-chn @COMM)]\n  (asp/pump-in chn\n	{:instruct :popup\n	 :lat (first ocr)\n	 :lon (second ocr)\n	 :html html\n	 :width 1200\n	 :height 1000\n	 :time (:ext-data-popup TIO)})\n  (asp/pump-in chn {:instruct :clear-placemarks})\n  (doseq [apt (take k nas)]\n    (point-out-place {:airport apt})\n    (asp/pump-in chn (placemark-instruct {:airport apt :feature \"airport\"}))))")
 	(title "pump-nearest-airports [k]"))
+
+([FlightPro_Class790000] of  QuestionTree
+
+	(name "climb"))
+
+([FlightPro_Class790001] of  QuestionTree
+
+	(name "descend"))
 
 ([FlightPro_Class8] of  CloFunction
 

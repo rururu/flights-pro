@@ -6,7 +6,9 @@
   [async.proc :as asp]
   [rete.core :as rete]
   [cesium.core :as czs]
-  [ext.data :as exd]))
+              [cognitect.transit :as t]
+  [ext.data :as exd])
+(:import java.io.ByteArrayOutputStream))
 
 (def HOST "http://localhost:")
 (def PORT 4444)
@@ -36,6 +38,14 @@
    "airline" {"short" "Ru Airlines"}}}))
 (def TERRAIN "yes")
 (def APT-ALT 0)
+(defn write-transit [x]
+  (let [baos (ByteArrayOutputStream.)
+        w    (t/writer baos :json)
+        _    (t/write w x)
+        ret  (.toString baos)]
+    (.reset baos)
+    ret))
+
 (defn current-time []
   (int (/ (System/currentTimeMillis) 1000)))
 
@@ -204,11 +214,30 @@ TERRAIN)
 (rete/assert-frame ['Follow 'id "STOP" 'time 0])
 "")
 
+(defn ask-es [pred subj obj adj]
+  (println [:ASK-ES pred subj obj adj])
+(rete/assert-frame 
+	['Question
+	 'predicate pred
+	 'subject subj
+	 'object obj
+	 'adjunct adj])
+(rete/fire))
+
+(defn adjuncts [pred subj obj qt]
+  (if-let [flt (seq (filter #(= (sv % "name") pred) (svs qt "branches")))]
+  (if-let [flt (seq (filter #(= (sv % "name") subj) (svs (first flt) "branches")))]
+    (if-let [flt (seq (filter #(= (sv % "name") obj) (svs (first flt) "branches")))]
+      (if-let [bb (seq (svs (first flt) "branches"))]
+        (map #(sv % "name") bb)
+        (ask-es pred subj obj nil))))))
+
 (defn objects [pred subj qt]
   (if-let [flt (seq (filter #(= (sv % "name") pred) (svs qt "branches")))]
   (if-let [flt (seq (filter #(= (sv % "name") subj) (svs (first flt) "branches")))]
-    (map #(sv % "name") (svs (first flt) "branches"))
-    "")))
+    (if-let [bb (seq (svs (first flt) "branches"))]
+      (map #(sv % "name") bb)
+      (ask-es pred subj nil nil)))))
 
 (defn subjects [pred qt]
   (if-let [flt (seq (filter #(= (sv % "name") pred) (svs qt "branches")))]
@@ -217,36 +246,32 @@ TERRAIN)
 (defn predicates [qt]
   (map #(sv % "name") (svs qt "branches")))
 
-(defn direct-question [pp]
+(defn question [pp]
+  ;;(println [:QUESTION pp])
+(write-transit 
   (condp = (:question pp)
-  "countries"	(->> (fr24/airports-by-country)
+    "es"	(ask-es (:predicate pp) (:subject pp) (:object pp) (:adjunct pp))
+    "countries"	(->> (fr24/airports-by-country)
 	  keys
 	  sort)
-  "airports"	(->> (get (fr24/airports-by-country) (:country pp))
+    "airports"	(->> (get (fr24/airports-by-country) (:country pp))
 	  keys
 	  sort)
-  "predicates"	(predicates 
+    "predicates" (predicates 
 	  (fainst (cls-instances "QuestionTree") nil))
-  "subjects"	(subjects 
+    "subjects"	(subjects 
 	  (:predicate pp) 
 	  (fainst (cls-instances "QuestionTree") nil))
-  "objects"	(objects
+    "objects"	(objects
 	  (:predicate pp)  
 	  (:subject pp) 
 	  (fainst (cls-instances "QuestionTree") nil))
-  true ""))
-
-(defn question [pp]
-  (println [:QUESTION pp])
-(if (= (:whom pp) "direct")
-  (asp/pump-in (:answer CHN) (direct-question pp))
-  (do (rete/assert-frame 
-	['Question
-	 'predicate (:predicate pp)
-	 'subject (:subject pp)
-	 'object (:object pp)])
-        (rete/fire)))
-{:status 204})
+    "adjuncts"	(adjuncts
+	  (:predicate pp)  
+	  (:subject pp) 
+	  (:object pp)
+	  (fainst (cls-instances "QuestionTree") nil))
+    false)))
 
 (defn foc-apt-ins [apt]
   ;; find or create airport instance

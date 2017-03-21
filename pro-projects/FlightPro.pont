@@ -1,4 +1,4 @@
-; Mon Mar 20 23:07:49 MSK 2017
+; Tue Mar 21 22:37:40 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -120,6 +120,10 @@
 		(range 0 359)
 		(default 0)
 		(create-accessor read-write))
+	(single-slot adjunct
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot speed
 		(type STRING)
 ;+		(cardinality 0 1)
@@ -228,6 +232,10 @@
 (defclass Question
 	(is-a Flights+Ontology)
 	(role concrete)
+	(single-slot adjunct
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot predicate
 		(type STRING)
 ;+		(cardinality 0 1)

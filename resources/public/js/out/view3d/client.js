@@ -18,10 +18,10 @@ view3d.client.TIO = cljs.core.PersistentHashMap.fromArrays([new cljs.core.Keywor
 view3d.client.CARRIER = cljs.core.volatile_BANG_.call(null,cljs.core.PersistentHashMap.fromArrays([new cljs.core.Keyword(null,"coord","coord",-1453656639),new cljs.core.Keyword(null,"speed","speed",1257663751),new cljs.core.Keyword(null,"rudder","rudder",1071257290),new cljs.core.Keyword(null,"mode","mode",654403691),new cljs.core.Keyword(null,"propeller","propeller",-1462065491),new cljs.core.Keyword(null,"course","course",1455432948),new cljs.core.Keyword(null,"elevator","elevator",-1729324395),new cljs.core.Keyword(null,"step-hrs","step-hrs",-504384679),new cljs.core.Keyword(null,"bank-params","bank-params",-1143002692),new cljs.core.Keyword(null,"altitude","altitude",463588637)],[new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [(0),(0)], null),(0),new cljs.core.PersistentArrayMap(null, 4, [new cljs.core.Keyword(null,"target","target",253001721),(0),new cljs.core.Keyword(null,"step","step",1288888124),(3),new cljs.core.Keyword(null,"accel","accel",-2118422974),(1),new cljs.core.Keyword(null,"time-out","time-out",-125288146),(1017)], null),"?",new cljs.core.PersistentArrayMap(null, 4, [new cljs.core.Keyword(null,"target","target",253001721),(0),new cljs.core.Keyword(null,"step","step",1288888124),(1),new cljs.core.Keyword(null,"accel","accel",-2118422974),(1),new cljs.core.Keyword(null,"time-out","time-out",-125288146),(2003)], null),(0),new cljs.core.PersistentArrayMap(null, 4, [new cljs.core.Keyword(null,"target","target",253001721),(0),new cljs.core.Keyword(null,"step","step",1288888124),(4),new cljs.core.Keyword(null,"accel","accel",-2118422974),(1),new cljs.core.Keyword(null,"time-out","time-out",-125288146),(997)], null),(new cljs.core.Keyword(null,"carrier","carrier",1085800622).cljs$core$IFn$_invoke$arity$1(view3d.client.TIO) / (3600000)),new cljs.core.PersistentVector(null, 4, 5, cljs.core.PersistentVector.EMPTY_NODE, [(12),(16),(64),(2)], null),(0)]));
 view3d.client.CAM_PROC = cljs.core.volatile_BANG_.call(null,"STOP");
 view3d.client.error_handler = (function view3d$client$error_handler(response){
-var map__30948 = response;
-var map__30948__$1 = ((((!((map__30948 == null)))?((((map__30948.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__30948.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__30948):map__30948);
-var status = cljs.core.get.call(null,map__30948__$1,new cljs.core.Keyword(null,"status","status",-1997798413));
-var status_text = cljs.core.get.call(null,map__30948__$1,new cljs.core.Keyword(null,"status-text","status-text",-1834235478));
+var map__33807 = response;
+var map__33807__$1 = ((((!((map__33807 == null)))?((((map__33807.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__33807.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__33807):map__33807);
+var status = cljs.core.get.call(null,map__33807__$1,new cljs.core.Keyword(null,"status","status",-1997798413));
+var status_text = cljs.core.get.call(null,map__33807__$1,new cljs.core.Keyword(null,"status-text","status-text",-1834235478));
 return cljs.core.println.call(null,[cljs.core.str("AJAX ERROR: "),cljs.core.str(status),cljs.core.str(" "),cljs.core.str(status_text)].join(''));
 });
 view3d.client.num_val = (function view3d$client$num_val(x){
@@ -35,12 +35,12 @@ view3d.client.read_transit = (function view3d$client$read_transit(x){
 return cognitect.transit.read.call(null,cognitect.transit.reader.call(null,new cljs.core.Keyword(null,"json","json",1279968570)),x);
 });
 view3d.client.turn_and_bank = (function view3d$client$turn_and_bank(carr__$1,course){
-var vec__30953 = new cljs.core.Keyword(null,"bank-params","bank-params",-1143002692).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,carr__$1));
-var rb = cljs.core.nth.call(null,vec__30953,(0),null);
-var sa = cljs.core.nth.call(null,vec__30953,(1),null);
-var ba = cljs.core.nth.call(null,vec__30953,(2),null);
-var fa = cljs.core.nth.call(null,vec__30953,(3),null);
-var bps = vec__30953;
+var vec__33812 = new cljs.core.Keyword(null,"bank-params","bank-params",-1143002692).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,carr__$1));
+var rb = cljs.core.nth.call(null,vec__33812,(0),null);
+var sa = cljs.core.nth.call(null,vec__33812,(1),null);
+var ba = cljs.core.nth.call(null,vec__33812,(2),null);
+var fa = cljs.core.nth.call(null,vec__33812,(3),null);
+var bps = vec__33812;
 var bnk = calc.dynamic.bank.call(null,new cljs.core.Keyword(null,"course","course",1455432948).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,carr__$1)),course,bps);
 var spd = new cljs.core.Keyword(null,"speed","speed",1257663751).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,carr__$1));
 if(((spd < (90))) || (cljs.core._EQ_.call(null,bnk,(0)))){
@@ -51,10 +51,10 @@ czm.core.camera.call(null,new cljs.core.Keyword(null,"roll","roll",11266999),bnk
 
 carr.move.turn.call(null,carr__$1,course,accel);
 
-return calc.dynamic.check_diff_and_do.call(null,carr__$1,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"rudder","rudder",1071257290),new cljs.core.Keyword(null,"target","target",253001721)], null),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"course","course",1455432948)], null),cljs.core.get_in.call(null,cljs.core.deref.call(null,carr__$1),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"rudder","rudder",1071257290),new cljs.core.Keyword(null,"step","step",1288888124)], null)),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"rudder","rudder",1071257290),new cljs.core.Keyword(null,"time-out","time-out",-125288146)], null),((function (accel,vec__30953,rb,sa,ba,fa,bps,bnk,spd){
+return calc.dynamic.check_diff_and_do.call(null,carr__$1,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"rudder","rudder",1071257290),new cljs.core.Keyword(null,"target","target",253001721)], null),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"course","course",1455432948)], null),cljs.core.get_in.call(null,cljs.core.deref.call(null,carr__$1),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"rudder","rudder",1071257290),new cljs.core.Keyword(null,"step","step",1288888124)], null)),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"rudder","rudder",1071257290),new cljs.core.Keyword(null,"time-out","time-out",-125288146)], null),((function (accel,vec__33812,rb,sa,ba,fa,bps,bnk,spd){
 return (function (){
 return czm.core.camera.call(null,new cljs.core.Keyword(null,"roll","roll",11266999),(0));
-});})(accel,vec__30953,rb,sa,ba,fa,bps,bnk,spd))
+});})(accel,vec__33812,rb,sa,ba,fa,bps,bnk,spd))
 );
 }
 });
@@ -149,9 +149,9 @@ view3d.client.latitude = (function view3d$client$latitude(lat){
 if(cljs.core._EQ_.call(null,new cljs.core.Keyword(null,"mode","mode",654403691).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,view3d.client.CARRIER)),"MANUAL")){
 var car = cljs.core.deref.call(null,view3d.client.CARRIER);
 var lat__$1 = view3d.client.num_val.call(null,lat);
-var vec__30959 = new cljs.core.Keyword(null,"coord","coord",-1453656639).cljs$core$IFn$_invoke$arity$1(car);
-var _ = cljs.core.nth.call(null,vec__30959,(0),null);
-var lon = cljs.core.nth.call(null,vec__30959,(1),null);
+var vec__33818 = new cljs.core.Keyword(null,"coord","coord",-1453656639).cljs$core$IFn$_invoke$arity$1(car);
+var _ = cljs.core.nth.call(null,vec__33818,(0),null);
+var lon = cljs.core.nth.call(null,vec__33818,(1),null);
 return carr.move.set_turn_point.call(null,view3d.client.CARRIER,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [lat__$1,lon], null),new cljs.core.Keyword(null,"course","course",1455432948).cljs$core$IFn$_invoke$arity$1(car),new cljs.core.Keyword(null,"speed","speed",1257663751).cljs$core$IFn$_invoke$arity$1(car));
 } else {
 return null;
@@ -161,32 +161,32 @@ view3d.client.longitude = (function view3d$client$longitude(lon){
 if(cljs.core._EQ_.call(null,new cljs.core.Keyword(null,"mode","mode",654403691).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,view3d.client.CARRIER)),"MANUAL")){
 var car = cljs.core.deref.call(null,view3d.client.CARRIER);
 var lon__$1 = view3d.client.num_val.call(null,lon);
-var vec__30965 = new cljs.core.Keyword(null,"coord","coord",-1453656639).cljs$core$IFn$_invoke$arity$1(car);
-var lat = cljs.core.nth.call(null,vec__30965,(0),null);
-var _ = cljs.core.nth.call(null,vec__30965,(1),null);
+var vec__33824 = new cljs.core.Keyword(null,"coord","coord",-1453656639).cljs$core$IFn$_invoke$arity$1(car);
+var lat = cljs.core.nth.call(null,vec__33824,(0),null);
+var _ = cljs.core.nth.call(null,vec__33824,(1),null);
 return carr.move.set_turn_point.call(null,view3d.client.CARRIER,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [lat,lon__$1], null),new cljs.core.Keyword(null,"course","course",1455432948).cljs$core$IFn$_invoke$arity$1(car),new cljs.core.Keyword(null,"speed","speed",1257663751).cljs$core$IFn$_invoke$arity$1(car));
 } else {
 return null;
 }
 });
 view3d.client.camera_move = (function view3d$client$camera_move(var_args){
-var args30968 = [];
-var len__21677__auto___30974 = arguments.length;
-var i__21678__auto___30975 = (0);
+var args33827 = [];
+var len__9665__auto___33833 = arguments.length;
+var i__9666__auto___33834 = (0);
 while(true){
-if((i__21678__auto___30975 < len__21677__auto___30974)){
-args30968.push((arguments[i__21678__auto___30975]));
+if((i__9666__auto___33834 < len__9665__auto___33833)){
+args33827.push((arguments[i__9666__auto___33834]));
 
-var G__30976 = (i__21678__auto___30975 + (1));
-i__21678__auto___30975 = G__30976;
+var G__33835 = (i__9666__auto___33834 + (1));
+i__9666__auto___33834 = G__33835;
 continue;
 } else {
 }
 break;
 }
 
-var G__30970 = args30968.length;
-switch (G__30970) {
+var G__33829 = args33827.length;
+switch (G__33829) {
 case 1:
 return view3d.client.camera_move.cljs$core$IFn$_invoke$arity$1((arguments[(0)]));
 
@@ -196,7 +196,7 @@ return view3d.client.camera_move.cljs$core$IFn$_invoke$arity$2((arguments[(0)]),
 
 break;
 default:
-throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args30968.length)].join('')));
+throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args33827.length)].join('')));
 
 }
 });
@@ -206,14 +206,14 @@ return view3d.client.camera_move.call(null,carr__$1,(new cljs.core.Keyword(null,
 });
 
 view3d.client.camera_move.cljs$core$IFn$_invoke$arity$2 = (function (carr__$1,period){
-var car_30978 = cljs.core.deref.call(null,carr__$1);
-var vec__30971_30979 = new cljs.core.Keyword(null,"coord","coord",-1453656639).cljs$core$IFn$_invoke$arity$1(car_30978);
-var lat_30980 = cljs.core.nth.call(null,vec__30971_30979,(0),null);
-var lon_30981 = cljs.core.nth.call(null,vec__30971_30979,(1),null);
-var crs_30982 = new cljs.core.Keyword(null,"course","course",1455432948).cljs$core$IFn$_invoke$arity$1(car_30978);
-var alt_30983 = ((new cljs.core.Keyword(null,"altitude","altitude",463588637).cljs$core$IFn$_invoke$arity$1(car_30978) / 3.28084) | (0));
-var alt_30984__$1 = (((alt_30983 < (20)))?(20):alt_30983);
-czm.core.fly_to.call(null,lat_30980,lon_30981,alt_30984__$1,crs_30982,period);
+var car_33837 = cljs.core.deref.call(null,carr__$1);
+var vec__33830_33838 = new cljs.core.Keyword(null,"coord","coord",-1453656639).cljs$core$IFn$_invoke$arity$1(car_33837);
+var lat_33839 = cljs.core.nth.call(null,vec__33830_33838,(0),null);
+var lon_33840 = cljs.core.nth.call(null,vec__33830_33838,(1),null);
+var crs_33841 = new cljs.core.Keyword(null,"course","course",1455432948).cljs$core$IFn$_invoke$arity$1(car_33837);
+var alt_33842 = ((new cljs.core.Keyword(null,"altitude","altitude",463588637).cljs$core$IFn$_invoke$arity$1(car_33837) / 3.28084) | (0));
+var alt_33843__$1 = (((alt_33842 < (20)))?(20):alt_33842);
+czm.core.fly_to.call(null,lat_33839,lon_33840,alt_33843__$1,crs_33841,period);
 
 return true;
 });
@@ -224,58 +224,58 @@ view3d.client.manual_vehicle = (function view3d$client$manual_vehicle(){
 return new cljs.core.PersistentArrayMap(null, 4, [new cljs.core.Keyword(null,"coord","coord",-1453656639),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [view3d.client.num_val.call(null,view3d.controls.get_value.call(null,"input-lat")),view3d.client.num_val.call(null,view3d.controls.get_value.call(null,"input-lon"))], null),new cljs.core.Keyword(null,"course","course",1455432948),view3d.client.num_val.call(null,view3d.controls.get_value.call(null,"input-crs")),new cljs.core.Keyword(null,"speed","speed",1257663751),view3d.client.num_val.call(null,view3d.controls.get_value.call(null,"input-spd")),new cljs.core.Keyword(null,"altitude","altitude",463588637),view3d.client.num_val.call(null,view3d.controls.get_value.call(null,"input-alt"))], null);
 });
 view3d.client.directives_handler = (function view3d$client$directives_handler(response){
-var seq__31011 = cljs.core.seq.call(null,view3d.client.read_transit.call(null,response));
-var chunk__31012 = null;
-var count__31013 = (0);
-var i__31014 = (0);
+var seq__33870 = cljs.core.seq.call(null,view3d.client.read_transit.call(null,response));
+var chunk__33871 = null;
+var count__33872 = (0);
+var i__33873 = (0);
 while(true){
-if((i__31014 < count__31013)){
-var map__31015 = cljs.core._nth.call(null,chunk__31012,i__31014);
-var map__31015__$1 = ((((!((map__31015 == null)))?((((map__31015.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__31015.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__31015):map__31015);
-var dir = map__31015__$1;
-var directive = cljs.core.get.call(null,map__31015__$1,new cljs.core.Keyword(null,"directive","directive",793559132));
-var pred__31017_31037 = cljs.core._EQ_;
-var expr__31018_31038 = directive;
-if(cljs.core.truth_(pred__31017_31037.call(null,new cljs.core.Keyword(null,"manual","manual",-237370608),expr__31018_31038))){
+if((i__33873 < count__33872)){
+var map__33874 = cljs.core._nth.call(null,chunk__33871,i__33873);
+var map__33874__$1 = ((((!((map__33874 == null)))?((((map__33874.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__33874.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__33874):map__33874);
+var dir = map__33874__$1;
+var directive = cljs.core.get.call(null,map__33874__$1,new cljs.core.Keyword(null,"directive","directive",793559132));
+var pred__33876_33896 = cljs.core._EQ_;
+var expr__33877_33897 = directive;
+if(cljs.core.truth_(pred__33876_33896.call(null,new cljs.core.Keyword(null,"manual","manual",-237370608),expr__33877_33897))){
 if(cljs.core._EQ_.call(null,new cljs.core.Keyword(null,"mode","mode",654403691).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,view3d.client.CARRIER)),"?")){
 view3d.client.carrier.call(null,"MANUAL",view3d.client.manual_vehicle.call(null));
 } else {
 cljs.core._vreset_BANG_.call(null,view3d.client.CARRIER,cljs.core.assoc.call(null,cljs.core._deref.call(null,view3d.client.CARRIER),new cljs.core.Keyword(null,"mode","mode",654403691),"MANUAL"));
 }
 
-csasync.proc.start_process.call(null,view3d.client.CAM_PROC,((function (seq__31011,chunk__31012,count__31013,i__31014,pred__31017_31037,expr__31018_31038,map__31015,map__31015__$1,dir,directive){
+csasync.proc.start_process.call(null,view3d.client.CAM_PROC,((function (seq__33870,chunk__33871,count__33872,i__33873,pred__33876_33896,expr__33877_33897,map__33874,map__33874__$1,dir,directive){
 return (function (){
 return view3d.client.camera_move.call(null,view3d.client.CARRIER);
-});})(seq__31011,chunk__31012,count__31013,i__31014,pred__31017_31037,expr__31018_31038,map__31015,map__31015__$1,dir,directive))
+});})(seq__33870,chunk__33871,count__33872,i__33873,pred__33876_33896,expr__33877_33897,map__33874,map__33874__$1,dir,directive))
 ,new cljs.core.Keyword(null,"camera","camera",-1190348585).cljs$core$IFn$_invoke$arity$1(view3d.client.TIO));
 } else {
-if(cljs.core.truth_(pred__31017_31037.call(null,new cljs.core.Keyword(null,"callsigns","callsigns",-806223730),expr__31018_31038))){
-var map__31020_31039 = dir;
-var map__31020_31040__$1 = ((((!((map__31020_31039 == null)))?((((map__31020_31039.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__31020_31039.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__31020_31039):map__31020_31039);
-var list_31041 = cljs.core.get.call(null,map__31020_31040__$1,new cljs.core.Keyword(null,"list","list",765357683));
-view3d.controls.callsigns.call(null,cljs.core.conj.call(null,list_31041,"manual"));
+if(cljs.core.truth_(pred__33876_33896.call(null,new cljs.core.Keyword(null,"callsigns","callsigns",-806223730),expr__33877_33897))){
+var map__33879_33898 = dir;
+var map__33879_33899__$1 = ((((!((map__33879_33898 == null)))?((((map__33879_33898.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__33879_33898.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__33879_33898):map__33879_33898);
+var list_33900 = cljs.core.get.call(null,map__33879_33899__$1,new cljs.core.Keyword(null,"list","list",765357683));
+view3d.controls.callsigns.call(null,cljs.core.conj.call(null,list_33900,"manual"));
 } else {
-if(cljs.core.truth_(pred__31017_31037.call(null,new cljs.core.Keyword(null,"carrier","carrier",1085800622),expr__31018_31038))){
-var map__31022_31042 = dir;
-var map__31022_31043__$1 = ((((!((map__31022_31042 == null)))?((((map__31022_31042.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__31022_31042.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__31022_31042):map__31022_31042);
-var callsign_31044 = cljs.core.get.call(null,map__31022_31043__$1,new cljs.core.Keyword(null,"callsign","callsign",1222385874));
-var vehicle_31045 = cljs.core.get.call(null,map__31022_31043__$1,new cljs.core.Keyword(null,"vehicle","vehicle",1670166968));
+if(cljs.core.truth_(pred__33876_33896.call(null,new cljs.core.Keyword(null,"carrier","carrier",1085800622),expr__33877_33897))){
+var map__33881_33901 = dir;
+var map__33881_33902__$1 = ((((!((map__33881_33901 == null)))?((((map__33881_33901.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__33881_33901.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__33881_33901):map__33881_33901);
+var callsign_33903 = cljs.core.get.call(null,map__33881_33902__$1,new cljs.core.Keyword(null,"callsign","callsign",1222385874));
+var vehicle_33904 = cljs.core.get.call(null,map__33881_33902__$1,new cljs.core.Keyword(null,"vehicle","vehicle",1670166968));
 csasync.proc.stop_process.call(null,view3d.client.CAM_PROC);
 
-view3d.client.carrier.call(null,callsign_31044,vehicle_31045);
+view3d.client.carrier.call(null,callsign_33903,vehicle_33904);
 
 view3d.client.camera_move.call(null,view3d.client.CARRIER);
 } else {
-if(cljs.core.truth_(pred__31017_31037.call(null,new cljs.core.Keyword(null,"fly-onboard","fly-onboard",69825475),expr__31018_31038))){
-var map__31024_31046 = dir;
-var map__31024_31047__$1 = ((((!((map__31024_31046 == null)))?((((map__31024_31046.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__31024_31046.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__31024_31046):map__31024_31046);
-var callsign_31048 = cljs.core.get.call(null,map__31024_31047__$1,new cljs.core.Keyword(null,"callsign","callsign",1222385874));
-var vehicle_31049 = cljs.core.get.call(null,map__31024_31047__$1,new cljs.core.Keyword(null,"vehicle","vehicle",1670166968));
-var period_31050 = cljs.core.get.call(null,map__31024_31047__$1,new cljs.core.Keyword(null,"period","period",-352129191));
+if(cljs.core.truth_(pred__33876_33896.call(null,new cljs.core.Keyword(null,"fly-onboard","fly-onboard",69825475),expr__33877_33897))){
+var map__33883_33905 = dir;
+var map__33883_33906__$1 = ((((!((map__33883_33905 == null)))?((((map__33883_33905.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__33883_33905.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__33883_33905):map__33883_33905);
+var callsign_33907 = cljs.core.get.call(null,map__33883_33906__$1,new cljs.core.Keyword(null,"callsign","callsign",1222385874));
+var vehicle_33908 = cljs.core.get.call(null,map__33883_33906__$1,new cljs.core.Keyword(null,"vehicle","vehicle",1670166968));
+var period_33909 = cljs.core.get.call(null,map__33883_33906__$1,new cljs.core.Keyword(null,"period","period",-352129191));
 if(!(cljs.core._EQ_.call(null,new cljs.core.Keyword(null,"mode","mode",654403691).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,view3d.client.CARRIER)),"MANUAL"))){
-view3d.client.carrier.call(null,callsign_31048,vehicle_31049);
+view3d.client.carrier.call(null,callsign_33907,vehicle_33908);
 
-view3d.client.camera_move.call(null,view3d.client.CARRIER,period_31050);
+view3d.client.camera_move.call(null,view3d.client.CARRIER,period_33909);
 } else {
 }
 } else {
@@ -285,77 +285,77 @@ cljs.core.println.call(null,[cljs.core.str("Unknown directive: "),cljs.core.str(
 }
 }
 
-var G__31051 = seq__31011;
-var G__31052 = chunk__31012;
-var G__31053 = count__31013;
-var G__31054 = (i__31014 + (1));
-seq__31011 = G__31051;
-chunk__31012 = G__31052;
-count__31013 = G__31053;
-i__31014 = G__31054;
+var G__33910 = seq__33870;
+var G__33911 = chunk__33871;
+var G__33912 = count__33872;
+var G__33913 = (i__33873 + (1));
+seq__33870 = G__33910;
+chunk__33871 = G__33911;
+count__33872 = G__33912;
+i__33873 = G__33913;
 continue;
 } else {
-var temp__4657__auto__ = cljs.core.seq.call(null,seq__31011);
+var temp__4657__auto__ = cljs.core.seq.call(null,seq__33870);
 if(temp__4657__auto__){
-var seq__31011__$1 = temp__4657__auto__;
-if(cljs.core.chunked_seq_QMARK_.call(null,seq__31011__$1)){
-var c__21383__auto__ = cljs.core.chunk_first.call(null,seq__31011__$1);
-var G__31055 = cljs.core.chunk_rest.call(null,seq__31011__$1);
-var G__31056 = c__21383__auto__;
-var G__31057 = cljs.core.count.call(null,c__21383__auto__);
-var G__31058 = (0);
-seq__31011 = G__31055;
-chunk__31012 = G__31056;
-count__31013 = G__31057;
-i__31014 = G__31058;
+var seq__33870__$1 = temp__4657__auto__;
+if(cljs.core.chunked_seq_QMARK_.call(null,seq__33870__$1)){
+var c__9371__auto__ = cljs.core.chunk_first.call(null,seq__33870__$1);
+var G__33914 = cljs.core.chunk_rest.call(null,seq__33870__$1);
+var G__33915 = c__9371__auto__;
+var G__33916 = cljs.core.count.call(null,c__9371__auto__);
+var G__33917 = (0);
+seq__33870 = G__33914;
+chunk__33871 = G__33915;
+count__33872 = G__33916;
+i__33873 = G__33917;
 continue;
 } else {
-var map__31026 = cljs.core.first.call(null,seq__31011__$1);
-var map__31026__$1 = ((((!((map__31026 == null)))?((((map__31026.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__31026.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__31026):map__31026);
-var dir = map__31026__$1;
-var directive = cljs.core.get.call(null,map__31026__$1,new cljs.core.Keyword(null,"directive","directive",793559132));
-var pred__31028_31059 = cljs.core._EQ_;
-var expr__31029_31060 = directive;
-if(cljs.core.truth_(pred__31028_31059.call(null,new cljs.core.Keyword(null,"manual","manual",-237370608),expr__31029_31060))){
+var map__33885 = cljs.core.first.call(null,seq__33870__$1);
+var map__33885__$1 = ((((!((map__33885 == null)))?((((map__33885.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__33885.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__33885):map__33885);
+var dir = map__33885__$1;
+var directive = cljs.core.get.call(null,map__33885__$1,new cljs.core.Keyword(null,"directive","directive",793559132));
+var pred__33887_33918 = cljs.core._EQ_;
+var expr__33888_33919 = directive;
+if(cljs.core.truth_(pred__33887_33918.call(null,new cljs.core.Keyword(null,"manual","manual",-237370608),expr__33888_33919))){
 if(cljs.core._EQ_.call(null,new cljs.core.Keyword(null,"mode","mode",654403691).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,view3d.client.CARRIER)),"?")){
 view3d.client.carrier.call(null,"MANUAL",view3d.client.manual_vehicle.call(null));
 } else {
 cljs.core._vreset_BANG_.call(null,view3d.client.CARRIER,cljs.core.assoc.call(null,cljs.core._deref.call(null,view3d.client.CARRIER),new cljs.core.Keyword(null,"mode","mode",654403691),"MANUAL"));
 }
 
-csasync.proc.start_process.call(null,view3d.client.CAM_PROC,((function (seq__31011,chunk__31012,count__31013,i__31014,pred__31028_31059,expr__31029_31060,map__31026,map__31026__$1,dir,directive,seq__31011__$1,temp__4657__auto__){
+csasync.proc.start_process.call(null,view3d.client.CAM_PROC,((function (seq__33870,chunk__33871,count__33872,i__33873,pred__33887_33918,expr__33888_33919,map__33885,map__33885__$1,dir,directive,seq__33870__$1,temp__4657__auto__){
 return (function (){
 return view3d.client.camera_move.call(null,view3d.client.CARRIER);
-});})(seq__31011,chunk__31012,count__31013,i__31014,pred__31028_31059,expr__31029_31060,map__31026,map__31026__$1,dir,directive,seq__31011__$1,temp__4657__auto__))
+});})(seq__33870,chunk__33871,count__33872,i__33873,pred__33887_33918,expr__33888_33919,map__33885,map__33885__$1,dir,directive,seq__33870__$1,temp__4657__auto__))
 ,new cljs.core.Keyword(null,"camera","camera",-1190348585).cljs$core$IFn$_invoke$arity$1(view3d.client.TIO));
 } else {
-if(cljs.core.truth_(pred__31028_31059.call(null,new cljs.core.Keyword(null,"callsigns","callsigns",-806223730),expr__31029_31060))){
-var map__31031_31061 = dir;
-var map__31031_31062__$1 = ((((!((map__31031_31061 == null)))?((((map__31031_31061.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__31031_31061.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__31031_31061):map__31031_31061);
-var list_31063 = cljs.core.get.call(null,map__31031_31062__$1,new cljs.core.Keyword(null,"list","list",765357683));
-view3d.controls.callsigns.call(null,cljs.core.conj.call(null,list_31063,"manual"));
+if(cljs.core.truth_(pred__33887_33918.call(null,new cljs.core.Keyword(null,"callsigns","callsigns",-806223730),expr__33888_33919))){
+var map__33890_33920 = dir;
+var map__33890_33921__$1 = ((((!((map__33890_33920 == null)))?((((map__33890_33920.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__33890_33920.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__33890_33920):map__33890_33920);
+var list_33922 = cljs.core.get.call(null,map__33890_33921__$1,new cljs.core.Keyword(null,"list","list",765357683));
+view3d.controls.callsigns.call(null,cljs.core.conj.call(null,list_33922,"manual"));
 } else {
-if(cljs.core.truth_(pred__31028_31059.call(null,new cljs.core.Keyword(null,"carrier","carrier",1085800622),expr__31029_31060))){
-var map__31033_31064 = dir;
-var map__31033_31065__$1 = ((((!((map__31033_31064 == null)))?((((map__31033_31064.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__31033_31064.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__31033_31064):map__31033_31064);
-var callsign_31066 = cljs.core.get.call(null,map__31033_31065__$1,new cljs.core.Keyword(null,"callsign","callsign",1222385874));
-var vehicle_31067 = cljs.core.get.call(null,map__31033_31065__$1,new cljs.core.Keyword(null,"vehicle","vehicle",1670166968));
+if(cljs.core.truth_(pred__33887_33918.call(null,new cljs.core.Keyword(null,"carrier","carrier",1085800622),expr__33888_33919))){
+var map__33892_33923 = dir;
+var map__33892_33924__$1 = ((((!((map__33892_33923 == null)))?((((map__33892_33923.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__33892_33923.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__33892_33923):map__33892_33923);
+var callsign_33925 = cljs.core.get.call(null,map__33892_33924__$1,new cljs.core.Keyword(null,"callsign","callsign",1222385874));
+var vehicle_33926 = cljs.core.get.call(null,map__33892_33924__$1,new cljs.core.Keyword(null,"vehicle","vehicle",1670166968));
 csasync.proc.stop_process.call(null,view3d.client.CAM_PROC);
 
-view3d.client.carrier.call(null,callsign_31066,vehicle_31067);
+view3d.client.carrier.call(null,callsign_33925,vehicle_33926);
 
 view3d.client.camera_move.call(null,view3d.client.CARRIER);
 } else {
-if(cljs.core.truth_(pred__31028_31059.call(null,new cljs.core.Keyword(null,"fly-onboard","fly-onboard",69825475),expr__31029_31060))){
-var map__31035_31068 = dir;
-var map__31035_31069__$1 = ((((!((map__31035_31068 == null)))?((((map__31035_31068.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__31035_31068.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__31035_31068):map__31035_31068);
-var callsign_31070 = cljs.core.get.call(null,map__31035_31069__$1,new cljs.core.Keyword(null,"callsign","callsign",1222385874));
-var vehicle_31071 = cljs.core.get.call(null,map__31035_31069__$1,new cljs.core.Keyword(null,"vehicle","vehicle",1670166968));
-var period_31072 = cljs.core.get.call(null,map__31035_31069__$1,new cljs.core.Keyword(null,"period","period",-352129191));
+if(cljs.core.truth_(pred__33887_33918.call(null,new cljs.core.Keyword(null,"fly-onboard","fly-onboard",69825475),expr__33888_33919))){
+var map__33894_33927 = dir;
+var map__33894_33928__$1 = ((((!((map__33894_33927 == null)))?((((map__33894_33927.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__33894_33927.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__33894_33927):map__33894_33927);
+var callsign_33929 = cljs.core.get.call(null,map__33894_33928__$1,new cljs.core.Keyword(null,"callsign","callsign",1222385874));
+var vehicle_33930 = cljs.core.get.call(null,map__33894_33928__$1,new cljs.core.Keyword(null,"vehicle","vehicle",1670166968));
+var period_33931 = cljs.core.get.call(null,map__33894_33928__$1,new cljs.core.Keyword(null,"period","period",-352129191));
 if(!(cljs.core._EQ_.call(null,new cljs.core.Keyword(null,"mode","mode",654403691).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,view3d.client.CARRIER)),"MANUAL"))){
-view3d.client.carrier.call(null,callsign_31070,vehicle_31071);
+view3d.client.carrier.call(null,callsign_33929,vehicle_33930);
 
-view3d.client.camera_move.call(null,view3d.client.CARRIER,period_31072);
+view3d.client.camera_move.call(null,view3d.client.CARRIER,period_33931);
 } else {
 }
 } else {
@@ -365,14 +365,14 @@ cljs.core.println.call(null,[cljs.core.str("Unknown directive: "),cljs.core.str(
 }
 }
 
-var G__31073 = cljs.core.next.call(null,seq__31011__$1);
-var G__31074 = null;
-var G__31075 = (0);
-var G__31076 = (0);
-seq__31011 = G__31073;
-chunk__31012 = G__31074;
-count__31013 = G__31075;
-i__31014 = G__31076;
+var G__33932 = cljs.core.next.call(null,seq__33870__$1);
+var G__33933 = null;
+var G__33934 = (0);
+var G__33935 = (0);
+seq__33870 = G__33932;
+chunk__33871 = G__33933;
+count__33872 = G__33934;
+i__33873 = G__33935;
 continue;
 }
 } else {

@@ -42,9 +42,10 @@
                  "</select>")]
   (set-html! (str element k) sel)))
 
-(defn ask-server [params]
+(defn ask-server [params handler]
   (GET (:question URL) 
     {:params params
+     :handler handler
      :error-handler error-handler
      :response-format :transit}))
 
@@ -61,5 +62,8 @@
 (set-html! "element4" "")
 (set-html! "element5" "")
 (set-html! "element6" "")
+(set-html! "element20" "")
+(set-html! "element30" "")
+(set-html! "element40" "")
 (show-chart-controls))
 

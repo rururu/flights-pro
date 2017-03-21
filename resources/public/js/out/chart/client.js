@@ -19,10 +19,10 @@ chart.client.VEHICLES = cljs.core.volatile_BANG_.call(null,cljs.core.PersistentA
 chart.client.PLACEMARKS = cljs.core.volatile_BANG_.call(null,cljs.core.PersistentArrayMap.EMPTY);
 chart.client.LINKS = cljs.core.volatile_BANG_.call(null,cljs.core.PersistentArrayMap.EMPTY);
 chart.client.error_handler = (function chart$client$error_handler(response){
-var map__31081 = response;
-var map__31081__$1 = ((((!((map__31081 == null)))?((((map__31081.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__31081.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__31081):map__31081);
-var status = cljs.core.get.call(null,map__31081__$1,new cljs.core.Keyword(null,"status","status",-1997798413));
-var status_text = cljs.core.get.call(null,map__31081__$1,new cljs.core.Keyword(null,"status-text","status-text",-1834235478));
+var map__33940 = response;
+var map__33940__$1 = ((((!((map__33940 == null)))?((((map__33940.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__33940.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__33940):map__33940);
+var status = cljs.core.get.call(null,map__33940__$1,new cljs.core.Keyword(null,"status","status",-1997798413));
+var status_text = cljs.core.get.call(null,map__33940__$1,new cljs.core.Keyword(null,"status-text","status-text",-1834235478));
 return cljs.core.println.call(null,[cljs.core.str("AJAX ERROR: "),cljs.core.str(status),cljs.core.str(" "),cljs.core.str(status_text)].join(''));
 });
 chart.client.no_handler = new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"handler","handler",-195596612),(function (response){
@@ -37,13 +37,13 @@ if(cljs.core.truth_(temp__4657__auto__)){
 var vmp = temp__4657__auto__;
 carr.move.move.call(null,vmp);
 
-var mp_31089 = cljs.core.deref.call(null,vmp);
-var mrk_31090 = new cljs.core.Keyword(null,"marker","marker",865118313).cljs$core$IFn$_invoke$arity$1(mp_31089);
-var vec__31086_31091 = new cljs.core.Keyword(null,"coord","coord",-1453656639).cljs$core$IFn$_invoke$arity$1(mp_31089);
-var lat_31092 = cljs.core.nth.call(null,vec__31086_31091,(0),null);
-var lon_31093 = cljs.core.nth.call(null,vec__31086_31091,(1),null);
-var pos_31094 = (new L.LatLng(lat_31092,lon_31093));
-mrk_31090.setLatLng(pos_31094);
+var mp_33948 = cljs.core.deref.call(null,vmp);
+var mrk_33949 = new cljs.core.Keyword(null,"marker","marker",865118313).cljs$core$IFn$_invoke$arity$1(mp_33948);
+var vec__33945_33950 = new cljs.core.Keyword(null,"coord","coord",-1453656639).cljs$core$IFn$_invoke$arity$1(mp_33948);
+var lat_33951 = cljs.core.nth.call(null,vec__33945_33950,(0),null);
+var lon_33952 = cljs.core.nth.call(null,vec__33945_33950,(1),null);
+var pos_33953 = (new L.LatLng(lat_33951,lon_33952));
+mrk_33949.setLatLng(pos_33953);
 
 return cljs.core._vreset_BANG_.call(null,chart.client.VEHICLES,cljs.core.assoc.call(null,cljs.core._deref.call(null,chart.client.VEHICLES),id,vmp));
 } else {
@@ -64,55 +64,55 @@ return null;
 }
 });
 chart.client.clear_vehicles = (function chart$client$clear_vehicles(){
-var seq__31099_31103 = cljs.core.seq.call(null,cljs.core.vals.call(null,cljs.core.deref.call(null,chart.client.VEHICLES)));
-var chunk__31100_31104 = null;
-var count__31101_31105 = (0);
-var i__31102_31106 = (0);
+var seq__33958_33962 = cljs.core.seq.call(null,cljs.core.vals.call(null,cljs.core.deref.call(null,chart.client.VEHICLES)));
+var chunk__33959_33963 = null;
+var count__33960_33964 = (0);
+var i__33961_33965 = (0);
 while(true){
-if((i__31102_31106 < count__31101_31105)){
-var veh_31107 = cljs.core._nth.call(null,chunk__31100_31104,i__31102_31106);
-csasync.proc.stop_process.call(null,new cljs.core.Keyword(null,"movst","movst",1585301628).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,veh_31107)));
+if((i__33961_33965 < count__33960_33964)){
+var veh_33966 = cljs.core._nth.call(null,chunk__33959_33963,i__33961_33965);
+csasync.proc.stop_process.call(null,new cljs.core.Keyword(null,"movst","movst",1585301628).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,veh_33966)));
 
-cljs.core.deref.call(null,chart.client.CHART).removeLayer(new cljs.core.Keyword(null,"marker","marker",865118313).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,veh_31107)));
+cljs.core.deref.call(null,chart.client.CHART).removeLayer(new cljs.core.Keyword(null,"marker","marker",865118313).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,veh_33966)));
 
-var G__31108 = seq__31099_31103;
-var G__31109 = chunk__31100_31104;
-var G__31110 = count__31101_31105;
-var G__31111 = (i__31102_31106 + (1));
-seq__31099_31103 = G__31108;
-chunk__31100_31104 = G__31109;
-count__31101_31105 = G__31110;
-i__31102_31106 = G__31111;
+var G__33967 = seq__33958_33962;
+var G__33968 = chunk__33959_33963;
+var G__33969 = count__33960_33964;
+var G__33970 = (i__33961_33965 + (1));
+seq__33958_33962 = G__33967;
+chunk__33959_33963 = G__33968;
+count__33960_33964 = G__33969;
+i__33961_33965 = G__33970;
 continue;
 } else {
-var temp__4657__auto___31112 = cljs.core.seq.call(null,seq__31099_31103);
-if(temp__4657__auto___31112){
-var seq__31099_31113__$1 = temp__4657__auto___31112;
-if(cljs.core.chunked_seq_QMARK_.call(null,seq__31099_31113__$1)){
-var c__21383__auto___31114 = cljs.core.chunk_first.call(null,seq__31099_31113__$1);
-var G__31115 = cljs.core.chunk_rest.call(null,seq__31099_31113__$1);
-var G__31116 = c__21383__auto___31114;
-var G__31117 = cljs.core.count.call(null,c__21383__auto___31114);
-var G__31118 = (0);
-seq__31099_31103 = G__31115;
-chunk__31100_31104 = G__31116;
-count__31101_31105 = G__31117;
-i__31102_31106 = G__31118;
+var temp__4657__auto___33971 = cljs.core.seq.call(null,seq__33958_33962);
+if(temp__4657__auto___33971){
+var seq__33958_33972__$1 = temp__4657__auto___33971;
+if(cljs.core.chunked_seq_QMARK_.call(null,seq__33958_33972__$1)){
+var c__9371__auto___33973 = cljs.core.chunk_first.call(null,seq__33958_33972__$1);
+var G__33974 = cljs.core.chunk_rest.call(null,seq__33958_33972__$1);
+var G__33975 = c__9371__auto___33973;
+var G__33976 = cljs.core.count.call(null,c__9371__auto___33973);
+var G__33977 = (0);
+seq__33958_33962 = G__33974;
+chunk__33959_33963 = G__33975;
+count__33960_33964 = G__33976;
+i__33961_33965 = G__33977;
 continue;
 } else {
-var veh_31119 = cljs.core.first.call(null,seq__31099_31113__$1);
-csasync.proc.stop_process.call(null,new cljs.core.Keyword(null,"movst","movst",1585301628).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,veh_31119)));
+var veh_33978 = cljs.core.first.call(null,seq__33958_33972__$1);
+csasync.proc.stop_process.call(null,new cljs.core.Keyword(null,"movst","movst",1585301628).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,veh_33978)));
 
-cljs.core.deref.call(null,chart.client.CHART).removeLayer(new cljs.core.Keyword(null,"marker","marker",865118313).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,veh_31119)));
+cljs.core.deref.call(null,chart.client.CHART).removeLayer(new cljs.core.Keyword(null,"marker","marker",865118313).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,veh_33978)));
 
-var G__31120 = cljs.core.next.call(null,seq__31099_31113__$1);
-var G__31121 = null;
-var G__31122 = (0);
-var G__31123 = (0);
-seq__31099_31103 = G__31120;
-chunk__31100_31104 = G__31121;
-count__31101_31105 = G__31122;
-i__31102_31106 = G__31123;
+var G__33979 = cljs.core.next.call(null,seq__33958_33972__$1);
+var G__33980 = null;
+var G__33981 = (0);
+var G__33982 = (0);
+seq__33958_33962 = G__33979;
+chunk__33959_33963 = G__33980;
+count__33960_33964 = G__33981;
+i__33961_33965 = G__33982;
 continue;
 }
 } else {
@@ -134,21 +134,21 @@ cljs.core.deref.call(null,chart.client.CHART).removeLayer(mrk);
 } else {
 }
 
-var vec__31128 = new cljs.core.Keyword(null,"coord","coord",-1453656639).cljs$core$IFn$_invoke$arity$1(mp);
-var lat = cljs.core.nth.call(null,vec__31128,(0),null);
-var lon = cljs.core.nth.call(null,vec__31128,(1),null);
+var vec__33987 = new cljs.core.Keyword(null,"coord","coord",-1453656639).cljs$core$IFn$_invoke$arity$1(mp);
+var lat = cljs.core.nth.call(null,vec__33987,(0),null);
+var lon = cljs.core.nth.call(null,vec__33987,(1),null);
 var pos = (new L.LatLng(lat,lon));
 var ico = L.icon(({"iconUrl": chart.client.URL_ICO.call(null,new cljs.core.Keyword(null,"status","status",-1997798413).cljs$core$IFn$_invoke$arity$1(mp)), "iconSize": [(32),(32)]}));
 var opt = ({"icon": ico, "rotationAngle": new cljs.core.Keyword(null,"course","course",1455432948).cljs$core$IFn$_invoke$arity$1(mp), "rotationOrigin": "center center", "title": new cljs.core.Keyword(null,"callsign","callsign",1222385874).cljs$core$IFn$_invoke$arity$1(mp), "draggable": false});
 var mrk__$1 = L.marker(pos,opt);
-mrk__$1.on("click",((function (vec__31128,lat,lon,pos,ico,opt,mrk__$1){
+mrk__$1.on("click",((function (vec__33987,lat,lon,pos,ico,opt,mrk__$1){
 return (function (e){
-return chart.client.info.call(null,cljs.core.ffirst.call(null,cljs.core.filter.call(null,((function (vec__31128,lat,lon,pos,ico,opt,mrk__$1){
-return (function (p1__31124_SHARP_){
-return cljs.core._EQ_.call(null,new cljs.core.Keyword(null,"marker","marker",865118313).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,cljs.core.second.call(null,p1__31124_SHARP_))),e.target);
-});})(vec__31128,lat,lon,pos,ico,opt,mrk__$1))
+return chart.client.info.call(null,cljs.core.ffirst.call(null,cljs.core.filter.call(null,((function (vec__33987,lat,lon,pos,ico,opt,mrk__$1){
+return (function (p1__33983_SHARP_){
+return cljs.core._EQ_.call(null,new cljs.core.Keyword(null,"marker","marker",865118313).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,cljs.core.second.call(null,p1__33983_SHARP_))),e.target);
+});})(vec__33987,lat,lon,pos,ico,opt,mrk__$1))
 ,cljs.core.seq.call(null,cljs.core.deref.call(null,chart.client.VEHICLES)))));
-});})(vec__31128,lat,lon,pos,ico,opt,mrk__$1))
+});})(vec__33987,lat,lon,pos,ico,opt,mrk__$1))
 );
 
 mrk__$1.addTo(cljs.core.deref.call(null,chart.client.CHART));
@@ -171,13 +171,13 @@ return cljs.core._vreset_BANG_.call(null,chart.client.VEHICLES,cljs.core.assoc.c
 });
 chart.client.create_placemark = (function chart$client$create_placemark(iname,tip,lat,lon,feature,url_ico){
 var pos = (new L.LatLng(lat,lon));
-var ico = L.icon(({"iconUrl": (function (){var or__20569__auto__ = url_ico;
-if(cljs.core.truth_(or__20569__auto__)){
-return or__20569__auto__;
+var ico = L.icon(({"iconUrl": (function (){var or__8557__auto__ = url_ico;
+if(cljs.core.truth_(or__8557__auto__)){
+return or__8557__auto__;
 } else {
-var or__20569__auto____$1 = chart.client.URL_ICO.call(null,feature);
-if(cljs.core.truth_(or__20569__auto____$1)){
-return or__20569__auto____$1;
+var or__8557__auto____$1 = chart.client.URL_ICO.call(null,feature);
+if(cljs.core.truth_(or__8557__auto____$1)){
+return or__8557__auto____$1;
 } else {
 return chart.client.URL_ICO.call(null,"default");
 }
@@ -207,51 +207,51 @@ return null;
 }
 });
 chart.client.clear_placemarks = (function chart$client$clear_placemarks(){
-var seq__31135_31139 = cljs.core.seq.call(null,cljs.core.vals.call(null,cljs.core.deref.call(null,chart.client.PLACEMARKS)));
-var chunk__31136_31140 = null;
-var count__31137_31141 = (0);
-var i__31138_31142 = (0);
+var seq__33994_33998 = cljs.core.seq.call(null,cljs.core.vals.call(null,cljs.core.deref.call(null,chart.client.PLACEMARKS)));
+var chunk__33995_33999 = null;
+var count__33996_34000 = (0);
+var i__33997_34001 = (0);
 while(true){
-if((i__31138_31142 < count__31137_31141)){
-var mrk_31143 = cljs.core._nth.call(null,chunk__31136_31140,i__31138_31142);
-cljs.core.deref.call(null,chart.client.CHART).removeLayer(mrk_31143);
+if((i__33997_34001 < count__33996_34000)){
+var mrk_34002 = cljs.core._nth.call(null,chunk__33995_33999,i__33997_34001);
+cljs.core.deref.call(null,chart.client.CHART).removeLayer(mrk_34002);
 
-var G__31144 = seq__31135_31139;
-var G__31145 = chunk__31136_31140;
-var G__31146 = count__31137_31141;
-var G__31147 = (i__31138_31142 + (1));
-seq__31135_31139 = G__31144;
-chunk__31136_31140 = G__31145;
-count__31137_31141 = G__31146;
-i__31138_31142 = G__31147;
+var G__34003 = seq__33994_33998;
+var G__34004 = chunk__33995_33999;
+var G__34005 = count__33996_34000;
+var G__34006 = (i__33997_34001 + (1));
+seq__33994_33998 = G__34003;
+chunk__33995_33999 = G__34004;
+count__33996_34000 = G__34005;
+i__33997_34001 = G__34006;
 continue;
 } else {
-var temp__4657__auto___31148 = cljs.core.seq.call(null,seq__31135_31139);
-if(temp__4657__auto___31148){
-var seq__31135_31149__$1 = temp__4657__auto___31148;
-if(cljs.core.chunked_seq_QMARK_.call(null,seq__31135_31149__$1)){
-var c__21383__auto___31150 = cljs.core.chunk_first.call(null,seq__31135_31149__$1);
-var G__31151 = cljs.core.chunk_rest.call(null,seq__31135_31149__$1);
-var G__31152 = c__21383__auto___31150;
-var G__31153 = cljs.core.count.call(null,c__21383__auto___31150);
-var G__31154 = (0);
-seq__31135_31139 = G__31151;
-chunk__31136_31140 = G__31152;
-count__31137_31141 = G__31153;
-i__31138_31142 = G__31154;
+var temp__4657__auto___34007 = cljs.core.seq.call(null,seq__33994_33998);
+if(temp__4657__auto___34007){
+var seq__33994_34008__$1 = temp__4657__auto___34007;
+if(cljs.core.chunked_seq_QMARK_.call(null,seq__33994_34008__$1)){
+var c__9371__auto___34009 = cljs.core.chunk_first.call(null,seq__33994_34008__$1);
+var G__34010 = cljs.core.chunk_rest.call(null,seq__33994_34008__$1);
+var G__34011 = c__9371__auto___34009;
+var G__34012 = cljs.core.count.call(null,c__9371__auto___34009);
+var G__34013 = (0);
+seq__33994_33998 = G__34010;
+chunk__33995_33999 = G__34011;
+count__33996_34000 = G__34012;
+i__33997_34001 = G__34013;
 continue;
 } else {
-var mrk_31155 = cljs.core.first.call(null,seq__31135_31149__$1);
-cljs.core.deref.call(null,chart.client.CHART).removeLayer(mrk_31155);
+var mrk_34014 = cljs.core.first.call(null,seq__33994_34008__$1);
+cljs.core.deref.call(null,chart.client.CHART).removeLayer(mrk_34014);
 
-var G__31156 = cljs.core.next.call(null,seq__31135_31149__$1);
-var G__31157 = null;
-var G__31158 = (0);
-var G__31159 = (0);
-seq__31135_31139 = G__31156;
-chunk__31136_31140 = G__31157;
-count__31137_31141 = G__31158;
-i__31138_31142 = G__31159;
+var G__34015 = cljs.core.next.call(null,seq__33994_34008__$1);
+var G__34016 = null;
+var G__34017 = (0);
+var G__34018 = (0);
+seq__33994_33998 = G__34015;
+chunk__33995_33999 = G__34016;
+count__33996_34000 = G__34017;
+i__33997_34001 = G__34018;
 continue;
 }
 } else {
@@ -263,23 +263,23 @@ break;
 return cljs.core.vreset_BANG_.call(null,chart.client.PLACEMARKS,cljs.core.PersistentArrayMap.EMPTY);
 });
 chart.client.popup = (function chart$client$popup(var_args){
-var args31160 = [];
-var len__21677__auto___31166 = arguments.length;
-var i__21678__auto___31167 = (0);
+var args34019 = [];
+var len__9665__auto___34025 = arguments.length;
+var i__9666__auto___34026 = (0);
 while(true){
-if((i__21678__auto___31167 < len__21677__auto___31166)){
-args31160.push((arguments[i__21678__auto___31167]));
+if((i__9666__auto___34026 < len__9665__auto___34025)){
+args34019.push((arguments[i__9666__auto___34026]));
 
-var G__31168 = (i__21678__auto___31167 + (1));
-i__21678__auto___31167 = G__31168;
+var G__34027 = (i__9666__auto___34026 + (1));
+i__9666__auto___34026 = G__34027;
 continue;
 } else {
 }
 break;
 }
 
-var G__31162 = args31160.length;
-switch (G__31162) {
+var G__34021 = args34019.length;
+switch (G__34021) {
 case 3:
 return chart.client.popup.cljs$core$IFn$_invoke$arity$3((arguments[(0)]),(arguments[(1)]),(arguments[(2)]));
 
@@ -293,16 +293,16 @@ return chart.client.popup.cljs$core$IFn$_invoke$arity$6((arguments[(0)]),(argume
 
 break;
 default:
-throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args31160.length)].join('')));
+throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args34019.length)].join('')));
 
 }
 });
 
 chart.client.popup.cljs$core$IFn$_invoke$arity$3 = (function (id,html,time){
 var vmp = cljs.core.deref.call(null,chart.client.VEHICLES).call(null,id);
-var vec__31163 = new cljs.core.Keyword(null,"coord","coord",-1453656639).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,vmp));
-var lat = cljs.core.nth.call(null,vec__31163,(0),null);
-var lon = cljs.core.nth.call(null,vec__31163,(1),null);
+var vec__34022 = new cljs.core.Keyword(null,"coord","coord",-1453656639).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,vmp));
+var lat = cljs.core.nth.call(null,vec__34022,(0),null);
+var lon = cljs.core.nth.call(null,vec__34022,(1),null);
 return chart.client.popup.call(null,lat,lon,html,time);
 });
 
@@ -330,8 +330,8 @@ chart.client.popup.cljs$lang$maxFixedArity = 6;
 chart.client.add_trail = (function chart$client$add_trail(id,points,options,time){
 var ops = cljs.core.clj__GT_js.call(null,options);
 var pts = cljs.core.map.call(null,((function (ops){
-return (function (p1__31170_SHARP_){
-return (new L.LatLng(cljs.core.first.call(null,p1__31170_SHARP_),cljs.core.second.call(null,p1__31170_SHARP_)));
+return (function (p1__34029_SHARP_){
+return (new L.LatLng(cljs.core.first.call(null,p1__34029_SHARP_),cljs.core.second.call(null,p1__34029_SHARP_)));
 });})(ops))
 ,cljs.core.partition.call(null,(3),points));
 var pts__$1 = cljs.core.clj__GT_js.call(null,pts);
@@ -353,27 +353,27 @@ var bnd = cljs.core.deref.call(null,chart.client.CHART).getBounds();
 return new cljs.core.PersistentVector(null, 4, 5, cljs.core.PersistentVector.EMPTY_NODE, [bnd.getNorth(),bnd.getSouth(),bnd.getWest(),bnd.getEast()], null);
 });
 chart.client.new_visible = (function chart$client$new_visible(){
-var vec__31174 = chart.client.visible_map.call(null);
-var n = cljs.core.nth.call(null,vec__31174,(0),null);
-var s = cljs.core.nth.call(null,vec__31174,(1),null);
-var w = cljs.core.nth.call(null,vec__31174,(2),null);
-var e = cljs.core.nth.call(null,vec__31174,(3),null);
+var vec__34033 = chart.client.visible_map.call(null);
+var n = cljs.core.nth.call(null,vec__34033,(0),null);
+var s = cljs.core.nth.call(null,vec__34033,(1),null);
+var w = cljs.core.nth.call(null,vec__34033,(2),null);
+var e = cljs.core.nth.call(null,vec__34033,(3),null);
 var z = cljs.core.deref.call(null,chart.client.CHART).getZoom();
 var url = [cljs.core.str(new cljs.core.Keyword(null,"command","command",-894540724).cljs$core$IFn$_invoke$arity$1(chart.client.URL)),cljs.core.str("visible?z="),cljs.core.str(z),cljs.core.str("&n="),cljs.core.str(n),cljs.core.str("&s="),cljs.core.str(s),cljs.core.str("&w="),cljs.core.str(w),cljs.core.str("&e="),cljs.core.str(e)].join('');
-return ajax.core.GET.call(null,url,new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"handler","handler",-195596612),((function (vec__31174,n,s,w,e,z,url){
+return ajax.core.GET.call(null,url,new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"handler","handler",-195596612),((function (vec__34033,n,s,w,e,z,url){
 return (function (response){
 return null;
-});})(vec__31174,n,s,w,e,z,url))
+});})(vec__34033,n,s,w,e,z,url))
 ,new cljs.core.Keyword(null,"error-handler","error-handler",-484945776),chart.client.error_handler], null));
 });
-chart.client.map_center = (function chart$client$map_center(p__31177,zoom,lock){
-var vec__31181 = p__31177;
-var lat = cljs.core.nth.call(null,vec__31181,(0),null);
-var lon = cljs.core.nth.call(null,vec__31181,(1),null);
+chart.client.map_center = (function chart$client$map_center(p__34036,zoom,lock){
+var vec__34040 = p__34036;
+var lat = cljs.core.nth.call(null,vec__34040,(0),null);
+var lon = cljs.core.nth.call(null,vec__34040,(1),null);
 var cen = (new L.LatLng(lat,lon));
-var zom = (function (){var or__20569__auto__ = zoom;
-if(cljs.core.truth_(or__20569__auto__)){
-return or__20569__auto__;
+var zom = (function (){var or__8557__auto__ = zoom;
+if(cljs.core.truth_(or__8557__auto__)){
+return or__8557__auto__;
 } else {
 return cljs.core.deref.call(null,chart.client.CHART).getZoom();
 }
@@ -387,25 +387,25 @@ return null;
 }
 });
 chart.client.collect_llga = (function chart$client$collect_llga(ids){
-var vhs = cljs.core.filter.call(null,cljs.core.some_QMARK_,cljs.core.map.call(null,(function (p1__31184_SHARP_){
-return cljs.core.deref.call(null,chart.client.VEHICLES).call(null,p1__31184_SHARP_);
+var vhs = cljs.core.filter.call(null,cljs.core.some_QMARK_,cljs.core.map.call(null,(function (p1__34043_SHARP_){
+return cljs.core.deref.call(null,chart.client.VEHICLES).call(null,p1__34043_SHARP_);
 }),ids));
 var mks = cljs.core.map.call(null,((function (vhs){
-return (function (p1__31185_SHARP_){
-return new cljs.core.Keyword(null,"marker","marker",865118313).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,p1__31185_SHARP_));
+return (function (p1__34044_SHARP_){
+return new cljs.core.Keyword(null,"marker","marker",865118313).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,p1__34044_SHARP_));
 });})(vhs))
 ,vhs);
 var llgs = cljs.core.map.call(null,((function (vhs,mks){
-return (function (p1__31186_SHARP_){
-return p1__31186_SHARP_.getLatLng();
+return (function (p1__34045_SHARP_){
+return p1__34045_SHARP_.getLatLng();
 });})(vhs,mks))
 ,mks);
 return cljs.core.clj__GT_js.call(null,llgs);
 });
-chart.client.linkPopup = (function chart$client$linkPopup(p__31187,ops){
-var vec__31191 = p__31187;
-var id1 = cljs.core.nth.call(null,vec__31191,(0),null);
-var id2 = cljs.core.nth.call(null,vec__31191,(1),null);
+chart.client.linkPopup = (function chart$client$linkPopup(p__34046,ops){
+var vec__34050 = p__34046;
+var id1 = cljs.core.nth.call(null,vec__34050,(0),null);
+var id2 = cljs.core.nth.call(null,vec__34050,(1),null);
 var vhs = cljs.core.deref.call(null,chart.client.VEHICLES);
 var alt1 = new cljs.core.Keyword(null,"altitude","altitude",463588637).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,vhs.call(null,id1)));
 var alt2 = new cljs.core.Keyword(null,"altitude","altitude",463588637).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,vhs.call(null,id2)));
@@ -440,122 +440,122 @@ return null;
 }
 });
 chart.client.instructions_handler = (function chart$client$instructions_handler(response){
-var seq__31240 = cljs.core.seq.call(null,chart.client.read_transit.call(null,response));
-var chunk__31241 = null;
-var count__31242 = (0);
-var i__31243 = (0);
+var seq__34099 = cljs.core.seq.call(null,chart.client.read_transit.call(null,response));
+var chunk__34100 = null;
+var count__34101 = (0);
+var i__34102 = (0);
 while(true){
-if((i__31243 < count__31242)){
-var map__31244 = cljs.core._nth.call(null,chunk__31241,i__31243);
-var map__31244__$1 = ((((!((map__31244 == null)))?((((map__31244.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__31244.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__31244):map__31244);
-var ins = map__31244__$1;
-var instruct = cljs.core.get.call(null,map__31244__$1,new cljs.core.Keyword(null,"instruct","instruct",-1491431711));
-var pred__31246_31286 = cljs.core._EQ_;
-var expr__31247_31287 = instruct;
-if(cljs.core.truth_(pred__31246_31286.call(null,new cljs.core.Keyword(null,"create-update","create-update",1670324321),expr__31247_31287))){
-var map__31249_31288 = ins;
-var map__31249_31289__$1 = ((((!((map__31249_31288 == null)))?((((map__31249_31288.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__31249_31288.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__31249_31288):map__31249_31288);
-var id_31290 = cljs.core.get.call(null,map__31249_31289__$1,new cljs.core.Keyword(null,"id","id",-1388402092));
-var vehicle_31291 = cljs.core.get.call(null,map__31249_31289__$1,new cljs.core.Keyword(null,"vehicle","vehicle",1670166968));
-chart.client.create_update_vehicle.call(null,id_31290,vehicle_31291);
+if((i__34102 < count__34101)){
+var map__34103 = cljs.core._nth.call(null,chunk__34100,i__34102);
+var map__34103__$1 = ((((!((map__34103 == null)))?((((map__34103.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__34103.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__34103):map__34103);
+var ins = map__34103__$1;
+var instruct = cljs.core.get.call(null,map__34103__$1,new cljs.core.Keyword(null,"instruct","instruct",-1491431711));
+var pred__34105_34145 = cljs.core._EQ_;
+var expr__34106_34146 = instruct;
+if(cljs.core.truth_(pred__34105_34145.call(null,new cljs.core.Keyword(null,"create-update","create-update",1670324321),expr__34106_34146))){
+var map__34108_34147 = ins;
+var map__34108_34148__$1 = ((((!((map__34108_34147 == null)))?((((map__34108_34147.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__34108_34147.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__34108_34147):map__34108_34147);
+var id_34149 = cljs.core.get.call(null,map__34108_34148__$1,new cljs.core.Keyword(null,"id","id",-1388402092));
+var vehicle_34150 = cljs.core.get.call(null,map__34108_34148__$1,new cljs.core.Keyword(null,"vehicle","vehicle",1670166968));
+chart.client.create_update_vehicle.call(null,id_34149,vehicle_34150);
 } else {
-if(cljs.core.truth_(pred__31246_31286.call(null,new cljs.core.Keyword(null,"delete","delete",-1768633620),expr__31247_31287))){
-var map__31251_31292 = ins;
-var map__31251_31293__$1 = ((((!((map__31251_31292 == null)))?((((map__31251_31292.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__31251_31292.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__31251_31292):map__31251_31292);
-var id_31294 = cljs.core.get.call(null,map__31251_31293__$1,new cljs.core.Keyword(null,"id","id",-1388402092));
-chart.client.delete_vehicle.call(null,id_31294);
+if(cljs.core.truth_(pred__34105_34145.call(null,new cljs.core.Keyword(null,"delete","delete",-1768633620),expr__34106_34146))){
+var map__34110_34151 = ins;
+var map__34110_34152__$1 = ((((!((map__34110_34151 == null)))?((((map__34110_34151.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__34110_34151.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__34110_34151):map__34110_34151);
+var id_34153 = cljs.core.get.call(null,map__34110_34152__$1,new cljs.core.Keyword(null,"id","id",-1388402092));
+chart.client.delete_vehicle.call(null,id_34153);
 } else {
-if(cljs.core.truth_(pred__31246_31286.call(null,new cljs.core.Keyword(null,"clear","clear",1877104959),expr__31247_31287))){
+if(cljs.core.truth_(pred__34105_34145.call(null,new cljs.core.Keyword(null,"clear","clear",1877104959),expr__34106_34146))){
 chart.client.clear_vehicles.call(null);
 } else {
-if(cljs.core.truth_(pred__31246_31286.call(null,new cljs.core.Keyword(null,"popup","popup",635890211),expr__31247_31287))){
-var map__31253_31295 = ins;
-var map__31253_31296__$1 = ((((!((map__31253_31295 == null)))?((((map__31253_31295.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__31253_31295.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__31253_31295):map__31253_31295);
-var id_31297 = cljs.core.get.call(null,map__31253_31296__$1,new cljs.core.Keyword(null,"id","id",-1388402092));
-var lat_31298 = cljs.core.get.call(null,map__31253_31296__$1,new cljs.core.Keyword(null,"lat","lat",-580793929));
-var lon_31299 = cljs.core.get.call(null,map__31253_31296__$1,new cljs.core.Keyword(null,"lon","lon",522068437));
-var html_31300 = cljs.core.get.call(null,map__31253_31296__$1,new cljs.core.Keyword(null,"html","html",-998796897));
-var time_31301 = cljs.core.get.call(null,map__31253_31296__$1,new cljs.core.Keyword(null,"time","time",1385887882));
-var width_31302 = cljs.core.get.call(null,map__31253_31296__$1,new cljs.core.Keyword(null,"width","width",-384071477));
-var height_31303 = cljs.core.get.call(null,map__31253_31296__$1,new cljs.core.Keyword(null,"height","height",1025178622));
-if(cljs.core.truth_(id_31297)){
-chart.client.popup.call(null,id_31297,html_31300,time_31301);
+if(cljs.core.truth_(pred__34105_34145.call(null,new cljs.core.Keyword(null,"popup","popup",635890211),expr__34106_34146))){
+var map__34112_34154 = ins;
+var map__34112_34155__$1 = ((((!((map__34112_34154 == null)))?((((map__34112_34154.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__34112_34154.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__34112_34154):map__34112_34154);
+var id_34156 = cljs.core.get.call(null,map__34112_34155__$1,new cljs.core.Keyword(null,"id","id",-1388402092));
+var lat_34157 = cljs.core.get.call(null,map__34112_34155__$1,new cljs.core.Keyword(null,"lat","lat",-580793929));
+var lon_34158 = cljs.core.get.call(null,map__34112_34155__$1,new cljs.core.Keyword(null,"lon","lon",522068437));
+var html_34159 = cljs.core.get.call(null,map__34112_34155__$1,new cljs.core.Keyword(null,"html","html",-998796897));
+var time_34160 = cljs.core.get.call(null,map__34112_34155__$1,new cljs.core.Keyword(null,"time","time",1385887882));
+var width_34161 = cljs.core.get.call(null,map__34112_34155__$1,new cljs.core.Keyword(null,"width","width",-384071477));
+var height_34162 = cljs.core.get.call(null,map__34112_34155__$1,new cljs.core.Keyword(null,"height","height",1025178622));
+if(cljs.core.truth_(id_34156)){
+chart.client.popup.call(null,id_34156,html_34159,time_34160);
 } else {
-if(cljs.core.truth_((function (){var and__20557__auto__ = width_31302;
-if(cljs.core.truth_(and__20557__auto__)){
-var and__20557__auto____$1 = height_31303;
-if(cljs.core.truth_(and__20557__auto____$1)){
-var and__20557__auto____$2 = lat_31298;
-if(cljs.core.truth_(and__20557__auto____$2)){
-return lon_31299;
+if(cljs.core.truth_((function (){var and__8545__auto__ = width_34161;
+if(cljs.core.truth_(and__8545__auto__)){
+var and__8545__auto____$1 = height_34162;
+if(cljs.core.truth_(and__8545__auto____$1)){
+var and__8545__auto____$2 = lat_34157;
+if(cljs.core.truth_(and__8545__auto____$2)){
+return lon_34158;
 } else {
-return and__20557__auto____$2;
+return and__8545__auto____$2;
 }
 } else {
-return and__20557__auto____$1;
+return and__8545__auto____$1;
 }
 } else {
-return and__20557__auto__;
-}
-})())){
-chart.client.popup.call(null,lat_31298,lon_31299,html_31300,time_31301,width_31302,height_31303);
-} else {
-if(cljs.core.truth_((function (){var and__20557__auto__ = lat_31298;
-if(cljs.core.truth_(and__20557__auto__)){
-return lon_31299;
-} else {
-return and__20557__auto__;
+return and__8545__auto__;
 }
 })())){
-chart.client.popup.call(null,lat_31298,lon_31299,html_31300,time_31301);
+chart.client.popup.call(null,lat_34157,lon_34158,html_34159,time_34160,width_34161,height_34162);
+} else {
+if(cljs.core.truth_((function (){var and__8545__auto__ = lat_34157;
+if(cljs.core.truth_(and__8545__auto__)){
+return lon_34158;
+} else {
+return and__8545__auto__;
+}
+})())){
+chart.client.popup.call(null,lat_34157,lon_34158,html_34159,time_34160);
 } else {
 }
 }
 }
 } else {
-if(cljs.core.truth_(pred__31246_31286.call(null,new cljs.core.Keyword(null,"trail","trail",-272340561),expr__31247_31287))){
-var map__31255_31304 = ins;
-var map__31255_31305__$1 = ((((!((map__31255_31304 == null)))?((((map__31255_31304.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__31255_31304.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__31255_31304):map__31255_31304);
-var id_31306 = cljs.core.get.call(null,map__31255_31305__$1,new cljs.core.Keyword(null,"id","id",-1388402092));
-var points_31307 = cljs.core.get.call(null,map__31255_31305__$1,new cljs.core.Keyword(null,"points","points",-1486596883));
-var options_31308 = cljs.core.get.call(null,map__31255_31305__$1,new cljs.core.Keyword(null,"options","options",99638489));
-var time_31309 = cljs.core.get.call(null,map__31255_31305__$1,new cljs.core.Keyword(null,"time","time",1385887882));
-chart.client.add_trail.call(null,id_31306,points_31307,options_31308,time_31309);
+if(cljs.core.truth_(pred__34105_34145.call(null,new cljs.core.Keyword(null,"trail","trail",-272340561),expr__34106_34146))){
+var map__34114_34163 = ins;
+var map__34114_34164__$1 = ((((!((map__34114_34163 == null)))?((((map__34114_34163.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__34114_34163.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__34114_34163):map__34114_34163);
+var id_34165 = cljs.core.get.call(null,map__34114_34164__$1,new cljs.core.Keyword(null,"id","id",-1388402092));
+var points_34166 = cljs.core.get.call(null,map__34114_34164__$1,new cljs.core.Keyword(null,"points","points",-1486596883));
+var options_34167 = cljs.core.get.call(null,map__34114_34164__$1,new cljs.core.Keyword(null,"options","options",99638489));
+var time_34168 = cljs.core.get.call(null,map__34114_34164__$1,new cljs.core.Keyword(null,"time","time",1385887882));
+chart.client.add_trail.call(null,id_34165,points_34166,options_34167,time_34168);
 } else {
-if(cljs.core.truth_(pred__31246_31286.call(null,new cljs.core.Keyword(null,"map-center","map-center",770153511),expr__31247_31287))){
-var map__31257_31310 = ins;
-var map__31257_31311__$1 = ((((!((map__31257_31310 == null)))?((((map__31257_31310.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__31257_31310.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__31257_31310):map__31257_31310);
-var coord_31312 = cljs.core.get.call(null,map__31257_31311__$1,new cljs.core.Keyword(null,"coord","coord",-1453656639));
-var zoom_31313 = cljs.core.get.call(null,map__31257_31311__$1,new cljs.core.Keyword(null,"zoom","zoom",-1827487038));
-var lock_31314 = cljs.core.get.call(null,map__31257_31311__$1,new cljs.core.Keyword(null,"lock","lock",-488188066));
-chart.client.map_center.call(null,coord_31312,zoom_31313,lock_31314);
+if(cljs.core.truth_(pred__34105_34145.call(null,new cljs.core.Keyword(null,"map-center","map-center",770153511),expr__34106_34146))){
+var map__34116_34169 = ins;
+var map__34116_34170__$1 = ((((!((map__34116_34169 == null)))?((((map__34116_34169.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__34116_34169.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__34116_34169):map__34116_34169);
+var coord_34171 = cljs.core.get.call(null,map__34116_34170__$1,new cljs.core.Keyword(null,"coord","coord",-1453656639));
+var zoom_34172 = cljs.core.get.call(null,map__34116_34170__$1,new cljs.core.Keyword(null,"zoom","zoom",-1827487038));
+var lock_34173 = cljs.core.get.call(null,map__34116_34170__$1,new cljs.core.Keyword(null,"lock","lock",-488188066));
+chart.client.map_center.call(null,coord_34171,zoom_34172,lock_34173);
 } else {
-if(cljs.core.truth_(pred__31246_31286.call(null,new cljs.core.Keyword(null,"create-placemark","create-placemark",-1706112738),expr__31247_31287))){
-var map__31259_31315 = ins;
-var map__31259_31316__$1 = ((((!((map__31259_31315 == null)))?((((map__31259_31315.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__31259_31315.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__31259_31315):map__31259_31315);
-var iname_31317 = cljs.core.get.call(null,map__31259_31316__$1,new cljs.core.Keyword(null,"iname","iname",672588984));
-var tip_31318 = cljs.core.get.call(null,map__31259_31316__$1,new cljs.core.Keyword(null,"tip","tip",1221810860));
-var lat_31319 = cljs.core.get.call(null,map__31259_31316__$1,new cljs.core.Keyword(null,"lat","lat",-580793929));
-var lon_31320 = cljs.core.get.call(null,map__31259_31316__$1,new cljs.core.Keyword(null,"lon","lon",522068437));
-var feature_31321 = cljs.core.get.call(null,map__31259_31316__$1,new cljs.core.Keyword(null,"feature","feature",27242652));
-var url_ico_31322 = cljs.core.get.call(null,map__31259_31316__$1,new cljs.core.Keyword(null,"url-ico","url-ico",1042909732));
-chart.client.create_placemark.call(null,iname_31317,tip_31318,lat_31319,lon_31320,feature_31321,url_ico_31322);
+if(cljs.core.truth_(pred__34105_34145.call(null,new cljs.core.Keyword(null,"create-placemark","create-placemark",-1706112738),expr__34106_34146))){
+var map__34118_34174 = ins;
+var map__34118_34175__$1 = ((((!((map__34118_34174 == null)))?((((map__34118_34174.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__34118_34174.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__34118_34174):map__34118_34174);
+var iname_34176 = cljs.core.get.call(null,map__34118_34175__$1,new cljs.core.Keyword(null,"iname","iname",672588984));
+var tip_34177 = cljs.core.get.call(null,map__34118_34175__$1,new cljs.core.Keyword(null,"tip","tip",1221810860));
+var lat_34178 = cljs.core.get.call(null,map__34118_34175__$1,new cljs.core.Keyword(null,"lat","lat",-580793929));
+var lon_34179 = cljs.core.get.call(null,map__34118_34175__$1,new cljs.core.Keyword(null,"lon","lon",522068437));
+var feature_34180 = cljs.core.get.call(null,map__34118_34175__$1,new cljs.core.Keyword(null,"feature","feature",27242652));
+var url_ico_34181 = cljs.core.get.call(null,map__34118_34175__$1,new cljs.core.Keyword(null,"url-ico","url-ico",1042909732));
+chart.client.create_placemark.call(null,iname_34176,tip_34177,lat_34178,lon_34179,feature_34180,url_ico_34181);
 } else {
-if(cljs.core.truth_(pred__31246_31286.call(null,new cljs.core.Keyword(null,"delete-placemark","delete-placemark",1209837453),expr__31247_31287))){
-var map__31261_31323 = ins;
-var map__31261_31324__$1 = ((((!((map__31261_31323 == null)))?((((map__31261_31323.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__31261_31323.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__31261_31323):map__31261_31323);
-var iname_31325 = cljs.core.get.call(null,map__31261_31324__$1,new cljs.core.Keyword(null,"iname","iname",672588984));
-chart.client.delete_placemark.call(null,iname_31325);
+if(cljs.core.truth_(pred__34105_34145.call(null,new cljs.core.Keyword(null,"delete-placemark","delete-placemark",1209837453),expr__34106_34146))){
+var map__34120_34182 = ins;
+var map__34120_34183__$1 = ((((!((map__34120_34182 == null)))?((((map__34120_34182.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__34120_34182.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__34120_34182):map__34120_34182);
+var iname_34184 = cljs.core.get.call(null,map__34120_34183__$1,new cljs.core.Keyword(null,"iname","iname",672588984));
+chart.client.delete_placemark.call(null,iname_34184);
 } else {
-if(cljs.core.truth_(pred__31246_31286.call(null,new cljs.core.Keyword(null,"clear-placemarks","clear-placemarks",-1671077158),expr__31247_31287))){
+if(cljs.core.truth_(pred__34105_34145.call(null,new cljs.core.Keyword(null,"clear-placemarks","clear-placemarks",-1671077158),expr__34106_34146))){
 chart.client.clear_placemarks.call(null);
 } else {
-if(cljs.core.truth_(pred__31246_31286.call(null,new cljs.core.Keyword(null,"add-link","add-link",1776480037),expr__31247_31287))){
-var map__31263_31326 = ins;
-var map__31263_31327__$1 = ((((!((map__31263_31326 == null)))?((((map__31263_31326.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__31263_31326.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__31263_31326):map__31263_31326);
-var ids_31328 = cljs.core.get.call(null,map__31263_31327__$1,new cljs.core.Keyword(null,"ids","ids",-998535796));
-var options_31329 = cljs.core.get.call(null,map__31263_31327__$1,new cljs.core.Keyword(null,"options","options",99638489));
-chart.client.add_link.call(null,ids_31328,options_31329);
+if(cljs.core.truth_(pred__34105_34145.call(null,new cljs.core.Keyword(null,"add-link","add-link",1776480037),expr__34106_34146))){
+var map__34122_34185 = ins;
+var map__34122_34186__$1 = ((((!((map__34122_34185 == null)))?((((map__34122_34185.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__34122_34185.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__34122_34185):map__34122_34185);
+var ids_34187 = cljs.core.get.call(null,map__34122_34186__$1,new cljs.core.Keyword(null,"ids","ids",-998535796));
+var options_34188 = cljs.core.get.call(null,map__34122_34186__$1,new cljs.core.Keyword(null,"options","options",99638489));
+chart.client.add_link.call(null,ids_34187,options_34188);
 } else {
 cljs.core.println.call(null,[cljs.core.str("Unknown instruction: "),cljs.core.str(new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [instruct,ins], null))].join(''));
 }
@@ -569,141 +569,141 @@ cljs.core.println.call(null,[cljs.core.str("Unknown instruction: "),cljs.core.st
 }
 }
 
-var G__31330 = seq__31240;
-var G__31331 = chunk__31241;
-var G__31332 = count__31242;
-var G__31333 = (i__31243 + (1));
-seq__31240 = G__31330;
-chunk__31241 = G__31331;
-count__31242 = G__31332;
-i__31243 = G__31333;
+var G__34189 = seq__34099;
+var G__34190 = chunk__34100;
+var G__34191 = count__34101;
+var G__34192 = (i__34102 + (1));
+seq__34099 = G__34189;
+chunk__34100 = G__34190;
+count__34101 = G__34191;
+i__34102 = G__34192;
 continue;
 } else {
-var temp__4657__auto__ = cljs.core.seq.call(null,seq__31240);
+var temp__4657__auto__ = cljs.core.seq.call(null,seq__34099);
 if(temp__4657__auto__){
-var seq__31240__$1 = temp__4657__auto__;
-if(cljs.core.chunked_seq_QMARK_.call(null,seq__31240__$1)){
-var c__21383__auto__ = cljs.core.chunk_first.call(null,seq__31240__$1);
-var G__31334 = cljs.core.chunk_rest.call(null,seq__31240__$1);
-var G__31335 = c__21383__auto__;
-var G__31336 = cljs.core.count.call(null,c__21383__auto__);
-var G__31337 = (0);
-seq__31240 = G__31334;
-chunk__31241 = G__31335;
-count__31242 = G__31336;
-i__31243 = G__31337;
+var seq__34099__$1 = temp__4657__auto__;
+if(cljs.core.chunked_seq_QMARK_.call(null,seq__34099__$1)){
+var c__9371__auto__ = cljs.core.chunk_first.call(null,seq__34099__$1);
+var G__34193 = cljs.core.chunk_rest.call(null,seq__34099__$1);
+var G__34194 = c__9371__auto__;
+var G__34195 = cljs.core.count.call(null,c__9371__auto__);
+var G__34196 = (0);
+seq__34099 = G__34193;
+chunk__34100 = G__34194;
+count__34101 = G__34195;
+i__34102 = G__34196;
 continue;
 } else {
-var map__31265 = cljs.core.first.call(null,seq__31240__$1);
-var map__31265__$1 = ((((!((map__31265 == null)))?((((map__31265.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__31265.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__31265):map__31265);
-var ins = map__31265__$1;
-var instruct = cljs.core.get.call(null,map__31265__$1,new cljs.core.Keyword(null,"instruct","instruct",-1491431711));
-var pred__31267_31338 = cljs.core._EQ_;
-var expr__31268_31339 = instruct;
-if(cljs.core.truth_(pred__31267_31338.call(null,new cljs.core.Keyword(null,"create-update","create-update",1670324321),expr__31268_31339))){
-var map__31270_31340 = ins;
-var map__31270_31341__$1 = ((((!((map__31270_31340 == null)))?((((map__31270_31340.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__31270_31340.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__31270_31340):map__31270_31340);
-var id_31342 = cljs.core.get.call(null,map__31270_31341__$1,new cljs.core.Keyword(null,"id","id",-1388402092));
-var vehicle_31343 = cljs.core.get.call(null,map__31270_31341__$1,new cljs.core.Keyword(null,"vehicle","vehicle",1670166968));
-chart.client.create_update_vehicle.call(null,id_31342,vehicle_31343);
+var map__34124 = cljs.core.first.call(null,seq__34099__$1);
+var map__34124__$1 = ((((!((map__34124 == null)))?((((map__34124.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__34124.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__34124):map__34124);
+var ins = map__34124__$1;
+var instruct = cljs.core.get.call(null,map__34124__$1,new cljs.core.Keyword(null,"instruct","instruct",-1491431711));
+var pred__34126_34197 = cljs.core._EQ_;
+var expr__34127_34198 = instruct;
+if(cljs.core.truth_(pred__34126_34197.call(null,new cljs.core.Keyword(null,"create-update","create-update",1670324321),expr__34127_34198))){
+var map__34129_34199 = ins;
+var map__34129_34200__$1 = ((((!((map__34129_34199 == null)))?((((map__34129_34199.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__34129_34199.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__34129_34199):map__34129_34199);
+var id_34201 = cljs.core.get.call(null,map__34129_34200__$1,new cljs.core.Keyword(null,"id","id",-1388402092));
+var vehicle_34202 = cljs.core.get.call(null,map__34129_34200__$1,new cljs.core.Keyword(null,"vehicle","vehicle",1670166968));
+chart.client.create_update_vehicle.call(null,id_34201,vehicle_34202);
 } else {
-if(cljs.core.truth_(pred__31267_31338.call(null,new cljs.core.Keyword(null,"delete","delete",-1768633620),expr__31268_31339))){
-var map__31272_31344 = ins;
-var map__31272_31345__$1 = ((((!((map__31272_31344 == null)))?((((map__31272_31344.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__31272_31344.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__31272_31344):map__31272_31344);
-var id_31346 = cljs.core.get.call(null,map__31272_31345__$1,new cljs.core.Keyword(null,"id","id",-1388402092));
-chart.client.delete_vehicle.call(null,id_31346);
+if(cljs.core.truth_(pred__34126_34197.call(null,new cljs.core.Keyword(null,"delete","delete",-1768633620),expr__34127_34198))){
+var map__34131_34203 = ins;
+var map__34131_34204__$1 = ((((!((map__34131_34203 == null)))?((((map__34131_34203.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__34131_34203.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__34131_34203):map__34131_34203);
+var id_34205 = cljs.core.get.call(null,map__34131_34204__$1,new cljs.core.Keyword(null,"id","id",-1388402092));
+chart.client.delete_vehicle.call(null,id_34205);
 } else {
-if(cljs.core.truth_(pred__31267_31338.call(null,new cljs.core.Keyword(null,"clear","clear",1877104959),expr__31268_31339))){
+if(cljs.core.truth_(pred__34126_34197.call(null,new cljs.core.Keyword(null,"clear","clear",1877104959),expr__34127_34198))){
 chart.client.clear_vehicles.call(null);
 } else {
-if(cljs.core.truth_(pred__31267_31338.call(null,new cljs.core.Keyword(null,"popup","popup",635890211),expr__31268_31339))){
-var map__31274_31347 = ins;
-var map__31274_31348__$1 = ((((!((map__31274_31347 == null)))?((((map__31274_31347.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__31274_31347.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__31274_31347):map__31274_31347);
-var id_31349 = cljs.core.get.call(null,map__31274_31348__$1,new cljs.core.Keyword(null,"id","id",-1388402092));
-var lat_31350 = cljs.core.get.call(null,map__31274_31348__$1,new cljs.core.Keyword(null,"lat","lat",-580793929));
-var lon_31351 = cljs.core.get.call(null,map__31274_31348__$1,new cljs.core.Keyword(null,"lon","lon",522068437));
-var html_31352 = cljs.core.get.call(null,map__31274_31348__$1,new cljs.core.Keyword(null,"html","html",-998796897));
-var time_31353 = cljs.core.get.call(null,map__31274_31348__$1,new cljs.core.Keyword(null,"time","time",1385887882));
-var width_31354 = cljs.core.get.call(null,map__31274_31348__$1,new cljs.core.Keyword(null,"width","width",-384071477));
-var height_31355 = cljs.core.get.call(null,map__31274_31348__$1,new cljs.core.Keyword(null,"height","height",1025178622));
-if(cljs.core.truth_(id_31349)){
-chart.client.popup.call(null,id_31349,html_31352,time_31353);
+if(cljs.core.truth_(pred__34126_34197.call(null,new cljs.core.Keyword(null,"popup","popup",635890211),expr__34127_34198))){
+var map__34133_34206 = ins;
+var map__34133_34207__$1 = ((((!((map__34133_34206 == null)))?((((map__34133_34206.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__34133_34206.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__34133_34206):map__34133_34206);
+var id_34208 = cljs.core.get.call(null,map__34133_34207__$1,new cljs.core.Keyword(null,"id","id",-1388402092));
+var lat_34209 = cljs.core.get.call(null,map__34133_34207__$1,new cljs.core.Keyword(null,"lat","lat",-580793929));
+var lon_34210 = cljs.core.get.call(null,map__34133_34207__$1,new cljs.core.Keyword(null,"lon","lon",522068437));
+var html_34211 = cljs.core.get.call(null,map__34133_34207__$1,new cljs.core.Keyword(null,"html","html",-998796897));
+var time_34212 = cljs.core.get.call(null,map__34133_34207__$1,new cljs.core.Keyword(null,"time","time",1385887882));
+var width_34213 = cljs.core.get.call(null,map__34133_34207__$1,new cljs.core.Keyword(null,"width","width",-384071477));
+var height_34214 = cljs.core.get.call(null,map__34133_34207__$1,new cljs.core.Keyword(null,"height","height",1025178622));
+if(cljs.core.truth_(id_34208)){
+chart.client.popup.call(null,id_34208,html_34211,time_34212);
 } else {
-if(cljs.core.truth_((function (){var and__20557__auto__ = width_31354;
-if(cljs.core.truth_(and__20557__auto__)){
-var and__20557__auto____$1 = height_31355;
-if(cljs.core.truth_(and__20557__auto____$1)){
-var and__20557__auto____$2 = lat_31350;
-if(cljs.core.truth_(and__20557__auto____$2)){
-return lon_31351;
+if(cljs.core.truth_((function (){var and__8545__auto__ = width_34213;
+if(cljs.core.truth_(and__8545__auto__)){
+var and__8545__auto____$1 = height_34214;
+if(cljs.core.truth_(and__8545__auto____$1)){
+var and__8545__auto____$2 = lat_34209;
+if(cljs.core.truth_(and__8545__auto____$2)){
+return lon_34210;
 } else {
-return and__20557__auto____$2;
+return and__8545__auto____$2;
 }
 } else {
-return and__20557__auto____$1;
+return and__8545__auto____$1;
 }
 } else {
-return and__20557__auto__;
-}
-})())){
-chart.client.popup.call(null,lat_31350,lon_31351,html_31352,time_31353,width_31354,height_31355);
-} else {
-if(cljs.core.truth_((function (){var and__20557__auto__ = lat_31350;
-if(cljs.core.truth_(and__20557__auto__)){
-return lon_31351;
-} else {
-return and__20557__auto__;
+return and__8545__auto__;
 }
 })())){
-chart.client.popup.call(null,lat_31350,lon_31351,html_31352,time_31353);
+chart.client.popup.call(null,lat_34209,lon_34210,html_34211,time_34212,width_34213,height_34214);
+} else {
+if(cljs.core.truth_((function (){var and__8545__auto__ = lat_34209;
+if(cljs.core.truth_(and__8545__auto__)){
+return lon_34210;
+} else {
+return and__8545__auto__;
+}
+})())){
+chart.client.popup.call(null,lat_34209,lon_34210,html_34211,time_34212);
 } else {
 }
 }
 }
 } else {
-if(cljs.core.truth_(pred__31267_31338.call(null,new cljs.core.Keyword(null,"trail","trail",-272340561),expr__31268_31339))){
-var map__31276_31356 = ins;
-var map__31276_31357__$1 = ((((!((map__31276_31356 == null)))?((((map__31276_31356.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__31276_31356.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__31276_31356):map__31276_31356);
-var id_31358 = cljs.core.get.call(null,map__31276_31357__$1,new cljs.core.Keyword(null,"id","id",-1388402092));
-var points_31359 = cljs.core.get.call(null,map__31276_31357__$1,new cljs.core.Keyword(null,"points","points",-1486596883));
-var options_31360 = cljs.core.get.call(null,map__31276_31357__$1,new cljs.core.Keyword(null,"options","options",99638489));
-var time_31361 = cljs.core.get.call(null,map__31276_31357__$1,new cljs.core.Keyword(null,"time","time",1385887882));
-chart.client.add_trail.call(null,id_31358,points_31359,options_31360,time_31361);
+if(cljs.core.truth_(pred__34126_34197.call(null,new cljs.core.Keyword(null,"trail","trail",-272340561),expr__34127_34198))){
+var map__34135_34215 = ins;
+var map__34135_34216__$1 = ((((!((map__34135_34215 == null)))?((((map__34135_34215.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__34135_34215.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__34135_34215):map__34135_34215);
+var id_34217 = cljs.core.get.call(null,map__34135_34216__$1,new cljs.core.Keyword(null,"id","id",-1388402092));
+var points_34218 = cljs.core.get.call(null,map__34135_34216__$1,new cljs.core.Keyword(null,"points","points",-1486596883));
+var options_34219 = cljs.core.get.call(null,map__34135_34216__$1,new cljs.core.Keyword(null,"options","options",99638489));
+var time_34220 = cljs.core.get.call(null,map__34135_34216__$1,new cljs.core.Keyword(null,"time","time",1385887882));
+chart.client.add_trail.call(null,id_34217,points_34218,options_34219,time_34220);
 } else {
-if(cljs.core.truth_(pred__31267_31338.call(null,new cljs.core.Keyword(null,"map-center","map-center",770153511),expr__31268_31339))){
-var map__31278_31362 = ins;
-var map__31278_31363__$1 = ((((!((map__31278_31362 == null)))?((((map__31278_31362.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__31278_31362.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__31278_31362):map__31278_31362);
-var coord_31364 = cljs.core.get.call(null,map__31278_31363__$1,new cljs.core.Keyword(null,"coord","coord",-1453656639));
-var zoom_31365 = cljs.core.get.call(null,map__31278_31363__$1,new cljs.core.Keyword(null,"zoom","zoom",-1827487038));
-var lock_31366 = cljs.core.get.call(null,map__31278_31363__$1,new cljs.core.Keyword(null,"lock","lock",-488188066));
-chart.client.map_center.call(null,coord_31364,zoom_31365,lock_31366);
+if(cljs.core.truth_(pred__34126_34197.call(null,new cljs.core.Keyword(null,"map-center","map-center",770153511),expr__34127_34198))){
+var map__34137_34221 = ins;
+var map__34137_34222__$1 = ((((!((map__34137_34221 == null)))?((((map__34137_34221.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__34137_34221.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__34137_34221):map__34137_34221);
+var coord_34223 = cljs.core.get.call(null,map__34137_34222__$1,new cljs.core.Keyword(null,"coord","coord",-1453656639));
+var zoom_34224 = cljs.core.get.call(null,map__34137_34222__$1,new cljs.core.Keyword(null,"zoom","zoom",-1827487038));
+var lock_34225 = cljs.core.get.call(null,map__34137_34222__$1,new cljs.core.Keyword(null,"lock","lock",-488188066));
+chart.client.map_center.call(null,coord_34223,zoom_34224,lock_34225);
 } else {
-if(cljs.core.truth_(pred__31267_31338.call(null,new cljs.core.Keyword(null,"create-placemark","create-placemark",-1706112738),expr__31268_31339))){
-var map__31280_31367 = ins;
-var map__31280_31368__$1 = ((((!((map__31280_31367 == null)))?((((map__31280_31367.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__31280_31367.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__31280_31367):map__31280_31367);
-var iname_31369 = cljs.core.get.call(null,map__31280_31368__$1,new cljs.core.Keyword(null,"iname","iname",672588984));
-var tip_31370 = cljs.core.get.call(null,map__31280_31368__$1,new cljs.core.Keyword(null,"tip","tip",1221810860));
-var lat_31371 = cljs.core.get.call(null,map__31280_31368__$1,new cljs.core.Keyword(null,"lat","lat",-580793929));
-var lon_31372 = cljs.core.get.call(null,map__31280_31368__$1,new cljs.core.Keyword(null,"lon","lon",522068437));
-var feature_31373 = cljs.core.get.call(null,map__31280_31368__$1,new cljs.core.Keyword(null,"feature","feature",27242652));
-var url_ico_31374 = cljs.core.get.call(null,map__31280_31368__$1,new cljs.core.Keyword(null,"url-ico","url-ico",1042909732));
-chart.client.create_placemark.call(null,iname_31369,tip_31370,lat_31371,lon_31372,feature_31373,url_ico_31374);
+if(cljs.core.truth_(pred__34126_34197.call(null,new cljs.core.Keyword(null,"create-placemark","create-placemark",-1706112738),expr__34127_34198))){
+var map__34139_34226 = ins;
+var map__34139_34227__$1 = ((((!((map__34139_34226 == null)))?((((map__34139_34226.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__34139_34226.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__34139_34226):map__34139_34226);
+var iname_34228 = cljs.core.get.call(null,map__34139_34227__$1,new cljs.core.Keyword(null,"iname","iname",672588984));
+var tip_34229 = cljs.core.get.call(null,map__34139_34227__$1,new cljs.core.Keyword(null,"tip","tip",1221810860));
+var lat_34230 = cljs.core.get.call(null,map__34139_34227__$1,new cljs.core.Keyword(null,"lat","lat",-580793929));
+var lon_34231 = cljs.core.get.call(null,map__34139_34227__$1,new cljs.core.Keyword(null,"lon","lon",522068437));
+var feature_34232 = cljs.core.get.call(null,map__34139_34227__$1,new cljs.core.Keyword(null,"feature","feature",27242652));
+var url_ico_34233 = cljs.core.get.call(null,map__34139_34227__$1,new cljs.core.Keyword(null,"url-ico","url-ico",1042909732));
+chart.client.create_placemark.call(null,iname_34228,tip_34229,lat_34230,lon_34231,feature_34232,url_ico_34233);
 } else {
-if(cljs.core.truth_(pred__31267_31338.call(null,new cljs.core.Keyword(null,"delete-placemark","delete-placemark",1209837453),expr__31268_31339))){
-var map__31282_31375 = ins;
-var map__31282_31376__$1 = ((((!((map__31282_31375 == null)))?((((map__31282_31375.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__31282_31375.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__31282_31375):map__31282_31375);
-var iname_31377 = cljs.core.get.call(null,map__31282_31376__$1,new cljs.core.Keyword(null,"iname","iname",672588984));
-chart.client.delete_placemark.call(null,iname_31377);
+if(cljs.core.truth_(pred__34126_34197.call(null,new cljs.core.Keyword(null,"delete-placemark","delete-placemark",1209837453),expr__34127_34198))){
+var map__34141_34234 = ins;
+var map__34141_34235__$1 = ((((!((map__34141_34234 == null)))?((((map__34141_34234.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__34141_34234.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__34141_34234):map__34141_34234);
+var iname_34236 = cljs.core.get.call(null,map__34141_34235__$1,new cljs.core.Keyword(null,"iname","iname",672588984));
+chart.client.delete_placemark.call(null,iname_34236);
 } else {
-if(cljs.core.truth_(pred__31267_31338.call(null,new cljs.core.Keyword(null,"clear-placemarks","clear-placemarks",-1671077158),expr__31268_31339))){
+if(cljs.core.truth_(pred__34126_34197.call(null,new cljs.core.Keyword(null,"clear-placemarks","clear-placemarks",-1671077158),expr__34127_34198))){
 chart.client.clear_placemarks.call(null);
 } else {
-if(cljs.core.truth_(pred__31267_31338.call(null,new cljs.core.Keyword(null,"add-link","add-link",1776480037),expr__31268_31339))){
-var map__31284_31378 = ins;
-var map__31284_31379__$1 = ((((!((map__31284_31378 == null)))?((((map__31284_31378.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__31284_31378.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__31284_31378):map__31284_31378);
-var ids_31380 = cljs.core.get.call(null,map__31284_31379__$1,new cljs.core.Keyword(null,"ids","ids",-998535796));
-var options_31381 = cljs.core.get.call(null,map__31284_31379__$1,new cljs.core.Keyword(null,"options","options",99638489));
-chart.client.add_link.call(null,ids_31380,options_31381);
+if(cljs.core.truth_(pred__34126_34197.call(null,new cljs.core.Keyword(null,"add-link","add-link",1776480037),expr__34127_34198))){
+var map__34143_34237 = ins;
+var map__34143_34238__$1 = ((((!((map__34143_34237 == null)))?((((map__34143_34237.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__34143_34237.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__34143_34237):map__34143_34237);
+var ids_34239 = cljs.core.get.call(null,map__34143_34238__$1,new cljs.core.Keyword(null,"ids","ids",-998535796));
+var options_34240 = cljs.core.get.call(null,map__34143_34238__$1,new cljs.core.Keyword(null,"options","options",99638489));
+chart.client.add_link.call(null,ids_34239,options_34240);
 } else {
 cljs.core.println.call(null,[cljs.core.str("Unknown instruction: "),cljs.core.str(new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [instruct,ins], null))].join(''));
 }
@@ -717,14 +717,14 @@ cljs.core.println.call(null,[cljs.core.str("Unknown instruction: "),cljs.core.st
 }
 }
 
-var G__31382 = cljs.core.next.call(null,seq__31240__$1);
-var G__31383 = null;
-var G__31384 = (0);
-var G__31385 = (0);
-seq__31240 = G__31382;
-chunk__31241 = G__31383;
-count__31242 = G__31384;
-i__31243 = G__31385;
+var G__34241 = cljs.core.next.call(null,seq__34099__$1);
+var G__34242 = null;
+var G__34243 = (0);
+var G__34244 = (0);
+seq__34099 = G__34241;
+chunk__34100 = G__34242;
+count__34101 = G__34243;
+i__34102 = G__34244;
 continue;
 }
 } else {
@@ -738,23 +738,23 @@ chart.client.receive_instructions = (function chart$client$receive_instructions(
 return ajax.core.GET.call(null,new cljs.core.Keyword(null,"instructions","instructions",1724333802).cljs$core$IFn$_invoke$arity$1(chart.client.URL),new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"handler","handler",-195596612),chart.client.instructions_handler,new cljs.core.Keyword(null,"error-handler","error-handler",-484945776),chart.client.error_handler], null));
 });
 chart.client.move_to = (function chart$client$move_to(var_args){
-var args31387 = [];
-var len__21677__auto___31390 = arguments.length;
-var i__21678__auto___31391 = (0);
+var args34246 = [];
+var len__9665__auto___34249 = arguments.length;
+var i__9666__auto___34250 = (0);
 while(true){
-if((i__21678__auto___31391 < len__21677__auto___31390)){
-args31387.push((arguments[i__21678__auto___31391]));
+if((i__9666__auto___34250 < len__9665__auto___34249)){
+args34246.push((arguments[i__9666__auto___34250]));
 
-var G__31392 = (i__21678__auto___31391 + (1));
-i__21678__auto___31391 = G__31392;
+var G__34251 = (i__9666__auto___34250 + (1));
+i__9666__auto___34250 = G__34251;
 continue;
 } else {
 }
 break;
 }
 
-var G__31389 = args31387.length;
-switch (G__31389) {
+var G__34248 = args34246.length;
+switch (G__34248) {
 case 0:
 return chart.client.move_to.cljs$core$IFn$_invoke$arity$0();
 
@@ -768,15 +768,13 @@ return chart.client.move_to.cljs$core$IFn$_invoke$arity$2((arguments[(0)]),(argu
 
 break;
 default:
-throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args31387.length)].join('')));
+throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args34246.length)].join('')));
 
 }
 });
 
 chart.client.move_to.cljs$core$IFn$_invoke$arity$0 = (function (){
-ask.master.ask_server.call(null,new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"whom","whom",1092673542),"direct",new cljs.core.Keyword(null,"question","question",-1411720117),"countries"], null));
-
-return ask.master.get_answer.call(null,chart.client.move_to);
+return ask.master.ask_server.call(null,new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"question","question",-1411720117),"countries"], null),chart.client.move_to);
 });
 
 chart.client.move_to.cljs$core$IFn$_invoke$arity$1 = (function (cns){
@@ -784,10 +782,8 @@ ask.master.selector.call(null,"element",(1),"chart.client","countries",cns,new c
 
 return (
 chart.client.handler1 = (function chart$client$handler1(sel){
-ask.master.ask_server.call(null,new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"whom","whom",1092673542),"direct",new cljs.core.Keyword(null,"question","question",-1411720117),"airports",new cljs.core.Keyword(null,"country","country",312965309),sel], null));
-
-return ask.master.get_answer.call(null,(function (p1__31386_SHARP_){
-return chart.client.move_to.call(null,sel,p1__31386_SHARP_);
+return ask.master.ask_server.call(null,new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"question","question",-1411720117),"airports",new cljs.core.Keyword(null,"country","country",312965309),sel], null),(function (p1__34245_SHARP_){
+return chart.client.move_to.call(null,sel,p1__34245_SHARP_);
 }));
 }))
 ;
@@ -809,23 +805,23 @@ return ask.master.clear_dialog.call(null);
 chart.client.move_to.cljs$lang$maxFixedArity = 2;
 
 chart.client.schedule = (function chart$client$schedule(var_args){
-var args31398 = [];
-var len__21677__auto___31401 = arguments.length;
-var i__21678__auto___31402 = (0);
+var args34257 = [];
+var len__9665__auto___34260 = arguments.length;
+var i__9666__auto___34261 = (0);
 while(true){
-if((i__21678__auto___31402 < len__21677__auto___31401)){
-args31398.push((arguments[i__21678__auto___31402]));
+if((i__9666__auto___34261 < len__9665__auto___34260)){
+args34257.push((arguments[i__9666__auto___34261]));
 
-var G__31403 = (i__21678__auto___31402 + (1));
-i__21678__auto___31402 = G__31403;
+var G__34262 = (i__9666__auto___34261 + (1));
+i__9666__auto___34261 = G__34262;
 continue;
 } else {
 }
 break;
 }
 
-var G__31400 = args31398.length;
-switch (G__31400) {
+var G__34259 = args34257.length;
+switch (G__34259) {
 case 0:
 return chart.client.schedule.cljs$core$IFn$_invoke$arity$0();
 
@@ -851,7 +847,7 @@ return chart.client.schedule.cljs$core$IFn$_invoke$arity$6((arguments[(0)]),(arg
 
 break;
 default:
-throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args31398.length)].join('')));
+throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args34257.length)].join('')));
 
 }
 });
@@ -873,10 +869,8 @@ return chart.client.schedule.call(null,call,tim);
 });
 
 chart.client.schedule.cljs$core$IFn$_invoke$arity$2 = (function (call,tim){
-ask.master.ask_server.call(null,new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"whom","whom",1092673542),"direct",new cljs.core.Keyword(null,"question","question",-1411720117),"countries"], null));
-
-return ask.master.get_answer.call(null,(function (p1__31394_SHARP_){
-return chart.client.schedule.call(null,call,tim,p1__31394_SHARP_);
+return ask.master.ask_server.call(null,new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"question","question",-1411720117),"countries"], null),(function (p1__34253_SHARP_){
+return chart.client.schedule.call(null,call,tim,p1__34253_SHARP_);
 }));
 });
 
@@ -885,10 +879,8 @@ ask.master.selector.call(null,"element",(3),"chart.client","from country",cns1,n
 
 return (
 chart.client.handler3 = (function chart$client$handler3(sel){
-ask.master.ask_server.call(null,new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"whom","whom",1092673542),"direct",new cljs.core.Keyword(null,"question","question",-1411720117),"airports",new cljs.core.Keyword(null,"country","country",312965309),sel], null));
-
-return ask.master.get_answer.call(null,(function (p1__31395_SHARP_){
-return chart.client.schedule.call(null,call,tim,sel,p1__31395_SHARP_);
+return ask.master.ask_server.call(null,new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"question","question",-1411720117),"airports",new cljs.core.Keyword(null,"country","country",312965309),sel], null),(function (p1__34254_SHARP_){
+return chart.client.schedule.call(null,call,tim,sel,p1__34254_SHARP_);
 }));
 }))
 ;
@@ -899,10 +891,8 @@ ask.master.selector.call(null,"element",(4),"chart.client","from airport",aps1,n
 
 return (
 chart.client.handler4 = (function chart$client$handler4(sel){
-ask.master.ask_server.call(null,new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"whom","whom",1092673542),"direct",new cljs.core.Keyword(null,"question","question",-1411720117),"countries"], null));
-
-return ask.master.get_answer.call(null,(function (p1__31396_SHARP_){
-return chart.client.schedule.call(null,call,tim,cnt1,sel,p1__31396_SHARP_);
+return ask.master.ask_server.call(null,new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"question","question",-1411720117),"countries"], null),(function (p1__34255_SHARP_){
+return chart.client.schedule.call(null,call,tim,cnt1,sel,p1__34255_SHARP_);
 }));
 }))
 ;
@@ -913,10 +903,8 @@ ask.master.selector.call(null,"element",(5),"chart.client","to county",cns2,new 
 
 return (
 chart.client.handler5 = (function chart$client$handler5(sel){
-ask.master.ask_server.call(null,new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"whom","whom",1092673542),"direct",new cljs.core.Keyword(null,"question","question",-1411720117),"airports",new cljs.core.Keyword(null,"country","country",312965309),sel], null));
-
-return ask.master.get_answer.call(null,(function (p1__31397_SHARP_){
-return chart.client.schedule.call(null,call,tim,cnt1,apt1,sel,p1__31397_SHARP_);
+return ask.master.ask_server.call(null,new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"question","question",-1411720117),"airports",new cljs.core.Keyword(null,"country","country",312965309),sel], null),(function (p1__34256_SHARP_){
+return chart.client.schedule.call(null,call,tim,cnt1,apt1,sel,p1__34256_SHARP_);
 }));
 }))
 ;
@@ -938,23 +926,23 @@ return ask.master.clear_dialog.call(null);
 chart.client.schedule.cljs$lang$maxFixedArity = 6;
 
 chart.client.question = (function chart$client$question(var_args){
-var args31407 = [];
-var len__21677__auto___31410 = arguments.length;
-var i__21678__auto___31411 = (0);
+var args34267 = [];
+var len__9665__auto___34270 = arguments.length;
+var i__9666__auto___34271 = (0);
 while(true){
-if((i__21678__auto___31411 < len__21677__auto___31410)){
-args31407.push((arguments[i__21678__auto___31411]));
+if((i__9666__auto___34271 < len__9665__auto___34270)){
+args34267.push((arguments[i__9666__auto___34271]));
 
-var G__31412 = (i__21678__auto___31411 + (1));
-i__21678__auto___31411 = G__31412;
+var G__34272 = (i__9666__auto___34271 + (1));
+i__9666__auto___34271 = G__34272;
 continue;
 } else {
 }
 break;
 }
 
-var G__31409 = args31407.length;
-switch (G__31409) {
+var G__34269 = args34267.length;
+switch (G__34269) {
 case 0:
 return chart.client.question.cljs$core$IFn$_invoke$arity$0();
 
@@ -971,16 +959,18 @@ case 3:
 return chart.client.question.cljs$core$IFn$_invoke$arity$3((arguments[(0)]),(arguments[(1)]),(arguments[(2)]));
 
 break;
+case 4:
+return chart.client.question.cljs$core$IFn$_invoke$arity$4((arguments[(0)]),(arguments[(1)]),(arguments[(2)]),(arguments[(3)]));
+
+break;
 default:
-throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args31407.length)].join('')));
+throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args34267.length)].join('')));
 
 }
 });
 
 chart.client.question.cljs$core$IFn$_invoke$arity$0 = (function (){
-ask.master.ask_server.call(null,new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"whom","whom",1092673542),"direct",new cljs.core.Keyword(null,"question","question",-1411720117),"predicates"], null));
-
-return ask.master.get_answer.call(null,chart.client.question);
+return ask.master.ask_server.call(null,new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"question","question",-1411720117),"predicates"], null),chart.client.question);
 });
 
 chart.client.question.cljs$core$IFn$_invoke$arity$1 = (function (predicates){
@@ -988,12 +978,8 @@ ask.master.selector.call(null,"element",(1),"chart.client","?",predicates,new cl
 
 return (
 chart.client.handler1 = (function chart$client$handler1(sel){
-cljs.core.println.call(null,(1),sel);
-
-ask.master.ask_server.call(null,new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"whom","whom",1092673542),"direct",new cljs.core.Keyword(null,"question","question",-1411720117),"subjects",new cljs.core.Keyword(null,"predicate","predicate",-1742501860),sel], null));
-
-return ask.master.get_answer.call(null,(function (p1__31405_SHARP_){
-return chart.client.question.call(null,sel,p1__31405_SHARP_);
+return ask.master.ask_server.call(null,new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"question","question",-1411720117),"subjects",new cljs.core.Keyword(null,"predicate","predicate",-1742501860),sel], null),(function (p1__34264_SHARP_){
+return chart.client.question.call(null,sel,p1__34264_SHARP_);
 }));
 }))
 ;
@@ -1004,48 +990,66 @@ ask.master.selector.call(null,"element",(20),"chart.client","?",subjects,new clj
 
 return (
 chart.client.handler20 = (function chart$client$handler20(sel){
-cljs.core.println.call(null,(20),sel);
-
-ask.master.ask_server.call(null,new cljs.core.PersistentArrayMap(null, 4, [new cljs.core.Keyword(null,"whom","whom",1092673542),"direct",new cljs.core.Keyword(null,"question","question",-1411720117),"objects",new cljs.core.Keyword(null,"predicate","predicate",-1742501860),pred,new cljs.core.Keyword(null,"subject","subject",-1411880451),sel], null));
-
-return ask.master.get_answer.call(null,(function (p1__31406_SHARP_){
-return chart.client.question.call(null,pred,sel,p1__31406_SHARP_);
+return ask.master.ask_server.call(null,new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"question","question",-1411720117),"objects",new cljs.core.Keyword(null,"predicate","predicate",-1742501860),pred,new cljs.core.Keyword(null,"subject","subject",-1411880451),sel], null),(function (p1__34265_SHARP_){
+return chart.client.question.call(null,pred,sel,p1__34265_SHARP_);
 }));
 }))
 ;
 });
 
 chart.client.question.cljs$core$IFn$_invoke$arity$3 = (function (pred,subj,objects){
+if(cljs.core.truth_(objects)){
 ask.master.selector.call(null,"element",(30),"chart.client","?",objects,new cljs.core.Keyword(null,"itself","itself",1264932322),(130));
 
 return (
 chart.client.handler30 = (function chart$client$handler30(sel){
-cljs.core.println.call(null,(30),sel);
-
-return ask.master.ask_server.call(null,new cljs.core.PersistentArrayMap(null, 4, [new cljs.core.Keyword(null,"whom","whom",1092673542),"es",new cljs.core.Keyword(null,"predicate","predicate",-1742501860),pred,new cljs.core.Keyword(null,"subject","subject",-1411880451),subj,new cljs.core.Keyword(null,"object","object",1474613949),sel], null));
+return ask.master.ask_server.call(null,new cljs.core.PersistentArrayMap(null, 4, [new cljs.core.Keyword(null,"question","question",-1411720117),"adjuncts",new cljs.core.Keyword(null,"predicate","predicate",-1742501860),pred,new cljs.core.Keyword(null,"subject","subject",-1411880451),subj,new cljs.core.Keyword(null,"object","object",1474613949),sel], null),(function (p1__34266_SHARP_){
+return chart.client.question.call(null,pred,subj,sel,p1__34266_SHARP_);
+}));
 }))
 ;
+} else {
+return ask.master.clear_dialog.call(null);
+}
 });
 
-chart.client.question.cljs$lang$maxFixedArity = 3;
+chart.client.question.cljs$core$IFn$_invoke$arity$4 = (function (pred,subj,obj,adjuncts){
+if(cljs.core.truth_(adjuncts)){
+ask.master.selector.call(null,"element",(40),"chart.client","?",adjuncts,new cljs.core.Keyword(null,"itself","itself",1264932322),(130));
+
+return (
+chart.client.handler40 = (function chart$client$handler40(sel){
+ask.master.ask_server.call(null,new cljs.core.PersistentArrayMap(null, 5, [new cljs.core.Keyword(null,"question","question",-1411720117),"es",new cljs.core.Keyword(null,"predicate","predicate",-1742501860),pred,new cljs.core.Keyword(null,"subject","subject",-1411880451),subj,new cljs.core.Keyword(null,"object","object",1474613949),obj,new cljs.core.Keyword(null,"adjunct","adjunct",1627696494),sel], null),(function (r){
+return null;
+}));
+
+return ask.master.clear_dialog.call(null);
+}))
+;
+} else {
+return ask.master.clear_dialog.call(null);
+}
+});
+
+chart.client.question.cljs$lang$maxFixedArity = 4;
 
 chart.client.command = (function chart$client$command(cmd){
-var pred__31417_31420 = cljs.core._EQ_;
-var expr__31418_31421 = cmd;
-if(cljs.core.truth_(pred__31417_31420.call(null,"commands",expr__31418_31421))){
+var pred__34277_34280 = cljs.core._EQ_;
+var expr__34278_34281 = cmd;
+if(cljs.core.truth_(pred__34277_34280.call(null,"commands",expr__34278_34281))){
 } else {
-if(cljs.core.truth_(pred__31417_31420.call(null,"watch-visible",expr__31418_31421))){
-var bnd_31422 = cljs.core.deref.call(null,chart.client.CHART).getBounds();
-var prm_31423 = [cljs.core.str("?n="),cljs.core.str(bnd_31422.getNorth()),cljs.core.str("&s="),cljs.core.str(bnd_31422.getSouth()),cljs.core.str("&w="),cljs.core.str(bnd_31422.getWest()),cljs.core.str("&e="),cljs.core.str(bnd_31422.getEast()),cljs.core.str("&z="),cljs.core.str(cljs.core.deref.call(null,chart.client.CHART).getZoom())].join('');
-ajax.core.GET.call(null,[cljs.core.str(new cljs.core.Keyword(null,"command","command",-894540724).cljs$core$IFn$_invoke$arity$1(chart.client.URL)),cljs.core.str(cmd),cljs.core.str(prm_31423)].join(''),chart.client.no_handler);
+if(cljs.core.truth_(pred__34277_34280.call(null,"watch-visible",expr__34278_34281))){
+var bnd_34282 = cljs.core.deref.call(null,chart.client.CHART).getBounds();
+var prm_34283 = [cljs.core.str("?n="),cljs.core.str(bnd_34282.getNorth()),cljs.core.str("&s="),cljs.core.str(bnd_34282.getSouth()),cljs.core.str("&w="),cljs.core.str(bnd_34282.getWest()),cljs.core.str("&e="),cljs.core.str(bnd_34282.getEast()),cljs.core.str("&z="),cljs.core.str(cljs.core.deref.call(null,chart.client.CHART).getZoom())].join('');
+ajax.core.GET.call(null,[cljs.core.str(new cljs.core.Keyword(null,"command","command",-894540724).cljs$core$IFn$_invoke$arity$1(chart.client.URL)),cljs.core.str(cmd),cljs.core.str(prm_34283)].join(''),chart.client.no_handler);
 } else {
-if(cljs.core.truth_(pred__31417_31420.call(null,"move-to",expr__31418_31421))){
+if(cljs.core.truth_(pred__34277_34280.call(null,"move-to",expr__34278_34281))){
 chart.client.move_to.call(null);
 } else {
-if(cljs.core.truth_(pred__31417_31420.call(null,"schedule",expr__31418_31421))){
+if(cljs.core.truth_(pred__34277_34280.call(null,"schedule",expr__34278_34281))){
 chart.client.schedule.call(null);
 } else {
-if(cljs.core.truth_(pred__31417_31420.call(null,"question",expr__31418_31421))){
+if(cljs.core.truth_(pred__34277_34280.call(null,"question",expr__34278_34281))){
 chart.client.question.call(null);
 } else {
 ajax.core.GET.call(null,[cljs.core.str(new cljs.core.Keyword(null,"command","command",-894540724).cljs$core$IFn$_invoke$arity$1(chart.client.URL)),cljs.core.str(cmd)].join(''),chart.client.no_handler);
@@ -1069,11 +1073,11 @@ var tile5 = L.tileLayer("http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}",({"m
 var base = cljs.core.clj__GT_js.call(null,new cljs.core.PersistentArrayMap(null, 5, ["OpenStreetMap",tile1,"Google Satellite",tile2,"Google Streets",tile3,"Google Hybrid",tile4,"Google Terrain",tile5], null));
 var ctrl = L.control.layers(base,null);
 try{tile1.addTo(m);
-}catch (e31425){if((e31425 instanceof Error)){
-var e_31426 = e31425;
-cljs.core.println.call(null,e_31426);
+}catch (e34285){if((e34285 instanceof Error)){
+var e_34286 = e34285;
+cljs.core.println.call(null,e_34286);
 } else {
-throw e31425;
+throw e34285;
 
 }
 }

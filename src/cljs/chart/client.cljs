@@ -261,16 +261,14 @@
 
 (defn move-to
   ([]
-  (am/ask-server {:whom "direct"
-	    :question "countries"})
-  (am/get-answer move-to))
+  (am/ask-server {:question "countries"}
+	move-to))
 ([cns]
   (am/selector "element" 1 "chart.client" "countries" cns :itself 130)
   (defn handler1 [sel]
-    (am/ask-server {:whom "direct"
-	       :question "airports"
-	       :country sel})
-    (am/get-answer #(move-to sel %))))
+    (am/ask-server {:question "airports"
+	       :country sel}
+	#(move-to sel %))))
 ([cnt aps]
   (am/selector "element" 2 "chart.client" "airports" aps :itself 130)
   (defn handler2 [sel]
@@ -287,29 +285,25 @@
       (defn handler2 [tim]
         (schedule call tim))))
 ([call tim]
-  (am/ask-server {:whom "direct"
-	    :question "countries"})
-  (am/get-answer #(schedule call tim %)))
+  (am/ask-server {:question "countries"}
+	#(schedule call tim %)))
 ([call tim cns1]
   (am/selector "element" 3 "chart.client" "from country" cns1 :itself 130)
   (defn handler3 [sel]
-    (am/ask-server {:whom "direct"
-	       :question "airports"
-	       :country sel})
-    (am/get-answer #(schedule call tim sel %))))
+    (am/ask-server {:question "airports"
+	       :country sel}
+	#(schedule call tim sel %))))
 ([call tim cnt1 aps1]
   (am/selector "element" 4 "chart.client" "from airport" aps1 :itself 130)
   (defn handler4 [sel]
-    (am/ask-server {:whom "direct"
-	    :question "countries"})
-    (am/get-answer #(schedule call tim cnt1 sel %))))
+    (am/ask-server {:question "countries"}
+	#(schedule call tim cnt1 sel %))))
 ([call tim cnt1 apt1 cns2]
   (am/selector "element" 5 "chart.client" "to county" cns2 :itself 130)
   (defn handler5 [sel]
-    (am/ask-server {:whom "direct"
-	       :question "airports"
-	       :country sel})
-    (am/get-answer #(schedule call tim cnt1 apt1 sel %))))
+    (am/ask-server {:question "airports"
+	       :country sel}
+	#(schedule call tim cnt1 apt1 sel %))))
 ([call tim cnt1 apt1 cnt2 aps2]
   (am/selector "element" 6 "chart.client" "to airport" aps2 :itself 130)
   (defn handler6 [sel]
@@ -324,34 +318,43 @@
 
 (defn question
   ([]
-  (am/ask-server {:whom "direct"
-	    :question "predicates"})
-  (am/get-answer question))
+  (am/ask-server {:question "predicates"}
+	question))
 ([predicates]
   (am/selector "element" 1 "chart.client" "?" predicates :itself 130)
   (defn handler1 [sel]
-    (println 1 sel)
-    (am/ask-server {:whom "direct"
-	       :question "subjects"
-	       :predicate sel})
-    (am/get-answer #(question sel %))))
+    (am/ask-server {:question "subjects"
+	       :predicate sel}
+	#(question sel %))))
 ([pred subjects]
   (am/selector "element" 20 "chart.client" "?" subjects :itself 130)
   (defn handler20 [sel]
-    (println 20 sel)
-    (am/ask-server {:whom "direct"
-	       :question "objects"
+    (am/ask-server {:question "objects"
 	       :predicate pred
-	       :subject sel})
-    (am/get-answer #(question pred sel %))))
+	       :subject sel}
+	#(question pred sel %))))
 ([pred subj objects]
-  (am/selector "element" 30 "chart.client" "?" objects :itself 130)
-  (defn handler30 [sel]
-    (println 30 sel)
-    (am/ask-server {:whom "es"
-	       :predicate pred
-	       :subject subj
-	       :object sel}))))
+  (if objects
+    (do (am/selector "element" 30 "chart.client" "?" objects :itself 130)
+      (defn handler30 [sel]
+        (am/ask-server {:question "adjuncts"
+	          :predicate pred
+	          :subject subj
+	          :object sel} 
+	#(question pred subj sel %))))
+    (am/clear-dialog)))
+([pred subj obj adjuncts]
+  (if adjuncts
+    (do (am/selector "element" 40 "chart.client" "?" adjuncts :itself 130)
+      (defn handler40 [sel]
+        (am/ask-server {:question "es"
+	          :predicate pred
+	          :subject subj
+	          :object obj
+                                  :adjunct sel} 
+	(fn [r]))
+        (am/clear-dialog)))
+    (am/clear-dialog))))
 
 (defn command [cmd]
   (condp = cmd
