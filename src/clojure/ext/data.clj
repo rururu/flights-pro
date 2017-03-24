@@ -247,7 +247,7 @@ nil)
         pro "<html><head><meta charset=\"UTF-8\"/></meta></head>"
         hdr "<h3>Where we are?</h3>"
         html (if (= ocn "Land")
-	(let [nby (gn/call-geonames-nearby lat lon)
+	(let [nby (gn/call-geonames-nearby lat lon nil nil nil nil)
 	       nam (nby "name")
 	       cty (nby "countryName")
 	       adm (nby "adminName1")
@@ -331,4 +331,47 @@ nil)
 	{:instruct :map-center
 	 :coord [(/ (+ n s) 2) (/ (+ w e) 2)]
 	 :zoom z})))
+
+(defn pump-nearest [ob]
+  (let [[lat1 lon1] (our-center)]
+  (if-let [flt (seq (filter #(= (sv % "title") ob) (cls-instances "Feature")))]
+    (let [nbr (gn/call-geonames-nearby lat1 lon1 nil (sv (first flt) "code") nil 300)
+           html (if (or (nil? nbr) (empty? nbr))
+	"No information."
+	(let [lat2 (read-string (nbr "lat"))
+	       lon2 (read-string (nbr "lng"))
+	       dis (read-string (nbr "distance"))
+	       bea (gn/bearing lat1 lon1 lat2 lon2)]
+	  (str "<h3>Nearest " ob "</h3>"
+	    "name: " (nbr "name") "<br>"
+	    "country: " (nbr "countryName") "<br>"
+	    "latitude: " lat2 "<br>"
+	    "longitude: " lon2 "<br>"
+	    (format "distance: %.1f" dis) " NM<br>"
+	    "direction: " (gn/direction bea))))]
+        (asp/pump-in (:ins-chn @COMM)
+	{:instruct :popup
+	 :lat lat1
+	 :lon lon1
+	 :html html
+	 :width 1200
+	 :height 1000
+	 :time (:ext-data-popup TIO)})))))
+
+(defn pump-airplanes [head css]
+  (let [[lat lon] (our-center)
+       css (sort css)
+       k (count css)
+       cs3 (partition-all 3 css)
+       html (str "<h3>" head " " k "</h3><table>"
+	(apply str (map #(str "<tr><td>" (apply str (interpose "</td><td>" %)) "</td></tr>") cs3))
+	"</table>")]
+  (asp/pump-in (:ins-chn @COMM)
+	{:instruct :popup
+	 :lat lat
+	 :lon lon
+	 :html html
+	 :width 1200
+	 :height 1000
+	 :time (:ext-data-popup TIO)})))
 

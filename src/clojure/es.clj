@@ -7,7 +7,8 @@
   [calc.core :as calc]
   [calc.geo :as geo]
   [fr24.client :as fr24]
-  [my.flights.move :as mfs])
+  [my.flights.move :as mfs]
+  [rete.core :as rt])
 (:import
   java.util.Calendar))
 
@@ -250,8 +251,8 @@
   (* (+ spd1 spd2) INTS-TIME))
 
 (defn pom-and-link [id1 crd1 crs1 spd1 cs1 id2 crd2 crs2 spd2 cs2 dmin tmin]
-  (put-on-map id1 crd1 crs1 spd1 "INTERSECT")
-(put-on-map id2 crd2 crs2 spd2 "INTERSECT")
+  (put-on-map id1 cs1 crd1 crs1 spd1 "INTERSECT")
+(put-on-map id2 cs2 crd2 crs2 spd2 "INTERSECT")
 (asp/pump-in (:instructions  cmd/CHN)
 	{:instruct :add-link
                          :ids [id1 id2]
@@ -260,4 +261,9 @@
 	                :color "red"
 	                :dmin dmin	
 	                :tmin tmin}}))
+
+(defn flights-of-status [sta]
+  (let [ff (rt/facts-with-slot-value 'Flight 'status = sta)
+       cc (map #(rt/slot-value 'callsign %) ff)]
+  (sort (set cc))))
 

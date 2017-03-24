@@ -28,7 +28,6 @@
  :vehicles 200
  :display 831
  :manual-data 6000
- :ext-data 15000
  :ext-data-popup 60000})
 (def CARRIER (volatile! {:mode "?"
                :coord [0 0]
