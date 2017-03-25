@@ -228,6 +228,27 @@
     (asp/delayer #(do (.removeLayer @CHART lnk)
 	     (vswap! LINKS dissoc ids)) del))))
 
+(defn select-airport
+  ([]
+  (am/ask-server {:question "countries"}
+	select-airport))
+([cns]
+  (am/selector "element" 1 "chart.client" "countries" cns :itself 130)
+  (defn handler1 [sel]
+    (am/ask-server {:question "airports"
+	       :country sel}
+	#(select-airport sel %))))
+([cnt aps]
+  (am/selector "element" 2 "chart.client" "airports" aps :itself 130)
+  (defn handler2 [sel]
+    (am/ask-server {:question "es"
+	      :predicate "User Answer"
+	      :subject "selected airport"
+	      :object sel
+                              :adjunct cnt} 
+	(fn [r]))
+    (am/clear-dialog))))
+
 (defn instructions-handler [response]
   (doseq [{:keys [instruct] :as ins} (read-transit response)]
   ;;(println [:INSTRUCT ins])
@@ -253,6 +274,9 @@
     :clear-placemarks (clear-placemarks)
     :add-link (let [{:keys [ids options]} ins]
 	(add-link ids options))
+    :ask-user (let [{:keys [question]} ins]
+	(condp = 
+	  "airport" (select-airport)))
     (println (str "Unknown instruction: " [instruct ins])))))
 
 (defn receive-instructions []

@@ -1,4 +1,4 @@
-; Fri Mar 17 19:58:53 MSK 2017
+; Sat Mar 25 22:08:38 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -20,8 +20,8 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[GeoNames_ProjectKB_Class10378]
-		[GeoNames_ProjectKB_Class10379]))
+		[GeoNames_ProjectKB_Class10365]
+		[GeoNames_ProjectKB_Class10366]))
 
 ([CLSES_TAB] of  Widget
 
@@ -77,12 +77,12 @@
 	(is_hidden FALSE)
 	(widget_class_name "edu.stanford.smi.protege.widget.FormsTab"))
 
-([GeoNames_ProjectKB_Class10378] of  String
+([GeoNames_ProjectKB_Class10365] of  String
 
 	(name "FeatureClass")
 	(string_value "title"))
 
-([GeoNames_ProjectKB_Class10379] of  String
+([GeoNames_ProjectKB_Class10366] of  String
 
 	(name "Feature")
 	(string_value "title"))
@@ -268,28 +268,28 @@
 	(is_hidden FALSE)
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
 
-([KB_322001_Class353] of  Map
+([KB_397634_Class353] of  Map
 
 	(entries
-		[KB_322001_Class354]
-		[KB_322001_Class355]
-		[KB_322001_Class356]))
+		[KB_397634_Class354]
+		[KB_397634_Class355]
+		[KB_397634_Class356]))
 
-([KB_322001_Class354] of  Map_Entry
+([KB_397634_Class354] of  Map_Entry
 
 	(key "suppress_instance_counting")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_322001_Class355] of  Map_Entry
+([KB_397634_Class355] of  Map_Entry
 
 	(key "add_name_on_instance_form")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_322001_Class356] of  Map_Entry
+([KB_397634_Class356] of  Map_Entry
 
 	(key "change_tracking_active")
 	(key_class "java.lang.String")

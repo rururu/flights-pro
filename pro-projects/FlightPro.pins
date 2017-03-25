@@ -1,4 +1,4 @@
-; Fri Mar 24 22:19:27 MSK 2017
+; Sat Mar 25 18:37:24 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -275,6 +275,7 @@
 		[FlightPro_Class690014]
 		[FlightPro_Class690015]
 		[FlightPro_Class690013]
+		[FlightPro_Class580046]
 		[FlightPro_Class170005]
 		[FlightPro_Class170004]
 		[FlightPro_Class430000]
@@ -393,7 +394,7 @@
 
 ([FlightPro_Class170005] of  CloFunction
 
-	(source "(doseq [{:keys [instruct] :as ins} (read-transit response)]\n  ;;(println [:INSTRUCT ins])\n  (condp = instruct\n    :create-update (let [{:keys [id vehicle]} ins]\n	(create-update-vehicle id vehicle))\n    :delete (let [{:keys [id]} ins]\n	(delete-vehicle id))\n    :clear (clear-vehicles)\n    :popup (let [{:keys [id lat lon html time width height]} ins]\n	(cond\n	  id (popup id html time)\n	  (and  width height lat lon) (popup lat lon html time width height)\n	  (and lat lon) (popup lat lon html time)))\n    :trail (let [{:keys [id points options time]} ins]\n	(add-trail id points options time))\n    :map-center (let [{:keys [coord zoom lock]} ins]\n	(map-center coord zoom lock))\n    :create-placemark (let [{:keys [iname tip lat lon feature url-ico]} ins]\n	(create-placemark iname tip lat lon feature url-ico))\n    :delete-placemark (let [{:keys [iname]} ins]\n	(delete-placemark iname))\n    :clear-placemarks (clear-placemarks)\n    :add-link (let [{:keys [ids options]} ins]\n	(add-link ids options))\n    (println (str \"Unknown instruction: \" [instruct ins]))))")
+	(source "(doseq [{:keys [instruct] :as ins} (read-transit response)]\n  ;;(println [:INSTRUCT ins])\n  (condp = instruct\n    :create-update (let [{:keys [id vehicle]} ins]\n	(create-update-vehicle id vehicle))\n    :delete (let [{:keys [id]} ins]\n	(delete-vehicle id))\n    :clear (clear-vehicles)\n    :popup (let [{:keys [id lat lon html time width height]} ins]\n	(cond\n	  id (popup id html time)\n	  (and  width height lat lon) (popup lat lon html time width height)\n	  (and lat lon) (popup lat lon html time)))\n    :trail (let [{:keys [id points options time]} ins]\n	(add-trail id points options time))\n    :map-center (let [{:keys [coord zoom lock]} ins]\n	(map-center coord zoom lock))\n    :create-placemark (let [{:keys [iname tip lat lon feature url-ico]} ins]\n	(create-placemark iname tip lat lon feature url-ico))\n    :delete-placemark (let [{:keys [iname]} ins]\n	(delete-placemark iname))\n    :clear-placemarks (clear-placemarks)\n    :add-link (let [{:keys [ids options]} ins]\n	(add-link ids options))\n    :ask-user (let [{:keys [question]} ins]\n	(condp = \n	  \"airport\" (select-airport)))\n    (println (str \"Unknown instruction: \" [instruct ins]))))")
 	(title "instructions-handler [response]"))
 
 ([FlightPro_Class180000] of  CloFunction
@@ -1023,7 +1024,7 @@
 
 ([FlightPro_Class280040] of  CloFunction
 
-	(source "(when-let [dati (.getInstance *kb* (.substring id 2))]\n  (decorate-instance dati)\n  (point-out-place {:instance dati})\n  (asp/pump-in (:ins-chn @COMM) \n	(placemark-popup-instruct dati)))")
+	(source "(when-let [dati (.getInstance *kb* (.substring id 2))]\n  ;;(decorate-instance dati)\n  (point-out-place {:instance dati})\n  (asp/pump-in (:ins-chn @COMM) \n	(placemark-popup-instruct dati)))")
 	(title "placemark-info [id]"))
 
 ([FlightPro_Class280085] of  POIRequest
@@ -1343,7 +1344,9 @@
 		[FlightPro_Class810007]
 		[FlightPro_Class840000]
 		[FlightPro_Class690007]
-		[FlightPro_Class850005])
+		[FlightPro_Class850005]
+		[FlightPro_Class580045]
+		[FlightPro_Class580050])
 	(templates [Question])
 	(title "Questions"))
 
@@ -2184,7 +2187,8 @@
 
 	(branches
 		[FlightPro_Class510027]
-		[FlightPro_Class510028])
+		[FlightPro_Class510028]
+		[FlightPro_Class570000])
 	(name "airplanes"))
 
 ([FlightPro_Class510027] of  QuestionTree
@@ -2264,7 +2268,8 @@
 		[FlightPro_Class510046]
 		[FlightPro_Class510047]
 		[FlightPro_Class510048]
-		[FlightPro_Class510049])
+		[FlightPro_Class510049]
+		[FlightPro_Class580132])
 	(name "nearest"))
 
 ([FlightPro_Class510041] of  QuestionTree
@@ -2327,7 +2332,9 @@
 		[FlightPro_Class510038]
 		[FlightPro_Class790000]
 		[FlightPro_Class790001]
-		[FlightPro_Class850020]))
+		[FlightPro_Class850020]
+		[FlightPro_Class570000]
+		[FlightPro_Class580132]))
 
 ([FlightPro_Class520000] of  CloFunction
 
@@ -2408,6 +2415,10 @@
 	(source ";; Calculates time (hrs)\n(if (= ini-alt fin-alt)\n  0\n  (let [step (* alt-stp alt-acl)\n         tioh (float (/ alt-tio 3600000))\n         adif (if (> ini-alt fin-alt) (- ini-alt fin-alt) (- fin-alt ini-alt))]\n    (* (/ adif step) tioh)))")
 	(title "altitude-variation [[ini-alt x] [fin-alt alt-acl] alt-stp alt-tio]"))
 
+([FlightPro_Class570000] of  QuestionTree
+
+	(name "all"))
+
 ([FlightPro_Class570001] of  Rule
 
 	(lhs "?fp (FlightPlan id ?id\n	status \"LANDING\"\n	spec-plan ?spp\n	landing ?lnd)\n(Flight age \"CURRENT\" \n	id ?id\n	coord ?crd\n	course ?crs\n	speed ?spd\n                        [(= ?spd 0)\n	 (calc.geo/abaft ?crs ?crd (:finish-crd ?spp))])")
@@ -2419,6 +2430,1665 @@
 
 	(source "(when-let [mrk (@PLACEMARKS iname)]\n  (.removeLayer @CHART mrk)\n  (vswap! PLACEMARKS dissoc iname))")
 	(title "delete-placemark [iname]"))
+
+([FlightPro_Class580001] of  CloFuncall
+
+	(source "(rete.core/facts 'Flight)"))
+
+([FlightPro_Class580002] of  CloFuncall
+
+	(source "(rete.core/fact-list 'Flight)"))
+
+([FlightPro_Class580003] of  Airport
+
+	(altitude 591)
+	(coord 41.61 -87.41)
+	(country "United States")
+	(iata "GYY")
+	(icao "KGYY")
+	(runways 0)
+	(title "Chicago Gary International"))
+
+([FlightPro_Class580004] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 30)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.4337)
+	(lng -0.2141)
+	(rank 100)
+	(summary "The Championships, Wimbledon, commonly known as \"Wimbledon\", is the oldest tennis tournament in the world, and is widely considered the most prestigious. It has been held at the All England Club in Wimbledon, London since 1877 (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/123000/thumb-122329-100.jpg")
+	(title "The Championships, Wimbledon")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/The_Championships%2C_Wimbledon"))
+
+([FlightPro_Class580005] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 20)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.5034)
+	(lng -0.1276)
+	(rank 100)
+	(summary "10 Downing Street, colloquially known in the United Kingdom as \"Number 10\", is the headquarters of the executive branch of the British Government and the official residence and office of the First Lord of the Treasury, a post which, for much of the 18th and 19th centuries and ever since 1905, is (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/149000/thumb-148771-100.jpg")
+	(title "10 Downing Street")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/10_Downing_Street"))
+
+([FlightPro_Class580006] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 11)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.4748)
+	(lng -0.2962)
+	(rank 100)
+	(summary "Kew Gardens is the world's largest collection of living plants. Founded in 1840 from the exotic garden at Kew Park in the London Borough of Richmond upon Thames, UK, its living collections include more than 30,000 different kinds of plants, while the herbarium, which is one of the largest in the (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/74000/thumb-73182-100.jpg")
+	(title "Kew Gardens")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kew_Gardens"))
+
+([FlightPro_Class580007] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 108)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.4223)
+	(lng -0.0758)
+	(rank 100)
+	(summary "The Crystal Palace was a cast-iron and plate-glass structure erected in Hyde Park, London, England, to house the Great Exhibition of 1851. More than 14,000 exhibitors from around the world gathered in its exhibition space to display examples of technology developed in the Industrial Revolution (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/44000/thumb-43036-100.jpg")
+	(title "The Crystal Palace")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/The_Crystal_Palace"))
+
+([FlightPro_Class580008] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 23)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.4967)
+	(lng -0.1719)
+	(rank 100)
+	(summary "The Victoria and Albert Museum (often abbreviated as the V&A), London, is the world's largest museum of decorative arts and design, housing a permanent collection of over 4.5 million objects. It was founded in 1852 and named after Queen Victoria and Prince Albert (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/81000/thumb-80971-100.jpg")
+	(title "Victoria and Albert Museum")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Victoria_and_Albert_Museum"))
+
+([FlightPro_Class580009] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 41)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.5153)
+	(lng -0.142)
+	(rank 100)
+	(summary "Oxford Street is a major road in the City of Westminster in the West End of London. It is Europe's busiest shopping street, with around half a million daily visitors, and as of 2012 had approximately 300 shops. It is designated as part of the A40, a major road between London and Fishguard, though it (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/13000/thumb-12716-100.jpg")
+	(title "Oxford Street")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Oxford_Street"))
+
+([FlightPro_Class580010] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 36)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.5099)
+	(lng -0.1345)
+	(rank 100)
+	(summary "Piccadilly Circus is a road junction and public space of London's West End in the City of Westminster, built in 1819 to connect Regent Street with Piccadilly. In this context, a circus, from the Latin word meaning \"circle\", is a round open space at a street junction (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/145000/thumb-144173-100.jpg")
+	(title "Piccadilly Circus")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Piccadilly_Circus"))
+
+([FlightPro_Class580011] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 60)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.5555)
+	(lng -0.2797)
+	(rank 100)
+	(summary "Wembley Stadium (formerly known as the Empire Stadium) was a football stadium located in Wembley, London, England, that stood on the site now occupied by the new Wembley Stadium. It was famous for hosting the annual FA Cup finals, five European Cup finals, the 1948 Summer Olympics, the 1966 World (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/15000/thumb-14511-100.jpg")
+	(title "Wembley Stadium (1923)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Wembley_Stadium_%281923%29"))
+
+([FlightPro_Class580012] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 8)
+	(feature "adm1st")
+	(lang "en")
+	(lat 51.4966)
+	(lng -0.086)
+	(rank 100)
+	(summary "The London Borough of Southwark \"Southwark\", in The Columbia Lippincott Gazetteer of the World (1952), New York: Columbia University Press. in south London, England forms part of Inner London and is connected by bridges across the River Thames to the City of London (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/38000/thumb-37850-100.jpg")
+	(title "London Borough of Southwark")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/London_Borough_of_Southwark"))
+
+([FlightPro_Class580013] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 14)
+	(feature "adm1st")
+	(lang "en")
+	(lat 51.4167)
+	(lng -0.3333)
+	(rank 100)
+	(summary "The London Borough of Richmond upon Thames (pronunciation) in south-west London, England, forms part of Outer London and is the only London borough on both sides of the River Thames. It was created in 1965 when three smaller council areas amalgamated under the London Government Act 1963 (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/146000/thumb-145782-100.jpg")
+	(title "London Borough of Richmond upon Thames")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/London_Borough_of_Richmond_upon_Thames"))
+
+([FlightPro_Class580014] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "DE")
+	(elevation 10)
+	(feature "adm1st")
+	(lang "en")
+	(lat 51.4929)
+	(lng -0.2258)
+	(rank 100)
+	(summary "The London Borough of Hammersmith and Fulham (pronunciation) is a London borough in West London, and forms part of Inner London. Traversed by the east-west main roads of the A4 Great West Road and the A40 Westway, many international corporations have offices in the borough (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/37000/thumb-36664-100.jpg")
+	(title "London Borough of Hammersmith and Fulham")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/London_Borough_of_Hammersmith_and_Fulham"))
+
+([FlightPro_Class580015] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 37)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.5357)
+	(lng -0.1558)
+	(rank 100)
+	(summary "London Zoo is the world's oldest scientific zoo. It was opened in London on April 27, 1828, and was originally intended to be used as a collection for scientific study. It was eventually opened to the public in 1847 (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/155000/thumb-154916-100.png")
+	(title "London Zoo")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/London_Zoo"))
+
+([FlightPro_Class580016] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 14)
+	(feature "edu")
+	(lang "en")
+	(lat 51.4984)
+	(lng -0.1284)
+	(rank 100)
+	(summary "Westminster School is an independent school within the precincts of Westminster Abbey, England, which has the highest Oxford and Cambridge acceptance rates of any secondary school or college in the world.http://www.parliament.uk/briefing-papers/sn00616 (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/156000/thumb-155018-100.jpg")
+	(title "Westminster School")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Westminster_School"))
+
+([FlightPro_Class580017] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 27)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.456)
+	(lng -0.3416)
+	(rank 100)
+	(summary "Twickenham Stadium (; usually known as Twickenham or Twickers)Nicky Campbell ', The Guardian 1 February 2007 is a stadium in Twickenham, south west London, England. It is primarily a venue for rugby union and hosts England's home test matches, the Middlesex Sevens, the Aviva Premiership final, the (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/67000/thumb-66092-100.jpg")
+	(title "Twickenham Stadium")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Twickenham_Stadium"))
+
+([FlightPro_Class580018] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 16)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.4961)
+	(lng -0.1397)
+	(rank 100)
+	(summary "Westminster Cathedral in London is the mother church of the Catholic Church in England and Wales. The site on which the cathedral stands in the City of Westminster was purchased by the Archdiocese of Westminster in 1885 (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/80000/thumb-79428-100.jpg")
+	(title "Westminster Cathedral")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Westminster_Cathedral"))
+
+([FlightPro_Class580019] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 28)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.5103)
+	(lng -0.1303)
+	(rank 100)
+	(summary "Leicester Square is a pedestrianised square in the West End of London, England. It was laid out in 1670 and is named after the contemporary Leicester House, itself named after Robert Sidney, 2nd Earl of Leicester (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/19000/thumb-18011-100.jpg")
+	(title "Leicester Square")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Leicester_Square"))
+
+([FlightPro_Class580020] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 44)
+	(feature "adm1st")
+	(lang "en")
+	(lat 51.5886)
+	(lng -0.0118)
+	(rank 100)
+	(summary "The London Borough of Waltham Forest is a London borough in North East London, England. The south of the borough contrasts markedly with the north (split by the North Circular Road) in terms of its mixed ethnicity and socio-economic indicators (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/3000/thumb-2717-100.jpg")
+	(title "London Borough of Waltham Forest")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/London_Borough_of_Waltham_Forest"))
+
+([FlightPro_Class580021] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 5)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.5422)
+	(lng -0.0033)
+	(rank 100)
+	(summary "Stratford is a major multilevel interchange station serving the district of Stratford in the London Borough of Newham, east London. It is served by the London Underground, London Overground, Docklands Light Railway (DLR) and is also a National Rail station on the Great Eastern Main Line, down-line (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/117000/thumb-116347-100.jpg")
+	(title "Stratford station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Stratford_station"))
+
+([FlightPro_Class580022] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 36)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.522)
+	(lng -0.157)
+	(rank 100)
+	(summary "Baker Street is a station on the London Underground at the junction of Baker Street and the Marylebone Road. The station lies in Travelcard Zone 1 and is served by five different lines. It is one of the original stations of the Metropolitan Railway (MR), the world's first underground railway, opened (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/115000/thumb-114027-100.jpg")
+	(title "Baker Street tube station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Baker_Street_tube_station"))
+
+([FlightPro_Class580023] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 36)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.5144)
+	(lng -0.0803)
+	(rank 100)
+	(summary "30 St Mary Axe (widely known informally as The Gherkin and previously as the Swiss Re Building) is a commercial skyscraper in London's primary financial district, the City of London. It was completed in December 2003 and opened in April 2004 (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/35000/thumb-34352-100.jpg")
+	(title "30 St Mary Axe")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/30_St_Mary_Axe"))
+
+([FlightPro_Class580024] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 19)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.4986)
+	(lng -0.1331)
+	(rank 100)
+	(summary "Scotland Yard (officially New Scotland Yard) is a metonym for the headquarters of the Metropolitan Police Service, the territorial police force responsible for policing most of London. The name derives from the location of the original Metropolitan Police headquarters at 4 Whitehall Place, which had (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/66000/thumb-65894-100.jpg")
+	(title "Scotland Yard")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Scotland_Yard"))
+
+([FlightPro_Class580025] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 23)
+	(feature "city")
+	(lang "en")
+	(lat 51.519)
+	(lng -0.102)
+	(rank 98)
+	(summary "Smithfield is a locality in the ward of Farringdon Without situated at the City of London's northwest in central London, England. The principal street of the area is West Smithfield.Renamed in 1889 to avoid confusion with the Smithfield in Tower Hamlets, nowadays called East Smithfield (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/129000/thumb-128872-100.jpg")
+	(title "Smithfield, London")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Smithfield%2C_London"))
+
+([FlightPro_Class580026] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 89)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.5686)
+	(lng -0.1911)
+	(rank 98)
+	(summary "Hampstead Heath (locally known as \"the Heath\") is a large, ancient London park, covering . This grassy public space sits astride a sandy ridge, one of the highest points in London, running from Hampstead to Highgate, which rests on a band of London Clay (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/72000/thumb-71291-100.jpg")
+	(title "Hampstead Heath")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Hampstead_Heath"))
+
+([FlightPro_Class580027] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 46)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.5223)
+	(lng -0.1634)
+	(rank 98)
+	(summary "Marylebone station , also known as London Marylebone, is a central London railway terminus and London Underground complex. It stands midway between the main line stations at Euston and Paddington, about 1 mile (1.6 km) from each (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/56000/thumb-55473-100.jpg")
+	(title "Marylebone station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Marylebone_station"))
+
+([FlightPro_Class580028] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 27)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.507)
+	(lng -0.1803)
+	(rank 98)
+	(summary "Kensington Gardens, once the private gardens of Kensington Palace, are one of the Royal Parks of London, lying immediately to the west of Hyde Park. It is shared between the City of Westminster and the Royal Borough of Kensington and Chelsea, lying within western central London (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/91000/thumb-90305-100.jpg")
+	(title "Kensington Gardens")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kensington_Gardens"))
+
+([FlightPro_Class580029] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 6)
+	(feature "city")
+	(lang "en")
+	(lat 51.4887)
+	(lng -0.0186)
+	(rank 98)
+	(summary "The Isle of Dogs is an area in the East End of London that is bounded on three sides (east, south and west) by one of the largest meanders in the River Thames. The northern boundary has never been clearly or consistently defined (the name Isle of Dogs had no official status until 1987, with the (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/24000/thumb-23230-100.jpg")
+	(title "Isle of Dogs")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Isle_of_Dogs"))
+
+([FlightPro_Class580030] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 26)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.5113)
+	(lng -0.0906)
+	(rank 98)
+	(summary "Cannon Street, also known as London Cannon Street, is a central London railway terminus and connected London Underground station located on Cannon Street in the City of London. It was built on the site of the medieval Steelyard, the trading base in England of the Hanseatic League, and it opened in (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/76000/thumb-75647-100.jpg")
+	(title "Cannon Street station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Cannon_Street_station"))
+
+([FlightPro_Class580031] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 32)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.5133)
+	(lng -0.0886)
+	(rank 98)
+	(summary "Bank and Monument are interlinked London Underground and Docklands Light Railway stations that form a public transport complex spanning the length of King William Street in the City of London. Bank station, named after the Bank of England, opened in 1900 at Bank junction and is served by the (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/127000/thumb-126526-100.jpg")
+	(title "Bank and Monument stations")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Bank_and_Monument_stations"))
+
+([FlightPro_Class580032] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 39)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.505)
+	(lng -0.0196)
+	(rank 98)
+	(summary "One Canada Square is a skyscraper in Canary Wharf, London. It was the tallest building in the United Kingdom from 1990 to 2010, standing at above ground levelAviation charts issued by the Civil Aviation Authority and containing 50 storeys (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/119000/thumb-118837-100.jpg")
+	(title "One Canada Square")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/One_Canada_Square"))
+
+([FlightPro_Class580033] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 34)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.5132)
+	(lng -0.1589)
+	(rank 98)
+	(summary "Marble Arch is a 19th-century white marble faced triumphal arch and London landmark. The structure was designed by John Nash in 1827 to be the state entrance to the cour d'honneur of Buckingham Palace; it stood near the site of what is today the three bayed, central projection of the palace (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/102000/thumb-101311-100.jpg")
+	(title "Marble Arch")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Marble_Arch"))
+
+([FlightPro_Class580034] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 12)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.4818)
+	(lng -0.1447)
+	(rank 98)
+	(summary "Battersea Power Station is a decommissioned coal-fired power station located on the south bank of the River Thames, in Nine Elms, Battersea, an inner-city district of South West London. It comprises two individual power stations, built in two stages in the form of a single building (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/45000/thumb-44239-100.jpg")
+	(title "Battersea Power Station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Battersea_Power_Station"))
+
+([FlightPro_Class580035] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 20)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.5032)
+	(lng -0.1274)
+	(rank 98)
+	(summary "Downing Street in London, England, has for more than three hundred years housed the official residences of two of the most senior British Cabinet ministers: the First Lord of the Treasury, an office now synonymous with that of Prime Minister of the United Kingdom; and the Second Lord of the (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/54000/thumb-53157-100.jpg")
+	(title "Downing Street")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Downing_Street"))
+
+([FlightPro_Class580036] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 35)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.5186)
+	(lng -0.0886)
+	(rank 98)
+	(summary "Moorgate, also known as London Moorgate, is a central London railway terminus and connected London Underground station on Moorgate in the City of London. Weekday main line railway services for Hertford, Welwyn Garden City and Letchworth are operated by Great Northern, while the Underground station (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/123000/thumb-122144-100.jpg")
+	(title "Moorgate station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Moorgate_station"))
+
+([FlightPro_Class580037] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 12)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.5116)
+	(lng -0.103)
+	(rank 98)
+	(summary "Blackfriars, also known as London Blackfriars, is a central London railway station and connected London Underground station located in the City of London. Its platforms span the River Thames, occupying the length of Blackfriars Railway Bridge, a short distance downstream from Blackfriars Bridge (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/73000/thumb-72196-100.jpg")
+	(title "Blackfriars station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Blackfriars_station"))
+
+([FlightPro_Class580038] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 33)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.5158)
+	(lng -0.1019)
+	(rank 98)
+	(summary "The Central Criminal Court of England and Wales, commonly known as the Old Bailey from the street on which it stands, is a court in London and one of a number of buildings housing the Crown Court. Part of the present building stands on the site of the medieval Newgate gaol, on a road named Old (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/36000/thumb-35526-100.jpg")
+	(title "Old Bailey")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Old_Bailey"))
+
+([FlightPro_Class580039] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 23)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.5089)
+	(lng -0.1269)
+	(rank 98)
+	(summary "St Martin-in-the-Fields is an English Anglican church at the north-east corner of Trafalgar Square in the City of Westminster, London. It is dedicated to Saint Martin of Tours. There has been a church on the site since the medieval period (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/119000/thumb-118306-100.jpg")
+	(title "St Martin-in-the-Fields")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/St_Martin-in-the-Fields"))
+
+([FlightPro_Class580040] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 20)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.4975)
+	(lng -0.1747)
+	(rank 98)
+	(summary "The Science Museum is a major museum on Exhibition Road in South Kensington, London. It was founded in 1857 and today is one of the city's major tourist attractions, attracting 3.3 million visitors annually. Like other publicly funded national museums in the United Kingdom, the Science Museum does (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/97000/thumb-96969-100.jpg")
+	(title "Science Museum, London")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Science_Museum%2C_London"))
+
+([FlightPro_Class580041] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 48)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.4767)
+	(lng 1.0E-4)
+	(rank 98)
+	(summary "Greenwich Park is a former hunting park in Greenwich and one of the largest single green spaces in south-east London. One of the Royal Parks of London, and the first to be enclosed (in 1433), it covers , and is part of the Greenwich World Heritage Site (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/14000/thumb-13333-100.jpg")
+	(title "Greenwich Park")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Greenwich_Park"))
+
+([FlightPro_Class580042] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 39)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.5258)
+	(lng -0.145)
+	(rank 98)
+	(summary "The Royal College of Physicians, sometimes referred to as the Royal College of Physicians of London to differentiate it from other similarly-named bodies, is a British professional body of Doctors and Physician Associates of general medicine and its subspecialties (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/149000/thumb-148794-100.jpg")
+	(title "Royal College of Physicians")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Royal_College_of_Physicians"))
+
+([FlightPro_Class580043] of  WikiArticleDetails
+
+	(butt-del-pois "Delete POIs/ext.data/delete-pois")
+	(butt-return "Return to Flight/ext.data/ret-to-flight")
+	(butt-show-pois "Show on Map/ext.data/show-on-map")
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 68)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.5486)
+	(lng -0.535)
+	(max-rows 50)
+	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
+	(radius 1.0)
+	(rank 98)
+	(summary "Pinewood Studios is a British film studio and television studio situated in Iver Heath, Buckinghamshire, England, approximately west of central London. It is run by The Pinewood Studios Group. The studios have been the base for many productions over the years from big-budget films to television (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/151000/thumb-150340-100.jpg")
+	(title "Pinewood Studios")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Pinewood_Studios"))
+
+([FlightPro_Class580044] of  CloFuncall
+
+	(source "(ru.rules/pp 'Question)"))
+
+([FlightPro_Class580045] of  Rule
+
+	(lhs "?q (Question predicate \"How far\"\n	subject \"airport\")\n(not Question predicate \"User Answer\")")
+	(rhs "(async.proc/pump-in \n	(:instructions pro.commands/CHN)\n	{:instruct :ask-user :question \"airport\"})")
+	(salience 0)
+	(title "qq:HowFarAirport1"))
+
+([FlightPro_Class580046] of  CloFunction
+
+	(source "([]\n  (am/ask-server {:question \"countries\"}\n	select-airport))\n([cns]\n  (am/selector \"element\" 1 \"chart.client\" \"countries\" cns :itself 130)\n  (defn handler1 [sel]\n    (am/ask-server {:question \"airports\"\n	       :country sel}\n	#(select-airport sel %))))\n([cnt aps]\n  (am/selector \"element\" 2 \"chart.client\" \"airports\" aps :itself 130)\n  (defn handler2 [sel]\n    (am/ask-server {:question \"es\"\n	      :predicate \"User Answer\"\n	      :subject \"selected airport\"\n	      :object sel\n                              :adjunct cnt} \n	(fn [r]))\n    (am/clear-dialog)))")
+	(title "select-airport"))
+
+([FlightPro_Class580047] of  CloFuncall
+
+	(source "(pro.commands/pump-in (:instructions pro.commands/CHN) {:instruct :ask-user :question \"airport\"})"))
+
+([FlightPro_Class580048] of  CloFuncall
+
+	(source "(async.proc/pump-in (:instructions pro.commands/CHN) {:instruct :ask-user :question \"airport\"})"))
+
+([FlightPro_Class580049] of  CloFuncall
+
+	(source "fr24.client/STATUS"))
+
+([FlightPro_Class580050] of  Rule
+
+	(lhs "?q1 (Question predicate \"How far\"\n	subject \"airport\")\n?q2 (Question predicate \"User Answer\"\n	subject \"selected airport\"\n	object ?apt\n	adjunct ?cnt)")
+	(rhs "(ext.data/pump-far-airport ?cnt ?apt)\n(retract ?q1 ?q2)")
+	(salience 0)
+	(title "qq:HowFarAirport2"))
+
+([FlightPro_Class580051] of  CloFunction
+
+	(source "(if-let [apt (get-in (fr24/airports-by-country) [cnt apt])]\n  (let [[lat1 lon1] (our-center)\n         lat2 (apt \"lat\") \n         lon2 (apt \"lon\")\n         dis (geo/distance-nm [lat1 lon1] [lat2 lon2])\n         bea (geo/bear-deg [lat1 lon1] [lat2 lon2])\n         html (str \"<h3>\" (apt \"name\") \"</h3>\"\n	\"country: \" cnt \"<br>\"\n	\"latitude: \" lat2 \"<br>\"\n	\"longitude: \" lon2 \"<br>\"\n	\"direction: \" (gn/direction bea)\n	\"<h4>\" (format \"distance: %.1f\" dis) \" NM</h4>\")]\n    (asp/pump-in (:ins-chn @COMM)\n	{:instruct :popup\n	 :lat lat1\n	 :lon lon1\n	 :html html\n	 :width 1200\n	 :height 1000\n	 :time (:ext-data-popup TIO)})))")
+	(title "pump-far-airport [cnt apt]"))
+
+([FlightPro_Class580052] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 228)
+	(feature "adm1st")
+	(lang "en")
+	(lat 45.2167)
+	(lng -62.7)
+	(rank 100)
+	(summary "Nova Scotia (\"New Scotland\", pronounced ; ;) is one of Canada's three Maritime provinces and constitutes one of the four Atlantic Canada provinces. Located almost exactly halfway between the Equator and the North Pole (44º 39' N Latitude), its provincial capital is Halifax (...)")
+	(title "Nova Scotia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Nova_Scotia"))
+
+([FlightPro_Class580053] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 21)
+	(lang "en")
+	(lat 45.2806)
+	(lng -66.0761)
+	(rank 100)
+	(summary "Saint John is the largest city in the Canadian province of New Brunswick, and the second largest in the maritime provinces. It is known as the Fundy City due to its location on the north shore of the Bay of Fundy at the mouth of the Saint John River, as well as being the only city on the bay (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/11000/thumb-10143-100.jpg")
+	(title "Saint John, New Brunswick")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Saint_John%2C_New_Brunswick"))
+
+([FlightPro_Class580054] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 17)
+	(feature "city")
+	(lang "en")
+	(lat 44.6479)
+	(lng -63.5716)
+	(rank 100)
+	(summary "The Halifax Regional Municipality (; commonly Halifax or HRM) is the capital of the province of Nova Scotia, Canada. The Regional Municipality had a population of 390,096 in 2011 Canadian Census and the urban area had a population of 297,943 (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/93000/thumb-92456-100.jpg")
+	(title "Halifax Regional Municipality")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Halifax_Regional_Municipality"))
+
+([FlightPro_Class580056] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 0)
+	(feature "landmark")
+	(lang "en")
+	(lat 44.6692)
+	(lng -63.5964)
+	(rank 98)
+	(summary "The Halifax Explosion occurred in Halifax, Nova Scotia, Canada, on the morning of December 6, 1917. SS Mont-Blanc, a French cargo ship fully loaded with wartime explosives, collided with the Norwegian vessel SS ImoThe ship had been named with the initials - JMO - after the senior owner of the (...)")
+	(title "Halifax Explosion")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Halifax_Explosion"))
+
+([FlightPro_Class580058] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 13)
+	(feature "city")
+	(lang "en")
+	(lat 44.3784)
+	(lng -64.3172)
+	(rank 98)
+	(summary "Lunenburg is a Canadian port town in Lunenburg County, Nova Scotia. Situated on the province's South Shore, Lunenburg is located at the western side of Mahone Bay. The town is approximately 90 kilometres southwest of the county boundary with the Halifax Regional Municipality (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/51000/thumb-50234-100.jpg")
+	(title "Lunenburg, Nova Scotia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Lunenburg%2C_Nova_Scotia"))
+
+([FlightPro_Class580059] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 56)
+	(feature "edu")
+	(lang "en")
+	(lat 44.6369)
+	(lng -63.5917)
+	(rank 98)
+	(summary "Dalhousie University (commonly known as Dalhousie or Dal) is a public research university in Nova Scotia, Canada, with three campuses in Halifax, and a fourth in Bible Hill. Dalhousie offers more than 3,700 courses and 190 degree programs in twelve undergraduate, graduate, and professional faculties (...)")
+	(title "Dalhousie University")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Dalhousie_University"))
+
+([FlightPro_Class580062] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(lang "en")
+	(lat 45.083)
+	(lng -67.04)
+	(rank 98)
+	(summary "Saint Andrews (2011 population: 1,889) is a Canadian town in Charlotte County, New Brunswick. It is sometimes referred to in tourism marketing by its unofficial nickname \"St. Andrews-by-the-sea\".  (...)")
+	(title "St. Andrews, New Brunswick")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/St._Andrews%2C_New_Brunswick"))
+
+([FlightPro_Class580063] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 137)
+	(feature "airport")
+	(lang "en")
+	(lat 44.8797)
+	(lng -63.5103)
+	(rank 98)
+	(summary "Halifax/Robert L. Stanfield International Airport, or Halifax Stanfield International Airport is an airport in Enfield, Nova Scotia, a community inside the Halifax Regional Municipality, Canada.\".\" Halifax Regional Municipality. Retrieved on March 2, 2011 (...)")
+	(title "Halifax Stanfield International Airport")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Halifax_Stanfield_International_Airport"))
+
+([FlightPro_Class580064] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 5)
+	(lang "en")
+	(lat 45.1923)
+	(lng -67.2772)
+	(rank 97)
+	(summary "This article is about the town, you may also want Saint Stephen Parish St. Stephen (2011 population: 4,817) is a Canadian town in Charlotte County, New Brunswick, situated on the east bank of the St. Croix River at around the intersection of Route 170 and the southern terminus of Route 3.  (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/160000/thumb-159094-100.jpg")
+	(title "St. Stephen, New Brunswick")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/St._Stephen%2C_New_Brunswick"))
+
+([FlightPro_Class580065] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 22)
+	(feature "city")
+	(lang "en")
+	(lat 45.7236)
+	(lng -65.5108)
+	(rank 97)
+	(summary "Sussex (2011 population: 4,312) is a Canadian town in Kings County, New Brunswick. Sussex straddles the Kennebecasis River, northeast of Saint John, and is a major dairy products producer in the province. It is home to Atlantic Canada's largest hot air balloon festival.  (...)")
+	(title "Sussex, New Brunswick")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Sussex%2C_New_Brunswick"))
+
+([FlightPro_Class580066] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 63)
+	(feature "city")
+	(lang "en")
+	(lat 44.67)
+	(lng -63.61)
+	(rank 97)
+	(summary "The City of Halifax was an incorporated city in Nova Scotia, Canada, which was established as the Town of Halifax in 1749, and incorporated as a city in 1842. On April 1, 1996, the government of Nova Scotia dissolved the City of Halifax, and amalgamated the four municipalities within Halifax County (...)")
+	(title "Halifax (former city)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Halifax_%28former_city%29"))
+
+([FlightPro_Class580067] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 36)
+	(feature "city")
+	(lang "en")
+	(lat 45.8477)
+	(lng -66.4707)
+	(rank 97)
+	(summary "Oromocto (2011 population: 8,932) is a Canadian town in Sunbury County, New Brunswick. The town is located on the west bank of the St. John River at the mouth of the Oromocto River, approximately 20 kilometres southeast of Fredericton (...)")
+	(title "Oromocto")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Oromocto"))
+
+([FlightPro_Class580068] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 20)
+	(feature "city")
+	(lang "en")
+	(lat 45.3888)
+	(lng -65.9944)
+	(population 11505)
+	(rank 97)
+	(summary "Rothesay (or) is a Canadian town located in Kings County, New Brunswick. It is a suburb of Saint John along the Kennebecasis River.  (...)")
+	(title "Rothesay, New Brunswick")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Rothesay%2C_New_Brunswick"))
+
+([FlightPro_Class580069] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 15)
+	(feature "city")
+	(lang "en")
+	(lat 44.3761)
+	(lng -64.5177)
+	(rank 97)
+	(summary "Bridgewater is a town in Lunenburg County, Nova Scotia, Canada, at the navigable limit of the LaHave River. It is the largest town in the South Shore region. While the majority of the South Shore's economy is based upon the tourist trade, Bridgewater is more a commercial and industrial centre and (...)")
+	(title "Bridgewater, Nova Scotia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Bridgewater%2C_Nova_Scotia"))
+
+([FlightPro_Class580070] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 24)
+	(feature "city")
+	(lang "en")
+	(lat 45.166)
+	(lng -67.2424)
+	(rank 97)
+	(summary "Calais is a city in Washington County, Maine, United States. As of the 2010 census, it had a population of 3,123. The city has three United States border crossings (also known as a Port of entry) over the St. Croix River bordering St. Stephen, New Brunswick, Canada (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/47000/thumb-46667-100.jpg")
+	(title "Calais, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Calais%2C_Maine"))
+
+([FlightPro_Class580072] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 64)
+	(lang "en")
+	(lat 45.3637)
+	(lng -66.2582)
+	(rank 97)
+	(summary "Grand Bay–Westfield (2011 population: 5,117) is a Canadian suburb of Saint John in the western part of Kings County, New Brunswick. The town is an amalgamation of the original town of Grand Bay and the neighbouring village of Westfield immediately to the north (...)")
+	(title "Grand Bay–Westfield")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Grand_Bay%E2%80%93Westfield"))
+
+([FlightPro_Class580073] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 21)
+	(feature "city")
+	(lang "en")
+	(lat 45.3649)
+	(lng -63.2798)
+	(rank 97)
+	(summary "Truro is a town in central Nova Scotia, Canada. Truro is the shire town of Colchester County and is located on the south side of the Salmon River floodplain, close to the river's mouth at the eastern end of Cobequid Bay.  (...)")
+	(title "Truro, Nova Scotia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Truro%2C_Nova_Scotia"))
+
+([FlightPro_Class580074] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 31)
+	(feature "city")
+	(lang "en")
+	(lat 44.6701)
+	(lng -63.5775)
+	(rank 97)
+	(summary "Dartmouth (2001 pop.: 65,741) founded in 1750, is a former city and planning area of the Halifax Regional Municipality, Nova Scotia. Located on the eastern shore of Halifax Harbour, Dartmouth has been nicknamed the City of Lakes after the large number of lakes located in the city (...)")
+	(title "Dartmouth, Nova Scotia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Dartmouth%2C_Nova_Scotia"))
+
+([FlightPro_Class580075] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 31)
+	(lang "en")
+	(lat 45.1319)
+	(lng -66.8202)
+	(rank 97)
+	(summary "St. George is a Canadian town in Charlotte County, New Brunswick.  (...)")
+	(title "St. George, New Brunswick")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/St._George%2C_New_Brunswick"))
+
+([FlightPro_Class580076] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 22)
+	(feature "city")
+	(lang "en")
+	(lat 45.8316)
+	(lng -64.2092)
+	(rank 97)
+	(summary "Amherst (2011 population 9,717; UA population 9,547) is a Canadian town in northwestern Cumberland County, Nova Scotia. Located at the northeast end of the Cumberland Basin, an arm of the Bay of Fundy, Amherst is strategically situated on the eastern boundary of the Tantramar Marshes 3 kilometres (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/138000/thumb-137656-100.jpg")
+	(title "Amherst, Nova Scotia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Amherst%2C_Nova_Scotia"))
+
+([FlightPro_Class580077] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 18)
+	(feature "city")
+	(lang "en")
+	(lat 44.9911)
+	(lng -64.1318)
+	(rank 97)
+	(summary "Windsor (2011 population: 3,785) is a Canadian town located in Hants County, Nova Scotia. It is a service centre for the western part of the county and is situated on Highway 101. The town has a history dating back to its use by the Mi'kmaq Nation for several millennia prior to European discovery (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/87000/thumb-86537-100.jpg")
+	(title "Windsor, Nova Scotia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Windsor%2C_Nova_Scotia"))
+
+([FlightPro_Class580078] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 16)
+	(feature "landmark")
+	(lang "en")
+	(lat 45.1106)
+	(lng -64.3789)
+	(rank 96)
+	(summary "This is a list of National Historic Sites of Canada in the province of Nova Scotia. There are 87 National Historic Sites designated in Nova Scotia, of which 26 are administered by Parks Canada., National Historic Sites of Canada - administered by Parks Canada This list uses names designated by the (...)")
+	(title "List of National Historic Sites of Canada in Nova Scotia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/List_of_National_Historic_Sites_of_Canada_in_Nova_Scotia"))
+
+([FlightPro_Class580080] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 33)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 45.1)
+	(lng -63.9)
+	(rank 96)
+	(summary "Hants County is a county in the Canadian province of Nova Scotia which was the home of Henry Alline, Thomas Chandler Haliburton, Alden Nowlan and Noel Doiron. The county of Hants was created June 17, 1781, and consisted of the townships of Windsor, Falmouth and Newport (...)")
+	(title "Hants County, Nova Scotia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Hants_County%2C_Nova_Scotia"))
+
+([FlightPro_Class580081] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 7)
+	(lang "en")
+	(lat 45.1089)
+	(lng -64.3092)
+	(rank 96)
+	(summary "Grand-Pré is a Canadian rural community in Kings County, Nova Scotia. Its French name translates to \"Great Meadow\" and the community lies at the eastern edge of the Annapolis Valley several kilometres east of the town of Wolfville on a peninsula jutting into the Minas Basin surrounded by extensive (...)")
+	(title "Grand-Pré, Nova Scotia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Grand-Pr%C3%A9%2C_Nova_Scotia"))
+
+([FlightPro_Class580083] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 231)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 45.0)
+	(lng -64.6)
+	(rank 96)
+	(summary "Kings County is a county in the Canadian province of Nova Scotia. It is in central Nova Scotia on the shore of the Bay of Fundy, with its northeastern part forming the western shore of the Minas Basin.  (...)")
+	(title "Kings County, Nova Scotia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kings_County%2C_Nova_Scotia"))
+
+([FlightPro_Class580084] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 345)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 45.7639)
+	(lng -64.8836)
+	(rank 96)
+	(summary "Albert County (2011 population 28,846) is a county located in southeastern New Brunswick, Canada on the Chignecto Bay of the Bay of Fundy. Prior to the abolition of county government in 1967, the county seat was Hopewell Cape (...)")
+	(title "Albert County, New Brunswick")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Albert_County%2C_New_Brunswick"))
+
+([FlightPro_Class580085] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 10)
+	(feature "city")
+	(lang "en")
+	(lat 44.0353)
+	(lng -64.7203)
+	(rank 96)
+	(summary "Liverpool is a Canadian community and former town located along the Atlantic Ocean of the Province of Nova Scotia's South Shore. It is situated within the Region of Queens Municipality which is the local governmental unit that comprises all of Queens County, Nova Scotia (...)")
+	(title "Liverpool, Nova Scotia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Liverpool%2C_Nova_Scotia"))
+
+([FlightPro_Class580086] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(feature "landmark")
+	(lang "en")
+	(lat 44.4091)
+	(lng -63.9736)
+	(rank 96)
+	(summary "Swissair Flight 111 (SR111, SWR111) was a Swissair McDonnell Douglas MD-11 on a scheduled airline flight from John F. Kennedy International Airport in New York City, United States to Cointrin International Airport in Geneva, Switzerland. This flight was also a codeshare flight with Delta Air Lines (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/106000/thumb-105264-100.jpg")
+	(title "Swissair Flight 111")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Swissair_Flight_111"))
+
+([FlightPro_Class580087] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 83)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 45.7)
+	(lng -64.1)
+	(rank 96)
+	(summary "Cumberland County is a county in the Canadian province of Nova Scotia.  (...)")
+	(title "Cumberland County, Nova Scotia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Cumberland_County%2C_Nova_Scotia"))
+
+([FlightPro_Class580089] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 23)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 45.4)
+	(lng -63.3)
+	(rank 96)
+	(summary "Colchester County is a county in the Canadian province of Nova Scotia.  (...)")
+	(title "Colchester County, Nova Scotia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Colchester_County%2C_Nova_Scotia"))
+
+([FlightPro_Class580090] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 85)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 45.6604)
+	(lng -65.7898)
+	(rank 96)
+	(summary "Kings County (2011 population 69,665) is located in southern New Brunswick, Canada. Its historical shire town is Hampton. Both the Saint John and Kennebecasis rivers pass through the county. Dairy farming is an important industry in the area (...)")
+	(title "Kings County, New Brunswick")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kings_County%2C_New_Brunswick"))
+
+([FlightPro_Class580092] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 41)
+	(feature "city")
+	(lang "en")
+	(lat 44.8108)
+	(lng -68.7831)
+	(rank 100)
+	(summary "Bangor is a city in and the county seat of Penobscot County, Maine, and the major commercial and cultural center for eastern and northern Maine. The population of the city was 33,039 at the 2010 United States Census; the Bangor Metropolitan Statistical Area, 153,923.http://2010.census (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/3000/thumb-2233-100.jpg")
+	(title "Bangor, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Bangor%2C_Maine"))
+
+([FlightPro_Class580093] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 38)
+	(feature "city")
+	(lang "en")
+	(lat 44.3106)
+	(lng -69.78)
+	(rank 100)
+	(summary "Augusta is the capital of the US state of Maine, county seat of Kennebec County, and center of population for Maine. The city's population was 19,136 at the 2010 census, making it the third-smallest state capital after Montpelier, Vermont and Pierre, South Dakota (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/93000/thumb-92165-100.jpg")
+	(title "Augusta, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Augusta%2C_Maine"))
+
+([FlightPro_Class580094] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(lang "en")
+	(lat 45.0)
+	(lng -65.8)
+	(rank 100)
+	(summary "The Bay of Fundy is a bay on the Atlantic coast of North America, on the northeast end of the Gulf of Maine between the Canadian provinces of New Brunswick and Nova Scotia, with a small portion touching the U.S. state of Maine (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/52000/thumb-51441-100.jpg")
+	(title "Bay of Fundy")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Bay_of_Fundy"))
+
+([FlightPro_Class580095] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 13)
+	(feature "city")
+	(lang "en")
+	(lat 43.8429)
+	(lng -66.1192)
+	(rank 98)
+	(summary "Yarmouth is a town and port located on the Gulf of Maine in southwestern Nova Scotia, Canada. Yarmouth is the shire town of Yarmouth County and is largest population centre in the region. Long connected to fishing due to its proximity to Georges Bank, the town is located in the heart of the world's (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/41000/thumb-40872-100.jpg")
+	(title "Yarmouth, Nova Scotia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Yarmouth%2C_Nova_Scotia"))
+
+([FlightPro_Class580096] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 13)
+	(feature "city")
+	(lang "en")
+	(lat 44.7417)
+	(lng -65.5153)
+	(rank 98)
+	(summary "Annapolis Royal is a small Canadian town located in the western part of Annapolis County, Nova Scotia, and was known as Port Royal until the Conquest of Acadia in 1710 by Britain. The town was the capital of Acadia and later Nova Scotia for almost 150 years, until the founding of Halifax in 1749 (...)")
+	(title "Annapolis Royal")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Annapolis_Royal"))
+
+([FlightPro_Class580097] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 18)
+	(feature "city")
+	(lang "en")
+	(lat 44.4058)
+	(lng -68.8069)
+	(rank 98)
+	(summary "Castine is a town in Hancock County, Maine, United States and served as the capital of Acadia (1670–1674).See Brenda Dunn. Port Royal/ Annapolis Royal. 2004. Nimbus Publishing. The population was 1,366 at the 2010 census (...)")
+	(title "Castine, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Castine%2C_Maine"))
+
+([FlightPro_Class580098] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 96)
+	(feature "isle")
+	(lang "en")
+	(lat 44.6979)
+	(lng -66.8223)
+	(rank 98)
+	(summary "Grand Manan Island (also simply Grand Manan) is a Canadian island, and the largest of the Fundy Islands in the Bay of Fundy. It is also the primary island in the Grand Manan Archipelago, sitting at the boundary between the Bay of Fundy and the Gulf of Maine on the Atlantic coast (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/138000/thumb-137644-100.jpg")
+	(title "Grand Manan Island")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Grand_Manan_Island"))
+
+([FlightPro_Class580099] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 93)
+	(lang "en")
+	(lat 44.5642)
+	(lng -69.6631)
+	(rank 98)
+	(summary "Colby College is a private liberal arts college located on Mayflower Hill in Waterville, Maine, USA. Founded in 1813, it is the 12th-oldest independent liberal arts college in the United States. Colby was the first all-male college in New England to accept female students in 1871.http://www.colby (...)")
+	(title "Colby College")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Colby_College"))
+
+([FlightPro_Class580100] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 18)
+	(feature "city")
+	(lang "en")
+	(lat 43.9164)
+	(lng -69.8225)
+	(rank 98)
+	(summary "Bath is a city in Sagadahoc County, Maine, in the United States. The population was 8,514 at the 2010 census. It is the county seat of Sagadahoc County. Bath is a port of entry with a good harbor formed by the Kennebec River estuary (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/157000/thumb-156134-100.jpg")
+	(title "Bath, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Bath%2C_Maine"))
+
+([FlightPro_Class580101] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 93)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 44.41)
+	(lng -69.77)
+	(rank 98)
+	(summary "Kennebec County is a county located in the U.S. state of Maine. In 2010, its population was 122,151. Its county seat is Augusta. The center of population of Maine is located in Kennebec County, in the city of Augusta.http://www.census.gov/geo/www/cenpop/statecenters (...)")
+	(title "Kennebec County, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kennebec_County%2C_Maine"))
+
+([FlightPro_Class580102] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 238)
+	(lang "en")
+	(lat 44.35)
+	(lng -68.2167)
+	(rank 98)
+	(summary "Acadia National Park is a National Park located in the U.S. state of Maine. It reserves much of Mount Desert Island, and associated smaller islands, off the Atlantic coast. Originally created as Lafayette National Park in 1919, the oldest National Park east of the Mississippi River, it was renamed (...)")
+	(title "Acadia National Park")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Acadia_National_Park"))
+
+([FlightPro_Class580103] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 32)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 44.97)
+	(lng -67.61)
+	(rank 98)
+	(summary "Washington County is a county located in the U.S. state of Maine. As of the 2010 census, its population was 32,856. Its county seat is Machias. It is sometimes referred to as \"Sunrise County\" because it is the easternmost county in the continental United States, and claims have been made that (...)")
+	(title "Washington County, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Washington_County%2C_Maine"))
+
+([FlightPro_Class580104] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 2)
+	(feature "landmark")
+	(lang "en")
+	(lat 43.9045)
+	(lng -69.8147)
+	(rank 98)
+	(summary "Bath Iron Works (BIW) is a major American shipyard located on the Kennebec River in Bath, Maine, United States. Since its founding in 1884 (as Bath Iron Works, Limited), BIW has built private, commercial and military vessels, most of which have been ordered by the United States Navy (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/133000/thumb-132731-100.jpg")
+	(title "Bath Iron Works")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Bath_Iron_Works"))
+
+([FlightPro_Class580105] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 27)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 44.57)
+	(lng -68.37)
+	(rank 98)
+	(summary "Hancock County is a county located in the U.S. state of Maine. As of 2010, the population was 54,418. Its county seat is Ellsworth. It was incorporated on June 25, 1789. Hancock County was named for John Hancock, the first governor of the Commonwealth of Massachusetts (...)")
+	(title "Hancock County, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Hancock_County%2C_Maine"))
+
+([FlightPro_Class580106] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 34)
+	(feature "city")
+	(lang "en")
+	(lat 44.552)
+	(lng -69.6317)
+	(rank 97)
+	(summary "Waterville is a city in Kennebec County, Maine, United States, on the west bank of the Kennebec River. The population was 15,722 at the 2010 census. Waterville is home to Colby College and Thomas College.  (...)")
+	(title "Waterville, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Waterville%2C_Maine"))
+
+([FlightPro_Class580107] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 14)
+	(feature "city")
+	(lang "en")
+	(lat 44.1094)
+	(lng -69.1147)
+	(rank 97)
+	(summary "Rockland is a city in Knox County, Maine, in the United States. As of the 2010 census, the city population was 7,297. It is the county seat of Knox County. The city is a popular tourist destination. It is a departure point for the Maine State Ferry Service to the islands of Penobscot Bay: (...)")
+	(title "Rockland, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Rockland%2C_Maine"))
+
+([FlightPro_Class580108] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 43)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 43.91)
+	(lng -69.84)
+	(rank 97)
+	(summary "Sagadahoc County is a county located in the U.S. state of Maine. As of the 2010 census, the population was 35,293. Its county seat is Bath. In geographic area, it is the smallest county in Maine. Sagadahoc County is part of the Portland&ndash;South Portland&ndash;Biddeford, Maine Metropolitan (...)")
+	(title "Sagadahoc County, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Sagadahoc_County%2C_Maine"))
+
+([FlightPro_Class580109] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 27)
+	(feature "city")
+	(lang "en")
+	(lat 44.6844)
+	(lng -67.4628)
+	(rank 97)
+	(summary "Machias is a town in and the county seat of Washington County in downeast Maine, United States. As of the 2010 census, the town population was 2,221. It is home to the University of Maine at Machias and Machias Valley Airport, a small public airport owned by the town (...)")
+	(title "Machias, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Machias%2C_Maine"))
+
+([FlightPro_Class580110] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 66)
+	(feature "city")
+	(lang "en")
+	(lat 44.5722)
+	(lng -68.476)
+	(rank 97)
+	(summary "Ellsworth is a city in and the county seat of Hancock County, Maine, United States. The 2010 Census determined it had a population of 7,741. Ellsworth was Maine's fastest growing city from 2000–2010 with a growth rate of nearly 20 percent (...)")
+	(title "Ellsworth, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ellsworth%2C_Maine"))
+
+([FlightPro_Class580111] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(feature "adm2nd")
+	(lang "en")
+	(lat 44.03)
+	(lng -69.03)
+	(rank 97)
+	(summary "Knox County is a county located in the U.S. state of Maine. As of 2010, the population was 39,736. Its county seat is Rockland. The county is named for American Revolutionary War general and Secretary of War Henry Knox, who lived in the county from 1795 until his death in 1806 (...)")
+	(title "Knox County, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Knox_County%2C_Maine"))
+
+([FlightPro_Class580112] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 91)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 44.48)
+	(lng -69.12)
+	(rank 97)
+	(summary "Waldo County is a county located in the U.S. state of Maine. As of the 2010 census, the population was 38,786. Its county seat is Belfast. Waldo County was founded on 7 February 1827 from a portion of Hancock County. It was named after Brigadier-General Samuel Waldo, proprietor of the Waldo Patent.  (...)")
+	(title "Waldo County, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Waldo_County%2C_Maine"))
+
+([FlightPro_Class580113] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 47)
+	(feature "city")
+	(lang "en")
+	(lat 44.2181)
+	(lng -69.0819)
+	(rank 97)
+	(summary "Camden is a town in Knox County, Maine, United States. The population was 4,850 at the 2010 census. The population of the town more than triples during the summer months, due to tourists and summer residents. Camden is a famous summer colony in the Mid-Coast region of Maine (...)")
+	(title "Camden, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Camden%2C_Maine"))
+
+([FlightPro_Class580114] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(feature "waterbody")
+	(lang "en")
+	(lat 44.1872)
+	(lng -68.9211)
+	(rank 97)
+	(summary "The Gulf of Maine is a large gulf of the Atlantic Ocean on the east coast of North America. It is delineated by Cape Cod at the eastern tip of Massachusetts in the southwest and Cape Sable at the southern tip of Nova Scotia in the northeast. It includes the entire coastlines of the U.S (...)")
+	(title "Gulf of Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Gulf_of_Maine"))
+
+([FlightPro_Class580115] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 17)
+	(feature "city")
+	(lang "en")
+	(lat 44.0028)
+	(lng -69.6659)
+	(rank 97)
+	(summary "Wiscasset is a town in and the county seat of Lincoln County, Maine, United States, in the Mid Coast region of the state. The population was 3,732 at the 2010 census. Home to the Chewonki Foundation, Wiscasset is a tourist destination noted for early architecture.  (...)")
+	(title "Wiscasset, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Wiscasset%2C_Maine"))
+
+([FlightPro_Class580116] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 19)
+	(feature "city")
+	(lang "en")
+	(lat 44.3873)
+	(lng -68.2053)
+	(rank 97)
+	(summary "Bar Harbor is a town on Mount Desert Island in Hancock County, Maine, United States. As of the 2010 census, its population is 5,235. Bar Harbor is a popular tourist destination in the Down East region of Maine, and home to the College of the Atlantic, Jackson Laboratory and Mount Desert Island (...)")
+	(title "Bar Harbor, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Bar_Harbor%2C_Maine"))
+
+([FlightPro_Class580117] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 34)
+	(feature "city")
+	(lang "en")
+	(lat 44.9136)
+	(lng -67.0039)
+	(rank 97)
+	(summary "Eastport is a small city (consisting entirely of islands) in Washington County, Maine, United States. The population was 1,331 at the 2010 census. The principal island is Moose Island, which is connected to the mainland by causeway (...)")
+	(title "Eastport, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Eastport%2C_Maine"))
+
+([FlightPro_Class580118] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 50)
+	(feature "city")
+	(lang "en")
+	(lat 44.7648)
+	(lng -69.7184)
+	(population 8589)
+	(rank 97)
+	(summary "Skowhegan is the county seat of Somerset County, Maine, United States. As of the 2010 census, the town population was 8,589. Every August, Skowhegan hosts the annual Skowhegan State Fair, the oldest continuous state fair in the United States (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/131000/thumb-130096-100.jpg")
+	(title "Skowhegan, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Skowhegan%2C_Maine"))
+
+([FlightPro_Class580119] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 14)
+	(lang "en")
+	(lat 44.3428)
+	(lng -68.3071)
+	(rank 97)
+	(summary "Mount Desert Island (often abbreviated MDI), in Hancock County, Maine, is the largest island off the coast of Maine. With an area of it is the 6th largest island in the contiguous United States. Though it is often claimed to be the third largest island on the eastern seaboard of the United States,: (...)")
+	(title "Mount Desert Island")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Mount_Desert_Island"))
+
+([FlightPro_Class580120] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 6)
+	(feature "river")
+	(lang "en")
+	(lat 44.8267)
+	(lng -68.6967)
+	(rank 97)
+	(summary "The Penobscot River is a U.S. Geological Survey. National Hydrography Dataset high-resolution flowline data. , accessed June 22, 2011 river in the U.S. state of Maine. Including the river's West Branch and South Branch increases the Penobscot's length to , making it the second longest river system (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/15000/thumb-14141-100.jpg")
+	(title "Penobscot River")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Penobscot_River"))
+
+([FlightPro_Class580121] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 46)
+	(lang "en")
+	(lat 44.0872)
+	(lng -69.6183)
+	(rank 97)
+	(summary "This is a list of the National Register of Historic Places listings in Lincoln County, Maine. This is intended to be a complete list of the properties and districts on the National Register of Historic Places in Lincoln County, Maine, United States (...)")
+	(title "National Register of Historic Places listings in Lincoln County, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/National_Register_of_Historic_Places_listings_in_Lincoln_County%2C_Maine"))
+
+([FlightPro_Class580122] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 13)
+	(lang "en")
+	(lat 44.742)
+	(lng -65.5158)
+	(rank 96)
+	(summary "Port Royal can refer to two different contemporary communities in the Canadian province of Nova Scotia: * Port Royal is a rural farming community in Annapolis County which was the site of a 17th-century French colonization effort known as the Habitation at Port-Royal (...)")
+	(title "Port Royal, Nova Scotia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Port_Royal%2C_Nova_Scotia"))
+
+([FlightPro_Class580123] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 43)
+	(feature "city")
+	(lang "en")
+	(lat 44.4258)
+	(lng -69.0117)
+	(rank 96)
+	(summary "Belfast is a city in Waldo County, Maine, in the United States. As of the 2010 census, the city population was 6,668. Located at the mouth of the Passagassawakeag River estuary on Penobscot Bay, Belfast is the county seat of Waldo County (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/141000/thumb-140626-100.jpg")
+	(title "Belfast, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Belfast%2C_Maine"))
+
+([FlightPro_Class580124] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 45)
+	(feature "city")
+	(lang "en")
+	(lat 44.943)
+	(lng -68.6765)
+	(rank 96)
+	(summary "Old Town is a city in Penobscot County, Maine, United States. The population was 7,840 at the 2010 census. The city's developed area is chiefly located on relatively large Marsh Island, though its boundaries extend beyond that (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/52000/thumb-51480-100.jpg")
+	(title "Old Town, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Old_Town%2C_Maine"))
+
+([FlightPro_Class580125] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 5)
+	(feature "city")
+	(lang "en")
+	(lat 43.7632)
+	(lng -65.3247)
+	(rank 96)
+	(summary "Shelburne is a town located in southwestern Nova Scotia, Canada. It is the shire town of Shelburne County.  (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/57000/thumb-56427-100.jpg")
+	(title "Shelburne, Nova Scotia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Shelburne%2C_Nova_Scotia"))
+
+([FlightPro_Class580126] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 18)
+	(lang "en")
+	(lat 44.3164)
+	(lng -69.7744)
+	(rank 96)
+	(summary "This is a list of the National Register of Historic Places listings in Kennebec County, Maine. This is intended to be a complete list of the properties and districts on the National Register of Historic Places in Kennebec County, Maine, United States (...)")
+	(title "National Register of Historic Places listings in Kennebec County, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/National_Register_of_Historic_Places_listings_in_Kennebec_County%2C_Maine"))
+
+([FlightPro_Class580127] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 38)
+	(lang "en")
+	(lat 44.883)
+	(lng -68.672)
+	(rank 96)
+	(summary "Orono is a town in Penobscot County, Maine, United States. It was first settled in 1774 and named in honor of Chief Joseph Orono of the Penobscot Nation. It is home to The University of Maine. The population was 10,362 at the 2010 census.  (...)")
+	(title "Orono, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Orono%2C_Maine"))
+
+([FlightPro_Class580128] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 240)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 44.7)
+	(lng -65.2)
+	(rank 96)
+	(summary "Annapolis County is a county in the Canadian province of Nova Scotia located in the western part of the province on the Bay of Fundy. The county seat is Annapolis Royal.  (...)")
+	(title "Annapolis County, Nova Scotia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Annapolis_County%2C_Nova_Scotia"))
+
+([FlightPro_Class580129] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 0)
+	(feature "landmark")
+	(lang "en")
+	(lat 44.1115)
+	(lng -69.1032)
+	(rank 96)
+	(summary "__NOTOC__ This is a complete List of National Historic Landmarks in Maine. The United States National Historic Landmark program is operated under the auspices of the National Park Service, and recognizes structures, districts, objects, and similar resources according to a list of criteria of (...)")
+	(title "List of National Historic Landmarks in Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/List_of_National_Historic_Landmarks_in_Maine"))
+
+([FlightPro_Class580130] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(feature "city")
+	(lang "en")
+	(lat 44.0217)
+	(lng -68.7936)
+	(rank 96)
+	(summary "Vinalhaven is a town located on the larger of the two Fox Islands in Knox County, Maine, United States. Vinalhaven is also used to refer to the Island itself. The population was 1,165 at the 2010 census. It is home to a thriving lobster fishery and hosts a summer colony (...)")
+	(title "Vinalhaven, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Vinalhaven%2C_Maine"))
+
+([FlightPro_Class580131] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 12)
+	(feature "city")
+	(lang "en")
+	(lat 43.8444)
+	(lng -65.9464)
+	(rank 96)
+	(summary "Argyle is a municipal district in Yarmouth County, Nova Scotia. The district occupies the eastern portion of the county and is one of three municipal units - the other two being the town of Yarmouth and the Yarmouth municipal district (...)")
+	(title "Argyle, Nova Scotia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Argyle%2C_Nova_Scotia"))
+
+([FlightPro_Class580132] of  QuestionTree
+
+	(name "populated place"))
 
 ([FlightPro_Class590000] of  CloFunction
 
@@ -3046,7 +4716,48 @@
 	(button-bbx "submit/wiki.gis/submit-bbx")
 	(button-clear-articles "Clear Articles/wiki.gis/clear-articles")
 	(language English-en)
-	(max-responses 40))
+	(max-responses 40)
+	(responses
+		[FlightPro_Class580092]
+		[FlightPro_Class580093]
+		[FlightPro_Class580094]
+		[FlightPro_Class580095]
+		[FlightPro_Class580096]
+		[FlightPro_Class580097]
+		[FlightPro_Class580098]
+		[FlightPro_Class580099]
+		[FlightPro_Class580100]
+		[FlightPro_Class580101]
+		[FlightPro_Class580102]
+		[FlightPro_Class580103]
+		[FlightPro_Class580104]
+		[FlightPro_Class580105]
+		[FlightPro_Class580106]
+		[FlightPro_Class580107]
+		[FlightPro_Class580108]
+		[FlightPro_Class580109]
+		[FlightPro_Class580110]
+		[FlightPro_Class580111]
+		[FlightPro_Class580112]
+		[FlightPro_Class580113]
+		[FlightPro_Class580114]
+		[FlightPro_Class580115]
+		[FlightPro_Class580116]
+		[FlightPro_Class580117]
+		[FlightPro_Class580118]
+		[FlightPro_Class580119]
+		[FlightPro_Class580120]
+		[FlightPro_Class580121]
+		[FlightPro_Class580122]
+		[FlightPro_Class580123]
+		[FlightPro_Class580124]
+		[FlightPro_Class580125]
+		[FlightPro_Class580126]
+		[FlightPro_Class580127]
+		[FlightPro_Class580128]
+		[FlightPro_Class580129]
+		[FlightPro_Class580130]
+		[FlightPro_Class580131]))
 
 ([FlightPro_Class660024] of  CloFunction
 
@@ -3081,7 +4792,8 @@
 		[FlightPro_Class610313]
 		[FlightPro_Class620000]
 		[FlightPro_Class840001]
-		[FlightPro_Class850012])
+		[FlightPro_Class850012]
+		[FlightPro_Class580051])
 	(cloNamespace [FlightPro_Class670001])
 	(cloVars
 		[FlightPro_Class330004]
@@ -3110,7 +4822,7 @@
 ([FlightPro_Class670008] of  BBX
 
 	(title "Current")
-	(wsen 33.281708 61.49584 34.604187 62.118656))
+	(wsen -69.86755 40.930115 -65.044556 45.023067))
 
 ([FlightPro_Class670041] of  TypeName
 
@@ -3642,7 +5354,7 @@
 
 ([FlightPro_Class840001] of  CloFunction
 
-	(source "(let [[lat1 lon1] (our-center)]\n  (if-let [flt (seq (filter #(= (sv % \"title\") ob) (cls-instances \"Feature\")))]\n    (let [nbr (gn/call-geonames-nearby lat1 lon1 nil (sv (first flt) \"code\") nil 300)\n           html (if (or (nil? nbr) (empty? nbr))\n	\"No information.\"\n	(let [lat2 (read-string (nbr \"lat\"))\n	       lon2 (read-string (nbr \"lng\"))\n	       dis (read-string (nbr \"distance\"))\n	       bea (gn/bearing lat1 lon1 lat2 lon2)]\n	  (str \"<h3>Nearest \" ob \"</h3>\"\n	    \"name: \" (nbr \"name\") \"<br>\"\n	    \"country: \" (nbr \"countryName\") \"<br>\"\n	    \"latitude: \" lat2 \"<br>\"\n	    \"longitude: \" lon2 \"<br>\"\n	    (format \"distance: %.1f\" dis) \" NM<br>\"\n	    \"direction: \" (gn/direction bea))))]\n        (asp/pump-in (:ins-chn @COMM)\n	{:instruct :popup\n	 :lat lat1\n	 :lon lon1\n	 :html html\n	 :width 1200\n	 :height 1000\n	 :time (:ext-data-popup TIO)}))))")
+	(source "(if-let [flt (seq (filter #(= (sv % \"title\") ob) (cls-instances \"Feature\")))]\n  (let [[lat1 lon1] (our-center)\n         nbr (gn/call-geonames-nearby lat1 lon1 nil (sv (first flt) \"code\") nil 300)\n         html (if (or (nil? nbr) (empty? nbr))\n	\"No information.\"\n	(let [lat2 (read-string (nbr \"lat\"))\n	       lon2 (read-string (nbr \"lng\"))\n	       dis (read-string (nbr \"distance\"))\n	       bea (gn/bearing lat1 lon1 lat2 lon2)]\n	  (str \"<h3>Nearest \" ob \"</h3>\"\n	    \"<h4>\" (nbr \"name\") \"</h4>\"\n	    \"country: \" (nbr \"countryName\") \"<br>\"\n	    \"latitude: \" lat2 \"<br>\"\n	    \"longitude: \" lon2 \"<br>\"\n	    (format \"distance: %.1f\" dis) \" NM<br>\"\n	    \"direction: \" (gn/direction bea))))]\n    (asp/pump-in (:ins-chn @COMM)\n	{:instruct :popup\n	 :lat lat1\n	 :lon lon1\n	 :html html\n	 :width 1200\n	 :height 1000\n	 :time (:ext-data-popup TIO)})))")
 	(title "pump-nearest [ob]"))
 
 ([FlightPro_Class840011] of  CloFunction
@@ -3672,10 +5384,10 @@
 
 ([FlightPro_Class850005] of  Rule
 
-	(lhs "?q (Question predicate \"How many\"\n	subject \"airplanes\"\n	object \"on the ground\")")
-	(rhs "(ext.data/pump-airplanes \n	\"Airplanes on the ground\" \n	(es/flights-of-status \"GROUND\"))\n(retract ?q)")
+	(lhs "?q (Question predicate \"How many\"\n	subject \"airplanes\"\n	object ?ob\n	(not= ?ob \"in the air\"))")
+	(rhs "(ext.data/pump-airplanes \n	(str \"Airplanes \" ?ob) \n	(es/flights-of-status\n	  (condp = ?ob\n	    \"all\" \"ANY\"\n	    \"on the ground\" \"GROUND\")))\n(retract ?q)")
 	(salience 0)
-	(title "qq:AirplanesOnGround"))
+	(title "qq:AirplanesAll"))
 
 ([FlightPro_Class850006] of  CloFuncall
 
@@ -3683,57 +5395,17 @@
 
 ([FlightPro_Class850007] of  CloFunction
 
-	(source "(let [ff (rt/facts-with-slot-value 'Flight 'status = sta)\n       cc (map #(rt/slot-value 'callsign %) ff)]\n  (sort (set cc)))")
+	(source "(let [ff (if (= sta \"ANY\") \n            (rt/fact-list 'Flight)\n            (rt/facts-with-slot-value 'Flight 'status = sta))\n       cc (map #(rt/slot-value 'callsign %) ff)]\n  (sort (set cc)))")
 	(title "flights-of-status [sta]"))
 
 ([FlightPro_Class850008] of  CloFuncall
 
 	(source "(es/flights-of-status \"GROUND\")"))
 
-([FlightPro_Class850009] of  CloFuncall
-
-	(source "(es/flights-of-status \"CLIMB\")"))
-
-([FlightPro_Class850010] of  CloFuncall
-
-	(source "(es/flights-of-status \"DESCEND\")"))
-
-([FlightPro_Class850011] of  CloFuncall
-
-	(source "(es/flights-of-status \"LEVEL\")"))
-
 ([FlightPro_Class850012] of  CloFunction
 
-	(source "(let [[lat lon] (our-center)\n       css (sort css)\n       k (count css)\n       cs3 (partition-all 3 css)\n       html (str \"<h3>\" head \" \" k \"</h3><table>\"\n	(apply str (map #(str \"<tr><td>\" (apply str (interpose \"</td><td>\" %)) \"</td></tr>\") cs3))\n	\"</table>\")]\n  (asp/pump-in (:ins-chn @COMM)\n	{:instruct :popup\n	 :lat lat\n	 :lon lon\n	 :html html\n	 :width 1200\n	 :height 1000\n	 :time (:ext-data-popup TIO)}))")
+	(source "(let [[lat lon] (our-center)\n       css (sort css)\n       k (count css)\n       cs3 (partition-all 3 css)\n       html (str \"<h3>\" head \"</h3>\"\n	\"<h3>\" k \"</h3><table>\"\n	(apply str (map #(str \"<tr><td>\" (apply str (interpose \"</td><td>\" %)) \"</td></tr>\") cs3))\n	\"</table>\")]\n  (asp/pump-in (:ins-chn @COMM)\n	{:instruct :popup\n	 :lat lat\n	 :lon lon\n	 :html html\n	 :width 1200\n	 :height 1000\n	 :time (:ext-data-popup TIO)}))")
 	(title "pump-airplanes [head css]"))
-
-([FlightPro_Class850013] of  CloFuncall
-
-	(source "(partition 3 [1 2])"))
-
-([FlightPro_Class850014] of  CloFuncall
-
-	(source "(partition 3 [1 2 3 4])"))
-
-([FlightPro_Class850015] of  CloFuncall
-
-	(source "(partition 3 [1 2 3 4 5])"))
-
-([FlightPro_Class850016] of  CloFuncall
-
-	(source "(partition-all 3 [1 2 3 4 5])"))
-
-([FlightPro_Class850017] of  CloFuncall
-
-	(source "(partition-all 3 [1 2])"))
-
-([FlightPro_Class850018] of  CloFuncall
-
-	(source "(char \\tab)"))
-
-([FlightPro_Class850019] of  CloFuncall
-
-	(source "(println (str \"x\" (char \\tab) \"y\"))"))
 
 ([FlightPro_Class850020] of  QuestionTree
 

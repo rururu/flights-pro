@@ -1,4 +1,4 @@
-; Fri Mar 17 19:58:53 MSK 2017
+; Sat Mar 25 22:08:38 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -12,6 +12,7 @@
 		[GeoNames_Class10006]
 		[Example_Class30000]
 		[Example_Class40007]
+		[GeoNames_Class70000]
 		[Example_Class10003]
 		[Example_Class20000]
 		[Example_Class20005]
@@ -53,7 +54,8 @@
 		[GeoNames_Class70001]
 		[GeoNames_Class50000]
 		[GeoNames_Class90001]
-		[GeoNames_Class80000])
+		[GeoNames_Class80000]
+		[GeoNames_Class110001])
 	(title "geonames"))
 
 ([Example_Class10001] of  CloNamespace
@@ -150,6 +152,11 @@
 
 	(source "(let [cnt (:content xml)\n       keys (map #(name (:tag %)) cnt)\n       vals (map #(first (:content %)) cnt)]\n  (apply hash-map (interleave keys vals)))")
 	(title "xml-to-map [xml]"))
+
+([GeoNames_Class110001] of  CloVar
+
+	(source "\"http://api.geonames.org/search\"")
+	(title "^:dynamic *search-url*"))
 
 ([GeoNames_Class110003] of  FeatureClass
 
@@ -574,6 +581,126 @@
 	(featureClass [GeoNames_Class110011])
 	(title "tundra"))
 
+([GeoNames_Class120022] of  CloFuncall
+
+	(source "(def x (geo.names/call-geonames-search {:name_equals \"Москва\" :cities \"cities1000\"}))"))
+
+([GeoNames_Class120023] of  CloFuncall
+
+	(source "(geo.names/call-geonames-search {:name_equals \"Москва\" :cities \"cities1000\"})"))
+
+([GeoNames_Class120024] of  CloFuncall
+
+	(source "(map protege.core/ctpl (geo.names/call-geonames-search {:name_equals \"Москва\" :cities \"cities1000\"}))"))
+
+([GeoNames_Class120025] of  CloFuncall
+
+	(source "(do (map protege.core/ctpl (geo.names/call-geonames-search {:name_equals \"Москва\" :cities \"cities1000\"}) 0)"))
+
+([GeoNames_Class120026] of  CloFuncall
+
+	(source "(do (map protege.core/ctpl (geo.names/call-geonames-search {:name_equals \"Москва\" :cities \"cities1000\"}))0)"))
+
+([GeoNames_Class120027] of  CloFuncall
+
+	(source "(do (map protege.core/ctpl (geo.names/call-geonames-search {:name_equals \"Москва\" :cities \"cities15000\"}))0)"))
+
+([GeoNames_Class120028] of  CloFuncall
+
+	(source "(doseq [e (geo.names/call-geonames-search {:name_equals \"Москва\" :cities \"cities15000\"})] (protege.core/ctpl e))"))
+
+([GeoNames_Class120029] of  CloFuncall
+
+	(source "(doseq [e (geo.names/call-geonames-search {:name_equals \"Москва\" :cities \"cities1000\"})] (protege.core/ctpl e))"))
+
+([GeoNames_Class120030] of  CloFuncall
+
+	(source "(doseq [e (geo.names/call-geonames-search {:name_equals \"Москва\" :cities \"cities1000\" :style \"FULL\"})] (protege.core/ctpl e))"))
+
+([GeoNames_Class120031] of  CloFuncall
+
+	(source "(doseq [e (geo.names/call-geonames-search {:name_equals \"Пушное\" :style \"FULL\"})] (protege.core/ctpl e))"))
+
+([GeoNames_Class120032] of  CloFuncall
+
+	(source "(doseq [e (geo.names/call-geonames-search {:name_equals \"Сосновка\" :style \"FULL\"})] (protege.core/ctpl e))"))
+
+([GeoNames_Class120033] of  CloFuncall
+
+	(source "(do (map protege.core/ctpl (geo.names/call-geonames-search {:name_equals \"Москва\" :cities \"cities1000\"})) 0)"))
+
+([GeoNames_Class120034] of  CloFuncall
+
+	(source "(doseq [e (geo.names/call-geonames-search {:name_equals \"Сосновка\" :cities \"cities1000\" :style \"FULL\"})] (protege.core/ctpl e))"))
+
+([GeoNames_Class120035] of  CloFuncall
+
+	(source "(doseq [e (geo.names/call-geonames-search {:name_equals \"Сосновка\" :cities \"cities1000\" :isNameRequired true :style \"FULL\"})] (protege.core/ctpl e))"))
+
+([GeoNames_Class120036] of  CloFuncall
+
+	(source "(doseq [e (geo.names/call-geonames-search {:name_equals \"Sosnovka\" :cities \"cities1000\" :isNameRequired true :style \"FULL\"})] (protege.core/ctpl e))"))
+
+([GeoNames_Class120037] of  CloFuncall
+
+	(source "(doseq [e (geo.names/call-geonames-search {:name_equals \"Sosnovka\" :isNameRequired true :style \"FULL\"})] (protege.core/ctpl e))"))
+
+([GeoNames_Class120038] of  CloFuncall
+
+	(source "(doseq [e (geo.names/call-geonames-search {:name_equals \"Sosnovka\" :style \"FULL\"})] (protege.core/ctpl e))"))
+
+([GeoNames_Class120039] of  CloFuncall
+
+	(source "(doseq [e (geo.names/call-geonames-search {:name_equals \"Sosnovka\"  :cities \"cities1000\" :style \"FULL\"})] (protege.core/ctpl e))"))
+
+([GeoNames_Class120040] of  CloFuncall
+
+	(source "(doseq [e (geo.names/call-geonames-search {:q \"Sosnovka\" :isNameRequired true :style \"FULL\"})] (protege.core/ctpl e))"))
+
+([GeoNames_Class120041] of  CloFuncall
+
+	(source "(doseq [e (geo.names/call-geonames-search {:name \"Sosnovka\" :isNameRequired true :style \"FULL\"})] (protege.core/ctpl e))"))
+
+([GeoNames_Class120042] of  CloFuncall
+
+	(source "(doseq [e (geo.names/call-geonames-search {:name \"Sosnovka\"  :cities \"cities1000\" :style \"FULL\"})] (protege.core/ctpl e))"))
+
+([GeoNames_Class120043] of  CloFuncall
+
+	(source "(doseq [e (geo.names/call-geonames-search {:name \"Sosnovka\"  :cities \"cities1000\" :orderby \"population\" :style \"FULL\"})] (protege.core/ctpl e))"))
+
+([GeoNames_Class120044] of  CloFuncall
+
+	(source "(doseq [e (geo.names/call-geonames-search {:name \"Moscow\"  :cities \"cities1000\" :orderby \"population\" :style \"FULL\"})] (protege.core/ctpl e))"))
+
+([GeoNames_Class120045] of  CloFuncall
+
+	(source "(doseq [e (geo.names/call-geonames-search {:country \"FR\"  :cities \"cities1000\" :orderby \"population\" :style \"FULL\"})] (protege.core/ctpl e))"))
+
+([GeoNames_Class120046] of  CloFuncall
+
+	(source "(count (geo.names/call-geonames-search {:country \"FR\"  :cities \"cities1000\" :orderby \"population\" :style \"FULL\"}))"))
+
+([GeoNames_Class120047] of  CloFuncall
+
+	(source "(count (geo.names/call-geonames-search {:country \"US\"  :cities \"cities1000\" :orderby \"population\" :style \"FULL\"}))"))
+
+([GeoNames_Class120048] of  CloFuncall
+
+	(source "(geo.names/call-geonames-search {:country \"FI\"  :cities \"cities1000\" :orderby \"population\"}))"))
+
+([GeoNames_Class120049] of  CloFuncall
+
+	(source "(doseq [e (geo.names/call-geonames-search {:country \"FR\"  :cities \"cities1000\" :orderby \"population\"})] (protege.core/ctpl e))"))
+
+([GeoNames_Class120050] of  CloFuncall
+
+	(source "(doseq [e (geo.names/call-geonames-search {:country \"FI\"  :cities \"cities1000\" :orderby \"population\"})] (protege.core/ctpl e))"))
+
+([GeoNames_Class120051] of  CloFuncall
+
+	(source "(doseq [e (geo.names/call-geonames-search {:country \"RU\"  :cities \"cities1000\" :orderby \"population\"})] (protege.core/ctpl e))"))
+
 ([GeoNames_Class2] of  CloVar
 
 	(source "\"http://api.geonames.org/wikipediaBoundingBox\"")
@@ -698,6 +825,11 @@
 
 	(source "; Get Wikipedia articles containing text\n(let [url (str *wiki-search* \"?q=\" (java.net.URLEncoder/encode text \"utf-8\") \"&lang=\" lang \"&maxRows=\" max \"&username=\" *username*)]\n  (seq (ws-map-list url)))")
 	(title "call-wiki-search [text max lang]"))
+
+([GeoNames_Class70000] of  CloFunction
+
+	(source ";; mp - parameters map \n;; see http://www.geonames.org/export/geonames-search.html\n(let [url (str *search-url* \"?username=\" *username*\n              (apply str (for [[k v] (seq mp)] (str \"&\" (name k) \"=\" v))))]\n (try\n   (if-let [xml (clojure.xml/parse url)]\n      (map xml-to-map (rest (:content xml))) )\n (catch Exception e\n   (ctpl e)\n   nil)))")
+	(title "call-geonames-search [mp]"))
 
 ([GeoNames_Class70001] of  CloVar
 

@@ -263,7 +263,9 @@
 	                :tmin tmin}}))
 
 (defn flights-of-status [sta]
-  (let [ff (rt/facts-with-slot-value 'Flight 'status = sta)
+  (let [ff (if (= sta "ANY") 
+            (rt/fact-list 'Flight)
+            (rt/facts-with-slot-value 'Flight 'status = sta))
        cc (map #(rt/slot-value 'callsign %) ff)]
   (sort (set cc))))
 

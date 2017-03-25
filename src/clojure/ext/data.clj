@@ -110,7 +110,7 @@
 
 (defn placemark-info [id]
   (when-let [dati (.getInstance *kb* (.substring id 2))]
-  (decorate-instance dati)
+  ;;(decorate-instance dati)
   (point-out-place {:instance dati})
   (asp/pump-in (:ins-chn @COMM) 
 	(placemark-popup-instruct dati))))
@@ -333,37 +333,38 @@ nil)
 	 :zoom z})))
 
 (defn pump-nearest [ob]
-  (let [[lat1 lon1] (our-center)]
   (if-let [flt (seq (filter #(= (sv % "title") ob) (cls-instances "Feature")))]
-    (let [nbr (gn/call-geonames-nearby lat1 lon1 nil (sv (first flt) "code") nil 300)
-           html (if (or (nil? nbr) (empty? nbr))
+  (let [[lat1 lon1] (our-center)
+         nbr (gn/call-geonames-nearby lat1 lon1 nil (sv (first flt) "code") nil 300)
+         html (if (or (nil? nbr) (empty? nbr))
 	"No information."
 	(let [lat2 (read-string (nbr "lat"))
 	       lon2 (read-string (nbr "lng"))
 	       dis (read-string (nbr "distance"))
 	       bea (gn/bearing lat1 lon1 lat2 lon2)]
 	  (str "<h3>Nearest " ob "</h3>"
-	    "name: " (nbr "name") "<br>"
+	    "<h4>" (nbr "name") "</h4>"
 	    "country: " (nbr "countryName") "<br>"
 	    "latitude: " lat2 "<br>"
 	    "longitude: " lon2 "<br>"
 	    (format "distance: %.1f" dis) " NM<br>"
 	    "direction: " (gn/direction bea))))]
-        (asp/pump-in (:ins-chn @COMM)
+    (asp/pump-in (:ins-chn @COMM)
 	{:instruct :popup
 	 :lat lat1
 	 :lon lon1
 	 :html html
 	 :width 1200
 	 :height 1000
-	 :time (:ext-data-popup TIO)})))))
+	 :time (:ext-data-popup TIO)}))))
 
 (defn pump-airplanes [head css]
   (let [[lat lon] (our-center)
        css (sort css)
        k (count css)
        cs3 (partition-all 3 css)
-       html (str "<h3>" head " " k "</h3><table>"
+       html (str "<h3>" head "</h3>"
+	"<h3>" k "</h3><table>"
 	(apply str (map #(str "<tr><td>" (apply str (interpose "</td><td>" %)) "</td></tr>") cs3))
 	"</table>")]
   (asp/pump-in (:ins-chn @COMM)
@@ -374,4 +375,26 @@ nil)
 	 :width 1200
 	 :height 1000
 	 :time (:ext-data-popup TIO)})))
+
+(defn pump-far-airport [cnt apt]
+  (if-let [apt (get-in (fr24/airports-by-country) [cnt apt])]
+  (let [[lat1 lon1] (our-center)
+         lat2 (apt "lat") 
+         lon2 (apt "lon")
+         dis (geo/distance-nm [lat1 lon1] [lat2 lon2])
+         bea (geo/bear-deg [lat1 lon1] [lat2 lon2])
+         html (str "<h3>" (apt "name") "</h3>"
+	"country: " cnt "<br>"
+	"latitude: " lat2 "<br>"
+	"longitude: " lon2 "<br>"
+	"direction: " (gn/direction bea)
+	"<h4>" (format "distance: %.1f" dis) " NM</h4>")]
+    (asp/pump-in (:ins-chn @COMM)
+	{:instruct :popup
+	 :lat lat1
+	 :lon lon1
+	 :html html
+	 :width 1200
+	 :height 1000
+	 :time (:ext-data-popup TIO)}))))
 

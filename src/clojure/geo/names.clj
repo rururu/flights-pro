@@ -22,6 +22,7 @@
 (def ^:dynamic *gtopo30* "http://api.geonames.org/gtopo30")
 (def ^:dynamic *hierarchy-url* "http://api.geonames.org/hierarchy")
 (def ^:dynamic *pois-osm-url* "http://api.geonames.org/findNearbyPOIsOSM")
+(def ^:dynamic *search-url* "http://api.geonames.org/search")
 (defn map-into-inst [mp inst]
   (doseq [[k v] mp]
    (if (slt k)
@@ -85,6 +86,18 @@ inst)
   292.5 "west"
   337.5 "north-west"
   "north"))
+
+(defn call-geonames-search [mp]
+  ;; mp - parameters map 
+;; see http://www.geonames.org/export/geonames-search.html
+(let [url (str *search-url* "?username=" *username*
+              (apply str (for [[k v] (seq mp)] (str "&" (name k) "=" v))))]
+ (try
+   (if-let [xml (clojure.xml/parse url)]
+      (map xml-to-map (rest (:content xml))) )
+ (catch Exception e
+   (ctpl e)
+   nil))))
 
 (defn call-geonames-ocean [lat lng]
   ; Get ocean from Geonames Web Service
