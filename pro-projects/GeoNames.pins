@@ -1,4 +1,4 @@
-; Sat Mar 25 22:08:38 MSK 2017
+; Sun Mar 26 22:49:07 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -581,125 +581,1265 @@
 	(featureClass [GeoNames_Class110011])
 	(title "tundra"))
 
-([GeoNames_Class120022] of  CloFuncall
+([GeoNames_Class120018] of  Country
 
-	(source "(def x (geo.names/call-geonames-search {:name_equals \"Москва\" :cities \"cities1000\"}))"))
+	(code "AD")
+	(title "Andorra"))
 
-([GeoNames_Class120023] of  CloFuncall
+([GeoNames_Class120019] of  Country
 
-	(source "(geo.names/call-geonames-search {:name_equals \"Москва\" :cities \"cities1000\"})"))
+	(code "AE")
+	(title "United Arab Emirates"))
 
-([GeoNames_Class120024] of  CloFuncall
+([GeoNames_Class120020] of  Country
 
-	(source "(map protege.core/ctpl (geo.names/call-geonames-search {:name_equals \"Москва\" :cities \"cities1000\"}))"))
+	(code "AF")
+	(title "Afghanistan"))
 
-([GeoNames_Class120025] of  CloFuncall
+([GeoNames_Class120021] of  Country
 
-	(source "(do (map protege.core/ctpl (geo.names/call-geonames-search {:name_equals \"Москва\" :cities \"cities1000\"}) 0)"))
+	(code "AG")
+	(title "Antigua and Barbuda"))
 
-([GeoNames_Class120026] of  CloFuncall
+([GeoNames_Class130022] of  Country
 
-	(source "(do (map protege.core/ctpl (geo.names/call-geonames-search {:name_equals \"Москва\" :cities \"cities1000\"}))0)"))
+	(code "AI")
+	(title "Anguilla"))
 
-([GeoNames_Class120027] of  CloFuncall
+([GeoNames_Class130023] of  Country
 
-	(source "(do (map protege.core/ctpl (geo.names/call-geonames-search {:name_equals \"Москва\" :cities \"cities15000\"}))0)"))
+	(code "AL")
+	(title "Albania"))
 
-([GeoNames_Class120028] of  CloFuncall
+([GeoNames_Class130024] of  Country
 
-	(source "(doseq [e (geo.names/call-geonames-search {:name_equals \"Москва\" :cities \"cities15000\"})] (protege.core/ctpl e))"))
+	(code "AM")
+	(title "Armenia"))
 
-([GeoNames_Class120029] of  CloFuncall
+([GeoNames_Class130025] of  Country
 
-	(source "(doseq [e (geo.names/call-geonames-search {:name_equals \"Москва\" :cities \"cities1000\"})] (protege.core/ctpl e))"))
+	(code "AN")
+	(title "Netherlands Antilles"))
 
-([GeoNames_Class120030] of  CloFuncall
+([GeoNames_Class130026] of  Country
 
-	(source "(doseq [e (geo.names/call-geonames-search {:name_equals \"Москва\" :cities \"cities1000\" :style \"FULL\"})] (protege.core/ctpl e))"))
+	(code "AO")
+	(title "Angola"))
 
-([GeoNames_Class120031] of  CloFuncall
+([GeoNames_Class130027] of  Country
 
-	(source "(doseq [e (geo.names/call-geonames-search {:name_equals \"Пушное\" :style \"FULL\"})] (protege.core/ctpl e))"))
+	(code "AQ")
+	(title "Antarctica"))
 
-([GeoNames_Class120032] of  CloFuncall
+([GeoNames_Class130028] of  Country
 
-	(source "(doseq [e (geo.names/call-geonames-search {:name_equals \"Сосновка\" :style \"FULL\"})] (protege.core/ctpl e))"))
+	(code "AR")
+	(title "Argentina"))
 
-([GeoNames_Class120033] of  CloFuncall
+([GeoNames_Class130029] of  Country
 
-	(source "(do (map protege.core/ctpl (geo.names/call-geonames-search {:name_equals \"Москва\" :cities \"cities1000\"})) 0)"))
+	(code "AS")
+	(title "American Samoa"))
 
-([GeoNames_Class120034] of  CloFuncall
+([GeoNames_Class130030] of  Country
 
-	(source "(doseq [e (geo.names/call-geonames-search {:name_equals \"Сосновка\" :cities \"cities1000\" :style \"FULL\"})] (protege.core/ctpl e))"))
+	(code "AT")
+	(title "Austria"))
 
-([GeoNames_Class120035] of  CloFuncall
+([GeoNames_Class130031] of  Country
 
-	(source "(doseq [e (geo.names/call-geonames-search {:name_equals \"Сосновка\" :cities \"cities1000\" :isNameRequired true :style \"FULL\"})] (protege.core/ctpl e))"))
+	(code "AU")
+	(title "Australia"))
 
-([GeoNames_Class120036] of  CloFuncall
+([GeoNames_Class130032] of  Country
 
-	(source "(doseq [e (geo.names/call-geonames-search {:name_equals \"Sosnovka\" :cities \"cities1000\" :isNameRequired true :style \"FULL\"})] (protege.core/ctpl e))"))
+	(code "AW")
+	(title "Aruba"))
 
-([GeoNames_Class120037] of  CloFuncall
+([GeoNames_Class130033] of  Country
 
-	(source "(doseq [e (geo.names/call-geonames-search {:name_equals \"Sosnovka\" :isNameRequired true :style \"FULL\"})] (protege.core/ctpl e))"))
+	(code "AX")
+	(title "Åland"))
 
-([GeoNames_Class120038] of  CloFuncall
+([GeoNames_Class130034] of  Country
 
-	(source "(doseq [e (geo.names/call-geonames-search {:name_equals \"Sosnovka\" :style \"FULL\"})] (protege.core/ctpl e))"))
+	(code "AZ")
+	(title "Azerbaijan"))
 
-([GeoNames_Class120039] of  CloFuncall
+([GeoNames_Class130035] of  Country
 
-	(source "(doseq [e (geo.names/call-geonames-search {:name_equals \"Sosnovka\"  :cities \"cities1000\" :style \"FULL\"})] (protege.core/ctpl e))"))
+	(code "BA")
+	(title "Bosnia and Herzegovina"))
 
-([GeoNames_Class120040] of  CloFuncall
+([GeoNames_Class130036] of  Country
 
-	(source "(doseq [e (geo.names/call-geonames-search {:q \"Sosnovka\" :isNameRequired true :style \"FULL\"})] (protege.core/ctpl e))"))
+	(code "BB")
+	(title "Barbados"))
 
-([GeoNames_Class120041] of  CloFuncall
+([GeoNames_Class130037] of  Country
 
-	(source "(doseq [e (geo.names/call-geonames-search {:name \"Sosnovka\" :isNameRequired true :style \"FULL\"})] (protege.core/ctpl e))"))
+	(code "BD")
+	(title "Bangladesh"))
 
-([GeoNames_Class120042] of  CloFuncall
+([GeoNames_Class130038] of  Country
 
-	(source "(doseq [e (geo.names/call-geonames-search {:name \"Sosnovka\"  :cities \"cities1000\" :style \"FULL\"})] (protege.core/ctpl e))"))
+	(code "BE")
+	(title "Belgium"))
 
-([GeoNames_Class120043] of  CloFuncall
+([GeoNames_Class130039] of  Country
 
-	(source "(doseq [e (geo.names/call-geonames-search {:name \"Sosnovka\"  :cities \"cities1000\" :orderby \"population\" :style \"FULL\"})] (protege.core/ctpl e))"))
+	(code "BF")
+	(title "Burkina Faso"))
 
-([GeoNames_Class120044] of  CloFuncall
+([GeoNames_Class130040] of  Country
 
-	(source "(doseq [e (geo.names/call-geonames-search {:name \"Moscow\"  :cities \"cities1000\" :orderby \"population\" :style \"FULL\"})] (protege.core/ctpl e))"))
+	(code "BG")
+	(title "Bulgaria"))
 
-([GeoNames_Class120045] of  CloFuncall
+([GeoNames_Class130041] of  Country
 
-	(source "(doseq [e (geo.names/call-geonames-search {:country \"FR\"  :cities \"cities1000\" :orderby \"population\" :style \"FULL\"})] (protege.core/ctpl e))"))
+	(code "BH")
+	(title "Bahrain"))
 
-([GeoNames_Class120046] of  CloFuncall
+([GeoNames_Class130042] of  Country
 
-	(source "(count (geo.names/call-geonames-search {:country \"FR\"  :cities \"cities1000\" :orderby \"population\" :style \"FULL\"}))"))
+	(code "BI")
+	(title "Burundi"))
 
-([GeoNames_Class120047] of  CloFuncall
+([GeoNames_Class130043] of  Country
 
-	(source "(count (geo.names/call-geonames-search {:country \"US\"  :cities \"cities1000\" :orderby \"population\" :style \"FULL\"}))"))
+	(code "BJ")
+	(title "Benin"))
 
-([GeoNames_Class120048] of  CloFuncall
+([GeoNames_Class130044] of  Country
 
-	(source "(geo.names/call-geonames-search {:country \"FI\"  :cities \"cities1000\" :orderby \"population\"}))"))
+	(code "BL")
+	(title "Saint Barthélemy"))
 
-([GeoNames_Class120049] of  CloFuncall
+([GeoNames_Class130045] of  Country
 
-	(source "(doseq [e (geo.names/call-geonames-search {:country \"FR\"  :cities \"cities1000\" :orderby \"population\"})] (protege.core/ctpl e))"))
+	(code "BM")
+	(title "Bermuda"))
 
-([GeoNames_Class120050] of  CloFuncall
+([GeoNames_Class130046] of  Country
 
-	(source "(doseq [e (geo.names/call-geonames-search {:country \"FI\"  :cities \"cities1000\" :orderby \"population\"})] (protege.core/ctpl e))"))
+	(code "BN")
+	(title "Brunei"))
 
-([GeoNames_Class120051] of  CloFuncall
+([GeoNames_Class130047] of  Country
 
-	(source "(doseq [e (geo.names/call-geonames-search {:country \"RU\"  :cities \"cities1000\" :orderby \"population\"})] (protege.core/ctpl e))"))
+	(code "BO")
+	(title "Bolivia"))
+
+([GeoNames_Class130048] of  Country
+
+	(code "BQ")
+	(title "Bonaire"))
+
+([GeoNames_Class130049] of  Country
+
+	(code "BR")
+	(title "Brazil"))
+
+([GeoNames_Class130050] of  Country
+
+	(code "BS")
+	(title "Bahamas"))
+
+([GeoNames_Class130051] of  Country
+
+	(code "BT")
+	(title "Bhutan"))
+
+([GeoNames_Class130052] of  Country
+
+	(code "BV")
+	(title "Bouvet Island"))
+
+([GeoNames_Class130053] of  Country
+
+	(code "BW")
+	(title "Botswana"))
+
+([GeoNames_Class130054] of  Country
+
+	(code "BY")
+	(title "Belarus"))
+
+([GeoNames_Class130055] of  Country
+
+	(code "BZ")
+	(title "Belize"))
+
+([GeoNames_Class130056] of  Country
+
+	(code "CA")
+	(title "Canada"))
+
+([GeoNames_Class130057] of  Country
+
+	(code "CC")
+	(title "Cocos [Keeling] Islands"))
+
+([GeoNames_Class130058] of  Country
+
+	(code "CD")
+	(title "Democratic Republic of the Congo"))
+
+([GeoNames_Class130059] of  Country
+
+	(code "CF")
+	(title "Central African Republic"))
+
+([GeoNames_Class130060] of  Country
+
+	(code "CG")
+	(title "Republic of the Congo"))
+
+([GeoNames_Class130061] of  Country
+
+	(code "CH")
+	(title "Switzerland"))
+
+([GeoNames_Class130062] of  Country
+
+	(code "CI")
+	(title "Ivory Coast"))
+
+([GeoNames_Class130063] of  Country
+
+	(code "CK")
+	(title "Cook Islands"))
+
+([GeoNames_Class130064] of  Country
+
+	(code "CL")
+	(title "Chile"))
+
+([GeoNames_Class130065] of  Country
+
+	(code "CM")
+	(title "Cameroon"))
+
+([GeoNames_Class130066] of  Country
+
+	(code "CN")
+	(title "China"))
+
+([GeoNames_Class130067] of  Country
+
+	(code "CO")
+	(title "Colombia"))
+
+([GeoNames_Class130068] of  Country
+
+	(code "CR")
+	(title "Costa Rica"))
+
+([GeoNames_Class130069] of  Country
+
+	(code "CS")
+	(title "Serbia and Montenegro"))
+
+([GeoNames_Class130070] of  Country
+
+	(code "CU")
+	(title "Cuba"))
+
+([GeoNames_Class130071] of  Country
+
+	(code "CV")
+	(title "Cape Verde"))
+
+([GeoNames_Class130072] of  Country
+
+	(code "CW")
+	(title "Curacao"))
+
+([GeoNames_Class130073] of  Country
+
+	(code "CX")
+	(title "Christmas Island"))
+
+([GeoNames_Class130074] of  Country
+
+	(code "CY")
+	(title "Cyprus"))
+
+([GeoNames_Class130075] of  Country
+
+	(code "CZ")
+	(title "Czechia"))
+
+([GeoNames_Class130076] of  Country
+
+	(code "DE")
+	(title "Germany"))
+
+([GeoNames_Class130077] of  Country
+
+	(code "DJ")
+	(title "Djibouti"))
+
+([GeoNames_Class130078] of  Country
+
+	(code "DK")
+	(title "Denmark"))
+
+([GeoNames_Class130079] of  Country
+
+	(code "DM")
+	(title "Dominica"))
+
+([GeoNames_Class130080] of  Country
+
+	(code "DO")
+	(title "Dominican Republic"))
+
+([GeoNames_Class130081] of  Country
+
+	(code "DZ")
+	(title "Algeria"))
+
+([GeoNames_Class130082] of  Country
+
+	(code "EC")
+	(title "Ecuador"))
+
+([GeoNames_Class130083] of  Country
+
+	(code "EE")
+	(title "Estonia"))
+
+([GeoNames_Class130084] of  Country
+
+	(code "EG")
+	(title "Egypt"))
+
+([GeoNames_Class130085] of  Country
+
+	(code "EH")
+	(title "Western Sahara"))
+
+([GeoNames_Class130086] of  Country
+
+	(code "ER")
+	(title "Eritrea"))
+
+([GeoNames_Class130087] of  Country
+
+	(code "ES")
+	(title "Spain"))
+
+([GeoNames_Class130088] of  Country
+
+	(code "ET")
+	(title "Ethiopia"))
+
+([GeoNames_Class130089] of  Country
+
+	(code "FI")
+	(title "Finland"))
+
+([GeoNames_Class130090] of  Country
+
+	(code "FJ")
+	(title "Fiji"))
+
+([GeoNames_Class130091] of  Country
+
+	(code "FK")
+	(title "Falkland Islands"))
+
+([GeoNames_Class130092] of  Country
+
+	(code "FM")
+	(title "Micronesia"))
+
+([GeoNames_Class130093] of  Country
+
+	(code "FO")
+	(title "Faroe Islands"))
+
+([GeoNames_Class130094] of  Country
+
+	(code "FR")
+	(title "France"))
+
+([GeoNames_Class130095] of  Country
+
+	(code "GA")
+	(title "Gabon"))
+
+([GeoNames_Class130096] of  Country
+
+	(code "GB")
+	(title "United Kingdom"))
+
+([GeoNames_Class130097] of  Country
+
+	(code "GD")
+	(title "Grenada"))
+
+([GeoNames_Class130098] of  Country
+
+	(code "GE")
+	(title "Georgia"))
+
+([GeoNames_Class130099] of  Country
+
+	(code "GF")
+	(title "French Guiana"))
+
+([GeoNames_Class130100] of  Country
+
+	(code "GG")
+	(title "Guernsey"))
+
+([GeoNames_Class130101] of  Country
+
+	(code "GH")
+	(title "Ghana"))
+
+([GeoNames_Class130102] of  Country
+
+	(code "GI")
+	(title "Gibraltar"))
+
+([GeoNames_Class130103] of  Country
+
+	(code "GL")
+	(title "Greenland"))
+
+([GeoNames_Class130104] of  Country
+
+	(code "GM")
+	(title "Gambia"))
+
+([GeoNames_Class130105] of  Country
+
+	(code "GN")
+	(title "Guinea"))
+
+([GeoNames_Class130106] of  Country
+
+	(code "GP")
+	(title "Guadeloupe"))
+
+([GeoNames_Class130107] of  Country
+
+	(code "GQ")
+	(title "Equatorial Guinea"))
+
+([GeoNames_Class130108] of  Country
+
+	(code "GR")
+	(title "Greece"))
+
+([GeoNames_Class130109] of  Country
+
+	(code "GS")
+	(title "South Georgia and the South Sandwich Islands"))
+
+([GeoNames_Class130110] of  Country
+
+	(code "GT")
+	(title "Guatemala"))
+
+([GeoNames_Class130111] of  Country
+
+	(code "GU")
+	(title "Guam"))
+
+([GeoNames_Class130112] of  Country
+
+	(code "GW")
+	(title "Guinea-Bissau"))
+
+([GeoNames_Class130113] of  Country
+
+	(code "GY")
+	(title "Guyana"))
+
+([GeoNames_Class130114] of  Country
+
+	(code "HK")
+	(title "Hong Kong"))
+
+([GeoNames_Class130115] of  Country
+
+	(code "HM")
+	(title "Heard Island and McDonald Islands"))
+
+([GeoNames_Class130116] of  Country
+
+	(code "HN")
+	(title "Honduras"))
+
+([GeoNames_Class130117] of  Country
+
+	(code "HR")
+	(title "Croatia"))
+
+([GeoNames_Class130118] of  Country
+
+	(code "HT")
+	(title "Haiti"))
+
+([GeoNames_Class130119] of  Country
+
+	(code "HU")
+	(title "Hungary"))
+
+([GeoNames_Class130120] of  Country
+
+	(code "ID")
+	(title "Indonesia"))
+
+([GeoNames_Class130121] of  Country
+
+	(code "IE")
+	(title "Ireland"))
+
+([GeoNames_Class130122] of  Country
+
+	(code "IL")
+	(title "Israel"))
+
+([GeoNames_Class130123] of  Country
+
+	(code "IM")
+	(title "Isle of Man"))
+
+([GeoNames_Class130124] of  Country
+
+	(code "IN")
+	(title "India"))
+
+([GeoNames_Class130125] of  Country
+
+	(code "IO")
+	(title "British Indian Ocean Territory"))
+
+([GeoNames_Class130126] of  Country
+
+	(code "IQ")
+	(title "Iraq"))
+
+([GeoNames_Class130127] of  Country
+
+	(code "IR")
+	(title "Iran"))
+
+([GeoNames_Class130128] of  Country
+
+	(code "IS")
+	(title "Iceland"))
+
+([GeoNames_Class130129] of  Country
+
+	(code "IT")
+	(title "Italy"))
+
+([GeoNames_Class130130] of  Country
+
+	(code "JE")
+	(title "Jersey"))
+
+([GeoNames_Class130131] of  Country
+
+	(code "JM")
+	(title "Jamaica"))
+
+([GeoNames_Class130132] of  Country
+
+	(code "JO")
+	(title "Jordan"))
+
+([GeoNames_Class130133] of  Country
+
+	(code "JP")
+	(title "Japan"))
+
+([GeoNames_Class130134] of  Country
+
+	(code "KE")
+	(title "Kenya"))
+
+([GeoNames_Class130135] of  Country
+
+	(code "KG")
+	(title "Kyrgyzstan"))
+
+([GeoNames_Class130136] of  Country
+
+	(code "KH")
+	(title "Cambodia"))
+
+([GeoNames_Class130137] of  Country
+
+	(code "KI")
+	(title "Kiribati"))
+
+([GeoNames_Class130138] of  Country
+
+	(code "KM")
+	(title "Comoros"))
+
+([GeoNames_Class130139] of  Country
+
+	(code "KN")
+	(title "Saint Kitts and Nevis"))
+
+([GeoNames_Class130140] of  Country
+
+	(code "KP")
+	(title "North Korea"))
+
+([GeoNames_Class130141] of  Country
+
+	(code "KR")
+	(title "South Korea"))
+
+([GeoNames_Class130142] of  Country
+
+	(code "KW")
+	(title "Kuwait"))
+
+([GeoNames_Class130143] of  Country
+
+	(code "KY")
+	(title "Cayman Islands"))
+
+([GeoNames_Class130144] of  Country
+
+	(code "KZ")
+	(title "Kazakhstan"))
+
+([GeoNames_Class130145] of  Country
+
+	(code "LA")
+	(title "Laos"))
+
+([GeoNames_Class130146] of  Country
+
+	(code "LB")
+	(title "Lebanon"))
+
+([GeoNames_Class130147] of  Country
+
+	(code "LC")
+	(title "Saint Lucia"))
+
+([GeoNames_Class130148] of  Country
+
+	(code "LI")
+	(title "Liechtenstein"))
+
+([GeoNames_Class130149] of  Country
+
+	(code "LK")
+	(title "Sri Lanka"))
+
+([GeoNames_Class130150] of  Country
+
+	(code "LR")
+	(title "Liberia"))
+
+([GeoNames_Class130151] of  Country
+
+	(code "LS")
+	(title "Lesotho"))
+
+([GeoNames_Class130152] of  Country
+
+	(code "LT")
+	(title "Lithuania"))
+
+([GeoNames_Class130153] of  Country
+
+	(code "LU")
+	(title "Luxembourg"))
+
+([GeoNames_Class130154] of  Country
+
+	(code "LV")
+	(title "Latvia"))
+
+([GeoNames_Class130155] of  Country
+
+	(code "LY")
+	(title "Libya"))
+
+([GeoNames_Class130156] of  Country
+
+	(code "MA")
+	(title "Morocco"))
+
+([GeoNames_Class130157] of  Country
+
+	(code "MC")
+	(title "Monaco"))
+
+([GeoNames_Class130158] of  Country
+
+	(code "MD")
+	(title "Moldova"))
+
+([GeoNames_Class130159] of  Country
+
+	(code "ME")
+	(title "Montenegro"))
+
+([GeoNames_Class130160] of  Country
+
+	(code "MF")
+	(title "Saint Martin"))
+
+([GeoNames_Class130161] of  Country
+
+	(code "MG")
+	(title "Madagascar"))
+
+([GeoNames_Class130162] of  Country
+
+	(code "MH")
+	(title "Marshall Islands"))
+
+([GeoNames_Class130163] of  Country
+
+	(code "MK")
+	(title "Macedonia"))
+
+([GeoNames_Class130164] of  Country
+
+	(code "ML")
+	(title "Mali"))
+
+([GeoNames_Class130165] of  Country
+
+	(code "MM")
+	(title "Myanmar [Burma]"))
+
+([GeoNames_Class130166] of  Country
+
+	(code "MN")
+	(title "Mongolia"))
+
+([GeoNames_Class130167] of  Country
+
+	(code "MO")
+	(title "Macao"))
+
+([GeoNames_Class130168] of  Country
+
+	(code "MP")
+	(title "Northern Mariana Islands"))
+
+([GeoNames_Class130169] of  Country
+
+	(code "MQ")
+	(title "Martinique"))
+
+([GeoNames_Class130170] of  Country
+
+	(code "MR")
+	(title "Mauritania"))
+
+([GeoNames_Class130171] of  Country
+
+	(code "MS")
+	(title "Montserrat"))
+
+([GeoNames_Class130172] of  Country
+
+	(code "MT")
+	(title "Malta"))
+
+([GeoNames_Class130173] of  Country
+
+	(code "MU")
+	(title "Mauritius"))
+
+([GeoNames_Class130174] of  Country
+
+	(code "MV")
+	(title "Maldives"))
+
+([GeoNames_Class130175] of  Country
+
+	(code "MW")
+	(title "Malawi"))
+
+([GeoNames_Class130176] of  Country
+
+	(code "MX")
+	(title "Mexico"))
+
+([GeoNames_Class130177] of  Country
+
+	(code "MY")
+	(title "Malaysia"))
+
+([GeoNames_Class130178] of  Country
+
+	(code "MZ")
+	(title "Mozambique"))
+
+([GeoNames_Class130179] of  Country
+
+	(code "NA")
+	(title "Namibia"))
+
+([GeoNames_Class130180] of  Country
+
+	(code "NC")
+	(title "New Caledonia"))
+
+([GeoNames_Class130181] of  Country
+
+	(code "NE")
+	(title "Niger"))
+
+([GeoNames_Class130182] of  Country
+
+	(code "NF")
+	(title "Norfolk Island"))
+
+([GeoNames_Class130183] of  Country
+
+	(code "NG")
+	(title "Nigeria"))
+
+([GeoNames_Class130184] of  Country
+
+	(code "NI")
+	(title "Nicaragua"))
+
+([GeoNames_Class130185] of  Country
+
+	(code "NL")
+	(title "Netherlands"))
+
+([GeoNames_Class130186] of  Country
+
+	(code "NO")
+	(title "Norway"))
+
+([GeoNames_Class130187] of  Country
+
+	(code "NP")
+	(title "Nepal"))
+
+([GeoNames_Class130188] of  Country
+
+	(code "NR")
+	(title "Nauru"))
+
+([GeoNames_Class130189] of  Country
+
+	(code "NU")
+	(title "Niue"))
+
+([GeoNames_Class130190] of  Country
+
+	(code "NZ")
+	(title "New Zealand"))
+
+([GeoNames_Class130191] of  Country
+
+	(code "OM")
+	(title "Oman"))
+
+([GeoNames_Class130192] of  Country
+
+	(code "PA")
+	(title "Panama"))
+
+([GeoNames_Class130193] of  Country
+
+	(code "PE")
+	(title "Peru"))
+
+([GeoNames_Class130194] of  Country
+
+	(code "PF")
+	(title "French Polynesia"))
+
+([GeoNames_Class130195] of  Country
+
+	(code "PG")
+	(title "Papua New Guinea"))
+
+([GeoNames_Class130196] of  Country
+
+	(code "PH")
+	(title "Philippines"))
+
+([GeoNames_Class130197] of  Country
+
+	(code "PK")
+	(title "Pakistan"))
+
+([GeoNames_Class130198] of  Country
+
+	(code "PL")
+	(title "Poland"))
+
+([GeoNames_Class130199] of  Country
+
+	(code "PM")
+	(title "Saint Pierre and Miquelon"))
+
+([GeoNames_Class130200] of  Country
+
+	(code "PN")
+	(title "Pitcairn Islands"))
+
+([GeoNames_Class130201] of  Country
+
+	(code "PR")
+	(title "Puerto Rico"))
+
+([GeoNames_Class130202] of  Country
+
+	(code "PS")
+	(title "Palestine"))
+
+([GeoNames_Class130203] of  Country
+
+	(code "PT")
+	(title "Portugal"))
+
+([GeoNames_Class130204] of  Country
+
+	(code "PW")
+	(title "Palau"))
+
+([GeoNames_Class130205] of  Country
+
+	(code "PY")
+	(title "Paraguay"))
+
+([GeoNames_Class130206] of  Country
+
+	(code "QA")
+	(title "Qatar"))
+
+([GeoNames_Class130207] of  Country
+
+	(code "RE")
+	(title "Réunion"))
+
+([GeoNames_Class130208] of  Country
+
+	(code "RO")
+	(title "Romania"))
+
+([GeoNames_Class130209] of  Country
+
+	(code "RS")
+	(title "Serbia"))
+
+([GeoNames_Class130210] of  Country
+
+	(code "RU")
+	(title "Russia"))
+
+([GeoNames_Class130211] of  Country
+
+	(code "RW")
+	(title "Rwanda"))
+
+([GeoNames_Class130212] of  Country
+
+	(code "SA")
+	(title "Saudi Arabia"))
+
+([GeoNames_Class130213] of  Country
+
+	(code "SB")
+	(title "Solomon Islands"))
+
+([GeoNames_Class130214] of  Country
+
+	(code "SC")
+	(title "Seychelles"))
+
+([GeoNames_Class130215] of  Country
+
+	(code "SD")
+	(title "Sudan"))
+
+([GeoNames_Class130216] of  Country
+
+	(code "SE")
+	(title "Sweden"))
+
+([GeoNames_Class130217] of  Country
+
+	(code "SG")
+	(title "Singapore"))
+
+([GeoNames_Class130218] of  Country
+
+	(code "SH")
+	(title "Saint Helena"))
+
+([GeoNames_Class130219] of  Country
+
+	(code "SI")
+	(title "Slovenia"))
+
+([GeoNames_Class130220] of  Country
+
+	(code "SJ")
+	(title "Svalbard and Jan Mayen"))
+
+([GeoNames_Class130221] of  Country
+
+	(code "SK")
+	(title "Slovakia"))
+
+([GeoNames_Class130222] of  Country
+
+	(code "SL")
+	(title "Sierra Leone"))
+
+([GeoNames_Class130223] of  Country
+
+	(code "SM")
+	(title "San Marino"))
+
+([GeoNames_Class130224] of  Country
+
+	(code "SN")
+	(title "Senegal"))
+
+([GeoNames_Class130225] of  Country
+
+	(code "SO")
+	(title "Somalia"))
+
+([GeoNames_Class130226] of  Country
+
+	(code "SR")
+	(title "Suriname"))
+
+([GeoNames_Class130227] of  Country
+
+	(code "SS")
+	(title "South Sudan"))
+
+([GeoNames_Class130228] of  Country
+
+	(code "ST")
+	(title "São Tomé and Príncipe"))
+
+([GeoNames_Class130229] of  Country
+
+	(code "SV")
+	(title "El Salvador"))
+
+([GeoNames_Class130230] of  Country
+
+	(code "SX")
+	(title "Sint Maarten"))
+
+([GeoNames_Class130231] of  Country
+
+	(code "SY")
+	(title "Syria"))
+
+([GeoNames_Class130232] of  Country
+
+	(code "SZ")
+	(title "Swaziland"))
+
+([GeoNames_Class130233] of  Country
+
+	(code "TC")
+	(title "Turks and Caicos Islands"))
+
+([GeoNames_Class130234] of  Country
+
+	(code "TD")
+	(title "Chad"))
+
+([GeoNames_Class130235] of  Country
+
+	(code "TF")
+	(title "French Southern Territories"))
+
+([GeoNames_Class130236] of  Country
+
+	(code "TG")
+	(title "Togo"))
+
+([GeoNames_Class130237] of  Country
+
+	(code "TH")
+	(title "Thailand"))
+
+([GeoNames_Class130238] of  Country
+
+	(code "TJ")
+	(title "Tajikistan"))
+
+([GeoNames_Class130239] of  Country
+
+	(code "TK")
+	(title "Tokelau"))
+
+([GeoNames_Class130240] of  Country
+
+	(code "TL")
+	(title "East Timor"))
+
+([GeoNames_Class130241] of  Country
+
+	(code "TM")
+	(title "Turkmenistan"))
+
+([GeoNames_Class130242] of  Country
+
+	(code "TN")
+	(title "Tunisia"))
+
+([GeoNames_Class130243] of  Country
+
+	(code "TO")
+	(title "Tonga"))
+
+([GeoNames_Class130244] of  Country
+
+	(code "TR")
+	(title "Turkey"))
+
+([GeoNames_Class130245] of  Country
+
+	(code "TT")
+	(title "Trinidad and Tobago"))
+
+([GeoNames_Class130246] of  Country
+
+	(code "TV")
+	(title "Tuvalu"))
+
+([GeoNames_Class130247] of  Country
+
+	(code "TW")
+	(title "Taiwan"))
+
+([GeoNames_Class130248] of  Country
+
+	(code "TZ")
+	(title "Tanzania"))
+
+([GeoNames_Class130249] of  Country
+
+	(code "UA")
+	(title "Ukraine"))
+
+([GeoNames_Class130250] of  Country
+
+	(code "UG")
+	(title "Uganda"))
+
+([GeoNames_Class130251] of  Country
+
+	(code "UM")
+	(title "U.S. Minor Outlying Islands"))
+
+([GeoNames_Class130252] of  Country
+
+	(code "US")
+	(title "United States"))
+
+([GeoNames_Class130253] of  Country
+
+	(code "UY")
+	(title "Uruguay"))
+
+([GeoNames_Class130254] of  Country
+
+	(code "UZ")
+	(title "Uzbekistan"))
+
+([GeoNames_Class130255] of  Country
+
+	(code "VA")
+	(title "Vatican City"))
+
+([GeoNames_Class130256] of  Country
+
+	(code "VC")
+	(title "Saint Vincent and the Grenadines"))
+
+([GeoNames_Class130257] of  Country
+
+	(code "VE")
+	(title "Venezuela"))
+
+([GeoNames_Class130258] of  Country
+
+	(code "VG")
+	(title "British Virgin Islands"))
+
+([GeoNames_Class130259] of  Country
+
+	(code "VI")
+	(title "U.S. Virgin Islands"))
+
+([GeoNames_Class130260] of  Country
+
+	(code "VN")
+	(title "Vietnam"))
+
+([GeoNames_Class130261] of  Country
+
+	(code "VU")
+	(title "Vanuatu"))
+
+([GeoNames_Class130262] of  Country
+
+	(code "WF")
+	(title "Wallis and Futuna"))
+
+([GeoNames_Class130263] of  Country
+
+	(code "WS")
+	(title "Samoa"))
+
+([GeoNames_Class130264] of  Country
+
+	(code "XK")
+	(title "Kosovo"))
+
+([GeoNames_Class130265] of  Country
+
+	(code "YE")
+	(title "Yemen"))
+
+([GeoNames_Class130266] of  Country
+
+	(code "YT")
+	(title "Mayotte"))
+
+([GeoNames_Class130267] of  Country
+
+	(code "ZA")
+	(title "South Africa"))
+
+([GeoNames_Class130268] of  Country
+
+	(code "ZM")
+	(title "Zambia"))
+
+([GeoNames_Class130269] of  Country
+
+	(code "ZW")
+	(title "Zimbabwe"))
 
 ([GeoNames_Class2] of  CloVar
 

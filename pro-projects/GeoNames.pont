@@ -1,4 +1,4 @@
-; Sat Mar 25 22:08:38 MSK 2017
+; Sun Mar 26 22:49:07 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -53,6 +53,18 @@
 	(single-slot featureClass
 		(type INSTANCE)
 ;+		(allowed-classes FeatureClass)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot code
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass Country
+	(is-a GeoNames)
+	(role concrete)
+	(single-slot title
+		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot code
