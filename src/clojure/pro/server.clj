@@ -25,11 +25,13 @@
 
 (defn response1 [chn]
   (-> (r/response (write-transit (deref (future (asp/one-out chn)))))
-       (r/header "Access-Control-Allow-Origin" "*")))
+       (r/header "Access-Control-Allow-Origin" "*")
+       (r/charset "UTF-8")))
 
 (defn responseN [chn]
   (-> (r/response (write-transit (deref (future (asp/pump-out chn)))))
-       (r/header "Access-Control-Allow-Origin" "*")))
+       (r/header "Access-Control-Allow-Origin" "*")
+       (r/charset "UTF-8")))
 
 (defn view3D-in-browser []
   (let [address (str HOST PORT)]

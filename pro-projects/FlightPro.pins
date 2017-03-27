@@ -1,4 +1,4 @@
-; Sat Mar 25 18:37:24 MSK 2017
+; Mon Mar 27 21:51:22 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -276,6 +276,7 @@
 		[FlightPro_Class690015]
 		[FlightPro_Class690013]
 		[FlightPro_Class580046]
+		[FlightPro_Class810003]
 		[FlightPro_Class170005]
 		[FlightPro_Class170004]
 		[FlightPro_Class430000]
@@ -394,7 +395,7 @@
 
 ([FlightPro_Class170005] of  CloFunction
 
-	(source "(doseq [{:keys [instruct] :as ins} (read-transit response)]\n  ;;(println [:INSTRUCT ins])\n  (condp = instruct\n    :create-update (let [{:keys [id vehicle]} ins]\n	(create-update-vehicle id vehicle))\n    :delete (let [{:keys [id]} ins]\n	(delete-vehicle id))\n    :clear (clear-vehicles)\n    :popup (let [{:keys [id lat lon html time width height]} ins]\n	(cond\n	  id (popup id html time)\n	  (and  width height lat lon) (popup lat lon html time width height)\n	  (and lat lon) (popup lat lon html time)))\n    :trail (let [{:keys [id points options time]} ins]\n	(add-trail id points options time))\n    :map-center (let [{:keys [coord zoom lock]} ins]\n	(map-center coord zoom lock))\n    :create-placemark (let [{:keys [iname tip lat lon feature url-ico]} ins]\n	(create-placemark iname tip lat lon feature url-ico))\n    :delete-placemark (let [{:keys [iname]} ins]\n	(delete-placemark iname))\n    :clear-placemarks (clear-placemarks)\n    :add-link (let [{:keys [ids options]} ins]\n	(add-link ids options))\n    :ask-user (let [{:keys [question]} ins]\n	(condp = \n	  \"airport\" (select-airport)))\n    (println (str \"Unknown instruction: \" [instruct ins]))))")
+	(source "(doseq [{:keys [instruct] :as ins} (read-transit response)]\n  ;;(println [:INSTRUCT ins])\n  (condp = instruct\n    :create-update (let [{:keys [id vehicle]} ins]\n	(create-update-vehicle id vehicle))\n    :delete (let [{:keys [id]} ins]\n	(delete-vehicle id))\n    :clear (clear-vehicles)\n    :popup (let [{:keys [id lat lon html time width height]} ins]\n	(cond\n	  id (popup id html time)\n	  (and  width height lat lon) (popup lat lon html time width height)\n	  (and lat lon) (popup lat lon html time)))\n    :trail (let [{:keys [id points options time]} ins]\n	(add-trail id points options time))\n    :map-center (let [{:keys [coord zoom lock]} ins]\n	(map-center coord zoom lock))\n    :create-placemark (let [{:keys [iname tip lat lon feature url-ico]} ins]\n	(create-placemark iname tip lat lon feature url-ico))\n    :delete-placemark (let [{:keys [iname]} ins]\n	(delete-placemark iname))\n    :clear-placemarks (clear-placemarks)\n    :add-link (let [{:keys [ids options]} ins]\n	(add-link ids options))\n    :ask-user (let [{:keys [question param]} ins]\n	(condp = question\n	  \"global city\" (select-global-city param)\n	  \"airport\" (select-airport)))\n    (println (str \"Unknown instruction: \" [instruct ins]))))")
 	(title "instructions-handler [response]"))
 
 ([FlightPro_Class180000] of  CloFunction
@@ -635,12 +636,12 @@
 
 ([FlightPro_Class20014] of  CloFunction
 
-	(source "(-> (r/response (write-transit (deref (future (asp/pump-out chn)))))\n       (r/header \"Access-Control-Allow-Origin\" \"*\"))")
+	(source "(-> (r/response (write-transit (deref (future (asp/pump-out chn)))))\n       (r/header \"Access-Control-Allow-Origin\" \"*\")\n       (r/charset \"UTF-8\"))")
 	(title "responseN [chn]"))
 
 ([FlightPro_Class20017] of  CloFunction
 
-	(source "(-> (r/response (write-transit (deref (future (asp/one-out chn)))))\n       (r/header \"Access-Control-Allow-Origin\" \"*\"))")
+	(source "(-> (r/response (write-transit (deref (future (asp/one-out chn)))))\n       (r/header \"Access-Control-Allow-Origin\" \"*\")\n       (r/charset \"UTF-8\"))")
 	(title "response1 [chn]"))
 
 ([FlightPro_Class20021] of  CloFunction
@@ -1244,22 +1245,6 @@
 
 	(source "(def hel (fifos \""))
 
-([FlightPro_Class280189] of  CloFuncall
-
-	(source "(def hel (fifos \"WikiArticle\" \"title\" \"Helsinki\"))"))
-
-([FlightPro_Class280190] of  CloFuncall
-
-	(source "hel"))
-
-([FlightPro_Class280191] of  CloFuncall
-
-	(source "(.setDirectType hel (cls \"WikiArticleDetails\"))"))
-
-([FlightPro_Class280192] of  CloFuncall
-
-	(source "(.setDirectType hel (cls \"WikiArticle\"))"))
-
 ([FlightPro_Class280198] of  CloFunction
 
 	(source "(condp = (typ dati)\n  \"WikiArticle\"	(invoke-later (do\n	  (.setDirectType dati (cls \"WikiArticleDetails\"))\n	  (ssv dati \"max-rows\" (int 50))\n	  (ssv dati \"radius\" (float 1))\n	  (ssv dati \"poi-req-butt\" \n	    (first (.getDefaultValues (slt \"poi-req-butt\"))))\n	  (ssv dati \"butt-show-pois\" \n	    \"Show on Map/ext.data/show-on-map\")\n	  (ssv dati \"butt-del-pois\" \n	    \"Delete POIs/ext.data/delete-pois\")\n	  (ssv dati \"butt-return\" \n	    \"Return to Flight/ext.data/ret-to-flight\")\n	  (let [frm (.show *prj* dati)]\n	    (.setLocationRelativeTo frm nil)\n	    (.setAlwaysOnTop frm true)\n	    (.setVisible frm true))))\n  false)")
@@ -1346,7 +1331,10 @@
 		[FlightPro_Class690007]
 		[FlightPro_Class850005]
 		[FlightPro_Class580045]
-		[FlightPro_Class580050])
+		[FlightPro_Class580050]
+		[FlightPro_Class810002]
+		[FlightPro_Class820008]
+		[FlightPro_Class820009])
 	(templates [Question])
 	(title "Questions"))
 
@@ -2205,7 +2193,10 @@
 
 ([FlightPro_Class510029] of  QuestionTree
 
-	(branches [FlightPro_Class510030])
+	(branches
+		[FlightPro_Class510030]
+		[FlightPro_Class800000]
+		[FlightPro_Class800001])
 	(name "How far"))
 
 ([FlightPro_Class510030] of  QuestionTree
@@ -2334,7 +2325,9 @@
 		[FlightPro_Class790001]
 		[FlightPro_Class850020]
 		[FlightPro_Class570000]
-		[FlightPro_Class580132]))
+		[FlightPro_Class580132]
+		[FlightPro_Class800000]
+		[FlightPro_Class800001]))
 
 ([FlightPro_Class520000] of  CloFunction
 
@@ -2430,14 +2423,6 @@
 
 	(source "(when-let [mrk (@PLACEMARKS iname)]\n  (.removeLayer @CHART mrk)\n  (vswap! PLACEMARKS dissoc iname))")
 	(title "delete-placemark [iname]"))
-
-([FlightPro_Class580001] of  CloFuncall
-
-	(source "(rete.core/facts 'Flight)"))
-
-([FlightPro_Class580002] of  CloFuncall
-
-	(source "(rete.core/fact-list 'Flight)"))
 
 ([FlightPro_Class580003] of  Airport
 
@@ -3051,10 +3036,6 @@
 	(title "Pinewood Studios")
 	(wikipediaUrl "http://en.wikipedia.org/wiki/Pinewood_Studios"))
 
-([FlightPro_Class580044] of  CloFuncall
-
-	(source "(ru.rules/pp 'Question)"))
-
 ([FlightPro_Class580045] of  Rule
 
 	(lhs "?q (Question predicate \"How far\"\n	subject \"airport\")\n(not Question predicate \"User Answer\")")
@@ -3064,20 +3045,8 @@
 
 ([FlightPro_Class580046] of  CloFunction
 
-	(source "([]\n  (am/ask-server {:question \"countries\"}\n	select-airport))\n([cns]\n  (am/selector \"element\" 1 \"chart.client\" \"countries\" cns :itself 130)\n  (defn handler1 [sel]\n    (am/ask-server {:question \"airports\"\n	       :country sel}\n	#(select-airport sel %))))\n([cnt aps]\n  (am/selector \"element\" 2 \"chart.client\" \"airports\" aps :itself 130)\n  (defn handler2 [sel]\n    (am/ask-server {:question \"es\"\n	      :predicate \"User Answer\"\n	      :subject \"selected airport\"\n	      :object sel\n                              :adjunct cnt} \n	(fn [r]))\n    (am/clear-dialog)))")
+	(source "([]\n  (am/ask-server {:question \"countries\"}\n	select-airport))\n([cns]\n  (am/selector \"element\" 1 \"chart.client\" \"countries\" cns :itself 130)\n  (defn handler1 [sel]\n    (am/ask-server {:question \"airports\"\n	       :country sel}\n	#(select-airport sel %))))\n([cnt aps]\n  (am/selector \"element\" 20 \"chart.client\" \"airports\" aps :itself 130)\n  (defn handler20 [sel]\n    (am/ask-server {:question \"es\"\n	      :predicate \"User Answer\"\n	      :subject \"selected airport\"\n	      :object sel\n                              :adjunct cnt} \n	(fn [r]))\n    (am/clear-dialog)))")
 	(title "select-airport"))
-
-([FlightPro_Class580047] of  CloFuncall
-
-	(source "(pro.commands/pump-in (:instructions pro.commands/CHN) {:instruct :ask-user :question \"airport\"})"))
-
-([FlightPro_Class580048] of  CloFuncall
-
-	(source "(async.proc/pump-in (:instructions pro.commands/CHN) {:instruct :ask-user :question \"airport\"})"))
-
-([FlightPro_Class580049] of  CloFuncall
-
-	(source "fr24.client/STATUS"))
 
 ([FlightPro_Class580050] of  Rule
 
@@ -4718,46 +4687,46 @@
 	(language English-en)
 	(max-responses 40)
 	(responses
-		[FlightPro_Class580092]
-		[FlightPro_Class580093]
-		[FlightPro_Class580094]
-		[FlightPro_Class580095]
-		[FlightPro_Class580096]
-		[FlightPro_Class580097]
-		[FlightPro_Class580098]
-		[FlightPro_Class580099]
-		[FlightPro_Class580100]
-		[FlightPro_Class580101]
-		[FlightPro_Class580102]
-		[FlightPro_Class580103]
-		[FlightPro_Class580104]
-		[FlightPro_Class580105]
-		[FlightPro_Class580106]
-		[FlightPro_Class580107]
-		[FlightPro_Class580108]
-		[FlightPro_Class580109]
-		[FlightPro_Class580110]
-		[FlightPro_Class580111]
-		[FlightPro_Class580112]
-		[FlightPro_Class580113]
-		[FlightPro_Class580114]
-		[FlightPro_Class580115]
-		[FlightPro_Class580116]
-		[FlightPro_Class580117]
-		[FlightPro_Class580118]
-		[FlightPro_Class580119]
-		[FlightPro_Class580120]
-		[FlightPro_Class580121]
-		[FlightPro_Class580122]
-		[FlightPro_Class580123]
-		[FlightPro_Class580124]
-		[FlightPro_Class580125]
-		[FlightPro_Class580126]
-		[FlightPro_Class580127]
-		[FlightPro_Class580128]
-		[FlightPro_Class580129]
-		[FlightPro_Class580130]
-		[FlightPro_Class580131]))
+		[FlightPro_Class850000]
+		[FlightPro_Class850001]
+		[FlightPro_Class850002]
+		[FlightPro_Class850003]
+		[FlightPro_Class850004]
+		[FlightPro_Class860005]
+		[FlightPro_Class860006]
+		[FlightPro_Class860007]
+		[FlightPro_Class860008]
+		[FlightPro_Class860009]
+		[FlightPro_Class860010]
+		[FlightPro_Class860011]
+		[FlightPro_Class860012]
+		[FlightPro_Class860013]
+		[FlightPro_Class860014]
+		[FlightPro_Class860015]
+		[FlightPro_Class860016]
+		[FlightPro_Class860017]
+		[FlightPro_Class860018]
+		[FlightPro_Class860019]
+		[FlightPro_Class860020]
+		[FlightPro_Class860021]
+		[FlightPro_Class860022]
+		[FlightPro_Class860023]
+		[FlightPro_Class860024]
+		[FlightPro_Class860025]
+		[FlightPro_Class860026]
+		[FlightPro_Class860027]
+		[FlightPro_Class860028]
+		[FlightPro_Class860029]
+		[FlightPro_Class860030]
+		[FlightPro_Class860031]
+		[FlightPro_Class860032]
+		[FlightPro_Class860033]
+		[FlightPro_Class860034]
+		[FlightPro_Class860035]
+		[FlightPro_Class860036]
+		[FlightPro_Class860037]
+		[FlightPro_Class860038]
+		[FlightPro_Class860039]))
 
 ([FlightPro_Class660024] of  CloFunction
 
@@ -4793,13 +4762,16 @@
 		[FlightPro_Class620000]
 		[FlightPro_Class840001]
 		[FlightPro_Class850012]
-		[FlightPro_Class580051])
+		[FlightPro_Class580051]
+		[FlightPro_Class820010]
+		[FlightPro_Class820021])
 	(cloNamespace [FlightPro_Class670001])
 	(cloVars
 		[FlightPro_Class330004]
 		[FlightPro_Class750000]
 		[FlightPro_Class810006]
-		[FlightPro_Class660025])
+		[FlightPro_Class660025]
+		[FlightPro_Class820018])
 	(title "External Data"))
 
 ([FlightPro_Class670001] of  CloNamespace
@@ -4822,7 +4794,7 @@
 ([FlightPro_Class670008] of  BBX
 
 	(title "Current")
-	(wsen -69.86755 40.930115 -65.044556 45.023067))
+	(wsen 24.36081 60.072376 25.566559 60.56133))
 
 ([FlightPro_Class670041] of  TypeName
 
@@ -5253,6 +5225,14 @@
 	(source "(vswap! carr assoc :altitude alt)")
 	(title "set-altitude [carr alt]"))
 
+([FlightPro_Class800000] of  QuestionTree
+
+	(name "global city"))
+
+([FlightPro_Class800001] of  QuestionTree
+
+	(name "local city"))
+
 ([FlightPro_Class800002] of  Airport
 
 	(altitude 62)
@@ -5298,6 +5278,26 @@
 	(source "(let [[lat lon] (our-center)\n        ocn (gn/call-geonames-ocean lat lon)\n        pro \"<html><head><meta charset=\\\"UTF-8\\\"/></meta></head>\"\n        hdr \"<h3>Where we are?</h3>\"\n        html (if (= ocn \"Land\")\n	(let [nby (gn/call-geonames-nearby lat lon nil nil nil nil)\n	       nam (nby \"name\")\n	       cty (nby \"countryName\")\n	       adm (nby \"adminName1\")\n	       cnt (nby \"continentCode\")\n	       lat1 (read-string (nby \"lat\"))\n	       lon1 (read-string (nby \"lng\"))\n                               dis (read-string (nby \"distance\"))\n	       dir (gn/direction (gn/bearing lat1 lon1 lat lon))]\n	   (str pro hdr \"We are in \" (format \"%.0f\" dis)\n		\" miles to \" dir\n		\" from the \" nam \",<br>\"\n		cty \" (\" adm \"),<br>\"  \n		(CONTINENT cnt)))\n                      (str pro hdr \"We are above the \" ocn))]\n    (asp/pump-in (:ins-chn @COMM)\n	{:instruct :popup\n	 :lat lat\n	 :lon lon\n	 :html html\n	 :width 600\n	 :height 800\n	 :time (:ext-data-popup TIO)}))")
 	(title "pump-where-we-are []"))
 
+([FlightPro_Class810002] of  Rule
+
+	(lhs "?q (Question predicate \"How far\"\n	subject \"global city\")\n(not Question predicate \"User Answer\")")
+	(rhs "(async.proc/pump-in \n	(:instructions pro.commands/CHN)\n	{:instruct :ask-user \n	 :question \"global city\"\n	 :param {:countries (sort (map #(protege.core/sv % \"title\") \n			(protege.core/cls-instances \"Country\")))}})")
+	(salience 0)
+	(title "qq:HowFarGlobalCity1"))
+
+([FlightPro_Class810003] of  CloFunction
+
+	(source "(if-let [cns (:countries param)]\n  (do (am/selector \"element\" 1 \"chart.client\" \"countries\" cns :itself 130)\n        (defn handler1 [sel]\n          (am/ask-server {:question \"es\"\n	:predicate \"User Answer\"\n	:subject \"selected country\"\n	:object sel} \n	(fn [r]))))\n  (if-let [cts (:cities param)]\n    (do (am/selector \"element\" 20 \"chart.client\" \"cities\" cts :itself 130)\n      (defn handler20 [sel]\n        (am/ask-server {:question \"es\"\n	:predicate \"User Answer\"\n	:subject \"selected city\"\n	:object sel} \n	(fn [r]))\n        (am/clear-dialog)))))")
+	(title "select-global-city [param]"))
+
+([FlightPro_Class810004] of  CloFuncall
+
+	(source "(rete"))
+
+([FlightPro_Class810005] of  CloFuncall
+
+	(source "(rete/assert-frame  ['Question 'predicate \"How far\" 'subject \"global city\" 'object nil 'adjunct nil])"))
+
 ([FlightPro_Class810006] of  CloVar
 
 	(source "{\"AF\" \"Africa\"\n  \"AN\" \"Antarctica\"\n  \"AS\" \"Asia\"\n  \"EU\" \"Europe\"\n  \"NA\" \"North America\"\n  \"OC\" \"Oceania\"\n  \"SA\" \"South America\"}")
@@ -5314,6 +5314,86 @@
 
 	(source "(set-html! \"zoom\" (str \"zoom \" z))")
 	(title "display-zoom [z]"))
+
+([FlightPro_Class820006] of  CloFuncall
+
+	(source "(rete.core/assert-frame  ['Question 'predicate \"How far\" 'subject \"global city\" 'object nil 'adjunct nil])"))
+
+([FlightPro_Class820007] of  CloFuncall
+
+	(source "(rete.core/fire)"))
+
+([FlightPro_Class820008] of  Rule
+
+	(lhs "?q1 (Question predicate \"How far\"\n	subject \"global city\")\n?q2 (Question predicate \"User Answer\"\n	subject \"selected country\"\n	object ?cnt)\n(not Question predicate \"User Answer\")")
+	(rhs "(async.proc/pump-in \n	(:instructions pro.commands/CHN)\n	{:instruct :ask-user \n	 :question \"global city\"\n	 :param {:cities (ext.data/country-cities ?cnt)}})")
+	(salience 0)
+	(title "qq:HowFarGlobalCity2"))
+
+([FlightPro_Class820009] of  Rule
+
+	(lhs "?q1 (Question predicate \"How far\"\n	subject \"global city\")\n?q2 (Question predicate \"User Answer\"\n	subject \"selected country\"\n	object ?cnt)\n?q3 (Question predicate \"User Answer\"\n	subject \"selected city\"\n	object ?cty)")
+	(rhs "(ext.data/pump-far-glo-city ?cnt ?cty)\n(retract ?q1 ?q2 ?q3)")
+	(salience 0)
+	(title "qq:HowFarGlobalCity3"))
+
+([FlightPro_Class820010] of  CloFunction
+
+	(source "(if-let [ins (fifos \"Country\" \"title\" cnt)]\n  (let [cod (sv ins \"code\")\n         gns (gn/call-geonames-search \n	{:country cod  :cities \"cities1000\" :orderby \"population\"})]\n    (def LAST-R gns)\n    (sort (map #(% \"name\") gns))))")
+	(title "country-cities [cnt]"))
+
+([FlightPro_Class820011] of  CloFuncall
+
+	(source "(def x (geo.names/call-geonames-search {:country \"FI\"  :cities \"cities1000\" :orderby \"population\"}))"))
+
+([FlightPro_Class820012] of  CloFuncall
+
+	(source "x"))
+
+([FlightPro_Class820013] of  CloFuncall
+
+	(source "(map (% \"name\") x)"))
+
+([FlightPro_Class820014] of  CloFuncall
+
+	(source "(map #(% \"name\") x)"))
+
+([FlightPro_Class820015] of  CloFuncall
+
+	(source "(map #(% \"name\") nil)"))
+
+([FlightPro_Class820016] of  CloFuncall
+
+	(source "(map #(% \"name\") {})"))
+
+([FlightPro_Class820017] of  CloFuncall
+
+	(source "(ext.data/country-cities \"Finland\")"))
+
+([FlightPro_Class820018] of  CloVar
+
+	(title "LAST-R"))
+
+([FlightPro_Class820019] of  CloFuncall
+
+	(source "(ext.data/country-cities \"Gabon\")"))
+
+([FlightPro_Class820020] of  CloFuncall
+
+	(source "ext.data/LAST-R"))
+
+([FlightPro_Class820021] of  CloFunction
+
+	(source "(if-let [flt (seq (filter #(= (% \"name\") cty) LAST-R))]\n  (let [ct (first flt)\n         [lat1 lon1] (our-center)\n         lat2 (read-string (ct \"lat\"))\n         lon2 (read-string (ct \"lng\"))\n         dis (geo/distance-nm [lat1 lon1] [lat2 lon2])\n         bea (geo/bear-deg [lat1 lon1] [lat2 lon2])\n         html (str \"<h3>\" cty \"</h3>\"\n	\"страна: \" cnt \"<br>\"\n	\"latitude: \" lat2 \"<br>\"\n	\"longitude: \" lon2 \"<br>\"\n	\"direction: \" (gn/direction bea)\n	\"<h4>\" (format \"distance: %.1f\" dis) \" NM</h4>\")]\n    (asp/pump-in (:ins-chn @COMM)\n	{:instruct :popup\n	 :lat lat1\n	 :lon lon1\n	 :html html\n	 :width 1200\n	 :height 1000\n	 :time (:ext-data-popup TIO)})))")
+	(title "pump-far-glo-city [cnt cty]"))
+
+([FlightPro_Class820022] of  CloFuncall
+
+	(source "(ru.rules/pp 'Question)"))
+
+([FlightPro_Class820023] of  CloFuncall
+
+	(source "(pro.server/write-transit {:a \"страна\"})"))
 
 ([FlightPro_Class830000] of  CloFunction
 
@@ -5362,25 +5442,66 @@
 	(source "(or (> (Math/abs (- lat1 lat2)) 0.02)\n     (> (Math/abs (- lon1 lon2)) 0.02))")
 	(title "obsolete [[lat1 lon1] [lat2 lon2]]"))
 
-([FlightPro_Class850000] of  CloFuncall
+([FlightPro_Class850000] of  WikiArticle
 
-	(source "(ext.data/pump-nearest \"lake\")"))
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "adm2nd")
+	(lang "en")
+	(lat 60.25)
+	(lng 24.5)
+	(rank 100)
+	(summary "Uusimaa (Finnish) or Nyland (Swedish) (both names mean “new land”) is a region in Finland. It borders the regions Finland Proper, Tavastia Proper, Päijänne Tavastia and Kymenlaakso. Finland’s capital Helsinki and its second largest city Espoo are both located centrally in Uusimaa, making it by far (...)")
+	(title "Uusimaa")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Uusimaa"))
 
-([FlightPro_Class850001] of  CloFuncall
+([FlightPro_Class850001] of  WikiArticle
 
-	(source "(ext.data/pump-nearest \"bank\")"))
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(lang "en")
+	(lat 60.2167)
+	(lng 24.7333)
+	(rank 96)
+	(summary "Kauniainen is a small town and a municipality of inhabitants in the Helsinki Metropolitan Area, Finland. It is surrounded by the City of Espoo, in Greater Helsinki. Kauniainen was founded by a corporation in 1906, AB Grankulla, that parcelled land and created a suburb for villas; Kauniainen received (...)")
+	(title "Kauniainen")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kauniainen"))
 
-([FlightPro_Class850002] of  CloFuncall
+([FlightPro_Class850002] of  WikiArticle
 
-	(source "(empty? nil)"))
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.4028)
+	(lng 25.0292)
+	(rank 96)
+	(summary "Tuusula is a municipality of Finland. It belongs to the Helsinki sub-region of the Uusimaa region. The municipality has a population of .  (...)")
+	(title "Tuusula")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Tuusula"))
 
-([FlightPro_Class850003] of  CloFuncall
+([FlightPro_Class850003] of  WikiArticle
 
-	(source "(some? nil)"))
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(lang "en")
+	(lat 60.1238)
+	(lng 24.4357)
+	(rank 95)
+	(summary "Kirkkonummi is a municipality of inhabitants in southern Finland. The literal meaning of the words \"Kirkkonummi\" and \"Kyrkslätt\" in English is \"church moor\". The municipality is located just outside the Helsinki Metropolitan Area, bordering the city of Espoo in the east (...)")
+	(title "Kirkkonummi")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kirkkonummi"))
 
-([FlightPro_Class850004] of  CloFuncall
+([FlightPro_Class850004] of  WikiArticle
 
-	(source "(some? {})"))
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 60.375)
+	(lng 25.2667)
+	(rank 94)
+	(summary "Sipoo is a municipality of Finland. Its seat is in Nikkilä/Nickby. It is the eastern neighbour of Helsinki and is located in the Uusimaa region. The municipality has a population of and covers an area of of which is water. The population density is  (...)")
+	(title "Sipoo")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Sipoo"))
 
 ([FlightPro_Class850005] of  Rule
 
@@ -5389,18 +5510,10 @@
 	(salience 0)
 	(title "qq:AirplanesAll"))
 
-([FlightPro_Class850006] of  CloFuncall
-
-	(source "(rete.core/facts-with-slot-value 'Flight 'status = \"GROUND\")"))
-
 ([FlightPro_Class850007] of  CloFunction
 
 	(source "(let [ff (if (= sta \"ANY\") \n            (rt/fact-list 'Flight)\n            (rt/facts-with-slot-value 'Flight 'status = sta))\n       cc (map #(rt/slot-value 'callsign %) ff)]\n  (sort (set cc)))")
 	(title "flights-of-status [sta]"))
-
-([FlightPro_Class850008] of  CloFuncall
-
-	(source "(es/flights-of-status \"GROUND\")"))
 
 ([FlightPro_Class850012] of  CloFunction
 
@@ -5410,6 +5523,429 @@
 ([FlightPro_Class850020] of  QuestionTree
 
 	(name "on level"))
+
+([FlightPro_Class860005] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(lang "en")
+	(lat 60.1983)
+	(lng 24.8761)
+	(rank 91)
+	(summary "Munkkiniemi (in slang Munkka) is a neighbourhood in Helsinki. Subdivisions within the district are Vanha Munkkiniemi, Kuusisaari, Lehtisaari, Munkkivuori, Niemenmäki and Talinranta. The land in Munkkiniemi was from the 17th century a part of Munksnäs manor (...)")
+	(title "Munkkiniemi")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Munkkiniemi"))
+
+([FlightPro_Class860006] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 60.4667)
+	(lng 24.8083)
+	(rank 91)
+	(summary "Nurmijärvi is the most populated rural municipality of Finland, located north of the capital Helsinki. The close proximity to Helsinki has led to a considerable growth of the major villages such as Klaukkala and Rajamäki, which nowadays are considered dormitory towns of Helsinki (...)")
+	(title "Nurmijärvi")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Nurmij%C3%A4rvi"))
+
+([FlightPro_Class860007] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.169)
+	(lng 24.9502)
+	(rank 90)
+	(summary "Aleksanterinkatu is a street in the centre of Helsinki, Finland. In the city plan by Carl Ludvig Engel, it was the Decumanus Maximus, the main east-west street in the city, crossing the Cardo, Unioninkatu (Union Street) at the corner of the Senate Square (...)")
+	(title "Aleksanterinkatu")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Aleksanterinkatu"))
+
+([FlightPro_Class860008] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 60.2539)
+	(lng 25.0442)
+	(rank 88)
+	(summary "Helsinki-Malmi Airport is an airport in the city of Helsinki, Finland, located in the district of Malmi, north north-east of the city centre. Until the opening of the Helsinki-Vantaa Airport in 1952 it was the main airport of Helsinki and all Finland (...)")
+	(title "Helsinki-Malmi Airport")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Helsinki-Malmi_Airport"))
+
+([FlightPro_Class860009] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 60.1756)
+	(lng 24.9342)
+	(rank 87)
+	(summary "The World Federation of the Deaf (WFD) is an international non-governmental organization that acts as a peak body for national associations of Deaf people, with a focus on Deaf people who use sign language and their family and friends (...)")
+	(title "World Federation of the Deaf")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/World_Federation_of_the_Deaf"))
+
+([FlightPro_Class860010] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.1714)
+	(lng 24.9461)
+	(population 398)
+	(rank 87)
+	(summary "Kluuvi is the commercial centre of Helsinki, Finland, and a neighbourhood in the Vironniemi district of Helsinki. The Helsinki Central railway station, the Helsinki main post office, the Stockmann and Sokos department stores, the Kluuvi shopping centre and the main offices of Finnish banks are (...)")
+	(title "Kluuvi")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kluuvi"))
+
+([FlightPro_Class860011] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.2719)
+	(lng 24.9728)
+	(rank 87)
+	(summary "Suunto Oy is a company that manufactures and markets sports watches, dive computers and precision instruments. Headquartered in Vantaa, Finland, Suunto employs more than 400 people worldwide, and its products are sold in over 100 countries (...)")
+	(title "Suunto")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Suunto"))
+
+([FlightPro_Class860012] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1712)
+	(lng 24.9525)
+	(rank 87)
+	(summary "The Bank of Finland is the central bank of Finland. It is the fourth oldest central bank in the world.  (...)")
+	(title "Bank of Finland")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Bank_of_Finland"))
+
+([FlightPro_Class860013] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.2103)
+	(lng 25.0781)
+	(rank 87)
+	(summary "Itäkeskus (Finnish) or Östra centrum (Swedish) is a ground-level station on the Helsinki Metro. It serves the Itäkeskus shopping centre and surrounding areas in East Helsinki. After the Itäkeskus station, there is a fork in the metro line: one branch continues north towards Mellunmäki, while another (...)")
+	(title "Itäkeskus metro station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/It%C3%A4keskus_metro_station"))
+
+([FlightPro_Class860014] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "city")
+	(lang "en")
+	(lat 60.1047)
+	(lng 24.9741)
+	(rank 87)
+	(summary "Sailing/Yachting is an Olympic sport starting from the Games of the 1st Olympiad (1896 Olympics in Athens). With the exception of 1904 and possible 1916 sailing was always a part of the Olympic program. The Sailing program of 1952 consisted of a total of five sailing classes (disciplines) (...)")
+	(title "Sailing at the 1952 Summer Olympics")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Sailing_at_the_1952_Summer_Olympics"))
+
+([FlightPro_Class860015] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "DE")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1683)
+	(lng 24.9422)
+	(rank 85)
+	(summary "The Stockmann department store is a culturally significant business building and department store located in the centre of Helsinki, Finland. It is one of many department stores owned by the Stockmann corporation (...)")
+	(title "Stockmann, Helsinki centre")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Stockmann%2C_Helsinki_centre"))
+
+([FlightPro_Class860016] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.2)
+	(lng 25.05)
+	(rank 85)
+	(summary "Herttoniemi is a neighbourhood and a suburb of Helsinki, the Finnish capital. It is located about 7 km east of the city centre and can be easily reached by metro in 10 minutes. It has an older northern suburb and a newer coastal suburb with ferry connections to the city centre (...)")
+	(title "Herttoniemi")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Herttoniemi"))
+
+([FlightPro_Class860017] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1706)
+	(lng 24.9406)
+	(rank 84)
+	(summary "Rautatientori metro station or Central railway station metro station is a station on the Helsinki Metro in Finland. The entrance is located in the Asematunneli main hall, which has an exit to the Helsinki Central Railway Station (...)")
+	(title "Rautatientori metro station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Rautatientori_metro_station"))
+
+([FlightPro_Class860018] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1694)
+	(lng 24.9178)
+	(rank 83)
+	(summary "The Hietaniemi cemetery is located mainly in the Lapinlahti quarter and partly in the Etu-Töölö district of Helsinki, the capital of Finland. It is the location for Finnish state funeral services. The cemetery includes a large military cemetery section for soldiers from the capital fallen in the (...)")
+	(title "Hietaniemi cemetery")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Hietaniemi_cemetery"))
+
+([FlightPro_Class860019] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "city")
+	(lang "en")
+	(lat 60.1864)
+	(lng 24.9681)
+	(rank 83)
+	(summary "Sörnäinen (; Sörkkä or Sörkka in Helsinki slang) is a neighbourhood in the city of Helsinki, Finland. Sörnäinen is located a little more than one kilometre north from the coastal centre of Helsinki, near the district of Hakaniemi. The east side of Sörnäinen borders the sea (...)")
+	(title "Sörnäinen")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/S%C3%B6rn%C3%A4inen"))
+
+([FlightPro_Class860020] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "city")
+	(lang "en")
+	(lat 60.2167)
+	(lng 24.8167)
+	(rank 83)
+	(summary "Leppävaara (Finnish) or Alberga (Swedish) is a district of Espoo, a city in Finland. A major traffic hub in the Greater Helsinki region, the Rantarata rail line and Kehä I, the busiest road in Finland, cross in Leppävaara. The Sello Shopping Centre is also located there (...)")
+	(title "Leppävaara")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Lepp%C3%A4vaara"))
+
+([FlightPro_Class860021] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.18)
+	(lng 24.9506)
+	(rank 83)
+	(summary "Hakaniemi (Finnish) or Hagnäs (Swedish) is a station on the Helsinki Metro. It serves the central Helsinki districts of Hakaniemi and Kallio. The station was among the first metro stations opened in Helsinki, on 1 June 1982, and was designed by Mirja Castrén, Juhani Jauhiainen, and Marja Nuuttila (...)")
+	(title "Hakaniemi metro station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Hakaniemi_metro_station"))
+
+([FlightPro_Class860022] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1889)
+	(lng 25.0081)
+	(rank 83)
+	(summary "Kulosaari (Finnish) or Brändö (Swedish) is a ground-level station on the Helsinki Metro. It serves the island district of Kulosaari in East Helsinki. The station was one of the first metro stations opened in Helsinki, on 1 June 1982, and was designed by Jaakko Ylinen and Jarmo Maunula (...)")
+	(title "Kulosaari metro station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kulosaari_metro_station"))
+
+([FlightPro_Class860023] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 60.475)
+	(lng 25.375)
+	(rank 83)
+	(summary "Pornainen is a municipality of Finland. It is located in the province of Southern Finland and is part of the Uusimaa region. The municipality has a population of and covers an area of of which is water. The population density is . The municipality is unilingually Finnish.  (...)")
+	(title "Pornainen")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Pornainen"))
+
+([FlightPro_Class860024] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1722)
+	(lng 24.9475)
+	(rank 83)
+	(summary "Kaisaniemi (Finnish) or Kajsaniemi (Swedish) is a station on the Helsinki Metro. It serves the central Helsinki district of Kaisaniemi. It is the only station whose name is announced in only one language: whether this is Finnish or Swedish is unknown and irrelevant, because the Finnish 'Kaisaniemi' (...)")
+	(title "Kaisaniemi metro station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kaisaniemi_metro_station"))
+
+([FlightPro_Class860025] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1722)
+	(lng 24.9437)
+	(rank 82)
+	(summary "The Finnish National Theatre , founded in 1872 in the city of Pori, is located in central Helsinki on the northern side of the Helsinki Central Railway Station Square. The Finnish National Theatre is the oldest Finnish-language professional theatre in Finland (...)")
+	(title "Finnish National Theatre")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Finnish_National_Theatre"))
+
+([FlightPro_Class860026] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.2333)
+	(lng 25.0167)
+	(rank 82)
+	(summary "Viikki is a neighbourhood of about 5,500 inhabitants in Helsinki, Finland. It is located at the bottom of Vanhankaupunginlahti bay, some 7–10 km from the city centre. The district hosts the Viikki Campus with four of the faculties of the University of Helsinki (biosciences, pharmacy, veterinary (...)")
+	(title "Viikki")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Viikki"))
+
+([FlightPro_Class860027] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1815)
+	(lng 24.9297)
+	(rank 82)
+	(summary "The Finnish National Opera is a Finnish opera company based in Helsinki. Its home base is the Opera House on Töölönlahti bay in Töölö, which opened in 1993, and is state-owned through Senate Properties. The Opera House features two auditoriums, the main auditorium with 1,350, seats and a smaller (...)")
+	(title "Finnish National Opera")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Finnish_National_Opera"))
+
+([FlightPro_Class860028] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1689)
+	(lng 24.9319)
+	(rank 82)
+	(summary "The Kamppi metro station is a station on the Helsinki Metro. In addition to serving the area around Kamppi in central Helsinki, the station is integrated with the Kamppi Center bus terminal and shopping complex (...)")
+	(title "Kamppi metro station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kamppi_metro_station"))
+
+([FlightPro_Class860029] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1875)
+	(lng 24.9611)
+	(rank 82)
+	(summary "Sörnäinen (Finnish) or Sörnäs (Swedish) is a station on the Helsinki Metro. It serves the central Helsinki districts of Sörnäinen and Kallio. When heading east, Sörnäinen is the last station that is actually underground - the eastern part of the metro service is mostly above ground (part of Vuosaari (...)")
+	(title "Sörnäinen metro station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/S%C3%B6rn%C3%A4inen_metro_station"))
+
+([FlightPro_Class860030] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.195)
+	(lng 25.0308)
+	(rank 82)
+	(summary "Herttoniemi (Finnish) or Hertonäs (Swedish) is a ground-level station on the Helsinki Metro. It serves the district of Herttoniemi in East Helsinki. The station was one of the first metro stations opened in Helsinki, on 1 June 1982, and was designed by Jaakko Ylinen and Jarmo Maunula (...)")
+	(title "Herttoniemi metro station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Herttoniemi_metro_station"))
+
+([FlightPro_Class860031] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(feature "isle")
+	(lang "en")
+	(lat 60.15)
+	(lng 25.05)
+	(rank 82)
+	(summary "Santahamina is an island and neighbourhood of Eastern Helsinki, Finland. At present it is a military base housing the Guard Jaeger Regiment, making access restricted. The Finnish National Defence University (NDU) is also located on the island.  (...)")
+	(title "Santahamina")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Santahamina"))
+
+([FlightPro_Class860032] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.1875)
+	(lng 24.9769)
+	(rank 82)
+	(summary "Kalasatama (Finnish) or Fiskehamnen (Swedish) is a station on the Helsinki Metro, in the capital city of Finland. The station was opened on 1 January 2007, and it serves the eastern part of the central Helsinki district of Sörnäinen (...)")
+	(title "Kalasatama metro station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kalasatama_metro_station"))
+
+([FlightPro_Class860033] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "railwaystation")
+	(lang "en")
+	(lat 60.2392)
+	(lng 25.1108)
+	(rank 81)
+	(summary "Mellunmäki (Finnish) or Mellungsbacka (Swedish) is a ground-level bridge station on the northern branch (Itäkeskus - Mellunmäki) of the Helsinki Metro. It serves the district of Mellunmäki in East Helsinki, Finland and is the terminus of the northern branch (...)")
+	(title "Mellunmäki metro station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Mellunm%C3%A4ki_metro_station"))
+
+([FlightPro_Class860034] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.2072)
+	(lng 25.1422)
+	(rank 81)
+	(summary "Vuosaari (Finnish) or Nordsjö (Swedish) is a ground-level station on the southern branch (Itäkeskus - Vuosaari) of the Helsinki Metro. It serves the district of Vuosaari in East Helsinki, and is the terminus of the branch (...)")
+	(title "Vuosaari metro station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Vuosaari_metro_station"))
+
+([FlightPro_Class860035] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.2361)
+	(lng 25.0836)
+	(rank 81)
+	(summary "Kontula (Finnish) or Gårdsbacka (Swedish) is a ground-level station on the northern branch (Itäkeskus - Mellunmäki) of the Helsinki Metro. It serves the district of Kontula in East Helsinki. The station was opened on 21 October 1986, designed by the architect bureau Toivo Karhunen Oy (...)")
+	(title "Kontula metro station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kontula_metro_station"))
+
+([FlightPro_Class860036] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "city")
+	(lang "en")
+	(lat 60.1945)
+	(lng 24.9567)
+	(rank 80)
+	(summary "Vallila is a neighbourhood in Helsinki, the capital of Finland. Vallila is a central-northern neighbourhood, bordered by Pasila to the west and Alppiharju to the south. Like Kallio, Vallila is mostly residential and has a reputation of being a working-class neighbourhood (...)")
+	(title "Vallila")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Vallila"))
+
+([FlightPro_Class860037] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.2147)
+	(lng 25.0931)
+	(rank 80)
+	(summary "Puotila (Finnish) or Botby gård (Swedish) is a ground-level 'cut-and-cover' station on the eastern branch (Itäkeskus - Vuosaari) of the Helsinki Metro. It serves the districts of Puotila and Puotinharju in East Helsinki (...)")
+	(title "Puotila metro station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Puotila_metro_station"))
+
+([FlightPro_Class860038] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.2053)
+	(lng 25.1214)
+	(rank 80)
+	(summary "Rastila (Finnish) or Rastböle (Swedish) is a ground-level station on the eastern branch (Itäkeskus - Vuosaari) of the Helsinki Metro. It serves the residential areas of Meri-Rastila and Rastila in the district of Vuosaari, in East Helsinki (...)")
+	(title "Rastila metro station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Rastila_metro_station"))
+
+([FlightPro_Class860039] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "isle")
+	(lang "en")
+	(lat 60.1806)
+	(lng 25.0542)
+	(rank 79)
+	(summary "Laajasalo is a group of islands that forms a neighbourhood in southern Helsinki, the capital of Finland. As of 2010, it had a population of 15,961. Image:Church in Laajasalo Helsinki.jpgChurch in Laajasalo Image:Laajasalo Oil Harbour.jpgLaajasalo Oil Harbour")
+	(title "Laajasalo")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Laajasalo"))
 
 ([FlightPro_Class9] of  CloFunction
 

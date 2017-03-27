@@ -34,6 +34,7 @@
      :wiki false
      :ins-chn nil
      :fr24-bbx-ctrl :client})))
+(def LAST-R )
 (defmacro with-timeout [msec & body]
   `(let [f# (future (do ~@body))
          v# (gensym)
@@ -385,6 +386,37 @@ nil)
          bea (geo/bear-deg [lat1 lon1] [lat2 lon2])
          html (str "<h3>" (apt "name") "</h3>"
 	"country: " cnt "<br>"
+	"latitude: " lat2 "<br>"
+	"longitude: " lon2 "<br>"
+	"direction: " (gn/direction bea)
+	"<h4>" (format "distance: %.1f" dis) " NM</h4>")]
+    (asp/pump-in (:ins-chn @COMM)
+	{:instruct :popup
+	 :lat lat1
+	 :lon lon1
+	 :html html
+	 :width 1200
+	 :height 1000
+	 :time (:ext-data-popup TIO)}))))
+
+(defn country-cities [cnt]
+  (if-let [ins (fifos "Country" "title" cnt)]
+  (let [cod (sv ins "code")
+         gns (gn/call-geonames-search 
+	{:country cod  :cities "cities1000" :orderby "population"})]
+    (def LAST-R gns)
+    (sort (map #(% "name") gns)))))
+
+(defn pump-far-glo-city [cnt cty]
+  (if-let [flt (seq (filter #(= (% "name") cty) LAST-R))]
+  (let [ct (first flt)
+         [lat1 lon1] (our-center)
+         lat2 (read-string (ct "lat"))
+         lon2 (read-string (ct "lng"))
+         dis (geo/distance-nm [lat1 lon1] [lat2 lon2])
+         bea (geo/bear-deg [lat1 lon1] [lat2 lon2])
+         html (str "<h3>" cty "</h3>"
+	"страна: " cnt "<br>"
 	"latitude: " lat2 "<br>"
 	"longitude: " lon2 "<br>"
 	"direction: " (gn/direction bea)

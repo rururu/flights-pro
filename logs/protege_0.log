@@ -1636,3 +1636,12 @@ Was expecting one of:
 2017.03.26 19:07:59.031 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 4 sec (ui) -- ProjectManager$3.run()
 2017.03.26 22:31:09.669 MSK INFO: Project load time for file:/Users/ru/clojure/fligts-pro/pro-projects/GeoNames.pprj: 0 sec -- ProjectChooser.loadProject()
 2017.03.26 22:31:10.154 MSK INFO: UI display time = 0 sec -- ProjectManager$2.run()
+2017.03.27 10:14:24.639 MSK INFO: *** SYSTEM START ***
+2017.03.27 10:14:26.797 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.03.27 10:14:41.000 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj = 1 sec (project) + 4 sec (ui) -- ProjectManager$3.run()
+2017.03.27 21:43:34.671 MSK INFO: *** SYSTEM START ***
+2017.03.27 21:43:35.793 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.03.27 21:43:41.542 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 2 sec (ui) -- ProjectManager$3.run()
+2017.03.27 21:47:29.277 MSK INFO: *** SYSTEM START ***
+2017.03.27 21:47:30.130 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.03.27 21:47:37.623 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 2 sec (ui) -- ProjectManager$3.run()

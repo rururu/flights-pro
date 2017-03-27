@@ -239,8 +239,8 @@
 	       :country sel}
 	#(select-airport sel %))))
 ([cnt aps]
-  (am/selector "element" 2 "chart.client" "airports" aps :itself 130)
-  (defn handler2 [sel]
+  (am/selector "element" 20 "chart.client" "airports" aps :itself 130)
+  (defn handler20 [sel]
     (am/ask-server {:question "es"
 	      :predicate "User Answer"
 	      :subject "selected airport"
@@ -248,6 +248,25 @@
                               :adjunct cnt} 
 	(fn [r]))
     (am/clear-dialog))))
+
+(defn select-global-city [param]
+  (if-let [cns (:countries param)]
+  (do (am/selector "element" 1 "chart.client" "countries" cns :itself 130)
+        (defn handler1 [sel]
+          (am/ask-server {:question "es"
+	:predicate "User Answer"
+	:subject "selected country"
+	:object sel} 
+	(fn [r]))))
+  (if-let [cts (:cities param)]
+    (do (am/selector "element" 20 "chart.client" "cities" cts :itself 130)
+      (defn handler20 [sel]
+        (am/ask-server {:question "es"
+	:predicate "User Answer"
+	:subject "selected city"
+	:object sel} 
+	(fn [r]))
+        (am/clear-dialog))))))
 
 (defn instructions-handler [response]
   (doseq [{:keys [instruct] :as ins} (read-transit response)]
@@ -274,8 +293,9 @@
     :clear-placemarks (clear-placemarks)
     :add-link (let [{:keys [ids options]} ins]
 	(add-link ids options))
-    :ask-user (let [{:keys [question]} ins]
-	(condp = 
+    :ask-user (let [{:keys [question param]} ins]
+	(condp = question
+	  "global city" (select-global-city param)
 	  "airport" (select-airport)))
     (println (str "Unknown instruction: " [instruct ins])))))
 
