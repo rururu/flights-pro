@@ -18,7 +18,7 @@
                :coord [0 0]
                :altitude 0
                :speed 0
-               :course 0
+               :course 270
                :step-hrs (double (/ (:carrier TIO) 3600000))
                :bank-params [12 16 64 2]
                :rudder {:target 0

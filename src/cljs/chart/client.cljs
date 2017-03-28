@@ -249,7 +249,7 @@
 	(fn [r]))
     (am/clear-dialog))))
 
-(defn select-global-city [param]
+(defn select-city [param]
   (if-let [cns (:countries param)]
   (do (am/selector "element" 1 "chart.client" "countries" cns :itself 130)
         (defn handler1 [sel]
@@ -295,7 +295,7 @@
 	(add-link ids options))
     :ask-user (let [{:keys [question param]} ins]
 	(condp = question
-	  "global city" (select-global-city param)
+	  "city" (select-city param)
 	  "airport" (select-airport)))
     (println (str "Unknown instruction: " [instruct ins])))))
 

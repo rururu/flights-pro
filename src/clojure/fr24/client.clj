@@ -10,7 +10,7 @@
 (def F24 {:url-flights "http://data-live.flightradar24.com/zones/fcgi/feed.js"
  :url-airports "http://www.flightradar24.com/_json/airports.php"
  :url-flight-data "http://data-live.flightradar24.com/clickhandler/?version=1.5&flight="
- :time-out 12000})
+ :time-out 18000})
 (def BBX (volatile! {:n 0 :s 0 :w 0 :e 0 :z 0}))
 (def FLIGHTS (volatile! {}))
 (def AIRPORTS (volatile! nil))

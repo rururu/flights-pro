@@ -111,7 +111,7 @@
 
 (defn placemark-info [id]
   (when-let [dati (.getInstance *kb* (.substring id 2))]
-  ;;(decorate-instance dati)
+  (decorate-instance dati)
   (point-out-place {:instance dati})
   (asp/pump-in (:ins-chn @COMM) 
 	(placemark-popup-instruct dati))))
@@ -407,7 +407,19 @@ nil)
     (def LAST-R gns)
     (sort (map #(% "name") gns)))))
 
-(defn pump-far-glo-city [cnt cty]
+(defn local-cities []
+  (let [[lat lon] (our-center)
+       gns (gn/call-geonames-search 
+	{:east (+ lon 1.0)	;; + 1 degree (~ 60 NM)
+	 :west (- lon 1.0)
+	 :north (+ lat 1.0)
+	 :south (- lat 1.0)	;; square (120x120 MN)
+	 :cities "cities1000" 
+	 :orderby "population"})]
+  (def LAST-R gns)
+  (sort (map #(% "name") gns))))
+
+(defn pump-far-city [cnt cty]
   (if-let [flt (seq (filter #(= (% "name") cty) LAST-R))]
   (let [ct (first flt)
          [lat1 lon1] (our-center)

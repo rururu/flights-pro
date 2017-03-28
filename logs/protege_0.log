@@ -1645,3 +1645,12 @@ Was expecting one of:
 2017.03.27 21:47:29.277 MSK INFO: *** SYSTEM START ***
 2017.03.27 21:47:30.130 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
 2017.03.27 21:47:37.623 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 2 sec (ui) -- ProjectManager$3.run()
+2017.03.28 10:10:28.636 MSK INFO: *** SYSTEM START ***
+2017.03.28 10:10:30.173 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.03.28 10:10:39.087 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 4 sec (ui) -- ProjectManager$3.run()
+2017.03.28 21:09:51.482 MSK INFO: *** SYSTEM START ***
+2017.03.28 21:09:54.523 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.03.28 21:10:04.808 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 3 sec (ui) -- ProjectManager$3.run()
+2017.03.28 22:19:28.402 MSK INFO: *** SYSTEM START ***
+2017.03.28 22:19:29.756 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.03.28 22:19:36.358 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 3 sec (ui) -- ProjectManager$3.run()
