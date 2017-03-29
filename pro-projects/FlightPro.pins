@@ -1,4 +1,4 @@
-; Tue Mar 28 22:33:21 MSK 2017
+; Wed Mar 29 21:11:45 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -768,7 +768,7 @@
 
 ([FlightPro_Class210011] of  CloVar
 
-	(source "{:url-flights \"http://data-live.flightradar24.com/zones/fcgi/feed.js\"\n :url-airports \"http://www.flightradar24.com/_json/airports.php\"\n :url-flight-data \"http://data-live.flightradar24.com/clickhandler/?version=1.5&flight=\"\n :time-out 18000}")
+	(source "{:url-flights \"http://data-live.flightradar24.com/zones/fcgi/feed.js\"\n :url-airports \"http://www.flightradar24.com/_json/airports.php\"\n :url-flight-data \"http://data-live.flightradar24.com/clickhandler/?version=1.5&flight=\"\n :time-out 15000}")
 	(title "F24"))
 
 ([FlightPro_Class210012] of  CloFunction
@@ -935,7 +935,7 @@
 
 ([FlightPro_Class250010] of  Rule
 
-	(lhs "?ob (Onboard time ?t0 callsign ?cs)\n(Flight age \"CURRENT\" \n	callsign ?cs\n	coord ?crd1 \n	time ?t1 \n	(<= ?t0 ?t1))\n(Flight age \"NEW\"\n	callsign ?cs\n	course ?crs2 \n	coord ?crd2 \n	speed ?spd2 \n	altitude ?alt2\n	status ?s2\n	time ?t2\n	(not= ?crd1 ?crd2))")
+	(lhs "?ob (Onboard time ?t0 callsign ?cs)\n(Flight age \"CURRENT\" \n	callsign ?cs\n	coord ?crd1 \n	time ?t1 \n	(<= ?t0 ?t1))\n(Flight age \"NEW\"\n	callsign ?cs\n	course ?crs2 \n	coord ?crd2 \n	speed ?spd2 \n	altitude ?alt2\n	status ?s2\n	time ?t2)")
 	(rhs "(modify ?ob time ?t2)\n(es/fly-onboard-to ?cs ?crs2 ?crd2 ?spd2 ?alt2 (- ?t2 ?t1))")
 	(salience 0)
 	(title "af:FlyOnboardTo"))
@@ -1541,7 +1541,7 @@
 
 ([FlightPro_Class330004] of  CloVar
 
-	(source "{:carrier 1000\n :camera 2222\n :directives 911\n :instructions 979\n :vehicles 200\n :display 831\n :manual-data 6000\n :ext-data-popup 60000}")
+	(source "{:carrier 1000\n :camera 3030\n :directives 911\n :instructions 979\n :vehicles 200\n :display 831\n :manual-data 6000\n :ext-data-popup 60000}")
 	(title "TIO"))
 
 ([FlightPro_Class330005] of  CloFunction
@@ -1912,7 +1912,7 @@
 
 ([FlightPro_Class420021] of  CloFunction
 
-	(source "(println [:CMD-MOVE-TO params])\n(let [{:keys [country airport]} params]\n  (if-let [apt (get-in (fr24/airports-by-country) [country airport])]\n    (let [iata (apt \"iata\")\n           alt (apt \"alt\")\n           crd [(apt \"lat\") (apt \"lon\")]]\n      (foc-apt-ins apt)\n      (if (= TERRAIN \"yes\")\n        (def APT-ALT alt)) \n      (set-map-view crd)\n      (println :Airport country airport iata crd alt))))\n\"\"")
+	(source "(println [:CMD-MOVE-TO params])\n(let [{:keys [country airport]} params]\n  (if-let [apt (get-in (fr24/airports-by-country) [country airport])]\n    (let [iata (apt \"iata\")\n           alt (apt \"alt\")\n           crd [(apt \"lat\") (apt \"lon\")]]\n      (foc-apt-ins apt)\n      (def APT-ALT (if (= TERRAIN \"yes\")\n	      (+ alt 300)\n	      100))\n      (set-map-view crd)\n      (println :Airport country airport iata crd alt))))\n\"\"")
 	(title "move-to [params]"))
 
 ([FlightPro_Class430000] of  CloFunction
