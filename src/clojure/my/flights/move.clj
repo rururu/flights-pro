@@ -7,7 +7,7 @@
 (def PID180 (/ Math/PI 180))
 (def NMRAD (/ Math/PI 10800))
 (def TIO {:carrier 1000
- :camera 2222
+ :camera 3030
  :directives 911
  :instructions 979
  :vehicles 200

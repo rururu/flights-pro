@@ -1,4 +1,4 @@
-; Wed Mar 29 21:11:45 MSK 2017
+; Thu Mar 30 22:34:13 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -935,15 +935,15 @@
 
 ([FlightPro_Class250010] of  Rule
 
-	(lhs "?ob (Onboard time ?t0 callsign ?cs)\n(Flight age \"CURRENT\" \n	callsign ?cs\n	coord ?crd1 \n	time ?t1 \n	(<= ?t0 ?t1))\n(Flight age \"NEW\"\n	callsign ?cs\n	course ?crs2 \n	coord ?crd2 \n	speed ?spd2 \n	altitude ?alt2\n	status ?s2\n	time ?t2)")
-	(rhs "(modify ?ob time ?t2)\n(es/fly-onboard-to ?cs ?crs2 ?crd2 ?spd2 ?alt2 (- ?t2 ?t1))")
+	(lhs "?ob (Onboard time ?t0 callsign ?cs)\n(Flight age \"CURRENT\" \n	callsign ?cs\n	course ?crs1 \n	coord ?crd1 \n	speed ?spd1\n	altitude ?alt1\n	time ?t1 \n	(<= ?t0 ?t1))\n(Flight age \"NEW\"\n	callsign ?cs\n	course ?crs2 \n	coord ?crd2 \n	speed ?spd2 \n	altitude ?alt2\n	time ?t2)")
+	(rhs "(println :FOB ?cs)\n(modify ?ob time ?t2)\n(es/fly-onboard-to ?cs ?crs1 ?crs2 ?crd1 ?crd2 ?spd1 ?spd2 ?alt1 ?alt2)")
 	(salience 0)
 	(title "af:FlyOnboardTo"))
 
 ([FlightPro_Class250011] of  CloFunction
 
-	(source "(if (not ONB-PAUSE)\n  (let [crd3 (geo/future-pos crd2 crs2 spd2 (/ per 3600))\n         per3 (* 2 per)]\n    (asp/pump-in (:directives cmd/CHN)\n	{:directive :fly-onboard\n	 :callsign csn\n	 :vehicle {\n	   :coord crd2\n	   :altitude (if (< alt2 cmd/APT-ALT) cmd/APT-ALT alt2)\n	   :speed spd2\n	   :course crs2}\n	 :period per3})))")
-	(title "fly-onboard-to [csn crs2 crd2 spd2 alt2 per]"))
+	(source "(if (not ONB-PAUSE)\n  (let [[lat1 lon1] crd1\n         [lat2 lon2] crd2\n         alt (float (/ (+ alt1 alt2) 2))]\n    (asp/pump-in (:directives cmd/CHN)\n	{:directive :carrier\n	 :callsign cs\n	 :vehicle {\n	   :coord [(double (/ (+ lat1 lat2) 2)) \n	               (double (/ (+ lon1 lon2) 2))]\n	   :altitude (if (< alt cmd/APT-ALT) cmd/APT-ALT alt)\n	   :speed (float (/ (+ spd1 spd2) 2))\n	   :course (int (/ (+ crs1 crs2) 2))}})))")
+	(title "fly-onboard-to [cs crs1 crs2 crd1 crd2 spd1 spd2 alt1 alt2]"))
 
 ([FlightPro_Class260000] of  CloFunction
 
@@ -957,8 +957,8 @@
 
 ([FlightPro_Class260003] of  CloFunction
 
-	(source "(def ONB-PAUSE true)\n(asp/delayer #(def ONB-PAUSE false) 8000)\n(asp/pump-in (:directives cmd/CHN)\n	{:directive :carrier\n	 :callsign csg\n	 :vehicle {:coord crd\n	               :course crs\n	               :speed spd\n	               :altitude (if (< alt cmd/APT-ALT) cmd/APT-ALT alt)}})")
-	(title "go-onboard [csg crd crs spd alt]"))
+	(source "(def ONB-PAUSE true)\n(asp/delayer #(def ONB-PAUSE false) 12000)\n(asp/pump-in (:directives cmd/CHN)\n	{:directive :carrier\n	 :go-onboard true\n	 :callsign cs\n	 :vehicle {:coord crd\n	               :course crs\n	               :speed spd\n	               :altitude (if (< alt cmd/APT-ALT) cmd/APT-ALT alt)}})")
+	(title "go-onboard [cs crd crs spd alt]"))
 
 ([FlightPro_Class270000] of  CloFunction
 
@@ -1912,7 +1912,7 @@
 
 ([FlightPro_Class420021] of  CloFunction
 
-	(source "(println [:CMD-MOVE-TO params])\n(let [{:keys [country airport]} params]\n  (if-let [apt (get-in (fr24/airports-by-country) [country airport])]\n    (let [iata (apt \"iata\")\n           alt (apt \"alt\")\n           crd [(apt \"lat\") (apt \"lon\")]]\n      (foc-apt-ins apt)\n      (def APT-ALT (if (= TERRAIN \"yes\")\n	      (+ alt 300)\n	      100))\n      (set-map-view crd)\n      (println :Airport country airport iata crd alt))))\n\"\"")
+	(source "(println [:CMD-MOVE-TO params])\n(let [{:keys [country airport]} params]\n  (if-let [apt (get-in (fr24/airports-by-country) [country airport])]\n    (let [iata (apt \"iata\")\n           alt (apt \"alt\")\n           crd [(apt \"lat\") (apt \"lon\")]]\n      (foc-apt-ins apt)\n      (def APT-ALT (if (= TERRAIN \"yes\")\n	      (+ alt 300)\n	      60))\n      (set-map-view crd)\n      (println :Airport country airport iata crd alt))))\n\"\"")
 	(title "move-to [params]"))
 
 ([FlightPro_Class430000] of  CloFunction
@@ -2509,7 +2509,7 @@
 
 ([FlightPro_Class610000] of  CloVar
 
-	(source "\"yes\"")
+	(source "\"no\"")
 	(title "TERRAIN"))
 
 ([FlightPro_Class610001] of  CloFunction
@@ -3086,46 +3086,46 @@
 	(language English-en)
 	(max-responses 40)
 	(responses
-		[FlightPro_Class870689]
-		[FlightPro_Class870690]
-		[FlightPro_Class870691]
-		[FlightPro_Class870692]
-		[FlightPro_Class870693]
-		[FlightPro_Class870694]
-		[FlightPro_Class870695]
-		[FlightPro_Class870696]
-		[FlightPro_Class870697]
-		[FlightPro_Class870698]
-		[FlightPro_Class870699]
-		[FlightPro_Class870700]
-		[FlightPro_Class870701]
-		[FlightPro_Class870702]
-		[FlightPro_Class870703]
-		[FlightPro_Class870704]
-		[FlightPro_Class870705]
-		[FlightPro_Class870706]
-		[FlightPro_Class870707]
-		[FlightPro_Class870708]
-		[FlightPro_Class870709]
-		[FlightPro_Class870710]
-		[FlightPro_Class870711]
-		[FlightPro_Class870712]
-		[FlightPro_Class870713]
-		[FlightPro_Class870714]
-		[FlightPro_Class870715]
-		[FlightPro_Class870716]
-		[FlightPro_Class870717]
-		[FlightPro_Class870718]
-		[FlightPro_Class870719]
-		[FlightPro_Class870720]
-		[FlightPro_Class870721]
-		[FlightPro_Class870722]
-		[FlightPro_Class870723]
-		[FlightPro_Class870724]
-		[FlightPro_Class870725]
-		[FlightPro_Class870726]
-		[FlightPro_Class870727]
-		[FlightPro_Class870728]))
+		[FlightPro_Class860040]
+		[FlightPro_Class860041]
+		[FlightPro_Class860042]
+		[FlightPro_Class860043]
+		[FlightPro_Class860044]
+		[FlightPro_Class860045]
+		[FlightPro_Class860046]
+		[FlightPro_Class860047]
+		[FlightPro_Class860048]
+		[FlightPro_Class860049]
+		[FlightPro_Class860050]
+		[FlightPro_Class860051]
+		[FlightPro_Class860052]
+		[FlightPro_Class860053]
+		[FlightPro_Class860054]
+		[FlightPro_Class860055]
+		[FlightPro_Class860056]
+		[FlightPro_Class860057]
+		[FlightPro_Class860058]
+		[FlightPro_Class860059]
+		[FlightPro_Class860060]
+		[FlightPro_Class860061]
+		[FlightPro_Class860062]
+		[FlightPro_Class860063]
+		[FlightPro_Class860064]
+		[FlightPro_Class860065]
+		[FlightPro_Class860066]
+		[FlightPro_Class860067]
+		[FlightPro_Class860068]
+		[FlightPro_Class860069]
+		[FlightPro_Class860070]
+		[FlightPro_Class860071]
+		[FlightPro_Class860072]
+		[FlightPro_Class860073]
+		[FlightPro_Class860074]
+		[FlightPro_Class860075]
+		[FlightPro_Class860076]
+		[FlightPro_Class860077]
+		[FlightPro_Class860078]
+		[FlightPro_Class860079]))
 
 ([FlightPro_Class660024] of  CloFunction
 
@@ -3194,7 +3194,7 @@
 ([FlightPro_Class670008] of  BBX
 
 	(title "Current")
-	(wsen 1.4804077 48.23199 3.8919067 50.062428))
+	(wsen -0.53318024 51.368996 -0.23174286 51.586884))
 
 ([FlightPro_Class670041] of  TypeName
 
@@ -3651,7 +3651,7 @@
 
 ([FlightPro_Class80003] of  CloFunction
 
-	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :manual (if (= (:mode @CARRIER) \"?\")\n	(carrier \"MANUAL\" (manual-vehicle))\n	(vswap! CARRIER assoc :mode \"MANUAL\"))\n    :callsigns (let [{:keys [list]} dir]\n	(ctl/callsigns (conj list \"manual\")))\n    :carrier (let [{:keys [callsign vehicle]} dir]\n	(carrier callsign vehicle))\n    :fly-onboard (let [{:keys [callsign vehicle period]} dir]\n	(if (not (= (:mode @CARRIER) \"MANUAL\"))\n	  (carrier callsign vehicle)))\n    (println (str \"Unknown directive: \" [directive dir]))))")
+	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :manual (if (= (:mode @CARRIER) \"?\")\n	(carrier \"MANUAL\" (manual-vehicle))\n	(vswap! CARRIER assoc :mode \"MANUAL\"))\n    :callsigns (let [{:keys [list]} dir]\n	(ctl/callsigns (conj list \"manual\")))\n    :carrier (let [{:keys [callsign vehicle go-onboard]} dir]\n	(if go-onboard\n	  (vswap! CARRIER assoc :mode callsign))\n	(if (not (= (:mode @CARRIER) \"MANUAL\"))\n	  (carrier callsign vehicle)))\n    (println (str \"Unknown directive: \" [directive dir]))))")
 	(title "directives-handler [response]"))
 
 ([FlightPro_Class80004] of  CloFunction
@@ -3834,6 +3834,72 @@
 	(source "(or (> (Math/abs (- lat1 lat2)) 0.02)\n     (> (Math/abs (- lon1 lon2)) 0.02))")
 	(title "obsolete [[lat1 lon1] [lat2 lon2]]"))
 
+([FlightPro_Class850000] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 30)
+	(feature "city")
+	(lang "en")
+	(lat 51.5155)
+	(lng -0.0922)
+	(rank 100)
+	(summary "The City of London is a city within London. The City constituted most of London from its settlement by the Romans in the 1st century AD to the Middle Ages, but the conurbation has since grown far beyond its borders (...)")
+	(title "City of London")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/City_of_London"))
+
+([FlightPro_Class850001] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 26)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 51.5084)
+	(lng -0.1254)
+	(rank 100)
+	(summary "Greater London is an administrative area, ceremonial county and the London region of England.Travers, T., The Politics of London, (2004) It was created on 1 April 1965, comprising the City of London and 32 London boroughs, of which 12 are Inner London and 20 Outer London boroughs (...)")
+	(title "Greater London")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Greater_London"))
+
+([FlightPro_Class850002] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 35)
+	(lang "en")
+	(lat 51.5211)
+	(lng -0.1289)
+	(rank 100)
+	(summary "The University of London is a federal public university in London, United Kingdom. It comprises 18 constituent colleges, 10 research institutes and a number of central bodies. It is the second-largest university in the United Kingdom by number of full-time students, with around 135,000 campus-based (...)")
+	(title "University of London")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/University_of_London"))
+
+([FlightPro_Class850003] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 30)
+	(lang "en")
+	(lat 51.512)
+	(lng -0.1228)
+	(rank 100)
+	(summary "Covent Garden is a district in London on the eastern fringes of the West End, between St. Martin's Lane and Drury Lane. It is associated with the former fruit and vegetable market in the central square, now a popular shopping and tourist site, and the Royal Opera House, which is also known as (...)")
+	(title "Covent Garden")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Covent_Garden"))
+
+([FlightPro_Class850004] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 15)
+	(feature "city")
+	(lang "en")
+	(lat 51.463)
+	(lng -0.106)
+	(rank 100)
+	(summary "Brixton is a district in the London Borough of Lambeth in South London, England. It is south south-east of Charing Cross. The area is identified in the London Plan as one of 35 major centres in Greater London. Brixton is mainly residential with a prominent street market and substantial retail sector (...)")
+	(title "Brixton")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Brixton"))
+
 ([FlightPro_Class850005] of  Rule
 
 	(lhs "?q (Question predicate \"How many\"\n	subject \"airplanes\"\n	object ?ob\n	(not= ?ob \"in the air\"))")
@@ -3862,6 +3928,894 @@
 ([FlightPro_Class860003] of  CloFuncall
 
 	(source "(ru.rules/pp :all)"))
+
+([FlightPro_Class860008] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 46)
+	(feature "city")
+	(lang "en")
+	(lat 51.3727)
+	(lng -0.1099)
+	(rank 98)
+	(summary "Croydon is a large town in south London, England, in the London Borough of Croydon. south of Charing Cross. It is identified in the London Plan as one of 11 metropolitan centres in Greater London. Croydon lies on a transport corridor between central London and the south coast of England, to the (...)")
+	(title "Croydon")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Croydon"))
+
+([FlightPro_Class860009] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 99)
+	(feature "city")
+	(lang "en")
+	(lat 51.5541)
+	(lng -0.1744)
+	(rank 98)
+	(summary "Hampstead (or), commonly known as Hampstead Village, is an area of London, England, north-west of Charing Cross. Part of the London Borough of Camden in Inner London, it is known for its intellectual, liberal, artistic, musical and literary associations and for Hampstead Heath, a large, hilly (...)")
+	(title "Hampstead")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Hampstead"))
+
+([FlightPro_Class860010] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 26)
+	(feature "city")
+	(lang "en")
+	(lat 51.5262)
+	(lng -0.1178)
+	(rank 98)
+	(summary "Bloomsbury is an area of the London Borough of Camden, in central London, between Euston Road and Holborn, developed by the Russell family in the 17th and 18th centuries into a fashionable residential area. It is notable for its array of garden squares,. Retrieved 8 March 2007 (...)")
+	(title "Bloomsbury")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Bloomsbury"))
+
+([FlightPro_Class860011] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 18)
+	(feature "city")
+	(lang "en")
+	(lat 51.5165)
+	(lng -0.075)
+	(rank 98)
+	(summary "Whitechapel is a district within East London, England, in the London Borough of Tower Hamlets. It is located east of Charing Cross and roughly bounded by the Bishopsgate thoroughfare on the west, Fashion Street on the north, Brady Street and Cavell Street on the east and The Highway on the south (...)")
+	(title "Whitechapel")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Whitechapel"))
+
+([FlightPro_Class860012] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 17)
+	(feature "Landmark")
+	(lang "en")
+	(lat 51.498)
+	(lng -0.1545)
+	(rank 98)
+	(summary "Belgravia is a district of west London in the City of Westminster and the Royal Borough of Kensington and Chelsea. Noted for its immensely expensive residential properties, it is one of the wealthiest districts in the world (...)")
+	(title "Belgravia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Belgravia"))
+
+([FlightPro_Class860014] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 41)
+	(feature "city")
+	(lang "en")
+	(lat 51.544)
+	(lng -0.1027)
+	(rank 98)
+	(summary "Islington is a district in Greater London, England, and part of the London Borough of Islington. It is a mainly residential district of Inner London, extending from Islington High Street to Highbury Fields, encompassing the area around the busy Upper Street, Essex Road and Southgate Road to the east (...)")
+	(title "Islington")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Islington"))
+
+([FlightPro_Class860016] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 34)
+	(feature "city")
+	(lang "en")
+	(lat 51.5177)
+	(lng -0.147)
+	(rank 98)
+	(summary "Marylebone (or) is an affluent inner-city area of central London, located within the City of Westminster. It is sometimes written as St. Marylebone (or, archaically, Mary-le-bone). Marylebone is in an area of London that can be roughly defined as bounded by Oxford Street to the south, Marylebone (...)")
+	(title "Marylebone")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Marylebone"))
+
+([FlightPro_Class860017] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 14)
+	(feature "city")
+	(lang "en")
+	(lat 51.4928)
+	(lng -0.2229)
+	(rank 98)
+	(summary "Hammersmith is a district in west London, England, in the London Borough of Hammersmith and Fulham, approximately five miles (eight kilometres) west of Charing Cross on the north bank of the River Thames. One of west London's key transport hubs and commercial and employment centres, and home to (...)")
+	(title "Hammersmith")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Hammersmith"))
+
+([FlightPro_Class860021] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 13)
+	(feature "city")
+	(lang "en")
+	(lat 51.4649)
+	(lng -0.2211)
+	(rank 98)
+	(summary "Putney is a district in south-west London, UK, located in the London Borough of Wandsworth. It is situated south-west of Charing Cross. The area is identified in the London Plan as one of 35 major centres in Greater London.  (...)")
+	(title "Putney")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Putney"))
+
+([FlightPro_Class860023] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 6)
+	(feature "city")
+	(lang "en")
+	(lat 51.4813)
+	(lng -0.1197)
+	(rank 98)
+	(summary "Kennington is a district situated in Central London, England, south of the River Thames. It is mainly within the London Borough of Lambeth, although parts of the district fall within the London Borough of Southwark (...)")
+	(title "Kennington")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kennington"))
+
+([FlightPro_Class860024] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 32)
+	(feature "city")
+	(lang "en")
+	(lat 51.541)
+	(lng -0.1433)
+	(population 24538)
+	(rank 98)
+	(summary "Camden Town, often shortened to Camden (ambiguously also used for the much larger London Borough of Camden of which it is the central neighbourhood), is a district of Inner London in northwest London, England. It is located north-northwest of Charing Cross and is one of the 35 major centres (...)")
+	(title "Camden Town")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Camden_Town"))
+
+([FlightPro_Class860025] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 28)
+	(feature "city")
+	(lang "en")
+	(lat 51.5615)
+	(lng -0.0731)
+	(rank 98)
+	(summary "Stoke Newington is a district in the London Borough of Hackney. It is north-east of Charing Cross.  (...)")
+	(title "Stoke Newington")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Stoke_Newington"))
+
+([FlightPro_Class860026] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 11)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.5071)
+	(lng -0.1141)
+	(rank 98)
+	(summary "The Royal National Theatre (generally known as the National Theatre) in London is one of the United Kingdom's three most prominent publicly funded theatre companies, alongside the Royal Shakespeare Company and the Royal Opera House (...)")
+	(title "Royal National Theatre")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Royal_National_Theatre"))
+
+([FlightPro_Class860027] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 43)
+	(feature "city")
+	(lang "en")
+	(lat 51.5172)
+	(lng -0.173)
+	(rank 98)
+	(summary "Paddington is a district within the City of Westminster, in west London. Formerly a metropolitan borough, it was integrated with Westminster and Greater London in 1965. Three important landmarks of the district are Paddington station, designed by the celebrated engineer Isambard Kingdom Brunel and (...)")
+	(title "Paddington")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Paddington"))
+
+([FlightPro_Class860028] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 29)
+	(feature "city")
+	(lang "en")
+	(lat 51.5088)
+	(lng -0.1474)
+	(rank 97)
+	(summary "Mayfair (originally called The May Fair) is an area of central London, by the east edge of Hyde Park, in the City of Westminster. The district is now mainly commercial, with many former homes converted into offices for major corporations headquarters, embassies and also hedge funds and real estate (...)")
+	(title "Mayfair")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Mayfair"))
+
+([FlightPro_Class860030] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 12)
+	(feature "city")
+	(lang "en")
+	(lat 51.4638)
+	(lng -0.1677)
+	(rank 97)
+	(summary "Battersea is an area of the London Borough of Wandsworth, England. It is an inner-city district of South London in fare zone 2, situated on the south side of the River Thames, 2.9 miles (4.8 km) south-west of Charing Cross. Battersea spans from Fairfield in the west to Queenstown in the east (...)")
+	(title "Battersea")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Battersea"))
+
+([FlightPro_Class860031] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 40)
+	(feature "city")
+	(lang "en")
+	(lat 51.5172)
+	(lng -0.1182)
+	(rank 97)
+	(summary "Holborn is an area of central London and also the name of the area's principal street, known as High Holborn between St. Giles's High Street and Gray's Inn Road (the junction being roughly where Holborn Bar—the entrance to the City of London—once was) and then Holborn Viaduct between Holborn Circus (...)")
+	(title "Holborn")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Holborn"))
+
+([FlightPro_Class860032] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 71)
+	(feature "city")
+	(lang "en")
+	(lat 51.5837)
+	(lng -0.2252)
+	(rank 97)
+	(summary "Hendon is a London suburb situated in the London Borough of Barnet. northwest of Charing Cross. Hendon was ancient parish in the county of Middlesex and has formed part of Greater London since 1965.http://www.visionofbritain.org.uk/unit/10130293  (...)")
+	(title "Hendon")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Hendon"))
+
+([FlightPro_Class860034] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 7)
+	(feature "city")
+	(lang "en")
+	(lat 51.4903)
+	(lng -0.1193)
+	(rank 97)
+	(summary "Vauxhall is an inner city area of Central London in the London Borough of Lambeth. It was once in the historic county of Surrey. It has also given its name to the Vauxhall Parliamentary Constituency, which also includes parts of Brixton and Clapham, and to the Vauxhall Motors car manufacturer, which (...)")
+	(title "Vauxhall")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Vauxhall"))
+
+([FlightPro_Class860035] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 23)
+	(lang "en")
+	(lat 51.4999)
+	(lng -0.1621)
+	(rank 97)
+	(summary "Knightsbridge is a road which gives its name to an exclusive district in west London. The road runs along the south side of Hyde Park, west from Hyde Park Corner, spanning the City of Westminster and the Royal Borough of Kensington and Chelsea (...)")
+	(title "Knightsbridge")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Knightsbridge"))
+
+([FlightPro_Class860036] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 39)
+	(feature "city")
+	(lang "en")
+	(lat 51.4457)
+	(lng -0.0779)
+	(rank 97)
+	(summary "Dulwich is an area of South London, England. The settlement is mostly in the London Borough of Southwark with parts in the London Borough of Lambeth. Dulwich, consisting of East Dulwich, West Dulwich and Dulwich Village lies in a valley between the neighbouring districts of Camberwell, Crystal (...)")
+	(title "Dulwich")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Dulwich"))
+
+([FlightPro_Class860037] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 49)
+	(feature "city")
+	(lang "en")
+	(lat 51.5548)
+	(lng -0.2176)
+	(rank 97)
+	(summary "Cricklewood is an area in north-west London, England, situated 5 miles (8.2 km) northwest of Charing Cross. It lies between Willesden Green and Dollis Hill to the west, Brondesbury and Kilburn to the south, West Hampstead and Child's Hill to the south-east and east, and Brent Cross to the north (...)")
+	(title "Cricklewood")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Cricklewood"))
+
+([FlightPro_Class860039] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 111)
+	(feature "Landmark")
+	(lang "en")
+	(lat 51.5716)
+	(lng -0.1448)
+	(rank 97)
+	(summary "Highgate (or) is a suburban area of North London on the north-eastern corner of Hampstead Heath. Highgate is one of the most expensive London suburbs in which to live. It has an active conservation body, the Highgate Society, to protect its character (...)")
+	(title "Highgate")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Highgate"))
+
+([FlightPro_Class860040] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 55)
+	(feature "adm1st")
+	(lang "en")
+	(lat 51.5334)
+	(lng -0.4526)
+	(rank 100)
+	(summary "The London Borough of Hillingdon (pronunciation) is the westernmost borough in Greater London, England which had a population of 273,936 according to the 2011 Census. It was formed from the districts of Hayes and Harlington, Ruislip-Northwood, Uxbridge, and Yiewsley and West Drayton in the historic (...)")
+	(title "London Borough of Hillingdon")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/London_Borough_of_Hillingdon"))
+
+([FlightPro_Class860041] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 28)
+	(feature "railwaystation")
+	(lang "en")
+	(lat 51.5067)
+	(lng -0.2853)
+	(rank 100)
+	(summary "The District line is a London Underground service that crosses Greater London from east to west. From Upminster, the eastern terminus, the line runs through Central London to Earl's Court before dividing into three western branches, to Ealing Broadway, Wimbledon and Richmond (...)")
+	(title "District line")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/District_line"))
+
+([FlightPro_Class860042] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 10)
+	(feature "city")
+	(lang "en")
+	(lat 51.4123)
+	(lng -0.3004)
+	(rank 100)
+	(summary "The Royal Borough of Kingston upon Thames is a borough in southwest London, England. The main town is Kingston upon Thames and it includes Surbiton, Chessington, New Malden, Tolworth and part of Worcester Park. It is the oldest of the four Royal Boroughs in England (...)")
+	(title "Royal Borough of Kingston upon Thames")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Royal_Borough_of_Kingston_upon_Thames"))
+
+([FlightPro_Class860043] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 11)
+	(feature "city")
+	(lang "en")
+	(lat 51.4925)
+	(lng -0.2633)
+	(rank 98)
+	(summary "Chiswick is a suburban and urban district of west London, England, and part of the London Borough of Hounslow.Hounslow London Borough Council - . Retrieved on 1 February 2008. It contains Hogarth's House, the former residence of the 18th century English artist William Hogarth; Chiswick House, a (...)")
+	(title "Chiswick")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Chiswick"))
+
+([FlightPro_Class860044] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 35)
+	(feature "city")
+	(lang "en")
+	(lat 51.5111)
+	(lng -0.3058)
+	(rank 98)
+	(summary "Ealing is a suburban district of west London, England and the administrative centre of the London Borough of Ealing. It is located west of Charing Cross and around from the City of London. It is one of the major metropolitan centres identified in the London Plan (...)")
+	(title "Ealing")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ealing"))
+
+([FlightPro_Class860045] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 42)
+	(feature "city")
+	(lang "en")
+	(lat 51.5189)
+	(lng -0.3376)
+	(rank 98)
+	(summary "Hanwell is a town situated in the London Borough of Ealing in west London, between Ealing and Southall. The motto of the Hanwell Urban District Council was Nec Aspera Terrent (“Difficulties be Damned”)  (...)")
+	(title "Hanwell")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Hanwell"))
+
+([FlightPro_Class860046] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 10)
+	(feature "city")
+	(lang "en")
+	(lat 51.4769)
+	(lng -0.2953)
+	(rank 98)
+	(summary "Kew is a district in the London Borough of Richmond upon Thames, west by south-west of Charing Cross; its population at the 2011 Census was 11,436. Kew is the location of the Royal Botanic Gardens (\"Kew Gardens\"), now a World Heritage Site, which includes Kew Palace (...)")
+	(title "Kew")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kew"))
+
+([FlightPro_Class860047] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 36)
+	(feature "city")
+	(lang "en")
+	(lat 51.456)
+	(lng -0.301)
+	(rank 98)
+	(summary "Richmond is an affluent suburban town in south west London, west-southwest of Charing Cross. The town is on a meander of the River Thames, with a large number of parks and open spaces, including Richmond Park, and many protected conservation areas, which include much of Richmond Hill (...)")
+	(title "Richmond, London")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Richmond%2C_London"))
+
+([FlightPro_Class860048] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 43)
+	(feature "city")
+	(lang "en")
+	(lat 51.556)
+	(lng -0.3042)
+	(rank 98)
+	(summary "Wembley is an area of northwest London, England, and part of the London Borough of Brent. It is home to the famous Wembley Stadium and Wembley Arena. Formerly part of the parish of Harrow on the Hill in the county of Middlesex, Wembley formed a separate civil parish from 1894 and was incorporated as (...)")
+	(title "Wembley")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Wembley"))
+
+([FlightPro_Class860049] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 39)
+	(feature "city")
+	(lang "en")
+	(lat 51.5404)
+	(lng -0.4778)
+	(rank 98)
+	(summary "Uxbridge is a large town in west London, England, and the administrative headquarters of the London Borough of Hillingdon. Fifteen miles (24.1 km) west-northwest of Charing Cross, it is one of the major metropolitan centres identified in the London Plan (...)")
+	(title "Uxbridge")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Uxbridge"))
+
+([FlightPro_Class860050] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 11)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.4811)
+	(lng -0.2794)
+	(rank 98)
+	(summary "The National Archives (TNA) is an executive agency of the Ministry of Justice of the United Kingdom. It is \"the UK government's official archive, containing 1,000 years of history\".The National Archives. “”. Retrieved 17 November 2008 (...)")
+	(title "The National Archives (United Kingdom)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/The_National_Archives_%28United_Kingdom%29"))
+
+([FlightPro_Class860051] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 14)
+	(feature "city")
+	(lang "en")
+	(lat 51.4103)
+	(lng -0.2995)
+	(rank 98)
+	(summary "Kingston upon Thames, also known as Kingston, is the principal settlement of the Royal Borough of Kingston upon Thames in southwest London. It was the ancient market town where Saxon kings were crowned. Kingston is situated southwest of Charing Cross and is one of the major metropolitan centres (...)")
+	(title "Kingston upon Thames")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kingston_upon_Thames"))
+
+([FlightPro_Class860052] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 12)
+	(feature "city")
+	(lang "en")
+	(lat 51.4486)
+	(lng -0.3369)
+	(rank 98)
+	(summary "Twickenham is a large London district centred southwest of its centre, Charing Cross which has some homes and the Thames Path National Trail by the River Thames but has its high street away from it. Twickenham's York House buildings have the administrative headquarters of the London Borough of (...)")
+	(title "Twickenham")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Twickenham"))
+
+([FlightPro_Class860053] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 14)
+	(feature "city")
+	(lang "en")
+	(lat 51.3902)
+	(lng -0.5074)
+	(population 15967)
+	(rank 98)
+	(summary "Chertsey is a town in the Runnymede borough of Surrey, England on the River Thames and a tributary, the River Bourne, in the informally defined Greater London Urban Area, bordered by junction 11 of the M25 London orbital motorway, the town of Addlestone and by villages and hamlets (...)")
+	(title "Chertsey")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Chertsey"))
+
+([FlightPro_Class860054] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 11)
+	(feature "city")
+	(lang "en")
+	(lat 51.4666)
+	(lng -0.3363)
+	(rank 98)
+	(summary "__NOTOC__ Isleworth consists of two west London wards, urban and suburban and a small part of a third. It was an early Saxon parish, heavily farmed at the Norman Conquest. It begins east of the town of Hounslow which has more retail and offices, in the borough of that name; west of the River Thames; (...)")
+	(title "Isleworth")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Isleworth"))
+
+([FlightPro_Class860055] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 15)
+	(feature "city")
+	(lang "en")
+	(lat 51.3944)
+	(lng -0.4481)
+	(rank 98)
+	(summary "Shepperton is a largely suburban town/village in the borough of Spelthorne, Surrey in the former historic county of Middlesex in England, south west of Charing Cross, London, bounded by the Thames to the south and in the north-west bisected by the M3 motorway (...)")
+	(title "Shepperton")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Shepperton"))
+
+([FlightPro_Class860056] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 21)
+	(feature "city")
+	(lang "en")
+	(lat 51.4496)
+	(lng -0.4089)
+	(rank 98)
+	(summary "Feltham is an urban and suburban town in the London Borough of Hounslow, at the edge of south-west London. Feltham is centred west south west of the conventional Centre of London and south of Heathrow Airport. Landmarks and economically important sites include a large entertainment park (Leisure (...)")
+	(title "Feltham")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Feltham"))
+
+([FlightPro_Class860057] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 35)
+	(feature "city")
+	(lang "en")
+	(lat 51.5121)
+	(lng -0.3779)
+	(rank 98)
+	(summary "Southall is a large suburban district of west London, England, and part of the London Borough of Ealing. It is situated west of Charing Cross. Neighbouring places include Yeading, Hayes, Hanwell, Heston, Hounslow, Greenford and Northolt (...)")
+	(title "Southall")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Southall"))
+
+([FlightPro_Class860058] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 48)
+	(feature "city")
+	(lang "en")
+	(lat 51.5758)
+	(lng -0.4333)
+	(rank 98)
+	(summary "Ruislip is a suburban area of northwest London, centred on an old village in Greater London and is part of the London Borough of Hillingdon. It was formerly a parish in the county of Middlesex covering the neighbouring areas of Eastcote, Northwood, Ruislip Manor and South Ruislip in the area (...)")
+	(title "Ruislip")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ruislip"))
+
+([FlightPro_Class860059] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 12)
+	(feature "city")
+	(lang "en")
+	(lat 51.3896)
+	(lng -0.3338)
+	(rank 97)
+	(summary "Thames Ditton is a village by and on the River Thames in the Elmbridge borough of Surrey, England. It has a large inhabited Island in the river but is otherwise on the southern bank, 12.2 miles (19.6 km) south-west of Charing Cross (...)")
+	(title "Thames Ditton")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Thames_Ditton"))
+
+([FlightPro_Class860060] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 6)
+	(feature "city")
+	(lang "en")
+	(lat 51.4741)
+	(lng -0.2352)
+	(rank 97)
+	(summary "Barnes is a district in south-west London, England at one end of the London Borough of Richmond upon Thames. It is centred west south-west of Charing Cross in a loop of the River Thames, with Hammersmith Bridge at the north end linking it to the centre of Hammersmith, the nearest entertainment and (...)")
+	(title "Barnes, London")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Barnes%2C_London"))
+
+([FlightPro_Class860061] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 30)
+	(feature "city")
+	(lang "en")
+	(lat 51.3799)
+	(lng -0.2807)
+	(rank 97)
+	(summary "Tolworth is a suburban area of southwest London in the Royal Borough of Kingston upon Thames,http://www.kingston.gov.uk/ located south west of Charing Cross. Neighbouring places include: Long Ditton, New Malden, Kingston, Surbiton, Berrylands, Hinchley Wood, Chessington, Ewell and Worcester Park (...)")
+	(title "Tolworth")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Tolworth"))
+
+([FlightPro_Class860062] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 46)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.5581)
+	(lng -0.283)
+	(rank 97)
+	(summary "Wembley Arena (originally the Empire Pool) is an indoor arena, at Wembley, in the London Borough of Brent. It is located right next to Wembley Stadium.  (...)")
+	(title "Wembley Arena")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Wembley_Arena"))
+
+([FlightPro_Class860063] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 10)
+	(feature "city")
+	(lang "en")
+	(lat 51.4242)
+	(lng -0.3321)
+	(rank 97)
+	(summary "Teddington is a largely suburban town centred on a linear settlement in the London Borough of Richmond upon Thames in south west London, on the north bank of the River Thames, between Hampton Wick and Twickenham; its centre is mid rise urban development. It is south west of Charing Cross (...)")
+	(title "Teddington")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Teddington"))
+
+([FlightPro_Class860064] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 18)
+	(feature "city")
+	(lang "en")
+	(lat 51.3868)
+	(lng -0.4133)
+	(population 24137)
+	(rank 97)
+	(summary "Walton-on-Thames is a town on the River Thames in the Elmbridge borough of Surrey. The town is centred south west of Charing Cross and is between the towns of Weybridge and Molesey. Its waterside has the Thames Path National Trail between Sunbury Lock and Shepperton Lock and, as a post town, Walton (...)")
+	(title "Walton-on-Thames")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Walton-on-Thames"))
+
+([FlightPro_Class860065] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 14)
+	(feature "city")
+	(lang "en")
+	(lat 51.422)
+	(lng -0.419)
+	(rank 97)
+	(summary "Sunbury-on-Thames also known as Sunbury is a suburban town in the Surrey borough of Spelthorne (historically Middlesex), England. Though Sunbury lies just outside the border of Greater London, it does fall within the Greater London Urban Area and is hence largely urban in composition (...)")
+	(title "Sunbury-on-Thames")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Sunbury-on-Thames"))
+
+([FlightPro_Class860066] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 19)
+	(feature "city")
+	(lang "en")
+	(lat 51.4668)
+	(lng -0.3507)
+	(rank 97)
+	(summary "Hounslow is the principal town in the London Borough of Hounslow. It is an urban and suburban district 10.6 miles (17 km) west south-west of Charing Cross. It forms a larger post town in the TW postcode area and is an economic hub within the capital; it has a large shopping centre which adjoins its (...)")
+	(title "Hounslow")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Hounslow"))
+
+([FlightPro_Class860067] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 24)
+	(feature "city")
+	(lang "en")
+	(lat 51.3923)
+	(lng -0.303)
+	(rank 97)
+	(summary "Surbiton, is a suburban area of south-west London within the Royal Borough of Kingston upon Thames. It is situated next to the River Thames, 11.0 miles south west of central London (12 miles by rail from London Waterloo) (...)")
+	(title "Surbiton")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Surbiton"))
+
+([FlightPro_Class860068] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 41)
+	(feature "city")
+	(lang "en")
+	(lat 51.3691)
+	(lng -0.365)
+	(population 8387)
+	(rank 96)
+	(summary "Esher is a town in Surrey, England, to the east of the River Mole. Esher is a locality within the Greater London Urban Area, largely suburban with few high rise buildings and very short sections of dual carriageway within the ward itself, southwest of Charing Cross (...)")
+	(title "Esher")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Esher"))
+
+([FlightPro_Class860069] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 7)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.4298)
+	(lng -0.32)
+	(rank 96)
+	(summary "The Tideway is a name given to the part of the River Thames in England that is subject to tides. This stretch of water is downstream from Teddington Lock and is in its widest definition just under long.http://www.thames-path (...)")
+	(title "Tideway")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Tideway"))
+
+([FlightPro_Class860070] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 16)
+	(feature "city")
+	(lang "en")
+	(lat 51.434)
+	(lng -0.464)
+	(population 25240)
+	(rank 96)
+	(summary "Ashford is a suburban town almost entirely in the Surrey borough of Spelthorne, but with a small section lying within the London Borough of Hounslow, England. Mostly residential, Ashford is WSW of Charing Cross, London, forms part of the London commuter belt, with a minor stop on the Waterloo to (...)")
+	(title "Ashford, Surrey")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ashford%2C_Surrey"))
+
+([FlightPro_Class860071] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 27)
+	(lang "en")
+	(lat 51.475)
+	(lng -0.396)
+	(rank 96)
+	(summary "The 284 miles (457 km) A30 road from London to Land's End, used to provide the most direct route from London to the south west; nowadays the M3 motorway and A303 road performs this function for much of the route and only parts of A30 now retain trunk road status (...)")
+	(title "A30 road")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/A30_road"))
+
+([FlightPro_Class860072] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 29)
+	(feature "adm3rd")
+	(lang "en")
+	(lat 51.37)
+	(lng -0.3618)
+	(rank 96)
+	(summary "Elmbridge is a local government district with borough status in Surrey, England. Its principal towns are Esher, Walton on Thames and Weybridge.  (...)")
+	(title "Elmbridge")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Elmbridge"))
+
+([FlightPro_Class860073] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 42)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.5323)
+	(lng -0.4672)
+	(rank 96)
+	(summary "Brunel University (informally Brunel) is a public research university located in Uxbridge, London, United Kingdom. It was founded in 1966 and is named after the Victorian engineer Isambard Kingdom Brunel. Brunel is a campus university located on the outskirts of Uxbridge (...)")
+	(title "Brunel University")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Brunel_University"))
+
+([FlightPro_Class860074] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 37)
+	(feature "city")
+	(lang "en")
+	(lat 51.5299)
+	(lng -0.3628)
+	(rank 96)
+	(summary "Greenford is a large suburb in the London Borough of Ealing in west London, UK. It was historically an ancient parish in the former county of Middlesex. The most prominent landmarks in the suburb are the A40, a major dual-carriageway; Horsenden Hill, above sea level; the small Parish Church of Holy (...)")
+	(title "Greenford")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Greenford"))
+
+([FlightPro_Class860075] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 46)
+	(feature "landmark")
+	(lang "en")
+	(lat 51.5415)
+	(lng -0.4719)
+	(rank 96)
+	(summary "RAF Uxbridge was a Royal Air Force (RAF) station in Uxbridge, within the London Borough of Hillingdon, occupying a site that originally belonged to the Hillingdon House estate. The British government purchased the estate in 1915, three years before the founding of the RAF (...)")
+	(title "RAF Uxbridge")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/RAF_Uxbridge"))
+
+([FlightPro_Class860076] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 41)
+	(feature "city")
+	(lang "en")
+	(lat 51.4561)
+	(lng -0.2359)
+	(rank 96)
+	(summary "Roehampton is a suburban district in south-west London, forming the western end of the London Borough of Wandsworth. It lies between the town of Barnes to the north, Putney to the east and Wimbledon Common to the south (...)")
+	(title "Roehampton")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Roehampton"))
+
+([FlightPro_Class860077] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 59)
+	(feature "city")
+	(lang "en")
+	(lat 51.5836)
+	(lng -0.3464)
+	(rank 96)
+	(summary "Harrow is a large town in the London Borough of Harrow, northwest London, United Kingdom. Harrow was a municipal borough of Middlesex before its inclusion in Greater London in 1965. Harrow is home to a large University of Westminster campus and is widely known for Harrow School, with Harrow County (...)")
+	(title "Harrow, London")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Harrow%2C_London"))
+
+([FlightPro_Class860078] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 41)
+	(feature "city")
+	(lang "en")
+	(lat 51.558)
+	(lng -0.4484)
+	(population 10387)
+	(rank 96)
+	(summary "Ickenham is a suburban area centred on an old village in Greater London, part of the London Borough of Hillingdon. While no major historical events have taken place in Ickenham, settlements dating back to the Roman occupation of Britain have been discovered during archaeological surveys, and the (...)")
+	(title "Ickenham")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ickenham"))
+
+([FlightPro_Class860079] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GB")
+	(elevation 36)
+	(feature "city")
+	(lang "en")
+	(lat 51.547)
+	(lng -0.362)
+	(rank 95)
+	(summary "Northolt is a town in north west London, England, and within the London Borough of Ealing, England. The town has London Underground and Network Rail stations and is on the A40 road. It is served by a number of London Bus routes.  (...)")
+	(title "Northolt")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Northolt"))
+
+([FlightPro_Class860080] of  CloFuncall
+
+	(source "(ru.rules/pp 'Onboard)"))
 
 ([FlightPro_Class870008] of  Rule
 

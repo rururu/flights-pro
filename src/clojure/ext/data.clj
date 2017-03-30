@@ -12,7 +12,7 @@
   edu.stanford.smi.protege.model.Instance))
 
 (def TIO {:carrier 1000
- :camera 2222
+ :camera 3030
  :directives 911
  :instructions 979
  :vehicles 200

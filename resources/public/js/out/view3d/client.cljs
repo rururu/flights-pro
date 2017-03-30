@@ -162,9 +162,9 @@
 	(vswap! CARRIER assoc :mode "MANUAL"))
     :callsigns (let [{:keys [list]} dir]
 	(ctl/callsigns (conj list "manual")))
-    :carrier (let [{:keys [callsign vehicle]} dir]
-	(carrier callsign vehicle))
-    :fly-onboard (let [{:keys [callsign vehicle period]} dir]
+    :carrier (let [{:keys [callsign vehicle go-onboard]} dir]
+	(if go-onboard
+	  (vswap! CARRIER assoc :mode callsign))
 	(if (not (= (:mode @CARRIER) "MANUAL"))
 	  (carrier callsign vehicle)))
     (println (str "Unknown directive: " [directive dir])))))

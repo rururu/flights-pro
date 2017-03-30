@@ -36,7 +36,7 @@
                "scheduled" {"arrival" "unk"}}
 
    "airline" {"short" "Ru Airlines"}}}))
-(def TERRAIN "yes")
+(def TERRAIN "no")
 (def APT-ALT 0)
 (defn write-transit [x]
   (let [baos (ByteArrayOutputStream.)
@@ -298,7 +298,7 @@ TERRAIN)
       (foc-apt-ins apt)
       (def APT-ALT (if (= TERRAIN "yes")
 	      (+ alt 300)
-	      20))
+	      100))
       (set-map-view crd)
       (println :Airport country airport iata crd alt))))
 "")
