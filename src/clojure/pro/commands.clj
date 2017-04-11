@@ -184,7 +184,7 @@
   (condp = cls
     "manual" (do (asp/pump-in (:directives CHN)
 	{:directive :manual})
-                     (rete/assert-frame ['Onboard 'callsign "STOP"]))
+                     (rete/assert-frame ['Onboard 'callsign cls 'time 0]))
    "select" (let [lst (vec (sort (map fr24/callsign (keys @fr24/FLIGHTS))))
                        lst (filter #(not (empty? %)) lst)]
                   (asp/pump-in (:directives CHN)
@@ -298,7 +298,7 @@ TERRAIN)
       (foc-apt-ins apt)
       (def APT-ALT (if (= TERRAIN "yes")
 	      (+ alt 300)
-	      100))
+	      60))
       (set-map-view crd)
       (println :Airport country airport iata crd alt))))
 "")

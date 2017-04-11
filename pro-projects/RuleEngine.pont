@@ -1,4 +1,4 @@
-; Mon Oct 31 20:52:35 MSK 2016
+; Sat Apr 08 20:17:34 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -35,6 +35,11 @@
 	(single-slot butt-run
 		(type STRING)
 		(default "Run/ru.rules/run-engine")
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot butt-retr-inss
+		(type STRING)
+		(default "Retract Instances/ru.rules/retr-inss")
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot butt-ass-inss
@@ -135,11 +140,6 @@
 		(type INSTANCE)
 ;+		(allowed-classes RuleSet)
 		(create-accessor read-write))
-	(single-slot butt-fire
-		(type STRING)
-		(default "Fire/ru.rules/fire-all-rules")
-;+		(cardinality 0 1)
-		(create-accessor read-write))
 	(multislot fact-classes
 		(type INSTANCE)
 ;+		(allowed-classes %3ASTANDARD-CLASS)
@@ -149,17 +149,32 @@
 		(default "Step/ru.rules/step-engine")
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
-	(multislot instances
-		(type INSTANCE)
-;+		(allowed-classes)
-		(create-accessor read-write))
 	(single-slot butt-ass-inss
 		(type STRING)
 		(default "Assert Instances/ru.rules/ass-inss")
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
+	(single-slot butt-run
+		(type STRING)
+		(default "Run/ru.rules/run-engine")
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot butt-fire
+		(type STRING)
+		(default "Fire/ru.rules/fire-all-rules")
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot instances
+		(type INSTANCE)
+;+		(allowed-classes)
+		(create-accessor read-write))
 	(single-slot title
 		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot butt-retr-inss
+		(type STRING)
+		(default "Retract Instances/ru.rules/retr-inss")
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(multislot facts
@@ -170,11 +185,6 @@
 		(type INTEGER)
 		(range 1 %3FVARIABLE)
 		(default 1)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(single-slot butt-run
-		(type STRING)
-		(default "Run/ru.rules/run-engine")
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot mode

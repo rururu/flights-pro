@@ -28,19 +28,25 @@
 
 (af:FlyOnboardTo 0
 ?ob (Onboard time ?t0 callsign ?cs)
-(Flight age "CURRENT" time ?t1 callsign ?cs
+(Flight age "CURRENT" 
+	callsign ?cs
+	course ?crs1 
+	coord ?crd1 
+	speed ?spd1
+	altitude ?alt1
+	time ?t1 
 	(<= ?t0 ?t1))
 (Flight age "NEW"
-           callsign ?cs
-           course ?crs2 
-           coord ?crd2 
-           speed ?spd2 
-           altitude ?alt2
-           status ?s2
-           time ?t2)
+	callsign ?cs
+	course ?crs2 
+	coord ?crd2 
+	speed ?spd2 
+	altitude ?alt2
+	time ?t2)
 =>
+(println :FOB ?cs)
 (modify ?ob time ?t2)
-(es/fly-onboard-to ?cs ?crs2 ?crd2 ?spd2 ?alt2 (- ?t2 ?t1)))
+(es/fly-onboard-to ?cs ?crs1 ?crs2 ?crd1 ?crd2 ?spd1 ?spd2 ?alt1 ?alt2))
 
 (mf:ClimbStart 0
 ?fp (FlightPlan id ?id
@@ -69,13 +75,14 @@
 
 (af:PutFlightOnMap 0
 (Flight id ?id
+           callsign ?cs
            coord ?crd
            course ?crs
            speed ?spd
            status ?sts
            age "NEW")
 =>
-(es/put-on-map ?id ?crd ?crs ?spd ?sts))
+(es/put-on-map ?id ?cs ?crd ?crs ?spd ?sts))
 
 (af:FlightHistory3 1
 ?of1 (Flight id ?id age "OLD" time ?t1)
@@ -88,6 +95,7 @@
 (Flight id ?id altitude ?a1 age "OLD")
 (Flight id ?id altitude ?a2 age "CURRENT")
 ?fl (Flight id ?id altitude ?a3 age "NEW"
+	callsign ?cs
 	status ?s3 
 	coord ?crd3 
 	course ?crs3
@@ -96,12 +104,13 @@
 	 (> ?a1 ?a2 ?a3)))
 =>
 (modify ?fl status "DESCEND")
-(es/put-on-map ?id ?crd3 ?crs3 ?spd3 ?s3))
+(es/put-on-map ?id ?cs ?crd3 ?crs3 ?spd3 ?s3))
 
 (af:ClimbMark 0
 (Flight id ?id altitude ?a1 age "OLD")
 (Flight id ?id altitude ?a2 age "CURRENT")
 ?fl (Flight id ?id altitude ?a3 age "NEW"
+	callsign ?cs
 	status ?s3 
 	coord ?crd3 
 	course ?crs3
@@ -110,7 +119,7 @@
 	 (< ?a1 ?a2 ?a3)))
 =>
 (modify ?fl status "CLIMB")
-(es/put-on-map ?id ?crd3 ?crs3 ?spd3 ?s3))
+(es/put-on-map ?id ?cs ?crd3 ?crs3 ?spd3 ?s3))
 
 (mf:TakeoffDone 0
 ?fp (FlightPlan id ?id
@@ -186,11 +195,10 @@
 =>
 (retract ?ob1 ?ob2))
 
-(af:StopOrSwitchFollow 0
+(af:StopOrSwitchFollow 1
 ?f1 (Follow  id ?id1 time ?t1)
-?f2 (Follow  id ?id2 time ?t2
-	((not= ?id1 ?id2)
-	 (= ?t2 0)))
+?f2 (Follow  id ?id2 time 0
+	(not= ?id1 ?id2))
 =>
 (retract ?f1)
 (if (= ?id2 "STOP")
@@ -377,8 +385,29 @@
 (modify ?fp status "GROUND" 
 	landing "DONE"))
 
+(qq:HowFarAirport1 0
+?q (Question predicate "How far"
+	subject "airport")
+(not Question predicate "User Answer")
+=>
+(async.proc/pump-in 
+	(:instructions pro.commands/CHN)
+	{:instruct :ask-user :question "airport"}))
+
+(qq:HowFarAirport2 0
+?q1 (Question predicate "How far"
+	subject "airport")
+?q2 (Question predicate "User Answer"
+	subject "selected airport"
+	object ?apt
+	adjunct ?cnt)
+=>
+(ext.data/pump-far-airport ?cnt ?apt)
+(retract ?q1 ?q2))
+
 (qq:Check2FlightsIntersection 0
-?q (Question predicate "intersect")
+?q (Question predicate "What"
+	subject "Intersections")
 (Flight id ?id1
            callsign ?cs1
            coord ?crd1
@@ -402,10 +431,135 @@
 =>
 (when-let [[dmin tmin] (es/intersect? ?crd1 ?crs1 ?spd1 ?crd2 ?crs2 ?spd2 ?id1 ?id2)]
   (println [:Dmin dmin :Tmin tmin :Who ?cs1 ?cs2])
-  (es/pom-and-link ?id1 ?crd1 ?crs1 ?spd1 ?cs1 ?id2 ?crd2 ?crs2 ?spd2 ?cs2 dmin tmin)))
-
-(qq:RetractQuestion -1
-?q (Question)
-=>
+  (es/pom-and-link ?id1 ?crd1 ?crs1 ?spd1 ?cs1 ?id2 ?crd2 ?crs2 ?spd2 ?cs2 dmin tmin))
 (retract ?q))
+
+(qq:AirplanesInAir 0
+?q (Question predicate "How many"
+	subject "airplanes"
+	object "in the air"
+	adjunct ?ad)
+=>
+(ext.data/pump-airplanes 
+	(str "Airplanes " ?ad)
+	(es/flights-of-status 
+	  (condp = ?ad
+	    "on level" "LEVEL"
+	    "climb" "CLIMB"
+	    "descend" "DESCEND")))
+(retract ?q))
+
+(qq:WeatherGeoNames 0
+?q (Question predicate "What"
+	subject "weather"
+  	object "by GeoNames")
+=>
+(ext.data/pump-weather ext.data/gn-weather-html)
+(retract ?q))
+
+(qq:Weather2 0
+?q (Question predicate "What"
+	subject "weather"
+	object "by Weather2")
+=>
+(ext.data/pump-weather ext.data/w2-weather-html)
+(retract ?q))
+
+(qq:NearestAirports 0
+?q (Question predicate "Where"
+	subject "nearest"
+	object "airports")
+=>
+(ext.data/pump-nearest-airports 4)
+(retract ?q))
+
+(qq:HowFarGlobalCity1 0
+?q (Question predicate "How far"
+	subject "global city")
+(not Question predicate "User Answer")
+=>
+(async.proc/pump-in 
+	(:instructions pro.commands/CHN)
+	{:instruct :ask-user 
+	 :question "city"
+	 :param {:countries (sort (map #(protege.core/sv % "title") 
+			(protege.core/cls-instances "Country")))}}))
+
+(qq:WhereWeAre 0
+?q (Question predicate "Where"
+	subject "we are")
+=>
+(ext.data/pump-where-we-are)
+(retract ?q))
+
+(qq:HowFarGlobalCity2 0
+?q1 (Question predicate "How far"
+	subject "global city")
+?q2 (Question predicate "User Answer"
+	subject "selected country"
+	object ?cnt)
+(not Question predicate "User Answer")
+=>
+(async.proc/pump-in 
+	(:instructions pro.commands/CHN)
+	{:instruct :ask-user 
+	 :question "city"
+	 :param {:cities (ext.data/country-cities ?cnt)}}))
+
+(qq:HowFarGlobalCity3 0
+?q1 (Question predicate "How far"
+	subject "global city")
+?q2 (Question predicate "User Answer"
+	subject "selected country"
+	object ?cnt)
+?q3 (Question predicate "User Answer"
+	subject "selected city"
+	object ?cty)
+=>
+(ext.data/pump-far-city ?cnt ?cty)
+(retract ?q1 ?q2 ?q3))
+
+(qq:WhereNearest 0
+?q (Question predicate "Where"
+	subject "nearest"
+	object ?ob
+	(not= ?ob "airports"))
+=>
+(ext.data/pump-nearest ?ob)
+(retract ?q))
+
+(qq:AirplanesAll 0
+?q (Question predicate "How many"
+	subject "airplanes"
+	object ?ob
+	(not= ?ob "in the air"))
+=>
+(ext.data/pump-airplanes 
+	(str "Airplanes " ?ob) 
+	(es/flights-of-status
+	  (condp = ?ob
+	    "all" "ANY"
+	    "on the ground" "GROUND")))
+(retract ?q))
+
+(qq:HowFarLocalCity1 0
+?q (Question predicate "How far"
+	subject "local city")
+(not Question predicate "User Answer")
+=>
+(async.proc/pump-in 
+	(:instructions pro.commands/CHN)
+	{:instruct :ask-user 
+	 :question "city"
+	 :param {:cities (ext.data/local-cities)}}))
+
+(qq:HowFarLocalCity2 0
+?q1 (Question predicate "How far"
+	subject "local city")
+?q2 (Question predicate "User Answer"
+	subject "selected city"
+	object ?cty)
+=>
+(ext.data/pump-far-city nil ?cty)
+(retract ?q1 ?q2))
 

@@ -3,6 +3,7 @@
   [protege.core :as p]
   [rete.core :as rete])
 (:import
+  edu.stanford.smi.protege.model.ValueType
   edu.stanford.smi.protege.ui.DisplayUtilities
   javax.swing.JOptionPane))
 
@@ -10,7 +11,7 @@
 (def RUN nil)
 (defn mk-templates [clss]
   (letfn [(mk-tpl [cls]
-	(cons (symbol (.getName cls))
+	(concat [(symbol (.getName cls)) 'INSTANCE]
 	  (map #(symbol (.getName %)) (.getTemplateSlots cls))))]
   (if (seq? clss)
     (map mk-tpl clss)
@@ -27,36 +28,38 @@
         rhs (read-string (str "(" (p/sv ri "rhs") ")"))]
     (concat [nm sal] lhs ['=>] rhs))))
 
-(defn single-value [v]
-  (if (string? v)
-  (if (> (count (clojure.string/split v #"\s")) 1)
-    v
-    (symbol v))
-  v))
+(defn single-value [val slt]
+  (if (= (.getValueType slt) ValueType/SYMBOL)
+  (symbol val)
+  val))
 
 (defn mk-frame [ins]
   (letfn [(sval [slt ins]
 	(if (.getAllowsMultipleValues slt)
-	  (map single-value (.getOwnSlotValues ins slt))
-                          (if-let [v (.getOwnSlotValue ins slt)]
-                            (single-value v)
+	  (vec (map #(single-value % slt) (.getOwnSlotValues ins slt)))
+                          (if-let [val (.getOwnSlotValue ins slt)]
+                            (single-value val slt)
                             :?)))]
   (let [typ (.getDirectType ins)
         slots (.getTemplateSlots typ)
-        svs (mapcat #(list (symbol (.getName %)) (sval % ins)) slots)]
-    (cons (symbol (.getName typ)) svs))))
+        svls (mapcat #(list (symbol (.getName %)) (sval % ins)) slots)
+        svls (cons 'INSTANCE (cons (.getName ins) svls))]
+    (cons (symbol (.getName typ)) svls))))
 
 (defn facts-from-classes [fcs]
   (mapcat #(.getInstances %) fcs))
 
 (defn run-engine
-  ([title]
-  (when-let [ins (p/fifos "Run" "title" title)]
-    (run-engine title
+  ([iot]
+  (let [[ins tit] (if (string? iot) 
+	[(p/fifos "Run" "title" iot) iot]
+	[iot (p/sv iot "title")])]
+    (if (and ins tit)
+      (run-engine tit
 	(p/svs ins "rule-sets")
 	(p/svs ins "fact-classes")
 	(p/svs ins "facts")
-	(p/sv   ins "mode"))))
+	(p/sv   ins "mode")))))
 ([hm inst]
   (let [mp (into {} hm)
          tit (mp "title")
@@ -86,12 +89,24 @@
   (doseq [ins inss]
   (rete/assert-frame (mk-frame ins))))
 
+(defn retract-instances [inss]
+  (doseq [ins inss]
+  (doseq [fact (rete/facts-with-slot-value 'INSTANCE = (.getName ins))]
+    (rete/retract-fact (first fact) true))))
+
 (defn ass-inss [hm inst]
   (let [mp (into {} hm)
       clw (mp "clsWidget")
       sel (.getSelection (.getSlotWidget clw (p/slt "instances")))]
   (if (seq sel)
     (assert-instances sel))))
+
+(defn retr-inss [hm inst]
+  (let [mp (into {} hm)
+      clw (mp "clsWidget")
+      sel (.getSelection (.getSlotWidget clw (p/slt "instances")))]
+  (if (seq sel)
+    (retract-instances sel))))
 
 (defn pp [typ]
   ;; pretty print facts to REPL

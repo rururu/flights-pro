@@ -1,4 +1,4 @@
-; Mon Oct 31 20:52:35 MSK 2016
+; Sat Apr 08 20:17:34 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -10,12 +10,12 @@
 
 ([RETE_Class4] of  CloFunction
 
-	(source "([title]\n  (when-let [ins (p/fifos \"Run\" \"title\" title)]\n    (run-engine title\n	(p/svs ins \"rule-sets\")\n	(p/svs ins \"fact-classes\")\n	(p/svs ins \"facts\")\n	(p/sv   ins \"mode\"))))\n([hm inst]\n  (let [mp (into {} hm)\n         tit (mp \"title\")\n         rss (mp \"rule-sets\")\n         fcs (mp \"fact-classes\")\n         ffs (mp \"facts\")\n         mod (mp \"mode\")]\n    (run-engine tit rss fcs ffs mod)))\n([tit rss fcs ffs mod]\n  (println [:RUN tit])\n  (let [ffc (facts-from-classes fcs)\n         fts (concat ffc ffs)\n         fts (map mk-frame fts)\n         tps (mapcat #(p/svs % \"templates\") rss)\n         tps (mk-templates tps)\n         rls (mapcat #(p/svs % \"rules\") rss)\n         rls (map #(mk-rule % mod) rls)\n         rls (map rete/trans-rule rls)]\n     (println (str \"Mode: \" mod))\n     (println (str \"Templates: \" (count tps)))\n     (println (str \"Rules: \" (count rls)))\n     (println (str \"Facts: \" (count fts)))\n     (def RUN true)\n     (rete/run-with mod tps rls fts)))")
+	(source "([iot]\n  (let [[ins tit] (if (string? iot) \n	[(p/fifos \"Run\" \"title\" iot) iot]\n	[iot (p/sv iot \"title\")])]\n    (if (and ins tit)\n      (run-engine tit\n	(p/svs ins \"rule-sets\")\n	(p/svs ins \"fact-classes\")\n	(p/svs ins \"facts\")\n	(p/sv   ins \"mode\")))))\n([hm inst]\n  (let [mp (into {} hm)\n         tit (mp \"title\")\n         rss (mp \"rule-sets\")\n         fcs (mp \"fact-classes\")\n         ffs (mp \"facts\")\n         mod (mp \"mode\")]\n    (run-engine tit rss fcs ffs mod)))\n([tit rss fcs ffs mod]\n  (println [:RUN tit])\n  (let [ffc (facts-from-classes fcs)\n         fts (concat ffc ffs)\n         fts (map mk-frame fts)\n         tps (mapcat #(p/svs % \"templates\") rss)\n         tps (mk-templates tps)\n         rls (mapcat #(p/svs % \"rules\") rss)\n         rls (map #(mk-rule % mod) rls)\n         rls (map rete/trans-rule rls)]\n     (println (str \"Mode: \" mod))\n     (println (str \"Templates: \" (count tps)))\n     (println (str \"Rules: \" (count rls)))\n     (println (str \"Facts: \" (count fts)))\n     (def RUN true)\n     (rete/run-with mod tps rls fts)))")
 	(title "run-engine"))
 
 ([RuleEngine_Class0] of  CloFunction
 
-	(source "(letfn [(mk-tpl [cls]\n	(cons (symbol (.getName cls))\n	  (map #(symbol (.getName %)) (.getTemplateSlots cls))))]\n  (if (seq? clss)\n    (map mk-tpl clss)\n    (mk-templates (.getSubclasses clss)) ))")
+	(source "(letfn [(mk-tpl [cls]\n	(concat [(symbol (.getName cls)) 'INSTANCE]\n	  (map #(symbol (.getName %)) (.getTemplateSlots cls))))]\n  (if (seq? clss)\n    (map mk-tpl clss)\n    (mk-templates (.getSubclasses clss)) ))")
 	(title "mk-templates [clss]"))
 
 ([RuleEngine_Class10000] of  CloFunction
@@ -50,8 +50,8 @@
 
 ([RuleEngine_Class140000] of  CloFunction
 
-	(source "(if (string? v)\n  (if (> (count (clojure.string/split v #\"\\s\")) 1)\n    v\n    (symbol v))\n  v)")
-	(title "single-value [v]"))
+	(source "(if (= (.getValueType slt) ValueType/SYMBOL)\n  (symbol val)\n  val)")
+	(title "single-value [val slt]"))
 
 ([RuleEngine_Class150000] of  CloFunction
 
@@ -118,6 +118,16 @@
 	(source "(println \"INITIALIZING EXPERT SYSTEM\")\n(println \"1. Loading Clojure Programs...\")\n(if-let [wps (ClojureTab/findAnnotated (cls-instances \"WorkingPrograms\") nil)]\n  (loop [i 1 pins (svs wps \"cloPrograms\")]\n    (when (seq pins)\n      (println (str \" 1.\" i \" \" (sv (first pins) \"title\") \" = \" (ClojureTab/loadProgram (first pins)) ))\n      (recur (inc i) (rest pins)) ) )\n  (println \"  Annotated instance of WorkingPrograms not found!\"))\n(println \"2. Starting Expert System.\")\n(if-let [run (ClojureTab/findAnnotated (cls-instances \"Run\") nil)]\n  (ClojureTab/invoke \"ru.rules\" \"run-engine\" run)\n  (println \"  Annotated instance of Run not found!\"))\n(println \"EXPERT SYSTEM INITIALIZED\")")
 	(title "clojure-work []"))
 
+([RuleEngine_Class230000] of  CloFunction
+
+	(source "(doseq [ins inss]\n  (doseq [fact (rete/facts-with-slot-value 'INSTANCE = (.getName ins))]\n    (rete/retract-fact (first fact) true)))")
+	(title "retract-instances [inss]"))
+
+([RuleEngine_Class240000] of  CloFunction
+
+	(source "(let [mp (into {} hm)\n      clw (mp \"clsWidget\")\n      sel (.getSelection (.getSlotWidget clw (p/slt \"instances\")))]\n  (if (seq sel)\n    (retract-instances sel)))")
+	(title "retr-inss [hm inst]"))
+
 ([RuleEngine_Class30000] of  CloProgram
 
 	(cloFunctions
@@ -128,7 +138,9 @@
 		[RuleEngine_Class50000]
 		[RETE_Class4]
 		[RuleEngine_Class70000]
+		[RuleEngine_Class230000]
 		[RuleEngine_Class60002]
+		[RuleEngine_Class240000]
 		[RuleEngine_Class60000]
 		[RuleEngine_Class10000]
 		[RuleEngine_Class170000]
@@ -155,7 +167,7 @@
 
 ([RuleEngine_Class40000] of  CloNamespace
 
-	(source "(:require\n  [protege.core :as p]\n  [rete.core :as rete])\n(:import\n  edu.stanford.smi.protege.ui.DisplayUtilities\n  javax.swing.JOptionPane)")
+	(source "(:require\n  [protege.core :as p]\n  [rete.core :as rete])\n(:import\n  edu.stanford.smi.protege.model.ValueType\n  edu.stanford.smi.protege.ui.DisplayUtilities\n  javax.swing.JOptionPane)")
 	(title "ru.rules"))
 
 ([RuleEngine_Class50000] of  CloFunction
@@ -185,5 +197,5 @@
 
 ([RuleEngine_Class90000] of  CloFunction
 
-	(source "(letfn [(sval [slt ins]\n	(if (.getAllowsMultipleValues slt)\n	  (map single-value (.getOwnSlotValues ins slt))\n                          (if-let [v (.getOwnSlotValue ins slt)]\n                            (single-value v)\n                            :?)))]\n  (let [typ (.getDirectType ins)\n        slots (.getTemplateSlots typ)\n        svs (mapcat #(list (symbol (.getName %)) (sval % ins)) slots)]\n    (cons (symbol (.getName typ)) svs)))")
+	(source "(letfn [(sval [slt ins]\n	(if (.getAllowsMultipleValues slt)\n	  (vec (map #(single-value % slt) (.getOwnSlotValues ins slt)))\n                          (if-let [val (.getOwnSlotValue ins slt)]\n                            (single-value val slt)\n                            :?)))]\n  (let [typ (.getDirectType ins)\n        slots (.getTemplateSlots typ)\n        svls (mapcat #(list (symbol (.getName %)) (sval % ins)) slots)\n        svls (cons 'INSTANCE (cons (.getName ins) svls))]\n    (cons (symbol (.getName typ)) svls)))")
 	(title "mk-frame [ins]"))

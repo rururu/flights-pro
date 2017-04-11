@@ -1,4 +1,4 @@
-; Thu Mar 30 22:34:13 MSK 2017
+; Tue Apr 11 22:13:20 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -788,7 +788,7 @@
 
 ([FlightPro_Class220001] of  Rule
 
-	(lhs "(Flight time ?t\n           callsign ?cs\n           coord ?crd \n           course ?crs\n           speed ?spd\n           altitude ?alt)\n?ob1 (Onboard)\n?ob2 (Onboard callsign ?cs time 0\n	(not= ?cs \"STOP\"))")
+	(lhs "(Flight time ?t\n           callsign ?cs\n           coord ?crd \n           course ?crs\n           speed ?spd\n           altitude ?alt)\n?ob1 (Onboard)\n?ob2 (Onboard callsign ?cs time 0)")
 	(rhs "(retract ?ob1)\n(modify ?ob2 time ?t)\n(es/go-onboard ?cs ?crd ?crs ?spd ?alt)")
 	(salience 0)
 	(title "af:SwitchOnboard"))
@@ -935,8 +935,8 @@
 
 ([FlightPro_Class250010] of  Rule
 
-	(lhs "?ob (Onboard time ?t0 callsign ?cs)\n(Flight age \"CURRENT\" \n	callsign ?cs\n	course ?crs1 \n	coord ?crd1 \n	speed ?spd1\n	altitude ?alt1\n	time ?t1 \n	(<= ?t0 ?t1))\n(Flight age \"NEW\"\n	callsign ?cs\n	course ?crs2 \n	coord ?crd2 \n	speed ?spd2 \n	altitude ?alt2\n	time ?t2)")
-	(rhs "(println :FOB ?cs)\n(modify ?ob time ?t2)\n(es/fly-onboard-to ?cs ?crs1 ?crs2 ?crd1 ?crd2 ?spd1 ?spd2 ?alt1 ?alt2)")
+	(lhs "?ob (Onboard time ?t0 callsign ?cs\n	(not= ?cs \"MANUAL\"))\n(Flight age \"CURRENT\" \n	callsign ?cs\n	course ?crs1 \n	coord ?crd1 \n	speed ?spd1\n	altitude ?alt1\n	time ?t1 \n	(<= ?t0 ?t1))\n(Flight age \"NEW\"\n	callsign ?cs\n	course ?crs2 \n	coord ?crd2 \n	speed ?spd2 \n	altitude ?alt2\n	time ?t2)")
+	(rhs "(modify ?ob time ?t2)\n(es/fly-onboard-to ?cs ?crs1 ?crs2 ?crd1 ?crd2 ?spd1 ?spd2 ?alt1 ?alt2)")
 	(salience 0)
 	(title "af:FlyOnboardTo"))
 
@@ -962,7 +962,7 @@
 
 ([FlightPro_Class270000] of  CloFunction
 
-	(source "(println [:CMD-ONBOARD params])\n(let [cls (:callsign params)]\n  (condp = cls\n    \"manual\" (do (asp/pump-in (:directives CHN)\n	{:directive :manual})\n                     (rete/assert-frame ['Onboard 'callsign \"STOP\"]))\n   \"select\" (let [lst (vec (sort (map fr24/callsign (keys @fr24/FLIGHTS))))\n                       lst (filter #(not (empty? %)) lst)]\n                  (asp/pump-in (:directives CHN)\n	{:directive :callsigns\n	 :list lst}))\n    (rete/assert-frame ['Onboard 'callsign cls 'time 0])))\n\"\"")
+	(source "(println [:CMD-ONBOARD params])\n(let [cls (:callsign params)]\n  (condp = cls\n    \"manual\" (do (asp/pump-in (:directives CHN)\n	{:directive :manual})\n                     (rete/assert-frame ['Onboard 'callsign cls 'time 0]))\n   \"select\" (let [lst (vec (sort (map fr24/callsign (keys @fr24/FLIGHTS))))\n                       lst (filter #(not (empty? %)) lst)]\n                  (asp/pump-in (:directives CHN)\n	{:directive :callsigns\n	 :list lst}))\n    (rete/assert-frame ['Onboard 'callsign cls 'time 0])))\n\"\"")
 	(title "onboard [params]"))
 
 ([FlightPro_Class270001] of  CloFunction
@@ -1459,7 +1459,6 @@
 		[FlightPro_Class320013]
 		[FlightPro_Class350001]
 		[FlightPro_Class230003]
-		[FlightPro_Class370002]
 		[FlightPro_Class220001]
 		[FlightPro_Class250010]
 		[FlightPro_Class390000])
@@ -2509,7 +2508,7 @@
 
 ([FlightPro_Class610000] of  CloVar
 
-	(source "\"no\"")
+	(source "\"yes\"")
 	(title "TERRAIN"))
 
 ([FlightPro_Class610001] of  CloFunction
@@ -3086,46 +3085,46 @@
 	(language English-en)
 	(max-responses 40)
 	(responses
-		[FlightPro_Class860040]
-		[FlightPro_Class860041]
-		[FlightPro_Class860042]
-		[FlightPro_Class860043]
-		[FlightPro_Class860044]
-		[FlightPro_Class860045]
-		[FlightPro_Class860046]
-		[FlightPro_Class860047]
-		[FlightPro_Class860048]
-		[FlightPro_Class860049]
-		[FlightPro_Class860050]
-		[FlightPro_Class860051]
-		[FlightPro_Class860052]
-		[FlightPro_Class860053]
-		[FlightPro_Class860054]
-		[FlightPro_Class860055]
-		[FlightPro_Class860056]
-		[FlightPro_Class860057]
-		[FlightPro_Class860058]
-		[FlightPro_Class860059]
-		[FlightPro_Class860060]
-		[FlightPro_Class860061]
-		[FlightPro_Class860062]
-		[FlightPro_Class860063]
-		[FlightPro_Class860064]
-		[FlightPro_Class860065]
-		[FlightPro_Class860066]
-		[FlightPro_Class860067]
-		[FlightPro_Class860068]
-		[FlightPro_Class860069]
-		[FlightPro_Class860070]
-		[FlightPro_Class860071]
-		[FlightPro_Class860072]
-		[FlightPro_Class860073]
-		[FlightPro_Class860074]
-		[FlightPro_Class860075]
-		[FlightPro_Class860076]
-		[FlightPro_Class860077]
-		[FlightPro_Class860078]
-		[FlightPro_Class860079]))
+		[FlightPro_Class880281]
+		[FlightPro_Class880282]
+		[FlightPro_Class880283]
+		[FlightPro_Class880284]
+		[FlightPro_Class880285]
+		[FlightPro_Class880286]
+		[FlightPro_Class880287]
+		[FlightPro_Class880288]
+		[FlightPro_Class880289]
+		[FlightPro_Class880290]
+		[FlightPro_Class880291]
+		[FlightPro_Class880292]
+		[FlightPro_Class880293]
+		[FlightPro_Class880294]
+		[FlightPro_Class880295]
+		[FlightPro_Class880296]
+		[FlightPro_Class880297]
+		[FlightPro_Class880298]
+		[FlightPro_Class880299]
+		[FlightPro_Class880300]
+		[FlightPro_Class880301]
+		[FlightPro_Class880302]
+		[FlightPro_Class880303]
+		[FlightPro_Class880304]
+		[FlightPro_Class880305]
+		[FlightPro_Class880306]
+		[FlightPro_Class880307]
+		[FlightPro_Class880308]
+		[FlightPro_Class880309]
+		[FlightPro_Class880310]
+		[FlightPro_Class880311]
+		[FlightPro_Class880312]
+		[FlightPro_Class880313]
+		[FlightPro_Class880314]
+		[FlightPro_Class880315]
+		[FlightPro_Class880316]
+		[FlightPro_Class880317]
+		[FlightPro_Class880318]
+		[FlightPro_Class880319]
+		[FlightPro_Class880320]))
 
 ([FlightPro_Class660024] of  CloFunction
 
@@ -3194,7 +3193,7 @@
 ([FlightPro_Class670008] of  BBX
 
 	(title "Current")
-	(wsen -0.53318024 51.368996 -0.23174286 51.586884))
+	(wsen 3.593487 41.569084 23.259014 56.15386))
 
 ([FlightPro_Class670041] of  TypeName
 
@@ -3921,13 +3920,27 @@
 
 	(name "on level"))
 
+([FlightPro_Class860000] of  CloFuncall
+
+	(source "(ru.rules/dr)"))
+
+([FlightPro_Class860001] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.2653)
+	(lng 23.4472)
+	(population 1869)
+	(rank 83)
+	(summary "Kisko is a former municipality of Finland. It was consolidated with Salo on January 1, 2009. It is located in the province of Western Finland and is part of the Finland Proper region. The municipality had a population of 1,869 (2004-12-31) and covered an area of 284.13 km² of which 30 (...)")
+	(title "Kisko")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kisko"))
+
 ([FlightPro_Class860002] of  QuestionTree
 
 	(name "local city"))
-
-([FlightPro_Class860003] of  CloFuncall
-
-	(source "(ru.rules/pp :all)"))
 
 ([FlightPro_Class860008] of  WikiArticle
 
@@ -4813,9 +4826,57 @@
 	(title "Northolt")
 	(wikipediaUrl "http://en.wikipedia.org/wiki/Northolt"))
 
-([FlightPro_Class860080] of  CloFuncall
+([FlightPro_Class870002] of  WikiArticle
 
-	(source "(ru.rules/pp 'Onboard)"))
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "adm2nd")
+	(lang "en")
+	(lat 60.2042)
+	(lng 23.1222)
+	(rank 82)
+	(summary "Perniö is a former municipality of Finland. It was consolidated with Salo on January 1, 2009. It is located in the province of Western Finland and is part of the Finland Proper region. The municipality had a population of 6,026 (2004-12-31) and covered an area of 407 (...)")
+	(title "Perniö")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Perni%C3%B6"))
+
+([FlightPro_Class870004] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.35)
+	(lng 23.2806)
+	(rank 81)
+	(summary "Muurla is a former municipality of Finland. It was consolidated with Salo on 1 January 2009. It is located in the province of Western Finland and is part of the Finland Proper region. The municipality had a population of 1,455 (2004-12-31) and covered an area of 83.16 km² of which 3.00 km² is water (...)")
+	(title "Muurla")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Muurla"))
+
+([FlightPro_Class870005] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.0581)
+	(lng 23.3003)
+	(rank 78)
+	(summary "Tenala is a former municipality in Uusimaa, Finland. It was neighboured by Hanko, Kisko, Perniö, Pohja, Särkisalo and Ekenäs. The municipality was established in 1329. The stone church of Tenala was built in late 15th century and the paintings on the piers are from the 17th century (...)")
+	(title "Tenala")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Tenala"))
+
+([FlightPro_Class870007] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "river")
+	(lang "en")
+	(lat 60.35)
+	(lng 23.1)
+	(rank 24)
+	(summary "Uskelanjoki is a river of Finland. It flows into the Archipelago Sea through the town of Salo. The course of the river follows a large, NE–SW oriented bedrock fracture line which begins from the river estuary in Halikonlahti bay and goes up through the lower reaches of the river and its tributary (...)")
+	(title "Uskelanjoki")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Uskelanjoki"))
 
 ([FlightPro_Class870008] of  Rule
 
@@ -4835,10 +4896,6 @@
 	(rhs "(ext.data/pump-far-city nil ?cty)\n(retract ?q1 ?q2)")
 	(salience 0)
 	(title "qq:HowFarLocalCity2"))
-
-([FlightPro_Class870012] of  CloFuncall
-
-	(source "(ext.data/local-cities)"))
 
 ([FlightPro_Class870053] of  WikiArticle
 
@@ -10632,9 +10689,3251 @@
 	(runways 0)
 	(title "Atlanta Hartsfield-Jackson International Airport"))
 
-([FlightPro_Class870731] of  CloFuncall
+([FlightPro_Class880008] of  WikiArticle
 
-	(source "pro.commands/APT-ALT"))
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.19)
+	(lng 23.352)
+	(rank 6)
+	(summary "Aijala is a village in the municipality of Kisko in Varsinais-Suomi, Finland. It was the village of Varsinais-Suomi of the year in 2003. It is an old mine village in which there were several ore quarries. The 1677-1916 lead was quarried in Hopeamäki and Aurums 1684-1957 (...)")
+	(title "Aijala")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Aijala"))
+
+([FlightPro_Class880011] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.114)
+	(lng 22.9497)
+	(rank 82)
+	(summary "Särkisalo is a former municipality of Finland, located mostly on Särkisalo island. It was consolidated with Salo on January 1, 2009. It is located in the province of Western Finland and is part of the Finland Proper region (...)")
+	(title "Särkisalo")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/S%C3%A4rkisalo"))
+
+([FlightPro_Class880015] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.2972)
+	(lng 22.9081)
+	(rank 64)
+	(summary "Angelniemi is a former municipality of Finland. It became part of Halikko in 1967. It was located on partly on the continent by the Halikonlahti Bay and partly on Kimito Island and is still nowadays the only part of the island where Finnish is the primary language (...)")
+	(title "Angelniemi")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Angelniemi"))
+
+([FlightPro_Class880018] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.1639)
+	(lng 22.7278)
+	(rank 85)
+	(summary "Kimito is a former municipality of Finland. On January 1, 2009, it was consolidated with Dragsfjärd and Västanfjärd to form the new municipality of Kimitoön. Prior to the consolidation, it was one of the four municipalities located on Kimito island, the other three being Västanfjärd, Dragsfjärd and (...)")
+	(title "Kimito")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kimito"))
+
+([FlightPro_Class880019] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.1667)
+	(lng 22.7333)
+	(rank 84)
+	(summary "Kimitoön is a municipality of Finland. It was created on January 1, 2009, when the municipalities of Dragsfjärd, Kimito and Västanfjärd were consolidated into a single municipality. It is located in the province of Western Finland and is part of the Finland Proper region (...)")
+	(title "Kimitoön")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kimito%C3%B6n"))
+
+([FlightPro_Class880020] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.0722)
+	(lng 22.4694)
+	(rank 83)
+	(summary "Dragsfjärd is a former municipality of Finland. On January 1, 2009, it was consolidated with Kimito and Västanfjärd to form the new municipality of Kimitoön. It is located in the province of Western Finland and is part of the Finland Proper region (...)")
+	(title "Dragsfjärd")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Dragsfj%C3%A4rd"))
+
+([FlightPro_Class880021] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "isle")
+	(lang "en")
+	(lat 60.1561)
+	(lng 22.7089)
+	(rank 80)
+	(summary "Kimitoön is the largest coastal island of Finland with the area of . It is situated in the Finland Proper region in Western Finland province. The island has a population of 7,500 divided between the two municipalities: Kimitoön and Salo of which Salo is mostly located on the mainland (...)")
+	(title "Kimitoön (island)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kimito%C3%B6n_%28island%29"))
+
+([FlightPro_Class880022] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.05)
+	(lng 22.673)
+	(rank 78)
+	(summary "Västanfjärd is a former municipality of Finland. On January 1, 2009, it was consolidated with Dragsfjärd and Kimito to form the new municipality of Kimitoön. It is located in the province of Western Finland and is part of the Finland Proper region (...)")
+	(title "Västanfjärd")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/V%C3%A4stanfj%C3%A4rd"))
+
+([FlightPro_Class880024] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.2702)
+	(lng 22.5444)
+	(rank 65)
+	(summary "Karuna, in the region Finland Proper located in the province Southern Finland, was a municipality in Finland until 1969 when it merged into the municipality of Sauvo. Part of the former municipality, namely, the village of Sandö was merged into the municipality of Kimito (...)")
+	(title "Karuna, Finland")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Karuna%2C_Finland"))
+
+([FlightPro_Class880025] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.212)
+	(lng 22.51)
+	(rank 61)
+	(summary "The Battle of Sandöström was fought between Sweden and Russia during the Finnish War 1808-09.  (...)")
+	(title "Battle of Sandöström")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Battle_of_Sand%C3%B6str%C3%B6m"))
+
+([FlightPro_Class880026] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 60.2689)
+	(lng 22.5447)
+	(rank 41)
+	(summary "The Karuna church is a stone church located in Karuna Sauvo, Finland Proper, Finland. It was designed by Finnish church architect Josef Stenbäck and built in 1908–1910. The style of the building reflects National Romantic style with Jugendstil features (...)")
+	(title "Karuna Church")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Karuna_Church"))
+
+([FlightPro_Class880029] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(elevation 8)
+	(feature "city")
+	(lang "en")
+	(lat 59.9542)
+	(lng 22.3611)
+	(rank 69)
+	(summary "Högsåra (Finnish Haukisaari and Haukkasaari) is a village in the municipality of Dragsfjärd in the archipelago of Hiittinen, Finland. The village was known as a station of pilots before. The village has a population of about 50. Högsåra has three wind power producers (...)")
+	(title "Högsåra")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/H%C3%B6gs%C3%A5ra"))
+
+([FlightPro_Class880030] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(elevation 7)
+	(feature "city")
+	(lang "en")
+	(lat 59.9217)
+	(lng 22.41)
+	(rank 63)
+	(summary "Kasnäs is a village in the municipality of Kimitoön, Finland. It belongs to the archipelago of Hitis. Blåmusslan, one of the two information centers of the Archipelago National Park is situated here. The ferries to the archipelago of Hitis, including Vänö and Tunnhamn, leave from here (...)")
+	(title "Kasnäs")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kasn%C3%A4s"))
+
+([FlightPro_Class880031] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "isle")
+	(lang "en")
+	(lat 60.24)
+	(lng 21.9617)
+	(rank 53)
+	(summary "Själö or Nagu Själö (in Swedish) or Seili (in Finnish) is a small island (about 2 km from north to south), off the main islands of Nagu, in the Archipelago Sea, off the south west coast of Finland. Själö is part of the municipality of Pargas (...)")
+	(title "Själö")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Sj%C3%A4l%C3%B6"))
+
+([FlightPro_Class880032] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.1931)
+	(lng 21.9069)
+	(population 1443)
+	(rank 93)
+	(summary "Nagu is a former municipality of Finland. On 1 January 2009, it was consolidated with Houtskär, Iniö, Korpo and Pargas to form the new town of Väståboland. On 1 January 2012 the name Väståboland was changed to Pargas (...)")
+	(title "Nagu")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Nagu"))
+
+([FlightPro_Class880034] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landscape")
+	(lang "en")
+	(lat 59.9147)
+	(lng 21.8775)
+	(rank 77)
+	(summary "Archipelago National Park is a national park in Finland Proper. It was established in 1983 and covers of land areas. It is part of the UNESCO biosphere reserves and received a PAN Parks certificate in 2007. The park consists of all state owned waters and lands in a large co-operation area, excluding (...)")
+	(title "Archipelago National Park")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Archipelago_National_Park"))
+
+([FlightPro_Class880036] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "airport")
+	(lang "en")
+	(lat 60.1833)
+	(lng 21.7833)
+	(rank 55)
+	(summary "Storlandet is the main island of the former Nagu municipality (now part of Väståboland, Finland Proper) in Western Finland. It has an area of .")
+	(title "Storlandet")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Storlandet"))
+
+([FlightPro_Class880037] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FI")
+	(feature "city")
+	(lang "en")
+	(lat 60.1625)
+	(lng 21.5625)
+	(rank 85)
+	(summary "Korpo is an island located in the Turku archipelago. It is a former municipality of Finland. On 1 January 2009, it was consolidated with Houtskär, Iniö, Nagu and Pargas to form the new town of Väståboland. As of 1 January 2012 Väståboland was renamed Pargas (Parainen in Finnish), which is also the (...)")
+	(title "Korpo")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Korpo"))
+
+([FlightPro_Class880038] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AX")
+	(elevation 10)
+	(feature "city")
+	(lang "en")
+	(lat 59.9517)
+	(lng 21.61)
+	(rank 64)
+	(summary "Aspö is a small village on the Aspö Island in Väståboland, Finland. Until 2009 it belonged to the municipality of Korpo. Its Finnish-language name is Haapasaari, although this name is seldom used. The village is known for its white limestone church that has a red brick roof (...)")
+	(title "Aspö")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Asp%C3%B6"))
+
+([FlightPro_Class880039] of  WikiArticleDetails
+
+	(butt-del-pois "Delete POIs/ext.data/delete-pois")
+	(butt-return "Return to Flight/ext.data/ret-to-flight")
+	(butt-show-pois "Show on Map/ext.data/show-on-map")
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AX")
+	(feature "isle")
+	(lang "en")
+	(lat 59.83)
+	(lng 21.5717)
+	(max-rows 50)
+	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
+	(radius 1.0)
+	(rank 55)
+	(summary "Jurmo is the name of an island and a village in the municipality of Korpo in the outer islands of the archipelago off of Turku, Finland. Directly south of the island of Korpo and northeast of the island of Utö, this elongated island is in length with an average width of  (...)")
+	(title "Jurmo")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Jurmo"))
+
+([FlightPro_Class880045] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 25)
+	(feature "city")
+	(lang "en")
+	(lat 59.2861)
+	(lng 18.2872)
+	(rank 98)
+	(summary "Saltsjöbaden is a locality in Nacka Municipality, Stockholm County, Sweden with 9,491 inhabitants in 2010. It lies on the Baltic Sea coast.  (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/97000/thumb-96307-100.jpg")
+	(title "Saltsjöbaden")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Saltsj%C3%B6baden"))
+
+([FlightPro_Class880080] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "isle")
+	(lang "en")
+	(lat 60.2507)
+	(lng 20.3741)
+	(rank 100)
+	(summary "The Åland Islands or Åland (Swedish: Åland, ;) is a region of Finland that consists of an archipelago lying at the entrance to the Gulf of Bothnia in the Baltic Sea. It is autonomous, demilitarised and is the only monolingually Swedish-speaking region in Finland (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/90000/thumb-89400-100.jpg")
+	(title "Åland Islands")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/%C3%85land_Islands"))
+
+([FlightPro_Class880081] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(feature "isle")
+	(lang "en")
+	(lat 59.3878)
+	(lng 18.7358)
+	(rank 100)
+	(summary "The Stockholm archipelago is the largest archipelago in Sweden, and the second-largest archipelago in the Baltic Sea (the largest being across the Baltic in Finland).  (...)")
+	(title "Stockholm archipelago")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Stockholm_archipelago"))
+
+([FlightPro_Class880082] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "city")
+	(lang "en")
+	(lat 60.0931)
+	(lng 19.9392)
+	(rank 100)
+	(summary "Mariehamn is the capital of Åland, an autonomous territory under Finnish sovereignty. Mariehamn is the seat of the Government and Parliament of Åland, and 40% of the population of Åland live in the city. Like all of Åland, Mariehamn is unilingually Swedish-speaking and around of the inhabitants (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/28000/thumb-27686-100.jpg")
+	(title "Mariehamn")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Mariehamn"))
+
+([FlightPro_Class880083] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 14)
+	(feature "city")
+	(lang "en")
+	(lat 59.7583)
+	(lng 18.6958)
+	(rank 100)
+	(summary "Norrtälje is a locality and the seat of Norrtälje Municipality, Stockholm County, Sweden with 17,275 inhabitants in 2010.  (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/136000/thumb-135353-100.jpg")
+	(title "Norrtälje")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Norrt%C3%A4lje"))
+
+([FlightPro_Class880084] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 25)
+	(feature "city")
+	(lang "en")
+	(lat 59.4053)
+	(lng 18.3294)
+	(rank 98)
+	(summary "Vaxholm is a locality and the seat of Vaxholm Municipality, Stockholm County, Sweden. It is located in the Stockholm archipelago. The name Vaxholm comes from Vaxholm Castle, which was constructed in 1549 on an islet with this name on the inlet to Stockholm, for defense purposes, by King Gustav Vasa (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/54000/thumb-53033-100.jpg")
+	(title "Vaxholm")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Vaxholm"))
+
+([FlightPro_Class880085] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AX")
+	(feature "city")
+	(lang "en")
+	(lat 60.155)
+	(lng 19.95)
+	(rank 98)
+	(summary "Jomala is a municipality of Åland, an autonomous territory of Finland. The municipality has a population of and covers an area of of which is water. The population density is . The municipality is unilingually Swedish. Mariehamn Airport is located in Jomala.  (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/161000/thumb-160383-100.jpg")
+	(title "Jomala")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Jomala"))
+
+([FlightPro_Class880086] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 21)
+	(feature "isle")
+	(lang "en")
+	(lat 59.526)
+	(lng 18.6236)
+	(rank 98)
+	(summary "Ljusterö is an island in Sweden. It is in the northern part of the Stockholm archipelago in Österåker Municipality, Stockholm County. It is approximately 65 kilometers north of central Stockholm. With an area of 62 km², it is the 17th largest island in the country (...)")
+	(title "Ljusterö")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ljuster%C3%B6"))
+
+([FlightPro_Class880087] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 32)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 59.7667)
+	(lng 18.7)
+	(rank 98)
+	(summary "Norrtälje Municipality (Norrtälje kommun) is a municipality in Stockholm County in east central Sweden. Its seat is located in the city of Norrtälje. It is the largest and northernmost municipality of Stockholm County and was created in 1971 through the amalgamation of several former municipalities (...)")
+	(title "Norrtälje Municipality")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Norrt%C3%A4lje_Municipality"))
+
+([FlightPro_Class880088] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 16)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 59.3333)
+	(lng 18.3833)
+	(rank 98)
+	(summary "Värmdö Municipality (Värmdö kommun) is a municipality in Stockholm County in east central Sweden. Its seat is located in the town of Gustavsberg, with a population of 9,682 (2005), situated on the main island at an elevation of 37 m (...)")
+	(title "Värmdö Municipality")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/V%C3%A4rmd%C3%B6_Municipality"))
+
+([FlightPro_Class880089] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AX")
+	(feature "city")
+	(lang "en")
+	(lat 60.213)
+	(lng 19.6274)
+	(rank 98)
+	(summary "Eckerö is a municipality of Åland, an autonomous territory under Finnish sovereignty. The municipality has a population of and covers an area of of which is water. The population density is . The municipality is unilingually Swedish and of the population are Swedish speakers (...)")
+	(title "Eckerö")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ecker%C3%B6"))
+
+([FlightPro_Class880090] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AX")
+	(feature "city")
+	(lang "en")
+	(lat 60.069)
+	(lng 20.083)
+	(rank 98)
+	(summary "Lemland is a municipality of Åland, an autonomous territory of Finland. The municipality has a population of and covers an area of of which is water. The population density is . The municipality is unilingually Swedish.  (...)")
+	(title "Lemland")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Lemland"))
+
+([FlightPro_Class880091] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AX")
+	(feature "adm1st")
+	(lang "en")
+	(lat 60.031)
+	(lng 20.3883)
+	(rank 98)
+	(summary "Föglö is an island municipality of Åland, an autonomous territory of Finland. The municipality has a population of and covers an area of of which is water. The population density is . The municipality is unilingually Swedish, yet in the last decade there has been some immigration from Estonia and (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/121000/thumb-120434-100.jpg")
+	(title "Föglö")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/F%C3%B6gl%C3%B6"))
+
+([FlightPro_Class880092] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AX")
+	(feature "adm1st")
+	(lang "en")
+	(lat 60.242)
+	(lng 20.373)
+	(rank 98)
+	(summary "Vårdö is an island municipality of Åland, an autonomous territory of Finland. The municipality has a population of and covers an area of of which is water. The population density is . The municipality is unilingually Swedish (...)")
+	(title "Vårdö")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/V%C3%A5rd%C3%B6"))
+
+([FlightPro_Class880093] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(feature "city")
+	(lang "en")
+	(lat 60.2667)
+	(lng 18.3667)
+	(rank 98)
+	(summary "Östhammar is a locality and the seat of Östhammar Municipality, Uppsala County, Sweden with 4,534 inhabitants in 2010. Today Östhammar Municipality is a part of Uppsala County, but the area has historically been a part of Stockholm County.  (...)")
+	(title "Östhammar")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/%C3%96sthammar"))
+
+([FlightPro_Class880094] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AX")
+	(feature "city")
+	(lang "en")
+	(lat 60.23)
+	(lng 19.9847)
+	(rank 98)
+	(summary "Finström is a municipality of Åland, an autonomous territory of Finland. The municipality has a population of of which speak Swedish and Finnish as their first language. The municipality covers an area of of which is water. The population density is . The municipality is unilingually Swedish (...)")
+	(title "Finström")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Finstr%C3%B6m"))
+
+([FlightPro_Class880095] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 13)
+	(feature "city")
+	(lang "en")
+	(lat 59.4802)
+	(lng 18.2996)
+	(rank 97)
+	(summary "Åkersberga is a locality and the seat of Österåker Municipality, Stockholm County, Sweden with 28,033 inhabitants in 2010.  (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/95000/thumb-94818-100.jpg")
+	(title "Åkersberga")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/%C3%85kersberga"))
+
+([FlightPro_Class880096] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AX")
+	(feature "city")
+	(lang "en")
+	(lat 60.2167)
+	(lng 19.7333)
+	(rank 97)
+	(summary "Hammarland is a municipality of Åland, an autonomous territory of Finland. The municipality has a population of and covers an area of of which is water. The population density is . The municipality is unilingually Swedish (...)")
+	(title "Hammarland")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Hammarland"))
+
+([FlightPro_Class880097] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 14)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 59.4833)
+	(lng 18.3)
+	(rank 97)
+	(summary "Österåker Municipality is a municipality in Stockholm County in east central Sweden. Its seat is located in the town of Åkersberga, with a population of 26,727 (2005). From 1974 to 1982 Österåker was part of Vaxholm Municipality (...)")
+	(title "Österåker Municipality")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/%C3%96ster%C3%A5ker_Municipality"))
+
+([FlightPro_Class880098] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 10)
+	(feature "landmark")
+	(lang "en")
+	(lat 59.3695)
+	(lng 18.7398)
+	(rank 97)
+	(summary "Ivar Kreuger (; March 2, 1880 – March 12, 1932) was a Swedish civil engineer, financier, entrepreneur and industrialist. In 1908 he co-founded the construction company Kreuger & Toll Byggnads AB, which specialized in new building techniques (...)")
+	(title "Ivar Kreuger")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ivar_Kreuger"))
+
+([FlightPro_Class880100] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "isle")
+	(lang "en")
+	(lat 60.301)
+	(lng 19.1315)
+	(rank 97)
+	(summary "Märket (\"The Mark\") is a small uninhabited skerry in the Baltic Sea between Sweden and Finland (in the area of the autonomous Åland Islands), which has been divided between two sovereignties since the Treaty of Fredrikshamn of 1809 defined the border between Sweden and the Russian Empire as going (...)")
+	(title "Märket")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/M%C3%A4rket"))
+
+([FlightPro_Class880101] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(feature "adm2nd")
+	(lang "en")
+	(lat 60.2667)
+	(lng 18.3667)
+	(rank 96)
+	(summary "Östhammar Municipality (Östhammars kommun) is a municipality in Uppsala County in east central Sweden. Its seat is located in the city of Östhammar. The present municipality was created during the local government reform in the late sixties and early seventies (...)")
+	(title "Östhammar Municipality")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/%C3%96sthammar_Municipality"))
+
+([FlightPro_Class880103] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 17)
+	(feature "city")
+	(lang "en")
+	(lat 59.325)
+	(lng 18.3861)
+	(rank 96)
+	(summary "Gustavsberg is a locality and the seat of Värmdö Municipality in Stockholm County, Sweden with 11,333 inhabitants in 2010. It is most known for its porcelain factory, Gustavsberg porcelain, and toilet bowls distributed nationwide and internationally.  (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/101000/thumb-100547-100.jpg")
+	(title "Gustavsberg, Värmdö Municipality")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Gustavsberg%2C_V%C3%A4rmd%C3%B6_Municipality"))
+
+([FlightPro_Class880104] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(feature "city")
+	(lang "en")
+	(lat 60.3392)
+	(lng 18.4425)
+	(rank 95)
+	(summary "Öregrund is a locality situated in Östhammar Municipality, Uppsala County, Sweden with 1,555 inhabitants in 2010. It is located by the coast of the Baltic Sea. Öregrund is, despite its small population, for historical reasons often still referred to as a city.  (...)")
+	(title "Öregrund")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/%C3%96regrund"))
+
+([FlightPro_Class880105] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(feature "adm2nd")
+	(lang "en")
+	(lat 59.4167)
+	(lng 18.3167)
+	(rank 95)
+	(summary "Vaxholm Municipality (Vaxholms kommun or Vaxholms stad) is a municipality within Stockholm archipelago in Stockholm County in east central Sweden. The municipal slogan is \"Vaxholm &ndash; the capital of the archipelago\", due to its central location in the archipelago (...)")
+	(title "Vaxholm Municipality")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Vaxholm_Municipality"))
+
+([FlightPro_Class880106] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 21)
+	(feature "isle")
+	(lang "en")
+	(lat 59.4286)
+	(lng 18.8811)
+	(population 280)
+	(rank 94)
+	(summary "Möja is an island in the Stockholm archipelago in Sweden. Möja is one of the most popular islands in the archipelago for travellers and boaters, and is also significant in size. Möja is frequented by the ferries of Waxholmsbolaget and other companies, and is easily accessible from Stockholm (...)")
+	(title "Möja")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/M%C3%B6ja"))
+
+([FlightPro_Class880107] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 37)
+	(feature "isle")
+	(lang "en")
+	(lat 60.0)
+	(lng 18.8333)
+	(rank 94)
+	(summary "Väddö is an island in the Baltic Sea in Roslagen district, Sweden. It is situated in Norrtälje Municipality. Together with the adjoined Björkö it is considered the seventh largest island of Sweden.  (...)")
+	(title "Väddö")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/V%C3%A4dd%C3%B6"))
+
+([FlightPro_Class880108] of  WikiArticleDetails
+
+	(butt-del-pois "Delete POIs/ext.data/delete-pois")
+	(butt-return "Return to Flight/ext.data/ret-to-flight")
+	(butt-show-pois "Show on Map/ext.data/show-on-map")
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "waterbody")
+	(lang "en")
+	(lat 60.1833)
+	(lng 19.1087)
+	(max-rows 50)
+	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
+	(radius 1.0)
+	(rank 94)
+	(summary "The Sea of Åland is a waterway in the southern Gulf of Bothnia, between the Åland islands and Sweden. It connects the Bothnian Sea with the Baltic Sea proper. The seas are often choppy here. The narrowest part is named South Kvarken.")
+	(title "Sea of Åland")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Sea_of_%C3%85land"))
+
+([FlightPro_Class880109] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 28)
+	(feature "city")
+	(lang "en")
+	(lat 59.7444)
+	(lng 18.3687)
+	(rank 94)
+	(summary "Rimbo is a locality situated in Norrtälje Municipality, Stockholm County, Sweden with 4,629 inhabitants in 2010. Rimbo is located about 20 km west of the municipal seat Norrtälje. Rimbo grew up as a railhead at the junction between the narrow gauge railways to Uppsala and Norrtälje (1884), Stockholm (...)")
+	(title "Rimbo")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Rimbo"))
+
+([FlightPro_Class880110] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AX")
+	(feature "city")
+	(lang "en")
+	(lat 60.13)
+	(lng 20.66)
+	(rank 94)
+	(summary "Sottunga is an island municipality of Åland, an autonomous territory of Finland. The municipality is the smallest when it comes to population in Åland and in Finland, with a population of only and covers an area of of which is water. The population density is  (...)")
+	(title "Sottunga")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Sottunga"))
+
+([FlightPro_Class880111] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 23)
+	(feature "landmark")
+	(lang "en")
+	(lat 59.2353)
+	(lng 18.3047)
+	(rank 94)
+	(summary "Tyresö Palace (Swedish:Tyresö slott) is a palace from the 17th century in Tyresö, Stockholm County, Sweden, about 25 km south-east of central Stockholm. The construction of the palace began in the 1620s by the Lord High Steward (Swedish: riksdrots) Gabriel Oxenstierna (...)")
+	(title "Tyresö Palace")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Tyres%C3%B6_Palace"))
+
+([FlightPro_Class880112] of  WikiArticleDetails
+
+	(butt-del-pois "Delete POIs/ext.data/delete-pois")
+	(butt-return "Return to Flight/ext.data/ret-to-flight")
+	(butt-show-pois "Show on Map/ext.data/show-on-map")
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "landmark")
+	(lang "en")
+	(lat 59.85)
+	(lng 19.9167)
+	(max-rows 50)
+	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
+	(radius 1.0)
+	(rank 93)
+	(summary "SMS Rheinland was one of four s, the first dreadnoughts built for the German Imperial Navy (Kaiserliche Marine). Rheinland mounted twelve main guns in six twin turrets in an unusual hexagonal arrangement. The navy built Rheinland and her sister ships in response to the revolutionary British , which (...)")
+	(title "SMS Rheinland")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/SMS_Rheinland"))
+
+([FlightPro_Class880113] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AX")
+	(feature "city")
+	(lang "en")
+	(lat 60.25)
+	(lng 20.1167)
+	(rank 93)
+	(summary "Sund is a municipality of Åland. It is an autonomous territory of Finland which is very rich in history and culture, being one of the official 27 National landscapes of Finland. The municipality has a population of and covers an area of of which is water. The population density is  (...)")
+	(title "Sund, Åland")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Sund%2C_%C3%85land"))
+
+([FlightPro_Class880114] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AX")
+	(feature "city")
+	(lang "en")
+	(lat 60.373)
+	(lng 19.845)
+	(rank 93)
+	(summary "Geta is a municipality of Åland, an autonomous territory of Finland. The municipality has a population of and covers an area of of which is water. The population density is . The municipality is unilingually Swedish.  (...)")
+	(title "Geta, Åland")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Geta%2C_%C3%85land"))
+
+([FlightPro_Class880115] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 61)
+	(lang "en")
+	(lat 59.5249)
+	(lng 18.4082)
+	(rank 93)
+	(summary "Roslagen is the name of the coastal areas of Uppland province in Sweden, which also constitutes the northern part of the Stockholm archipelago. Historically, it was the name for all the coastal areas of the Baltic Sea, including the eastern parts of lake Mälaren, belonging to Svealand (...)")
+	(title "Roslagen")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Roslagen"))
+
+([FlightPro_Class880116] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(feature "city")
+	(lang "en")
+	(lat 60.0986)
+	(lng 18.8153)
+	(rank 92)
+	(summary "Grisslehamn is a locality situated in Norrtälje Municipality, Stockholm County, Sweden with 249 inhabitants in 2010. It is located on the coast by the Sea of Åland; the Eckerö Linjen ferries between Åland and Sweden operate between Grisslehamn and Berghamn on Eckerö, Åland (...)")
+	(title "Grisslehamn")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Grisslehamn"))
+
+([FlightPro_Class880117] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "isle")
+	(lang "en")
+	(lat 60.1481)
+	(lng 19.7883)
+	(rank 92)
+	(summary "Fasta Åland (or , meaning mainland Åland) is the largest and most populous island of Åland, an autonomous province of Finland. The provincial capital Mariehamn is located on the island. With the area of 685 km² it is the 3rd largest island in Finland (...)")
+	(title "Fasta Åland")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Fasta_%C3%85land"))
+
+([FlightPro_Class880118] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AX")
+	(feature "city")
+	(lang "en")
+	(lat 60.274)
+	(lng 20.06)
+	(rank 92)
+	(summary ":For the prison, see Saltvik Prison. Saltvik is a municipality of Åland, an autonomous territory of Finland. The total area is 1 161,8 km², of which 150,7 km² is land, 4,7 km² lakes and 1006,4 km² sea. The archipelago north of Saltvik is perhaps the most beautiful one in Åland (...)")
+	(title "Saltvik")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Saltvik"))
+
+([FlightPro_Class880119] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AX")
+	(feature "city")
+	(lang "en")
+	(lat 60.117)
+	(lng 20.255)
+	(rank 92)
+	(summary "Lumparland is a municipality of Åland, an autonomous territory of Finland. It is the smallest municipality on mainland Åland. The municipality has a population of and covers an area of of which is water. The population density is . The municipality is unilingually Swedish (...)")
+	(title "Lumparland")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Lumparland"))
+
+([FlightPro_Class880120] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 26)
+	(feature "landmark")
+	(lang "en")
+	(lat 59.3653)
+	(lng 18.0583)
+	(rank 100)
+	(summary "Stockholm University is the state university of Stockholm, Sweden. Stockholm University has two scientific fields: the natural sciences and the humanities/social sciences. With over 70,000 students at four different faculties, law, humanities, the mathematical and natural sciences, it is one of the (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/147000/thumb-146712-100.jpg")
+	(title "Stockholm University")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Stockholm_University"))
+
+([FlightPro_Class880121] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 20)
+	(feature "landmark")
+	(lang "en")
+	(lat 59.3275)
+	(lng 18.0675)
+	(rank 100)
+	(summary "The Riksdag (or Sveriges riksdag) is the national legislature and the supreme decision-making body of Sweden. Since 1971 the Riksdag has been a unicameral legislature with 349 members , elected proportionally and serving, from 1994 onwards, on fixed four-year terms (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/148000/thumb-147162-100.jpg")
+	(title "Riksdag")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Riksdag"))
+
+([FlightPro_Class880122] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 43)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 59.35)
+	(lng 18.0667)
+	(rank 100)
+	(summary "Stockholm Municipality or the City of Stockholm (Swedish: Stockholms kommun or Stockholms stad) is a municipality in Stockholm County in east central Sweden. It has the largest population of the 290 municipalities of the country, but one of the smallest areas, making it the most densely populated (...)")
+	(title "Stockholm Municipality")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Stockholm_Municipality"))
+
+([FlightPro_Class880123] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 16)
+	(feature "railwaystation")
+	(lang "en")
+	(lat 59.3302)
+	(lng 18.0583)
+	(rank 98)
+	(summary "Stockholm Central Station is the largest railway station in Sweden.(not counting Metro stations) It is situated in the district of Norrmalm at Vasagatan/Central Plan. Opened July 18, 1871, it has over 200,000 visitors daily, of which about 170,000 are travellers (105,000 with commuter trains, 25,000 (...)")
+	(title "Stockholm Central Station")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Stockholm_Central_Station"))
+
+([FlightPro_Class880124] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 11)
+	(feature "landmark")
+	(lang "en")
+	(lat 59.3279)
+	(lng 18.0915)
+	(rank 98)
+	(summary "Vasa (or Wasa)The original name of the ship was Vasen (\"the fascine\"), after the heraldic symbol on the coat of arms of the House of Vasa, which was also part of the coat of arms of Sweden at the time. Vasa has since become the most widely recognized name of the ship, largely because the Vasa Museum (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/65000/thumb-64824-100.jpg")
+	(title "Vasa (ship)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Vasa_%28ship%29"))
+
+([FlightPro_Class880125] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 17)
+	(feature "city")
+	(lang "en")
+	(lat 59.517)
+	(lng 17.917)
+	(rank 98)
+	(summary "Upplands Väsby is a locality and the seat of Upplands Väsby Municipality, Stockholm County, Sweden with 37,594 inhabitants in 2010.  (...)")
+	(title "Upplands Väsby")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Upplands_V%C3%A4sby"))
+
+([FlightPro_Class880126] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 50)
+	(feature "city")
+	(lang "en")
+	(lat 59.3083)
+	(lng 18.1639)
+	(rank 98)
+	(summary "Nacka is the municipal seat of Nacka Municipality and part of Stockholm urban area in Sweden. The municipality's name harks back to a 16th-century industrial operation established by the Crown at Nacka farmstead where conditions for water mills are good (...)")
+	(title "Nacka")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Nacka"))
+
+([FlightPro_Class880127] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 8)
+	(feature "airport")
+	(lang "en")
+	(lat 59.3543)
+	(lng 17.9436)
+	(rank 98)
+	(summary "Stockholm Bromma Airport is a Swedish domestic and minor international airport in Stockholm. It is located west northwest of downtown Stockholm and is the closest to the city compared to the other commercial passenger airports in the area around Stockholm (Arlanda, Skavsta and Västerås) (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/131000/thumb-130112-100.jpg")
+	(title "Stockholm Bromma Airport")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Stockholm_Bromma_Airport"))
+
+([FlightPro_Class880128] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 3)
+	(feature "landmark")
+	(lang "en")
+	(lat 59.3906)
+	(lng 18.0164)
+	(rank 98)
+	(summary "Ulriksdal Palace is a royal palace situated on the banks of the Edsviken in the Royal National City Park in Solna Municipality, 6 km north of Stockholm. It was originally called Jakobsdal for its owner Jacob De la Gardie, who had it built by architect Hans Jacob Kristler in 1643-1645 as a country (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/16000/thumb-15796-100.jpg")
+	(title "Ulriksdal Palace")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ulriksdal_Palace"))
+
+([FlightPro_Class880129] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 18)
+	(feature "landmark")
+	(lang "en")
+	(lat 59.3627)
+	(lng 17.9963)
+	(rank 97)
+	(summary "Råsunda Stadium (; also known as Råsunda Fotbollsstadion, Råsundastadion or just Råsunda) was the Swedish national football stadium. It was located in Solna Municipality in Stockholm and named after the district in Solna where it is located (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/139000/thumb-138211-100.jpg")
+	(title "Råsunda Stadium")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/R%C3%A5sunda_Stadium"))
+
+([FlightPro_Class880130] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 26)
+	(lang "en")
+	(lat 59.4333)
+	(lng 18.0833)
+	(rank 97)
+	(summary "Täby is a trimunicipal locality and the seat of Täby Municipality in Stockholm County, Sweden, with 66,292 inhabitants in 2013. It is also partly located in Danderyd Municipality (the Enebyberg area) and a very small part of Sollentuna Municipality (...)")
+	(title "Täby")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/T%C3%A4by"))
+
+([FlightPro_Class880131] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 21)
+	(feature "railwaystation")
+	(lang "en")
+	(lat 59.3317)
+	(lng 18.0608)
+	(rank 97)
+	(summary "T-Centralen (Swedish for \"The T-Central\"; T being an abbreviation for \"tunnelbana\", the Swedish word for \"underground\" or \"subway\") is a metro station that forms the heart of the Stockholm metro system, in the sense that it is the only station where all three of the system's lines meet (...)")
+	(title "T-Centralen")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/T-Centralen"))
+
+([FlightPro_Class880132] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 20)
+	(feature "city")
+	(lang "en")
+	(lat 59.7167)
+	(lng 17.8)
+	(rank 97)
+	(summary "Knivsta is a locality and the seat of Knivsta Municipality, Uppsala County, Sweden with 7,081 inhabitants in 2010.  (...)")
+	(title "Knivsta")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Knivsta"))
+
+([FlightPro_Class880133] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 26)
+	(feature "isle")
+	(lang "en")
+	(lat 59.3327)
+	(lng 18.0222)
+	(rank 97)
+	(summary "Kungsholmen is an island in Lake Mälaren in Sweden, part of Stockholm City. It is situated north of Riddarfjärden and considered part of the historical province Uppland. Its area is 3.9 km² with a perimeter of 8.9 km. The highest point is at Stadshagsplan (47 m) (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/77000/thumb-76025-100.jpg")
+	(title "Kungsholmen")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kungsholmen"))
+
+([FlightPro_Class880134] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 28)
+	(feature "city")
+	(lang "en")
+	(lat 59.3264)
+	(lng 18.0725)
+	(rank 97)
+	(summary "The City of Stockholm is situated on fourteen islands and on the banks to the archipelago where Lake Mälaren meets the Baltic Sea. The city centre is virtually situated on the water.  (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/157000/thumb-156832-100.jpg")
+	(title "Geography of Stockholm")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Geography_of_Stockholm"))
+
+([FlightPro_Class880135] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 8)
+	(feature "landmark")
+	(lang "en")
+	(lat 59.3233)
+	(lng 18.0967)
+	(rank 97)
+	(summary "Gröna Lund is an amusement park in Stockholm, Sweden. It is located on the seaward side of the Djurgården island and is relatively small compared to other amusement parks, mainly due to its central location, which limits expansion (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/52000/thumb-51788-100.jpg")
+	(title "Gröna Lund")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Gr%C3%B6na_Lund"))
+
+([FlightPro_Class880136] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 30)
+	(feature "city")
+	(lang "en")
+	(lat 59.3333)
+	(lng 18.0667)
+	(population 7000)
+	(rank 97)
+	(summary "Norrmalm is a city district in Stockholm, part of the larger Norrmalm borough. The southern part of the district, Lower Norrmalm (Swedish: Nedre Norrmalm), also known as City, constitutes the most central part of Stockholm, while Upper Norrmalm is more residential (...)")
+	(title "Norrmalm")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Norrmalm"))
+
+([FlightPro_Class880137] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 18)
+	(lang "en")
+	(lat 59.3167)
+	(lng 18.5167)
+	(rank 97)
+	(summary "Värmdö is an island in the innermost region of the Stockholm archipelago and covers an area of 180 km², making it the largest island in the archipelago. Värmdö is after Gotland and Öland the third largest island on the eastern coast of Sweden. Värmdö lies in Stockholm County (...)")
+	(title "Värmdö (island)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/V%C3%A4rmd%C3%B6_%28island%29"))
+
+([FlightPro_Class880138] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 52)
+	(feature "landmark")
+	(lang "en")
+	(lat 59.2771)
+	(lng 17.907)
+	(rank 97)
+	(summary "Skärholmen is a suburban district in south-western Stockholm, primarily consisting of Million Programme style apartment buildings from the 1960s and early 1970s. As such, it is one of the larger and more well known concrete suburbs of Stockholm, with one of the biggest shopping centres in Sweden (...)")
+	(title "Skärholmen")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Sk%C3%A4rholmen"))
+
+([FlightPro_Class880139] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 43)
+	(feature "city")
+	(lang "en")
+	(lat 59.3442)
+	(lng 18.0422)
+	(rank 97)
+	(summary "Vasastaden, or colloquially Vasastan, (Swedish for \"The Vasa City\") is a 3.00 km² large city district in central Stockholm, Sweden. With 51,661 inhabitants it is the second most populous, as well as the second most densely populated (17,220/km²) district in Stockholm (...)")
+	(title "Vasastan, Stockholm")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Vasastan%2C_Stockholm"))
+
+([FlightPro_Class880140] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 22)
+	(feature "waterbody")
+	(lang "en")
+	(lat 59.2456)
+	(lng 18.1244)
+	(rank 97)
+	(summary "Drevviken is a lake in southern Stockholm, Sweden, shared by the four municipalities Stockholm, Haninge, Huddinge, and Tyresö. While much of the surrounding area is used for one-family houses, the lake and the green space north of it are considered to be of great recreational and natural importance (...)")
+	(title "Drevviken")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Drevviken"))
+
+([FlightPro_Class880141] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 25)
+	(feature "waterbody")
+	(lang "en")
+	(lat 59.2308)
+	(lng 18.0886)
+	(rank 97)
+	(summary "Magelungen is one of the biggest lakes in Stockholm, Sweden, located between the municipalities of Stockholm and Huddinge. It is considered as of great recreational value and is popular for bathing, yachting, and fishing in summers, and tour skating in winters (...)")
+	(title "Magelungen")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Magelungen"))
+
+([FlightPro_Class880142] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 22)
+	(lang "en")
+	(lat 59.3833)
+	(lng 17.6333)
+	(rank 96)
+	(summary "Färingsö or Svartsjölandet is an island in Sweden's Lake Mälaren. It covers an area of 79 km². The island is a part of Ekerö Municipality. The largest village on the island is Stenhamra. The island is also named after the village of Svartsjö.  (...)")
+	(title "Färingsö")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/F%C3%A4rings%C3%B6"))
+
+([FlightPro_Class880143] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 49)
+	(feature "landmark")
+	(lang "en")
+	(lat 59.235)
+	(lng 18.1017)
+	(rank 96)
+	(summary "Farsta strand is a suburban satellite town in the south part of Stockholm Municipality, Sweden.  (...)")
+	(title "Farsta strand")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Farsta_strand"))
+
+([FlightPro_Class880144] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 23)
+	(feature "city")
+	(lang "en")
+	(lat 59.3833)
+	(lng 18.0667)
+	(rank 96)
+	(summary "Stocksund is an upper class suburb in Metropolitan Stockholm, Sweden. Located immediately across the Edsviken and Stocksundet from Bergshamra, Stocksund is one of four parts of Danderyd Municipality north of Stockholm (...)")
+	(title "Stocksund")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Stocksund"))
+
+([FlightPro_Class880145] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 31)
+	(feature "city")
+	(lang "en")
+	(lat 59.3414)
+	(lng 17.8928)
+	(rank 96)
+	(summary "Södra Ängby is a residential area blending functionalism with garden city ideals, located in western Stockholm, Sweden, forming part of the Bromma borough. Encompassing more than 500 buildings, it remains the largest coherent functionalistic villa area in Sweden and possibly the world,Wærn, Guide (...)")
+	(title "Södra Ängby")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/S%C3%B6dra_%C3%84ngby"))
+
+([FlightPro_Class880146] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 13)
+	(feature "city")
+	(lang "en")
+	(lat 59.3331)
+	(lng 17.9803)
+	(rank 96)
+	(summary "Alvik is a residential district in western Stockholm municipality and part of the Bromma borough. The Alvik outdoor Metro station was opened in 1952 and is also a connection to the Tvärbanan light railway.  (...)")
+	(title "Alvik")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Alvik"))
+
+([FlightPro_Class880147] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 23)
+	(lang "en")
+	(lat 59.2667)
+	(lng 18.4667)
+	(rank 96)
+	(summary "Ingarö is an island in Värmdö Municipality, Stockholm County. The chief settlement is called Brunn. With an area of 63 km2, it is the 16th biggest island in Sweden. Petroglyphs indicate that the island has been inhabited since the Nordic Bronze Age (...)")
+	(title "Ingarö")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ingar%C3%B6"))
+
+([FlightPro_Class880148] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 3)
+	(lang "en")
+	(lat 59.4119)
+	(lng 17.9954)
+	(rank 96)
+	(summary "Edsviken is an elongated, narrow inlet of the Baltic Sea running through the Swedish municipalities of Danderyd, Solna and Sollentuna in Stockholm County. Edsviken ranges from Stocksund and Bergshamra, Solna in the south to Edsberg in the north (...)")
+	(title "Edsviken")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Edsviken"))
+
+([FlightPro_Class880149] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 21)
+	(feature "landmark")
+	(lang "en")
+	(lat 59.3339)
+	(lng 18.0558)
+	(rank 96)
+	(summary "Vasateatern or \"Vasan\" (in English: The Vasa Theatre) is a private theatre in Stockholm, Sweden. It is located at Vasagatan 19-21 in central Stockholm. It was built in 1886 and has for many years been Stockholm's (and Sweden's) main private theatre for comedies and farces (...)")
+	(title "Vasateatern")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Vasateatern"))
+
+([FlightPro_Class880150] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 26)
+	(feature "landmark")
+	(lang "en")
+	(lat 59.3349)
+	(lng 18.0622)
+	(rank 95)
+	(summary "Hötorget (Haymarket) is a city square in the center of Stockholm. During the daytime it is the site of a fruit and vegetable market, except on Sundays, when flea markets are arranged. To its east lies the Royal Concert Hall, to its south lies the Filmstaden Sergel, one of the largest multiscreen (...)")
+	(title "Hötorget")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/H%C3%B6torget"))
+
+([FlightPro_Class880151] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 19)
+	(lang "en")
+	(lat 59.3803)
+	(lng 17.8933)
+	(rank 95)
+	(summary "Spånga is a community and parish in Stockholm County, Sweden.  (...)")
+	(title "Spånga")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Sp%C3%A5nga"))
+
+([FlightPro_Class880152] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 26)
+	(feature "landmark")
+	(lang "en")
+	(lat 59.3197)
+	(lng 18.0706)
+	(rank 95)
+	(summary "The Stockholm City Museum is a museum documenting, preserving and exhibiting the history of Stockholm. The museum is housed in Södra Stadshuset at Slussen on Södermalm. The building was completed in 1685. In the 1930s the museum moved in and opened to the public in 1942 (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/75000/thumb-74302-100.jpg")
+	(title "Stockholm City Museum")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Stockholm_City_Museum"))
+
+([FlightPro_Class880153] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 8)
+	(feature "landmark")
+	(lang "en")
+	(lat 59.3578)
+	(lng 18.1039)
+	(rank 95)
+	(summary "Ropsten is a cape at the eastern part of Stockholm mainland at the inner part of Stockholm archipelago in Sweden. Two bridges named Lidingöbron extend from Ropsten over to the island of Lidingö. Ropsten area is located between Hjorthagen and the Stockholm city main port Värtahamnen (...)")
+	(title "Ropsten")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ropsten"))
+
+([FlightPro_Class880154] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 39)
+	(feature "city")
+	(lang "en")
+	(lat 59.3622)
+	(lng 17.8728)
+	(rank 95)
+	(summary "Vällingby (; by most Swedes today understood as \"Gruel Village\", see history below) is a suburban district in Västerort in the western part of Stockholm Municipality, Sweden. Vällingby was planned in the early 1950s as a new town (...)")
+	(title "Vällingby")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/V%C3%A4llingby"))
+
+([FlightPro_Class880155] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 13)
+	(feature "landmark")
+	(lang "en")
+	(lat 59.2678)
+	(lng 18.2458)
+	(rank 95)
+	(summary "Erstavik is a castle in Sweden. The surrounding property is one of the few remaining in Sweden still held as fideicommissum. It is located next to the Nackareservatet nature reserve.  (...)")
+	(title "Erstavik")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Erstavik"))
+
+([FlightPro_Class880156] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 38)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 59.4333)
+	(lng 17.8333)
+	(rank 95)
+	(summary "Järfälla Municipality (Järfälla kommun) is a municipality in Stockholm County in east central Sweden, and is considered a suburb of Stockholm. Its seat is located in Jakobsberg, part of Stockholm. Järfälla has not been amalgamated with other municipalities in the two local government reforms carried (...)")
+	(title "Järfälla Municipality")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/J%C3%A4rf%C3%A4lla_Municipality"))
+
+([FlightPro_Class880157] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 45)
+	(feature "city")
+	(lang "en")
+	(lat 59.2583)
+	(lng 18.085)
+	(rank 95)
+	(summary "Hökarängen is a district in the Farsta borough of southern Stockholm. It neighbours Fagersjö to the west, Farsta to the south, Sköndal to the east and Gubbängen to the north. As of December 31, 2012, the total population of Hökarängen is 8,916. The Hökarängen metro station is located in the district (...)")
+	(title "Hökarängen")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/H%C3%B6kar%C3%A4ngen"))
+
+([FlightPro_Class880158] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 29)
+	(lang "en")
+	(lat 59.3362)
+	(lng 18.0161)
+	(rank 95)
+	(summary "Stadshagen is a district in Stockholm, in the northwest part of Kungsholmen. One of Stockholm's major hospitals, Saint Göran Hospital, opened in 1888 in this district. The Blue line metro station of Stadshagen was opened in 1975 and is the least lightly used of the three subway lines.")
+	(title "Stadshagen")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Stadshagen"))
+
+([FlightPro_Class880159] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 51)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 59.2)
+	(lng 17.7667)
+	(rank 94)
+	(summary "Salem Municipality (Salems kommun) is a municipality in Stockholm County in east central Sweden. The name traces its origins from Slaem in the 16th century, but was later changed to Salem, the Biblical name of Jerusalem. Its seat is located in Salem.  (...)")
+	(title "Salem Municipality")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Salem_Municipality"))
+
+([FlightPro_Class880160] of  CloFuncall
+
+	(source "(ru.rules/sp :all)"))
+
+([FlightPro_Class880164] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 564)
+	(feature "city")
+	(lang "en")
+	(lat 48.5117)
+	(lng 14.5061)
+	(rank 100)
+	(summary "Freistadt (literally \"Freetown\") is a small Austrian town in the state of Upper Austria in the region Mühlviertel. With a population of approximately 7,500 residents, it is a trade centre for local villages. Freistadt is the economic centre of a district of the same name District Freistadt (...)")
+	(title "Freistadt")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Freistadt"))
+
+([FlightPro_Class880169] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 503)
+	(lang "en")
+	(lat 48.7667)
+	(lng 14.9833)
+	(rank 98)
+	(summary "Gmünd is a town in northwestern Waldviertel in the Austrian state of Lower Austria, the capital of the Gmünd district. The municipality consists of the Katastralgemeinden Böhmzeil, Breitensee, Eibenstein, Gmünd and Grillenstein (...)")
+	(title "Gmünd, Lower Austria")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Gm%C3%BCnd%2C_Lower_Austria"))
+
+([FlightPro_Class880170] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 509)
+	(feature "city")
+	(lang "en")
+	(lat 48.2833)
+	(lng 14.6803)
+	(rank 98)
+	(summary "Windhaag bei Perg is a municipality in the district of Perg in Upper Austria, Austria.  (...)")
+	(title "Windhaag bei Perg")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Windhaag_bei_Perg"))
+
+([FlightPro_Class880173] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 268)
+	(feature "city")
+	(lang "en")
+	(lat 48.2667)
+	(lng 14.25)
+	(rank 97)
+	(summary "Leonding is a city situated to the southwest of Linz, Austria in the state of Upper Austria. It has a population of about 22,269 (2001 census) and an area of . It borders Puchenau and the river Danube in the north, Wilhering and Pasching in the west, Traun in the south and Linz in the east (...)")
+	(title "Leonding")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Leonding"))
+
+([FlightPro_Class880174] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 425)
+	(feature "city")
+	(lang "en")
+	(lat 48.2669)
+	(lng 14.7156)
+	(rank 97)
+	(summary "Münzbach is a municipality in the district of Perg in Upper Austria, Austria.  (...)")
+	(title "Münzbach")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/M%C3%BCnzbach"))
+
+([FlightPro_Class880175] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 753)
+	(feature "city")
+	(lang "en")
+	(lat 48.5253)
+	(lng 14.2933)
+	(rank 97)
+	(summary "Bad Leonfelden is a municipality in the district of Urfahr-Umgebung in Upper Austria, Austria.  (...)")
+	(title "Bad Leonfelden")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Bad_Leonfelden"))
+
+([FlightPro_Class880176] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 427)
+	(feature "city")
+	(lang "en")
+	(lat 48.3556)
+	(lng 14.5306)
+	(rank 97)
+	(summary "Pregarten is a municipality in the district of Freistadt in Upper Austria, Austria.  (...)")
+	(title "Pregarten")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Pregarten"))
+
+([FlightPro_Class880183] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 299)
+	(feature "city")
+	(lang "en")
+	(lat 48.2756)
+	(lng 14.4292)
+	(rank 96)
+	(summary "Luftenberg an der Donau is a municipality in the district of Perg in Austria.  (...)")
+	(title "Luftenberg an der Donau")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Luftenberg_an_der_Donau"))
+
+([FlightPro_Class880184] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 578)
+	(lang "en")
+	(lat 48.3219)
+	(lng 14.7122)
+	(rank 96)
+	(summary "Rechberg is a municipality in the district of Perg in Upper Austria, Austria.  (...)")
+	(title "Rechberg, Austria")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Rechberg%2C_Austria"))
+
+([FlightPro_Class880185] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 245)
+	(lang "en")
+	(lat 48.2717)
+	(lng 14.4483)
+	(rank 96)
+	(summary "Sankt Georgen an der Gusen (lit. Saint George's Town on the Gusen River) is a small market town in Upper Austria, Austria, between the municipalities of Luftenberg and Langenstein. , the town had 3,533 inhabitants (...)")
+	(title "Sankt Georgen an der Gusen")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Sankt_Georgen_an_der_Gusen"))
+
+([FlightPro_Class880186] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 486)
+	(feature "city")
+	(lang "en")
+	(lat 48.3003)
+	(lng 14.6336)
+	(rank 96)
+	(summary "Allerheiligen im Mühlkreis is a municipality in the district Perg in Upper Austria, Austria.  (...)")
+	(title "Allerheiligen im Mühlkreis")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Allerheiligen_im_M%C3%BChlkreis"))
+
+([FlightPro_Class880187] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 577)
+	(feature "city")
+	(lang "en")
+	(lat 48.4722)
+	(lng 14.5417)
+	(rank 96)
+	(summary "Lasberg is a municipality in the district of Freistadt in Upper Austria, Austria.  (...)")
+	(title "Lasberg")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Lasberg"))
+
+([FlightPro_Class880188] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 576)
+	(feature "city")
+	(lang "en")
+	(lat 48.7008)
+	(lng 14.8956)
+	(rank 96)
+	(summary "Weitra is a small town in the district of Gmünd in the Austrian state of Lower Austria.  (...)")
+	(title "Weitra")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Weitra"))
+
+([FlightPro_Class880189] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 527)
+	(lang "en")
+	(lat 48.7587)
+	(lng 15.1825)
+	(rank 96)
+	(summary "Vitis is a town in the district of Waidhofen an der Thaya in the Austrian state of Lower Austria.  (...)")
+	(title "Vitis, Austria")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Vitis%2C_Austria"))
+
+([FlightPro_Class880190] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 339)
+	(feature "city")
+	(lang "en")
+	(lat 48.3531)
+	(lng 14.4158)
+	(rank 96)
+	(summary "Gallneukirchen is a small city in Upper Austria, Austria and is part of the district \"Urfahr-Umgebung\" with an official population of 6281.  (...)")
+	(title "Gallneukirchen")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Gallneukirchen"))
+
+([FlightPro_Class880193] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CZ")
+	(elevation 578)
+	(feature "city")
+	(lang "en")
+	(lat 48.6161)
+	(lng 14.3119)
+	(rank 95)
+	(summary "Vyšší Brod is a town in the South Bohemian Region of the Czech Republic. It has around 2,600 inhabitants and it is the southernmost municipality in the Czech Republic. Vyšší Brod Monastery, an important historic landmark, is located in the town.  (...)")
+	(title "Vyšší Brod")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Vy%C5%A1%C5%A1%C3%AD_Brod"))
+
+([FlightPro_Class880194] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 689)
+	(lang "en")
+	(lat 48.5083)
+	(lng 14.4389)
+	(rank 95)
+	(summary "Waldburg is a municipality in the district of Freistadt in Upper Austria, Austria.  (...)")
+	(title "Waldburg, Austria")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Waldburg%2C_Austria"))
+
+([FlightPro_Class880196] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 507)
+	(feature "city")
+	(lang "en")
+	(lat 48.4431)
+	(lng 14.5383)
+	(rank 95)
+	(summary "Kefermarkt is a municipality in the district of Freistadt in Upper Austria, Austria.  (...)")
+	(title "Kefermarkt")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kefermarkt"))
+
+([FlightPro_Class880199] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CZ")
+	(elevation 535)
+	(feature "city")
+	(lang "en")
+	(lat 48.7385)
+	(lng 14.4963)
+	(population 7362)
+	(rank 95)
+	(summary "Kaplice is a town in the South Bohemian Region of the Czech Republic.  (...)")
+	(title "Kaplice")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kaplice"))
+
+([FlightPro_Class880200] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 708)
+	(lang "en")
+	(lat 48.3131)
+	(lng 14.7636)
+	(rank 95)
+	(summary "Sankt Thomas am Blasenstein is a municipality in the district of Perg in Upper Austria, Austria.  (...)")
+	(title "Sankt Thomas am Blasenstein")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Sankt_Thomas_am_Blasenstein"))
+
+([FlightPro_Class880201] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 308)
+	(feature "city")
+	(lang "en")
+	(lat 48.0372)
+	(lng 14.4169)
+	(population 38140)
+	(rank 100)
+	(summary "Steyr is a town, located in the Austrian federal state of Upper Austria. The town is situated at the confluence of the rivers Steyr and Enns. Steyr is Austria's 12th most populated town and simultaneously the 3rd largest town in Upper Austria (...)")
+	(title "Steyr")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Steyr"))
+
+([FlightPro_Class880202] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 277)
+	(lang "en")
+	(lat 48.123)
+	(lng 14.8721)
+	(rank 100)
+	(summary "Amstetten is a town in Lower Austria. It is the capital of the Amstetten District.  (...)")
+	(title "Amstetten, Lower Austria")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Amstetten%2C_Lower_Austria"))
+
+([FlightPro_Class880203] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 532)
+	(feature "city")
+	(lang "en")
+	(lat 47.3817)
+	(lng 15.0972)
+	(rank 100)
+	(summary "Leoben is a Styrian city in central Austria, located by the Mur river. With a population of about 25,000 it is a local industrial center and hosts the University of Leoben which specialises in mining. The Peace of Leoben, an armistice between Austria and France preliminary to the Treaty of Campo (...)")
+	(title "Leoben")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Leoben"))
+
+([FlightPro_Class880204] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 493)
+	(feature "city")
+	(lang "en")
+	(lat 47.4105)
+	(lng 15.2687)
+	(population 12466)
+	(rank 100)
+	(summary "Bruck an der Mur is a city of some 13,500 people located in the Austrian state of Styria. It is located at the confluence of the Mur and Mürz Rivers. Its manufactures include metal products and paper; located on the Graz to Vienna main line, Bruck is an important regional rail junction.  (...)")
+	(title "Bruck an der Mur")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Bruck_an_der_Mur"))
+
+([FlightPro_Class880205] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 500)
+	(feature "city")
+	(lang "en")
+	(lat 47.4396)
+	(lng 15.2893)
+	(population 21586)
+	(rank 100)
+	(summary "Kapfenberg (around 22,000 inhabitants) is a city in Styria, Austria, near Bruck an der Mur. The town's landmark is Burg Oberkapfenberg. Main employer in the city of Kapfenberg was and still is the steel manufacturer Böhler (...)")
+	(title "Kapfenberg")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kapfenberg"))
+
+([FlightPro_Class880206] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 368)
+	(feature "city")
+	(lang "en")
+	(lat 47.9667)
+	(lng 14.7667)
+	(rank 100)
+	(summary "Waidhofen an der Ybbs is an independent city (Statutarstadt) in the Austrian state of Lower Austria. The city had a population of 11,662 (in 131,52 km²) as of the 2001 census. It was first mentioned in 1186 and has been the economic centre of the Ybbstal valley since the 14th century.  (...)")
+	(title "Waidhofen an der Ybbs")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Waidhofen_an_der_Ybbs"))
+
+([FlightPro_Class880207] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 252)
+	(feature "city")
+	(lang "en")
+	(lat 48.2503)
+	(lng 14.6336)
+	(rank 100)
+	(summary "Perg is a city in the Austrian state of Upper Austria, capital of the district of the same name.  (...)")
+	(title "Perg")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Perg"))
+
+([FlightPro_Class880208] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 250)
+	(feature "city")
+	(lang "en")
+	(lat 48.2419)
+	(lng 14.5169)
+	(rank 98)
+	(summary "Mauthausen is a small market town in Upper Austria, Austria. It is located at about 20 kilometres east of the city of Linz, and has a population of 4,850 (2001). During World War II, it became the site of the Mauthausen-Gusen concentration camp complex.  (...)")
+	(title "Mauthausen")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Mauthausen"))
+
+([FlightPro_Class880209] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 253)
+	(lang "en")
+	(lat 48.2167)
+	(lng 14.475)
+	(rank 98)
+	(summary "Enns is a town in the Austrian state of Upper Austria, located at an elevation of 281 metres above sea level on the river Enns, which forms the border with the state of Lower Austria. Enns was one of the first places in Austria to receive town privileges (...)")
+	(title "Enns (town)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Enns_%28town%29"))
+
+([FlightPro_Class880210] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 272)
+	(lang "en")
+	(lat 48.2217)
+	(lng 14.2397)
+	(rank 98)
+	(summary "The city Traun is located on the north bank of the river Traun and borders on the east to the state capital Linz. The name Traun is derived from the Celtic name for river (dru). Traun is the fifth largest city in Upper Austria, located in the district Linz-Land (...)")
+	(title "Traun")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Traun"))
+
+([FlightPro_Class880211] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 659)
+	(feature "city")
+	(lang "en")
+	(lat 47.426)
+	(lng 15.0067)
+	(population 8385)
+	(rank 98)
+	(summary "Trofaiach is a municipality in the Leoben district of the state of Styria in Austria, the site of a post World War II British sector displaced persons camp.  (...)")
+	(title "Trofaiach")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Trofaiach"))
+
+([FlightPro_Class880212] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 339)
+	(feature "city")
+	(lang "en")
+	(lat 48.0047)
+	(lng 15.1678)
+	(population 4186)
+	(rank 98)
+	(summary "Scheibbs is a town in Austria in the Scheibbs district of Lower Austria.  (...)")
+	(title "Scheibbs")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Scheibbs"))
+
+([FlightPro_Class880213] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 811)
+	(lang "en")
+	(lat 47.55)
+	(lng 14.8833)
+	(rank 98)
+	(summary "Eisenerz (\"Iron ore\") is a market place and old mining town in the Austrian state of Styria, . N.W. of Graz by rail. Pop. (2001) 6,400. It is situated in the deep Erzbach Valley, dominated on the east by the Pfaffenstein (6140 ft), on the west by the Kaiserschild (6830 ft), and on the south by the (...)")
+	(title "Eisenerz")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Eisenerz"))
+
+([FlightPro_Class880214] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 293)
+	(feature "city")
+	(lang "en")
+	(lat 48.2083)
+	(lng 14.2889)
+	(rank 98)
+	(summary "Ansfelden is a town in Upper Austria, Austria, located 289 metres above sea level, with a population of about 15300. The rivers Traun and Krems run through the municipality. The town is perhaps best known for being the birthplace of the composer and organist Anton Bruckner (...)")
+	(title "Ansfelden")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ansfelden"))
+
+([FlightPro_Class880215] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 245)
+	(feature "city")
+	(lang "en")
+	(lat 48.2267)
+	(lng 14.6089)
+	(rank 98)
+	(summary "Naarn im Machlande is a municipality in the district of Perg in Upper Austria, Austria.  (...)")
+	(title "Naarn im Machlande")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Naarn_im_Machlande"))
+
+([FlightPro_Class880216] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 236)
+	(feature "city")
+	(lang "en")
+	(lat 48.2089)
+	(lng 14.7442)
+	(rank 97)
+	(summary "Baumgartenberg is a municipality in the district Perg in Upper Austria, Austria.  (...)")
+	(title "Baumgartenberg")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Baumgartenberg"))
+
+([FlightPro_Class880217] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 280)
+	(feature "city")
+	(lang "en")
+	(lat 48.2247)
+	(lng 14.7833)
+	(rank 97)
+	(summary "Klam is a municipality in the district Perg in Upper Austria, Austria.  (...)")
+	(title "Klam")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Klam"))
+
+([FlightPro_Class880219] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 243)
+	(feature "river")
+	(lang "en")
+	(lat 48.2333)
+	(lng 14.5)
+	(rank 97)
+	(summary "The Enns is a southern tributary of the Danube River, joining northward at Enns, Austria. The Enns River spans , in a flat-J-shape. It flows from its source near the towns of Gasthofalm and Flachau, generally eastward through Radstadt, Schladming, and Liezen, then turns north near Hieflau, to flow (...)")
+	(title "Enns (river)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Enns_%28river%29"))
+
+([FlightPro_Class880220] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 231)
+	(feature "city")
+	(lang "en")
+	(lat 48.1836)
+	(lng 14.7094)
+	(rank 97)
+	(summary "Mitterkirchen im Machland is a municipality in the district of Perg in Upper Austria, Austria.  (...)")
+	(title "Mitterkirchen im Machland")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Mitterkirchen_im_Machland"))
+
+([FlightPro_Class880221] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 267)
+	(lang "en")
+	(lat 48.2275)
+	(lng 14.7075)
+	(rank 97)
+	(summary "Arbing is a municipality in the district Perg in Upper Austria, Austria. As of 2010 it has a population of 1366.  (...)")
+	(title "Arbing")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Arbing"))
+
+([FlightPro_Class880223] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 232)
+	(feature "city")
+	(lang "en")
+	(lat 48.1667)
+	(lng 15.0667)
+	(rank 97)
+	(summary "Ybbs an der Donau is a city in Austria. It was established in 1317. Throughout the town, from the intersection of the important trade routes and along the Danube the town has preserved a site that already had great economic importance during the Middle Ages (...)")
+	(title "Ybbs an der Donau")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ybbs_an_der_Donau"))
+
+([FlightPro_Class880225] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 461)
+	(feature "city")
+	(lang "en")
+	(lat 47.9819)
+	(lng 15.3253)
+	(rank 96)
+	(summary "Frankenfels is a market town with 2040 inhabitants in St. Pölten-Land which is a district of the state of Lower Austria, Austria.  (...)")
+	(title "Frankenfels")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Frankenfels"))
+
+([FlightPro_Class880226] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 826)
+	(feature "city")
+	(lang "en")
+	(lat 47.4881)
+	(lng 14.9933)
+	(rank 96)
+	(summary "Vordernberg is a municipality in the district of Leoben in the Austrian state of Styria.  (...)")
+	(title "Vordernberg")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Vordernberg"))
+
+([FlightPro_Class880227] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 673)
+	(feature "city")
+	(lang "en")
+	(lat 47.9333)
+	(lng 15.0833)
+	(rank 96)
+	(summary "Gaming is a municipality within the district of Scheibbs in Lower Austria. It is known primarily for an old Carthusian monastery existing within its borders. This served as the home and burial place of Duke Albert II of the Habsburg family, and now serves as the main campus for Franciscan University (...)")
+	(title "Gaming, Austria")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Gaming%2C_Austria"))
+
+([FlightPro_Class880228] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 1870)
+	(feature "mountain")
+	(lang "en")
+	(lat 47.8618)
+	(lng 15.2053)
+	(rank 96)
+	(summary "The Ötscher, at 1893 metres, is a prominent peak in south-western Lower Austria. Its name has Slavic roots and translates approximately as a diminutive of \"father\". The Ötscher area belongs to the Ybbstal Alps, which are part of the Northern Limestone Alps (...)")
+	(title "Ötscher")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/%C3%96tscher"))
+
+([FlightPro_Class880229] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 383)
+	(feature "city")
+	(lang "en")
+	(lat 48.055)
+	(lng 14.1308)
+	(rank 95)
+	(summary "Kremsmünster is a town in Kirchdorf an der Krems (district), in Upper Austria, Austria. Its population is 6,450, as of 2001. Settled in 777, it is home to the Kremsmünster Abbey. The Abbey was founded 777 by duke Tassilo III of Bavaria and is one of the oldest abbeys of central Europe (...)")
+	(title "Kremsmünster")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kremsm%C3%BCnster"))
+
+([FlightPro_Class880230] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 293)
+	(feature "city")
+	(lang "en")
+	(lat 48.2267)
+	(lng 14.1794)
+	(rank 95)
+	(summary "Hörsching is a municipality in the district Linz-Land in Upper Austria, Austria. It is next to the Linz Airport which is served by a shuttle bus from the Hörsching train station. Anton Bruckner was schooled for a time in the village.  (...)")
+	(title "Hörsching")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/H%C3%B6rsching"))
+
+([FlightPro_Class880231] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 457)
+	(feature "city")
+	(lang "en")
+	(lat 47.8781)
+	(lng 14.1333)
+	(rank 95)
+	(summary "Micheldorf in Oberösterreich is a municipality in the district of Kirchdorf an der Krems in Upper Austria, Austria.  (...)")
+	(title "Micheldorf in Oberösterreich")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Micheldorf_in_Ober%C3%B6sterreich"))
+
+([FlightPro_Class880232] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 252)
+	(feature "city")
+	(lang "en")
+	(lat 48.1333)
+	(lng 15.1389)
+	(rank 95)
+	(summary "Wieselburg is a town in Lower Austria, Austria, located near the River Erlauf. Its name roughly translates to castle where two rivers meet, as there are two rivers that run together to create the Erlauf. Its population is approximately 6,500 (including surrounding villages) (...)")
+	(title "Wieselburg")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Wieselburg"))
+
+([FlightPro_Class880233] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 377)
+	(feature "city")
+	(lang "en")
+	(lat 48.0347)
+	(lng 14.2094)
+	(rank 95)
+	(summary "Bad Hall is a market town in the Steyr-Land district in central Upper Austria, Austria. It has 5,200 inhabitants, as of 2006 estimates, in an area of 13.38 km². Its name, Bad Hall, means \"Bath salt\", a reference to its long history of baths and spas.  (...)")
+	(title "Bad Hall")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Bad_Hall"))
+
+([FlightPro_Class880234] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 1443)
+	(feature "mountain")
+	(lang "en")
+	(lat 47.525)
+	(lng 14.9117)
+	(rank 95)
+	(summary "The Erzberg mine is a large open-pit mine located in Eisenerz, Styria, in the central-western part of Austria, 60 km north-west of Graz and 260 km south-west of the capital, Vienna. Erzberg represents the largest iron ore reserves in Austria having estimated reserves of 235 million tonnes of ore (...)")
+	(title "Erzberg mine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Erzberg_mine"))
+
+([FlightPro_Class880235] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 248)
+	(lang "en")
+	(lat 48.2514)
+	(lng 14.4819)
+	(rank 95)
+	(summary "Langenstein is a municipality in the district of Perg in Upper Austria, Austria.  (...)")
+	(title "Langenstein, Austria")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Langenstein%2C_Austria"))
+
+([FlightPro_Class880236] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 253)
+	(lang "en")
+	(lat 48.2167)
+	(lng 14.4167)
+	(rank 95)
+	(summary "Asten is a municipality in the district Linz-Land in Upper Austria, Austria. The former name was Raffelstetten.  (...)")
+	(title "Asten, Austria")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Asten%2C_Austria"))
+
+([FlightPro_Class880237] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 748)
+	(feature "city")
+	(lang "en")
+	(lat 47.7402)
+	(lng 15.308)
+	(population 1272)
+	(rank 95)
+	(summary "Gußwerk is a municipality in the district of Bruck an der Mur in Styria, Austria.  (...)")
+	(title "Gußwerk")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Gu%C3%9Fwerk"))
+
+([FlightPro_Class880238] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 296)
+	(feature "landmark")
+	(lang "en")
+	(lat 48.2073)
+	(lng 14.3788)
+	(rank 95)
+	(summary "St. Florian Monastery is an Augustinian monastery in the town of Sankt Florian, Austria. Founded in the early ninth century, and later refounded by Augustinians in the eleventh century, St. Florian is the largest monastery in Upper Austria, and rivals Melk Abbey and Klosterneuburg Monastery as among (...)")
+	(title "St. Florian Monastery")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/St._Florian_Monastery"))
+
+([FlightPro_Class880239] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 214)
+	(feature "city")
+	(lang "en")
+	(lat 48.2)
+	(lng 15.2)
+	(rank 95)
+	(summary "Pöchlarn is a town in the district of Melk in the Austrian state of Lower Austria. The painter and writer Oskar Kokoschka was born here in 1886.  (...)")
+	(title "Pöchlarn")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/P%C3%B6chlarn"))
+
+([FlightPro_Class880240] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 442)
+	(feature "city")
+	(lang "en")
+	(lat 47.8836)
+	(lng 14.2589)
+	(rank 95)
+	(summary "Molln is a municipality in the district of Kirchdorf an der Krems in Upper Austria, Austria. It is remembered as a place where there was a poacher battle in 1919 and several people were shot and killed.  (...)")
+	(title "Molln")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Molln"))
+
+([FlightPro_Class880241] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 549)
+	(feature "landmark")
+	(lang "en")
+	(lat 47.5594)
+	(lng 13.6464)
+	(rank 98)
+	(summary "The Salzkammergut is a resort area located in Austria. It stretches from the City of Salzburg eastwards along the Austrian Alpine Foreland and the Northern Limestone Alps to the peaks of the Dachstein Mountains, spanning the federal states of Upper Austria, Salzburg, and Styria (...)")
+	(title "Salzkammergut")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Salzkammergut"))
+
+([FlightPro_Class880242] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 691)
+	(feature "city")
+	(lang "en")
+	(lat 47.1725)
+	(lng 14.6603)
+	(rank 98)
+	(summary "Judenburg is a historic town in Styria, Austria. Since 1 January 2012, it is the administrative centre of the newly established Murtal district. It has previously been the capital of the Judenburg District.  (...)")
+	(title "Judenburg")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Judenburg"))
+
+([FlightPro_Class880243] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 659)
+	(feature "city")
+	(lang "en")
+	(lat 47.61)
+	(lng 13.7828)
+	(rank 98)
+	(summary "Altaussee is a municipality and spa town in the district of Liezen in Styria, Austria. The small village is nestled on the shores of the Altaussee lake, beneath the Loser Plateau. Occupying an area of 92 km², Altaussee is home to 1,777 people (...)")
+	(title "Altaussee")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Altaussee"))
+
+([FlightPro_Class880244] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 659)
+	(feature "city")
+	(lang "en")
+	(lat 47.61)
+	(lng 13.7828)
+	(rank 97)
+	(summary "Bad Aussee is a town in the Austrian state of Styria, located at the confluence of the three sources of the Traun River in the Ausseerland region. Bad Aussee serves as the economic and cultural center of the Styrian part of the Salzkammergut lakes region (...)")
+	(title "Bad Aussee")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Bad_Aussee"))
+
+([FlightPro_Class880245] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 636)
+	(lang "en")
+	(lat 46.9525)
+	(lng 14.4097)
+	(rank 97)
+	(summary "Friesach is a historic town in the Sankt Veit an der Glan district of Carinthia, Austria. First mentioned in a 860 deed, it is known as the oldest town in Carinthia.  (...)")
+	(title "Friesach")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Friesach"))
+
+([FlightPro_Class880246] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 2862)
+	(feature "mountain")
+	(lang "en")
+	(lat 47.4761)
+	(lng 13.6047)
+	(rank 97)
+	(summary "The Dachstein Mountains are a mountain range in the Alps. The term is a collective name used by the Austrian Alpine Club in categorising the Eastern Alps (AVE No. 14). It includes: * The Dachstein Massif itself with its highest peak, the Hoher Dachstein * the Grimming in the east to the upper (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/58000/thumb-57128-100.jpg")
+	(title "Dachstein Mountains")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Dachstein_Mountains"))
+
+([FlightPro_Class880247] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 1065)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 47.1167)
+	(lng 13.8167)
+	(rank 97)
+	(summary "Bezirk Tamsweg is an administrative district (Bezirk) in the federal state of Salzburg, Austria. It is congruent with the Lungau region. The administrative centre of the district is Tamsweg.  (...)")
+	(title "Tamsweg District")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Tamsweg_District"))
+
+([FlightPro_Class880248] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 642)
+	(feature "city")
+	(lang "en")
+	(lat 47.5667)
+	(lng 14.2333)
+	(rank 97)
+	(summary "Liezen is a municipality in the Austrian federal state of Styria, district capital of the district of the same name and economic center on the River Enns.  (...)")
+	(title "Liezen")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Liezen"))
+
+([FlightPro_Class880249] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 802)
+	(feature "city")
+	(lang "en")
+	(lat 47.1119)
+	(lng 14.1731)
+	(rank 97)
+	(summary "Murau is the capital of the district of the same name in Styria, located along the Mur river. It has a population of 2,124.  (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/141000/thumb-140924-100.jpg")
+	(title "Murau")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Murau"))
+
+([FlightPro_Class880250] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 2749)
+	(feature "mountain")
+	(lang "en")
+	(lat 47.2667)
+	(lng 13.7617)
+	(rank 97)
+	(summary "The Niedere Tauern or Low Tauern are a mountain range of the Central Eastern Alps, in the Austrian states of Salzburg and Styria. For the etymology of the name, see Tauern.  (...)")
+	(title "Niedere Tauern")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Niedere_Tauern"))
+
+([FlightPro_Class880251] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 1884)
+	(feature "mountain")
+	(lang "en")
+	(lat 47.3419)
+	(lng 14.2217)
+	(rank 97)
+	(summary "The Northern Limestone Alps , also called the Northern Calcareous Alps, are the ranges of the Eastern Alps north of the Central Eastern Alps located in Austria and the adjacent Bavarian lands of southeastern Germany (...)")
+	(title "Northern Limestone Alps")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Northern_Limestone_Alps"))
+
+([FlightPro_Class880252] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 637)
+	(feature "airport")
+	(lang "en")
+	(lat 47.5357)
+	(lng 14.1414)
+	(rank 96)
+	(summary "This is a list of airports in Austria, sorted by location __TOC__  (...)")
+	(title "List of airports in Austria")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/List_of_airports_in_Austria"))
+
+([FlightPro_Class880253] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 1123)
+	(feature "city")
+	(lang "en")
+	(lat 47.4214)
+	(lng 13.6547)
+	(rank 96)
+	(summary "Ramsau am Dachstein is a municipality in the district of Liezen, state of Styria, Austria. It is also the name of the elevated plateau between the Dachstein range and the Enns valley on which this municipality is located (...)")
+	(title "Ramsau am Dachstein")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ramsau_am_Dachstein"))
+
+([FlightPro_Class880254] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 510)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 47.5586)
+	(lng 13.6836)
+	(rank 96)
+	(summary "Obertraun, Upper Austria is a village in the Salzkammergut, a region in Austria. It is located near the Hallstätter See (Hallstatt Lake) and Hoher Dachstein. Obertraun is a popular holiday destination offering activities such as skiing, snowboarding in the winter and mountain biking, swimming and (...)")
+	(title "Obertraun")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Obertraun"))
+
+([FlightPro_Class880255] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 736)
+	(feature "city")
+	(lang "en")
+	(lat 47.5833)
+	(lng 13.5333)
+	(rank 96)
+	(summary "Gosau is a municipality in the district of Gmunden in Upper Austria, Austria.  (...)")
+	(title "Gosau")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Gosau"))
+
+([FlightPro_Class880256] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 2319)
+	(feature "mountain")
+	(lang "en")
+	(lat 46.9531)
+	(lng 13.9292)
+	(rank 96)
+	(summary "The Gurktal Alps are a mountain range of the Central Eastern Alps in Austria, named after the valley of the Gurk River.  (...)")
+	(title "Gurktal Alps")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Gurktal_Alps"))
+
+([FlightPro_Class880257] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 751)
+	(lang "en")
+	(lat 46.9067)
+	(lng 13.535)
+	(rank 96)
+	(summary "Gmünd in Kärnten is a historic town in the district of Spittal an der Drau, in the Austrian state of Carinthia.  (...)")
+	(title "Gmünd, Carinthia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Gm%C3%BCnd%2C_Carinthia"))
+
+([FlightPro_Class880258] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 1037)
+	(feature "landmark")
+	(lang "en")
+	(lat 47.0716)
+	(lng 14.3007)
+	(rank 95)
+	(summary "St. Lambrecht's Abbey (Stift St. Lambrecht) is a Benedictine monastery in the village of Sankt Lambrecht in the Styrian Grebenzen nature reserve in Austria. The monastery is located 1,072 meters above sea level.  (...)")
+	(title "St. Lambrecht's Abbey")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/St._Lambrecht%27s_Abbey"))
+
+([FlightPro_Class880259] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 2749)
+	(lang "en")
+	(lat 47.2667)
+	(lng 13.7617)
+	(rank 95)
+	(summary "The Schladming Tauern at travel.michelin.com. Accessed on 10 Mar 2013.Outline of the geology of Austria and selected excursions, Volumes 34-35. Geologische Bundesanstalt (Austria), 1980. pp. 62/3. ISBN 978-3-9003-1207-7. are a subrange of the Austrian Central Alps within the Eastern Alps (...)")
+	(title "Schladming Tauern")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Schladming_Tauern"))
+
+([FlightPro_Class880260] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 789)
+	(lang "en")
+	(lat 46.9397)
+	(lng 14.5486)
+	(rank 95)
+	(summary "Hüttenberg is a town in the district of Sankt Veit an der Glan in the Austrian state of Carinthia.  (...)")
+	(title "Hüttenberg, Austria")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/H%C3%BCttenberg%2C_Austria"))
+
+([FlightPro_Class880261] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 1378)
+	(feature "city")
+	(lang "en")
+	(lat 47.1167)
+	(lng 13.8)
+	(rank 95)
+	(summary "Tamsweg is a market town in the Austrian state of Salzburg near the border with Styria. It is the administrative centre of the eponymous Tamsweg District (Bezirk) and the largest town of the Salzburg Lungau region.  (...)")
+	(title "Tamsweg")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Tamsweg"))
+
+([FlightPro_Class880262] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 1062)
+	(lang "en")
+	(lat 46.8542)
+	(lng 13.8931)
+	(rank 95)
+	(summary "Reichenau is a municipality in the district of Feldkirchen in the Austrian state of Carinthia.  (...)")
+	(title "Reichenau, Carinthia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Reichenau%2C_Carinthia"))
+
+([FlightPro_Class880263] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 663)
+	(feature "city")
+	(lang "en")
+	(lat 47.5267)
+	(lng 14.3558)
+	(rank 94)
+	(summary "Rottenmann is a town in Styria in Austria, near the Rottenmanner Tauern. Rottenmann was first referred to in an document in 927. It received its town charter in 1279 from King Rudolf von Habsburg.  (...)")
+	(title "Rottenmann")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Rottenmann"))
+
+([FlightPro_Class880264] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 618)
+	(feature "city")
+	(lang "en")
+	(lat 47.6964)
+	(lng 14.1494)
+	(rank 94)
+	(summary "Hinterstoder is a municipality in the district of Kirchdorf an der Krems in Upper Austria, Austria. The village is located close on the border to the federal state Styria and 600 m above sea level. Hinterstoder is surrouned by a lot of mountains: Grosser Priel (2.514 m), Kleiner Priel (2 (...)")
+	(title "Hinterstoder")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Hinterstoder"))
+
+([FlightPro_Class880265] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 640)
+	(feature "city")
+	(lang "en")
+	(lat 47.55)
+	(lng 14.3167)
+	(rank 94)
+	(summary "Selzthal is a municipality in the district of Liezen in the Austrian state of Styria.  (...)")
+	(title "Selzthal")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Selzthal"))
+
+([FlightPro_Class880266] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 673)
+	(feature "city")
+	(lang "en")
+	(lat 47.5054)
+	(lng 14.104)
+	(rank 94)
+	(summary "Irdning is a municipality in the district of Liezen in the Austrian state of Styria.  (...)")
+	(title "Irdning")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Irdning"))
+
+([FlightPro_Class880267] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 736)
+	(feature "city")
+	(lang "en")
+	(lat 47.2083)
+	(lng 14.6794)
+	(rank 94)
+	(summary "Fohnsdorf is a municipality in the district of Murtal in Styria, Austria.  (...)")
+	(title "Fohnsdorf")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Fohnsdorf"))
+
+([FlightPro_Class880268] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 611)
+	(feature "city")
+	(lang "en")
+	(lat 46.8667)
+	(lng 14.4667)
+	(rank 93)
+	(summary "Althofen is a town in the district of Sankt Veit an der Glan in the Austrian state of Carinthia.  (...)")
+	(title "Althofen")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Althofen"))
+
+([FlightPro_Class880269] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 563)
+	(lang "en")
+	(lat 47.65)
+	(lng 13.6167)
+	(rank 93)
+	(summary "Bad Goisern is a market town in Upper Austria, Austria in the district of Gmunden. It is part of the Salzkammergut resort area. At the 2005 census Bad Goisern had a population of 7,578 inhabitants.  (...)")
+	(title "Bad Goisern")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Bad_Goisern"))
+
+([FlightPro_Class880270] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 645)
+	(feature "city")
+	(lang "en")
+	(lat 47.6653)
+	(lng 14.3408)
+	(rank 93)
+	(summary "Spital am Pyhrn is a municipality in the district of Kirchdorf an der Krems in Upper Austria, Austria.  (...)")
+	(title "Spital am Pyhrn")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Spital_am_Pyhrn"))
+
+([FlightPro_Class880271] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 784)
+	(feature "city")
+	(lang "en")
+	(lat 47.2194)
+	(lng 14.5839)
+	(rank 93)
+	(summary "Pöls is a municipality in the district of Murtal in Styria, Austria.  (...)")
+	(title "Pöls")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/P%C3%B6ls"))
+
+([FlightPro_Class880272] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 655)
+	(lang "en")
+	(lat 46.8956)
+	(lng 14.3308)
+	(rank 93)
+	(summary "Straßburg is a town in the district of Sankt Veit an der Glan in Carinthia, Austria.  (...)")
+	(title "Straßburg, Austria")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Stra%C3%9Fburg%2C_Austria"))
+
+([FlightPro_Class880273] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 2101)
+	(feature "mountain")
+	(lang "en")
+	(lat 46.9039)
+	(lng 13.7278)
+	(rank 93)
+	(summary "The Nock MountainsLichtenberger, Elisabeth (2000). Austria, Austrian Academy of Science Press, pp. 138, 152 and 490. ISBN 978-3-7001-2775-8.Borntraeger, Gebrüder (1987). Monograph Series on Mineral Deposits, Issues 27-28, p. 220.Bedeker, K. (1970). Austria, Baedekers Autoführer-Verlag, p 140 (...)")
+	(title "Nock Mountains")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Nock_Mountains"))
+
+([FlightPro_Class880274] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 910)
+	(feature "city")
+	(lang "en")
+	(lat 47.5616)
+	(lng 14.0121)
+	(rank 92)
+	(summary "Tauplitz is a municipality in the district of Liezen in the Austrian state of Styria.  (...)")
+	(title "Tauplitz")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Tauplitz"))
+
+([FlightPro_Class880275] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 666)
+	(lang "en")
+	(lat 46.8753)
+	(lng 14.2889)
+	(rank 92)
+	(summary "Gurk is an Austrian market town and former episcopal see in the District of Sankt Veit an der Glan, Carinthia.  (...)")
+	(title "Gurk, Carinthia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Gurk%2C_Carinthia"))
+
+([FlightPro_Class880276] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 845)
+	(feature "city")
+	(lang "en")
+	(lat 46.9806)
+	(lng 14.2172)
+	(rank 92)
+	(summary "Metnitz is a town in the district of Sankt Veit an der Glan in the Austrian state of Carinthia.  (...)")
+	(title "Metnitz")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Metnitz"))
+
+([FlightPro_Class880277] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 915)
+	(lang "en")
+	(lat 47.2731)
+	(lng 14.67)
+	(rank 92)
+	(summary "Gaal is a municipality in the district of Murtal in Styria, Austria.  (...)")
+	(title "Gaal, Styria")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Gaal%2C_Styria"))
+
+([FlightPro_Class880278] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 1039)
+	(lang "en")
+	(lat 47.79)
+	(lng 14.3736)
+	(rank 91)
+	(summary "Kalkalpen National Park or Limestone Alps National Park is a national park in the Northern Limestone Alps of Austria. It contains Central Europe's largest forest region, as well the largest karst in Austria. It opened on 25 July 1997, and has an area of .  (...)")
+	(title "Kalkalpen National Park")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kalkalpen_National_Park"))
+
+([FlightPro_Class880279] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 930)
+	(lang "en")
+	(lat 46.9225)
+	(lng 13.5675)
+	(rank 91)
+	(summary "Krems in Kärnten is a municipality in the district of Spittal an der Drau in Carinthia in Austria.  (...)")
+	(title "Krems, Carinthia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Krems%2C_Carinthia"))
+
+([FlightPro_Class880280] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 773)
+	(lang "en")
+	(lat 47.5267)
+	(lng 14.2625)
+	(rank 91)
+	(summary "Lassing is a municipality in the district of Liezen, Styria, Austria. On June 17, 1998 a local mine collapsed. One man survived but ten others perished.  (...)")
+	(title "Lassing")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Lassing"))
+
+([FlightPro_Class880281] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BE")
+	(elevation 67)
+	(feature "city")
+	(lang "en")
+	(lat 50.6333)
+	(lng 5.5667)
+	(rank 100)
+	(summary "Liège (; , ; ; ; ; ; ; until 17 September 1946The Book Collector. Vol. 8 (1959), p. 10.Room, Adrian. 2006. Placenames of the World. 2nd ed. Jefferson, NC: McFarland & Co., p. 219.\"Liège\". 1991. Encyclopaedia Britannica: Micropædia. Vol. 7. Chicago: Encyclopaedia Britannica, p. 344 (...)")
+	(title "Liège")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Li%C3%A8ge"))
+
+([FlightPro_Class880282] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CH")
+	(elevation 403)
+	(feature "city")
+	(lang "en")
+	(lat 46.2)
+	(lng 6.15)
+	(rank 100)
+	(summary "Geneva (; , ; , and ; In the national languages of Switzerland the city is known as Genf (German), Ginevra (Italian) and Genevra (Romansh).) is the second most populous city in Switzerland (after Zurich) and is the most populous city of Romandy, the French-speaking part of Switzerland (...)")
+	(title "Geneva")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Geneva"))
+
+([FlightPro_Class880283] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CZ")
+	(elevation 203)
+	(feature "city")
+	(lang "en")
+	(lat 50.0878)
+	(lng 14.4205)
+	(rank 100)
+	(summary "Prague is the capital and largest city of the Czech Republic. It is the fourteenth-largest city in the European Union. It is also the historical capital of Bohemia proper. Situated in the north-west of the country on the Vltava River, the city is home to about 1 (...)")
+	(title "Prague")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Prague"))
+
+([FlightPro_Class880284] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "HU")
+	(elevation 104)
+	(feature "city")
+	(lang "en")
+	(lat 47.4983)
+	(lng 19.0408)
+	(rank 100)
+	(summary "Budapest is the capital and the largest city of Hungary, and one of the largest cities in the European Union. It is the country's principal political, cultural, commercial, industrial, and transportation centre, sometimes described as the primate city of Hungary (...)")
+	(title "Budapest")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Budapest"))
+
+([FlightPro_Class880285] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "DE")
+	(elevation 59)
+	(feature "city")
+	(lang "en")
+	(lat 52.1333)
+	(lng 11.6167)
+	(rank 100)
+	(summary "Magdeburg (; Low Saxon: Meideborg,), is the capital city of the Bundesland of Saxony-Anhalt, Germany. Magdeburg is situated on the Elbe River and was one of the most important medieval cities of Europe. Emperor Otto I, the first Holy Roman Emperor, lived for most of his reign in the town and was (...)")
+	(title "Magdeburg")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Magdeburg"))
+
+([FlightPro_Class880286] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "DE")
+	(elevation 120)
+	(feature "city")
+	(lang "en")
+	(lat 51.0493)
+	(lng 13.7384)
+	(population 525105)
+	(rank 100)
+	(summary "Dresden is the capital cityDesignated by article 2 of the of the Free State of Saxony in Germany. It is situated in a valley on the River Elbe, near the Czech border. The Dresden conurbation is part of the Saxon Triangle metropolitan area with 2.4 million inhabitants (...)")
+	(title "Dresden")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Dresden"))
+
+([FlightPro_Class880287] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "DE")
+	(elevation 306)
+	(lang "en")
+	(lat 49.4528)
+	(lng 11.0778)
+	(rank 100)
+	(summary "Nuremberg is a city in the German state of Bavaria, in the administrative region of Middle Franconia. Situated on the Pegnitz river and the Rhine–Main–Danube Canal, it is located about north of Munich. It is the second-largest city in Bavaria (after Munich), and is the largest in Franconia (...)")
+	(title "Nuremberg")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Nuremberg"))
+
+([FlightPro_Class880288] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 150)
+	(feature "city")
+	(lang "en")
+	(lat 48.1447)
+	(lng 17.1128)
+	(rank 100)
+	(summary "Bratislava (or ; ; formerly Slovak Prešporok; or ';) is the capital of Slovakia and, with a population of about 460,000, the country's largest city. Bratislava is in southwestern Slovakia, occupying both banks of the Danube River and the left bank of the Morava River (...)")
+	(title "Bratislava")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Bratislava"))
+
+([FlightPro_Class880289] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "DE")
+	(elevation 485)
+	(feature "city}}")
+	(lang "en")
+	(lat 48.367)
+	(lng 10.883)
+	(rank 100)
+	(summary "Augsburg is a city in the south-west of Bavaria, Germany. It was a Free Imperial City for over 500 years. It is a university town and home of the Regierungsbezirk Schwaben and the Bezirk Schwaben. Augsburg is an urban district and home to the institutions of the Landkreis Augsburg (...)")
+	(title "Augsburg")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Augsburg"))
+
+([FlightPro_Class880290] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "XK")
+	(elevation 603)
+	(feature "country")
+	(lang "en")
+	(lat 42.6667)
+	(lng 21.1667)
+	(rank 100)
+	(summary "Kosovo , sometimes referred to as Kosovo and Metohija (Serbian: Косово и Метохија, Kosovo i Metohija), is a region in southeastern Europe. In antiquity, the Dardanian kingdom, and later Roman province of Dardania was located in the region (...)")
+	(title "Kosovo")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kosovo"))
+
+([FlightPro_Class880291] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "HU")
+	(elevation 213)
+	(feature "city")
+	(lang "en")
+	(lat 48.7211)
+	(lng 21.2575)
+	(rank 100)
+	(summary "Košice is the biggest city in eastern Slovakia and currently the European Capital of Culture together with Marseille, France. It is situated on the river Hornád at the eastern reaches of the Slovak Ore Mountains, near the border with Hungary (...)")
+	(title "Košice")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ko%C5%A1ice"))
+
+([FlightPro_Class880292] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "IT")
+	(elevation 131)
+	(lang "en")
+	(lat 45.4666)
+	(lng 9.1666)
+	(rank 100)
+	(summary "Milan (; ; Milanese: Milan) is the second-largest city in Italy and the capital of Lombardy. The city proper has a population of about 1.3 million, while its urban area is the 5th largest in the EU with an estimated population of about 5,248,000 (...)")
+	(title "Milan")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Milan"))
+
+([FlightPro_Class880293] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "DE")
+	(elevation 257)
+	(feature "city")
+	(lang "en")
+	(lat 48.7766)
+	(lng 9.1777)
+	(rank 100)
+	(summary "Stuttgart (; , Alemannic: Schduagert) is the capital of the state of Baden-Württemberg in southern Germany. The sixth-largest city in Germany, Stuttgart has a population of 613,392 (December 2011)http://www.statistik.baden-wuerttemberg.de/Veroeffentl/Statistische_Berichte/3126_11001 (...)")
+	(title "Stuttgart")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Stuttgart"))
+
+([FlightPro_Class880294] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FR")
+	(elevation 1083)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 45.5833)
+	(lng 6.3333)
+	(rank 100)
+	(summary "Savoie (; Arpitan: Savouè d’Avâl, Italian: Savoia, , English: Savoy) is a French department located in the Rhône-Alpes region in the French Alps. Together with the Haute-Savoie, Savoie is one of the two departments of the historic region of Savoy that was annexed by France on June 14, 1860, (...)")
+	(title "Savoie")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Savoie"))
+
+([FlightPro_Class880295] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CH")
+	(elevation 489)
+	(lang "en")
+	(lat 46.521)
+	(lng 6.631)
+	(rank 100)
+	(summary "Lausanne is a city in Romandy, the French-speaking part of Switzerland, and is the capital of the canton of Vaud. The seat of the district of Lausanne, the city is situated on the shores of Lake Geneva . It faces the French town of Évian-les-Bains, with the Jura mountains to its north-west (...)")
+	(title "Lausanne")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Lausanne"))
+
+([FlightPro_Class880296] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CH")
+	(elevation 257)
+	(feature "city")
+	(lang "en")
+	(lat 47.567)
+	(lng 7.583)
+	(rank 100)
+	(summary "Basel or Basle Retrieved 23 September 2013. In the national languages of Switzerland the city is also known as Bâle (French), Basilea (Italian) and Basilea (Romansh) is Switzerland's third most populous city (behind Zurich and Geneva) with about 166,000 inhabitants (...)")
+	(title "Basel")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Basel"))
+
+([FlightPro_Class880297] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FR")
+	(elevation 177)
+	(feature "city")
+	(lang "en")
+	(lat 45.7597)
+	(lng 4.8422)
+	(rank 100)
+	(summary "Lyon (; , locally: ; ; historically spelled Lyons) is a city in east-central France in the Rhône-Alpes region, situated between Paris and Marseille. Etymologically it relates to the Celtic God Lugoves, Lugh as do Laon and Leiden (...)")
+	(title "Lyon")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Lyon"))
+
+([FlightPro_Class880298] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "DE")
+	(elevation 58)
+	(lang "en")
+	(lat 50.9426)
+	(lng 6.959)
+	(rank 100)
+	(summary "Cologne is Germany's fourth-largest city (after Berlin, Hamburg, and Munich), and is the largest city both in the German Federal State of North Rhine-Westphalia and within the Rhine-Ruhr Metropolitan Area, one of the major European metropolitan areas with more than ten million inhabitants (...)")
+	(title "Cologne")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Cologne"))
+
+([FlightPro_Class880299] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "IT")
+	(elevation 67)
+	(feature "adm3rd")
+	(lang "en")
+	(lat 45.4333)
+	(lng 10.9833)
+	(rank 100)
+	(summary "Verona (; Venetian Verona, Veròna) is a city straddling the Adige river in Veneto, northern Italy, with approximately 265,000 inhabitants and one of the seven chef-lieus of the region. It is the second largest city municipality in the region and the third of northeast Italy (...)")
+	(title "Verona")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Verona"))
+
+([FlightPro_Class880300] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FR")
+	(elevation 257)
+	(feature "city")
+	(lang "en")
+	(lat 47.2431)
+	(lng 6.0219)
+	(rank 100)
+	(summary "Besançon (French and Arpitan: ; archaic), is the capital and principal city of the Franche-Comté region in eastern France. It had a population of about 237,000 inhabitants in the metropolitan area in 2008. Located close to the border with Switzerland, it is the capital of the department of Doubs (...)")
+	(title "Besançon")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Besan%C3%A7on"))
+
+([FlightPro_Class880301] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FR")
+	(elevation 186)
+	(feature "city")
+	(lang "en")
+	(lat 49.1203)
+	(lng 6.1778)
+	(rank 100)
+	(summary "Metz is a city in the northeast of France located at the confluence of the Moselle and the Seille rivers. Metz is the capital and the prefecture of both the Lorraine region and the Moselle department. Located near the tripoint along the junction of France, Germany, and Luxembourg,Says J.M (...)")
+	(title "Metz")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Metz"))
+
+([FlightPro_Class880302] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 299)
+	(feature "city")
+	(lang "en")
+	(lat 46.0514)
+	(lng 14.506)
+	(rank 100)
+	(summary "Ljubljana (; , , or Aemona) is the capital and largest city of Slovenia. It is located in the heart of the country in the Ljubljana Basin, and is the center of the City Municipality of Ljubljana. With approximately 280,000 inhabitants, it is classified as the only Slovenian large town (...)")
+	(title "Ljubljana")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ljubljana"))
+
+([FlightPro_Class880303] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FR")
+	(elevation 31)
+	(feature "city")
+	(lang "en")
+	(lat 43.9494)
+	(lng 4.8089)
+	(rank 100)
+	(summary "Avignon (; Occitan: Avinhon in classical norm or Avignoun in Mistralian norm) is a French commune in southeastern France in the départment of the Vaucluse bordered by the left bank of the Rhône river. Of the 94,787 inhabitants of the city (as of 1 January 2010), about 12,000 live in the ancient town (...)")
+	(title "Avignon")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Avignon"))
+
+([FlightPro_Class880304] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FR")
+	(elevation 150)
+	(feature "city")
+	(lang "en")
+	(lat 48.5844)
+	(lng 7.7486)
+	(rank 100)
+	(summary "Strasbourg (; Lower Alsatian: Strossburi, ;) is the capital and principal city of the Alsace region in eastern France and is the official seat of the European Parliament. Located close to the border with Germany, it is the capital of the Bas-Rhin département (...)")
+	(title "Strasbourg")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Strasbourg"))
+
+([FlightPro_Class880305] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "PL")
+	(elevation 118)
+	(lang "en")
+	(lat 51.1167)
+	(lng 17.0333)
+	(rank 100)
+	(summary "Wrocław (; ; , known also by several alternative names), situated in Central Europe on the Silesian Lowlands on the river Oder , is the largest city in western Poland. Wrocław is the historical capital of Silesia and Lower Silesia, today is the capital of the Lower Silesian Voivodeship (...)")
+	(title "Wrocław")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Wroc%C5%82aw"))
+
+([FlightPro_Class880306] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 508)
+	(lang "en")
+	(lat 43.8476)
+	(lng 18.3564)
+	(rank 100)
+	(summary "Sarajevo (Cyrillic: Сарајево;) is the capital and largest city of Bosnia and Herzegovina, with an estimated population of 291,422 within administrative borders and 369,534 within the settlement. According to the 2013 Census, the Sarajevo metropolitan area, including Sarajevo Canton and East Sarajevo (...)")
+	(title "Sarajevo")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Sarajevo"))
+
+([FlightPro_Class880307] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RS")
+	(elevation 487)
+	(feature "country")
+	(lang "en")
+	(lat 43.95)
+	(lng 20.9333)
+	(rank 100)
+	(summary "Serbia , officially the Republic of Serbia , is a country located at the crossroads of Central and Southeast Europe, covering the southern part of the Pannonian Plain and the central Balkans. A landlocked country in relative proximity to the Mediterranean, Serbia borders Hungary to the north; (...)")
+	(title "Serbia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Serbia"))
+
+([FlightPro_Class880308] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "IT")
+	(elevation 23)
+	(feature "adm1st")
+	(lang "en")
+	(lat 45.5679)
+	(lng 11.8103)
+	(rank 100)
+	(summary "Veneto (or ,' Collins American English Dictionary. Retrieved 21 October 2012.) or Venetia ' Oxford Dictionary. Retrieved 21 October 2012. – ; ; also called (formerly) Venezia-Euganea Collins English Dictionary. Retrieved 21 October 2012. – is one of the twenty regions of Italy (...)")
+	(title "Veneto")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Veneto"))
+
+([FlightPro_Class880309] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 265)
+	(feature "country")
+	(lang "en")
+	(lat 49.7936)
+	(lng 6.1064)
+	(rank 100)
+	(summary "Luxembourg , officially the Grand Duchy of Luxembourg , is a landlocked country in Western Europe. It is bordered by Belgium to the west and north, Germany to the east, and France to the south. It comprises two principal regions: the Oesling in the north as part of the Ardennes massif, and the (...)")
+	(title "Luxembourg")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Luxembourg"))
+
+([FlightPro_Class880310] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "DE")
+	(elevation 385)
+	(feature "adm1st")
+	(lang "en")
+	(lat 48.9494)
+	(lng 11.395)
+	(rank 100)
+	(summary "The Free State of Bavaria (Main-Franconian: Freischdood Bayan) is a state of Germany, located in the southeast. With an area of , it is the largest state by area, forming almost 20% of the total land area of Germany (...)")
+	(title "Bavaria")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Bavaria"))
+
+([FlightPro_Class880311] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 51.9811)
+	(lng 4.0931)
+	(rank 100)
+	(summary "The Rhine is a European river that begins in the Swiss canton of Grisons in the southeastern Swiss Alps, flows through Germany and eventually empties into the North Sea in the Netherlands. It is the twelfth longest river in Europe, at about , with an average discharge of more than  (...)")
+	(title "Rhine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Rhine"))
+
+([FlightPro_Class880312] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 56)
+	(feature "landmark")
+	(lang "en")
+	(lat 50.8762)
+	(lng 4.422)
+	(rank 100)
+	(summary "The North Atlantic Treaty Organization (NATO; ;), also called the (North) Atlantic Alliance, is an intergovernmental military alliance based on the North Atlantic Treaty which was signed on 4 April 1949. The organization constitutes a system of collective defence whereby its member states agree to (...)")
+	(title "NATO")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/NATO"))
+
+([FlightPro_Class880313] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "IT")
+	(elevation 47)
+	(feature "airport")
+	(lang "en")
+	(lat 41.8887)
+	(lng 12.4866)
+	(rank 100)
+	(summary "Rome is a city and special comune (named \"Roma Capitale\") in Italy. Rome is the capital of Italy and also of the homonymous province and of the region of Lazio. With 2.7 million residents in , it is also the country's largest and most populated comune and fourth-most populous city in the European (...)")
+	(title "Rome")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Rome"))
+
+([FlightPro_Class880314] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 123)
+	(feature "landmark")
+	(lang "en")
+	(lat 44.5331)
+	(lng 10.8631)
+	(rank 100)
+	(summary "Scuderia Ferrari is the racing team division of the Ferrari automobile marque. The team mainly races in Formula One but has also competed in many other series in numerous levels of motorsport since its formation in 1929, including sportscar racing (...)")
+	(title "Scuderia Ferrari")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Scuderia_Ferrari"))
+
+([FlightPro_Class880315] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "AT")
+	(elevation 214)
+	(lang "en")
+	(lat 48.2)
+	(lng 16.35)
+	(rank 100)
+	(summary "Austria-Hungary (also known as the Austro-Hungarian Empire, Austro-Hungarian Monarchy or k.u.k. Monarchy, Dual Monarchy, Danube Monarchy), was a constitutional monarchic union more formally known as the Kingdoms and Lands Represented in the Imperial Council and the Lands of the Holy Hungarian Crown (...)")
+	(title "Austria-Hungary")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Austria-Hungary"))
+
+([FlightPro_Class880316] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "PL")
+	(elevation 232)
+	(feature "landmark")
+	(lang "en")
+	(lat 50.0358)
+	(lng 19.1783)
+	(rank 100)
+	(summary "The Holocaust (from the Greek ': hólos, \"whole\" and kaustós, \"burnt\"). also known as Shoah (Hebrew: , HaShoah, \"the catastrophe\"; Yiddish: , Churben or Hurban, from the Hebrew for \"destruction\"), was the mass murder or genocide of approximately six million Jews during World War II, a programme of (...)")
+	(title "The Holocaust")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/The_Holocaust"))
+
+([FlightPro_Class880317] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "IT")
+	(elevation 28)
+	(feature "landmark")
+	(lang "en")
+	(lat 41.9014)
+	(lng 12.4606)
+	(rank 100)
+	(summary "The Society of Jesus (S.J., SJ or SI) is a Christian male religious congregation of the Catholic Church. The members are called Jesuits. The society is engaged in evangelization and apostolic ministry in 112 nations on six continents (...)")
+	(title "Society of Jesus")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Society_of_Jesus"))
+
+([FlightPro_Class880318] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 420)
+	(lang "en")
+	(lat 43.5541)
+	(lng 5.6044)
+	(rank 100)
+	(summary "Pablo Ruiz y Picasso, known as Pablo Picasso (; 25 October 1881 – 8 April 1973) was a Spanish painter, sculptor, printmaker, ceramicist, and stage designer who spent most of his adult life in France. As one of the greatest and most influential artists of the 20th century, he is known for co-founding (...)")
+	(title "Pablo Picasso")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Pablo_Picasso"))
+
+([FlightPro_Class880319] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 41.91)
+	(lng 8.73)
+	(rank 100)
+	(summary "Ligue 1 (; League 1, formerly known as Division 1 and sometimes referred to as Le Championnat), is the French professional league for association football clubs. It is the country's primary football competition and serves as the top division of the French football league system (...)")
+	(title "Ligue 1")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ligue_1"))
+
+([FlightPro_Class880320] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "DE")
+	(elevation 35)
+	(feature "event")
+	(lang "en")
+	(lat 52.5167)
+	(lng 13.3833)
+	(rank 100)
+	(summary "The Battle of Berlin, designated the Berlin Strategic Offensive Operation by the Soviet Union, was the final major offensive of the European Theatre of World War II. Starting on 12 January 1945, the Red Army breached the German front as a result of the Vistula–Oder Offensive and advanced westward as (...)")
+	(title "Battle of Berlin")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Battle_of_Berlin"))
 
 ([FlightPro_Class9] of  CloFunction
 
