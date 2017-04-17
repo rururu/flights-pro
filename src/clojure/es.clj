@@ -79,24 +79,20 @@
 	{:instruct :delete
 	 :id id}))
 
-(defn fly-onboard-to [cs crs1 crs2 crd1 crd2 spd1 spd2 alt1 alt2]
+(defn fly-onboard-to [cs crd1 crd2 crs2 spd2 alt2]
   (if (not ONB-PAUSE)
-  (let [[lat1 lon1] crd1
-         [lat2 lon2] crd2
-         alt (float (/ (+ alt1 alt2) 2))]
-    (asp/pump-in (:directives cmd/CHN)
+  (asp/pump-in (:directives cmd/CHN)
 	{:directive :carrier
 	 :callsign cs
 	 :vehicle {
-	   :coord [(double (/ (+ lat1 lat2) 2)) 
-	               (double (/ (+ lon1 lon2) 2))]
-	   :altitude (if (< alt cmd/APT-ALT) cmd/APT-ALT alt)
-	   :speed (float (/ (+ spd1 spd2) 2))
-	   :course (int (/ (+ crs1 crs2) 2))}}))))
+	   :coord crd2
+	   :altitude (if (< alt2 cmd/GROUND-ALT) cmd/GROUND-ALT alt2)
+	   :speed (if (= crd1 crd2) 0 spd2)
+	   :course crs2}})))
 
 (defn go-onboard [cs crd crs spd alt]
   (def ONB-PAUSE true)
-(asp/delayer #(def ONB-PAUSE false) 12000)
+(asp/delayer #(def ONB-PAUSE false) 6000)
 (asp/pump-in (:directives cmd/CHN)
 	{:directive :carrier
 	 :go-onboard true
@@ -104,7 +100,7 @@
 	 :vehicle {:coord crd
 	               :course crs
 	               :speed spd
-	               :altitude (if (< alt cmd/APT-ALT) cmd/APT-ALT alt)}}))
+	               :altitude (if (< alt cmd/GROUND-ALT) cmd/GROUND-ALT alt)}}))
 
 (defn proc [z]
   (loop [n 1 y z]

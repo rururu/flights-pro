@@ -61,7 +61,7 @@
   (let [[rb sa ba fa :as bps] (:bank-params @carr)
        bnk (dyn/bank (:course @carr) course bps)
        spd (:speed @carr)]
-  (if (or (< spd 100) (= bnk 0))
+  (if (or (< spd 90) (= bnk 0))
     (mov/turn carr course 1)
     (let [accel (if (> (calc/abs bnk) rb) 2 1)]
       (czm/camera :roll bnk)
@@ -78,32 +78,15 @@
   {:handler (fn [response])
    :error-handler error-handler}))
 
-(defn carrier-interpol [callsign vehicle]
-  (let [car @CARRIER]
-  (if (not= callsign (:mode car))
-    (vswap! CARRIER assoc :mode callsign))
-  (let [ocrs (:course car)
-         ncrs (:course vehicle)
-         [olat olon] (:coord car)
-         [nlat nlon] (:coord vehicle)
-         ospd (:speed car)
-         nspd (:speed vehicle)]
-    (vswap! CARRIER assoc 
-	:coord [(double (/ (+ olat nlat) 2)) (double (/ (+ olon nlon) 2))]
-	:speed (cond
-	             (= nspd 0) 0 
-	             (= ospd 0) nspd
-	             true nspd))
-    (mov/elevate CARRIER (:altitude vehicle) 2)
-    (mov/set-turn-point CARRIER)
-    (if (not= ncrs ocrs)
-      (turn-and-bank CARRIER ncrs)))))
-
-(defn carrier-exact [callsign vehicle]
+(defn carrier [callsign vehicle]
   (if (not= callsign (:mode @CARRIER))
   (vswap! CARRIER assoc :mode callsign))
-(vswap! CARRIER merge vehicle)
-(mov/set-turn-point CARRIER))
+(let [old-crs (:course @CARRIER)
+       new-crs (:course vehicle)]
+  (vswap! CARRIER merge (dissoc vehicle :course))
+  (mov/set-turn-point CARRIER)
+  (if (not= new-crs old-crs)
+    (turn-and-bank CARRIER new-crs))))
 
 (defn view [dir]
   (czm/camera :view dir))
@@ -157,15 +140,10 @@
 (defn camera-move [carr]
   (let [car @carr
        [lat lon] (:coord car)
-       spd (:speed car)
-       crs (if (< spd 100) 
-	(:target (:rudder car))
-	(:course car))
+       crs (:course car)
        alt (int (/ (:altitude car) 3.28084))
-       k (if (< spd 100) 
-	200 
-	600)
-       per (int (/ (:camera TIO) k))] ;; per in sec 
+       alt (if (< alt 30) 30 alt)
+       per (int (/ (:camera TIO) 500))] ;; per in sec - (:camera TIO) x 2
        (czm/fly-to lat lon alt crs per)))
 
 (defn manual-vehicle []
@@ -180,17 +158,20 @@
   ;;(println [:DIRECTIVE dir])
   (condp = directive
     :manual (if (= (:mode @CARRIER) "?")
-	(carrier-exact "MANUAL" (manual-vehicle))
+	(carrier "MANUAL" (manual-vehicle))
 	(vswap! CARRIER assoc :mode "MANUAL"))
     :callsigns (let [{:keys [list]} dir]
 	(ctl/callsigns (conj list "manual")))
     :carrier (let [{:keys [callsign vehicle go-onboard]} dir]
-	(if go-onboard 
+	(if go-onboard
 	  (vswap! CARRIER assoc :mode callsign))
 	(if (not (= (:mode @CARRIER) "MANUAL"))
-	  (if go-onboard 
-	    (carrier-exact callsign vehicle)
-	    (carrier-interpol callsign vehicle))))
+	  (carrier callsign vehicle)))
+    :fly-onboard-to (let [{:keys [callsign vehicle]} dir
+	             [lat lon] (:coord vehicle)]
+	(czm/fly-to lat lon (:altitude vehicle) 
+		(:course vehicle)
+		(:period vehicle)))
     (println (str "Unknown directive: " [directive dir])))))
 
 (defn receive-directives []
@@ -217,7 +198,7 @@
 (GET (str (:command URL) "new-czml-doc")
 	{:handler (fn [response])
 	 :error-handler error-handler})
-(carrier-exact "MANUAL" 
+(carrier "MANUAL" 
 	{:coord [60 30]
 	 :altitude 4000
 	 :speed 160
@@ -229,5 +210,3 @@
 (asp/repeater send-manual-data (:manual-data TIO))
 (ctl/show-controls))
 
-
-(set! (.-onload js/window) (on-load))

@@ -88,10 +88,11 @@
 (right-controls))
 
 (defn show-flight-data [carr]
-  (let [{:keys [coord course speed altitude]} @carr]
+  (let [{:keys [coord course speed altitude]} @carr
+      spd (int speed)]
   (set-html! "course" (str "Course: " course))
-  (set-html! "speed" (str "Speed: " speed))
-  (set-html! "altitude" (str "Altitude: " altitude))
+  (set-html! "speed" (str "Speed: " spd))
+  (set-html! "altitude" (str "Altitude: " (if (< spd 100) 0 (int altitude))))
   (set-html! "lat" (str "Latitude: " (format "%.4f" (first coord))))
   (set-html! "lon" (str "Longitude: " (format "%.4f" (second coord))))))
 

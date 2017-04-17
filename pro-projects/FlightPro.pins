@@ -1,4 +1,4 @@
-; Tue Apr 11 22:13:20 MSK 2017
+; Mon Apr 17 21:46:56 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -130,7 +130,7 @@
 
 ([FlightPro_Class130001] of  CloFunction
 
-	(source "(let [[rb sa ba fa :as bps] (:bank-params @carr)\n       bnk (dyn/bank (:course @carr) course bps)\n       spd (:speed @carr)]\n  (if (or (< spd 90) (= bnk 0))\n    (mov/turn carr course 1)\n    (let [accel (if (> (calc/abs bnk) rb) 2 1)]\n      (czm/camera :roll bnk)\n      (mov/turn carr course accel)\n      (dyn/check-diff-and-do carr\n        [:rudder :target]\n        [:course]\n        (get-in @carr [:rudder :step])\n        [:rudder :time-out]\n        #(czm/camera :roll 0)))))")
+	(source "(let [[rb sa ba fa :as bps] (:bank-params @carr)\n       bnk (dyn/bank (:course @carr) course bps)\n       spd (:speed @carr)]\n  (if (or (< spd 100) (= bnk 0))\n    (mov/turn carr course 1)\n    (let [accel (if (> (calc/abs bnk) rb) 2 1)]\n      (czm/camera :roll bnk)\n      (mov/turn carr course accel)\n      (dyn/check-diff-and-do carr\n        [:rudder :target]\n        [:course]\n        (get-in @carr [:rudder :step])\n        [:rudder :time-out]\n        #(czm/camera :roll 0)))))")
 	(title "turn-and-bank [carr course]"))
 
 ([FlightPro_Class130003] of  CloFunction
@@ -186,7 +186,7 @@
 
 ([FlightPro_Class140007] of  CloFunction
 
-	(source "(let [{:keys [coord course speed altitude]} @carr]\n  (set-html! \"course\" (str \"Course: \" course))\n  (set-html! \"speed\" (str \"Speed: \" speed))\n  (set-html! \"altitude\" (str \"Altitude: \" altitude))\n  (set-html! \"lat\" (str \"Latitude: \" (format \"%.4f\" (first coord))))\n  (set-html! \"lon\" (str \"Longitude: \" (format \"%.4f\" (second coord)))))")
+	(source "(let [{:keys [coord course speed altitude]} @carr\n      spd (int speed)]\n  (set-html! \"course\" (str \"Course: \" course))\n  (set-html! \"speed\" (str \"Speed: \" spd))\n  (set-html! \"altitude\" (str \"Altitude: \" (if (< spd 100) 0 (int altitude))))\n  (set-html! \"lat\" (str \"Latitude: \" (format \"%.4f\" (first coord))))\n  (set-html! \"lon\" (str \"Longitude: \" (format \"%.4f\" (second coord)))))")
 	(title "show-flight-data [carr]"))
 
 ([FlightPro_Class140008] of  CloFunction
@@ -450,7 +450,7 @@
 
 ([FlightPro_Class190000] of  CloFunction
 
-	(source "(let [crt (current-time)\n       fls (seq @fls)]\n  (println \"t:\" crt \"flights:\" (count fls))\n  (doseq [[k v] fls]\n    (let [alt (fr24/altitude v)\n           [lat lon :as crd] (fr24/coord v)]\n      (rete/assert-frame \n	['Flight\n	'id k\n	'callsign (fr24/callsign v)\n	'coord crd\n	'course (fr24/course v)\n	'speed (fr24/speed v)\n	'altitude alt\n	'time crt\n	'point4d [lat lon (int (/ alt 3.28084)) (czs/iso8601curt)]\n	'age \"NEW\"\n	'status (if (> alt APT-ALT)\n                                     \"LEVEL\"\n                                     \"GROUND\")])))\n  (rete/fire)\n  true)")
+	(source "(let [crt (current-time)\n       fls (seq @fls)]\n  (println \"t:\" crt \"flights:\" (count fls))\n  (doseq [[k v] fls]\n    (let [alt (fr24/altitude v)\n           [lat lon :as crd] (fr24/coord v)]\n      (rete/assert-frame \n	['Flight\n	'id k\n	'callsign (fr24/callsign v)\n	'coord crd\n	'course (fr24/course v)\n	'speed (fr24/speed v)\n	'altitude alt\n	'time crt\n	'point4d [lat lon (int (/ alt 3.28084)) (czs/iso8601curt)]\n	'age \"NEW\"\n	'status (if (> alt GROUND-ALT)\n                                     \"LEVEL\"\n                                     \"GROUND\")])))\n  (rete/fire)\n  true)")
 	(title "process-flights [fls]"))
 
 ([FlightPro_Class190001] of  CloVar
@@ -473,6 +473,7 @@
 		[FlightPro_Class130001]
 		[FlightPro_Class140020]
 		[FlightPro_Class300006]
+		[FlightPro_Class870000]
 		[FlightPro_Class140021]
 		[FlightPro_Class140022]
 		[FlightPro_Class140023]
@@ -768,7 +769,7 @@
 
 ([FlightPro_Class210011] of  CloVar
 
-	(source "{:url-flights \"http://data-live.flightradar24.com/zones/fcgi/feed.js\"\n :url-airports \"http://www.flightradar24.com/_json/airports.php\"\n :url-flight-data \"http://data-live.flightradar24.com/clickhandler/?version=1.5&flight=\"\n :time-out 15000}")
+	(source "{:url-flights \"http://data-live.flightradar24.com/zones/fcgi/feed.js\"\n :url-airports \"http://www.flightradar24.com/_json/airports.php\"\n :url-flight-data \"http://data-live.flightradar24.com/clickhandler/?version=1.5&flight=\"\n :time-out 16000}")
 	(title "F24"))
 
 ([FlightPro_Class210012] of  CloFunction
@@ -935,15 +936,15 @@
 
 ([FlightPro_Class250010] of  Rule
 
-	(lhs "?ob (Onboard time ?t0 callsign ?cs\n	(not= ?cs \"MANUAL\"))\n(Flight age \"CURRENT\" \n	callsign ?cs\n	course ?crs1 \n	coord ?crd1 \n	speed ?spd1\n	altitude ?alt1\n	time ?t1 \n	(<= ?t0 ?t1))\n(Flight age \"NEW\"\n	callsign ?cs\n	course ?crs2 \n	coord ?crd2 \n	speed ?spd2 \n	altitude ?alt2\n	time ?t2)")
-	(rhs "(modify ?ob time ?t2)\n(es/fly-onboard-to ?cs ?crs1 ?crs2 ?crd1 ?crd2 ?spd1 ?spd2 ?alt1 ?alt2)")
+	(lhs "?ob (Onboard time ?t0 callsign ?cs\n	(not= ?cs \"MANUAL\"))\n(Flight age \"CURRENT\" \n	callsign ?cs\n	coord ?crd1 \n	time ?t1 \n	(<= ?t0 ?t1))\n(Flight age \"NEW\" \n	callsign ?cs\n	course ?crs2\n	coord ?crd2 \n	speed ?spd2\n	altitude ?alt2\n	time ?t2)")
+	(rhs "(println :FNB ?cs ?crs2 ?spd2 ?alt2 :STAND (= ?crd1 ?crd2))\n(modify ?ob time ?t2)\n(es/fly-onboard-to ?cs ?crd1 ?crd2 ?crs2 ?spd2 ?alt2)")
 	(salience 0)
 	(title "af:FlyOnboardTo"))
 
 ([FlightPro_Class250011] of  CloFunction
 
-	(source "(if (not ONB-PAUSE)\n  (let [[lat1 lon1] crd1\n         [lat2 lon2] crd2\n         alt (float (/ (+ alt1 alt2) 2))]\n    (asp/pump-in (:directives cmd/CHN)\n	{:directive :carrier\n	 :callsign cs\n	 :vehicle {\n	   :coord [(double (/ (+ lat1 lat2) 2)) \n	               (double (/ (+ lon1 lon2) 2))]\n	   :altitude (if (< alt cmd/APT-ALT) cmd/APT-ALT alt)\n	   :speed (float (/ (+ spd1 spd2) 2))\n	   :course (int (/ (+ crs1 crs2) 2))}})))")
-	(title "fly-onboard-to [cs crs1 crs2 crd1 crd2 spd1 spd2 alt1 alt2]"))
+	(source "(if (not ONB-PAUSE)\n  (asp/pump-in (:directives cmd/CHN)\n	{:directive :carrier\n	 :callsign cs\n	 :vehicle {\n	   :coord crd2\n	   :altitude (if (< alt2 cmd/GROUND-ALT) cmd/GROUND-ALT alt2)\n	   :speed (if (= crd1 crd2) 0 spd2)\n	   :course crs2}}))")
+	(title "fly-onboard-to [cs crd1 crd2 crs2 spd2 alt2]"))
 
 ([FlightPro_Class260000] of  CloFunction
 
@@ -957,7 +958,7 @@
 
 ([FlightPro_Class260003] of  CloFunction
 
-	(source "(def ONB-PAUSE true)\n(asp/delayer #(def ONB-PAUSE false) 12000)\n(asp/pump-in (:directives cmd/CHN)\n	{:directive :carrier\n	 :go-onboard true\n	 :callsign cs\n	 :vehicle {:coord crd\n	               :course crs\n	               :speed spd\n	               :altitude (if (< alt cmd/APT-ALT) cmd/APT-ALT alt)}})")
+	(source "(def ONB-PAUSE true)\n(asp/delayer #(def ONB-PAUSE false) 6000)\n(asp/pump-in (:directives cmd/CHN)\n	{:directive :carrier\n	 :go-onboard true\n	 :callsign cs\n	 :vehicle {:coord crd\n	               :course crs\n	               :speed spd\n	               :altitude (if (< alt cmd/GROUND-ALT) cmd/GROUND-ALT alt)}})")
 	(title "go-onboard [cs crd crs spd alt]"))
 
 ([FlightPro_Class270000] of  CloFunction
@@ -1184,38 +1185,6 @@
 
 	(source "(async.proc/pump-in (:instructions pro.commands/CHN) (pois-instruct (sv inst \"osm-responses\")))"))
 
-([FlightPro_Class280174] of  CloFuncall
-
-	(source "(async.proc/pump-in (:instructions pro.commands/CHN) (pois-instruct (svs inst \"osm-responses\")))"))
-
-([FlightPro_Class280175] of  CloFuncall
-
-	(source "(type (svs inst \"osm-responses\"))"))
-
-([FlightPro_Class280176] of  CloFuncall
-
-	(source "(seq? (svs inst \"osm-responses\"))"))
-
-([FlightPro_Class280177] of  CloFuncall
-
-	(source "(map async.proc/pump-in (:instructions pro.commands/CHN) (pois-instruct (svs inst \"osm-responses\")))"))
-
-([FlightPro_Class280178] of  CloFuncall
-
-	(source "(doseq [poi (pois-instruct (svs inst \"osm-responses\"))] (async.proc/pump-in (:instructions pro.commands/CHN) poi))"))
-
-([FlightPro_Class280179] of  CloFuncall
-
-	(source "(async.proc/pump-in (:instructions pro.commands/CHN) {:instruct :map-center :coord [60 30] :zoom 18})"))
-
-([FlightPro_Class280180] of  CloFuncall
-
-	(source "(async.proc/pump-in (:instructions pro.commands/CHN) {:instruct :map-center :coord [60.1667 30] :zoom 18})"))
-
-([FlightPro_Class280181] of  CloFuncall
-
-	(source "(async.proc/pump-in (:instructions pro.commands/CHN) {:instruct :map-center :coord [60.1667 24.9333] :zoom 19})"))
-
 ([FlightPro_Class280182] of  CloFunction
 
 	(source "(let [mp (into {} hm)\n       lat (mp \"lat\")\n       lon (mp \"lng\")\n       zoo 15\n       chn (:ins-chn @COMM)\n       rss (mp \"osm-responses\")]\n  (map-view-ctrl :server)\n  (asp/pump-in chn\n	{:instruct :map-center\n	 :coord [lat lon]\n	 :zoom zoo\n	 :lock true})\n  (doseq [rs rss]\n    (asp/pump-in chn (pois-instruct rs))))")
@@ -1228,22 +1197,6 @@
 	(%3ACREATION-TIMESTAMP "2017.03.10 18:56:41.210 MSK")
 	(%3ACREATOR "ru"))
 
-([FlightPro_Class280184] of  CloFuncall
-
-	(source "(pump-feature-pois nil nil \"city\" \"Helsinki"))
-
-([FlightPro_Class280185] of  CloFuncall
-
-	(source "(pump-feature-pois nil nil \"city\" \"Helsinki)"))
-
-([FlightPro_Class280186] of  CloFuncall
-
-	(source "(pump-feature-pois nil nil \"city\" \"Helsinki\")"))
-
-([FlightPro_Class280188] of  CloFuncall
-
-	(source "(def hel (fifos \""))
-
 ([FlightPro_Class280198] of  CloFunction
 
 	(source "(condp = (typ dati)\n  \"WikiArticle\"	(invoke-later (do\n	  (.setDirectType dati (cls \"WikiArticleDetails\"))\n	  (ssv dati \"max-rows\" (int 50))\n	  (ssv dati \"radius\" (float 1))\n	  (ssv dati \"poi-req-butt\" \n	    (first (.getDefaultValues (slt \"poi-req-butt\"))))\n	  (ssv dati \"butt-show-pois\" \n	    \"Show on Map/ext.data/show-on-map\")\n	  (ssv dati \"butt-del-pois\" \n	    \"Delete POIs/ext.data/delete-pois\")\n	  (ssv dati \"butt-return\" \n	    \"Return to Flight/ext.data/ret-to-flight\")\n	  (let [frm (.show *prj* dati)]\n	    (.setLocationRelativeTo frm nil)\n	    (.setAlwaysOnTop frm true)\n	    (.setVisible frm true))))\n  false)")
@@ -1251,7 +1204,7 @@
 
 ([FlightPro_Class290000] of  CloFunction
 
-	(source "(let [car @carr\n       [lat lon] (:coord car)\n       crs (:course car)\n       alt (int (/ (:altitude car) 3.28084))\n       alt (if (< alt 30) 30 alt)\n       per (int (/ (:camera TIO) 200))]\n       (czm/fly-to lat lon alt crs per))")
+	(source "(let [car @carr\n       [lat lon] (:coord car)\n       spd (:speed car)\n       crs (if (< spd 100) \n	(:target (:rudder car))\n	(:course car))\n       alt (int (/ (:altitude car) 3.28084))\n       k (if (< spd 100) \n	200 \n	600)\n       per (int (/ (:camera TIO) k))] ;; per in sec \n       (czm/fly-to lat lon alt crs per))")
 	(title "camera-move [carr]"))
 
 ([FlightPro_Class290001] of  CloFunction
@@ -1341,8 +1294,8 @@
 
 ([FlightPro_Class300006] of  CloFunction
 
-	(source "(if (not= callsign (:mode @CARRIER))\n  (vswap! CARRIER assoc :mode callsign))\n(let [old-crs (:course @CARRIER)\n       new-crs (:course vehicle)]\n  (vswap! CARRIER merge (dissoc vehicle :course))\n  (mov/set-turn-point CARRIER)\n  (if (not= new-crs old-crs)\n    (turn-and-bank CARRIER new-crs)))")
-	(title "carrier [callsign vehicle]"))
+	(source "(let [car @CARRIER]\n  (if (not= callsign (:mode car))\n    (vswap! CARRIER assoc :mode callsign))\n  (let [ocrs (:course car)\n         ncrs (:course vehicle)\n         [olat olon] (:coord car)\n         [nlat nlon] (:coord vehicle)\n         ospd (:speed car)\n         nspd (:speed vehicle)]\n    (vswap! CARRIER assoc \n	:coord [(double (/ (+ olat nlat) 2)) (double (/ (+ olon nlon) 2))]\n	:speed (cond\n	             (= nspd 0) 0 \n	             (= ospd 0) nspd\n	             true nspd))\n    (mov/elevate CARRIER (:altitude vehicle) 2)\n    (mov/set-turn-point CARRIER)\n    (if (not= ncrs ocrs)\n      (turn-and-bank CARRIER ncrs))))")
+	(title "carrier-interpol [callsign vehicle]"))
 
 ([FlightPro_Class30001] of  ClsRequired
 
@@ -1911,7 +1864,7 @@
 
 ([FlightPro_Class420021] of  CloFunction
 
-	(source "(println [:CMD-MOVE-TO params])\n(let [{:keys [country airport]} params]\n  (if-let [apt (get-in (fr24/airports-by-country) [country airport])]\n    (let [iata (apt \"iata\")\n           alt (apt \"alt\")\n           crd [(apt \"lat\") (apt \"lon\")]]\n      (foc-apt-ins apt)\n      (def APT-ALT (if (= TERRAIN \"yes\")\n	      (+ alt 300)\n	      60))\n      (set-map-view crd)\n      (println :Airport country airport iata crd alt))))\n\"\"")
+	(source "(println [:CMD-MOVE-TO params])\n(let [{:keys [country airport]} params]\n  (if-let [apt (get-in (fr24/airports-by-country) [country airport])]\n    (let [iata (apt \"iata\")\n           alt (apt \"alt\")\n           crd [(apt \"lat\") (apt \"lon\")]]\n      (foc-apt-ins apt)\n      (def GROUND-ALT (if (= TERRAIN \"yes\")\n		(+ alt 130)\n		30))\n      (set-map-view crd)\n      (println :Airport country airport iata crd alt))))\n\"\"")
 	(title "move-to [params]"))
 
 ([FlightPro_Class430000] of  CloFunction
@@ -2785,7 +2738,7 @@
 ([FlightPro_Class630000] of  CloVar
 
 	(source "0")
-	(title "APT-ALT"))
+	(title "GROUND-ALT"))
 
 ([FlightPro_Class630044] of  TypeName
 
@@ -3330,7 +3283,7 @@
 
 ([FlightPro_Class70001] of  CloFunction
 
-	(source "(enable-console-print!)\n(GET (str (:command URL) \"terrain\")\n	{:handler (fn [response]\n		(czm/init-3D-view (:base URL) response))\n	 :error-handler error-handler})\n(GET (str (:command URL) \"new-czml-doc\")\n	{:handler (fn [response])\n	 :error-handler error-handler})\n(carrier \"MANUAL\" \n	{:coord [60 30]\n	 :altitude 4000\n	 :speed 160\n	 :course 270})\n(asp/repeater mov/move CARRIER (:carrier TIO))\n(asp/repeater ctl/show-flight-data CARRIER (:display TIO))\n(asp/repeater camera-move CARRIER (:camera TIO))\n(asp/repeater receive-directives (:directives TIO))\n(asp/repeater send-manual-data (:manual-data TIO))\n(ctl/show-controls)")
+	(source "(enable-console-print!)\n(GET (str (:command URL) \"terrain\")\n	{:handler (fn [response]\n		(czm/init-3D-view (:base URL) response))\n	 :error-handler error-handler})\n(GET (str (:command URL) \"new-czml-doc\")\n	{:handler (fn [response])\n	 :error-handler error-handler})\n(carrier-exact \"MANUAL\" \n	{:coord [60 30]\n	 :altitude 4000\n	 :speed 160\n	 :course 270})\n(asp/repeater mov/move CARRIER (:carrier TIO))\n(asp/repeater ctl/show-flight-data CARRIER (:display TIO))\n(asp/repeater camera-move CARRIER (:camera TIO))\n(asp/repeater receive-directives (:directives TIO))\n(asp/repeater send-manual-data (:manual-data TIO))\n(ctl/show-controls)")
 	(title "on-load []"))
 
 ([FlightPro_Class70002] of  CloProgram
@@ -3650,7 +3603,7 @@
 
 ([FlightPro_Class80003] of  CloFunction
 
-	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :manual (if (= (:mode @CARRIER) \"?\")\n	(carrier \"MANUAL\" (manual-vehicle))\n	(vswap! CARRIER assoc :mode \"MANUAL\"))\n    :callsigns (let [{:keys [list]} dir]\n	(ctl/callsigns (conj list \"manual\")))\n    :carrier (let [{:keys [callsign vehicle go-onboard]} dir]\n	(if go-onboard\n	  (vswap! CARRIER assoc :mode callsign))\n	(if (not (= (:mode @CARRIER) \"MANUAL\"))\n	  (carrier callsign vehicle)))\n    (println (str \"Unknown directive: \" [directive dir]))))")
+	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :manual (if (= (:mode @CARRIER) \"?\")\n	(carrier-exact \"MANUAL\" (manual-vehicle))\n	(vswap! CARRIER assoc :mode \"MANUAL\"))\n    :callsigns (let [{:keys [list]} dir]\n	(ctl/callsigns (conj list \"manual\")))\n    :carrier (let [{:keys [callsign vehicle go-onboard]} dir]\n	(if go-onboard \n	  (vswap! CARRIER assoc :mode callsign))\n	(if (not (= (:mode @CARRIER) \"MANUAL\"))\n	  (if go-onboard \n	    (carrier-exact callsign vehicle)\n	    (carrier-interpol callsign vehicle))))\n    (println (str \"Unknown directive: \" [directive dir]))))")
 	(title "directives-handler [response]"))
 
 ([FlightPro_Class80004] of  CloFunction
@@ -3685,14 +3638,6 @@
 	(source "(if-let [cns (:countries param)]\n  (do (am/selector \"element\" 1 \"chart.client\" \"countries\" cns :itself 130)\n        (defn handler1 [sel]\n          (am/ask-server {:question \"es\"\n	:predicate \"User Answer\"\n	:subject \"selected country\"\n	:object sel} \n	(fn [r]))))\n  (if-let [cts (:cities param)]\n    (do (am/selector \"element\" 20 \"chart.client\" \"cities\" cts :itself 130)\n      (defn handler20 [sel]\n        (am/ask-server {:question \"es\"\n	:predicate \"User Answer\"\n	:subject \"selected city\"\n	:object sel} \n	(fn [r]))\n        (am/clear-dialog)))))")
 	(title "select-city [param]"))
 
-([FlightPro_Class810004] of  CloFuncall
-
-	(source "(rete"))
-
-([FlightPro_Class810005] of  CloFuncall
-
-	(source "(rete/assert-frame  ['Question 'predicate \"How far\" 'subject \"global city\" 'object nil 'adjunct nil])"))
-
 ([FlightPro_Class810006] of  CloVar
 
 	(source "{\"AF\" \"Africa\"\n  \"AN\" \"Antarctica\"\n  \"AS\" \"Asia\"\n  \"EU\" \"Europe\"\n  \"NA\" \"North America\"\n  \"OC\" \"Oceania\"\n  \"SA\" \"South America\"}")
@@ -3709,14 +3654,6 @@
 
 	(source "(set-html! \"zoom\" (str \"zoom \" z))")
 	(title "display-zoom [z]"))
-
-([FlightPro_Class820006] of  CloFuncall
-
-	(source "(rete.core/assert-frame  ['Question 'predicate \"How far\" 'subject \"global city\" 'object nil 'adjunct nil])"))
-
-([FlightPro_Class820007] of  CloFuncall
-
-	(source "(rete.core/fire)"))
 
 ([FlightPro_Class820008] of  Rule
 
@@ -3737,54 +3674,14 @@
 	(source "(if-let [ins (fifos \"Country\" \"title\" cnt)]\n  (let [cod (sv ins \"code\")\n         gns (gn/call-geonames-search \n	{:country cod  :cities \"cities1000\" :orderby \"population\"})]\n    (def LAST-R gns)\n    (sort (map #(% \"name\") gns))))")
 	(title "country-cities [cnt]"))
 
-([FlightPro_Class820011] of  CloFuncall
-
-	(source "(def x (geo.names/call-geonames-search {:country \"FI\"  :cities \"cities1000\" :orderby \"population\"}))"))
-
-([FlightPro_Class820012] of  CloFuncall
-
-	(source "x"))
-
-([FlightPro_Class820013] of  CloFuncall
-
-	(source "(map (% \"name\") x)"))
-
-([FlightPro_Class820014] of  CloFuncall
-
-	(source "(map #(% \"name\") x)"))
-
-([FlightPro_Class820015] of  CloFuncall
-
-	(source "(map #(% \"name\") nil)"))
-
-([FlightPro_Class820016] of  CloFuncall
-
-	(source "(map #(% \"name\") {})"))
-
-([FlightPro_Class820017] of  CloFuncall
-
-	(source "(ext.data/country-cities \"Finland\")"))
-
 ([FlightPro_Class820018] of  CloVar
 
 	(title "LAST-R"))
-
-([FlightPro_Class820019] of  CloFuncall
-
-	(source "(ext.data/country-cities \"Gabon\")"))
-
-([FlightPro_Class820020] of  CloFuncall
-
-	(source "ext.data/LAST-R"))
 
 ([FlightPro_Class820021] of  CloFunction
 
 	(source "(if-let [flt (seq (filter #(= (% \"name\") cty) LAST-R))]\n  (let [ct (first flt)\n         [lat1 lon1] (our-center)\n         lat2 (read-string (ct \"lat\"))\n         lon2 (read-string (ct \"lng\"))\n         dis (geo/distance-nm [lat1 lon1] [lat2 lon2])\n         bea (geo/bear-deg [lat1 lon1] [lat2 lon2])\n         html (str \"<h3>\" cty \"</h3>\"\n	\"страна: \" cnt \"<br>\"\n	\"latitude: \" lat2 \"<br>\"\n	\"longitude: \" lon2 \"<br>\"\n	\"direction: \" (gn/direction bea)\n	\"<h4>\" (format \"distance: %.1f\" dis) \" NM</h4>\")]\n    (asp/pump-in (:ins-chn @COMM)\n	{:instruct :popup\n	 :lat lat1\n	 :lon lon1\n	 :html html\n	 :width 1200\n	 :height 1000\n	 :time (:ext-data-popup TIO)})))")
 	(title "pump-far-city [cnt cty]"))
-
-([FlightPro_Class820022] of  CloFuncall
-
-	(source "(ru.rules/pp 'Question)"))
 
 ([FlightPro_Class830000] of  CloFunction
 
@@ -3922,7 +3819,7 @@
 
 ([FlightPro_Class860000] of  CloFuncall
 
-	(source "(ru.rules/dr)"))
+	(source "(rete.core/facts-with-slot-value 'Flight 'callsign = \"BAW481B\")"))
 
 ([FlightPro_Class860001] of  WikiArticle
 
@@ -4825,6 +4722,15 @@
 	(summary "Northolt is a town in north west London, England, and within the London Borough of Ealing, England. The town has London Underground and Network Rail stations and is on the A40 road. It is served by a number of London Bus routes.  (...)")
 	(title "Northolt")
 	(wikipediaUrl "http://en.wikipedia.org/wiki/Northolt"))
+
+([FlightPro_Class870000] of  CloFunction
+
+	(source "(if (not= callsign (:mode @CARRIER))\n  (vswap! CARRIER assoc :mode callsign))\n(vswap! CARRIER merge vehicle)\n(mov/set-turn-point CARRIER)")
+	(title "carrier-exact [callsign vehicle]"))
+
+([FlightPro_Class870001] of  CloFuncall
+
+	(source "(doseq [e (rete.core/facts-with-slot-value 'Flight 'callsign = \"BAW481B\")] (protege.core/ctpl e))"))
 
 ([FlightPro_Class870002] of  WikiArticle
 
@@ -10689,6 +10595,38 @@
 	(runways 0)
 	(title "Atlanta Hartsfield-Jackson International Airport"))
 
+([FlightPro_Class880000] of  CloFuncall
+
+	(source "pro.commands/GROUND-ALT"))
+
+([FlightPro_Class880001] of  CloFuncall
+
+	(source "(geo.names/call-geonames-elev30 60.3201 24.9568)"))
+
+([FlightPro_Class880002] of  CloFuncall
+
+	(source "(geo.names/call-geonames-elev30 60.2596 25.0516)"))
+
+([FlightPro_Class880003] of  CloFuncall
+
+	(source "(geo.names/call-geonames-elev30 60.1709 24.9362)"))
+
+([FlightPro_Class880004] of  CloFuncall
+
+	(source "(geo.names/call-geonames-elev30 -17.3834 -66.1638)"))
+
+([FlightPro_Class880005] of  CloFuncall
+
+	(source "(geo.names/call-geonames-elev30 -17.3834 -66.1639)"))
+
+([FlightPro_Class880006] of  CloFuncall
+
+	(source "(geo.names/call-geonames-elev30 -17.3835 -66.1638)"))
+
+([FlightPro_Class880007] of  CloFuncall
+
+	(source "(geo.names/call-geonames-elev30 60.0 30.0)"))
+
 ([FlightPro_Class880008] of  WikiArticle
 
 	(button-open-site "Open Site/wiki.gis/open-site")
@@ -12046,10 +11984,6 @@
 	(summary "Salem Municipality (Salems kommun) is a municipality in Stockholm County in east central Sweden. The name traces its origins from Slaem in the 16th century, but was later changed to Salem, the Biblical name of Jerusalem. Its seat is located in Salem.  (...)")
 	(title "Salem Municipality")
 	(wikipediaUrl "http://en.wikipedia.org/wiki/Salem_Municipality"))
-
-([FlightPro_Class880160] of  CloFuncall
-
-	(source "(ru.rules/sp :all)"))
 
 ([FlightPro_Class880164] of  WikiArticle
 
@@ -13934,6 +13868,90 @@
 	(summary "The Battle of Berlin, designated the Berlin Strategic Offensive Operation by the Soviet Union, was the final major offensive of the European Theatre of World War II. Starting on 12 January 1945, the Red Army breached the German front as a result of the Vistula–Oder Offensive and advanced westward as (...)")
 	(title "Battle of Berlin")
 	(wikipediaUrl "http://en.wikipedia.org/wiki/Battle_of_Berlin"))
+
+([FlightPro_Class890002] of  CloFuncall
+
+	(source "(doseq [e (rete.core/facts-with-slot-value 'Flight 'callsign = \"TAP364\")] (protege.core/ctpl e))"))
+
+([FlightPro_Class890003] of  CloFuncall
+
+	(source "(doseq [e (rete.core/facts-with-slot-value 'Flight 'callsign = \"DLH5RX\")] (protege.core/ctpl e))"))
+
+([FlightPro_Class890004] of  CloFuncall
+
+	(source "(doseq [e (rete.core/facts-with-slot-value 'Flight 'callsign = \"BAW706V\")] (protege.core/ctpl e))"))
+
+([FlightPro_Class890008] of  CloFuncall
+
+	(source "(geo.names/call-geonames-elev30 60.1 30.0)"))
+
+([FlightPro_Class890009] of  CloFuncall
+
+	(source "(geo.names/call-geonames-elev30 60.01 30.0)"))
+
+([FlightPro_Class890010] of  CloFuncall
+
+	(source "(geo.names/call-geonames-elev30 60.001 30.0)"))
+
+([FlightPro_Class890011] of  CloFuncall
+
+	(source "(geo.names/call-geonames-elev30 60.009 30.0)"))
+
+([FlightPro_Class890012] of  CloFuncall
+
+	(source "(geo.names/call-geonames-elev30 60.008 30.0)"))
+
+([FlightPro_Class890013] of  CloFuncall
+
+	(source "(geo.names/call-geonames-elev30 60.007 30.0)"))
+
+([FlightPro_Class890014] of  CloFuncall
+
+	(source "(geo.names/call-geonames-elev30 60.006 30.0)"))
+
+([FlightPro_Class890015] of  CloFuncall
+
+	(source "(geo.names/call-geonames-elev30 60.005 30.0)"))
+
+([FlightPro_Class890016] of  CloFuncall
+
+	(source "(geo.names/call-geonames-elev30 60.004 30.0)"))
+
+([FlightPro_Class890017] of  CloFuncall
+
+	(source "(geo.names/call-geonames-elev30 60.003 30.0)"))
+
+([FlightPro_Class890018] of  CloFuncall
+
+	(source "(geo.names/call-geonames-elev30 60.002 30.0)"))
+
+([FlightPro_Class890019] of  CloFuncall
+
+	(source "(geo.names/call-geonames-elev30 60.0019 30.0)"))
+
+([FlightPro_Class890020] of  CloFuncall
+
+	(source "(geo.names/call-geonames-elev30 60.0029 30.0)"))
+
+([FlightPro_Class890021] of  CloFuncall
+
+	(source "(geo.names/call-geonames-elev30 60.0028 30.0)"))
+
+([FlightPro_Class890022] of  CloFuncall
+
+	(source "(geo.names/call-geonames-elev30 60.0027 30.0)"))
+
+([FlightPro_Class890023] of  CloFuncall
+
+	(source "(geo.names/call-geonames-elev30 60.0024 30.0)"))
+
+([FlightPro_Class890024] of  CloFuncall
+
+	(source "(geo.names/call-geonames-elev30 60.0025 30.0)"))
+
+([FlightPro_Class890025] of  CloFuncall
+
+	(source "(geo.names/call-geonames-elev30 60.0026 30.0)"))
 
 ([FlightPro_Class9] of  CloFunction
 

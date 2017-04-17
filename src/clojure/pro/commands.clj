@@ -36,8 +36,8 @@
                "scheduled" {"arrival" "unk"}}
 
    "airline" {"short" "Ru Airlines"}}}))
-(def TERRAIN "no")
-(def APT-ALT 0)
+(def TERRAIN "yes")
+(def GROUND-ALT 0)
 (defn write-transit [x]
   (let [baos (ByteArrayOutputStream.)
         w    (t/writer baos :json)
@@ -67,7 +67,7 @@
 	'time crt
 	'point4d [lat lon (int (/ alt 3.28084)) (czs/iso8601curt)]
 	'age "NEW"
-	'status (if (> alt APT-ALT)
+	'status (if (> alt GROUND-ALT)
                                      "LEVEL"
                                      "GROUND")])))
   (rete/fire)
@@ -296,9 +296,9 @@ TERRAIN)
            alt (apt "alt")
            crd [(apt "lat") (apt "lon")]]
       (foc-apt-ins apt)
-      (def APT-ALT (if (= TERRAIN "yes")
-	      (+ alt 300)
-	      60))
+      (def GROUND-ALT (if (= TERRAIN "yes")
+		(+ alt 130)
+		30))
       (set-map-view crd)
       (println :Airport country airport iata crd alt))))
 "")
