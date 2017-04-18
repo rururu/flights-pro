@@ -1,4 +1,4 @@
-; Mon Apr 17 21:46:56 MSK 2017
+; Tue Apr 18 22:53:44 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -789,8 +789,8 @@
 
 ([FlightPro_Class220001] of  Rule
 
-	(lhs "(Flight time ?t\n           callsign ?cs\n           coord ?crd \n           course ?crs\n           speed ?spd\n           altitude ?alt)\n?ob1 (Onboard)\n?ob2 (Onboard callsign ?cs time 0)")
-	(rhs "(retract ?ob1)\n(modify ?ob2 time ?t)\n(es/go-onboard ?cs ?crd ?crs ?spd ?alt)")
+	(lhs "(Flight time ?t\n           id ?id\n           callsign ?cs\n           coord ?crd \n           course ?crs\n           speed ?spd\n           altitude ?alt)\n?ob1 (Onboard)\n?ob2 (Onboard callsign ?cs time 0)")
+	(rhs "(retract ?ob1)\n(modify ?ob2 time ?t)\n(pro.commands/def-ground-alt (pro.commands/destination-alt ?id))\n(es/go-onboard ?cs ?crd ?crs ?spd ?alt)")
 	(salience 0)
 	(title "af:SwitchOnboard"))
 
@@ -830,8 +830,8 @@
 
 ([FlightPro_Class230003] of  Rule
 
-	(lhs "(Flight time ?t\n           callsign ?cs\n           coord ?crd \n           course ?crs\n           speed ?spd\n           altitude ?alt)\n?ob (Onboard callsign ?cs time 0)\n(not Onboard)")
-	(rhs "(modify ?ob time ?t)\n(es/go-onboard ?cs ?crd ?crs ?spd ?alt)")
+	(lhs "(Flight time ?t\n           id ?id\n           callsign ?cs\n           coord ?crd \n           course ?crs\n           speed ?spd\n           altitude ?alt)\n?ob (Onboard callsign ?cs time 0)\n(not Onboard)")
+	(rhs "(modify ?ob time ?t)\n(pro.commands/def-ground-alt (pro.commands/destination-alt ?id))\n(es/go-onboard ?cs ?crd ?crs ?spd ?alt)")
 	(salience 0)
 	(title "af:StartOnboard"))
 
@@ -937,7 +937,7 @@
 ([FlightPro_Class250010] of  Rule
 
 	(lhs "?ob (Onboard time ?t0 callsign ?cs\n	(not= ?cs \"MANUAL\"))\n(Flight age \"CURRENT\" \n	callsign ?cs\n	coord ?crd1 \n	time ?t1 \n	(<= ?t0 ?t1))\n(Flight age \"NEW\" \n	callsign ?cs\n	course ?crs2\n	coord ?crd2 \n	speed ?spd2\n	altitude ?alt2\n	time ?t2)")
-	(rhs "(println :FNB ?cs ?crs2 ?spd2 ?alt2 :STAND (= ?crd1 ?crd2))\n(modify ?ob time ?t2)\n(es/fly-onboard-to ?cs ?crd1 ?crd2 ?crs2 ?spd2 ?alt2)")
+	(rhs ";;(println :FNB ?cs ?crs2 ?spd2 ?alt2 :STAND (= ?crd1 ?crd2))\n(modify ?ob time ?t2)\n(es/fly-onboard-to ?cs ?crd1 ?crd2 ?crs2 ?spd2 ?alt2)")
 	(salience 0)
 	(title "af:FlyOnboardTo"))
 
@@ -1204,7 +1204,7 @@
 
 ([FlightPro_Class290000] of  CloFunction
 
-	(source "(let [car @carr\n       [lat lon] (:coord car)\n       spd (:speed car)\n       crs (if (< spd 100) \n	(:target (:rudder car))\n	(:course car))\n       alt (int (/ (:altitude car) 3.28084))\n       k (if (< spd 100) \n	200 \n	600)\n       per (int (/ (:camera TIO) k))] ;; per in sec \n       (czm/fly-to lat lon alt crs per))")
+	(source "(let [car @carr\n       [lat lon] (:coord car)\n       spd (:speed car)\n       crs (if (< spd 100) \n	(:target (:rudder car))\n	(:course car))\n       alt (int (/ (:altitude car) 3.28084))\n       k (if (< spd 100) \n	200 \n	600)\n       per (int (/ (:camera TIO) 1000))] ;; per in sec \n   (czm/fly-to lat lon alt crs per))")
 	(title "camera-move [carr]"))
 
 ([FlightPro_Class290001] of  CloFunction
@@ -1746,13 +1746,15 @@
 		[FlightPro_Class460001]
 		[FlightPro_Class420000]
 		[FlightPro_Class640008]
+		[FlightPro_Class900004]
 		[FlightPro_Class420021]
 		[FlightPro_Class460002]
 		[FlightPro_Class510000]
 		[FlightPro_Class590000]
 		[FlightPro_Class660024]
 		[FlightPro_Class640001]
-		[FlightPro_Class830000])
+		[FlightPro_Class830000]
+		[FlightPro_Class890000])
 	(cloNamespace [FlightPro_Class400001])
 	(cloVars
 		[FlightPro_Class70000]
@@ -1762,6 +1764,7 @@
 		[FlightPro_Class310001]
 		[FlightPro_Class510001]
 		[FlightPro_Class610000]
+		[FlightPro_Class900003]
 		[FlightPro_Class630000])
 	(title "Pro Commands"))
 
@@ -1864,7 +1867,7 @@
 
 ([FlightPro_Class420021] of  CloFunction
 
-	(source "(println [:CMD-MOVE-TO params])\n(let [{:keys [country airport]} params]\n  (if-let [apt (get-in (fr24/airports-by-country) [country airport])]\n    (let [iata (apt \"iata\")\n           alt (apt \"alt\")\n           crd [(apt \"lat\") (apt \"lon\")]]\n      (foc-apt-ins apt)\n      (def GROUND-ALT (if (= TERRAIN \"yes\")\n		(+ alt 130)\n		30))\n      (set-map-view crd)\n      (println :Airport country airport iata crd alt))))\n\"\"")
+	(source "(println [:CMD-MOVE-TO params])\n(let [{:keys [country airport]} params]\n  (if-let [apt (get-in (fr24/airports-by-country) [country airport])]\n    (let [iata (apt \"iata\")\n           alt (apt \"alt\")\n           crd [(apt \"lat\") (apt \"lon\")]]\n      (foc-apt-ins apt)\n      (def-ground-alt alt)\n      (set-map-view crd)\n      (println :Airport country airport iata crd alt))))\n\"\"")
 	(title "move-to [params]"))
 
 ([FlightPro_Class430000] of  CloFunction
@@ -13869,6 +13872,15 @@
 	(title "Battle of Berlin")
 	(wikipediaUrl "http://en.wikipedia.org/wiki/Battle_of_Berlin"))
 
+([FlightPro_Class890000] of  CloFunction
+
+	(source "(if-let [inf (or (get @MY-INFOS id) (fr24/fl-info id))]\n  (get-in inf [\"airport\" \"destination\" \"position\" \"altitude\"]))")
+	(title "destination-alt [id]"))
+
+([FlightPro_Class890001] of  CloFuncall
+
+	(source "(fr24.client/id-by-call \"THY8WH\")"))
+
 ([FlightPro_Class890002] of  CloFuncall
 
 	(source "(doseq [e (rete.core/facts-with-slot-value 'Flight 'callsign = \"TAP364\")] (protege.core/ctpl e))"))
@@ -13937,22 +13949,6 @@
 
 	(source "(geo.names/call-geonames-elev30 60.0028 30.0)"))
 
-([FlightPro_Class890022] of  CloFuncall
-
-	(source "(geo.names/call-geonames-elev30 60.0027 30.0)"))
-
-([FlightPro_Class890023] of  CloFuncall
-
-	(source "(geo.names/call-geonames-elev30 60.0024 30.0)"))
-
-([FlightPro_Class890024] of  CloFuncall
-
-	(source "(geo.names/call-geonames-elev30 60.0025 30.0)"))
-
-([FlightPro_Class890025] of  CloFuncall
-
-	(source "(geo.names/call-geonames-elev30 60.0026 30.0)"))
-
 ([FlightPro_Class9] of  CloFunction
 
 	(source "(let [dest (js/Cesium.Cartesian3.fromDegrees lon lat alt)]\n  (.flyTo (.-camera VIEWER)\n            #js{:destination dest\n                  :orientation #js{:heading (js/Cesium.Math.toRadians hea)\n                                           :pitch   (js/Cesium.Math.toRadians pit)\n                                           :roll    (js/Cesium.Math.toRadians rol)}\n                  :duration per\n                  :easingFunction (fn [time] time)}))")
@@ -13962,6 +13958,30 @@
 
 	(source "(loop [out []]\n  (if (empty? out)\n    (recur (<!! chn))\n    out))")
 	(title "one-out [chn]"))
+
+([FlightPro_Class900002] of  CloFuncall
+
+	(source "(pro.commands/def-ground-alt (fr24.client/id-by-call \"THY8WH\"))"))
+
+([FlightPro_Class900003] of  CloVar
+
+	(source "{:terrain 200 ;; feet\n :cabin 30}")
+	(title "GROUND-DELTA"))
+
+([FlightPro_Class900004] of  CloFunction
+
+	(source "(def GROUND-ALT \n  (if (= TERRAIN \"yes\")\n    (+ alt \n      (GROUND-DELTA :terrain)\n      (GROUND-DELTA :cabin))\n    (GROUND-DELTA :cabin)))")
+	(title "def-ground-alt [alt]"))
+
+([FlightPro_Class900006] of  Airport
+
+	(altitude 163)
+	(coord 40.97692 28.8146)
+	(country "Turkey")
+	(iata "IST")
+	(icao "LTBA")
+	(runways 0)
+	(title "Istanbul Ataturk International Airport"))
 
 ([FlightPro_Class90001] of  CloFunction
 

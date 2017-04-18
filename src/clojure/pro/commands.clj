@@ -37,6 +37,8 @@
 
    "airline" {"short" "Ru Airlines"}}}))
 (def TERRAIN "yes")
+(def GROUND-DELTA {:terrain 200 ;; feet
+ :cabin 30})
 (def GROUND-ALT 0)
 (defn write-transit [x]
   (let [baos (ByteArrayOutputStream.)
@@ -288,6 +290,14 @@ TERRAIN)
 	          (float (apt "lon"))]))))
 ))
 
+(defn def-ground-alt [alt]
+  (def GROUND-ALT 
+  (if (= TERRAIN "yes")
+    (+ alt 
+      (GROUND-DELTA :terrain)
+      (GROUND-DELTA :cabin))
+    (GROUND-DELTA :cabin))))
+
 (defn move-to [params]
   (println [:CMD-MOVE-TO params])
 (let [{:keys [country airport]} params]
@@ -296,9 +306,7 @@ TERRAIN)
            alt (apt "alt")
            crd [(apt "lat") (apt "lon")]]
       (foc-apt-ins apt)
-      (def GROUND-ALT (if (= TERRAIN "yes")
-		(+ alt 130)
-		30))
+      (def-ground-alt alt)
       (set-map-view crd)
       (println :Airport country airport iata crd alt))))
 "")
@@ -368,4 +376,8 @@ TERRAIN)
   (println [:CMD-NEW-CZML-DOC params])
 (czs/new-doc)
 "")
+
+(defn destination-alt [id]
+  (if-let [inf (or (get @MY-INFOS id) (fr24/fl-info id))]
+  (get-in inf ["airport" "destination" "position" "altitude"])))
 

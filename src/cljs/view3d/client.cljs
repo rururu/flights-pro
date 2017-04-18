@@ -165,8 +165,8 @@
        k (if (< spd 100) 
 	200 
 	600)
-       per (int (/ (:camera TIO) k))] ;; per in sec 
-       (czm/fly-to lat lon alt crs per)))
+       per (int (/ (:camera TIO) 1000))] ;; per in sec 
+   (czm/fly-to lat lon alt crs per)))
 
 (defn manual-vehicle []
   {:coord   [(num-val (ctl/get-value "input-lat"))
