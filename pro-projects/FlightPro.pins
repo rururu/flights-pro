@@ -1,4 +1,4 @@
-; Tue Apr 18 22:53:44 MSK 2017
+; Wed Apr 19 08:50:22 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -790,7 +790,7 @@
 ([FlightPro_Class220001] of  Rule
 
 	(lhs "(Flight time ?t\n           id ?id\n           callsign ?cs\n           coord ?crd \n           course ?crs\n           speed ?spd\n           altitude ?alt)\n?ob1 (Onboard)\n?ob2 (Onboard callsign ?cs time 0)")
-	(rhs "(retract ?ob1)\n(modify ?ob2 time ?t)\n(pro.commands/def-ground-alt (pro.commands/destination-alt ?id))\n(es/go-onboard ?cs ?crd ?crs ?spd ?alt)")
+	(rhs "(retract ?ob1)\n(modify ?ob2 time ?t)\n(pro.commands/def-ground-alt (pro.commands/destination-alt ?id))\n(es/fly-onboard-to ?cs 0 ?crd ?crs ?spd ?alt 6)")
 	(salience 0)
 	(title "af:SwitchOnboard"))
 
@@ -937,14 +937,14 @@
 ([FlightPro_Class250010] of  Rule
 
 	(lhs "?ob (Onboard time ?t0 callsign ?cs\n	(not= ?cs \"MANUAL\"))\n(Flight age \"CURRENT\" \n	callsign ?cs\n	coord ?crd1 \n	time ?t1 \n	(<= ?t0 ?t1))\n(Flight age \"NEW\" \n	callsign ?cs\n	course ?crs2\n	coord ?crd2 \n	speed ?spd2\n	altitude ?alt2\n	time ?t2)")
-	(rhs ";;(println :FNB ?cs ?crs2 ?spd2 ?alt2 :STAND (= ?crd1 ?crd2))\n(modify ?ob time ?t2)\n(es/fly-onboard-to ?cs ?crd1 ?crd2 ?crs2 ?spd2 ?alt2)")
+	(rhs ";;(println :FNB ?cs ?crs2 ?spd2 ?alt2 :STAND (= ?crd1 ?crd2))\n(modify ?ob time ?t2)\n(es/fly-onboard-to ?cs ?crd1 ?crd2 ?crs2 ?spd2 ?alt2 (- ?t2 ?t1))")
 	(salience 0)
 	(title "af:FlyOnboardTo"))
 
 ([FlightPro_Class250011] of  CloFunction
 
-	(source "(if (not ONB-PAUSE)\n  (asp/pump-in (:directives cmd/CHN)\n	{:directive :carrier\n	 :callsign cs\n	 :vehicle {\n	   :coord crd2\n	   :altitude (if (< alt2 cmd/GROUND-ALT) cmd/GROUND-ALT alt2)\n	   :speed (if (= crd1 crd2) 0 spd2)\n	   :course crs2}}))")
-	(title "fly-onboard-to [cs crd1 crd2 crs2 spd2 alt2]"))
+	(source "(if (not ONB-PAUSE)\n  (asp/pump-in (:directives cmd/CHN)\n	{:directive :carrier\n	 :callsign cs\n	 :vehicle {\n	   :period per\n	   :coord crd2\n	   :altitude (if (< alt2 cmd/GROUND-ALT) cmd/GROUND-ALT alt2)\n	   :speed (if (= crd1 crd2) 0 spd2)\n	   :course crs2}}))")
+	(title "fly-onboard-to [cs crd1 crd2 crs2 spd2 alt2 per]"))
 
 ([FlightPro_Class260000] of  CloFunction
 
@@ -1204,7 +1204,7 @@
 
 ([FlightPro_Class290000] of  CloFunction
 
-	(source "(let [car @carr\n       [lat lon] (:coord car)\n       spd (:speed car)\n       crs (if (< spd 100) \n	(:target (:rudder car))\n	(:course car))\n       alt (int (/ (:altitude car) 3.28084))\n       k (if (< spd 100) \n	200 \n	600)\n       per (int (/ (:camera TIO) 1000))] ;; per in sec \n   (czm/fly-to lat lon alt crs per))")
+	(source "(let [car @carr]\n  (if (= (:mode car) \"MANUAL\")  \n    (let [   [lat lon] (:coord car)\n       spd (:speed car)\n       crs (if (< spd 100) \n	(:target (:rudder car))\n	(:course car))\n       alt (int (/ (:altitude car) 3.28084))\n       k (if (< spd 100) \n	200 \n	600)\n       per (int (/ (:camera TIO) k))] ;; per in sec \n   (czm/fly-to lat lon alt crs per))))")
 	(title "camera-move [carr]"))
 
 ([FlightPro_Class290001] of  CloFunction
@@ -1294,7 +1294,7 @@
 
 ([FlightPro_Class300006] of  CloFunction
 
-	(source "(let [car @CARRIER]\n  (if (not= callsign (:mode car))\n    (vswap! CARRIER assoc :mode callsign))\n  (let [ocrs (:course car)\n         ncrs (:course vehicle)\n         [olat olon] (:coord car)\n         [nlat nlon] (:coord vehicle)\n         ospd (:speed car)\n         nspd (:speed vehicle)]\n    (vswap! CARRIER assoc \n	:coord [(double (/ (+ olat nlat) 2)) (double (/ (+ olon nlon) 2))]\n	:speed (cond\n	             (= nspd 0) 0 \n	             (= ospd 0) nspd\n	             true nspd))\n    (mov/elevate CARRIER (:altitude vehicle) 2)\n    (mov/set-turn-point CARRIER)\n    (if (not= ncrs ocrs)\n      (turn-and-bank CARRIER ncrs))))")
+	(source "(let [[lat lon] (:coord vehicle)\n        alt  (int (/ (:altitude vehicle) 3.28084))]\n  (czm/fly-to lat lon alt (:course vehicle) (:period vehicle)))")
 	(title "carrier-interpol [callsign vehicle]"))
 
 ([FlightPro_Class30001] of  ClsRequired
@@ -3606,7 +3606,7 @@
 
 ([FlightPro_Class80003] of  CloFunction
 
-	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :manual (if (= (:mode @CARRIER) \"?\")\n	(carrier-exact \"MANUAL\" (manual-vehicle))\n	(vswap! CARRIER assoc :mode \"MANUAL\"))\n    :callsigns (let [{:keys [list]} dir]\n	(ctl/callsigns (conj list \"manual\")))\n    :carrier (let [{:keys [callsign vehicle go-onboard]} dir]\n	(if go-onboard \n	  (vswap! CARRIER assoc :mode callsign))\n	(if (not (= (:mode @CARRIER) \"MANUAL\"))\n	  (if go-onboard \n	    (carrier-exact callsign vehicle)\n	    (carrier-interpol callsign vehicle))))\n    (println (str \"Unknown directive: \" [directive dir]))))")
+	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :manual (if (= (:mode @CARRIER) \"?\")\n	(carrier-exact \"MANUAL\" (manual-vehicle))\n	(vswap! CARRIER assoc :mode \"MANUAL\"))\n    :callsigns (let [{:keys [list]} dir]\n	(ctl/callsigns (conj list \"manual\")))\n    :carrier (let [{:keys [callsign vehicle go-onboard]} dir]\n	(vswap! CARRIER assoc :mode callsign)\n	(if (not= callsign \"MANUAL\")\n	  (carrier-interpol callsign vehicle)))\n    (println (str \"Unknown directive: \" [directive dir]))))")
 	(title "directives-handler [response]"))
 
 ([FlightPro_Class80004] of  CloFunction
@@ -13958,6 +13958,21 @@
 
 	(source "(loop [out []]\n  (if (empty? out)\n    (recur (<!! chn))\n    out))")
 	(title "one-out [chn]"))
+
+([FlightPro_Class900000] of  CloFunction
+
+	(source "(let [car @CARRIER]\n  (if (not= callsign (:mode car))\n    (vswap! CARRIER assoc :mode callsign))\n  (let [ocrs (:course car)\n         ncrs (:course vehicle)\n         [olat olon] (:coord car)\n         [nlat nlon] (:coord vehicle)\n         ospd (:speed car)\n         nspd (:speed vehicle)]\n    (vswap! CARRIER assoc \n	:coord [(double (/ (+ olat nlat) 2)) (double (/ (+ olon nlon) 2))]\n	:speed (cond\n	             (= nspd 0) 0 \n	             (= ospd 0) nspd\n	             true nspd))\n    (mov/elevate CARRIER (:altitude vehicle) 2)\n    (mov/set-turn-point CARRIER)\n    (if (not= ncrs ocrs)\n      (turn-and-bank CARRIER ncrs))))")
+	(title "carrier-interpol2 [callsign vehicle]"))
+
+([FlightPro_Class900001] of  Airport
+
+	(altitude 128)
+	(coord 18.20483 -63.055)
+	(country "Anguilla")
+	(iata "AXA")
+	(icao "TQPF")
+	(runways 0)
+	(title "The Valley Clayton J. Lloyd International Airport"))
 
 ([FlightPro_Class900002] of  CloFuncall
 

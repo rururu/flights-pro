@@ -79,12 +79,13 @@
 	{:instruct :delete
 	 :id id}))
 
-(defn fly-onboard-to [cs crd1 crd2 crs2 spd2 alt2]
+(defn fly-onboard-to [cs crd1 crd2 crs2 spd2 alt2 per]
   (if (not ONB-PAUSE)
   (asp/pump-in (:directives cmd/CHN)
 	{:directive :carrier
 	 :callsign cs
 	 :vehicle {
+	   :period per
 	   :coord crd2
 	   :altitude (if (< alt2 cmd/GROUND-ALT) cmd/GROUND-ALT alt2)
 	   :speed (if (= crd1 crd2) 0 spd2)

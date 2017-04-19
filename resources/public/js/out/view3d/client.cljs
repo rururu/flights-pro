@@ -79,25 +79,9 @@
    :error-handler error-handler}))
 
 (defn carrier-interpol [callsign vehicle]
-  (let [car @CARRIER]
-  (if (not= callsign (:mode car))
-    (vswap! CARRIER assoc :mode callsign))
-  (let [ocrs (:course car)
-         ncrs (:course vehicle)
-         [olat olon] (:coord car)
-         [nlat nlon] (:coord vehicle)
-         ospd (:speed car)
-         nspd (:speed vehicle)]
-    (vswap! CARRIER assoc 
-	:coord [(double (/ (+ olat nlat) 2)) (double (/ (+ olon nlon) 2))]
-	:speed (cond
-	             (= nspd 0) 0 
-	             (= ospd 0) nspd
-	             true nspd))
-    (mov/elevate CARRIER (:altitude vehicle) 2)
-    (mov/set-turn-point CARRIER)
-    (if (not= ncrs ocrs)
-      (turn-and-bank CARRIER ncrs)))))
+  (let [[lat lon] (:coord vehicle)
+        alt  (int (/ (:altitude vehicle) 3.28084))]
+  (czm/fly-to lat lon alt (:course vehicle) (:period vehicle))))
 
 (defn carrier-exact [callsign vehicle]
   (if (not= callsign (:mode @CARRIER))
@@ -155,8 +139,9 @@
     (mov/set-turn-point CARRIER [lat lon] (:course car) (:speed car)))))
 
 (defn camera-move [carr]
-  (let [car @carr
-       [lat lon] (:coord car)
+  (let [car @carr]
+  (if (= (:mode car) "MANUAL")  
+    (let [   [lat lon] (:coord car)
        spd (:speed car)
        crs (if (< spd 100) 
 	(:target (:rudder car))
@@ -165,8 +150,8 @@
        k (if (< spd 100) 
 	200 
 	600)
-       per (int (/ (:camera TIO) 1000))] ;; per in sec 
-   (czm/fly-to lat lon alt crs per)))
+       per (int (/ (:camera TIO) k))] ;; per in sec 
+   (czm/fly-to lat lon alt crs per)))))
 
 (defn manual-vehicle []
   {:coord   [(num-val (ctl/get-value "input-lat"))
@@ -185,12 +170,9 @@
     :callsigns (let [{:keys [list]} dir]
 	(ctl/callsigns (conj list "manual")))
     :carrier (let [{:keys [callsign vehicle go-onboard]} dir]
-	(if go-onboard 
-	  (vswap! CARRIER assoc :mode callsign))
-	(if (not (= (:mode @CARRIER) "MANUAL"))
-	  (if go-onboard 
-	    (carrier-exact callsign vehicle)
-	    (carrier-interpol callsign vehicle))))
+	(vswap! CARRIER assoc :mode callsign)
+	(if (not= callsign "MANUAL")
+	  (carrier-interpol callsign vehicle)))
     (println (str "Unknown directive: " [directive dir])))))
 
 (defn receive-directives []
