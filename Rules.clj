@@ -1,20 +1,23 @@
 (af:SwitchOnboard 0
 (Flight time ?t
+           id ?id
            callsign ?cs
            coord ?crd 
            course ?crs
            speed ?spd
            altitude ?alt)
 ?ob1 (Onboard)
-?ob2 (Onboard callsign ?cs time 0
-	(not= ?cs "STOP"))
+?ob2 (Onboard callsign ?cs time 0)
 =>
 (retract ?ob1)
 (modify ?ob2 time ?t)
-(es/go-onboard ?cs ?crd ?crs ?spd ?alt))
+(pro.commands/def-ground-alt (pro.commands/destination-alt ?id))
+(if (not= ?cs "MANUAL")
+  (es/fly-onboard-to ?cs 0 ?crd ?crs ?spd ?alt 6)))
 
 (af:StartOnboard 0
 (Flight time ?t
+           id ?id
            callsign ?cs
            coord ?crd 
            course ?crs
@@ -24,29 +27,28 @@
 (not Onboard)
 =>
 (modify ?ob time ?t)
+(pro.commands/def-ground-alt (pro.commands/destination-alt ?id))
 (es/go-onboard ?cs ?crd ?crs ?spd ?alt))
 
 (af:FlyOnboardTo 0
-?ob (Onboard time ?t0 callsign ?cs)
+?ob (Onboard time ?t0 callsign ?cs
+	(not= ?cs "MANUAL"))
 (Flight age "CURRENT" 
 	callsign ?cs
-	course ?crs1 
 	coord ?crd1 
-	speed ?spd1
-	altitude ?alt1
 	time ?t1 
 	(<= ?t0 ?t1))
-(Flight age "NEW"
+(Flight age "NEW" 
 	callsign ?cs
-	course ?crs2 
+	course ?crs2
 	coord ?crd2 
-	speed ?spd2 
+	speed ?spd2
 	altitude ?alt2
 	time ?t2)
 =>
-(println :FOB ?cs)
+;;(println :FNB ?cs ?crs2 ?spd2 ?alt2 :STAND (= ?crd1 ?crd2))
 (modify ?ob time ?t2)
-(es/fly-onboard-to ?cs ?crs1 ?crs2 ?crd1 ?crd2 ?spd1 ?spd2 ?alt1 ?alt2))
+(es/fly-onboard-to ?cs ?crd1 ?crd2 ?crs2 ?spd2 ?alt2 (- ?t2 ?t1)))
 
 (mf:ClimbStart 0
 ?fp (FlightPlan id ?id

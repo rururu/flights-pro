@@ -29,13 +29,13 @@
  :display 831
  :manual-data 6000
  :ext-data-popup 60000})
-(def CARRIER (volatile! {:mode "?"
-               :coord [0 0]
-               :altitude 0
-               :speed 0
+(def CARRIER (volatile! {:mode "MANUAL"
+               :coord [60 30]
+               :altitude 4000
+               :speed 160
                :course 270
                :step-hrs (double (/ (:carrier TIO) 3600000))
-               :bank-params [12 16 64 2]
+               :bank-params [12 2 16 64 2]
                :rudder {:target 0
                             :step 3
 	    :accel 1
@@ -77,17 +77,6 @@
   (GET (str (:command URL) "onboard?callsign=" call)
   {:handler (fn [response])
    :error-handler error-handler}))
-
-(defn carrier-interpol [callsign vehicle]
-  (let [[lat lon] (:coord vehicle)
-        alt  (int (/ (:altitude vehicle) 3.28084))]
-  (czm/fly-to lat lon alt (:course vehicle) (:period vehicle))))
-
-(defn carrier-exact [callsign vehicle]
-  (if (not= callsign (:mode @CARRIER))
-  (vswap! CARRIER assoc :mode callsign))
-(vswap! CARRIER merge vehicle)
-(mov/set-turn-point CARRIER))
 
 (defn view [dir]
   (czm/camera :view dir))
@@ -138,20 +127,15 @@
          [lat _] (:coord car)]
     (mov/set-turn-point CARRIER [lat lon] (:course car) (:speed car)))))
 
-(defn camera-move [carr]
+(defn camera-vehicle [vehicle per]
+  (let [[lat lon] (:coord vehicle)
+        alt  (int (/ (:altitude vehicle) 3.28084))]
+  (czm/fly-to lat lon alt (:course vehicle) per)))
+
+(defn camera-manual [carr]
   (let [car @carr]
   (if (= (:mode car) "MANUAL")  
-    (let [   [lat lon] (:coord car)
-       spd (:speed car)
-       crs (if (< spd 100) 
-	(:target (:rudder car))
-	(:course car))
-       alt (int (/ (:altitude car) 3.28084))
-       k (if (< spd 100) 
-	200 
-	600)
-       per (int (/ (:camera TIO) k))] ;; per in sec 
-   (czm/fly-to lat lon alt crs per)))))
+    (camera-vehicle car (int (/ (:camera TIO) 1000))))))
 
 (defn manual-vehicle []
   {:coord   [(num-val (ctl/get-value "input-lat"))
@@ -160,19 +144,23 @@
  :speed    (num-val (ctl/get-value "input-spd"))
  :altitude (num-val (ctl/get-value "input-alt"))})
 
+(defn bank-vehicle [vehicle]
+  (let [[rb sa ba fa :as bps] (:bank-params @CARRIER)
+       bnk (dyn/bank (:old-course vehicle) (:course vehicle) bps)]
+  (czm/camera :roll bnk)))
+
 (defn directives-handler [response]
   (doseq [{:keys [directive] :as dir} (read-transit response)]
   ;;(println [:DIRECTIVE dir])
   (condp = directive
-    :manual (if (= (:mode @CARRIER) "?")
-	(carrier-exact "MANUAL" (manual-vehicle))
-	(vswap! CARRIER assoc :mode "MANUAL"))
+    :manual (vswap! CARRIER assoc :mode "MANUAL")
     :callsigns (let [{:keys [list]} dir]
 	(ctl/callsigns (conj list "manual")))
-    :carrier (let [{:keys [callsign vehicle go-onboard]} dir]
+    :vehicle (let [{:keys [callsign vehicle period]} dir]
 	(vswap! CARRIER assoc :mode callsign)
-	(if (not= callsign "MANUAL")
-	  (carrier-interpol callsign vehicle)))
+	(camera-vehicle vehicle period)
+                        (bank-vehicle vehicle)
+	(ctl/show-flight-data vehicle))
     (println (str "Unknown directive: " [directive dir])))))
 
 (defn receive-directives []
@@ -190,6 +178,11 @@
 	{:handler (fn[response])
 	 :error-handler error-handler}))))
 
+(defn flight-data-manual [carr]
+  (let [car @carr]
+  (if (= (:mode car) "MANUAL")
+    (ctl/show-flight-data car))))
+
 (defn on-load []
   (enable-console-print!)
 (GET (str (:command URL) "terrain")
@@ -199,14 +192,10 @@
 (GET (str (:command URL) "new-czml-doc")
 	{:handler (fn [response])
 	 :error-handler error-handler})
-(carrier-exact "MANUAL" 
-	{:coord [60 30]
-	 :altitude 4000
-	 :speed 160
-	 :course 270})
+(mov/set-turn-point CARRIER)
 (asp/repeater mov/move CARRIER (:carrier TIO))
-(asp/repeater ctl/show-flight-data CARRIER (:display TIO))
-(asp/repeater camera-move CARRIER (:camera TIO))
+(asp/repeater flight-data-manual CARRIER (:display TIO))
+(asp/repeater camera-manual CARRIER (:camera TIO))
 (asp/repeater receive-directives (:directives TIO))
 (asp/repeater send-manual-data (:manual-data TIO))
 (ctl/show-controls))

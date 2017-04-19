@@ -79,13 +79,14 @@ return csasync.proc.start_process.call(null,new cljs.core.Keyword(null,"cdad-sta
 return proc_fn.call(null,carr);
 }),cljs.core.get_in.call(null,cljs.core.deref.call(null,carr),tio_pth));
 });
-calc.dynamic.bank = (function calc$dynamic$bank(old_crs,new_crs,p__34642){
-var vec__34646 = p__34642;
-var right_bank = cljs.core.nth.call(null,vec__34646,(0),null);
-var small_arc = cljs.core.nth.call(null,vec__34646,(1),null);
-var big_arc = cljs.core.nth.call(null,vec__34646,(2),null);
-var factor = cljs.core.nth.call(null,vec__34646,(3),null);
-var turn_right_QMARK_ = ((function (vec__34646,right_bank,small_arc,big_arc,factor){
+calc.dynamic.bank = (function calc$dynamic$bank(old_crs,new_crs,p__25565){
+var vec__25569 = p__25565;
+var right_bank = cljs.core.nth.call(null,vec__25569,(0),null);
+var min_arc = cljs.core.nth.call(null,vec__25569,(1),null);
+var small_arc = cljs.core.nth.call(null,vec__25569,(2),null);
+var big_arc = cljs.core.nth.call(null,vec__25569,(3),null);
+var factor = cljs.core.nth.call(null,vec__25569,(4),null);
+var turn_right_QMARK_ = ((function (vec__25569,right_bank,min_arc,small_arc,big_arc,factor){
 return (function calc$dynamic$bank_$_turn_right_QMARK_(from,to){
 var dif = (to - from);
 if((dif > (0))){
@@ -97,15 +98,13 @@ return (dif < (-180));
 return null;
 }
 }
-});})(vec__34646,right_bank,small_arc,big_arc,factor))
+});})(vec__25569,right_bank,min_arc,small_arc,big_arc,factor))
 ;
-if(cljs.core._EQ_.call(null,old_crs,new_crs)){
+var arc = calc.core.abs.call(null,(old_crs - new_crs));
+if((arc <= min_arc)){
 return (0);
 } else {
-var arc = calc.core.abs.call(null,(old_crs - new_crs));
-var arc__$1 = (((arc > (180)))?((360) - arc):((((arc < cljs.core._)) && ((cljs.core._ < (180))))?((360) + arc):(((arc < (0)))?((0) - arc):arc
-)));
-var bnk = (((arc__$1 < small_arc))?((right_bank / factor) | (0)):(((arc__$1 > big_arc))?(right_bank * factor):right_bank
+var bnk = (((arc < small_arc))?((right_bank / factor) | (0)):(((arc > big_arc))?(right_bank * factor):right_bank
 ));
 if(cljs.core.truth_(turn_right_QMARK_.call(null,old_crs,new_crs))){
 return bnk;

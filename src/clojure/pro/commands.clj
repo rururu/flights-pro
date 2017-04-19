@@ -36,7 +36,7 @@
                "scheduled" {"arrival" "unk"}}
 
    "airline" {"short" "Ru Airlines"}}}))
-(def TERRAIN "yes")
+(def TERRAIN "no")
 (def GROUND-DELTA {:terrain 200 ;; feet
  :cabin 30})
 (def GROUND-ALT 0)
@@ -184,9 +184,8 @@
   (println [:CMD-ONBOARD params])
 (let [cls (:callsign params)]
   (condp = cls
-    "manual" (do (asp/pump-in (:directives CHN)
-	{:directive :manual})
-                     (rete/assert-frame ['Onboard 'callsign cls 'time 0]))
+    "manual" (do (asp/pump-in (:directives CHN) {:directive :manual})
+	(rete/assert-frame ['Onboard 'callsign cls 'time 0]))
    "select" (let [lst (vec (sort (map fr24/callsign (keys @fr24/FLIGHTS))))
                        lst (filter #(not (empty? %)) lst)]
                   (asp/pump-in (:directives CHN)
@@ -367,7 +366,7 @@ TERRAIN)
 "")
 
 (defn go-initial-airport []
-  (if-let [api (fainst (cls-instances "Airport") "Initial Airport")]
+  (if-let [api (fainst (cls-instances "Airport") nil)]
   (move-to {:country (sv api "country")
 	:airport (sv api "title")})
   (println "Annotated Initial Airport not found!")))
