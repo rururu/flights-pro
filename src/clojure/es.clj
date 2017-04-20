@@ -90,12 +90,9 @@
 	   :altitude (if (< alt2 cmd/GROUND-ALT) 
 		cmd/GROUND-ALT 
 		alt2)
-	   :speed (if (= crd1 crd2) 0 spd2)
+	   :speed spd2
 	   :course crs2
-	   :old-course crs1}}))
-(println :ALT (if (< alt2 cmd/GROUND-ALT) 
-		cmd/GROUND-ALT 
-		alt2)))
+	   :old-course crs1}})))
 
 (defn proc [z]
   (loop [n 1 y z]

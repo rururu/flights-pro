@@ -23,27 +23,27 @@ var ldiff = (lambda - lambda0);
 var cosphi = Math.cos(phi);
 return Math.atan2((cosphi * Math.sin(ldiff)),((Math.cos(phi1) * Math.sin(phi)) - ((Math.sin(phi1) * cosphi) * Math.cos(ldiff))));
 });
-calc.geo.future_pos = (function calc$geo$future_pos(p__25256,crs,spd,tim){
-var vec__25263 = p__25256;
-var lat = cljs.core.nth.call(null,vec__25263,(0),null);
-var lon = cljs.core.nth.call(null,vec__25263,(1),null);
+calc.geo.future_pos = (function calc$geo$future_pos(p__26152,crs,spd,tim){
+var vec__26159 = p__26152;
+var lat = cljs.core.nth.call(null,vec__26159,(0),null);
+var lon = cljs.core.nth.call(null,vec__26159,(1),null);
 var phi = Math.toRadians(lat);
 var lam = Math.toRadians(lon);
 var dir = Math.toRadians(crs);
 var way = (spd * tim);
 var way__$1 = Math.toRadians((way / (60)));
-var vec__25266 = calc.geo.spherical_between.call(null,phi,lam,way__$1,dir);
-var phi2 = cljs.core.nth.call(null,vec__25266,(0),null);
-var lam2 = cljs.core.nth.call(null,vec__25266,(1),null);
+var vec__26162 = calc.geo.spherical_between.call(null,phi,lam,way__$1,dir);
+var phi2 = cljs.core.nth.call(null,vec__26162,(0),null);
+var lam2 = cljs.core.nth.call(null,vec__26162,(1),null);
 return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [Math.toDegrees(phi2),Math.toDegrees(lam2)], null);
 });
-calc.geo.distance_nm = (function calc$geo$distance_nm(p__25269,p__25270){
-var vec__25277 = p__25269;
-var la1 = cljs.core.nth.call(null,vec__25277,(0),null);
-var lo1 = cljs.core.nth.call(null,vec__25277,(1),null);
-var vec__25280 = p__25270;
-var la2 = cljs.core.nth.call(null,vec__25280,(0),null);
-var lo2 = cljs.core.nth.call(null,vec__25280,(1),null);
+calc.geo.distance_nm = (function calc$geo$distance_nm(p__26165,p__26166){
+var vec__26173 = p__26165;
+var la1 = cljs.core.nth.call(null,vec__26173,(0),null);
+var lo1 = cljs.core.nth.call(null,vec__26173,(1),null);
+var vec__26176 = p__26166;
+var la2 = cljs.core.nth.call(null,vec__26176,(0),null);
+var lo2 = cljs.core.nth.call(null,vec__26176,(1),null);
 var fi1 = Math.toRadians(la1);
 var ld1 = Math.toRadians(lo1);
 var fi2 = Math.toRadians(la2);
@@ -51,13 +51,13 @@ var ld2 = Math.toRadians(lo2);
 var rad = calc.geo.spherical_distance.call(null,fi1,ld1,fi2,ld2);
 return (Math.toDegrees(rad) * (60));
 });
-calc.geo.bear_deg = (function calc$geo$bear_deg(p__25283,p__25284){
-var vec__25291 = p__25283;
-var la1 = cljs.core.nth.call(null,vec__25291,(0),null);
-var lo1 = cljs.core.nth.call(null,vec__25291,(1),null);
-var vec__25294 = p__25284;
-var la2 = cljs.core.nth.call(null,vec__25294,(0),null);
-var lo2 = cljs.core.nth.call(null,vec__25294,(1),null);
+calc.geo.bear_deg = (function calc$geo$bear_deg(p__26179,p__26180){
+var vec__26187 = p__26179;
+var la1 = cljs.core.nth.call(null,vec__26187,(0),null);
+var lo1 = cljs.core.nth.call(null,vec__26187,(1),null);
+var vec__26190 = p__26180;
+var la2 = cljs.core.nth.call(null,vec__26190,(0),null);
+var lo2 = cljs.core.nth.call(null,vec__26190,(1),null);
 var fi1 = Math.toRadians(la1);
 var ld1 = Math.toRadians(lo1);
 var fi2 = Math.toRadians(la2);
@@ -89,19 +89,19 @@ return null;
 return null;
 }
 });
-calc.geo.future_intersect = (function calc$geo$future_intersect(p__25297,crs1,spd1,p__25298,crs2,spd2,tim){
-var vec__25311 = p__25297;
-var la1 = cljs.core.nth.call(null,vec__25311,(0),null);
-var lo1 = cljs.core.nth.call(null,vec__25311,(1),null);
-var vec__25314 = p__25298;
-var la2 = cljs.core.nth.call(null,vec__25314,(0),null);
-var lo2 = cljs.core.nth.call(null,vec__25314,(1),null);
-var vec__25317 = calc.geo.future_pos.call(null,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [la1,lo1], null),crs1,spd1,tim);
-var la3 = cljs.core.nth.call(null,vec__25317,(0),null);
-var lo3 = cljs.core.nth.call(null,vec__25317,(1),null);
-var vec__25320 = calc.geo.future_pos.call(null,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [la2,lo2], null),crs2,spd2,tim);
-var la4 = cljs.core.nth.call(null,vec__25320,(0),null);
-var lo4 = cljs.core.nth.call(null,vec__25320,(1),null);
+calc.geo.future_intersect = (function calc$geo$future_intersect(p__26193,crs1,spd1,p__26194,crs2,spd2,tim){
+var vec__26207 = p__26193;
+var la1 = cljs.core.nth.call(null,vec__26207,(0),null);
+var lo1 = cljs.core.nth.call(null,vec__26207,(1),null);
+var vec__26210 = p__26194;
+var la2 = cljs.core.nth.call(null,vec__26210,(0),null);
+var lo2 = cljs.core.nth.call(null,vec__26210,(1),null);
+var vec__26213 = calc.geo.future_pos.call(null,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [la1,lo1], null),crs1,spd1,tim);
+var la3 = cljs.core.nth.call(null,vec__26213,(0),null);
+var lo3 = cljs.core.nth.call(null,vec__26213,(1),null);
+var vec__26216 = calc.geo.future_pos.call(null,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [la2,lo2], null),crs2,spd2,tim);
+var la4 = cljs.core.nth.call(null,vec__26216,(0),null);
+var lo4 = cljs.core.nth.call(null,vec__26216,(1),null);
 return calc.geo.seg_intersect.call(null,lo1,la1,lo3,la3,lo2,la2,lo4,la4);
 });
 calc.geo.rev_bear = (function calc$geo$rev_bear(b){
@@ -112,13 +112,13 @@ return (rb - (360));
 return rb;
 }
 });
-calc.geo.course_angle = (function calc$geo$course_angle(crs,p__25323,p__25324){
-var vec__25331 = p__25323;
-var lat1 = cljs.core.nth.call(null,vec__25331,(0),null);
-var lon1 = cljs.core.nth.call(null,vec__25331,(1),null);
-var vec__25334 = p__25324;
-var lat2 = cljs.core.nth.call(null,vec__25334,(0),null);
-var lon2 = cljs.core.nth.call(null,vec__25334,(1),null);
+calc.geo.course_angle = (function calc$geo$course_angle(crs,p__26219,p__26220){
+var vec__26227 = p__26219;
+var lat1 = cljs.core.nth.call(null,vec__26227,(0),null);
+var lon1 = cljs.core.nth.call(null,vec__26227,(1),null);
+var vec__26230 = p__26220;
+var lat2 = cljs.core.nth.call(null,vec__26230,(0),null);
+var lon2 = cljs.core.nth.call(null,vec__26230,(1),null);
 var bea = calc.geo.bear_deg.call(null,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [lat1,lon1], null),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [lat2,lon2], null));
 var ca1 = (bea - crs);
 if((ca1 > (180))){
@@ -152,17 +152,17 @@ return x;
 }
 }
 });
-calc.geo.rough_distance = (function calc$geo$rough_distance(p__25337,p__25338){
-var vec__25345 = p__25337;
-var lat1 = cljs.core.nth.call(null,vec__25345,(0),null);
-var lon1 = cljs.core.nth.call(null,vec__25345,(1),null);
-var vec__25348 = p__25338;
-var lat2 = cljs.core.nth.call(null,vec__25348,(0),null);
-var lon2 = cljs.core.nth.call(null,vec__25348,(1),null);
-var smround = ((function (vec__25345,lat1,lon1,vec__25348,lat2,lon2){
+calc.geo.rough_distance = (function calc$geo$rough_distance(p__26233,p__26234){
+var vec__26241 = p__26233;
+var lat1 = cljs.core.nth.call(null,vec__26241,(0),null);
+var lon1 = cljs.core.nth.call(null,vec__26241,(1),null);
+var vec__26244 = p__26234;
+var lat2 = cljs.core.nth.call(null,vec__26244,(0),null);
+var lon2 = cljs.core.nth.call(null,vec__26244,(1),null);
+var smround = ((function (vec__26241,lat1,lon1,vec__26244,lat2,lon2){
 return (function calc$geo$rough_distance_$_smround(n){
 return (Math.round((n * (10))) / (10));
-});})(vec__25345,lat1,lon1,vec__25348,lat2,lon2))
+});})(vec__26241,lat1,lon1,vec__26244,lat2,lon2))
 ;
 var dlat = (lat1 - lat2);
 var dlon = (lon1 - lon2);

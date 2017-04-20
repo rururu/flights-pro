@@ -33,6 +33,7 @@
                   :orientation #js{:heading (js/Cesium.Math.toRadians hea)
                                            :pitch   (js/Cesium.Math.toRadians pit)
                                            :roll    (js/Cesium.Math.toRadians rol)}
+                  :maximumHeight alt
                   :duration per
                   :easingFunction (fn [time] time)})))
 

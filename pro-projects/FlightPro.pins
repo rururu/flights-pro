@@ -1,4 +1,4 @@
-; Wed Apr 19 22:42:09 MSK 2017
+; Thu Apr 20 23:54:03 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -130,7 +130,7 @@
 
 ([FlightPro_Class130001] of  CloFunction
 
-	(source "(let [[rb sa ba fa :as bps] (:bank-params @carr)\n       bnk (dyn/bank (:course @carr) course bps)\n       spd (:speed @carr)]\n  (if (or (< spd 100) (= bnk 0))\n    (mov/turn carr course 1)\n    (let [accel (if (> (calc/abs bnk) rb) 2 1)]\n      (czm/camera :roll bnk)\n      (mov/turn carr course accel)\n      (dyn/check-diff-and-do carr\n        [:rudder :target]\n        [:course]\n        (get-in @carr [:rudder :step])\n        [:rudder :time-out]\n        #(czm/camera :roll 0)))))")
+	(source "(let [[rb ma sa ba fa :as bps] (:bank-params @carr)\n       bnk (dyn/bank (:course @carr) course bps)\n       spd (:speed @carr)]\n  (if (or (< spd 100) (= bnk 0))\n    (mov/turn carr course 1)\n    (let [accel (if (> (calc/abs bnk) rb) 2 1)]\n      (czm/camera :roll bnk)\n      (mov/turn carr course accel)\n      (dyn/check-diff-and-do carr\n        [:rudder :target]\n        [:course]\n        (get-in @carr [:rudder :step])\n        [:rudder :time-out]\n        #(czm/camera :roll 0)))))")
 	(title "turn-and-bank [carr course]"))
 
 ([FlightPro_Class130003] of  CloFunction
@@ -944,7 +944,7 @@
 
 ([FlightPro_Class250011] of  CloFunction
 
-	(source "(if (not ONB-PAUSE)\n  (asp/pump-in (:directives cmd/CHN)\n	{:directive :vehicle\n	 :callsign cs\n	 :period per\n	 :vehicle {\n	   :coord crd2\n	   :altitude (if (< alt2 cmd/GROUND-ALT) \n		cmd/GROUND-ALT \n		alt2)\n	   :speed (if (= crd1 crd2) 0 spd2)\n	   :course crs2\n	   :old-course crs1}}))")
+	(source "(if (not ONB-PAUSE)\n  (asp/pump-in (:directives cmd/CHN)\n	{:directive :vehicle\n	 :callsign cs\n	 :period per\n	 :vehicle {\n	   :coord crd2\n	   :altitude (if (< alt2 cmd/GROUND-ALT) \n		cmd/GROUND-ALT \n		alt2)\n	   :speed spd2\n	   :course crs2\n	   :old-course crs1}}))")
 	(title "fly-onboard-to [cs crd1 crd2 crs1 crs2 spd2 alt2 per]"))
 
 ([FlightPro_Class260000] of  CloFunction
@@ -1025,7 +1025,7 @@
 
 ([FlightPro_Class280002] of  CloFunction
 
-	(source "(let [[rb sa ba fa :as bps] (:bank-params @CARRIER)\n       bnk (dyn/bank (:old-course vehicle) (:course vehicle) bps)]\n  (czm/camera :roll bnk))")
+	(source "(czm/camera :roll \n  (if (> (:speed vehicle) 120)\n    (dyn/bank (:old-course vehicle) \n	(:course vehicle) \n	(:bank-params @CARRIER))\n    0))")
 	(title "bank-vehicle [vehicle]"))
 
 ([FlightPro_Class280040] of  CloFunction
@@ -3025,46 +3025,46 @@
 	(language English-en)
 	(max-responses 40)
 	(responses
-		[FlightPro_Class880281]
-		[FlightPro_Class880282]
-		[FlightPro_Class880283]
-		[FlightPro_Class880284]
-		[FlightPro_Class880285]
-		[FlightPro_Class880286]
-		[FlightPro_Class880287]
-		[FlightPro_Class880288]
-		[FlightPro_Class880289]
-		[FlightPro_Class880290]
-		[FlightPro_Class880291]
-		[FlightPro_Class880292]
-		[FlightPro_Class880293]
-		[FlightPro_Class880294]
-		[FlightPro_Class880295]
-		[FlightPro_Class880296]
-		[FlightPro_Class880297]
-		[FlightPro_Class880298]
-		[FlightPro_Class880299]
-		[FlightPro_Class880300]
-		[FlightPro_Class880301]
-		[FlightPro_Class880302]
-		[FlightPro_Class880303]
-		[FlightPro_Class880304]
-		[FlightPro_Class880305]
-		[FlightPro_Class880306]
-		[FlightPro_Class880307]
-		[FlightPro_Class880308]
-		[FlightPro_Class880309]
-		[FlightPro_Class880310]
-		[FlightPro_Class880311]
-		[FlightPro_Class880312]
-		[FlightPro_Class880313]
-		[FlightPro_Class880314]
-		[FlightPro_Class880315]
-		[FlightPro_Class880316]
-		[FlightPro_Class880317]
-		[FlightPro_Class880318]
-		[FlightPro_Class880319]
-		[FlightPro_Class880320]))
+		[FlightPro_Class880000]
+		[FlightPro_Class880001]
+		[FlightPro_Class880002]
+		[FlightPro_Class880003]
+		[FlightPro_Class880004]
+		[FlightPro_Class880005]
+		[FlightPro_Class880006]
+		[FlightPro_Class880007]
+		[FlightPro_Class890008]
+		[FlightPro_Class890009]
+		[FlightPro_Class890010]
+		[FlightPro_Class890011]
+		[FlightPro_Class890012]
+		[FlightPro_Class890013]
+		[FlightPro_Class890014]
+		[FlightPro_Class890015]
+		[FlightPro_Class890016]
+		[FlightPro_Class890017]
+		[FlightPro_Class890018]
+		[FlightPro_Class890019]
+		[FlightPro_Class890020]
+		[FlightPro_Class890021]
+		[FlightPro_Class890022]
+		[FlightPro_Class890023]
+		[FlightPro_Class890024]
+		[FlightPro_Class890025]
+		[FlightPro_Class890026]
+		[FlightPro_Class890027]
+		[FlightPro_Class890028]
+		[FlightPro_Class890029]
+		[FlightPro_Class890030]
+		[FlightPro_Class890031]
+		[FlightPro_Class890032]
+		[FlightPro_Class890033]
+		[FlightPro_Class890034]
+		[FlightPro_Class890035]
+		[FlightPro_Class890036]
+		[FlightPro_Class890037]
+		[FlightPro_Class890038]
+		[FlightPro_Class890039]))
 
 ([FlightPro_Class660024] of  CloFunction
 
@@ -3133,7 +3133,7 @@
 ([FlightPro_Class670008] of  BBX
 
 	(title "Current")
-	(wsen 3.593487 41.569084 23.259014 56.15386))
+	(wsen -73.50815 41.33248 -72.27905 42.226482))
 
 ([FlightPro_Class670041] of  TypeName
 
@@ -10578,6 +10578,124 @@
 	(runways 0)
 	(title "Atlanta Hartsfield-Jackson International Airport"))
 
+([FlightPro_Class880000] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 56)
+	(feature "edu")
+	(lang "en")
+	(lat 41.5556)
+	(lng -72.6558)
+	(rank 100)
+	(summary "Wesleyan University is a private liberal arts college in Middletown, Connecticut, USA, founded in 1831. Wesleyan is the only Baccalaureate College in the nation that emphasizes undergraduate instruction in the arts and sciences, provides graduate research in many academic disciplines, and grants PhD (...)")
+	(title "Wesleyan University")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Wesleyan_University"))
+
+([FlightPro_Class880001] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 123)
+	(feature "city")
+	(lang "en")
+	(lat 41.398)
+	(lng -73.293)
+	(rank 100)
+	(summary "Newtown is a town in Fairfield County, Connecticut, United States. It is part of the greater Danbury metropolitan area. Newtown was founded in 1705 and later incorporated in 1711. As of the 2010 census, its population was 27,560.  (...)")
+	(title "Newtown, Connecticut")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Newtown%2C_Connecticut"))
+
+([FlightPro_Class880002] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 61)
+	(feature "city")
+	(lang "en")
+	(lat 41.8706)
+	(lng -72.8253)
+	(rank 98)
+	(summary "Simsbury is a suburban town in Hartford County, Connecticut, United States. The population was 23,511 at the 2010 census. The town was incorporated as Connecticut's twenty-first town in May 1670.  (...)")
+	(title "Simsbury, Connecticut")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Simsbury%2C_Connecticut"))
+
+([FlightPro_Class880003] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 218)
+	(feature "city")
+	(lang "en")
+	(lat 42.1958)
+	(lng -73.3625)
+	(rank 98)
+	(summary "Great Barrington is a town in Berkshire County, Massachusetts, United States. It is part of the Pittsfield, Massachusetts Metropolitan Statistical Area. The population was 7,104 at the 2010 census. Both a summer resort and home to Ski Butternut, Great Barrington includes the villages of Van (...)")
+	(title "Great Barrington, Massachusetts")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Great_Barrington%2C_Massachusetts"))
+
+([FlightPro_Class880004] of  WikiArticleDetails
+
+	(butt-del-pois "Delete POIs/ext.data/delete-pois")
+	(butt-return "Return to Flight/ext.data/ret-to-flight")
+	(butt-show-pois "Show on Map/ext.data/show-on-map")
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 18)
+	(feature "city")
+	(lang "en")
+	(lat 41.8528)
+	(lng -72.6431)
+	(max-rows 50)
+	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
+	(radius 1.0)
+	(rank 98)
+	(summary "Windsor is a town in Hartford County, Connecticut, United States, and was the first English settlement in the state. It lies on the northern border of Connecticut's capital, Hartford. The population of Windsor was 29,044 at the 2010 census (...)")
+	(title "Windsor, Connecticut")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Windsor%2C_Connecticut"))
+
+([FlightPro_Class880005] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 17)
+	(feature "city")
+	(lang "en")
+	(lat 41.3517)
+	(lng -72.4161)
+	(population 6783)
+	(rank 97)
+	(summary "Essex is a town in Middlesex County, Connecticut, United States. The population was 6,505 at the 2000 census. It is made up of three villages: Essex Village, Centerbrook, and Ivoryton.  (...)")
+	(title "Essex, Connecticut")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Essex%2C_Connecticut"))
+
+([FlightPro_Class880006] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 224)
+	(lang "en")
+	(lat 41.7761)
+	(lng -72.7989)
+	(rank 97)
+	(summary "The Metacomet Trail is a Blue-Blazed hiking trail that traverses the Metacomet Ridge of central Connecticut and is a part of the newly designated 'New England National Scenic Trail'. Despite being easily accessible and close to large population centers, the trail is considered remarkably rugged and (...)")
+	(title "Metacomet Trail")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Metacomet_Trail"))
+
+([FlightPro_Class880007] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 28)
+	(feature "city")
+	(lang "en")
+	(lat 41.975)
+	(lng -72.5494)
+	(rank 97)
+	(summary "Enfield is a town in Hartford County, Connecticut, United States. The population was 44,654 at the 2010 census. It is bordered by Longmeadow, Massachusetts and East Longmeadow, Massachusetts to the north, Somers to the east, East Windsor and Ellington to the south, and the Connecticut River (towns (...)")
+	(title "Enfield, Connecticut")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Enfield%2C_Connecticut"))
+
 ([FlightPro_Class880008] of  WikiArticle
 
 	(button-open-site "Open Site/wiki.gis/open-site")
@@ -13825,9 +13943,464 @@
 	(source "(if-let [inf (or (get @MY-INFOS id) (fr24/fl-info id))]\n  (get-in inf [\"airport\" \"destination\" \"position\" \"altitude\"]))")
 	(title "destination-alt [id]"))
 
+([FlightPro_Class890008] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 51)
+	(feature "city")
+	(lang "en")
+	(lat 41.605)
+	(lng -72.8792)
+	(rank 97)
+	(summary "Southington is a town in Hartford County, Connecticut, United States. As of the 2010 United States Census, it had a population of 43,069.  (...)")
+	(title "Southington, Connecticut")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Southington%2C_Connecticut"))
+
+([FlightPro_Class890009] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 61)
+	(feature "city")
+	(lang "en")
+	(lat 41.9833)
+	(lng -72.6911)
+	(rank 97)
+	(summary "Suffield is a town in Hartford County, Connecticut, United States. It had once been within the boundaries of Massachusetts. The town is located in the Connecticut River Valley with the town of Enfield neighboring to the east (...)")
+	(title "Suffield, Connecticut")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Suffield%2C_Connecticut"))
+
+([FlightPro_Class890010] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 13)
+	(feature "landmark")
+	(lang "en")
+	(lat 42.0938)
+	(lng -72.5848)
+	(rank 97)
+	(summary "The Naismith Memorial Basketball Hall of Fame, located in Springfield, Massachusetts, United States, honors extraordinary basketball players, coaches, referees, executives, and other major contributors to the game of basketball worldwide (...)")
+	(title "Naismith Memorial Basketball Hall of Fame")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Naismith_Memorial_Basketball_Hall_of_Fame"))
+
+([FlightPro_Class890011] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 56)
+	(feature "city")
+	(lang "en")
+	(lat 41.4603)
+	(lng -72.6819)
+	(rank 97)
+	(summary "Durham is a town in Middlesex County, Connecticut, United States. Durham is a former farming village on the Coginchaug River in central Connecticut. The population was 6,627 at the 2000 census. Every autumn, the town hosts the Durham Fair, the largest volunteer agricultural fair in New England (...)")
+	(title "Durham, Connecticut")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Durham%2C_Connecticut"))
+
+([FlightPro_Class890012] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 165)
+	(feature "city")
+	(lang "en")
+	(lat 41.3361)
+	(lng -73.2258)
+	(rank 97)
+	(summary "Monroe is a town in Fairfield County, Connecticut, United States. The population was 19,479 at the 2010 census. Like many of its neighbors, Monroe is largely considered a bedroom community of New York City and Stamford. Monroe's neighbors are Easton, Newtown, Oxford, Shelton, and Trumbull (...)")
+	(title "Monroe, Connecticut")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Monroe%2C_Connecticut"))
+
+([FlightPro_Class890013] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 149)
+	(feature "city")
+	(lang "en")
+	(lat 42.1878)
+	(lng -72.3086)
+	(rank 97)
+	(summary "Palmer is a city in Hampden County, Massachusetts, United States. The population was 12,140 as of the 2010 census. It is part of the Springfield, Massachusetts Metropolitan Statistical Area. Palmer adopted a home rule charter in 2004 with a council-manager form of government (...)")
+	(title "Palmer, Massachusetts")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Palmer%2C_Massachusetts"))
+
+([FlightPro_Class890014] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 220)
+	(feature "city")
+	(lang "en")
+	(lat 41.985)
+	(lng -73.4222)
+	(population 3977)
+	(rank 97)
+	(summary "Salisbury is a town in Litchfield County, Connecticut, United States. The town is the northwest-most in the State of Connecticut. The MA-NY-CT (Massachusetts-New York-Connecticut) Tri-State Marker is located just on the border of Salisbury. The population was 3,977 at the 2000 census.  (...)")
+	(title "Salisbury, Connecticut")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Salisbury%2C_Connecticut"))
+
+([FlightPro_Class890015] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 157)
+	(feature "city")
+	(lang "en")
+	(lat 41.6533)
+	(lng -73.3183)
+	(rank 97)
+	(summary "Washington is a rural town in Litchfield County, Connecticut, in the New England region of the United States. The population was 3,578 at the 2010 census. Washington is known for its picturesque countryside, historic architecture, and active civic and cultural life (...)")
+	(title "Washington, Connecticut")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Washington%2C_Connecticut"))
+
+([FlightPro_Class890016] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 40)
+	(feature "city")
+	(lang "en")
+	(lat 41.6139)
+	(lng -72.7725)
+	(rank 96)
+	(summary "Berlin is a town in Hartford County, Connecticut, United States. The population was 19,866 at the 2010 census. It was incorporated in 1785. The geographic center of Connecticut is located in the town. Berlin is residential and industrial, and is served by the Amtrak station of the same name (...)")
+	(title "Berlin, Connecticut")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Berlin%2C_Connecticut"))
+
+([FlightPro_Class890017] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 439)
+	(feature "city")
+	(lang "en")
+	(lat 41.9836)
+	(lng -73.1964)
+	(rank 96)
+	(summary "Norfolk is a town in Litchfield County, Connecticut, United States. The population was 1,787 at the 2010 census. Norfolk is perhaps best known as the site of the Yale Summer School of Music – Norfolk Chamber Music Festival, which hosts an annual chamber music concert series in \"the Music Shed,\" a (...)")
+	(title "Norfolk, Connecticut")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Norfolk%2C_Connecticut"))
+
+([FlightPro_Class890018] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 22)
+	(feature "landmark")
+	(lang "en")
+	(lat 41.8009)
+	(lng -72.714)
+	(rank 96)
+	(summary "The University of Hartford (UHart) is a private, independent, nonsectarian, coeducational university located in West Hartford, Connecticut. Its main campus touches portions of three municipalities: Bloomfield, Hartford, and West Hartford (...)")
+	(title "University of Hartford")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/University_of_Hartford"))
+
+([FlightPro_Class890019] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 356)
+	(feature "city")
+	(lang "en")
+	(lat 41.8606)
+	(lng -73.4486)
+	(rank 96)
+	(summary "Sharon is a town located in Litchfield County, Connecticut, in the northwest corner of the state. It is bounded on the north by Salisbury, on the east by the Housatonic River, on the south by Kent, and on the west by Dutchess County, New York (...)")
+	(title "Sharon, Connecticut")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Sharon%2C_Connecticut"))
+
+([FlightPro_Class890020] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 36)
+	(feature "landmark")
+	(lang "en")
+	(lat 41.7474)
+	(lng -72.69)
+	(rank 96)
+	(summary "Trinity College is a private, liberal arts college in Hartford, Connecticut. Founded in 1823, it is the second-oldest college in the state of Connecticut after Yale University. Coeducational since 1969, the college enrolls 2,300 students (...)")
+	(title "Trinity College (Connecticut)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Trinity_College_%28Connecticut%29"))
+
+([FlightPro_Class890021] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 221)
+	(feature "city")
+	(lang "en")
+	(lat 41.8453)
+	(lng -73.3314)
+	(rank 95)
+	(summary "Cornwall is a town in Litchfield County, Connecticut, United States. The population was 1,420 at the 2010 census. In 1939 poet Mark Van Doren wrote \"The Hills of Little Cornwall\", a short poem in which the beauties of the countryside were portrayed as seductive: Website of the Academy of American (...)")
+	(title "Cornwall, Connecticut")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Cornwall%2C_Connecticut"))
+
+([FlightPro_Class890022] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 104)
+	(feature "city")
+	(lang "en")
+	(lat 41.4661)
+	(lng -72.5442)
+	(population 7635)
+	(rank 95)
+	(summary "Haddam is a town in Middlesex County, Connecticut, United States. The population was 7,157 at the 2000 census. The town was also home to the now decommissioned Connecticut Yankee Nuclear Reactor.  (...)")
+	(title "Haddam, Connecticut")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Haddam%2C_Connecticut"))
+
+([FlightPro_Class890023] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 117)
+	(feature "city")
+	(lang "en")
+	(lat 41.5681)
+	(lng -72.5056)
+	(rank 95)
+	(summary "East Hampton is a town in Middlesex County, Connecticut, United States. The population was 13,352 at the 2000 census. The town center village is listed as a census-designated place (CDP). East Hampton includes the villages of Cobalt, Middle Haddam, and Lake Pocotopaug (...)")
+	(title "East Hampton, Connecticut")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/East_Hampton%2C_Connecticut"))
+
+([FlightPro_Class890024] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 78)
+	(feature "city")
+	(lang "en")
+	(lat 42.1889)
+	(lng -72.4592)
+	(rank 95)
+	(summary "Ludlow is a town in Hampden County, Massachusetts, United States. The population was 21,103 as of the 2010 census. It is located in western Massachusetts, north of Springfield, east of Chicopee, southeast of Granby, southwest of Belchertown, west of Wilbraham and is considered part of the (...)")
+	(title "Ludlow, Massachusetts")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ludlow%2C_Massachusetts"))
+
+([FlightPro_Class890025] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 32)
+	(feature "city")
+	(lang "en")
+	(lat 41.8322)
+	(lng -72.5697)
+	(rank 95)
+	(summary "South Windsor is a town in Hartford County, Connecticut, United States. The population was 25,709 at the 2010 census.  (...)")
+	(title "South Windsor, Connecticut")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/South_Windsor%2C_Connecticut"))
+
+([FlightPro_Class890026] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 210)
+	(feature "city")
+	(lang "en")
+	(lat 42.1103)
+	(lng -73.3556)
+	(population 3257)
+	(rank 95)
+	(summary "Sheffield is a town in Berkshire County, Massachusetts, United States. It is part of the Pittsfield, Massachusetts Metropolitan Statistical Area. The population was 3,257 at the 2010 census. Sheffield is home to Berkshire School, a private preparatory school (...)")
+	(title "Sheffield, Massachusetts")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Sheffield%2C_Massachusetts"))
+
+([FlightPro_Class890027] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 46)
+	(feature "city")
+	(lang "en")
+	(lat 41.3675)
+	(lng -72.4639)
+	(population 4629)
+	(rank 94)
+	(summary "Deep River (formerly known as Saybrook) is a town in Middlesex County, Connecticut, United States. The population was 4,629 at the 2010 census. The town center is also designated by the U.S. Census Bureau as a census-designated place (CDP) (...)")
+	(title "Deep River, Connecticut")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Deep_River%2C_Connecticut"))
+
+([FlightPro_Class890028] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 129)
+	(feature "city")
+	(lang "en")
+	(lat 41.6708)
+	(lng -73.0825)
+	(rank 94)
+	(summary "Thomaston is a town in Litchfield County, Connecticut, United States. The population was 7,503 at the 2000 census.  (...)")
+	(title "Thomaston, Connecticut")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Thomaston%2C_Connecticut"))
+
+([FlightPro_Class890029] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 89)
+	(feature "city")
+	(lang "en")
+	(lat 42.1236)
+	(lng -72.4319)
+	(population 14868)
+	(rank 94)
+	(summary "Wilbraham is a town in Hampden County, Massachusetts, United States. It is also a suburb of the City of Springfield, Massachusetts and part of the Springfield Metropolitan Statistical Area. The population was 14,868 at the 2010 census. The zip code of North Wilbraham was 01067 (...)")
+	(title "Wilbraham, Massachusetts")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Wilbraham%2C_Massachusetts"))
+
+([FlightPro_Class890030] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 446)
+	(feature "city")
+	(lang "en")
+	(lat 42.1806)
+	(lng -72.9278)
+	(population 1233)
+	(rank 94)
+	(summary "Blandford is a town in Hampden County, Massachusetts, United States. The population was 1,233 at the 2010 census. It is part of the Springfield, Massachusetts Metropolitan Statistical Area. It is the home of the Blandford Ski Area.  (...)")
+	(title "Blandford, Massachusetts")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Blandford%2C_Massachusetts"))
+
+([FlightPro_Class890031] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 183)
+	(feature "city")
+	(lang "en")
+	(lat 41.9292)
+	(lng -72.9722)
+	(rank 94)
+	(summary "Barkhamsted is a town in Litchfield County in Connecticut and contains seven villages, West Hill, Mallory, Barkhamsted Center, Center Hill, Washington Hill, Pleasant Valley and Riverton. The population was 3,494 at the 2000 census. Barkhamsted was named after Berkhamsted, Hertfordshire, England.  (...)")
+	(title "Barkhamsted, Connecticut")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Barkhamsted%2C_Connecticut"))
+
+([FlightPro_Class890032] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 136)
+	(feature "city")
+	(lang "en")
+	(lat 41.4686)
+	(lng -73.3919)
+	(rank 94)
+	(summary "Brookfield is a town located in northern Fairfield County, Connecticut, United States in the southern foot hills of the Berkshire Mountains. The population was 16,452 at the 2010 census. First settled in 1710 by John Muirwood, and several other colonial founders by the names of Hawley, Peck and (...)")
+	(title "Brookfield, Connecticut")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Brookfield%2C_Connecticut"))
+
+([FlightPro_Class890033] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 214)
+	(feature "city")
+	(lang "en")
+	(lat 42.0936)
+	(lng -72.3214)
+	(rank 94)
+	(summary "Monson is a town in Hampden County, Massachusetts, United States. The population was 8,560 at the 2010 census. It is part of the Springfield, Massachusetts Metropolitan Statistical Area. The village of Monson Center lies at the center of the town.  (...)")
+	(title "Monson, Massachusetts")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Monson%2C_Massachusetts"))
+
+([FlightPro_Class890034] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 122)
+	(feature "city")
+	(lang "en")
+	(lat 41.3806)
+	(lng -72.5764)
+	(rank 94)
+	(summary "Killingworth is a town in Middlesex County, Connecticut, United States. The town's name can easily be confused with another Connecticut town, Killingly; or a Vermont ski area, Killington. The population was 6,018 at the 2000 census.  (...)")
+	(title "Killingworth, Connecticut")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Killingworth%2C_Connecticut"))
+
+([FlightPro_Class890035] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 56)
+	(feature "city")
+	(lang "en")
+	(lat 42.0475)
+	(lng -72.5711)
+	(rank 94)
+	(summary "Longmeadow is a town in Hampden County, Massachusetts, United States. The population was 15,784 at the 2010 census.  (...)")
+	(title "Longmeadow, Massachusetts")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Longmeadow%2C_Massachusetts"))
+
+([FlightPro_Class890036] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 204)
+	(feature "city")
+	(lang "en")
+	(lat 41.9617)
+	(lng -73.3083)
+	(rank 94)
+	(summary "Canaan is a town in Litchfield County, Connecticut, United States. The population was 1,081 at the 2000 census. The town of Canaan is often referred to locally by the name of its principal constituent village, Falls Village., Town of Canaan website  (...)")
+	(title "Canaan, Connecticut")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Canaan%2C_Connecticut"))
+
+([FlightPro_Class890037] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 80)
+	(feature "city")
+	(lang "en")
+	(lat 41.7944)
+	(lng -72.8578)
+	(rank 94)
+	(summary "Avon is a town in the Farmington Valley region of Hartford County, Connecticut, United States. , the town had a population of 18,098. Avon is a suburb of Hartford. Avon Old Farms School, a prestigious boarding school, is located there (...)")
+	(title "Avon, Connecticut")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Avon%2C_Connecticut"))
+
+([FlightPro_Class890038] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 69)
+	(feature "city")
+	(lang "en")
+	(lat 42.0644)
+	(lng -72.5131)
+	(population 15720)
+	(rank 94)
+	(summary "East Longmeadow is a town in Hampden County, Massachusetts, United States situated in the Pioneer Valley region of Western Massachusetts. It has a population of 15,720 at the 2010 census. East Longmeadow is 25 miles north of Hartford, 88 miles southwest of Boston, and 142 miles north of New York (...)")
+	(title "East Longmeadow, Massachusetts")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/East_Longmeadow%2C_Massachusetts"))
+
+([FlightPro_Class890039] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 279)
+	(feature "waterbody")
+	(lang "en")
+	(lat 42.1694)
+	(lng -73.275)
+	(rank 93)
+	(summary "Lake Buel is a great pond in Berkshire County, Massachusetts just south of Route 57 and east of Great Barrington. It is surrounded by over one-hundred summer home and a few dozen year-round homes in about a dozen separate, tight-knit neighborhoods, each with its own private or semi-private road (...)")
+	(title "Lake Buel")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Lake_Buel"))
+
 ([FlightPro_Class9] of  CloFunction
 
-	(source "(let [dest (js/Cesium.Cartesian3.fromDegrees lon lat alt)]\n  (.flyTo (.-camera VIEWER)\n            #js{:destination dest\n                  :orientation #js{:heading (js/Cesium.Math.toRadians hea)\n                                           :pitch   (js/Cesium.Math.toRadians pit)\n                                           :roll    (js/Cesium.Math.toRadians rol)}\n                  :duration per\n                  :easingFunction (fn [time] time)}))")
+	(source "(let [dest (js/Cesium.Cartesian3.fromDegrees lon lat alt)]\n  (.flyTo (.-camera VIEWER)\n            #js{:destination dest\n                  :orientation #js{:heading (js/Cesium.Math.toRadians hea)\n                                           :pitch   (js/Cesium.Math.toRadians pit)\n                                           :roll    (js/Cesium.Math.toRadians rol)}\n                  :maximumHeight alt\n                  :duration per\n                  :easingFunction (fn [time] time)}))")
 	(title "fly-control [lat lon alt hea pit rol per]"))
 
 ([FlightPro_Class90000] of  CloFunction

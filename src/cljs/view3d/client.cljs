@@ -58,7 +58,7 @@
   (t/read (t/reader :json) x))
 
 (defn turn-and-bank [carr course]
-  (let [[rb sa ba fa :as bps] (:bank-params @carr)
+  (let [[rb ma sa ba fa :as bps] (:bank-params @carr)
        bnk (dyn/bank (:course @carr) course bps)
        spd (:speed @carr)]
   (if (or (< spd 100) (= bnk 0))
@@ -145,9 +145,12 @@
  :altitude (num-val (ctl/get-value "input-alt"))})
 
 (defn bank-vehicle [vehicle]
-  (let [[rb sa ba fa :as bps] (:bank-params @CARRIER)
-       bnk (dyn/bank (:old-course vehicle) (:course vehicle) bps)]
-  (czm/camera :roll bnk)))
+  (czm/camera :roll 
+  (if (> (:speed vehicle) 120)
+    (dyn/bank (:old-course vehicle) 
+	(:course vehicle) 
+	(:bank-params @CARRIER))
+    0)))
 
 (defn directives-handler [response]
   (doseq [{:keys [directive] :as dir} (read-transit response)]
