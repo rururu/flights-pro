@@ -26,20 +26,19 @@
   ;;(println [:CZML data])
   (.process CZM-SRC data)))
 
-(defn fly-control [lat lon alt hea pit rol per]
+(defn fly-control [lat lon alt hea pit rol per bounce]
   (let [dest (js/Cesium.Cartesian3.fromDegrees lon lat alt)]
   (.flyTo (.-camera VIEWER)
             #js{:destination dest
                   :orientation #js{:heading (js/Cesium.Math.toRadians hea)
                                            :pitch   (js/Cesium.Math.toRadians pit)
                                            :roll    (js/Cesium.Math.toRadians rol)}
-                  :maximumHeight alt
+                  :maximumHeight (if bounce nil alt)
                   :duration per
                   :easingFunction (fn [time] time)})))
 
-(defn fly-to [lat lon alt crs per]
-  ;;(println [:CZ-FLY-TO lat lon alt crs per])
-(let [pitch (condp = (:view @CAMERA)
+(defn fly-to [lat lon alt crs per bounce]
+  (let [pitch (condp = (:view @CAMERA)
                 "UP" 90
                 "DOWN" -90
                 (:pitch @CAMERA))
@@ -53,7 +52,7 @@
                          "BACKWARD-RIGHT" (+ crs 135)
                          "BACKWARD-LEFT" (- crs 135)
                          crs))]
-    (fly-control lat lon alt head pitch roll per)))
+    (fly-control lat lon alt head pitch roll per bounce)))
 
 (defn camera [key val]
   (vswap! CAMERA assoc key val))

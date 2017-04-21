@@ -20,7 +20,7 @@
  :answer (str HOST PORT "/answer/")
  :manual-data (str HOST PORT "/manual-data/")})
 (def TIO {:carrier 1000
- :camera 2222
+ :camera 3030
  :directives 911
  :instructions 979
  :vehicles 200

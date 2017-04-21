@@ -128,9 +128,12 @@
     (mov/set-turn-point CARRIER [lat lon] (:course car) (:speed car)))))
 
 (defn camera-vehicle [vehicle per]
-  (let [[lat lon] (:coord vehicle)
-        alt  (int (/ (:altitude vehicle) 3.28084))]
-  (czm/fly-to lat lon alt (:course vehicle) per)))
+  (let [[lat lon] (:coord vehicle)]
+  (czm/fly-to lat lon 
+	(int (/ (:altitude vehicle) 3.28084)) 
+	(:course vehicle) 
+	per
+	(:bounce vehicle))))
 
 (defn camera-manual [carr]
   (let [car @carr]

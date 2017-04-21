@@ -36,9 +36,9 @@
                "scheduled" {"arrival" "unk"}}
 
    "airline" {"short" "Ru Airlines"}}}))
-(def TERRAIN "no")
+(def TERRAIN "yes")
 (def GROUND-DELTA {:terrain 200 ;; feet
- :cabin 30})
+ :cabin 100})
 (def GROUND-ALT 0)
 (defn write-transit [x]
   (let [baos (ByteArrayOutputStream.)
