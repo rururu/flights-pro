@@ -48,6 +48,11 @@
                             :step 1
 	    :accel 1
                             :time-out 2003}}))
+(def VEHICLE (volatile! {:mode "MANUAL"
+               :coord [60 30]
+               :altitude 4000
+               :speed 160
+               :course 270}))
 (def error-handler (fn [response]
   (let [{:keys [status status-text]} response]
     (println (str "AJAX ERROR: " status " " status-text)))))
@@ -74,7 +79,11 @@
         #(czm/camera :roll 0))))))
 
 (defn onboard [call]
-  (GET (str (:command URL) "onboard?callsign=" call)
+  (if (= call "MANUAL")
+  (do (vswap! CARRIER merge @VEHICLE)
+    (mov/set-turn-point CARRIER)) 
+  (vswap! CARRIER assoc :mode call))
+(GET (str (:command URL) "onboard?callsign=" call)
   {:handler (fn [response])
    :error-handler error-handler}))
 
@@ -129,11 +138,16 @@
 
 (defn camera-vehicle [vehicle per]
   (let [[lat lon] (:coord vehicle)]
-  (czm/fly-to lat lon 
+  (vswap! VEHICLE merge vehicle)
+  (if (<= per 0)
+    (czm/move-to lat lon 
+	(int (/ (:altitude vehicle) 3.28084)) 
+	(:course vehicle))
+    (czm/fly-to lat lon 
 	(int (/ (:altitude vehicle) 3.28084)) 
 	(:course vehicle) 
 	per
-	(:bounce vehicle))))
+	(:bounce vehicle)))))
 
 (defn camera-manual [carr]
   (let [car @carr]
@@ -141,7 +155,8 @@
     (camera-vehicle car (int (/ (:camera TIO) 1000))))))
 
 (defn manual-vehicle []
-  {:coord   [(num-val (ctl/get-value "input-lat"))
+  {:mode "MANUAL"
+ :coord   [(num-val (ctl/get-value "input-lat"))
                (num-val (ctl/get-value "input-lon"))]
  :course   (num-val (ctl/get-value "input-crs"))
  :speed    (num-val (ctl/get-value "input-spd"))
@@ -159,11 +174,9 @@
   (doseq [{:keys [directive] :as dir} (read-transit response)]
   ;;(println [:DIRECTIVE dir])
   (condp = directive
-    :manual (vswap! CARRIER assoc :mode "MANUAL")
     :callsigns (let [{:keys [list]} dir]
-	(ctl/callsigns (conj list "manual")))
-    :vehicle (let [{:keys [callsign vehicle period]} dir]
-	(vswap! CARRIER assoc :mode callsign)
+	(ctl/callsigns list))
+    :vehicle (let [{:keys [vehicle period]} dir]
 	(camera-vehicle vehicle period)
                         (bank-vehicle vehicle)
 	(ctl/show-flight-data vehicle))
@@ -174,13 +187,13 @@
                        :error-handler error-handler}))
 
 (defn send-manual-data []
-  (let [carr @CARRIER]
-  (if (= (:mode carr) "MANUAL")
+  (let [car @CARRIER]
+  (if (= (:mode car) "MANUAL")
     (GET (str (:manual-data URL) 
-	"?coord=" (:coord carr)
-	"&course=" (:course carr)
-	"&speed= " (:speed carr)
-	"&altitude=" (:altitude carr))
+	"?coord=" (:coord car)
+	"&course=" (:course car)
+	"&speed= " (:speed car)
+	"&altitude=" (:altitude car))
 	{:handler (fn[response])
 	 :error-handler error-handler}))))
 

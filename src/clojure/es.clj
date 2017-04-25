@@ -84,7 +84,6 @@
 (if (not ONB-PAUSE)
   (asp/pump-in (:directives cmd/CHN)
 	{:directive :vehicle
-	 :callsign cs
 	 :period per
 	 :vehicle {
 	   :coord crd2

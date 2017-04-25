@@ -23,8 +23,7 @@
 (set-html! "onboard" "Onboard:")
 (set-html! "onboard-fld" 
   "<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>
-   <option value='callsign'>callsign</option>
-   <option value='manual'>manual</option>
+   <option value='MANUAL'>MANUAL</option>
    <option value='select'>select</option>")
 (set-html! "view" "View:")
 (set-html! "view-fld" 

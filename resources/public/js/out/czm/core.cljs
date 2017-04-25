@@ -37,6 +37,15 @@
                   :duration per
                   :easingFunction (fn [time] time)})))
 
+(defn move-control [lat lon alt hea pit rol]
+  (println :MC lat lon alt hea pit rol)
+(let [dest (js/Cesium.Cartesian3.fromDegrees lon lat alt)]
+  (.setView (.-camera VIEWER)
+            #js{:destination dest
+                  :orientation #js{:heading (js/Cesium.Math.toRadians hea)
+                                           :pitch   (js/Cesium.Math.toRadians pit)
+                                           :roll    (js/Cesium.Math.toRadians rol)}})))
+
 (defn fly-to [lat lon alt crs per bounce]
   (let [pitch (condp = (:view @CAMERA)
                 "UP" 90
@@ -63,4 +72,21 @@
 (.add (.-dataSources VIEWER) CZM-SRC)
 (.addEventListener (js/EventSource. (str base-url "czml/")) "czml" cz-processor false)
 (println [:INIT-3D-VIEW :BASE base-url :TERRA terra]))
+
+(defn move-to [lat lon alt crs]
+  (let [pitch (condp = (:view @CAMERA)
+                "UP" 90
+                "DOWN" -90
+                (:pitch @CAMERA))
+        roll (:roll @CAMERA)
+        head (geo/norm-crs (condp = (:view @CAMERA)
+                         "BACKWARD" (+ crs 180)
+                         "RIGHT" (+ crs 90)
+                         "LEFT" (- crs 90)
+                         "FORWARD-RIGHT" (+ crs 45)
+                         "FORWARD-LEFT" (- crs 45)
+                         "BACKWARD-RIGHT" (+ crs 135)
+                         "BACKWARD-LEFT" (- crs 135)
+                         crs))]
+    (move-control lat lon alt head pitch roll)))
 

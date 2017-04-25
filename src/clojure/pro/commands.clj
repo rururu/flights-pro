@@ -183,12 +183,10 @@
 (defn onboard [params]
   (println [:CMD-ONBOARD params])
 (let [cls (:callsign params)]
-  (condp = cls
-    "manual" (do (asp/pump-in (:directives CHN) {:directive :manual})
-	(rete/assert-frame ['Onboard 'callsign cls 'time 0]))
-   "select" (let [lst (vec (sort (map fr24/callsign (keys @fr24/FLIGHTS))))
-                       lst (filter #(not (empty? %)) lst)]
-                  (asp/pump-in (:directives CHN)
+  (if (= cls "select")
+    (let [lst (map fr24/callsign (keys @fr24/FLIGHTS))
+           lst (filter #(not (empty? %)) (vec (sort lst)))]
+      (asp/pump-in (:directives CHN)
 	{:directive :callsigns
 	 :list lst}))
     (rete/assert-frame ['Onboard 'callsign cls 'time 0])))
@@ -290,7 +288,8 @@ TERRAIN)
 ))
 
 (defn def-ground-alt [alt]
-  (def GROUND-ALT 
+  (println :DGA alt)
+(def GROUND-ALT 
   (if (= TERRAIN "yes")
     (+ alt 
       (GROUND-DELTA :terrain)
@@ -378,5 +377,7 @@ TERRAIN)
 
 (defn destination-alt [id]
   (if-let [inf (or (get @MY-INFOS id) (fr24/fl-info id))]
-  (get-in inf ["airport" "destination" "position" "altitude"])))
+  (or (get-in inf ["airport" "destination" "position" "altitude"])
+    GROUND-ALT)
+  GROUND-ALT))
 
