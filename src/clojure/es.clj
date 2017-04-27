@@ -79,8 +79,8 @@
 	{:instruct :delete
 	 :id id}))
 
-(defn fly-onboard-to [cs crd1 crd2 crs1 crs2 spd2 alt2 per bounce]
-  ;;(println :FOB cs crd1 crd2 crs1 crs2 spd2 alt2 per bounce)
+(defn fly-onboard-to [cs crd2 crs1 crs2 spd2 alt2 per]
+  ;;(println :FOB cs crd2 crs1 crs2 spd2 alt2 per)
 (if (not ONB-PAUSE)
   (asp/pump-in (:directives cmd/CHN)
 	{:directive :vehicle
@@ -90,7 +90,6 @@
 	   :altitude (if (< alt2 cmd/GROUND-ALT) 
 		cmd/GROUND-ALT 
 		alt2)
-                           :bounce bounce
 	   :speed spd2
 	   :course crs2
 	   :old-course crs1}})))

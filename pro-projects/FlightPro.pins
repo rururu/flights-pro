@@ -1,4 +1,4 @@
-; Tue Apr 25 21:50:03 MSK 2017
+; Thu Apr 27 11:49:58 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -44,8 +44,8 @@
 
 ([FlightPro_Class10001] of  CloFunction
 
-	(source "(let [pitch (condp = (:view @CAMERA)\n                \"UP\" 90\n                \"DOWN\" -90\n                (:pitch @CAMERA))\n        roll (:roll @CAMERA)\n        head (geo/norm-crs (condp = (:view @CAMERA)\n                         \"BACKWARD\" (+ crs 180)\n                         \"RIGHT\" (+ crs 90)\n                         \"LEFT\" (- crs 90)\n                         \"FORWARD-RIGHT\" (+ crs 45)\n                         \"FORWARD-LEFT\" (- crs 45)\n                         \"BACKWARD-RIGHT\" (+ crs 135)\n                         \"BACKWARD-LEFT\" (- crs 135)\n                         crs))]\n    (fly-control lat lon alt head pitch roll per bounce))")
-	(title "fly-to [lat lon alt crs per bounce]"))
+	(source "(let [pitch (condp = (:view @CAMERA)\n                \"UP\" 90\n                \"DOWN\" -90\n                (:pitch @CAMERA))\n        roll (:roll @CAMERA)\n        head (geo/norm-crs (condp = (:view @CAMERA)\n                         \"BACKWARD\" (+ crs 180)\n                         \"RIGHT\" (+ crs 90)\n                         \"LEFT\" (- crs 90)\n                         \"FORWARD-RIGHT\" (+ crs 45)\n                         \"FORWARD-LEFT\" (- crs 45)\n                         \"BACKWARD-RIGHT\" (+ crs 135)\n                         \"BACKWARD-LEFT\" (- crs 135)\n                         crs))]\n    (fly-control lat lon alt head pitch roll per))")
+	(title "fly-to [lat lon alt crs per]"))
 
 ([FlightPro_Class10002] of  CloFunction
 
@@ -791,8 +791,8 @@
 
 ([FlightPro_Class220001] of  Rule
 
-	(lhs "?ob1 (Onboard)\n?ob2 (Onboard callsign ?cs time 0)")
-	(rhs "(retract ?ob1)\n(if (= ?cs \"MANUAL\")\n  (retract ?ob2)\n  (modify ?ob2 time 1))")
+	(lhs "?ob1 (Onboard)\n?ob2 (Onboard callsign ?cs time 0)\n(Flight age \"NEW\"\n	callsign ?cs\n	id ?id\n	coord ?crd\n	course ?crs\n	speed ?spd\n	altitude ?alt)")
+	(rhs "(pro.commands/def-ground-alt (pro.commands/destination-alt ?id))\n(es/fly-onboard-to ?cs ?crd ?crs ?crs ?spd ?alt -1)\n(retract ?ob1)\n(if (= ?cs \"MANUAL\")\n  (retract ?ob2)\n  (modify ?ob2 time 1))")
 	(salience 1)
 	(title "af:SwitchOnboard"))
 
@@ -832,8 +832,8 @@
 
 ([FlightPro_Class230003] of  Rule
 
-	(lhs "?ob (Onboard callsign ?cs time 0)\n(not Onboard)")
-	(rhs "(modify ?ob time 1)")
+	(lhs "?ob (Onboard callsign ?cs time 0)\n(Flight age \"NEW\"\n	callsign ?cs\n	id ?id\n	coord ?crd\n	course ?crs\n	speed ?spd\n	altitude ?alt)\n(not Onboard)")
+	(rhs "(pro.commands/def-ground-alt (pro.commands/destination-alt ?id))\n(es/fly-onboard-to ?cs ?crd ?crs ?crs ?spd ?alt -1)\n(modify ?ob time 1)")
 	(salience 0)
 	(title "af:StartOnboard"))
 
@@ -938,15 +938,15 @@
 
 ([FlightPro_Class250010] of  Rule
 
-	(lhs "?ob (Onboard time ?t callsign ?cs\n	((not= ?cs \"MANUAL\")\n	 (> ?t 0)))\n(Flight age \"CURRENT\" \n	callsign ?cs\n	course ?crs1\n	coord ?crd1 \n	time ?t1 \n	(<= ?t ?t1))\n(Flight age \"NEW\" \n	callsign ?cs\n	course ?crs2\n	coord ?crd2 \n	speed ?spd2\n	altitude ?alt2\n	time ?t2)")
-	(rhs "(modify ?ob time ?t2)\n(es/fly-onboard-to ?cs ?crd1 ?crd2 ?crs1 ?crs2 ?spd2 ?alt2 (- ?t2 ?t1) false)")
+	(lhs "?ob (Onboard time ?t callsign ?cs\n	((not= ?cs \"MANUAL\")\n	 (> ?t 0)))\n(Flight age \"CURRENT\" \n	callsign ?cs\n	course ?crs1\n	time ?t1 \n	(<= ?t ?t1))\n(Flight age \"NEW\" \n	callsign ?cs\n	course ?crs2\n	coord ?crd2 \n	speed ?spd2\n	altitude ?alt2\n	time ?t2)")
+	(rhs "(modify ?ob time ?t2)\n(es/fly-onboard-to ?cs ?crd2 ?crs1 ?crs2 ?spd2 ?alt2 (- ?t2 ?t1))")
 	(salience 0)
 	(title "af:FlyOnboardTo"))
 
 ([FlightPro_Class250011] of  CloFunction
 
-	(source ";;(println :FOB cs crd1 crd2 crs1 crs2 spd2 alt2 per bounce)\n(if (not ONB-PAUSE)\n  (asp/pump-in (:directives cmd/CHN)\n	{:directive :vehicle\n	 :period per\n	 :vehicle {\n	   :coord crd2\n	   :altitude (if (< alt2 cmd/GROUND-ALT) \n		cmd/GROUND-ALT \n		alt2)\n                           :bounce bounce\n	   :speed spd2\n	   :course crs2\n	   :old-course crs1}}))")
-	(title "fly-onboard-to [cs crd1 crd2 crs1 crs2 spd2 alt2 per bounce]"))
+	(source ";;(println :FOB cs crd2 crs1 crs2 spd2 alt2 per)\n(if (not ONB-PAUSE)\n  (asp/pump-in (:directives cmd/CHN)\n	{:directive :vehicle\n	 :period per\n	 :vehicle {\n	   :coord crd2\n	   :altitude (if (< alt2 cmd/GROUND-ALT) \n		cmd/GROUND-ALT \n		alt2)\n	   :speed spd2\n	   :course crs2\n	   :old-course crs1}}))")
+	(title "fly-onboard-to [cs crd2 crs1 crs2 spd2 alt2 per]"))
 
 ([FlightPro_Class260000] of  CloFunction
 
@@ -1272,7 +1272,7 @@
 
 ([FlightPro_Class300006] of  CloFunction
 
-	(source "(let [[lat lon] (:coord vehicle)]\n  (vswap! VEHICLE merge vehicle)\n  (if (<= per 0)\n    (czm/move-to lat lon \n	(int (/ (:altitude vehicle) 3.28084)) \n	(:course vehicle))\n    (czm/fly-to lat lon \n	(int (/ (:altitude vehicle) 3.28084)) \n	(:course vehicle) \n	per\n	(:bounce vehicle))))")
+	(source "(let [[lat lon] (:coord vehicle)]\n  (vswap! VEHICLE merge vehicle)\n  (if (<= per 0)\n    (czm/move-to lat lon \n	(int (/ (:altitude vehicle) 3.28084)) \n	(:course vehicle))\n    (czm/fly-to lat lon \n	(int (/ (:altitude vehicle) 3.28084)) \n	(:course vehicle) \n	per)))")
 	(title "camera-vehicle [vehicle per]"))
 
 ([FlightPro_Class30001] of  ClsRequired
@@ -2026,9 +2026,9 @@
 		[FlightPro_Class9]
 		[FlightPro_Class680001]
 		[FlightPro_Class10001]
+		[FlightPro_Class680002]
 		[FlightPro_Class50000]
-		[FlightPro_Class10003]
-		[FlightPro_Class680002])
+		[FlightPro_Class10003])
 	(cloNamespace [FlightPro_Class1])
 	(cloVars
 		[FlightPro_Class3]
@@ -3987,8 +3987,8 @@
 
 ([FlightPro_Class9] of  CloFunction
 
-	(source "(let [dest (js/Cesium.Cartesian3.fromDegrees lon lat alt)]\n  (.flyTo (.-camera VIEWER)\n            #js{:destination dest\n                  :orientation #js{:heading (js/Cesium.Math.toRadians hea)\n                                           :pitch   (js/Cesium.Math.toRadians pit)\n                                           :roll    (js/Cesium.Math.toRadians rol)}\n                  :maximumHeight (if bounce nil alt)\n                  :duration per\n                  :easingFunction (fn [time] time)}))")
-	(title "fly-control [lat lon alt hea pit rol per bounce]"))
+	(source "(let [dest (js/Cesium.Cartesian3.fromDegrees lon lat alt)]\n  (.flyTo (.-camera VIEWER)\n            #js{:destination dest\n                  :orientation #js{:heading (js/Cesium.Math.toRadians hea)\n                                           :pitch   (js/Cesium.Math.toRadians pit)\n                                           :roll    (js/Cesium.Math.toRadians rol)}\n                  :maximumHeight alt\n                  :duration per\n                  :easingFunction (fn [time] time)}))")
+	(title "fly-control [lat lon alt hea pit rol per]"))
 
 ([FlightPro_Class90000] of  CloFunction
 
@@ -4012,12 +4012,12 @@
 
 ([FlightPro_Class900003] of  CloVar
 
-	(source "{:terrain 200 ;; feet\n :cabin 100}")
+	(source "{:terrain 120 ;; feet\n :cabin 60}")
 	(title "GROUND-DELTA"))
 
 ([FlightPro_Class900004] of  CloFunction
 
-	(source "(println :DGA alt)\n(def GROUND-ALT \n  (if (= TERRAIN \"yes\")\n    (+ alt \n      (GROUND-DELTA :terrain)\n      (GROUND-DELTA :cabin))\n    (GROUND-DELTA :cabin)))")
+	(source "(def GROUND-ALT \n  (if (= TERRAIN \"yes\")\n    (+ alt \n      (GROUND-DELTA :terrain)\n      (GROUND-DELTA :cabin))\n    (GROUND-DELTA :cabin)))")
 	(title "def-ground-alt [alt]"))
 
 ([FlightPro_Class900006] of  Airport

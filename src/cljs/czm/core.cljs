@@ -26,14 +26,14 @@
   ;;(println [:CZML data])
   (.process CZM-SRC data)))
 
-(defn fly-control [lat lon alt hea pit rol per bounce]
+(defn fly-control [lat lon alt hea pit rol per]
   (let [dest (js/Cesium.Cartesian3.fromDegrees lon lat alt)]
   (.flyTo (.-camera VIEWER)
             #js{:destination dest
                   :orientation #js{:heading (js/Cesium.Math.toRadians hea)
                                            :pitch   (js/Cesium.Math.toRadians pit)
                                            :roll    (js/Cesium.Math.toRadians rol)}
-                  :maximumHeight (if bounce nil alt)
+                  :maximumHeight alt
                   :duration per
                   :easingFunction (fn [time] time)})))
 
@@ -46,7 +46,7 @@
                                            :pitch   (js/Cesium.Math.toRadians pit)
                                            :roll    (js/Cesium.Math.toRadians rol)}})))
 
-(defn fly-to [lat lon alt crs per bounce]
+(defn fly-to [lat lon alt crs per]
   (let [pitch (condp = (:view @CAMERA)
                 "UP" 90
                 "DOWN" -90
@@ -61,17 +61,7 @@
                          "BACKWARD-RIGHT" (+ crs 135)
                          "BACKWARD-LEFT" (- crs 135)
                          crs))]
-    (fly-control lat lon alt head pitch roll per bounce)))
-
-(defn camera [key val]
-  (vswap! CAMERA assoc key val))
-
-(defn init-3D-view [base-url terra]
-  (if (= terra "yes")
-  (set! (.-terrainProvider VIEWER) TERR-PROV))
-(.add (.-dataSources VIEWER) CZM-SRC)
-(.addEventListener (js/EventSource. (str base-url "czml/")) "czml" cz-processor false)
-(println [:INIT-3D-VIEW :BASE base-url :TERRA terra]))
+    (fly-control lat lon alt head pitch roll per)))
 
 (defn move-to [lat lon alt crs]
   (let [pitch (condp = (:view @CAMERA)
@@ -89,4 +79,14 @@
                          "BACKWARD-LEFT" (- crs 135)
                          crs))]
     (move-control lat lon alt head pitch roll)))
+
+(defn camera [key val]
+  (vswap! CAMERA assoc key val))
+
+(defn init-3D-view [base-url terra]
+  (if (= terra "yes")
+  (set! (.-terrainProvider VIEWER) TERR-PROV))
+(.add (.-dataSources VIEWER) CZM-SRC)
+(.addEventListener (js/EventSource. (str base-url "czml/")) "czml" cz-processor false)
+(println [:INIT-3D-VIEW :BASE base-url :TERRA terra]))
 

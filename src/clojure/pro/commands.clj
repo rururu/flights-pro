@@ -288,8 +288,7 @@ TERRAIN)
 ))
 
 (defn def-ground-alt [alt]
-  (println :DGA alt)
-(def GROUND-ALT 
+  (def GROUND-ALT 
   (if (= TERRAIN "yes")
     (+ alt 
       (GROUND-DELTA :terrain)

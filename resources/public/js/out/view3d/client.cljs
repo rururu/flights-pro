@@ -146,8 +146,7 @@
     (czm/fly-to lat lon 
 	(int (/ (:altitude vehicle) 3.28084)) 
 	(:course vehicle) 
-	per
-	(:bounce vehicle)))))
+	per))))
 
 (defn camera-manual [carr]
   (let [car @carr]
