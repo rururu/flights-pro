@@ -1,4 +1,4 @@
-; Thu Apr 27 11:49:58 MSK 2017
+; Tue May 02 15:12:42 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -2277,8 +2277,8 @@
 
 ([FlightPro_Class540000] of  Rule
 
-	(lhs "?fp (FlightPlan id ?id\n	landing ?lnd\n	cruise ?cru\n	vertical-status  ?vst\n	[(= ?vst \"CLIMB\")\n	 (= ?vst \"LEVEL\")])\n(Flight age \"CURRENT\" \n	id ?id\n	coord ?crd\n	(<= (calc.geo/distance-nm ?crd (:final-turn-crd ?lnd))\n	  (:descend-dist ?cru)))")
-	(rhs "(println [:DescendStart ?id ?dnd])\n(my.flights.move/control ?id my.flights.move/elevate (:altitude ?lnd))\n(modify ?fp vertical-status \"DESCEND\")")
+	(lhs "?fp (FlightPlan id ?id\n	spec-plan ?spp\n	landing ?lnd\n	cruise ?cru\n	vertical-status  ?vst\n	[(= ?vst \"CLIMB\")\n	 (= ?vst \"LEVEL\")])\n(Flight age \"CURRENT\" \n	id ?id\n	coord ?crd\n	(<= (calc.geo/distance-nm ?crd (:final-turn-crd ?lnd))\n	  (:descend-dist ?cru)))")
+	(rhs "(println [:DescendStart ?id ?dnd])\n(my.flights.move/control ?id my.flights.move/elevate (:altitude ?lnd))\n(modify ?fp vertical-status \"DESCEND\")\n(pro.commands/def-ground-alt (:finish-alt ?spp))")
 	(salience 0)
 	(title "mf:DescendStart"))
 
@@ -2310,7 +2310,7 @@
 
 ([FlightPro_Class550000] of  CloVar
 
-	(source "{:takeoff \n  {:speed [220 8]\n   :altitude [1500 6]\n   :initial-turn-course [-1 2]}\n :cruise \n  {:speed [500 1]\n   :altitude [33000 8]\n   :min-spd 220\n   :min-alt 4000}\n :landing \n  {:speed [180 1 6]\n   :altitude [2000 8]\n   :outer-marker-distance 7\n   :final-turn-course [-1 1]\n   :altitude-graph\n     [[0.1 0][0.5 15][2 600][7 2000]] ;; x - dist, y - alt\n   :spdeed-graph\n     [[0.0 0][0.1 10][0.5 100][3 120]]} ;; x - dist, y - spd\n}")
+	(source "{:takeoff \n  {:speed [220 8]\n   :altitude [4000 8]\n   :initial-turn-course [-1 2]}\n :cruise \n  {:speed [500 1]\n   :altitude [33000 8]\n   :min-spd 220\n   :min-alt 4000}\n :landing \n  {:speed [180 1 6]\n   :altitude [2000 8]\n   :outer-marker-distance 7\n   :final-turn-course [-1 1]\n   :altitude-graph\n     [[0.1 0][0.5 15][2 600][7 2000]] ;; x - dist, y - alt\n   :spdeed-graph\n     [[0.0 0][0.1 10][0.5 100][3 120]]} ;; x - dist, y - spd\n}")
 	(title "GENPLAN"))
 
 ([FlightPro_Class550002] of  Rule

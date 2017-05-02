@@ -35,7 +35,7 @@
  "city"	(str HOST PORT "/img/city.png")})
 (def GENPLAN {:takeoff 
   {:speed [220 8]
-   :altitude [1500 6]
+   :altitude [4000 8]
    :initial-turn-course [-1 2]}
  :cruise 
   {:speed [500 1]
