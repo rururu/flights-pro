@@ -51,9 +51,13 @@ Latitude and longitude values change instantly.
 ## Screencasts
 
 1. Scheduled flight simulation from Cochabamba to Santa Cruz de la Sierra, Bolivia.
+
   [Part 1. Takeoff](https://www.youtube.com/watch?v=HkL9MkdoSG4)
+
   [Part 2. Level flight](https://www.youtube.com/watch?v=1-JVObqbtcI)
+
   [Part 3. Continuation of the level flight](https://www.youtube.com/watch?v=hHWDM8LyrkM)
+
   [Part 4. Landing](https://www.youtube.com/watch?v=pzy952DoeWg)
 
 Copyright and license
