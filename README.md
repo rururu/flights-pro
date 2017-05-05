@@ -13,7 +13,7 @@ $ git clone https://github.com/rururu/flights-pro.git
 $ cd flights-pro
 $ lein run
 ```
-In a Protege GUI open a project FlightPro.pprj from a folder <..>/pro-projects and execute a menu item Edit -> Clojure Work.
+In a Protege GUI open a project FlightPro.pprj from a folder <..>/flights-pro/pro-projects and execute a menu item Edit -> Clojure Work.
 When the Pro server starts, open two browser windows, one on the address: http://localhost:4444 (Cockpit view), second on the address: http://localhost:4444/chart (Chart view).
 
 ## Usage
