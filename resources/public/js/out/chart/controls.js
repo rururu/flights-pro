@@ -5,14 +5,14 @@ goog.require('goog.string');
 goog.require('goog.string.format');
 chart.controls.format = (function chart$controls$format(var_args){
 var args__21508__auto__ = [];
-var len__21501__auto___22899 = arguments.length;
-var i__21502__auto___22900 = (0);
+var len__21501__auto___22911 = arguments.length;
+var i__21502__auto___22912 = (0);
 while(true){
-if((i__21502__auto___22900 < len__21501__auto___22899)){
-args__21508__auto__.push((arguments[i__21502__auto___22900]));
+if((i__21502__auto___22912 < len__21501__auto___22911)){
+args__21508__auto__.push((arguments[i__21502__auto___22912]));
 
-var G__22901 = (i__21502__auto___22900 + (1));
-i__21502__auto___22900 = G__22901;
+var G__22913 = (i__21502__auto___22912 + (1));
+i__21502__auto___22912 = G__22913;
 continue;
 } else {
 }
@@ -29,10 +29,10 @@ return cljs.core.apply.call(null,goog.string.format,fmt,args);
 
 chart.controls.format.cljs$lang$maxFixedArity = (1);
 
-chart.controls.format.cljs$lang$applyTo = (function (seq22897){
-var G__22898 = cljs.core.first.call(null,seq22897);
-var seq22897__$1 = cljs.core.next.call(null,seq22897);
-return chart.controls.format.cljs$core$IFn$_invoke$arity$variadic(G__22898,seq22897__$1);
+chart.controls.format.cljs$lang$applyTo = (function (seq22909){
+var G__22910 = cljs.core.first.call(null,seq22909);
+var seq22909__$1 = cljs.core.next.call(null,seq22909);
+return chart.controls.format.cljs$core$IFn$_invoke$arity$variadic(G__22910,seq22909__$1);
 });
 
 chart.controls.by_id = (function chart$controls$by_id(id){

@@ -72,6 +72,8 @@ You can Expert System, Clojure and ClojureScript programming and debugging in ID
 
     Adding new question to Expert System. Adding new rule to ES for answer question. Adding new function for rule's right hand side ("local-cities"). Adding second rule for answer question. Filling function's body with code. Fixing bugs using exrernal text editor ("LightTable") to locate bug places. Restarting ES. Testing new question. [Programming1](https://www.youtube.com/watch?v=bTFfXeNlGlE)
 
+4. Programming and debugging ClojureScript, HTML and CSS. [Programming2](https://www.youtube.com/watch?v=14q3sFXtwGE)
+
 
 Copyright and license
 ----

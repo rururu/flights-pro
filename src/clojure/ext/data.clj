@@ -428,7 +428,7 @@ nil)
          dis (geo/distance-nm [lat1 lon1] [lat2 lon2])
          bea (geo/bear-deg [lat1 lon1] [lat2 lon2])
          html (str "<h3>" cty "</h3>"
-	"страна: " cnt "<br>"
+	"country: " cnt "<br>"
 	"latitude: " lat2 "<br>"
 	"longitude: " lon2 "<br>"
 	"direction: " (gn/direction bea)

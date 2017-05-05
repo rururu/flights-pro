@@ -1,4 +1,4 @@
-; Fri May 05 19:55:57 MSK 2017
+; Fri May 05 21:46:54 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -3670,7 +3670,7 @@
 
 ([FlightPro_Class820021] of  CloFunction
 
-	(source "(if-let [flt (seq (filter #(= (% \"name\") cty) LAST-R))]\n  (let [ct (first flt)\n         [lat1 lon1] (our-center)\n         lat2 (read-string (ct \"lat\"))\n         lon2 (read-string (ct \"lng\"))\n         dis (geo/distance-nm [lat1 lon1] [lat2 lon2])\n         bea (geo/bear-deg [lat1 lon1] [lat2 lon2])\n         html (str \"<h3>\" cty \"</h3>\"\n	\"страна: \" cnt \"<br>\"\n	\"latitude: \" lat2 \"<br>\"\n	\"longitude: \" lon2 \"<br>\"\n	\"direction: \" (gn/direction bea)\n	\"<h4>\" (format \"distance: %.1f\" dis) \" NM</h4>\")]\n    (asp/pump-in (:ins-chn @COMM)\n	{:instruct :popup\n	 :lat lat1\n	 :lon lon1\n	 :html html\n	 :width 1200\n	 :height 1000\n	 :time (:ext-data-popup TIO)})))")
+	(source "(if-let [flt (seq (filter #(= (% \"name\") cty) LAST-R))]\n  (let [ct (first flt)\n         [lat1 lon1] (our-center)\n         lat2 (read-string (ct \"lat\"))\n         lon2 (read-string (ct \"lng\"))\n         dis (geo/distance-nm [lat1 lon1] [lat2 lon2])\n         bea (geo/bear-deg [lat1 lon1] [lat2 lon2])\n         html (str \"<h3>\" cty \"</h3>\"\n	\"country: \" cnt \"<br>\"\n	\"latitude: \" lat2 \"<br>\"\n	\"longitude: \" lon2 \"<br>\"\n	\"direction: \" (gn/direction bea)\n	\"<h4>\" (format \"distance: %.1f\" dis) \" NM</h4>\")]\n    (asp/pump-in (:ins-chn @COMM)\n	{:instruct :popup\n	 :lat lat1\n	 :lon lon1\n	 :html html\n	 :width 1200\n	 :height 1000\n	 :time (:ext-data-popup TIO)})))")
 	(title "pump-far-city [cnt cty]"))
 
 ([FlightPro_Class830000] of  CloFunction
@@ -3763,7 +3763,7 @@
 
 ([FlightPro_Class870008] of  Rule
 
-	(lhs "?q (Question predicate \"How far\"\n	subject \"local city\")\n(not Question predicate \"User Answer\")")
+	(lhs "(Question predicate \"How far\"\n	subject \"local city\")\n(not Question predicate \"User Answer\")")
 	(rhs "(async.proc/pump-in \n	(:instructions pro.commands/CHN)\n	{:instruct :ask-user \n	 :question \"city\"\n	 :param {:cities (ext.data/local-cities)}})")
 	(salience 0)
 	(title "qq:HowFarLocalCity1"))
