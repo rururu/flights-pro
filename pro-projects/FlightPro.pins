@@ -1,4 +1,4 @@
-; Tue May 02 15:12:42 MSK 2017
+; Thu May 04 12:20:56 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -450,7 +450,7 @@
 
 ([FlightPro_Class190000] of  CloFunction
 
-	(source "(let [crt (current-time)\n       fls (seq @fls)]\n  (println \"t:\" crt \"flights:\" (count fls))\n  (doseq [[k v] fls]\n    (let [alt (fr24/altitude v)\n           [lat lon :as crd] (fr24/coord v)]\n      (rete/assert-frame \n	['Flight\n	'id k\n	'callsign (fr24/callsign v)\n	'coord crd\n	'course (fr24/course v)\n	'speed (fr24/speed v)\n	'altitude alt\n	'time crt\n	'point4d [lat lon (int (/ alt 3.28084)) (czs/iso8601curt)]\n	'age \"NEW\"\n	'status (if (> alt GROUND-ALT)\n                                     \"LEVEL\"\n                                     \"GROUND\")])))\n  (rete/fire)\n  true)")
+	(source "(let [crt (current-time)\n       fls (seq @fls)]\n  (println \"t:\" crt \"flights:\" (count fls))\n  (doseq [[k v] fls]\n    (let [alt (fr24/altitude v)\n           alt (if (< alt GROUND-ALT) \n	GROUND-ALT \n	alt)\n           [lat lon :as crd] (fr24/coord v)]\n      (rete/assert-frame \n	['Flight\n	'id k\n	'callsign (fr24/callsign v)\n	'coord crd\n	'course (fr24/course v)\n	'speed (fr24/speed v)\n	'altitude alt\n	'time crt\n	'point4d [lat lon (int (/ alt 3.28084)) (czs/iso8601curt)]\n	'age \"NEW\"\n	'status (if (> alt GROUND-ALT)\n                                     \"LEVEL\"\n                                     \"GROUND\")])))\n  (rete/fire)\n  true)")
 	(title "process-flights [fls]"))
 
 ([FlightPro_Class190001] of  CloVar
@@ -2310,7 +2310,7 @@
 
 ([FlightPro_Class550000] of  CloVar
 
-	(source "{:takeoff \n  {:speed [220 8]\n   :altitude [4000 8]\n   :initial-turn-course [-1 2]}\n :cruise \n  {:speed [500 1]\n   :altitude [33000 8]\n   :min-spd 220\n   :min-alt 4000}\n :landing \n  {:speed [180 1 6]\n   :altitude [2000 8]\n   :outer-marker-distance 7\n   :final-turn-course [-1 1]\n   :altitude-graph\n     [[0.1 0][0.5 15][2 600][7 2000]] ;; x - dist, y - alt\n   :spdeed-graph\n     [[0.0 0][0.1 10][0.5 100][3 120]]} ;; x - dist, y - spd\n}")
+	(source "{:takeoff \n  {:speed [220 8]\n   :altitude [1500 6]\n   :initial-turn-course [-1 2]}\n :cruise \n  {:speed [500 1]\n   :altitude [33000 8]\n   :min-spd 220\n   :min-alt 4000}\n :landing \n  {:speed [180 1 6]\n   :altitude [2000 8]\n   :outer-marker-distance 7\n   :final-turn-course [-1 1]\n   :altitude-graph\n     [[0.1 0][0.5 15][2 600][7 2000]] ;; x - dist, y - alt\n   :spdeed-graph\n     [[0.0 0][0.1 10][0.5 100][3 120]]} ;; x - dist, y - spd\n}")
 	(title "GENPLAN"))
 
 ([FlightPro_Class550002] of  Rule
@@ -2957,7 +2957,7 @@
 	(country "Bolivia")
 	(iata "VVI")
 	(icao "SLVR")
-	(runways 147)
+	(runways 327)
 	(title "Santa Cruz Viru Viru International Airport"))
 
 ([FlightPro_Class650014] of  Airport
@@ -3020,7 +3020,47 @@
 	(button-clear-articles "Clear Articles/wiki.gis/clear-articles")
 	(language English-en)
 	(max-responses 40)
-	(responses [FlightPro_Class880004]))
+	(responses
+		[FlightPro_Class950000]
+		[FlightPro_Class950001]
+		[FlightPro_Class950002]
+		[FlightPro_Class950003]
+		[FlightPro_Class950004]
+		[FlightPro_Class950005]
+		[FlightPro_Class950006]
+		[FlightPro_Class950007]
+		[FlightPro_Class950008]
+		[FlightPro_Class950009]
+		[FlightPro_Class950010]
+		[FlightPro_Class950011]
+		[FlightPro_Class950012]
+		[FlightPro_Class950013]
+		[FlightPro_Class950014]
+		[FlightPro_Class950015]
+		[FlightPro_Class950016]
+		[FlightPro_Class950017]
+		[FlightPro_Class950018]
+		[FlightPro_Class950019]
+		[FlightPro_Class950020]
+		[FlightPro_Class950021]
+		[FlightPro_Class950022]
+		[FlightPro_Class950023]
+		[FlightPro_Class950024]
+		[FlightPro_Class950025]
+		[FlightPro_Class950026]
+		[FlightPro_Class950027]
+		[FlightPro_Class950028]
+		[FlightPro_Class950029]
+		[FlightPro_Class950030]
+		[FlightPro_Class950031]
+		[FlightPro_Class950032]
+		[FlightPro_Class950033]
+		[FlightPro_Class950034]
+		[FlightPro_Class950035]
+		[FlightPro_Class950036]
+		[FlightPro_Class950037]
+		[FlightPro_Class950038]
+		[FlightPro_Class950039]))
 
 ([FlightPro_Class660024] of  CloFunction
 
@@ -3089,7 +3129,7 @@
 ([FlightPro_Class670008] of  BBX
 
 	(title "Current")
-	(wsen -73.50815 41.33248 -72.27905 42.226482))
+	(wsen -66.52634 -18.106697 -65.29724 -16.963547))
 
 ([FlightPro_Class670041] of  TypeName
 
@@ -4087,3 +4127,571 @@
 
 	(source "(volatile! {:mode \"MANUAL\"\n               :coord [60 30]\n               :altitude 4000\n               :speed 160\n               :course 270})")
 	(title "VEHICLE"))
+
+([FlightPro_Class950000] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 2573)
+	(feature "city")
+	(lang "en")
+	(lat -17.3833)
+	(lng -66.1667)
+	(rank 100)
+	(summary "Cochabamba or Quchapampa is a city in central Bolivia, located in a valley bearing the same name in the Andes mountain range. It is the capital of the Cochabamba Department and is the fourth largest city in Bolivia with a population of 630,587 according to the 2012 Bolivian census (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/33000/thumb-32029-100.jpg")
+	(title "Cochabamba")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Cochabamba"))
+
+([FlightPro_Class950001] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 2304)
+	(feature "adm1st")
+	(lang "en")
+	(lat -17.3333)
+	(lng -65.5)
+	(rank 100)
+	(summary "Cochabamba (from Quechua: qucha or qhucha, meaning \"lake\", pampa meaning \"plain\" pdf) is one of the nine component departments of Bolivia. It is known to be the \"granary\" of the country because of its variety of agricultural products due to Cochabamba's geographical position (...)")
+	(title "Cochabamba Department")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Cochabamba_Department"))
+
+([FlightPro_Class950002] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 2579)
+	(feature "landmark")
+	(lang "en")
+	(lat -17.3793)
+	(lng -66.1618)
+	(rank 98)
+	(summary "Bolivia hosted the Copa América for the second time in its 38th edition. It was held from June 11 to 29. It was organised by CONMEBOL, South America's football governing body. There is no qualifying for the final tournament (...)")
+	(title "1997 Copa América")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/1997_Copa_Am%C3%A9rica"))
+
+([FlightPro_Class950003] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 1183)
+	(feature "adm2nd")
+	(lang "en")
+	(lat -17.3333)
+	(lng -65.3333)
+	(rank 97)
+	(summary "Carrasco is a province in the Cochabamba Department in central Bolivia. Its capital is Totora.  (...)")
+	(title "Carrasco Province")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Carrasco_Province"))
+
+([FlightPro_Class950004] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 2559)
+	(feature "city")
+	(lang "en")
+	(lat -17.3975)
+	(lng -66.2817)
+	(rank 97)
+	(summary "Quillacollo is the capital of Quillacollo Province in Cochabamba Department, Bolivia. The municipality was established on 14 September 1905 under the Presidency of Ismail Montes.  (...)")
+	(title "Quillacollo")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Quillacollo"))
+
+([FlightPro_Class950005] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 2587)
+	(feature "adm2nd")
+	(lang "en")
+	(lat -17.5833)
+	(lng -66.25)
+	(rank 97)
+	(summary "Punata is a province almost in the middle of the Cochabamba Department, Bolivia, located about 45 km south of the city of Cochabamba. Its capital is Punata. The province is limited to the north by the Chapare Province, to the north-east by the Tiraque Province, to the east by the Arani Province, to (...)")
+	(title "Punata Province")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Punata_Province"))
+
+([FlightPro_Class950006] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 302)
+	(feature "city")
+	(lang "en")
+	(lat -16.9667)
+	(lng -65.4167)
+	(rank 97)
+	(summary "Villa Tunari or Tunari is a location in the department of Cochabamba, Bolivia. It is the seat of the Villa Tunari Municipality, the third municipal section of the Chapare Province. According to the census 2012 the population was 3,213 in the town which is an increment from 2,510 registered during (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/154000/thumb-153496-100.jpg")
+	(title "Villa Tunari")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Villa_Tunari"))
+
+([FlightPro_Class950007] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 2644)
+	(feature "adm2nd")
+	(lang "en")
+	(lat -17.3333)
+	(lng -66.25)
+	(rank 96)
+	(summary "Quillacollo is a province in the Cochabamba Department, Bolivia. It is known for its festival in August where people from all over Bolivia come and pay homage to the Virgin of Urqupiña (Virgen de Urqupiña). Quillacollo is said to be one of the fastest growing cities in Bolivia.  (...)")
+	(title "Quillacollo Province")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Quillacollo_Province"))
+
+([FlightPro_Class950008] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 3941)
+	(feature "landmark")
+	(lang "en")
+	(lat -17.3167)
+	(lng -66.1167)
+	(rank 96)
+	(summary "The Cordillera Oriental are parallel mountain ranges of the Bolivian Andes emplaced on the eastern and north eastern margin of the Andes. Large parts of Cordillera Oriental are forested and humid areas rich in agricultural and livestock products (...)")
+	(title "Cordillera Oriental (Bolivia)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Cordillera_Oriental_%28Bolivia%29"))
+
+([FlightPro_Class950009] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 3421)
+	(feature "adm3rd")
+	(lang "en")
+	(lat -17.6)
+	(lng -65.6)
+	(rank 96)
+	(summary "Vacas Municipality (Quechua name: Wak'as, deriving from Wak'a) is the second municipal section of the Arani Province in the Cochabamba Department in central Bolivia. Its capital is Vacas known as the \"Land of the potato\"  (...)")
+	(title "Vacas Municipality")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Vacas_Municipality"))
+
+([FlightPro_Class950010] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 2579)
+	(lang "en")
+	(lat -17.3792)
+	(lng -66.1617)
+	(rank 96)
+	(summary "The 2011–12 Liga de Fútbol Profesional Boliviano season was the 35th season of LFPB.  (...)")
+	(title "2011–12 Liga de Fútbol Profesional Boliviano season")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/2011%E2%80%9312_Liga_de_F%C3%BAtbol_Profesional_Boliviano_season"))
+
+([FlightPro_Class950011] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 2555)
+	(feature "city")
+	(lang "en")
+	(lat -17.3972)
+	(lng -66.3136)
+	(rank 96)
+	(summary "Vinto is a town in the Cochabamba Department in central Bolivia. It is the seat of the Vinto Municipality, the fourth municipal section of the Quillacollo Province. Vinto, Cochabamba, Gente de Vinto, Feria, Manzana  (...)")
+	(title "Vinto")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Vinto"))
+
+([FlightPro_Class950012] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 3138)
+	(feature "adm2nd")
+	(lang "en")
+	(lat -17.6167)
+	(lng -66.0833)
+	(rank 96)
+	(summary "Arani is a province in Cochabamba Department, Bolivia. Its capital is Arani, situated about 53 km from Cochabamba. Arani is known for its bread but also for the town's artisan wickerwork.  (...)")
+	(title "Arani Province")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Arani_Province"))
+
+([FlightPro_Class950013] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 2993)
+	(feature "adm2nd")
+	(lang "en")
+	(lat -17.8333)
+	(lng -66.3333)
+	(rank 95)
+	(summary "Esteban Arce is a province in Cochabamba Department, Bolivia. Its capital is Tarata.  (...)")
+	(title "Esteban Arce Province")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Esteban_Arce_Province"))
+
+([FlightPro_Class950014] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 2718)
+	(feature "city")
+	(lang "en")
+	(lat -17.4042)
+	(lng -66.0408)
+	(rank 95)
+	(summary "Sacaba is the capital of the Bolivian province of Chapare. The city, located 13 kilometers eastward from Cochabamba, is the second largest city in the Cochabamba Department after Cochabamba city. Post-colonial architecture may be seen in the inner part of Sacaba; however, some has been destroyed due (...)")
+	(title "Sacaba")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Sacaba"))
+
+([FlightPro_Class950015] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 2579)
+	(lang "en")
+	(lat -17.3792)
+	(lng -66.1617)
+	(rank 94)
+	(summary "The 2012–13 Liga de Fútbol Profesional Boliviano season was the 36th season of LFPB.  (...)")
+	(title "2012–13 Liga de Fútbol Profesional Boliviano season")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/2012%E2%80%9313_Liga_de_F%C3%BAtbol_Profesional_Boliviano_season"))
+
+([FlightPro_Class950016] of  WikiArticleDetails
+
+	(butt-del-pois "Delete POIs/ext.data/delete-pois")
+	(butt-return "Return to Flight/ext.data/ret-to-flight")
+	(butt-show-pois "Show on Map/ext.data/show-on-map")
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 2730)
+	(feature "city")
+	(lang "en")
+	(lat -17.5469)
+	(lng -65.8367)
+	(max-rows 50)
+	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
+	(radius 1.0)
+	(rank 94)
+	(summary "Punata is the capital of Punata Province and Punata Municipality in Cochabamba Department, Bolivia. At the time of census 2001 it had a population of 14,742 inhabitants and at the census 2012 the populations rose to 28.707 inhabitants (...)")
+	(title "Punata")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Punata"))
+
+([FlightPro_Class950017] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 2564)
+	(feature "airport")
+	(lang "en")
+	(lat -17.4211)
+	(lng -66.1771)
+	(rank 94)
+	(summary "Jorge Wilstermann International Airport is an airport serving Cochabamba, a city in the Cochabamba Department of Bolivia. The facility is named in honor of Jorge Wilstermann, a respected Bolivian commercial aviator.  (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/4000/thumb-3039-100.jpg")
+	(title "Jorge Wilstermann International Airport")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Jorge_Wilstermann_International_Airport"))
+
+([FlightPro_Class950018] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 2579)
+	(lang "en")
+	(lat -17.3792)
+	(lng -66.1617)
+	(rank 94)
+	(summary "The 2009 Liga de Fútbol Profesional Boliviano season was the 33rd of Bolivia's top-flight professional football league. The season was split into two championships&mdash;the Apertura and the Clausura&mdash;and the Play-off  (...)")
+	(title "2009 Liga de Fútbol Profesional Boliviano season")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/2009_Liga_de_F%C3%BAtbol_Profesional_Boliviano_season"))
+
+([FlightPro_Class950019] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 3887)
+	(feature "adm2nd")
+	(lang "en")
+	(lat -17.3333)
+	(lng -65.9167)
+	(rank 93)
+	(summary "Tiraque is a province in the Cochabamba Department in central Bolivia. Its capital is Tiraque.  (...)")
+	(title "Tiraque Province")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Tiraque_Province"))
+
+([FlightPro_Class950020] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 2835)
+	(feature "adm2nd")
+	(lang "en")
+	(lat -18.0)
+	(lng -66.0)
+	(rank 93)
+	(summary "Mizque (from Quechua: misk'i, meaning \"sweet\") is a province in the Cochabamba Department, Bolivia. Its capital is Mizque. The province, in 1992, had a population of 27,959 inhabitants, mostly indigenous citizens of Quechuan descent (...)")
+	(title "Mizque Province")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Mizque_Province"))
+
+([FlightPro_Class950021] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 2682)
+	(feature "adm2nd")
+	(lang "en")
+	(lat -17.5667)
+	(lng -66.3833)
+	(rank 93)
+	(summary "Germán Jordán is a province in the Cochabamba Department, Bolivia. Its capital is Cliza.  (...)")
+	(title "Germán Jordán Province")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Germ%C3%A1n_Jord%C3%A1n_Province"))
+
+([FlightPro_Class950022] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 2579)
+	(lang "en")
+	(lat -17.3792)
+	(lng -66.1617)
+	(rank 92)
+	(summary "The 2014–15 Liga de Fútbol Profesional Boliviano season is the 38th season of LFPB.  (...)")
+	(title "2014–15 Liga de Fútbol Profesional Boliviano season")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/2014%E2%80%9315_Liga_de_F%C3%BAtbol_Profesional_Boliviano_season"))
+
+([FlightPro_Class950023] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 2404)
+	(feature "city")
+	(lang "en")
+	(lat -17.7147)
+	(lng -66.263)
+	(rank 92)
+	(summary "Capinota is a small town in the Bolivian Department of Cochabamba and capital of the Capinota Province.  (...)")
+	(title "Capinota")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Capinota"))
+
+([FlightPro_Class950024] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 2579)
+	(feature "landmark")
+	(lang "en")
+	(lat -17.3793)
+	(lng -66.1618)
+	(rank 91)
+	(summary "The Estadio Félix Capriles is a multi-purpose stadium in Cochabamba, Bolivia. It is currently used mostly for football matches. The stadium has a maximum capacity of 32,000. It is the home stadium of Club Jorge Wilstermann and Club Aurora (...)")
+	(title "Estadio Félix Capriles")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Estadio_F%C3%A9lix_Capriles"))
+
+([FlightPro_Class950025] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 2787)
+	(lang "en")
+	(lat -17.62)
+	(lng -66.03)
+	(rank 91)
+	(summary "Tarata is a town in Cochabamba Department, Bolivia. It is the capital of the Esteban Arze Province. There are several towns like Arbieto, Santa Rosa, Tiataco, that surround Tarata. In addition, Tarata is known for its home-made cheese and sausage.  (...)")
+	(title "Tarata, Cochabamba")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Tarata%2C_Cochabamba"))
+
+([FlightPro_Class950026] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 2749)
+	(feature "city")
+	(lang "en")
+	(lat -17.5667)
+	(lng -65.7667)
+	(rank 91)
+	(summary "Arani (from Quechua: jarani or jallmani) is the capital of Arani Province and Arani Municipality located in Cochabamba Department in the center of Bolivia at an altitude of 9,400 ft (2,865 m). At the time of census 2001 it had 3,512 inhabitants (...)")
+	(title "Arani, Bolivia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Arani%2C_Bolivia"))
+
+([FlightPro_Class950027] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 2731)
+	(feature "city")
+	(lang "en")
+	(lat -17.5297)
+	(lng -65.9604)
+	(rank 90)
+	(summary "Tolata is a locality in the Cochabamba Department in central Bolivia. It is the seat of the Tolata Municipality, the third municipal section of the Germán Jordán Province. At the time of census 2001 it had a population of 2,207.  (...)")
+	(title "Tolata, Cochabamba")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Tolata%2C_Cochabamba"))
+
+([FlightPro_Class950028] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 2579)
+	(lang "en")
+	(lat -17.3792)
+	(lng -66.1617)
+	(rank 90)
+	(summary "The 2013–14 Liga de Fútbol Profesional Boliviano season was the 37th season of LFPB.  (...)")
+	(title "2013–14 Liga de Fútbol Profesional Boliviano season")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/2013%E2%80%9314_Liga_de_F%C3%BAtbol_Profesional_Boliviano_season"))
+
+([FlightPro_Class950029] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 2014)
+	(feature "city")
+	(lang "en")
+	(lat -17.9398)
+	(lng -65.3387)
+	(rank 90)
+	(summary "Mizque (from Quechua: misk'i, meaning \"sweet\") is a town in the Cochabamba Department, Bolivia. It is the capital of the Mizque Province. Mizque is located in the valley of the Mizque River, one of the main tributaries of the Río Grande (...)")
+	(title "Mizque")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Mizque"))
+
+([FlightPro_Class950030] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 2776)
+	(feature "city")
+	(lang "en")
+	(lat -17.5167)
+	(lng -65.9167)
+	(rank 90)
+	(summary "San Benito or Villa José Quintín Mendoza is a location in the Cochabamba Department in central Bolivia. It is the seat of the San Benito Municipality, the third municipal section of the Punata Province.  (...)")
+	(title "San Benito, Cochabamba")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/San_Benito%2C_Cochabamba"))
+
+([FlightPro_Class950031] of  WikiArticleDetails
+
+	(butt-del-pois "Delete POIs/ext.data/delete-pois")
+	(butt-return "Return to Flight/ext.data/ret-to-flight")
+	(butt-show-pois "Show on Map/ext.data/show-on-map")
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 3470)
+	(feature "city")
+	(lang "en")
+	(lat -17.5739)
+	(lng -65.5794)
+	(max-rows 50)
+	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
+	(radius 1.0)
+	(rank 89)
+	(summary "Vacas (Quechua name: Wak'as, deriving from Wak'a) is a Bolivian village in the southeast of the Cochabamba Department. It is the capital of the Vacas Municipality, the second municipal section of the Arani Province. Vacas is located about 85 km far from Cochabamba and about 30 km far from Arani (...)")
+	(title "Vacas, Cochabamba")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Vacas%2C_Cochabamba"))
+
+([FlightPro_Class950032] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 4801)
+	(feature "mountain")
+	(lang "en")
+	(lat -17.2894)
+	(lng -66.3681)
+	(rank 89)
+	(summary "Tunari National Park is a national park located in the Cochabamba Department, Bolivia.  (...)")
+	(title "Tunari National Park")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Tunari_National_Park"))
+
+([FlightPro_Class950033] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 2723)
+	(feature "city")
+	(lang "en")
+	(lat -17.5919)
+	(lng -65.934)
+	(rank 89)
+	(summary "Cliza is a town in the Cochabamba Department, Bolivia. It is the capital of the Germán Jordán Province and the Cliza Municipality. Along with Punata, Cliza is the major city in the valle alto of the Cochabamba Department.  (...)")
+	(title "Cliza (town)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Cliza_%28town%29"))
+
+([FlightPro_Class950034] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 2847)
+	(feature "landmark")
+	(lang "en")
+	(lat -17.3842)
+	(lng -66.135)
+	(rank 89)
+	(summary "Cristo de la Concordia (Christ of Peace) is a statue of Jesus Christ located atop San Pedro Hill, to the east of Cochabamba, Bolivia. It is accessible by cable car, or by climbing 2,000 steps. The statue is tall, on a pedestal of , for a total height of .  (...)")
+	(title "Cristo de la Concordia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Cristo_de_la_Concordia"))
+
+([FlightPro_Class950035] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 2739)
+	(feature "city")
+	(lang "en")
+	(lat -17.8216)
+	(lng -66.4035)
+	(rank 89)
+	(summary "Arque is a location in the Cochabamba Department, Bolivia. It is the seat of Arque Province and Arque Municipality. Arque is situated at an elevation of 10,735 ft (3,272 m) on the northern bank of Arque River. At the time of census 2001 it had a population of 487.  (...)")
+	(title "Arque")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Arque"))
+
+([FlightPro_Class950036] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 2567)
+	(feature "city")
+	(lang "en")
+	(lat -17.5667)
+	(lng -66.35)
+	(rank 89)
+	(summary "Parotani is a small town in Bolivia.  (...)")
+	(title "Parotani")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Parotani"))
+
+([FlightPro_Class950037] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 4596)
+	(lang "en")
+	(lat -17.25)
+	(lng -66.3333)
+	(rank 89)
+	(summary "Quillacollo Municipality is the first municipal section of the Quillacollo Province in the Cochabamba Department, Bolivia. Its capital is Quillacollo. At the time of census 2001 the municipality had 104,206 inhabitants.  (...)")
+	(title "Quillacollo Municipality")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Quillacollo_Municipality"))
+
+([FlightPro_Class950038] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "BO")
+	(elevation 2573)
+	(feature "adm2nd")
+	(lang "en")
+	(lat -17.3833)
+	(lng -66.1667)
+	(rank 89)
+	(summary "Cercado is a province in the Cochabamba Department, Bolivia. Its capital is Cochabamba which is also the capital of the department.  (...)")
+	(title "Cercado Province (Cochabamba)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Cercado_Province_%28Cochabamba%29"))
+
+([FlightPro_Class950039] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 2579)
+	(lang "en")
+	(lat -17.3792)
+	(lng -66.1617)
+	(rank 88)
+	(summary "The 2011 Liga de Fútbol Profesional Boliviano season (official known as the 2011 Campeonato ENTEL Fundadores de la LFPB for sponsorship reasons) was the 35th season of LFPB. Originally comprising two tournaments, the 2011 season was the first single-stage season since 2005 (...)")
+	(title "2011 Liga de Fútbol Profesional Boliviano season")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/2011_Liga_de_F%C3%BAtbol_Profesional_Boliviano_season"))
+
+([FlightPro_Class950040] of  Airport
+
+	(altitude 74)
+	(coord 43.43666 5.215)
+	(country "France")
+	(iata "MRS")
+	(icao "LFML")
+	(runways 0)
+	(title "Marseille Provence Airport"))

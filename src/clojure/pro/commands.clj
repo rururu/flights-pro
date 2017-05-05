@@ -57,6 +57,9 @@
   (println "t:" crt "flights:" (count fls))
   (doseq [[k v] fls]
     (let [alt (fr24/altitude v)
+           alt (if (< alt GROUND-ALT) 
+	GROUND-ALT 
+	alt)
            [lat lon :as crd] (fr24/coord v)]
       (rete/assert-frame 
 	['Flight
