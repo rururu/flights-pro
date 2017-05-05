@@ -8,7 +8,9 @@ It uses [Flightradar24](http://www.flightradar24.com) web service, [Leaflet](htt
 ## Start
 
 ```clj
-$ cd <..>/flights-pro
+$ cd <..>
+$ git clone https://github.com/rururu/flights-pro.git
+$ cd flights-pro
 $ lein run
 ```
 In a Protege GUI open a project FlightPro.pprj from a folder <..>/pro-projects and execute a menu item Edit -> Clojure Work.
