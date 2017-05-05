@@ -36,7 +36,7 @@
                "scheduled" {"arrival" "unk"}}
 
    "airline" {"short" "Ru Airlines"}}}))
-(def TERRAIN "yes")
+(def TERRAIN "no")
 (def GROUND-DELTA {:terrain 120 ;; feet
  :cabin 60})
 (def GROUND-ALT 0)

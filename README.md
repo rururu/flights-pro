@@ -48,17 +48,30 @@ Through "View" selector and "Pitch" and "Roll" fields you control direction of t
 
 Latitude and longitude values change instantly.
 
+## Programming
+
+You can Expert System, Clojure and ClojureScript programming and debugging in IDE based on Protege-3.5 during air traffic monitiring and simulation (see screencasts below).
+
 ## Screencasts
 
-1. Scheduled flight simulation from Cochabamba to Santa Cruz de la Sierra, Bolivia.
+1. Landing of a regular Air Berlin flight in JFK airport, New-York.
 
-  [Part 1. Takeoff](https://www.youtube.com/watch?v=HkL9MkdoSG4)
+    [AirBerlin Landing JFK](https://www.youtube.com/watch?v=lA3GPsUEVLE)
 
-  [Part 2. Level flight](https://www.youtube.com/watch?v=1-JVObqbtcI)
+2. Scheduled flight simulation from Cochabamba to Santa Cruz de la Sierra, Bolivia.
 
-  [Part 3. Continuation of the level flight](https://www.youtube.com/watch?v=hHWDM8LyrkM)
+    [Part 1. Takeoff](https://www.youtube.com/watch?v=HkL9MkdoSG4)
 
-  [Part 4. Landing](https://www.youtube.com/watch?v=pzy952DoeWg)
+    [Part 2. Level flight](https://www.youtube.com/watch?v=1-JVObqbtcI)
+
+    [Part 3. Continuation of the level flight](https://www.youtube.com/watch?v=hHWDM8LyrkM)
+
+    [Part 4. Landing](https://www.youtube.com/watch?v=pzy952DoeWg)
+
+3. Programming and debugging Expert system rules and Clojure functions:
+
+    Adding new question to Expert System. Adding new rule to ES for answer question. Adding new function for rule's right hand side ("local-cities"). Adding second rule for answer question. Filling function's body with code. Fixing bugs using exrernal text editor ("LightTable") to locate bug places. Restarting ES. Testing new question. [Programming1](https://www.youtube.com/watch?v=bTFfXeNlGlE)
+
 
 Copyright and license
 ----
