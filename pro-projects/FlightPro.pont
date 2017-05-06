@@ -1,4 +1,4 @@
-; Fri May 05 21:46:54 MSK 2017
+; Sat May 06 22:40:58 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -14,6 +14,12 @@
 	(single-slot age
 		(type STRING)
 ;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot altitude-graph
+		(type STRING)
+		(create-accessor read-write))
+	(multislot speed-graph
+		(type STRING)
 		(create-accessor read-write))
 	(single-slot id
 		(type STRING)
@@ -35,6 +41,11 @@
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
+	(single-slot cruise-plan
+		(type INSTANCE)
+;+		(allowed-classes CruisePlan)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot butt-del-pois
 		(type STRING)
 		(default "Delete POIs/ext.data/delete-pois")
@@ -47,6 +58,27 @@
 	(multislot branches
 		(type INSTANCE)
 ;+		(allowed-classes Tree)
+		(create-accessor read-write))
+	(single-slot min-speed
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot initial-turn-course
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot takeoff-plan
+		(type INSTANCE)
+;+		(allowed-classes TakeoffPlan)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot outer-marker-distance
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot min-altitude
+		(type STRING)
+;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot spec-plan
 		(type STRING)
@@ -95,7 +127,15 @@
 		(default "Return to Flight/ext.data/ret-to-flight")
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
+	(single-slot altitude-vector
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot time
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot final-turn-course
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
@@ -109,6 +149,11 @@
 		(create-accessor read-write))
 	(single-slot country
 		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot landing-plan
+		(type INSTANCE)
+;+		(allowed-classes LandingPlan)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot from
@@ -345,6 +390,83 @@
 	(multislot chart
 		(type INSTANCE)
 ;+		(allowed-classes QuestionTree)
+		(create-accessor read-write)))
+
+(defclass Flight+Plan+Ontology
+	(is-a Flights+Ontology)
+	(role abstract)
+	(single-slot title
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass GeneralPlan
+	(is-a Flight+Plan+Ontology)
+	(role concrete)
+	(single-slot cruise-plan
+		(type INSTANCE)
+;+		(allowed-classes CruisePlan)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot landing-plan
+		(type INSTANCE)
+;+		(allowed-classes LandingPlan)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot takeoff-plan
+		(type INSTANCE)
+;+		(allowed-classes TakeoffPlan)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass PartialPlan
+	(is-a Flight+Plan+Ontology)
+	(role abstract)
+	(single-slot speed
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot altitude-vector
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass TakeoffPlan
+	(is-a PartialPlan)
+	(role concrete)
+	(single-slot initial-turn-course
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass CruisePlan
+	(is-a PartialPlan)
+	(role concrete)
+	(single-slot min-speed
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot min-altitude
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass LandingPlan
+	(is-a PartialPlan)
+	(role concrete)
+	(single-slot final-turn-course
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot outer-marker-distance
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot speed-graph
+		(type STRING)
+		(create-accessor read-write))
+	(multislot altitude-graph
+		(type STRING)
 		(create-accessor read-write)))
 
 (defclass Tree

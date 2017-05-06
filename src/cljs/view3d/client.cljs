@@ -123,18 +123,14 @@
   (vswap! CARRIER assoc-in [:elevator :accel] accel)))
 
 (defn latitude [lat]
-  (if (= (:mode @CARRIER) "MANUAL")
-  (let [car @CARRIER
-         lat (num-val lat)
-         [_ lon] (:coord car)]
-    (mov/set-turn-point CARRIER [lat lon] (:course car) (:speed car)))))
+)
 
 (defn longitude [lon]
   (if (= (:mode @CARRIER) "MANUAL")
-  (let [car @CARRIER
-         lon (num-val lon)
-         [lat _] (:coord car)]
-    (mov/set-turn-point CARRIER [lat lon] (:course car) (:speed car)))))
+  (let [lon (num-val lon)
+         lat (num-val (ctl/get-value "input-lat"))
+         bea (mov/bear-deg-js (:coord @CARRIER) [lat lon])]
+    (course (int bea)))))
 
 (defn camera-vehicle [vehicle per]
   (let [[lat lon] (:coord vehicle)]

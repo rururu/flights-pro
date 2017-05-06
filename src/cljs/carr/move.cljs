@@ -18,6 +18,25 @@
        lam2 (+ (js/Math.atan2 (* sinc sinaz) (- (* cosphi1 cosc) (* sinphi1 sinc cosaz))) lambda0)]
   [phi2 lam2]))
 
+(defn spherical-azimuth-js [phi1 lambda0 phi lambda]
+  (let [ldiff (- lambda lambda0)
+       cosphi (js/Math.cos phi)]
+  (js/Math.atan2 (* cosphi (js.Math.sin ldiff))
+                      (- (* (js/Math.cos phi1) (js/Math.sin phi)) 
+                          (* (js/Math.sin phi1) cosphi (js/Math.cos ldiff))))))
+
+(defn bear-deg-js [[la1 lo1] [la2 lo2]]
+  (let [fi1 (* la1 PID180)
+       ld1 (* lo1 PID180)
+       fi2 (* la2 PID180)
+       ld2 (* lo2 PID180)
+       rad (spherical-azimuth-js fi1 ld1 fi2 ld2)
+       deg (/ rad PID180)]
+  (cond
+    (< deg 0) (+ deg 360.0)
+    (> deg 360.0) (- deg 360.0)
+    true deg)))
+
 (defn set-turn-point
   ([carr]
   (let [car @carr]

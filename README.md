@@ -3,7 +3,7 @@
 Air traffic control system and flight simulator - a test example for the [rete4frames](http://github.com/rururu/rete4frames) expert system shell.
 It uses [Flightradar24](http://www.flightradar24.com) web service, [Leaflet](http://leafletjs.com) JavaScript library, [Cesium](https://cesiumjs.org/) WebGL virtual globe and map engine, [geonames](http://www.geonames.org) geographical data web service and [Protege-3.5](http://protege.stanford.edu) ontology editor as server-side GUI and Clojure/ClojureScript IDE.
 
-![screenshot](screenshot.jpeg)
+![screenshot](screenshot1.jpeg)
 
 ## Start
 
@@ -42,13 +42,15 @@ The command "Clear" removes flights from the screen.
 
 "Onboard" selector gives possibility to select flight to get on board, or get on board MANUAL, flight that you control yourself through "Autopilot". If you see some flight on the chart and don't see it in the "Onboard" selector, click "select" once more. This updates list of flight callsigns in sight.
 
+When you stay on board of the regular flight and switch on MANUAL flight, it continues this regular flight strictly forward until you begin to maneuver yourself.
+
 Through "View" selector and "Pitch" and "Roll" fields you control direction of the camera's view.
 
 #### Autopilot
 
 "Autopilot" controls gives you possibility to set target values of course, speed and altitude of MANUAL flight. Values would be changing gradually. You can accelerate change of the corresponding value by "accel" selector.
 
-Latitude and longitude values change instantly.
+When longitude value changes, MANUAL flight turns on course to location, defined by latitude and longitude values. So, set needed latitude before longitude.
 
 ## Programming
 
@@ -78,6 +80,15 @@ You can Expert System, Clojure and ClojureScript programming and debugging in ID
 
     [Programming2](https://www.youtube.com/watch?v=14q3sFXtwGE)
 
+## Planning of scheduled flights
+
+Flight plan for scheduled flights is described in an active instance of a class "GeneralPlan" (active instance marked with "yellow sticker").
+
+You can change this plan before scheduling flight or replace it with your own plan by shifting yellow sticker (removing  from the old instance and sticking on new one).
+
+For example, to safely takeoff from Cochabamba you have to icrease and accelerate lifting by changing value of a slot "Altitude-vector" in "Basic Takeoff Plan" from [1500 6] on [4000 8] (here first value is a target altitude and second value is an acceleration of lift).
+
+![screenshot](screenshot2.jpeg)
 
 Copyright and license
 ----

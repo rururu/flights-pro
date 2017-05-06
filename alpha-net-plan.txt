@@ -1,14 +1,12 @@
 Flight:
- OLD: {:? {:? {:? {:? {:? {:? {:? {:? {:? 0}}}}}}}}}
- CURRENT: {:? {:? {:? {:? {:? {:? {:? {:? {:? 1}}}}}}}}}
- NEW: {:? {:? {:? {:? {:? {:? {:? {:? {:? 2}}}}}}}}}
- :?: {:? {:? {:? {:? {:? {:? {:? {:? {:? 3}}}}}}}}}
+ :?: {"OLD" {:? {:? {:? {:? {:? {:? {:? {:? {:? 0}}}}}}}}}, "CURRENT" {:? {:? {:? {:? {:? {:? {:? {:? {:? 1}}}}}}}}}, "NEW" {:? {:? {:? {:? {:? {:? {:? {:? {:? 2}}}}}}}}}, :? {:? {:? {:? {:? {:? {:? {:? {:? {:? 7}}}}}}}}}}
 Follow:
- :?: {:? 4}
+ :?: {:? {:? 3, 0 4}}
 Onboard:
- :?: {0 5, :? 6}
- STOP: {:? 7}
+ :?: {:? {:? 5, 0 6}}
 Schedule:
- :?: {:? {:? {:? 8}}}
+ :?: {:? {:? {:? {:? 8}}}}
 FlightPlan:
- :?: {:? {:? {:? {:? {:? {:? 9, "DONE" 10}}}}}, "DONE" {:? {:? {:? {:? {:? 11}}}}}}
+ :?: {:? {:? {:? {:? {:? {:? {:? {:? 9, "CLIMB" 13, "DESCEND" 15}}, "TAKEOFF" {:? {:? 10}}, "INITIAL-TURN" {:? {:? 11}}, "CRUISE" {:? {"OFF" 12, :? 14}}, "FINAL-TURN" {:? {:? 16}}, "LANDING" {:? {:? 17}}}}}}}}
+Question:
+ :?: {:? {:? {"What" {"Intersections" 18}, "Where" {"we are" 22, "nearest" 23}, "How many" {"airplanes" 25}, "How far" {"airport" 26, "global city" 29, "local city" 32}, "User Answer" {:? 27, "selected airport" 28, "selected country" 30, "selected city" 31}}, "by GeoNames" {"What" {"weather" 19}}, "by Weather2" {"What" {"weather" 20}}, "airports" {"Where" {"nearest" 21}}, "in the air" {"How many" {"airplanes" 24}}}}

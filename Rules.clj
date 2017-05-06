@@ -1,43 +1,45 @@
-(af:SwitchOnboard 0
-(Flight time ?t
-           id ?id
-           callsign ?cs
-           coord ?crd 
-           course ?crs
-           speed ?spd
-           altitude ?alt)
+(af:SwitchOnboard 1
 ?ob1 (Onboard)
 ?ob2 (Onboard callsign ?cs time 0)
+(Flight age "NEW"
+	callsign ?cs
+	id ?id
+	coord ?crd
+	course ?crs
+	speed ?spd
+	altitude ?alt)
 =>
-(retract ?ob1)
-(modify ?ob2 time ?t)
 (pro.commands/def-ground-alt (pro.commands/destination-alt ?id))
-(es/fly-onboard-to ?cs 0 ?crd 0 ?crs ?spd ?alt 12 true))
+(es/fly-onboard-to ?cs ?crd ?crs ?crs ?spd ?alt -1)
+(retract ?ob1)
+(if (= ?cs "MANUAL")
+  (retract ?ob2)
+  (modify ?ob2 time 1)))
 
 (af:StartOnboard 0
-(Flight time ?t
-           id ?id
-           callsign ?cs
-           coord ?crd 
-           course ?crs
-           speed ?spd
-           altitude ?alt)
 ?ob (Onboard callsign ?cs time 0)
+(Flight age "NEW"
+	callsign ?cs
+	id ?id
+	coord ?crd
+	course ?crs
+	speed ?spd
+	altitude ?alt)
 (not Onboard)
 =>
-(modify ?ob time ?t)
 (pro.commands/def-ground-alt (pro.commands/destination-alt ?id))
-(es/fly-onboard-to ?cs 0 ?crd 0 ?crs ?spd ?alt 12 true))
+(es/fly-onboard-to ?cs ?crd ?crs ?crs ?spd ?alt -1)
+(modify ?ob time 1))
 
 (af:FlyOnboardTo 0
-?ob (Onboard time ?t0 callsign ?cs
-	(not= ?cs "manual"))
+?ob (Onboard time ?t callsign ?cs
+	((not= ?cs "MANUAL")
+	 (> ?t 0)))
 (Flight age "CURRENT" 
 	callsign ?cs
 	course ?crs1
-	coord ?crd1 
 	time ?t1 
-	(<= ?t0 ?t1))
+	(<= ?t ?t1))
 (Flight age "NEW" 
 	callsign ?cs
 	course ?crs2
@@ -46,9 +48,8 @@
 	altitude ?alt2
 	time ?t2)
 =>
-;;(println :FNB ?cs ?crs2 ?spd2 ?alt2 :STAND (= ?crd1 ?crd2))
 (modify ?ob time ?t2)
-(es/fly-onboard-to ?cs ?crd1 ?crd2 ?crs1 ?crs2 ?spd2 ?alt2 (- ?t2 ?t1) false))
+(es/fly-onboard-to ?cs ?crd2 ?crs1 ?crs2 ?spd2 ?alt2 (- ?t2 ?t1)))
 
 (mf:ClimbStart 0
 ?fp (FlightPlan id ?id
@@ -191,12 +192,6 @@
 	 lat1 lon1 ?alt1])
   (modify ?f time ?t3)))
 
-(af:StopOnboard 0
-?ob1 (Onboard)
-?ob2 (Onboard callsign "STOP")
-=>
-(retract ?ob1 ?ob2))
-
 (af:StopOrSwitchFollow 1
 ?f1 (Follow  id ?id1 time ?t1)
 ?f2 (Follow  id ?id2 time 0
@@ -282,6 +277,7 @@
 
 (mf:DescendStart 0
 ?fp (FlightPlan id ?id
+	spec-plan ?spp
 	landing ?lnd
 	cruise ?cru
 	vertical-status  ?vst
@@ -295,7 +291,8 @@
 =>
 (println [:DescendStart ?id ?dnd])
 (my.flights.move/control ?id my.flights.move/elevate (:altitude ?lnd))
-(modify ?fp vertical-status "DESCEND"))
+(modify ?fp vertical-status "DESCEND")
+(pro.commands/def-ground-alt (:finish-alt ?spp)))
 
 (mf:CruiseDone 0
 ?fp (FlightPlan id ?id
@@ -545,7 +542,7 @@
 (retract ?q))
 
 (qq:HowFarLocalCity1 0
-?q (Question predicate "How far"
+(Question predicate "How far"
 	subject "local city")
 (not Question predicate "User Answer")
 =>

@@ -1,4 +1,4 @@
-; Fri May 05 21:46:54 MSK 2017
+; Sat May 06 22:40:58 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -56,6 +56,8 @@
 
 	(cloFunctions
 		[FlightPro_Class100026]
+		[FlightPro_Class960000]
+		[FlightPro_Class960001]
 		[FlightPro_Class100027]
 		[FlightPro_Class240001]
 		[FlightPro_Class240002]
@@ -1000,6 +1002,7 @@
 		[FlightPro_Class500000]
 		[FlightPro_Class520001]
 		[FlightPro_Class620004]
+		[FlightPro_Class960030]
 		[FlightPro_Class620003]
 		[FlightPro_Class490002]
 		[FlightPro_Class540017]
@@ -1013,7 +1016,6 @@
 		[FlightPro_Class70000]
 		[FlightPro_Class20005]
 		[FlightPro_Class160009]
-		[FlightPro_Class550000]
 		[FlightPro_Class590001]
 		[FlightPro_Class690005]
 		[FlightPro_Class690006])
@@ -1246,7 +1248,6 @@
 
 ([FlightPro_Class300000] of  CloFunction
 
-	(source "(if (= (:mode @CARRIER) \"MANUAL\")\n  (let [car @CARRIER\n         lat (num-val lat)\n         [_ lon] (:coord car)]\n    (mov/set-turn-point CARRIER [lat lon] (:course car) (:speed car))))")
 	(title "latitude [lat]"))
 
 ([FlightPro_Class300001] of  RuleSet
@@ -1373,7 +1374,7 @@
 
 ([FlightPro_Class320001] of  CloFunction
 
-	(source "(if (= (:mode @CARRIER) \"MANUAL\")\n  (let [car @CARRIER\n         lon (num-val lon)\n         [lat _] (:coord car)]\n    (mov/set-turn-point CARRIER [lat lon] (:course car) (:speed car))))")
+	(source "(if (= (:mode @CARRIER) \"MANUAL\")\n  (let [lon (num-val lon)\n         lat (num-val (ctl/get-value \"input-lat\"))\n         bea (mov/bear-deg-js (:coord @CARRIER) [lat lon])]\n    (course (int bea))))")
 	(title "longitude [lon]"))
 
 ([FlightPro_Class320010] of  RuleSet
@@ -1583,7 +1584,7 @@
 ([FlightPro_Class340002] of  Rule
 
 	(lhs "?sd (Schedule callsign ?csn\n	time ?tim\n	from ?frm\n	to ?to)")
-	(rhs "(if-let [stm (es/start-time ?tim)]\n  (let [spp (es/specific-plan es/GENPLAN ?frm ?to)]\n     (my.flights.move/add-my-flight \n	?csn ?csn (:start-crd spp) (:start-run spp) 0 (:start-alt spp))\n     (asser FlightPlan id ?csn\n	start-time stm\n	spec-plan spp\n	takeoff (es/takeoff-plan spp)\n	cruise (es/cruise-plan spp)\n	landing (es/landing-plan spp)\n	status \"READY\"\n	vertical-status \"OFF\")\n     (pro.commands/set-my-flight-info ?csn ?tim ?frm ?to)))")
+	(rhs "(if-let [stm (es/start-time ?tim)]\n  (let [spp (es/specific-plan ?frm ?to)]\n     (my.flights.move/add-my-flight \n	?csn ?csn (:start-crd spp) (:start-run spp) 0 (:start-alt spp))\n     (asser FlightPlan id ?csn\n	start-time stm\n	spec-plan spp\n	takeoff (es/takeoff-plan spp)\n	cruise (es/cruise-plan spp)\n	landing (es/landing-plan spp)\n	status \"READY\"\n	vertical-status \"OFF\")\n     (pro.commands/set-my-flight-info ?csn ?tim ?frm ?to)))")
 	(salience 0)
 	(title "mf:FlightPlan"))
 
@@ -2308,11 +2309,6 @@
 	(salience 0)
 	(title "mf:LandingStart"))
 
-([FlightPro_Class550000] of  CloVar
-
-	(source "{:takeoff \n  {:speed [220 8]\n   :altitude [1500 8]\n   :initial-turn-course [-1 2]}\n :cruise \n  {:speed [500 1]\n   :altitude [33000 8]\n   :min-spd 220\n   :min-alt 4000}\n :landing \n  {:speed [180 1 6]\n   :altitude [2000 8]\n   :outer-marker-distance 7\n   :final-turn-course [-1 1]\n   :altitude-graph\n     [[0.1 0][0.5 15][2 600][7 2000]] ;; x - dist, y - alt\n   :spdeed-graph\n     [[0.0 0][0.1 10][0.5 100][3 120]]} ;; x - dist, y - spd\n}")
-	(title "GENPLAN"))
-
 ([FlightPro_Class550002] of  Rule
 
 	(lhs "?fp (FlightPlan id ?id\n	landing ?lnd\n	cruise ?cru\n	vertical-status \"DESCEND\")\n(Flight age \"CURRENT\" \n	id ?id\n	coord ?crd\n	(<= (calc.geo/distance-nm ?crd (:final-turn-crd ?lnd))\n	  (:brake-dist ?cru)))")
@@ -2323,7 +2319,7 @@
 ([FlightPro_Class560000] of  Rule
 
 	(lhs "?fp (FlightPlan id ?id\n	status \"LANDING\"\n	landing ?lnd\n	spec-plan ?spp)\n(Flight age \"CURRENT\" \n	id ?id\n	coord ?crd)")
-	(rhs "(let [fcrd (:finish-crd ?spp)\n       dist (calc.geo/distance-nm ?crd fcrd)\n       bear (int (calc.geo/bear-deg ?crd fcrd))\n       alt (int (calc.core/smooth-tabfun dist (:altitude-graph ?lnd)))\n       spd (int (calc.core/smooth-tabfun dist (:spdeed-graph ?lnd)))]\n   (my.flights.move/control ?id my.flights.move/turn [bear 2])\n   (my.flights.move/control ?id my.flights.move/elevate [alt 8])\n   (my.flights.move/control ?id my.flights.move/accel [spd 10]))")
+	(rhs "(let [fcrd (:finish-crd ?spp)\n       dist (calc.geo/distance-nm ?crd fcrd)\n       bear (int (calc.geo/bear-deg ?crd fcrd))\n       alt (int (calc.core/smooth-tabfun dist (:altitude-graph ?lnd)))\n       spd (int (calc.core/smooth-tabfun dist (:speed-graph ?lnd)))]\n   (my.flights.move/control ?id my.flights.move/turn [bear 2])\n   (my.flights.move/control ?id my.flights.move/elevate [alt 8])\n   (my.flights.move/control ?id my.flights.move/accel [spd 10]))")
 	(salience 0)
 	(title "mf:OnLandingCourse"))
 
@@ -2642,8 +2638,8 @@
 
 ([FlightPro_Class620003] of  CloFunction
 
-	(source "(let [tof (:takeoff gen)\n       cru (:cruise gen)\n       lnd (:landing gen)\n       fcrd [(fapt \"lat\") (fapt \"lon\")]\n       tcrd [(tapt \"lat\") (tapt \"lon\")]\n       falt (if (= cmd/TERRAIN \"yes\") (fapt \"alt\") 0)\n       talt (if (= cmd/TERRAIN \"yes\") (tapt \"alt\") 0)\n       spp (assoc gen :takeoff (merge tof\n		{:altitude (corr-alt (:altitude tof) falt)})\n	        :landing (merge lnd\n		{:altitude (corr-alt (:altitude lnd) talt)\n		 :altitude-graph (corr-alt-tab (:altitude-graph lnd) talt)}))]\n    (merge spp {:general-crs	(int (geo/bear-deg fcrd tcrd))\n	:general-dist	(int (geo/distance-nm fcrd tcrd))\n	:start-crd 	fcrd\n	:finish-crd 	tcrd\n	:start-alt 	falt\n	:finish-alt 	talt\n	:start-run 	(runway (fapt \"iata\"))\n	:finish-run 	(runway (tapt \"iata\"))}))")
-	(title "specific-plan [gen fapt tapt]"))
+	(source "(if-let [gpi (fainst (cls-instances \"GeneralPlan\") nil)]\n  (let [tpi (sv gpi \"takeoff-plan\")\n         cpi (sv gpi \"cruise-plan\")\n         lpi (sv gpi \"landing-plan\")\n         fcrd [(fapt \"lat\") (fapt \"lon\")]\n         tcrd [(tapt \"lat\") (tapt \"lon\")]\n         falt (if (= cmd/TERRAIN \"yes\") (fapt \"alt\") 0)\n         talt (if (= cmd/TERRAIN \"yes\") (tapt \"alt\") 0)]\n        {:takeoff  {:speed (as-vec (sv tpi \"speed\"))\n	:altitude (corr-alt (as-vec (sv tpi \"altitude-vector\")) falt)\n	:initial-turn-course (as-vec (sv tpi \"initial-turn-course\"))}\n         :cruise   {:speed (as-vec (sv cpi \"speed\"))\n	:altitude (as-vec (sv cpi \"altitude-vector\"))\n	:min-spd (read-string (sv cpi \"min-speed\"))\n	:min-alt (read-string (sv cpi \"min-altitude\"))}\n         :landing {:speed (as-vec (sv lpi \"speed\"))\n	:altitude (corr-alt (as-vec (sv lpi \"altitude-vector\")) talt)\n	:outer-marker-distance (read-string (sv lpi \"outer-marker-distance\"))\n	:final-turn-course (as-vec (sv lpi \"final-turn-course\"))\n	:altitude-graph (corr-alt-tab (as-vec (svs lpi \"altitude-graph\")) talt)\n	:speed-graph (as-vec (svs lpi \"speed-graph\"))}\n         :general-crs (int (geo/bear-deg fcrd tcrd))\n         :general-dist (int (geo/distance-nm fcrd tcrd))\n         :start-crd  fcrd\n         :finish-crd tcrd\n         :start-alt falt\n         :finish-alt talt\n         :start-run (runway (fapt \"iata\"))\n         :finish-run (runway (tapt \"iata\"))}))")
+	(title "specific-plan [fapt tapt]"))
 
 ([FlightPro_Class620004] of  CloFunction
 
@@ -3019,48 +3015,7 @@
 	(button-bbx "submit/wiki.gis/submit-bbx")
 	(button-clear-articles "Clear Articles/wiki.gis/clear-articles")
 	(language English-en)
-	(max-responses 40)
-	(responses
-		[FlightPro_Class950000]
-		[FlightPro_Class950001]
-		[FlightPro_Class950002]
-		[FlightPro_Class950003]
-		[FlightPro_Class950004]
-		[FlightPro_Class950005]
-		[FlightPro_Class950006]
-		[FlightPro_Class950007]
-		[FlightPro_Class950008]
-		[FlightPro_Class950009]
-		[FlightPro_Class950010]
-		[FlightPro_Class950011]
-		[FlightPro_Class950012]
-		[FlightPro_Class950013]
-		[FlightPro_Class950014]
-		[FlightPro_Class950015]
-		[FlightPro_Class950016]
-		[FlightPro_Class950017]
-		[FlightPro_Class950018]
-		[FlightPro_Class950019]
-		[FlightPro_Class950020]
-		[FlightPro_Class950021]
-		[FlightPro_Class950022]
-		[FlightPro_Class950023]
-		[FlightPro_Class950024]
-		[FlightPro_Class950025]
-		[FlightPro_Class950026]
-		[FlightPro_Class950027]
-		[FlightPro_Class950028]
-		[FlightPro_Class950029]
-		[FlightPro_Class950030]
-		[FlightPro_Class950031]
-		[FlightPro_Class950032]
-		[FlightPro_Class950033]
-		[FlightPro_Class950034]
-		[FlightPro_Class950035]
-		[FlightPro_Class950036]
-		[FlightPro_Class950037]
-		[FlightPro_Class950038]
-		[FlightPro_Class950039]))
+	(max-responses 40))
 
 ([FlightPro_Class660024] of  CloFunction
 
@@ -3129,7 +3084,7 @@
 ([FlightPro_Class670008] of  BBX
 
 	(title "Current")
-	(wsen -66.52634 -18.106697 -65.29724 -16.963547))
+	(wsen 29.060211 59.56007 30.289307 60.193424))
 
 ([FlightPro_Class670041] of  TypeName
 
@@ -3780,45 +3735,6 @@
 	(salience 0)
 	(title "qq:HowFarLocalCity2"))
 
-([FlightPro_Class870062] of  WikiArticleDetails
-
-	(butt-del-pois "Delete POIs/ext.data/delete-pois")
-	(butt-return "Return to Flight/ext.data/ret-to-flight")
-	(butt-show-pois "Show on Map/ext.data/show-on-map")
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "DE")
-	(elevation 122)
-	(feature "landmark")
-	(lang "en")
-	(lat 51.5)
-	(lng 7.5)
-	(max-rows 50)
-	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
-	(radius 1.0)
-	(rank 100)
-	(summary "The Ruhr , or the Ruhr district, Ruhr region or Ruhr valley, is an urban area in North Rhine-Westphalia, Germany. With a population density of 2,800/km² and a population of some eight and a half million, it is the largest urban agglomeration in Germany (...)")
-	(title "Ruhr")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Ruhr"))
-
-([FlightPro_Class870080] of  WikiArticleDetails
-
-	(butt-del-pois "Delete POIs/ext.data/delete-pois")
-	(butt-return "Return to Flight/ext.data/ret-to-flight")
-	(butt-show-pois "Show on Map/ext.data/show-on-map")
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "DE")
-	(elevation 98)
-	(lang "en")
-	(lat 51.5711)
-	(lng 8.1092)
-	(max-rows 50)
-	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
-	(radius 1.0)
-	(rank 100)
-	(summary "Soest (as if it were 'Sohst') is a town in North Rhine-Westphalia, Germany. It is the capital of the Soest district. After Lippstadt, a neighbouring town, Soest is the second biggest town in its district.  (...)")
-	(title "Soest, Germany")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Soest%2C_Germany"))
-
 ([FlightPro_Class870095] of  TypeName
 
 	(name "wool"))
@@ -3835,27 +3751,6 @@
 
 	(name "watermill"))
 
-([FlightPro_Class870256] of  WikiArticleDetails
-
-	(butt-del-pois "Delete POIs/ext.data/delete-pois")
-	(butt-return "Return to Flight/ext.data/ret-to-flight")
-	(butt-show-pois "Show on Map/ext.data/show-on-map")
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "LU")
-	(elevation 499)
-	(feature "landmark")
-	(lang "en")
-	(lat 50.015)
-	(lng 6.09)
-	(max-rows 50)
-	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
-	(radius 1.0)
-	(rank 94)
-	(summary "Hosingen is a small town and former commune in northern Luxembourg. On January 1, 2012, the commune merged with Consthum and Hoscheid communes to form Parc Hosingen commune. Near Hosingen there is a transmitter for FM and TV of RTL (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/137000/thumb-136913-100.png")
-	(title "Hosingen")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Hosingen"))
-
 ([FlightPro_Class870268] of  TypeName
 
 	(name "playground"))
@@ -3867,25 +3762,6 @@
 ([FlightPro_Class870275] of  TypeName
 
 	(name "picnic_site"))
-
-([FlightPro_Class870358] of  WikiArticleDetails
-
-	(butt-del-pois "Delete POIs/ext.data/delete-pois")
-	(butt-return "Return to Flight/ext.data/ret-to-flight")
-	(butt-show-pois "Show on Map/ext.data/show-on-map")
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "FR")
-	(elevation 238)
-	(lang "en")
-	(lat 49.4697)
-	(lng 5.0369)
-	(max-rows 50)
-	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
-	(radius 1.0)
-	(rank 94)
-	(summary "Belval-Bois-des-Dames  is a commune in the Ardennes department in northern France.  (...)")
-	(title "Belval-Bois-des-Dames")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Belval-Bois-des-Dames"))
 
 ([FlightPro_Class870416] of  TypeName
 
@@ -3944,81 +3820,6 @@
 ([FlightPro_Class880003] of  CloFuncall
 
 	(source "(rete.core/facts-with-slot-value 'Flight 'callsign = \"MANUAL\")"))
-
-([FlightPro_Class880004] of  WikiArticleDetails
-
-	(butt-del-pois "Delete POIs/ext.data/delete-pois")
-	(butt-return "Return to Flight/ext.data/ret-to-flight")
-	(butt-show-pois "Show on Map/ext.data/show-on-map")
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation 18)
-	(feature "city")
-	(lang "en")
-	(lat 41.8528)
-	(lng -72.6431)
-	(max-rows 50)
-	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
-	(radius 1.0)
-	(rank 98)
-	(summary "Windsor is a town in Hartford County, Connecticut, United States, and was the first English settlement in the state. It lies on the northern border of Connecticut's capital, Hartford. The population of Windsor was 29,044 at the 2010 census (...)")
-	(title "Windsor, Connecticut")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Windsor%2C_Connecticut"))
-
-([FlightPro_Class880039] of  WikiArticleDetails
-
-	(butt-del-pois "Delete POIs/ext.data/delete-pois")
-	(butt-return "Return to Flight/ext.data/ret-to-flight")
-	(butt-show-pois "Show on Map/ext.data/show-on-map")
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "AX")
-	(feature "isle")
-	(lang "en")
-	(lat 59.83)
-	(lng 21.5717)
-	(max-rows 50)
-	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
-	(radius 1.0)
-	(rank 55)
-	(summary "Jurmo is the name of an island and a village in the municipality of Korpo in the outer islands of the archipelago off of Turku, Finland. Directly south of the island of Korpo and northeast of the island of Utö, this elongated island is in length with an average width of  (...)")
-	(title "Jurmo")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Jurmo"))
-
-([FlightPro_Class880108] of  WikiArticleDetails
-
-	(butt-del-pois "Delete POIs/ext.data/delete-pois")
-	(butt-return "Return to Flight/ext.data/ret-to-flight")
-	(butt-show-pois "Show on Map/ext.data/show-on-map")
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(feature "waterbody")
-	(lang "en")
-	(lat 60.1833)
-	(lng 19.1087)
-	(max-rows 50)
-	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
-	(radius 1.0)
-	(rank 94)
-	(summary "The Sea of Åland is a waterway in the southern Gulf of Bothnia, between the Åland islands and Sweden. It connects the Bothnian Sea with the Baltic Sea proper. The seas are often choppy here. The narrowest part is named South Kvarken.")
-	(title "Sea of Åland")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Sea_of_%C3%85land"))
-
-([FlightPro_Class880112] of  WikiArticleDetails
-
-	(butt-del-pois "Delete POIs/ext.data/delete-pois")
-	(butt-return "Return to Flight/ext.data/ret-to-flight")
-	(butt-show-pois "Show on Map/ext.data/show-on-map")
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(feature "landmark")
-	(lang "en")
-	(lat 59.85)
-	(lng 19.9167)
-	(max-rows 50)
-	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
-	(radius 1.0)
-	(rank 93)
-	(summary "SMS Rheinland was one of four s, the first dreadnoughts built for the German Imperial Navy (Kaiserliche Marine). Rheinland mounted twelve main guns in six twin turrets in an unusual hexagonal arrangement. The navy built Rheinland and her sister ships in response to the revolutionary British , which (...)")
-	(title "SMS Rheinland")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/SMS_Rheinland"))
 
 ([FlightPro_Class890000] of  CloFunction
 
@@ -4128,564 +3929,6 @@
 	(source "(volatile! {:mode \"MANUAL\"\n               :coord [60 30]\n               :altitude 4000\n               :speed 160\n               :course 270})")
 	(title "VEHICLE"))
 
-([FlightPro_Class950000] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 2573)
-	(feature "city")
-	(lang "en")
-	(lat -17.3833)
-	(lng -66.1667)
-	(rank 100)
-	(summary "Cochabamba or Quchapampa is a city in central Bolivia, located in a valley bearing the same name in the Andes mountain range. It is the capital of the Cochabamba Department and is the fourth largest city in Bolivia with a population of 630,587 according to the 2012 Bolivian census (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/33000/thumb-32029-100.jpg")
-	(title "Cochabamba")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Cochabamba"))
-
-([FlightPro_Class950001] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 2304)
-	(feature "adm1st")
-	(lang "en")
-	(lat -17.3333)
-	(lng -65.5)
-	(rank 100)
-	(summary "Cochabamba (from Quechua: qucha or qhucha, meaning \"lake\", pampa meaning \"plain\" pdf) is one of the nine component departments of Bolivia. It is known to be the \"granary\" of the country because of its variety of agricultural products due to Cochabamba's geographical position (...)")
-	(title "Cochabamba Department")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Cochabamba_Department"))
-
-([FlightPro_Class950002] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(elevation 2579)
-	(feature "landmark")
-	(lang "en")
-	(lat -17.3793)
-	(lng -66.1618)
-	(rank 98)
-	(summary "Bolivia hosted the Copa América for the second time in its 38th edition. It was held from June 11 to 29. It was organised by CONMEBOL, South America's football governing body. There is no qualifying for the final tournament (...)")
-	(title "1997 Copa América")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/1997_Copa_Am%C3%A9rica"))
-
-([FlightPro_Class950003] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 1183)
-	(feature "adm2nd")
-	(lang "en")
-	(lat -17.3333)
-	(lng -65.3333)
-	(rank 97)
-	(summary "Carrasco is a province in the Cochabamba Department in central Bolivia. Its capital is Totora.  (...)")
-	(title "Carrasco Province")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Carrasco_Province"))
-
-([FlightPro_Class950004] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 2559)
-	(feature "city")
-	(lang "en")
-	(lat -17.3975)
-	(lng -66.2817)
-	(rank 97)
-	(summary "Quillacollo is the capital of Quillacollo Province in Cochabamba Department, Bolivia. The municipality was established on 14 September 1905 under the Presidency of Ismail Montes.  (...)")
-	(title "Quillacollo")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Quillacollo"))
-
-([FlightPro_Class950005] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 2587)
-	(feature "adm2nd")
-	(lang "en")
-	(lat -17.5833)
-	(lng -66.25)
-	(rank 97)
-	(summary "Punata is a province almost in the middle of the Cochabamba Department, Bolivia, located about 45 km south of the city of Cochabamba. Its capital is Punata. The province is limited to the north by the Chapare Province, to the north-east by the Tiraque Province, to the east by the Arani Province, to (...)")
-	(title "Punata Province")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Punata_Province"))
-
-([FlightPro_Class950006] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 302)
-	(feature "city")
-	(lang "en")
-	(lat -16.9667)
-	(lng -65.4167)
-	(rank 97)
-	(summary "Villa Tunari or Tunari is a location in the department of Cochabamba, Bolivia. It is the seat of the Villa Tunari Municipality, the third municipal section of the Chapare Province. According to the census 2012 the population was 3,213 in the town which is an increment from 2,510 registered during (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/154000/thumb-153496-100.jpg")
-	(title "Villa Tunari")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Villa_Tunari"))
-
-([FlightPro_Class950007] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 2644)
-	(feature "adm2nd")
-	(lang "en")
-	(lat -17.3333)
-	(lng -66.25)
-	(rank 96)
-	(summary "Quillacollo is a province in the Cochabamba Department, Bolivia. It is known for its festival in August where people from all over Bolivia come and pay homage to the Virgin of Urqupiña (Virgen de Urqupiña). Quillacollo is said to be one of the fastest growing cities in Bolivia.  (...)")
-	(title "Quillacollo Province")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Quillacollo_Province"))
-
-([FlightPro_Class950008] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 3941)
-	(feature "landmark")
-	(lang "en")
-	(lat -17.3167)
-	(lng -66.1167)
-	(rank 96)
-	(summary "The Cordillera Oriental are parallel mountain ranges of the Bolivian Andes emplaced on the eastern and north eastern margin of the Andes. Large parts of Cordillera Oriental are forested and humid areas rich in agricultural and livestock products (...)")
-	(title "Cordillera Oriental (Bolivia)")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Cordillera_Oriental_%28Bolivia%29"))
-
-([FlightPro_Class950009] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 3421)
-	(feature "adm3rd")
-	(lang "en")
-	(lat -17.6)
-	(lng -65.6)
-	(rank 96)
-	(summary "Vacas Municipality (Quechua name: Wak'as, deriving from Wak'a) is the second municipal section of the Arani Province in the Cochabamba Department in central Bolivia. Its capital is Vacas known as the \"Land of the potato\"  (...)")
-	(title "Vacas Municipality")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Vacas_Municipality"))
-
-([FlightPro_Class950010] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(elevation 2579)
-	(lang "en")
-	(lat -17.3792)
-	(lng -66.1617)
-	(rank 96)
-	(summary "The 2011–12 Liga de Fútbol Profesional Boliviano season was the 35th season of LFPB.  (...)")
-	(title "2011–12 Liga de Fútbol Profesional Boliviano season")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/2011%E2%80%9312_Liga_de_F%C3%BAtbol_Profesional_Boliviano_season"))
-
-([FlightPro_Class950011] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 2555)
-	(feature "city")
-	(lang "en")
-	(lat -17.3972)
-	(lng -66.3136)
-	(rank 96)
-	(summary "Vinto is a town in the Cochabamba Department in central Bolivia. It is the seat of the Vinto Municipality, the fourth municipal section of the Quillacollo Province. Vinto, Cochabamba, Gente de Vinto, Feria, Manzana  (...)")
-	(title "Vinto")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Vinto"))
-
-([FlightPro_Class950012] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 3138)
-	(feature "adm2nd")
-	(lang "en")
-	(lat -17.6167)
-	(lng -66.0833)
-	(rank 96)
-	(summary "Arani is a province in Cochabamba Department, Bolivia. Its capital is Arani, situated about 53 km from Cochabamba. Arani is known for its bread but also for the town's artisan wickerwork.  (...)")
-	(title "Arani Province")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Arani_Province"))
-
-([FlightPro_Class950013] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 2993)
-	(feature "adm2nd")
-	(lang "en")
-	(lat -17.8333)
-	(lng -66.3333)
-	(rank 95)
-	(summary "Esteban Arce is a province in Cochabamba Department, Bolivia. Its capital is Tarata.  (...)")
-	(title "Esteban Arce Province")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Esteban_Arce_Province"))
-
-([FlightPro_Class950014] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 2718)
-	(feature "city")
-	(lang "en")
-	(lat -17.4042)
-	(lng -66.0408)
-	(rank 95)
-	(summary "Sacaba is the capital of the Bolivian province of Chapare. The city, located 13 kilometers eastward from Cochabamba, is the second largest city in the Cochabamba Department after Cochabamba city. Post-colonial architecture may be seen in the inner part of Sacaba; however, some has been destroyed due (...)")
-	(title "Sacaba")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Sacaba"))
-
-([FlightPro_Class950015] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(elevation 2579)
-	(lang "en")
-	(lat -17.3792)
-	(lng -66.1617)
-	(rank 94)
-	(summary "The 2012–13 Liga de Fútbol Profesional Boliviano season was the 36th season of LFPB.  (...)")
-	(title "2012–13 Liga de Fútbol Profesional Boliviano season")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/2012%E2%80%9313_Liga_de_F%C3%BAtbol_Profesional_Boliviano_season"))
-
-([FlightPro_Class950016] of  WikiArticleDetails
-
-	(butt-del-pois "Delete POIs/ext.data/delete-pois")
-	(butt-return "Return to Flight/ext.data/ret-to-flight")
-	(butt-show-pois "Show on Map/ext.data/show-on-map")
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 2730)
-	(feature "city")
-	(lang "en")
-	(lat -17.5469)
-	(lng -65.8367)
-	(max-rows 50)
-	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
-	(radius 1.0)
-	(rank 94)
-	(summary "Punata is the capital of Punata Province and Punata Municipality in Cochabamba Department, Bolivia. At the time of census 2001 it had a population of 14,742 inhabitants and at the census 2012 the populations rose to 28.707 inhabitants (...)")
-	(title "Punata")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Punata"))
-
-([FlightPro_Class950017] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 2564)
-	(feature "airport")
-	(lang "en")
-	(lat -17.4211)
-	(lng -66.1771)
-	(rank 94)
-	(summary "Jorge Wilstermann International Airport is an airport serving Cochabamba, a city in the Cochabamba Department of Bolivia. The facility is named in honor of Jorge Wilstermann, a respected Bolivian commercial aviator.  (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/4000/thumb-3039-100.jpg")
-	(title "Jorge Wilstermann International Airport")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Jorge_Wilstermann_International_Airport"))
-
-([FlightPro_Class950018] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(elevation 2579)
-	(lang "en")
-	(lat -17.3792)
-	(lng -66.1617)
-	(rank 94)
-	(summary "The 2009 Liga de Fútbol Profesional Boliviano season was the 33rd of Bolivia's top-flight professional football league. The season was split into two championships&mdash;the Apertura and the Clausura&mdash;and the Play-off  (...)")
-	(title "2009 Liga de Fútbol Profesional Boliviano season")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/2009_Liga_de_F%C3%BAtbol_Profesional_Boliviano_season"))
-
-([FlightPro_Class950019] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 3887)
-	(feature "adm2nd")
-	(lang "en")
-	(lat -17.3333)
-	(lng -65.9167)
-	(rank 93)
-	(summary "Tiraque is a province in the Cochabamba Department in central Bolivia. Its capital is Tiraque.  (...)")
-	(title "Tiraque Province")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Tiraque_Province"))
-
-([FlightPro_Class950020] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 2835)
-	(feature "adm2nd")
-	(lang "en")
-	(lat -18.0)
-	(lng -66.0)
-	(rank 93)
-	(summary "Mizque (from Quechua: misk'i, meaning \"sweet\") is a province in the Cochabamba Department, Bolivia. Its capital is Mizque. The province, in 1992, had a population of 27,959 inhabitants, mostly indigenous citizens of Quechuan descent (...)")
-	(title "Mizque Province")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Mizque_Province"))
-
-([FlightPro_Class950021] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 2682)
-	(feature "adm2nd")
-	(lang "en")
-	(lat -17.5667)
-	(lng -66.3833)
-	(rank 93)
-	(summary "Germán Jordán is a province in the Cochabamba Department, Bolivia. Its capital is Cliza.  (...)")
-	(title "Germán Jordán Province")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Germ%C3%A1n_Jord%C3%A1n_Province"))
-
-([FlightPro_Class950022] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(elevation 2579)
-	(lang "en")
-	(lat -17.3792)
-	(lng -66.1617)
-	(rank 92)
-	(summary "The 2014–15 Liga de Fútbol Profesional Boliviano season is the 38th season of LFPB.  (...)")
-	(title "2014–15 Liga de Fútbol Profesional Boliviano season")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/2014%E2%80%9315_Liga_de_F%C3%BAtbol_Profesional_Boliviano_season"))
-
-([FlightPro_Class950023] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 2404)
-	(feature "city")
-	(lang "en")
-	(lat -17.7147)
-	(lng -66.263)
-	(rank 92)
-	(summary "Capinota is a small town in the Bolivian Department of Cochabamba and capital of the Capinota Province.  (...)")
-	(title "Capinota")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Capinota"))
-
-([FlightPro_Class950024] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(elevation 2579)
-	(feature "landmark")
-	(lang "en")
-	(lat -17.3793)
-	(lng -66.1618)
-	(rank 91)
-	(summary "The Estadio Félix Capriles is a multi-purpose stadium in Cochabamba, Bolivia. It is currently used mostly for football matches. The stadium has a maximum capacity of 32,000. It is the home stadium of Club Jorge Wilstermann and Club Aurora (...)")
-	(title "Estadio Félix Capriles")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Estadio_F%C3%A9lix_Capriles"))
-
-([FlightPro_Class950025] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 2787)
-	(lang "en")
-	(lat -17.62)
-	(lng -66.03)
-	(rank 91)
-	(summary "Tarata is a town in Cochabamba Department, Bolivia. It is the capital of the Esteban Arze Province. There are several towns like Arbieto, Santa Rosa, Tiataco, that surround Tarata. In addition, Tarata is known for its home-made cheese and sausage.  (...)")
-	(title "Tarata, Cochabamba")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Tarata%2C_Cochabamba"))
-
-([FlightPro_Class950026] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 2749)
-	(feature "city")
-	(lang "en")
-	(lat -17.5667)
-	(lng -65.7667)
-	(rank 91)
-	(summary "Arani (from Quechua: jarani or jallmani) is the capital of Arani Province and Arani Municipality located in Cochabamba Department in the center of Bolivia at an altitude of 9,400 ft (2,865 m). At the time of census 2001 it had 3,512 inhabitants (...)")
-	(title "Arani, Bolivia")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Arani%2C_Bolivia"))
-
-([FlightPro_Class950027] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 2731)
-	(feature "city")
-	(lang "en")
-	(lat -17.5297)
-	(lng -65.9604)
-	(rank 90)
-	(summary "Tolata is a locality in the Cochabamba Department in central Bolivia. It is the seat of the Tolata Municipality, the third municipal section of the Germán Jordán Province. At the time of census 2001 it had a population of 2,207.  (...)")
-	(title "Tolata, Cochabamba")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Tolata%2C_Cochabamba"))
-
-([FlightPro_Class950028] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(elevation 2579)
-	(lang "en")
-	(lat -17.3792)
-	(lng -66.1617)
-	(rank 90)
-	(summary "The 2013–14 Liga de Fútbol Profesional Boliviano season was the 37th season of LFPB.  (...)")
-	(title "2013–14 Liga de Fútbol Profesional Boliviano season")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/2013%E2%80%9314_Liga_de_F%C3%BAtbol_Profesional_Boliviano_season"))
-
-([FlightPro_Class950029] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 2014)
-	(feature "city")
-	(lang "en")
-	(lat -17.9398)
-	(lng -65.3387)
-	(rank 90)
-	(summary "Mizque (from Quechua: misk'i, meaning \"sweet\") is a town in the Cochabamba Department, Bolivia. It is the capital of the Mizque Province. Mizque is located in the valley of the Mizque River, one of the main tributaries of the Río Grande (...)")
-	(title "Mizque")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Mizque"))
-
-([FlightPro_Class950030] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 2776)
-	(feature "city")
-	(lang "en")
-	(lat -17.5167)
-	(lng -65.9167)
-	(rank 90)
-	(summary "San Benito or Villa José Quintín Mendoza is a location in the Cochabamba Department in central Bolivia. It is the seat of the San Benito Municipality, the third municipal section of the Punata Province.  (...)")
-	(title "San Benito, Cochabamba")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/San_Benito%2C_Cochabamba"))
-
-([FlightPro_Class950031] of  WikiArticleDetails
-
-	(butt-del-pois "Delete POIs/ext.data/delete-pois")
-	(butt-return "Return to Flight/ext.data/ret-to-flight")
-	(butt-show-pois "Show on Map/ext.data/show-on-map")
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 3470)
-	(feature "city")
-	(lang "en")
-	(lat -17.5739)
-	(lng -65.5794)
-	(max-rows 50)
-	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
-	(radius 1.0)
-	(rank 89)
-	(summary "Vacas (Quechua name: Wak'as, deriving from Wak'a) is a Bolivian village in the southeast of the Cochabamba Department. It is the capital of the Vacas Municipality, the second municipal section of the Arani Province. Vacas is located about 85 km far from Cochabamba and about 30 km far from Arani (...)")
-	(title "Vacas, Cochabamba")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Vacas%2C_Cochabamba"))
-
-([FlightPro_Class950032] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 4801)
-	(feature "mountain")
-	(lang "en")
-	(lat -17.2894)
-	(lng -66.3681)
-	(rank 89)
-	(summary "Tunari National Park is a national park located in the Cochabamba Department, Bolivia.  (...)")
-	(title "Tunari National Park")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Tunari_National_Park"))
-
-([FlightPro_Class950033] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 2723)
-	(feature "city")
-	(lang "en")
-	(lat -17.5919)
-	(lng -65.934)
-	(rank 89)
-	(summary "Cliza is a town in the Cochabamba Department, Bolivia. It is the capital of the Germán Jordán Province and the Cliza Municipality. Along with Punata, Cliza is the major city in the valle alto of the Cochabamba Department.  (...)")
-	(title "Cliza (town)")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Cliza_%28town%29"))
-
-([FlightPro_Class950034] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(elevation 2847)
-	(feature "landmark")
-	(lang "en")
-	(lat -17.3842)
-	(lng -66.135)
-	(rank 89)
-	(summary "Cristo de la Concordia (Christ of Peace) is a statue of Jesus Christ located atop San Pedro Hill, to the east of Cochabamba, Bolivia. It is accessible by cable car, or by climbing 2,000 steps. The statue is tall, on a pedestal of , for a total height of .  (...)")
-	(title "Cristo de la Concordia")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Cristo_de_la_Concordia"))
-
-([FlightPro_Class950035] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 2739)
-	(feature "city")
-	(lang "en")
-	(lat -17.8216)
-	(lng -66.4035)
-	(rank 89)
-	(summary "Arque is a location in the Cochabamba Department, Bolivia. It is the seat of Arque Province and Arque Municipality. Arque is situated at an elevation of 10,735 ft (3,272 m) on the northern bank of Arque River. At the time of census 2001 it had a population of 487.  (...)")
-	(title "Arque")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Arque"))
-
-([FlightPro_Class950036] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 2567)
-	(feature "city")
-	(lang "en")
-	(lat -17.5667)
-	(lng -66.35)
-	(rank 89)
-	(summary "Parotani is a small town in Bolivia.  (...)")
-	(title "Parotani")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Parotani"))
-
-([FlightPro_Class950037] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 4596)
-	(lang "en")
-	(lat -17.25)
-	(lng -66.3333)
-	(rank 89)
-	(summary "Quillacollo Municipality is the first municipal section of the Quillacollo Province in the Cochabamba Department, Bolivia. Its capital is Quillacollo. At the time of census 2001 the municipality had 104,206 inhabitants.  (...)")
-	(title "Quillacollo Municipality")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Quillacollo_Municipality"))
-
-([FlightPro_Class950038] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "BO")
-	(elevation 2573)
-	(feature "adm2nd")
-	(lang "en")
-	(lat -17.3833)
-	(lng -66.1667)
-	(rank 89)
-	(summary "Cercado is a province in the Cochabamba Department, Bolivia. Its capital is Cochabamba which is also the capital of the department.  (...)")
-	(title "Cercado Province (Cochabamba)")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Cercado_Province_%28Cochabamba%29"))
-
-([FlightPro_Class950039] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(elevation 2579)
-	(lang "en")
-	(lat -17.3792)
-	(lng -66.1617)
-	(rank 88)
-	(summary "The 2011 Liga de Fútbol Profesional Boliviano season (official known as the 2011 Campeonato ENTEL Fundadores de la LFPB for sponsorship reasons) was the 35th season of LFPB. Originally comprising two tournaments, the 2011 season was the first single-stage season since 2005 (...)")
-	(title "2011 Liga de Fútbol Profesional Boliviano season")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/2011_Liga_de_F%C3%BAtbol_Profesional_Boliviano_season"))
-
 ([FlightPro_Class950040] of  Airport
 
 	(altitude 74)
@@ -4695,3 +3938,91 @@
 	(icao "LFML")
 	(runways 0)
 	(title "Marseille Provence Airport"))
+
+([FlightPro_Class960000] of  CloFunction
+
+	(source "(let [ldiff (- lambda lambda0)\n       cosphi (js/Math.cos phi)]\n  (js/Math.atan2 (* cosphi (js.Math.sin ldiff))\n                      (- (* (js/Math.cos phi1) (js/Math.sin phi)) \n                          (* (js/Math.sin phi1) cosphi (js/Math.cos ldiff)))))")
+	(title "spherical-azimuth-js [phi1 lambda0 phi lambda]"))
+
+([FlightPro_Class960001] of  CloFunction
+
+	(source "(let [fi1 (* la1 PID180)\n       ld1 (* lo1 PID180)\n       fi2 (* la2 PID180)\n       ld2 (* lo2 PID180)\n       rad (spherical-azimuth-js fi1 ld1 fi2 ld2)\n       deg (/ rad PID180)]\n  (cond\n    (< deg 0) (+ deg 360.0)\n    (> deg 360.0) (- deg 360.0)\n    true deg))")
+	(title "bear-deg-js [[la1 lo1] [la2 lo2]]"))
+
+([FlightPro_Class960019] of  GeneralPlan
+
+	(cruise-plan [FlightPro_Class960021])
+	(landing-plan [FlightPro_Class960028])
+	(takeoff-plan [FlightPro_Class960020])
+	(title "Basic Plan"))
+
+([FlightPro_Class960020] of  TakeoffPlan
+
+	(altitude-vector "1500 6")
+	(initial-turn-course "-1 2")
+	(speed "220 8")
+	(title "Basic Takeoff Plan"))
+
+([FlightPro_Class960021] of  CruisePlan
+
+	(altitude-vector "33000 8")
+	(min-altitude "4000")
+	(min-speed "220")
+	(speed "500 1")
+	(title "Basic Cruise Plan"))
+
+([FlightPro_Class960023] of  %3AINSTANCE-ANNOTATION
+
+	(%3AANNOTATED-INSTANCE [FlightPro_Class960019])
+	(%3AANNOTATION-TEXT "Active Plan")
+	(%3ACREATION-TIMESTAMP "2017.05.06 13:56:58.113 MSK")
+	(%3ACREATOR "ru"))
+
+([FlightPro_Class960028] of  LandingPlan
+
+	(altitude-graph
+		"0.1 0"
+		"0.5 15"
+		"2 600"
+		"7 2000")
+	(altitude-vector "2000 8")
+	(final-turn-course "-1 1")
+	(outer-marker-distance "7")
+	(speed "180 1 6")
+	(speed-graph
+		"0.0 0"
+		"0.1 10"
+		"0.5 100"
+		"3 120")
+	(title "Basic Landing Plan"))
+
+([FlightPro_Class960029] of  Airport
+
+	(altitude 312)
+	(coord 38.94744 -77.4599)
+	(country "United States")
+	(iata "IAD")
+	(icao "KIAD")
+	(runways 0)
+	(title "Washington Dulles International Airport"))
+
+([FlightPro_Class960030] of  CloFunction
+
+	(source "(if (string? s)\n  (read-string (str \"[\" s \"]\"))\n  (vec (map as-vec s)))")
+	(title "as-vec [s]"))
+
+([FlightPro_Class960031] of  CloFuncall
+
+	(source "(ru.rules/pp 'FlightPlan)"))
+
+([FlightPro_Class960032] of  CloFuncall
+
+	(source "(rete.core/facts-with-slot-value 'FlightPlan 'callsign = \"RU44\")"))
+
+([FlightPro_Class960033] of  CloFuncall
+
+	(source "(rete.core/facts-with-slot-value 'Flight 'callsign = \"UZ343\")"))
+
+([FlightPro_Class960119] of  CloFuncall
+
+	(source "(rete.core/facts-with-slot-value 'Flight 'callsign = \"RU17\")"))

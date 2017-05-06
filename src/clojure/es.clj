@@ -33,25 +33,6 @@
  "isle"	(str HOST PORT "/img/isle.png")
  "airport"	(str HOST PORT "/img/airport.png")
  "city"	(str HOST PORT "/img/city.png")})
-(def GENPLAN {:takeoff 
-  {:speed [220 8]
-   :altitude [1500 8]
-   :initial-turn-course [-1 2]}
- :cruise 
-  {:speed [500 1]
-   :altitude [33000 8]
-   :min-spd 220
-   :min-alt 4000}
- :landing 
-  {:speed [180 1 6]
-   :altitude [2000 8]
-   :outer-marker-distance 7
-   :final-turn-course [-1 1]
-   :altitude-graph
-     [[0.1 0][0.5 15][2 600][7 2000]] ;; x - dist, y - alt
-   :spdeed-graph
-     [[0.0 0][0.1 10][0.5 100][3 120]]} ;; x - dist, y - spd
-})
 (def ONB-PAUSE false)
 (def INTS-TIME ;; forcast time for intersection in hours (6 min)
 0.1)
@@ -158,27 +139,41 @@
           (recur [(round (int (* 0.8 a)) 1000) aa] [(round (int (* 0.8 s)) 10) sa] adis sdis))))
     [ad sd alt spd])))
 
-(defn specific-plan [gen fapt tapt]
-  (let [tof (:takeoff gen)
-       cru (:cruise gen)
-       lnd (:landing gen)
-       fcrd [(fapt "lat") (fapt "lon")]
-       tcrd [(tapt "lat") (tapt "lon")]
-       falt (if (= cmd/TERRAIN "yes") (fapt "alt") 0)
-       talt (if (= cmd/TERRAIN "yes") (tapt "alt") 0)
-       spp (assoc gen :takeoff (merge tof
-		{:altitude (corr-alt (:altitude tof) falt)})
-	        :landing (merge lnd
-		{:altitude (corr-alt (:altitude lnd) talt)
-		 :altitude-graph (corr-alt-tab (:altitude-graph lnd) talt)}))]
-    (merge spp {:general-crs	(int (geo/bear-deg fcrd tcrd))
-	:general-dist	(int (geo/distance-nm fcrd tcrd))
-	:start-crd 	fcrd
-	:finish-crd 	tcrd
-	:start-alt 	falt
-	:finish-alt 	talt
-	:start-run 	(runway (fapt "iata"))
-	:finish-run 	(runway (tapt "iata"))})))
+(defn as-vec [s]
+  (if (string? s)
+  (read-string (str "[" s "]"))
+  (vec (map as-vec s))))
+
+(defn specific-plan [fapt tapt]
+  (if-let [gpi (fainst (cls-instances "GeneralPlan") nil)]
+  (let [tpi (sv gpi "takeoff-plan")
+         cpi (sv gpi "cruise-plan")
+         lpi (sv gpi "landing-plan")
+         fcrd [(fapt "lat") (fapt "lon")]
+         tcrd [(tapt "lat") (tapt "lon")]
+         falt (if (= cmd/TERRAIN "yes") (fapt "alt") 0)
+         talt (if (= cmd/TERRAIN "yes") (tapt "alt") 0)]
+        {:takeoff  {:speed (as-vec (sv tpi "speed"))
+	:altitude (corr-alt (as-vec (sv tpi "altitude-vector")) falt)
+	:initial-turn-course (as-vec (sv tpi "initial-turn-course"))}
+         :cruise   {:speed (as-vec (sv cpi "speed"))
+	:altitude (as-vec (sv cpi "altitude-vector"))
+	:min-spd (read-string (sv cpi "min-speed"))
+	:min-alt (read-string (sv cpi "min-altitude"))}
+         :landing {:speed (as-vec (sv lpi "speed"))
+	:altitude (corr-alt (as-vec (sv lpi "altitude-vector")) talt)
+	:outer-marker-distance (read-string (sv lpi "outer-marker-distance"))
+	:final-turn-course (as-vec (sv lpi "final-turn-course"))
+	:altitude-graph (corr-alt-tab (as-vec (svs lpi "altitude-graph")) talt)
+	:speed-graph (as-vec (svs lpi "speed-graph"))}
+         :general-crs (int (geo/bear-deg fcrd tcrd))
+         :general-dist (int (geo/distance-nm fcrd tcrd))
+         :start-crd  fcrd
+         :finish-crd tcrd
+         :start-alt falt
+         :finish-alt talt
+         :start-run (runway (fapt "iata"))
+         :finish-run (runway (tapt "iata"))})))
 
 (defn takeoff-plan [spp]
   (let [tof (:takeoff spp)
