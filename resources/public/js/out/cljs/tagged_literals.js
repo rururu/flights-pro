@@ -1,4 +1,4 @@
-// Compiled by ClojureScript 1.9.293 {}
+// Compiled by ClojureScript 1.9.521 {}
 goog.provide('cljs.tagged_literals');
 goog.require('cljs.core');
 goog.require('cljs.reader');
@@ -8,8 +8,8 @@ if(cljs.core.vector_QMARK_.call(null,form)){
 throw (new Error("Queue literal expects a vector for its elements."));
 }
 
-return cljs.core._conj.call(null,cljs.core._conj.call(null,(function (){var x__11114__auto__ = form;
-return cljs.core._conj.call(null,cljs.core.List.EMPTY,x__11114__auto__);
+return cljs.core._conj.call(null,cljs.core._conj.call(null,(function (){var x__9759__auto__ = form;
+return cljs.core._conj.call(null,cljs.core.List.EMPTY,x__9759__auto__);
 })(),new cljs.core.Symbol(null,"cljs.core.PersistentQueue.EMPTY","cljs.core.PersistentQueue.EMPTY",399917828,null)),new cljs.core.Symbol("cljs.core","into","cljs.core/into",1879938733,null));
 });
 cljs.tagged_literals.read_uuid = (function cljs$tagged_literals$read_uuid(form){
@@ -19,7 +19,7 @@ throw (new Error("UUID literal expects a string as its representation."));
 }
 
 try{return cljs.core.uuid.call(null,form);
-}catch (e12179){var e = e12179;
+}catch (e11988){var e = e11988;
 throw (new Error(e.message));
 }});
 cljs.tagged_literals.read_inst = (function cljs$tagged_literals$read_inst(form){
@@ -29,7 +29,7 @@ throw (new Error("Instance literal expects a string for its timestamp."));
 }
 
 try{return cljs.reader.read_date.call(null,form);
-}catch (e12181){var e = e12181;
+}catch (e11990){var e = e11990;
 throw (new Error(e.message));
 }});
 cljs.tagged_literals.valid_js_literal_key_QMARK_ = (function cljs$tagged_literals$valid_js_literal_key_QMARK_(k){
@@ -51,8 +51,8 @@ cljs.tagged_literals.JSValue.cljs$lang$type = true;
 
 cljs.tagged_literals.JSValue.cljs$lang$ctorStr = "cljs.tagged-literals/JSValue";
 
-cljs.tagged_literals.JSValue.cljs$lang$ctorPrWriter = (function (this__10883__auto__,writer__10884__auto__,opt__10885__auto__){
-return cljs.core._write.call(null,writer__10884__auto__,"cljs.tagged-literals/JSValue");
+cljs.tagged_literals.JSValue.cljs$lang$ctorPrWriter = (function (this__9528__auto__,writer__9529__auto__,opt__9530__auto__){
+return cljs.core._write.call(null,writer__9529__auto__,"cljs.tagged-literals/JSValue");
 });
 
 cljs.tagged_literals.__GT_JSValue = (function cljs$tagged_literals$__GT_JSValue(val){
@@ -72,6 +72,6 @@ throw (new Error("JavaScript literal keys must be strings or unqualified keyword
 
 return (new cljs.tagged_literals.JSValue(form));
 });
-cljs.tagged_literals._STAR_cljs_data_readers_STAR_ = new cljs.core.PersistentArrayMap(null, 4, [new cljs.core.Symbol(null,"queue","queue",-1198599890,null),cljs.tagged_literals.read_queue,new cljs.core.Symbol(null,"uuid","uuid",-504564192,null),cljs.tagged_literals.read_uuid,new cljs.core.Symbol(null,"inst","inst",-2008473268,null),cljs.tagged_literals.read_inst,new cljs.core.Symbol(null,"js","js",-886355190,null),cljs.tagged_literals.read_js], null);
+cljs.tagged_literals._STAR_cljs_data_readers_STAR_ = cljs.core.merge.call(null,new cljs.core.PersistentArrayMap(null, 4, [new cljs.core.Symbol(null,"queue","queue",-1198599890,null),cljs.tagged_literals.read_queue,new cljs.core.Symbol(null,"uuid","uuid",-504564192,null),cljs.tagged_literals.read_uuid,new cljs.core.Symbol(null,"inst","inst",-2008473268,null),cljs.tagged_literals.read_inst,new cljs.core.Symbol(null,"js","js",-886355190,null),cljs.tagged_literals.read_js], null));
 
 //# sourceMappingURL=tagged_literals.js.map

@@ -1,20 +1,20 @@
-// Compiled by ClojureScript 1.9.293 {}
+// Compiled by ClojureScript 1.9.521 {}
 goog.provide('nightlight.repl_server');
 goog.require('cljs.core');
 goog.require('eval_soup.core');
 nightlight.repl_server.cljs_start_ns = new cljs.core.Symbol(null,"cljs.user","cljs.user",877795071,null);
 nightlight.repl_server.form__GT_serializable = (function nightlight$repl_server$form__GT_serializable(form){
 if((form instanceof Error)){
-return [(function (){var or__10277__auto__ = (function (){var G__22791 = form;
-var G__22791__$1 = (((G__22791 == null))?null:G__22791.cause);
-if((G__22791__$1 == null)){
+return [(function (){var or__8917__auto__ = (function (){var G__22749 = form;
+var G__22749__$1 = (((G__22749 == null))?null:G__22749.cause);
+if((G__22749__$1 == null)){
 return null;
 } else {
-return G__22791__$1.message;
+return G__22749__$1.message;
 }
 })();
-if(cljs.core.truth_(or__10277__auto__)){
-return or__10277__auto__;
+if(cljs.core.truth_(or__8917__auto__)){
+return or__8917__auto__;
 } else {
 return form.message;
 }
@@ -30,7 +30,7 @@ return window.onmessage = ((function (current_ns){
 return (function (e){
 return eval_soup.core.code__GT_results.call(null,e.data.forms,((function (current_ns){
 return (function (results){
-return window.parent.postMessage(cljs.core.clj__GT_js.call(null,new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"type","type",1174270348),e.data.type,new cljs.core.Keyword(null,"results","results",-1134170113),cljs.core.into_array.call(null,cljs.core.mapv.call(null,nightlight.repl_server.form__GT_serializable,results)),new cljs.core.Keyword(null,"ns","ns",441598760),[cljs.core.str(cljs.core.deref.call(null,current_ns))].join('')], null)),"*");
+return window.parent.postMessage(cljs.core.clj__GT_js.call(null,new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"type","type",1174270348),e.data.type,new cljs.core.Keyword(null,"results","results",-1134170113),cljs.core.into_array.call(null,cljs.core.mapv.call(null,nightlight.repl_server.form__GT_serializable,results)),new cljs.core.Keyword(null,"ns","ns",441598760),[cljs.core.str.cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,current_ns))].join('')], null)),"*");
 });})(current_ns))
 ,new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"current-ns","current-ns",1661653428),current_ns], null));
 });})(current_ns))

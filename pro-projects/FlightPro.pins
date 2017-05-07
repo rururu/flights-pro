@@ -1,4 +1,4 @@
-; Sat May 06 22:40:58 MSK 2017
+; Sun May 07 12:16:06 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -1971,7 +1971,7 @@
 
 ([FlightPro_Class490000] of  CloFunction
 
-	(source ";;(println [:START-TIME tim])\n(let [[h m :as hm] (seq (.split tim \":\"))]\n  (if (and (seq hm) (= (count hm) 2))\n    (let [h (read-string h)\n           m (if (.startsWith m \"0\") (.substring m 1) m)\n           m (read-string m)]\n      (if (and (number? h) (number? m) (<= 0 h 23) (<= 0 m 59))\n        (let [cld (Calendar/getInstance)]\n          (.set cld Calendar/HOUR_OF_DAY h)\n          (.set cld Calendar/MINUTE m)\n          (.set cld Calendar/SECOND 0)\n          (int (/ (.getTimeInMillis cld) 1000)))))))")
+	(source ";;(println [:START-TIME tim])\n(let [[h m :as hm] (seq (.split tim \":\"))]\n  (if (and (seq hm) (= (count hm) 2))\n    (let [h (read-string (if (.startsWith h \"0\") (.substring h 1) h))\n           m (read-string (if (.startsWith m \"0\") (.substring m 1) m))]\n      (if (and (number? h) (number? m) (<= 0 h 23) (<= 0 m 59))\n        (let [cld (Calendar/getInstance)]\n          (.set cld Calendar/HOUR_OF_DAY h)\n          (.set cld Calendar/MINUTE m)\n          (.set cld Calendar/SECOND 0)\n          (int (/ (.getTimeInMillis cld) 1000)))))))")
 	(title "start-time [tim]"))
 
 ([FlightPro_Class490002] of  CloFunction
@@ -2309,6 +2309,26 @@
 	(salience 0)
 	(title "mf:LandingStart"))
 
+([FlightPro_Class550000] of  Airport
+
+	(altitude 1729)
+	(coord 12.66831 108.1202)
+	(country "Vietnam")
+	(iata "BMV")
+	(icao "VVBM")
+	(runways 0)
+	(title "Buon Ma Thuot Airport"))
+
+([FlightPro_Class550001] of  Airport
+
+	(altitude 791)
+	(coord 48.07361 37.73972)
+	(country "Ukraine")
+	(iata "DOK")
+	(icao "UKCC")
+	(runways 0)
+	(title "Donetsk Sergey Prokofiev International Airport"))
+
 ([FlightPro_Class550002] of  Rule
 
 	(lhs "?fp (FlightPlan id ?id\n	landing ?lnd\n	cruise ?cru\n	vertical-status \"DESCEND\")\n(Flight age \"CURRENT\" \n	id ?id\n	coord ?crd\n	(<= (calc.geo/distance-nm ?crd (:final-turn-crd ?lnd))\n	  (:brake-dist ?cru)))")
@@ -2327,6 +2347,16 @@
 
 	(source ";; Calculates time (hrs)\n(if (= ini-alt fin-alt)\n  0\n  (let [step (* alt-stp alt-acl)\n         tioh (float (/ alt-tio 3600000))\n         adif (if (> ini-alt fin-alt) (- ini-alt fin-alt) (- fin-alt ini-alt))]\n    (* (/ adif step) tioh)))")
 	(title "altitude-variation [[ini-alt x] [fin-alt alt-acl] alt-stp alt-tio]"))
+
+([FlightPro_Class560002] of  Airport
+
+	(altitude 5871)
+	(coord 34.56584 69.21241)
+	(country "Afghanistan")
+	(iata "KBL")
+	(icao "OAKB")
+	(runways 0)
+	(title "Kabul International Airport"))
 
 ([FlightPro_Class570000] of  QuestionTree
 
@@ -3015,7 +3045,48 @@
 	(button-bbx "submit/wiki.gis/submit-bbx")
 	(button-clear-articles "Clear Articles/wiki.gis/clear-articles")
 	(language English-en)
-	(max-responses 40))
+	(max-responses 40)
+	(responses
+		[FlightPro_Class950000]
+		[FlightPro_Class950001]
+		[FlightPro_Class950002]
+		[FlightPro_Class950003]
+		[FlightPro_Class950004]
+		[FlightPro_Class950005]
+		[FlightPro_Class950006]
+		[FlightPro_Class950007]
+		[FlightPro_Class950008]
+		[FlightPro_Class950009]
+		[FlightPro_Class950010]
+		[FlightPro_Class950011]
+		[FlightPro_Class950012]
+		[FlightPro_Class950013]
+		[FlightPro_Class950014]
+		[FlightPro_Class950015]
+		[FlightPro_Class950016]
+		[FlightPro_Class950017]
+		[FlightPro_Class950018]
+		[FlightPro_Class950019]
+		[FlightPro_Class950020]
+		[FlightPro_Class950021]
+		[FlightPro_Class950022]
+		[FlightPro_Class950023]
+		[FlightPro_Class950024]
+		[FlightPro_Class950025]
+		[FlightPro_Class950026]
+		[FlightPro_Class950027]
+		[FlightPro_Class950028]
+		[FlightPro_Class950029]
+		[FlightPro_Class950030]
+		[FlightPro_Class950031]
+		[FlightPro_Class950032]
+		[FlightPro_Class950033]
+		[FlightPro_Class950034]
+		[FlightPro_Class950035]
+		[FlightPro_Class950036]
+		[FlightPro_Class950037]
+		[FlightPro_Class950038]
+		[FlightPro_Class950039]))
 
 ([FlightPro_Class660024] of  CloFunction
 
@@ -3084,7 +3155,7 @@
 ([FlightPro_Class670008] of  BBX
 
 	(title "Current")
-	(wsen 29.060211 59.56007 30.289307 60.193424))
+	(wsen -71.81763 44.50434 -61.984863 51.261913))
 
 ([FlightPro_Class670041] of  TypeName
 
@@ -3139,7 +3210,7 @@
 
 ([FlightPro_Class680001] of  CloFunction
 
-	(source "(println :MC lat lon alt hea pit rol)\n(let [dest (js/Cesium.Cartesian3.fromDegrees lon lat alt)]\n  (.setView (.-camera VIEWER)\n            #js{:destination dest\n                  :orientation #js{:heading (js/Cesium.Math.toRadians hea)\n                                           :pitch   (js/Cesium.Math.toRadians pit)\n                                           :roll    (js/Cesium.Math.toRadians rol)}}))")
+	(source ";;(println :MC lat lon alt hea pit rol)\n(let [dest (js/Cesium.Cartesian3.fromDegrees lon lat alt)]\n  (.setView (.-camera VIEWER)\n            #js{:destination dest\n                  :orientation #js{:heading (js/Cesium.Math.toRadians hea)\n                                           :pitch   (js/Cesium.Math.toRadians pit)\n                                           :roll    (js/Cesium.Math.toRadians rol)}}))")
 	(title "move-control [lat lon alt hea pit rol]"))
 
 ([FlightPro_Class680002] of  CloFunction
@@ -3929,6 +4000,576 @@
 	(source "(volatile! {:mode \"MANUAL\"\n               :coord [60 30]\n               :altitude 4000\n               :speed 160\n               :course 270})")
 	(title "VEHICLE"))
 
+([FlightPro_Class950000] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 12)
+	(feature "adm1st")
+	(lang "en")
+	(lat 45.9576)
+	(lng -66.6444)
+	(rank 100)
+	(summary "New Brunswick (; , Quebec French pronunciation:) is one of Canada's three Maritime provinces and is the only constitutionally bilingual (English–French) province.Section Sixteen of the Canadian Charter of Rights and Freedoms (...)")
+	(title "New Brunswick")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/New_Brunswick"))
+
+([FlightPro_Class950001] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 188)
+	(feature "adm1st")
+	(lang "en")
+	(lat 45.5)
+	(lng -69.0)
+	(rank 100)
+	(summary "Maine is a New England state in the northeastern region of the United States. Maine is the 39th most extensive and the 42nd most populous of the 50 U.S. states. It is bordered by New Hampshire to the west, the Atlantic Ocean to the east, and the Canadian provinces of Quebec and New Brunswick to the (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/123000/thumb-122917-100.jpg")
+	(title "Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Maine"))
+
+([FlightPro_Class950002] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 13)
+	(feature "adm1st")
+	(lang "en")
+	(lat 46.2354)
+	(lng -63.1265)
+	(rank 100)
+	(summary "Prince Edward Island (PEI or P.E.I.;) is a province of Canada consisting of the island of the same name, as well as several much smaller islands. It is one of the three Maritime Provinces and is the smallest province in both land area and population (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/143000/thumb-142178-100.png")
+	(title "Prince Edward Island")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Prince_Edward_Island"))
+
+([FlightPro_Class950003] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 36)
+	(feature "city")
+	(lang "en")
+	(lat 46.8127)
+	(lng -71.2199)
+	(rank 100)
+	(summary "Quebec , also Québec, City of Québec, Quebec City, or Québec City ,The city's name is not on a federally legislated list of , as is the case with the province of Quebec/Québec. Quebec is a common exception to the practice of retaining accented letters from French in the English versions of place (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/62000/thumb-61020-100.jpg")
+	(title "Quebec City")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Quebec_City"))
+
+([FlightPro_Class950004] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 83)
+	(feature "adm1st")
+	(lang "en")
+	(lat 46.8091)
+	(lng -71.2135)
+	(rank 100)
+	(summary "Quebec (or ;)According to the Canadian government, Québec (with the acute accent) is the official name in French and Quebec (without the accent) is the province's official name in English; the name is . In this system, the official name of the capital is Québec in both official languages (...)")
+	(title "Quebec")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Quebec"))
+
+([FlightPro_Class950005] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 81)
+	(feature "city")
+	(lang "en")
+	(lat 47.6653)
+	(lng -65.7542)
+	(rank 100)
+	(summary "Acadia was a colony of New France in northeastern North America that included parts of eastern Quebec, the Maritime provinces, and modern-day Maine to the Kennebec River.William Williamson. The history of the state of Maine. Vol. 2. 1832. p. 27; p. 266 (La Corne declares such to Lawrence in 1750); p (...)")
+	(title "Acadia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Acadia"))
+
+([FlightPro_Class950006] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 16)
+	(feature "city")
+	(lang "en")
+	(lat 46.0944)
+	(lng -64.7754)
+	(rank 100)
+	(summary "Moncton is a Canadian city located in Westmorland County in southeastern New Brunswick. Situated in the Petitcodiac River Valley, Moncton lies at the geographic centre of the Maritime Provinces. The city has earned the nickname \"Hub City\" due to its central location and history as a railway and land (...)")
+	(title "Moncton")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Moncton"))
+
+([FlightPro_Class950007] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 228)
+	(feature "adm1st")
+	(lang "en")
+	(lat 45.2167)
+	(lng -62.7)
+	(rank 100)
+	(summary "Nova Scotia (Latin for \"New Scotland\", pronounced in English as) (French: Nouvelle-Écosse; ;) is one of Canada's three Maritime provinces, and one of the four provinces which form Atlantic Canada. Its provincial capital is Halifax (...)")
+	(title "Nova Scotia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Nova_Scotia"))
+
+([FlightPro_Class950008] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 12)
+	(feature "city")
+	(lang "en")
+	(lat 45.9576)
+	(lng -66.6444)
+	(rank 100)
+	(summary "Fredericton is the capital of the Canadian province of New Brunswick. The city is situated in the west-central portion of the province along the Saint John River, which flows west to east as it bisects the city; it is the dominant natural feature of the area (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/51000/thumb-50792-100.jpg")
+	(title "Fredericton")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Fredericton"))
+
+([FlightPro_Class950009] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 14)
+	(lang "en")
+	(lat 45.273)
+	(lng -66.0635)
+	(rank 100)
+	(summary "Saint John is the largest city in New Brunswick and the second largest city in the maritime provinces. It is known as the Fundy City due to its location on the north shore of the Bay of Fundy at the mouth of the Saint John River, as well as being the only city on the bay (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/11000/thumb-10143-100.jpg")
+	(title "Saint John, New Brunswick")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Saint_John%2C_New_Brunswick"))
+
+([FlightPro_Class950010] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 17)
+	(feature "city")
+	(lang "en")
+	(lat 44.6479)
+	(lng -63.5716)
+	(rank 100)
+	(summary "Halifax , legally the Halifax Regional Municipality (HRM), is the capital of the province of Nova Scotia, Canada. The metropolitan area had a population of 414,400 in 2014 with 297,943 in the urban area centred on Halifax Harbour (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/93000/thumb-92456-100.jpg")
+	(title "Halifax, Nova Scotia")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Halifax%2C_Nova_Scotia"))
+
+([FlightPro_Class950011] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 13)
+	(feature "city")
+	(lang "en")
+	(lat 46.2354)
+	(lng -63.1265)
+	(rank 100)
+	(summary "Charlottetown is a Canadian city. It is both the largest city on and the provincial capital of Prince Edward Island, and the county seat of Queens County. Named after Charlotte of Mecklenburg-Strelitz, queen consort of the United Kingdom, Charlottetown was originally an unincorporated town that (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/86000/thumb-85011-100.jpg")
+	(title "Charlottetown")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Charlottetown"))
+
+([FlightPro_Class950012] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 87)
+	(lang "en")
+	(lat 48.4167)
+	(lng -71.0667)
+	(rank 100)
+	(summary "Saguenay (or ;) is a city in the Saguenay–Lac-Saint-Jean region of Quebec, Canada, on the Saguenay River, about north of Quebec City by overland route. It is about upriver and northwest of Tadoussac, located at the confluence with the St. Lawrence River (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/134000/thumb-133312-100.jpg")
+	(title "Saguenay, Quebec")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Saguenay%2C_Quebec"))
+
+([FlightPro_Class950013] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 41)
+	(feature "city")
+	(lang "en")
+	(lat 44.8108)
+	(lng -68.7831)
+	(rank 100)
+	(summary "Bangor is a city in the U.S. state of Maine. The city proper has a population of 33,039, while the metropolitan Bangor metropolitan area has a population of 153,746. Modern Bangor was established in the mid-1800s with the lumber and shipbuilding industries (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/3000/thumb-2233-100.jpg")
+	(title "Bangor, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Bangor%2C_Maine"))
+
+([FlightPro_Class950014] of  WikiArticleDetails
+
+	(butt-del-pois "Delete POIs/ext.data/delete-pois")
+	(butt-return "Return to Flight/ext.data/ret-to-flight")
+	(butt-show-pois "Show on Map/ext.data/show-on-map")
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 25)
+	(feature "city")
+	(lang "en")
+	(lat 48.4494)
+	(lng -68.525)
+	(max-rows 50)
+	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
+	(radius 1.0)
+	(rank 100)
+	(summary "Rimouski is a Canadian city located in the Bas-Saint-Laurent (Quebec) region at the mouth of the Rimouski River. It has a population of 46,860 (as of 2011) and many tourist, cultural and industrial attractions. Rimouski is the site of Université du Québec à Rimouski (UQAR), the Cégep de Rimouski (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/18000/thumb-17864-100.jpg")
+	(title "Rimouski")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Rimouski"))
+
+([FlightPro_Class950015] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 45.0)
+	(lng -65.68)
+	(rank 100)
+	(summary "The Bay of Fundy is a bay on the Atlantic coast of North America, on the northeast end of the Gulf of Maine between the Canadian provinces of New Brunswick and Nova Scotia, with a small portion touching the U.S. state of Maine (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/52000/thumb-51441-100.jpg")
+	(title "Bay of Fundy")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Bay_of_Fundy"))
+
+([FlightPro_Class950016] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 90)
+	(lang "en")
+	(lat 46.8033)
+	(lng -71.1778)
+	(rank 100)
+	(summary "Lévis is a city in eastern Quebec, Canada. It is located on the south shore of the St. Lawrence River, opposite Quebec City. A ferry links Old Quebec with Old Lévis, and two bridges, the Quebec Bridge and the Pierre Laporte Bridge, connect western Lévis with Quebec City (...)")
+	(title "Lévis, Quebec")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/L%C3%A9vis%2C_Quebec"))
+
+([FlightPro_Class950017] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 400)
+	(lang "en")
+	(lat 49.8667)
+	(lng -71.75)
+	(rank 100)
+	(summary "Saguenay–Lac-Saint-Jean is a region in Quebec, Canada. It contains the Saguenay Fjord, the estuary of the Saguenay River, stretching through much of the region. It is also known as Sagamie in French, from the first part of \"Saguenay\" and the last part of \"Piekouagami\", the Innu name (meaning \"flat (...)")
+	(title "Saguenay–Lac-Saint-Jean")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Saguenay%E2%80%93Lac-Saint-Jean"))
+
+([FlightPro_Class950018] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 0)
+	(feature "landmark")
+	(lang "en")
+	(lat 44.6692)
+	(lng -63.5964)
+	(rank 100)
+	(summary "The Halifax Explosion was a maritime disaster in Halifax, Nova Scotia, Canada, on the morning of 6 December 1917. SS Mont-Blanc, a French cargo ship laden with high explosives, collided with the Norwegian vessel SS Imo in the Narrows, a strait connecting the upper Halifax Harbour to Bedford Basin (...)")
+	(title "Halifax Explosion")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Halifax_Explosion"))
+
+([FlightPro_Class950019] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 244)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 46.65)
+	(lng -68.59)
+	(rank 100)
+	(summary "Aroostook County is a county located in the U.S. state of Maine. As of the 2010 census, the population was 71,870. Its seat is Houlton. Known locally in Maine simply as \"The County,\" it is the largest American county by land area east of the Rocky Mountains (St (...)")
+	(title "Aroostook County, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Aroostook_County%2C_Maine"))
+
+([FlightPro_Class950020] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 90)
+	(lang "en")
+	(lat 46.803)
+	(lng -71.215)
+	(rank 100)
+	(summary "The Battle of the Plains of Abraham, also known as the Battle of Quebec, (Bataille des Plaines d'Abraham or Première bataille de Québec in French) was a pivotal battle in the Seven Years' War (referred to as the French and Indian War in the United States) (...)")
+	(title "Battle of the Plains of Abraham")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Battle_of_the_Plains_of_Abraham"))
+
+([FlightPro_Class950021] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 284)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 45.84)
+	(lng -69.3)
+	(rank 100)
+	(summary "Piscataquis County is a county located in the U.S. state of Maine. As of the 2010 census, its population was 17,535, making it Maine's least-populous county. Its county seat is Dover-Foxcroft. The county was incorporated on 23 March 1838, taken from the western part of Penobscot County and the (...)")
+	(title "Piscataquis County, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Piscataquis_County%2C_Maine"))
+
+([FlightPro_Class950022] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 297)
+	(feature "city")
+	(lang "en")
+	(lat 48.6587)
+	(lng -67.4681)
+	(rank 100)
+	(summary "The Bas-Saint-Laurent (Lower Saint-Lawrence) region is located along the south shore of the lower Saint Lawrence River in Quebec. The river widens at this place and became farther a bay who discharges itself in the sea and is often nicknamed \"Bas-du-Fleuve\" (Lower-River) (...)")
+	(title "Bas-Saint-Laurent")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Bas-Saint-Laurent"))
+
+([FlightPro_Class950023] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 184)
+	(feature "landmark")
+	(lang "en")
+	(lat 49.5001)
+	(lng -62.9986)
+	(rank 100)
+	(summary "Anticosti Island (French, Île d'Anticosti) is an island in the Canadian province of Quebec, at the outlet of the Saint Lawrence River into the Gulf of Saint Lawrence, between 49° and 50° N., and between 61° 40' and 64° 30' W (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/133000/thumb-132932-100.jpg")
+	(title "Anticosti Island")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Anticosti_Island"))
+
+([FlightPro_Class950024] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 474)
+	(feature "landmark")
+	(lang "en")
+	(lat 44.991)
+	(lng -70.7139)
+	(rank 100)
+	(summary "Wilhelm Reich (24 March 1897 – 3 November 1957) was an Austrian psychoanalyst. Author of several influential books – most notably Character Analysis (1933), The Mass Psychology of Fascism (1933) and The Sexual Revolution (1936) – Reich became known as one of the most radical practitioners of (...)")
+	(title "Wilhelm Reich")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Wilhelm_Reich"))
+
+([FlightPro_Class950025] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(feature "river")
+	(lang "en")
+	(lat 45.8584)
+	(lng -64.5668)
+	(rank 100)
+	(summary "The Petitcodiac River , known informally as the Chocolate River, is a Canadian river in south-eastern New Brunswick. The river has a meander length of and is located in Westmorland, Albert, and Kings counties, draining a watershed area of about  (...)")
+	(title "Petitcodiac River")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Petitcodiac_River"))
+
+([FlightPro_Class950026] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 89)
+	(feature "edu")
+	(lang "en")
+	(lat 46.78)
+	(lng -71.2747)
+	(rank 100)
+	(summary "Laval University is the oldest centre of education in Canada (2nd oldest in North America), and was the first institution in North America to offer higher education in French. Its main campus is located on the outskirts of the historic city in Quebec City, the capital of the province of Quebec (...)")
+	(title "Laval University")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Laval_University"))
+
+([FlightPro_Class950027] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 56)
+	(feature "edu")
+	(lang "en")
+	(lat 44.6369)
+	(lng -63.5917)
+	(rank 100)
+	(summary "Dalhousie University (commonly known as Dal) is a public research university in Nova Scotia, Canada, with three campuses in Halifax, and a fourth in Bible Hill. Dalhousie offers more than 4,000 courses and 180 degree programs in twelve undergraduate, graduate, and professional faculties (...)")
+	(title "Dalhousie University")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Dalhousie_University"))
+
+([FlightPro_Class950028] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 7)
+	(lang "en")
+	(lat 47.6175)
+	(lng -65.6491)
+	(rank 100)
+	(summary "Bathurst (2011 population; UA 12,275; CA population 13,424) is the County seat for Gloucester County, New Brunswick, and is at the estuary of the Nepisiguit River.  (...)")
+	(title "Bathurst, New Brunswick")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Bathurst%2C_New_Brunswick"))
+
+([FlightPro_Class950029] of  WikiArticleDetails
+
+	(butt-del-pois "Delete POIs/ext.data/delete-pois")
+	(butt-return "Return to Flight/ext.data/ret-to-flight")
+	(butt-show-pois "Show on Map/ext.data/show-on-map")
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 480)
+	(feature "landmark")
+	(lang "en")
+	(lat 48.658)
+	(lng -65.7528)
+	(max-rows 50)
+	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
+	(radius 1.0)
+	(rank 100)
+	(summary "The Gaspésie (official name), or Gaspé Peninsula, the Gaspé or Gaspesia, is a peninsula along the south shore of the Saint Lawrence River to the east of the Matapédia Valley in Quebec, Canada, that extends into the Gulf of Saint Lawrence (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/39000/thumb-38292-100.jpg")
+	(title "Gaspé Peninsula")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Gasp%C3%A9_Peninsula"))
+
+([FlightPro_Class950030] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 150)
+	(feature "city")
+	(lang "en")
+	(lat 47.369)
+	(lng -68.3239)
+	(rank 100)
+	(summary "Edmundston is a Canadian city in Madawaska County, New Brunswick.  (...)")
+	(title "Edmundston")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Edmundston"))
+
+([FlightPro_Class950031] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 559)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 44.69)
+	(lng -71.3)
+	(rank 100)
+	(summary "Coös County (with two syllables), frequently spelled Coos County, is a county in the U.S. state of New Hampshire. As of the 2010 census, the population was 33,055, the least of any New Hampshire county. The county seat is Lancaster (...)")
+	(title "Coös County, New Hampshire")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Co%C3%B6s_County%2C_New_Hampshire"))
+
+([FlightPro_Class950032] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 16)
+	(feature "city")
+	(lang "en")
+	(lat 47.794)
+	(lng -64.9386)
+	(rank 100)
+	(summary "Caraquet (API : /kaʁakɛt/) is a Canadian town in Gloucester County, New Brunswick. Situated on the shore of Chaleur Bay in the Acadian Peninsula, its name is derived from the Mi'kmaq term for meeting of two rivers. The Caraquet River and Rivière du Nord flow into the Caraquet Bay west of the town.  (...)")
+	(title "Caraquet")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Caraquet"))
+
+([FlightPro_Class950033] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 20)
+	(lang "en")
+	(lat 46.0989)
+	(lng -64.7242)
+	(rank 100)
+	(summary "Dieppe is a Canadian city in Westmorland County, New Brunswick. It is New Brunswick's fourth most populous city with a history and identity that goes back to the eighteenth century. It was first incorporated as a town in 1952 and designated as a city in 2003 (...)")
+	(title "Dieppe, New Brunswick")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Dieppe%2C_New_Brunswick"))
+
+([FlightPro_Class950034] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 7)
+	(lang "en")
+	(lat 47.028)
+	(lng -65.4696)
+	(rank 100)
+	(summary "Miramichi is the largest city in northern New Brunswick, Canada. It is situated at the mouth of the Miramichi River where it enters Miramichi Bay. The Miramichi River valley is the second longest valley in New Brunswick, after the Saint John River Valley.  (...)")
+	(title "Miramichi, New Brunswick")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Miramichi%2C_New_Brunswick"))
+
+([FlightPro_Class950035] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 32)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 44.97)
+	(lng -67.61)
+	(rank 100)
+	(summary "Washington County is a county located in the U.S. state of Maine. As of the 2010 census, its population was 32,856, making it the third-least populous county in Maine. Its county seat is Machias. The county was established on June 25, 1789. It borders the Canadian province of New Brunswick (...)")
+	(title "Washington County, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Washington_County%2C_Maine"))
+
+([FlightPro_Class950036] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 113)
+	(lang "en")
+	(lat 48.5456)
+	(lng -71.6477)
+	(rank 100)
+	(summary "Alma (2011 Town population: 30,904; CA Population 33,018; UA Population 26,016) is a town in the Canadian province of Quebec.  (...)")
+	(title "Alma, Quebec")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Alma%2C_Quebec"))
+
+([FlightPro_Class950037] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 415)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 45.51)
+	(lng -69.95)
+	(rank 100)
+	(summary "Somerset County is a county located in the U.S. state of Maine. As of the 2010 census, the population was 52,228. Its county seat is Skowhegan.  (...)")
+	(title "Somerset County, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Somerset_County%2C_Maine"))
+
+([FlightPro_Class950038] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "US")
+	(elevation 27)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 44.57)
+	(lng -68.37)
+	(rank 100)
+	(summary "Hancock County is a county located in the U.S. state of Maine. As of the 2010 census, the population was 54,418. Its county seat is Ellsworth. The county was incorporated on June 25, 1789 and named for John Hancock, the first governor of the Commonwealth of Massachusetts (...)")
+	(title "Hancock County, Maine")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Hancock_County%2C_Maine"))
+
+([FlightPro_Class950039] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CA")
+	(elevation 23)
+	(feature "city")
+	(lang "en")
+	(lat 48.831)
+	(lng -64.4844)
+	(rank 100)
+	(summary "Gaspé is a city at the tip of the Gaspé Peninsula in the Gaspésie–Îles-de-la-Madeleine region of eastern Quebec, Canada. It is known for its large snow falls during winter and high gusts of wind year-round. Gaspé is located about 650 kilometres northeast of Quebec City, and 350 kilometres east of (...)")
+	(title "Gaspé, Quebec")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Gasp%C3%A9%2C_Quebec"))
+
 ([FlightPro_Class950040] of  Airport
 
 	(altitude 74)
@@ -4026,3 +4667,23 @@
 ([FlightPro_Class960119] of  CloFuncall
 
 	(source "(rete.core/facts-with-slot-value 'Flight 'callsign = \"RU17\")"))
+
+([FlightPro_Class970000] of  Airport
+
+	(altitude 4)
+	(coord 37.4611 -122.115)
+	(country "United States")
+	(iata "PAO")
+	(icao "KPAO")
+	(runways 0)
+	(title "Palo Alto Airport"))
+
+([FlightPro_Class970001] of  Airport
+
+	(altitude 13)
+	(coord 37.61897 -122.374)
+	(country "United States")
+	(iata "SFO")
+	(icao "KSFO")
+	(runways 0)
+	(title "San Francisco International Airport"))

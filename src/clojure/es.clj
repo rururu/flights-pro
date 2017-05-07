@@ -94,9 +94,8 @@
   ;;(println [:START-TIME tim])
 (let [[h m :as hm] (seq (.split tim ":"))]
   (if (and (seq hm) (= (count hm) 2))
-    (let [h (read-string h)
-           m (if (.startsWith m "0") (.substring m 1) m)
-           m (read-string m)]
+    (let [h (read-string (if (.startsWith h "0") (.substring h 1) h))
+           m (read-string (if (.startsWith m "0") (.substring m 1) m))]
       (if (and (number? h) (number? m) (<= 0 h 23) (<= 0 m 59))
         (let [cld (Calendar/getInstance)]
           (.set cld Calendar/HOUR_OF_DAY h)

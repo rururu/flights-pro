@@ -14,6 +14,7 @@
   #?(:clj (:require [cljs.util :as util]
                     [clojure.java.io :as io]
                     [clojure.string :as string]
+                    [clojure.set :as set]
                     [clojure.tools.reader :as reader]
                     [cljs.env :as env :refer [ensure]]
                     [cljs.tagged-literals :as tags]
@@ -109,7 +110,7 @@
            ss (map rf (string/split ss #"\."))
            ss (string/join "." ss)
            ms #?(:clj (clojure.lang.Compiler/munge ss)
-                 :cljs (cljs.core/munge ss))]
+                 :cljs (cljs.core/munge-str ss))]
        (if (symbol? s)
          (symbol ms)
          ms)))))
@@ -203,6 +204,14 @@
    (defmulti emit-constant class)
    :cljs
    (defmulti emit-constant type))
+
+(defmethod emit-constant :default
+  [x]
+  (throw
+    (ex-info (str "failed compiling constant: " x "; "
+               (type x) " is not a valid ClojureScript constant.")
+      {:constant x
+       :type (type x)})))
 
 (defmethod emit-constant nil [x] (emits "null"))
 
@@ -355,9 +364,9 @@
         (emits "new cljs.core.PersistentArrayMap(null, " (count keys) ", ["
           (comma-sep (interleave keys vals))
           "], null)")
-        (emits "cljs.core.PersistentArrayMap.fromArray(["
+        (emits "cljs.core.PersistentArrayMap.createAsIfByAssoc(["
           (comma-sep (interleave keys vals))
-          "], true, false)"))
+          "])"))
 
       :else
       (emits "cljs.core.PersistentHashMap.fromArrays(["
@@ -399,7 +408,7 @@
       (emits "new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, " (count items) ", ["
         (comma-sep (interleave items (repeat "null"))) "], null), null)")
 
-      :else (emits "cljs.core.PersistentHashSet.fromArray([" (comma-sep items) "], true)"))))
+      :else (emits "cljs.core.PersistentHashSet.createAsIfByAssoc([" (comma-sep items) "], true)"))))
 
 (defmethod emit* :js-value
   [{:keys [items js-type env]}]
@@ -821,7 +830,7 @@
                 (emitln "return " n ".call(this" (if (zero? pcnt) nil
                                                      (list "," (comma-sep (take pcnt maxparams)))) ");"))))
           (emitln "}")
-          (emitln "throw(new Error('Invalid arity: ' + arguments.length));")
+          (emitln "throw(new Error('Invalid arity: ' + (arguments.length - 1)));")
           (emitln "};")
           (when variadic
             (emitln mname ".cljs$lang$maxFixedArity = " max-fixed-arity ";")
@@ -932,8 +941,8 @@
                        (or (= protocol tag)
                            ;; ignore new type hints for now - David
                            (and (not (set? tag))
-                                (not ('#{any clj clj-or-nil clj-nil number string boolean function object array} tag))
-                                (when-let [ps (:protocols (ana/resolve-existing-var env (symbol (name tag))))]
+                                (not ('#{any clj clj-or-nil clj-nil number string boolean function object array js} tag))
+                                (when-let [ps (:protocols (ana/resolve-existing-var env tag))]
                                   (ps protocol)))))))
         opt-not? (and (= (:name info) 'cljs.core/not)
                       (= (ana/infer-tag env (first (:args expr))) 'boolean))
@@ -1024,13 +1033,13 @@
   (emit-wrap env (emits target " = " val)))
 
 (defn load-libs
-  [libs seen reloads]
+  [libs seen reloads deps]
   (let [loaded-libs (munge 'cljs.core.*loaded-libs*)
         loaded-libs-temp (munge (gensym 'cljs.core.*loaded-libs*))]
     (when (-> libs meta :reload-all)
       (emitln "if(!COMPILED) " loaded-libs-temp " = " loaded-libs " || cljs.core.set();")
       (emitln "if(!COMPILED) " loaded-libs " = cljs.core.set();"))
-    (doseq [lib (remove (set (vals seen)) (distinct (vals libs)))]
+    (doseq [lib (remove (set (vals seen)) (filter (set (vals libs)) deps))]
       (cond
         #?@(:clj
             [(ana/foreign-dep? lib)
@@ -1040,11 +1049,17 @@
                  (if (= :nodejs target)
                    ;; under node.js we load foreign libs globally
                    (let [{:keys [js-dependency-index options]} @env/*compiler*
-                         ijs-url (get-in js-dependency-index [(name lib) :url])]
+                         ijs (get js-dependency-index (name lib))]
                      (emitln "cljs.core.load_file(\""
-                       (str (io/file (util/output-directory options) (util/get-name ijs-url)))
+                       (str (io/file (util/output-directory options) (or (deps/-relative-path ijs)
+                                                                         (util/relative-name (:url ijs)))))
                        "\");"))
-                   (emitln "goog.require('" (munge lib) "');"))))])
+                   (emitln "goog.require('" (munge lib) "');"))))]
+            :cljs
+            [(and (ana/foreign-dep? lib)
+                  (when-let [{:keys [optimizations]} (get @env/*compiler* :options)]
+                    (not (keyword-identical? optimizations :none))))
+             nil])
 
         (or (-> libs meta :reload)
             (= (get reloads lib) :reload))
@@ -1060,17 +1075,19 @@
       (emitln "if(!COMPILED) " loaded-libs " = cljs.core.into(" loaded-libs-temp ", " loaded-libs ");"))))
 
 (defmethod emit* :ns*
-  [{:keys [name requires uses require-macros reloads env]}]
-  (load-libs requires nil (:require reloads))
-  (load-libs uses requires (:use reloads)))
+  [{:keys [name requires uses require-macros reloads env deps]}]
+  (load-libs requires nil (:require reloads) deps)
+  (load-libs uses requires (:use reloads) deps))
 
 (defmethod emit* :ns
-  [{:keys [name requires uses require-macros reloads env]}]
+  [{:keys [name requires uses require-macros reloads env deps]}]
   (emitln "goog.provide('" (munge name) "');")
   (when-not (= name 'cljs.core)
-    (emitln "goog.require('cljs.core');"))
-  (load-libs requires nil (:require reloads))
-  (load-libs uses requires (:use reloads)))
+    (emitln "goog.require('cljs.core');")
+    (when (-> @env/*compiler* :options :emit-constants)
+      (emitln "goog.require('" (munge ana/constants-ns-sym) "');")))
+  (load-libs requires nil (:require reloads) deps)
+  (load-libs uses requires (:use reloads) deps))
 
 (defmethod emit* :deftype*
   [{:keys [t fields pmasks body protocols]}]
@@ -1149,7 +1166,9 @@
 #?(:clj
    (defn with-core-cljs
      "Ensure that core.cljs has been loaded."
-     ([] (with-core-cljs nil))
+     ([] (with-core-cljs
+           (when env/*compiler*
+             (:options @env/*compiler*))))
      ([opts] (with-core-cljs opts (fn [])))
      ([opts body]
       {:pre [(or (nil? opts) (map? opts))
@@ -1167,7 +1186,10 @@
 
 #?(:clj
    (defn compiled-by-string
-     ([] (compiled-by-string nil))
+     ([]
+      (compiled-by-string
+        (when env/*compiler*
+          (:options @env/*compiler*))))
      ([opts]
       (str "// Compiled by ClojureScript "
         (util/clojurescript-version)
@@ -1292,7 +1314,7 @@
                                                 (set (vals deps))
                                                 (cond-> (conj (set (vals deps)) 'cljs.core)
                                                   (get-in @env/*compiler* [:options :emit-constants])
-                                                  (conj 'constants-table)))
+                                                  (conj ana/constants-ns-sym)))
                                   :file        dest
                                   :source-file src}
                                  (when sm-data
@@ -1311,7 +1333,10 @@
 
 #?(:clj
    (defn compile-file*
-     ([src dest] (compile-file* src dest nil))
+     ([src dest]
+      (compile-file* src dest
+        (when env/*compiler*
+          (:options @env/*compiler*))))
      ([src dest opts]
       (ensure
         (with-core-cljs opts
@@ -1332,7 +1357,10 @@
 #?(:clj
    (defn requires-compilation?
      "Return true if the src file requires compilation."
-     ([src dest] (requires-compilation? src dest nil))
+     ([src dest]
+      (requires-compilation? src dest
+        (when env/*compiler*
+          (:options @env/*compiler*))))
      ([^File src ^File dest opts]
       (let [{:keys [ns requires]} (ana/parse-ns src)]
         (ensure
@@ -1368,13 +1396,18 @@
       If the file was not compiled returns only {:file ...}"
      ([src]
       (let [dest (rename-to-js src)]
-        (compile-file src dest nil)))
+        (compile-file src dest
+          (when env/*compiler*
+            (:options @env/*compiler*)))))
      ([src dest]
-      (compile-file src dest nil))
+      (compile-file src dest
+        (when env/*compiler*
+          (:options @env/*compiler*))))
      ([src dest opts]
       {:post [map?]}
-      (binding [ana/*file-defs*    (atom #{})
-                ana/*unchecked-if* false]
+      (binding [ana/*file-defs*     (atom #{})
+                ana/*unchecked-if*  false
+                ana/*cljs-warnings* ana/*cljs-warnings*]
         (let [nses      (get @env/*compiler* ::ana/namespaces)
               src-file  (io/file src)
               dest-file (io/file dest)
@@ -1414,13 +1447,28 @@
    (defn cljs-files-in
      "Return a sequence of all .cljs and .cljc files in the given directory."
      [dir]
-     (filter
-       #(let [name (.getName ^File %)]
-         (and (or (.endsWith name ".cljs")
-                (.endsWith name ".cljc"))
-           (not= \. (first name))
-           (not (contains? cljs-reserved-file-names name))))
-       (file-seq dir))))
+     (map io/file
+       (reduce
+         (fn [m x]
+           (if (.endsWith ^String x ".cljs")
+             (cond-> (conj m x)
+               (contains? m (str (subs x 0 (dec (count x))) "c"))
+               (set/difference #{(str (subs x 0 (dec (count x))) "c")}))
+             ;; ends with .cljc
+             (cond-> m
+               (not (contains? m (str (subs x 0 (dec (count x))) "s")))
+               (conj x))))
+         #{}
+         (into []
+           (comp
+             (filter
+               #(let [name (.getName ^File %)]
+                  (and (or (.endsWith name ".cljs")
+                         (.endsWith name ".cljc"))
+                    (not= \. (first name))
+                    (not (contains? cljs-reserved-file-names name)))))
+             (map #(.getPath ^File %)))
+           (file-seq dir))))))
 
 #?(:clj
    (defn compile-root
@@ -1432,7 +1480,9 @@
      ([src-dir]
       (compile-root src-dir "out"))
      ([src-dir target-dir]
-      (compile-root src-dir target-dir nil))
+      (compile-root src-dir target-dir
+        (when env/*compiler*
+          (:options @env/*compiler*))))
      ([src-dir target-dir opts]
       (swap! env/*compiler* assoc :root src-dir)
       (let [src-dir-file (io/file src-dir)
@@ -1464,6 +1514,8 @@
 ;; TODO: needs fixing, table will include other things than keywords - David
 
 (defn emit-constants-table [table]
+  (emitln "goog.provide('" (munge ana/constants-ns-sym) "');")
+  (emitln "goog.require('cljs.core');")
   (doseq [[sym value] table]
     (let [ns   (namespace sym)
           name (name sym)]
@@ -1483,3 +1535,33 @@
      (with-open [out ^java.io.Writer (io/make-writer dest {})]
        (binding [*out* out]
          (emit-constants-table table)))))
+
+(defn emit-externs
+  ([externs]
+   (emit-externs [] externs (atom #{})
+     (when env/*compiler*
+       (::ana/externs @env/*compiler*))))
+  ([prefix externs top-level known-externs]
+   (loop [ks (seq (keys externs))]
+     (when ks
+       (let [k (first ks)
+             [top :as prefix'] (conj prefix k)]
+         (when (and (not= 'prototype k)
+                    (nil? (get-in known-externs prefix')))
+           (if-not (or (contains? @top-level top)
+                       (contains? known-externs top))
+             (do
+               (emitln "var " (string/join "." (map munge prefix')) ";")
+               (swap! top-level conj top))
+             (emitln (string/join "." (map munge prefix')) ";")))
+         (let [m (get externs k)]
+           (when-not (empty? m)
+             (emit-externs prefix' m top-level known-externs))))
+       (recur (next ks))))))
+
+#?(:clj
+   (defn emit-inferred-externs-to-file [externs dest]
+     (io/make-parents dest)
+     (with-open [out ^java.io.Writer (io/make-writer dest {})]
+       (binding [*out* out]
+         (emit-externs externs)))))

@@ -86,7 +86,7 @@ Flight plan for scheduled flights is described in an active instance of a class 
 
 You can change this plan before scheduling flight or replace it with your own plan by shifting yellow sticker (removing  from the old instance and sticking on new one).
 
-For example, to safely takeoff from Cochabamba you have to icrease and accelerate lifting by changing value of a slot "Altitude-vector" in "Basic Takeoff Plan" from [1500 6] on [4000 8] (here first value is a target altitude and second value is an acceleration of lift).
+For example, to safely takeoff from Cochabamba you have to icrease and accelerate lifting by changing value of a slot "Altitude-vector" in a "Basic Takeoff Plan" from [1500 6] on [4000 8] (here the first value is a target altitude and the second value is an acceleration of lift).
 
 ![screenshot](screenshot2.jpeg)
 

@@ -37,6 +37,7 @@
                             require use refer-clojure
 
                             if-some when-some test ns-interns ns-unmap var vswap! macroexpand-1 macroexpand
+                            some?
                             #?@(:cljs [alias coercive-not coercive-not= coercive-= coercive-boolean
                                        truth_ js-arguments js-delete js-in js-debugger exists? divide js-mod
                                        unsafe-bit-and bit-shift-right-zero-fill mask bitpos caching-hash
@@ -805,7 +806,7 @@
       (core/inc (core/quot c 32)))))
 
 (core/defmacro str [& xs]
-  (core/let [strs (core/->> (repeat (count xs) "cljs.core.str(~{})")
+  (core/let [strs (core/->> (repeat (count xs) "cljs.core.str.cljs$core$IFn$_invoke$arity$1(~{})")
                     (interpose ",")
                     (apply core/str))]
     (list* 'js* (core/str "[" strs "].join('')") xs)))
@@ -857,19 +858,18 @@
 (core/defmacro nil? [x]
   `(coercive-= ~x nil))
 
-;; internal - do not use.
+(core/defmacro some? [x]
+  `(not (nil? ~x)))
+
 (core/defmacro coercive-not [x]
   (bool-expr (core/list 'js* "(!~{})" x)))
 
-;; internal - do not use.
 (core/defmacro coercive-not= [x y]
   (bool-expr (core/list 'js* "(~{} != ~{})" x y)))
 
-;; internal - do not use.
 (core/defmacro coercive-= [x y]
   (bool-expr (core/list 'js* "(~{} == ~{})" x y)))
 
-;; internal - do not use.
 (core/defmacro coercive-boolean [x]
   (with-meta (core/list 'js* "~{}" x)
     {:tag 'boolean}))
@@ -879,7 +879,6 @@
   (core/assert (core/symbol? x) "x is substituted twice")
   (core/list 'js* "(~{} != null && ~{} !== false)" x x))
 
-;; internal - do not use
 (core/defmacro js-arguments []
   (core/list 'js* "arguments"))
 
@@ -1031,7 +1030,7 @@
   ([x] `(- ~x)))
 
 (core/defmacro ^::ana/numeric unchecked-remainder-int
-  ([x n] `(mod ~x ~n)))
+  ([x n] `(core/mod ~x ~n)))
 
 (core/defmacro ^::ana/numeric unchecked-subtract
   ([& xs] `(- ~@xs)))
@@ -1223,7 +1222,7 @@
               (.replace \/ \$))
     "$"))
 
-(def #^:private base-type
+(def ^:private base-type
      {nil "null"
       'object "object"
       'string "string"
@@ -1233,7 +1232,7 @@
       'boolean "boolean"
       'default "_"})
 
-(def #^:private js-base-type
+(def ^:private js-base-type
      {'js/Boolean "boolean"
       'js/String "string"
       'js/Array "array"
@@ -1347,9 +1346,7 @@
         (cljs.analyzer/warning :undeclared-protocol-symbol env {:protocol p})))))
 
 (core/defn- resolve-var [env sym]
-  (core/let [ret (core/-> (dissoc env :locals)
-                   (cljs.analyzer/resolve-var sym)
-                   :name)]
+  (core/let [ret (:name (cljs.analyzer/resolve-var env sym))]
     (core/assert ret (core/str "Can't resolve: " sym))
     ret))
 
@@ -1371,7 +1368,7 @@
                 ~type ~(with-meta `(fn ~@meths) (meta form))))
         sigs))))
 
-(core/defmulti extend-prefix (core/fn [tsym sym] (core/-> tsym meta :extend)))
+(core/defmulti ^:private extend-prefix (core/fn [tsym sym] (core/-> tsym meta :extend)))
 
 (core/defmethod extend-prefix :instance
   [tsym sym] `(.. ~tsym ~(to-property sym)))
@@ -1397,9 +1394,10 @@
        ~@body)))
 
 (core/defn- adapt-proto-params [type [[this & args :as sig] & body]]
-  `(~(vec (cons (vary-meta this assoc :tag type) args))
-     (this-as ~this
-       ~@body)))
+  (core/let [this' (vary-meta this assoc :tag type)]
+    `(~(vec (cons this' args))
+      (this-as ~this'
+        ~@body))))
 
 (core/defn- add-obj-methods [type type-sym sigs]
   (map (core/fn [[f & meths :as form]]
@@ -1945,7 +1943,7 @@
                                            (mapv (core/fn [arg]
                                                    (core/cond
                                                      (core/symbol? arg) arg
-                                                     (core/and (map? arg) (some? (:as arg))) (:as arg)
+                                                     (core/and (map? arg) (core/some? (:as arg))) (:as arg)
                                                      :else (gensym))) sig)
                                            sig)]
                             `(~sig
@@ -2452,7 +2450,7 @@
                      (map #(cljs.analyzer/analyze &env %) keys))
            (= (count (into #{} keys)) (count keys)))
        `(cljs.core/PersistentArrayMap. nil ~(clojure.core// (count kvs) 2) (array ~@kvs) nil)
-       `(.fromArray cljs.core/PersistentArrayMap (array ~@kvs) true false)))))
+       `(.createAsIfByAssoc cljs.core/PersistentArrayMap (array ~@kvs))))))
 
 (core/defmacro hash-map
   ([] `(.-EMPTY cljs.core/PersistentHashMap))
@@ -2475,7 +2473,7 @@
          (cljs.core/PersistentArrayMap. nil ~(count xs) (array ~@(interleave xs (repeat nil))) nil)
          nil)
       (vary-meta
-        `(.fromArray cljs.core/PersistentHashSet (array ~@xs) true)
+        `(.createAsIfByAssoc cljs.core/PersistentHashSet (array ~@xs))
         assoc :tag 'cljs.core/PersistentHashSet))))
 
 (core/defn- js-obj* [kvs]
@@ -2641,7 +2639,7 @@
          (~print-fn (str ~bs-str ", " ~expr-str ", "
                       ~iterations " runs, " elapsed# " msecs"))))))
 
-(def cs (into [] (map (comp gensym core/str core/char) (range 97 118))))
+(def ^:private cs (into [] (map (comp gensym core/str core/char) (range 97 118))))
 
 (core/defn- gen-apply-to-helper
   ([] (gen-apply-to-helper 1))
@@ -2761,6 +2759,9 @@
   :refer takes a list of symbols to refer from the namespace..
   :refer-macros takes a list of macro symbols to refer from the namespace.
   :include-macros true causes macros from the namespace to be required.
+  :rename specifies a map from referred var names to different
+    symbols (and can be used to prevent clashes)
+
 
   Flags
 

@@ -38,7 +38,7 @@
                   :easingFunction (fn [time] time)})))
 
 (defn move-control [lat lon alt hea pit rol]
-  (println :MC lat lon alt hea pit rol)
+  ;;(println :MC lat lon alt hea pit rol)
 (let [dest (js/Cesium.Cartesian3.fromDegrees lon lat alt)]
   (.setView (.-camera VIEWER)
             #js{:destination dest

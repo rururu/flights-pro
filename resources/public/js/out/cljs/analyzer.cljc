@@ -56,6 +56,10 @@
 
 (def ^:dynamic *file-defs* nil)
 
+(def constants-ns-sym
+  "The namespace of the constants table as a symbol."
+  'cljs.core.constants)
+
 #?(:clj
    (def transit-read-opts
      (try
@@ -139,10 +143,11 @@
    :extend-type-invalid-method-shape true
    :unsupported-js-module-type true
    :unsupported-preprocess-value true
-   :js-shadowed-by-local true})
+   :js-shadowed-by-local true
+   :infer-warning false})
 
 (def js-reserved
-  #{"arguments" "abstract" "boolean" "break" "byte" "case"
+  #{"arguments" "abstract" "await" "boolean" "break" "byte" "case"
     "catch" "char" "class" "const" "continue"
     "debugger" "default" "delete" "do" "double"
     "else" "enum" "export" "extends" "final"
@@ -414,6 +419,15 @@
   [warning-type {:keys [name]}]
   (str name " is shadowed by a local"))
 
+(defmethod error-message :infer-warning
+  [warning-type {:keys [warn-type form type property]}]
+  (case warn-type
+    :target   (str "Cannot infer target type in expression " form "")
+    :property (str "Cannot resolve property " property
+                   " for inferred type " type  " in expression " form)
+    :object   (str "Adding extern to Object for property " property " due to "
+                   "ambiguous expression " form)))
+
 (defn default-warning-handler [warning-type env extra]
   (when (warning-type *cljs-warnings*)
     (when-let [s (error-message warning-type extra)]
@@ -497,13 +511,13 @@
   #?(:clj
      (reify clojure.lang.IDeref
        (deref [_]
-         (if-not (nil? env/*compiler*)
+         (if (some? env/*compiler*)
            (::namespaces @env/*compiler*)
            default-namespaces)))
      :cljs
      (reify IDeref
        (-deref [_]
-         (if-not (nil? env/*compiler*)
+         (if (some? env/*compiler*)
            (::namespaces @env/*compiler*)
            default-namespaces)))))
 
@@ -511,11 +525,10 @@
   ([key]
     (get-namespace env/*compiler* key))
   ([cenv key]
-   (let [ns (get-in @cenv [::namespaces key])]
-     (if-not (nil? ns)
+   (if-some [ns (get-in @cenv [::namespaces key])]
        ns
        (when (= 'cljs.user key)
-         {:name 'cljs.user})))))
+         {:name 'cljs.user}))))
 
 #?(:clj
    (defmacro no-warn [& body]
@@ -671,11 +684,16 @@
   [env prefix]
   (when-not (gets @env/*compiler* ::namespaces prefix)
     (let [ns (:ns env)]
-      (if-not (nil? (get (:requires ns) prefix))
-        true
-        (if-not (nil? (get (:imports ns) prefix))
-          true
-          false)))))
+      (or (some? (get (:requires ns) prefix))
+          (some? (get (:imports ns) prefix))))))
+
+(defn js-module-exists?
+  [module]
+  ;; we need to check both keys and values of the JS module index, because
+  ;; macroexpansion will be looking for the provided name - António Monteiro
+  (contains?
+    (into #{} (mapcat identity) (get-in @env/*compiler* [:js-module-index]))
+    (str module)))
 
 (defn confirm-var-exists
   ([env prefix suffix]
@@ -693,7 +711,8 @@
      (when (and (not (implicit-import? env prefix suffix))
                 (not (loaded-js-ns? env prefix))
                 (not (and (= 'cljs.core prefix) (= 'unquote suffix)))
-                (nil? (gets @env/*compiler* ::namespaces prefix :defs suffix)))
+                (nil? (gets @env/*compiler* ::namespaces prefix :defs suffix))
+                (not (js-module-exists? prefix)))
        (missing-fn env prefix suffix)))))
 
 (defn confirm-var-exists-throw []
@@ -727,18 +746,95 @@
              (nil? (gets @env/*compiler* ::namespaces ns-sym))
              ;; macros may refer to namespaces never explicitly required
              ;; confirm that the library at least exists
-             #?(:clj (nil? (util/ns->source ns-sym))))
+             #?(:clj (nil? (util/ns->source ns-sym)))
+             (not (js-module-exists? ns-sym)))
     (warning :undeclared-ns env {:ns-sym ns-sym})))
 
 (defn core-name?
   "Is sym visible from core in the current compilation namespace?"
   #?(:cljs {:tag boolean})
   [env sym]
-  (and (or (gets @env/*compiler* ::namespaces 'cljs.core :defs sym)
-           (when-let [mac (get-expander sym env)]
+  (and (or (some? (gets @env/*compiler* ::namespaces 'cljs.core :defs sym))
+           (if-some [mac (get-expander sym env)]
              (let [^Namespace ns (-> mac meta :ns)]
-               (= (.getName ns) #?(:clj 'cljs.core :cljs 'cljs.core$macros)))))
+               (= (.getName ns) #?(:clj 'cljs.core :cljs 'cljs.core$macros)))
+             false))
        (not (contains? (-> env :ns :excludes) sym))))
+
+(defn js-tag? [x]
+  (and (symbol? x)
+       (or (= 'js x)
+           (= "js" (namespace x)))))
+
+(defn normalize-js-tag [x]
+  ;; if not 'js, assume constructor
+  (if-not (= 'js x)
+    (with-meta 'js
+      {:prefix (conj (->> (string/split (name x) #"\.")
+                       (map symbol) vec)
+                 'prototype)})
+    x))
+
+(def alias->type
+  '{object   Object
+    string   String
+    number   Number
+    array    Array
+    function Function
+    boolean  Boolean
+    symbol   Symbol})
+
+(defn has-extern?*
+  ([pre externs]
+   (let [pre (if-some [me (find
+                            (get-in externs '[Window prototype])
+                            (first pre))]
+               (if-some [tag (-> me first meta :tag)]
+                 (into [tag 'prototype] (next pre))
+                 pre)
+               pre)]
+     (has-extern?* pre externs externs)))
+  ([pre externs top]
+   (cond
+     (empty? pre) true
+     :else
+     (let [x  (first pre)
+           me (find externs x)]
+       (cond
+         (not me) false
+         :else
+         (let [[x' externs'] me
+               xmeta (meta x')]
+           (if (and (= 'Function (:tag xmeta)) (:ctor xmeta))
+             (or (has-extern?* (into '[prototype] (next pre)) externs' top)
+                 (has-extern?* (next pre) externs' top))
+             (recur (next pre) externs' top))))))))
+
+(defn has-extern?
+  ([pre]
+    (has-extern? pre (get @env/*compiler* ::externs)))
+  ([pre externs]
+   (or (has-extern?* pre externs)
+       (when (= 1 (count pre))
+         (let [x (first pre)]
+           (or (get-in externs (conj '[Window prototype] x))
+               (get-in externs (conj '[Number] x)))))
+       (-> (last pre) str (string/starts-with? "cljs$")))))
+
+(defn js-tag
+  ([pre]
+   (js-tag pre :tag))
+  ([pre tag-type]
+   (js-tag pre tag-type (get @env/*compiler* ::externs)))
+  ([pre tag-type externs]
+   (js-tag pre tag-type externs externs))
+  ([pre tag-type externs top]
+   (when-let [[p externs' :as me] (find externs (first pre))]
+     (let [tag (-> p meta tag-type)]
+       (if (= (count pre) 1)
+         (when tag (symbol "js" (str (alias->type tag tag))))
+         (or (js-tag (next pre) tag-type externs' top)
+             (js-tag (into '[prototype] (next pre)) tag-type (get top tag) top)))))))
 
 (defn resolve-var
   "Resolve a var. Accepts a side-effecting confirm fn for producing
@@ -751,20 +847,33 @@
        (do
          (when (contains? locals (-> sym name symbol))
            (warning :js-shadowed-by-local env {:name sym}))
-         {:name sym :ns 'js})
+         (let [pre (->> (string/split (name sym) #"\.") (map symbol) vec)]
+           (when-not (has-extern? pre)
+             (swap! env/*compiler* update-in
+               (into [::namespaces (-> env :ns :name) :externs] pre) merge {}))
+           (merge
+             {:name sym
+              :ns   'js
+              :tag  (with-meta (or (js-tag pre) 'js) {:prefix pre})}
+             (when-let [ret-tag (js-tag pre :ret-tag)]
+               {:js-fn-var true
+                :ret-tag ret-tag}))))
        (let [s  (str sym)
              lb (get locals sym)]
          (cond
-           (not (nil? lb)) lb
+           (some? lb) lb
 
-           (not (nil? (namespace sym)))
+           (some? (namespace sym))
            (let [ns      (namespace sym)
                  ns      (if #?(:clj  (= "clojure.core" ns)
                                 :cljs (identical? "clojure.core" ns))
                            "cljs.core"
                            ns)
-                 full-ns (resolve-ns-alias env ns)]
-             (when-not (nil? confirm)
+                 full-ns (resolve-ns-alias env ns
+                           (or (and (js-module-exists? ns)
+                                    (get-in @env/*compiler* [:js-module-index ns]))
+                             (symbol ns)))]
+             (when (some? confirm)
                (when (not= (-> env :ns :name) full-ns)
                  (confirm-ns env full-ns))
                (confirm env full-ns (symbol (name sym))))
@@ -778,31 +887,30 @@
                          (not ^boolean (goog.string/contains s ".."))))
            (let [idx    (.indexOf s ".")
                  prefix (symbol (subs s 0 idx))
-                 suffix (subs s (inc idx))
-                 lb     (get locals prefix)]
-             (if-not (nil? lb)
+                 suffix (subs s (inc idx))]
+             (if-some [lb (get locals prefix)]
                {:name (symbol (str (:name lb)) suffix)}
-               (let [cur-ns  (-> env :ns :name)
-                     full-ns (gets @env/*compiler* ::namespaces cur-ns :imports prefix)]
-                 (if-not (nil? full-ns)
+               (let [cur-ns  (-> env :ns :name)]
+                 (if-some [full-ns (gets @env/*compiler* ::namespaces cur-ns :imports prefix)]
                    {:name (symbol (str full-ns) suffix)}
-                   (let [info (gets @env/*compiler* ::namespaces cur-ns :defs prefix)]
-                     (if-not (nil? info)
+
+                   ;else
+                     (if-some [info (gets @env/*compiler* ::namespaces cur-ns :defs prefix)]
                        (merge info
                          {:name (symbol (str cur-ns) (str sym))
                           :ns cur-ns})
                        (merge (gets @env/*compiler* ::namespaces prefix :defs (symbol suffix))
                          {:name (if (= "" prefix) (symbol suffix) (symbol (str prefix) suffix))
-                          :ns prefix})))))))
+                          :ns prefix}))))))
 
-           (not (nil? (gets @env/*compiler* ::namespaces (-> env :ns :name) :uses sym)))
+           (some? (gets @env/*compiler* ::namespaces (-> env :ns :name) :uses sym))
            (let [full-ns (gets @env/*compiler* ::namespaces (-> env :ns :name) :uses sym)]
              (merge
                (gets @env/*compiler* ::namespaces full-ns :defs sym)
                {:name (symbol (str full-ns) (str sym))
                 :ns full-ns}))
 
-           (not (nil? (gets @env/*compiler* ::namespaces (-> env :ns :name) :renames sym)))
+           (some? (gets @env/*compiler* ::namespaces (-> env :ns :name) :renames sym))
            (let [qualified-symbol (gets @env/*compiler* ::namespaces (-> env :ns :name) :renames sym)
                  full-ns (symbol (namespace qualified-symbol))
                  sym     (symbol (name qualified-symbol))]
@@ -811,16 +919,23 @@
                {:name qualified-symbol
                 :ns full-ns}))
 
-           (not (nil? (gets @env/*compiler* ::namespaces (-> env :ns :name) :imports sym)))
+           (some? (gets @env/*compiler* ::namespaces (-> env :ns :name) :imports sym))
            (recur env (gets @env/*compiler* ::namespaces (-> env :ns :name) :imports sym) confirm)
+
+           (or (js-module-exists? s)
+               (js-module-exists? (resolve-ns-alias env s)))
+           (let [module (or (gets @env/*compiler* :js-module-index s)
+                            (resolve-ns-alias env s))]
+             {:name (symbol module)
+              :ns   'js})
 
            :else
            (let [cur-ns (-> env :ns :name)
                  full-ns (cond
-                           (not (nil? (gets @env/*compiler* ::namespaces cur-ns :defs sym))) cur-ns
+                           (some? (gets @env/*compiler* ::namespaces cur-ns :defs sym)) cur-ns
                            (core-name? env sym) 'cljs.core
                            :else cur-ns)]
-             (when-not (nil? confirm)
+             (when (some? confirm)
                (confirm env full-ns sym))
              (merge (gets @env/*compiler* ::namespaces full-ns :defs sym)
                {:name (symbol (str full-ns) (str sym))
@@ -850,17 +965,17 @@
   (let [ns (-> env :ns :name)
         namespaces (get @env/*compiler* ::namespaces)]
     (cond
-      (namespace sym)
+      (some? (namespace sym))
       (let [ns (namespace sym)
             ns (if (= "clojure.core" ns) "cljs.core" ns)
             full-ns (resolve-macro-ns-alias env ns)]
         (get-in namespaces [full-ns :macros (symbol (name sym))]))
 
-      (get-in namespaces [ns :use-macros sym])
+      (some? (get-in namespaces [ns :use-macros sym]))
       (let [full-ns (get-in namespaces [ns :use-macros sym])]
         (get-in namespaces [full-ns :macros sym]))
 
-      (get-in namespaces [ns :rename-macros sym])
+      (some? (get-in namespaces [ns :rename-macros sym]))
       (let [qualified-symbol (get-in namespaces [ns :rename-macros sym])
             full-ns (symbol (namespace qualified-symbol))
             sym     (symbol (name qualified-symbol))]
@@ -868,10 +983,10 @@
 
       :else
       (let [ns (cond
-                 (get-in namespaces [ns :macros sym]) ns
+                 (some? (get-in namespaces [ns :macros sym])) ns
                  (core-name? env sym) #?(:clj  'cljs.core
                                          :cljs CLJS_CORE_MACROS_SYM))]
-        (when ns
+        (when (some? ns)
           #?(:clj  (get-in namespaces [ns :macros sym])
              :cljs (get-in namespaces [ns :defs sym])))))))
 
@@ -904,13 +1019,11 @@
   {:op :constant :env env :form sym :tag 'cljs.core/Keyword})
 
 (defn get-tag [e]
-  (let [tag (-> e :tag)]
-    (if-not (nil? tag)
+  (if-some [tag (-> e :tag)]
       tag
-      (let [tag (-> e :info :tag)]
-        (if-not (nil? tag)
+      (if-some [tag (-> e :info :tag)]
           tag
-          (-> e :form meta :tag))))))
+          (-> e :form meta :tag))))
 
 (defn find-matching-method [f params]
   ;; if local fn, need to look in :info
@@ -927,18 +1040,15 @@
   #?(:cljs {:tag boolean})
   [env t]
   ;; don't use resolve-existing-var to avoid warnings
-  (when (and (not (nil? t)) (symbol? t))
-    (let [var (resolve-var env t)
-          type (:type var)]
-      (if-not (nil? type)
+  (when (and (some? t) (symbol? t))
+    (let [var (resolve-var env t)]
+      (if-some [type (:type var)]
         type
-        (let [type (-> var :info :type)]
-          (if-not (nil? type)
+          (if-some [type (-> var :info :type)]
             type
-            (let [proto (:protocol-symbol var)]
-              (if-not (nil? proto)
+              (if-some [proto (:protocol-symbol var)]
                 proto
-                (get '#{cljs.core/PersistentHashMap cljs.core/List} t)))))))))
+                (get '#{cljs.core/PersistentHashMap cljs.core/List} t)))))))
 
 (declare infer-tag)
 
@@ -963,12 +1073,12 @@
           #?(:clj (= then-tag IGNORE_SYM)
              :cljs (symbol-identical? then-tag IGNORE_SYM)) else-tag
           ;; TODO: temporary until we move not-native -> clj - David
-          (and (or (not (nil? (get NOT_NATIVE then-tag))) (type? env then-tag))
-               (or (not (nil? (get NOT_NATIVE else-tag))) (type? env else-tag)))
+          (and (or (some? (get NOT_NATIVE then-tag)) (type? env then-tag))
+               (or (some? (get NOT_NATIVE else-tag)) (type? env else-tag)))
           'clj
           :else
-          (if (and (not (nil? (get BOOLEAN_OR_SEQ then-tag)))
-                   (not (nil? (get BOOLEAN_OR_SEQ else-tag))))
+          (if (and (some? (get BOOLEAN_OR_SEQ then-tag))
+                   (some? (get BOOLEAN_OR_SEQ else-tag)))
             'seq
             (let [then-tag (if #?(:clj (set? then-tag)
                                   :cljs (cljs-set? then-tag))
@@ -979,14 +1089,15 @@
               (into then-tag else-tag))))))))
 
 (defn infer-invoke [env e]
-  (let [{info :info :as f} (:f e)
-        ret-tag (when-not (nil? (:fn-var info)) (:ret-tag info))]
-    (if-not (nil? ret-tag)
+  (let [{info :info :as f} (:f e)]
+    (if-some [ret-tag (if (or (true? (:fn-var info))
+                              (true? (:js-fn-var info)))
+                        (:ret-tag info)
+                        (when (= 'js (:ns info)) 'js))]
       ret-tag
       (let [args (:args e)
-            me (assoc (find-matching-method f args) :op :method)
-            ret-tag (infer-tag env me)]
-        (if-not (nil? ret-tag)
+            me (assoc (find-matching-method f args) :op :method)]
+        (if-some [ret-tag (infer-tag env me)]
           ret-tag
           ANY_SYM)))))
 
@@ -994,8 +1105,7 @@
   "Given env, an analysis environment, and e, an AST node, return the inferred
    type of the node"
   [env e]
-  (let [tag (get-tag e)]
-    (if-not (nil? tag)
+    (if-some [tag (get-tag e)]
       tag
       (case (:op e)
         :recur    IGNORE_SYM
@@ -1011,12 +1121,12 @@
                     true BOOLEAN_SYM
                     false BOOLEAN_SYM
                     ANY_SYM)
-        :var      (if-not (nil? (:init e))
-                    (infer-tag env (:init e))
+        :var      (if-some [init (:init e)]
+                    (infer-tag env init)
                     (infer-tag env (:info e)))
         :dot      ANY_SYM
         :js       ANY_SYM
-        nil))))
+        nil)))
 
 (defmulti parse (fn [op & rest] op))
 
@@ -1027,7 +1137,7 @@
   (let [env (dissoc env :locals)
         var (resolve-var env sym (confirm-var-exists-throw))
         expr-env (assoc env :context :expr)]
-    (if-let [var-ns (:ns var)]
+    (when-some [var-ns (:ns var)]
       {:var (analyze expr-env sym)
        :sym (analyze expr-env `(quote ~(symbol (name var-ns) (name (:name var)))))
        :meta (let [ks [:ns :doc :file :line :column]
@@ -1186,16 +1296,16 @@
                    (symbol (name sym))
 
                    :else sym)]
-    (when (get-in @env/*compiler* [::namespaces clash-ns])
+    (when (some? (get-in @env/*compiler* [::namespaces clash-ns]))
       (warning :ns-var-clash env
         {:ns (symbol (str ns-name "." sym))
          :var (symbol (str ns-name) (str sym))}))
-    (when (:const (resolve-var (dissoc env :locals) sym))
+    (when (some? (:const (resolve-var (dissoc env :locals) sym)))
       (throw (error env "Can't redefine a constant")))
-    (when-let [doc (:doc args)]
+    (when-some [doc (:doc args)]
       (when-not (string? doc)
         (throw (error env "Too many arguments to def"))))
-    (when-let [v (get-in @env/*compiler* [::namespaces ns-name :defs sym])]
+    (when-some [v (get-in @env/*compiler* [::namespaces ns-name :defs sym])]
       (when (and (not *allow-redef*)
                  (not (:declared v))
                  (not (:declared sym-meta))
@@ -1206,11 +1316,13 @@
       (swap! *file-defs* conj sym))
     (let [env (if (or (and (not= ns-name 'cljs.core)
                            (core-name? env sym))
-                      (get-in @env/*compiler* [::namespaces ns-name :uses sym]))
-                (let [ev (resolve-existing-var (dissoc env :locals) sym)]
+                      (some? (get-in @env/*compiler* [::namespaces ns-name :uses sym])))
+                (let [ev (resolve-existing-var (dissoc env :locals) sym)
+                      conj-to-set (fnil conj #{})]
                   (warning :redef env {:sym sym :ns (:ns ev) :ns-name ns-name})
-                  (swap! env/*compiler* update-in [::namespaces ns-name :excludes] conj sym)
-                  (update-in env [:ns :excludes] conj sym))
+                  (swap! env/*compiler* update-in [::namespaces ns-name :excludes]
+                     conj-to-set sym)
+                  (update-in env [:ns :excludes] conj-to-set sym))
                 env)
           var-name (:name (resolve-var (dissoc env :locals) sym))
           init-expr (when (contains? args :init)
@@ -1218,21 +1330,21 @@
                         (merge
                           {:name var-name}
                           sym-meta
-                          (when dynamic {:dynamic true})
+                          (when (true? dynamic) {:dynamic true})
                           (source-info var-name env)))
                       (disallowing-recur
                         (disallowing-ns*
                           (analyze (assoc env :context :expr) (:init args) sym))))
-          fn-var? (and init-expr (= (:op init-expr) :fn))
+          fn-var? (and (some? init-expr) (= (:op init-expr) :fn))
           tag (if fn-var?
                 (or (:ret-tag init-expr) tag)
-                tag)
+                (or tag (:tag init-expr)))
           export-as (when-let [export-val (-> sym meta :export)]
                       (if (= true export-val) var-name export-val))
           doc (or (:doc args) (-> sym meta :doc))]
-      (when-let [v (get-in @env/*compiler* [::namespaces ns-name :defs sym])]
+      (when-some [v (get-in @env/*compiler* [::namespaces ns-name :defs sym])]
         (when (and (not (-> sym meta :declared))
-                   (and (:fn-var v) (not fn-var?)))
+                   (and (true? (:fn-var v)) (not fn-var?)))
           (warning :fn-var env {:ns-name ns-name :sym sym})))
       (swap! env/*compiler* assoc-in [::namespaces ns-name :defs sym]
         (merge
@@ -1249,7 +1361,7 @@
                          "cljs/core.cljs"
                          f))))}
           (when doc {:doc doc})
-          (when dynamic {:dynamic true})
+          (when (true? dynamic) {:dynamic true})
           (source-info var-name env)
           ;; the protocol a protocol fn belongs to
           (when protocol
@@ -1262,20 +1374,21 @@
           (when fn-var?
             (let [params (map #(vec (map :name (:params %))) (:methods init-expr))]
               (merge
-                {:fn-var true
+                {:fn-var (not (:macro sym-meta))
                  ;; protocol implementation context
                  :protocol-impl (:protocol-impl init-expr)
                  ;; inline protocol implementation context
                  :protocol-inline (:protocol-inline init-expr)}
-                (if-let [top-fn-meta (:top-fn sym-meta)]
+                (if-some [top-fn-meta (:top-fn sym-meta)]
                   top-fn-meta
                   {:variadic (:variadic init-expr)
                    :max-fixed-arity (:max-fixed-arity init-expr)
                    :method-params params
                    :arglists (:arglists sym-meta)
-                   :arglists-meta (doall (map meta (:arglists sym-meta)))}))) )
-          (when (and fn-var? tag)
-            {:ret-tag tag})))
+                   :arglists-meta (doall (map meta (:arglists sym-meta)))}))))
+          (if (and fn-var? (some? tag))
+            {:ret-tag tag}
+            (when tag {:tag tag}))))
       (merge
         {:env env
          :op :def
@@ -1291,17 +1404,17 @@
          :doc doc
          :jsdoc (:jsdoc sym-meta)
          :init init-expr}
-        (when (:def-emits-var env)
+        (when (true? (:def-emits-var env))
           {:var-ast (var-ast env sym)})
-        (when-let [test (:test sym-meta)]
+        (when-some [test (:test sym-meta)]
           {:test (analyze (assoc env :context :expr) test)})
-        (when tag
+        (when (some? tag)
           (if fn-var?
             {:ret-tag tag}
             {:tag tag}))
-        (when dynamic {:dynamic true})
-        (when export-as {:export export-as})
-        (when init-expr {:children [init-expr]})))))
+        (when (true? dynamic) {:dynamic true})
+        (when (some? export-as) {:export export-as})
+        (when (some? init-expr) {:children [init-expr]})))))
 
 (defn analyze-fn-method-param [env]
   (fn [[locals params] name]
@@ -1311,7 +1424,7 @@
           column (get-col name env)
           nmeta  (meta name)
           tag    (:tag nmeta)
-          shadow (when-not (nil? locals)
+          shadow (when (some? locals)
                    (locals name))
           env    (merge (select-keys env [:context])
                    {:line line :column column})
@@ -1363,7 +1476,7 @@
 (declare analyze-wrap-meta)
 
 (defn fn-name-var [env locals name]
-  (when-not (nil? name)
+  (when (some? name)
     (let [ns       (-> env :ns :name)
           shadow   (get locals name)
           shadow   (when (nil? shadow)
@@ -1375,7 +1488,7 @@
                            :ns ns
                            :shadow shadow}}
           tag      (-> name meta :tag)
-          ret-tag  (when-not (nil? tag)
+          ret-tag  (when (some? tag)
                      {:ret-tag tag})]
       (merge name-var ret-tag))))
 
@@ -1397,10 +1510,10 @@
                        meths)
         locals       (:locals env)
         name-var     (fn-name-var env locals name)
-        env          (if-not (nil? name)
+        env          (if (some? name)
                        (update-in env [:fn-scope] conj name-var)
                        env)
-        locals       (if (and (not (nil? locals))
+        locals       (if (and (some? locals)
                               named-fn?)
                        (assoc locals name name-var)
                        locals)
@@ -1425,7 +1538,7 @@
                          :max-fixed-arity mfa
                          :method-params (map :params methods))
                        locals)
-        methods      (if-not (nil? name)
+        methods      (if (some? name)
                        ;; a second pass with knowledge of our function-ness/arity
                        ;; lets us optimize self calls
                        (disallowing-ns* (analyze-fn-methods-pass2 menv locals type meths))
@@ -1537,22 +1650,20 @@
     (analyze env init)))
 
 (defn get-let-tag [name init-expr]
-  (let [tag (-> name meta :tag)]
-    (if-not (nil? tag)
+  (if-some [tag (-> name meta :tag)]
       tag
-      (let [tag (-> init-expr :tag)]
-        (if-not (nil? tag)
+        (if-some [tag (-> init-expr :tag)]
           tag
-          (-> init-expr :info :tag))))))
+          (-> init-expr :info :tag))))
 
 (defn analyze-let-bindings* [encl-env bindings]
   (loop [bes []
          env (assoc encl-env :context :expr)
          bindings (seq (partition 2 bindings))]
-    (let [binding (first bindings)]
-      (if-not (nil? binding)
-        (let [[name init] binding]
-          (when (or (not (nil? (namespace name)))
+
+      (if-some [[name init] (first bindings)]
+        (let []
+          (when (or (some? (namespace name))
                   #?(:clj  (.contains (str name) ".")
                      :cljs ^boolean (goog.string/contains (str name) ".")))
             (throw (error encl-env (str "Invalid local name: " name))))
@@ -1584,7 +1695,7 @@
             (recur (conj bes be)
               (assoc-in env [:locals name] be)
               (next bindings))))
-        [bes env]))))
+        [bes env])))
 
 (defn analyze-let-bindings [encl-env bindings]
   (disallowing-recur (analyze-let-bindings* encl-env bindings)))
@@ -1610,7 +1721,7 @@
                        *recur-frames*)
         loop-lets    (cond
                        (true? is-loop) *loop-lets*
-                       (not (nil? *loop-lets*)) (cons {:params bes} *loop-lets*))
+                       (some? *loop-lets*) (cons {:params bes} *loop-lets*))
         expr         (analyze-let-body env context exprs recur-frames loop-lets)
         op           (if (true? is-loop) :loop :let)
         children     (conj (vec (map :init bes)) expr)]
@@ -1650,12 +1761,11 @@
 
 (defmethod parse 'new
   [_ env [_ ctor & args :as form] _ _]
-  (when-not (symbol? ctor)
-    (throw (error env "First arg to new must be a symbol")))
   (disallowing-recur
    (let [enve (assoc env :context :expr)
          ctorexpr (analyze enve ctor)
-         ctor-var (resolve-existing-var env ctor)
+         ctor-var (when (= (:op ctorexpr) :var)
+                    (resolve-existing-var env ctor))
          record-args
          (when (and (:record ctor-var) (not (-> ctor meta :internal-ctor)))
            (repeat 3 (analyze enve nil)))
@@ -1663,7 +1773,7 @@
          known-num-fields (:num-fields ctor-var)
          argc (count args)]
      (when (and (not (-> ctor meta :internal-ctor))
-                known-num-fields (not= known-num-fields argc))
+                (some? known-num-fields) (not= known-num-fields argc))
        (warning :fn-arity env {:argc argc :ctor ctor}))
      {:env env :op :new :form form :ctor ctorexpr :args argexprs
       :children (into [ctorexpr] argexprs)
@@ -1685,16 +1795,20 @@
     (disallowing-recur
      (let [enve (assoc env :context :expr)
            targetexpr (cond
-                       (and
-                         (= target '*unchecked-if*) ;; TODO: proper resolve
-                         (or (true? val) (false? val)))
+                       (and (= target '*unchecked-if*) ;; TODO: proper resolve
+                            (or (true? val) (false? val)))
                        (do
                          (set! *unchecked-if* val)
                          ::set-unchecked-if)
 
+                       (= target '*warn-on-infer*)
+                       (do
+                         (set! *cljs-warnings* (assoc *cljs-warnings* :infer-warning true))
+                         ::set-warn-on-infer)
+
                        (symbol? target)
                        (do
-                         (when (:const (resolve-var (dissoc env :locals) target))
+                         (when (some? (:const (resolve-var (dissoc env :locals) target)))
                            (throw (error env "Can't set! a constant")))
                          (let [local (-> env :locals target)]
                            (when-not (or (nil? local)
@@ -1714,11 +1828,14 @@
        (when-not targetexpr
          (throw (error env "set! target must be a field or a symbol naming a var")))
        (cond
-        (= targetexpr ::set-unchecked-if) {:env env :op :no-op}
-        :else {:env env :op :set! :form form :target targetexpr :val valexpr
-               :children [targetexpr valexpr]})))))
+        (some? (#{::set-unchecked-if ::set-warn-on-infer} targetexpr))
+        {:env env :op :no-op}
 
-(declare analyze-file)
+        :else
+        {:env env :op :set! :form form :target targetexpr :val valexpr
+         :children [targetexpr valexpr]})))))
+
+#?(:clj (declare analyze-file))
 
 #?(:clj
    (defn locate-src
@@ -1746,7 +1863,7 @@
   [dep]
   {:pre [(symbol? dep)]}
   (let [js-index (:js-dependency-index @env/*compiler*)]
-    (if-let [[_ {:keys [foreign]}] (find js-index (name dep))]
+    (if-some [[_ {:keys [foreign]}] (find js-index (name dep))]
       foreign
       false)))
 
@@ -1754,7 +1871,10 @@
   "Given a lib, a namespace, deps, its dependencies, env, an analysis environment
    and opts, compiler options - analyze all of the dependencies. Required to
    correctly analyze usage of other namespaces."
-  ([lib deps env] (analyze-deps lib deps env nil))
+  ([lib deps env]
+   (analyze-deps lib deps env
+     (when env/*compiler*
+       (:options @env/*compiler*))))
   ([lib deps env opts]
    (let [compiler @env/*compiler*]
      (binding [*cljs-dep-set* (vary-meta (conj *cljs-dep-set* lib) update-in [:dep-path] conj lib)]
@@ -1768,7 +1888,7 @@
          (when-not (or (not-empty (get-in compiler [::namespaces dep :defs]))
                        (contains? (:js-dependency-index compiler) (name dep))
                        #?(:clj (deps/find-classpath-lib dep)))
-           #?(:clj (if-let [src (locate-src dep)]
+           #?(:clj (if-some [src (locate-src dep)]
                      (analyze-file src opts)
                      (throw
                        (error env
@@ -1932,7 +2052,7 @@
                     (throw
                       (error env "Only [:refer-clojure :exclude (names)] and optionally `:rename {from to}` specs supported"))
 
-                    (not (nil? fs))
+                    (some? fs)
                     (let [kw (first fs)]
                       (if (valid-kws kw)
                         (let [refs (second fs)]
@@ -1968,11 +2088,11 @@
           (parse-ns-error-msg spec
             "Only [lib.ns :only (names)] and optionally `:rename {from to}` specs supported in :use / :use-macros")))
 
-      (not (nil? fs))
+      (some? fs)
       (let [kw (first fs)
             only? (= kw :only)]
         (if (or only? (= kw :rename))
-          (if (some #{(if only? :refer kw)} ret)
+          (if (some? (some #{(if only? :refer kw)} ret))
             (throw
               (error env
                 (parse-ns-error-msg spec
@@ -1984,7 +2104,7 @@
                 (recur (nnext fs) (into ret [(if only? :refer kw) refs]) false))))
           (recur fs ret true )))
 
-      :else (if (some #{:refer} ret)
+      :else (if (some? (some #{:refer} ret))
               ret
               (recur fs ret true)))))
 
@@ -1994,9 +2114,13 @@
     (do
       (basic-validate-ns-spec env macros? spec)
       (let [[lib & opts] spec
-            lib (if-let [js-module-name (get-in @env/*compiler* [:js-module-index (name lib)])]
-                  (symbol js-module-name)
-                  lib)
+            ;; We need to load JS modules by the name that has been created by the
+            ;; Google Closure compiler, e.g. module$resources$libs$calculator.
+            ;; This means that we need to create an alias from the module name
+            ;; given with :provides to the new name.
+            [lib js-module-provides] (if-some [js-module-name (get-in @env/*compiler* [:js-module-index (str lib)])]
+                                       [(symbol js-module-name) lib]
+                                       [lib nil])
             {alias :as referred :refer renamed :rename :or {alias lib}} (apply hash-map opts)
             referred-without-renamed (seq (remove (set (keys renamed)) referred))
             [rk uk renk] (if macros? [:require-macros :use-macros :rename-macros] [:require :use :rename])]
@@ -2005,14 +2129,14 @@
             (error env
               (parse-ns-error-msg spec
                 ":as must be followed by a symbol in :require / :require-macros"))))
-        (when alias
+        (when (some? alias)
           (let [alias-type (if macros? :macros :fns)
                 lib'       ((alias-type @aliases) alias)]
-            (when (and (not (nil? lib')) (not= lib lib'))
+            (when (and (some? lib') (not= lib lib'))
               (throw (error env (parse-ns-error-msg spec ":as alias must be unique"))))
             (swap! aliases
               update-in [alias-type]
-              conj [alias lib])))
+              conj [alias lib] (when js-module-provides [js-module-provides lib]))))
         (when-not (or (and (sequential? referred)
                            (every? symbol? referred))
                       (nil? referred))
@@ -2023,10 +2147,12 @@
         (when-not macros?
           (swap! deps conj lib))
         (merge
-          (when alias
-            {rk (merge {alias lib} {lib lib})})
-          (when referred-without-renamed {uk (apply hash-map (interleave referred-without-renamed (repeat lib)))})
-          (when renamed
+          (when (some? alias)
+            {rk (merge {alias lib} {lib lib}
+                  (when js-module-provides {js-module-provides lib}))})
+          (when (some? referred-without-renamed) 
+            {uk (apply hash-map (interleave referred-without-renamed (repeat lib)))})
+          (when (some? renamed)
             {renk (reduce (fn [m [original renamed]]
                             (when-not (some #{original} referred)
                               (throw (error env
@@ -2049,7 +2175,7 @@
     {:import  import-map
      :require import-map}))
 
-(declare parse-ns)
+#?(:clj (declare parse-ns))
 
 (defn macro-autoload-ns?
   "Given a spec form check whether the spec namespace requires a macro file
@@ -2115,6 +2241,13 @@
                 (if (vector? spec) spec [spec]))))]
     (map canonicalize specs)))
 
+(defn canonicalize-import-specs [specs]
+  (letfn [(canonicalize [quoted-spec-or-kw]
+            (if (keyword? quoted-spec-or-kw)
+              quoted-spec-or-kw
+              (second quoted-spec-or-kw)))]
+    (map canonicalize specs)))
+
 (defn desugar-ns-specs
   "Given an original set of ns specs desugar :include-macros and :refer-macros
    usage into only primitive spec forms - :use, :require, :use-macros,
@@ -2157,7 +2290,7 @@
                             (replace-refer-macros))
                      x)))))
         remove-sugar (partial remove-from-spec sugar-keys)]
-    (if-let [require-specs (seq (to-macro-specs require))]
+    (if-some [require-specs (seq (to-macro-specs require))]
       (map (fn [x]
              (if-not (reload-spec? x)
                (let [[k v] x]
@@ -2194,7 +2327,7 @@
     (let [segments (string/split (clojure.core/name name) #"\.")]
       (when (= 1 (count segments))
         (warning :single-segment-namespace env {:name name}))
-      (when (some js-reserved segments)
+      (when (some? (some js-reserved segments))
         (warning :munged-namespace env {:name name}))
       (find-def-clash env name segments)
       #?(:clj
@@ -2203,21 +2336,21 @@
              (AssertionError.
                (str "Namespace " name " has a segment starting with an invaild "
                     "JavaScript identifier"))))))
-    (let [docstring    (if (string? (first args)) (first args))
+    (let [docstring    (when (string? (first args)) (first args))
           mdocstr      (-> name meta :doc)
-          args         (if docstring (next args) args)
-          metadata     (if (map? (first args)) (first args))
+          args         (if (some? docstring) (next args) args)
+          metadata     (when (map? (first args)) (first args))
           form-meta    (meta form)
           args         (desugar-ns-specs
                          #?(:clj  (rewrite-cljs-aliases
                                     (if metadata (next args) args))
-                            :cljs (if metadata (next args) args)))
+                            :cljs (if (some? metadata) (next args) args)))
           name         (vary-meta name merge metadata)
           {excludes :excludes core-renames :renames} (parse-ns-excludes env args)
           core-renames (reduce (fn [m [original renamed]]
                                  (assoc m renamed (symbol "cljs.core" (str original))))
                          {} core-renames)
-          deps         (atom #{})
+          deps         (atom [])
           aliases      (atom {:fns {} :macros {}})
           spec-parsers {:require        (partial parse-require-spec env false deps aliases)
                         :require-macros (partial parse-require-spec env true deps aliases)
@@ -2233,17 +2366,17 @@
            use-macros :use-macros require-macros :require-macros
            rename-macros :rename-macros imports :import :as params}
           (reduce
-            (fn [m [k & libs]]
+            (fn [m [k & libs :as libspec]]
               (when-not (#{:use :use-macros :require :require-macros :import} k)
-                (throw (error env "Only :refer-clojure, :require, :require-macros, :use, :use-macros, and :import libspecs supported")))
+                (throw (error env (str "Only :refer-clojure, :require, :require-macros, :use, :use-macros, and :import libspecs supported. Got " libspec " instead."))))
               (when-not (@valid-forms k)
                 (throw (error env (str "Only one " k " form is allowed per namespace definition"))))
               (swap! valid-forms disj k)
               ;; check for spec type reloads
               (when-not (= :import k)
-                (when (some #{:reload} libs)
+                (when (some? (some #{:reload} libs))
                   (swap! reload assoc k :reload))
-                (when (some #{:reload-all} libs)
+                (when (some? (some #{:reload-all} libs))
                   (swap! reload assoc k :reload-all)))
               ;; check for individual ns reloads from REPL interactions
               (when-let [xs (seq (filter #(-> % meta :reload) libs))]
@@ -2276,27 +2409,12 @@
              :uses           uses
              :requires       requires
              :renames        (merge renames core-renames)
-             :imports        imports}
-            ns-info
-            (if (:merge form-meta)
-              ;; for merging information in via require usage in REPLs
-              (let [ns-info' (get-in @env/*compiler* [::namespaces name])]
-                (if (pos? (count ns-info'))
-                  (let [merge-keys
-                        [:use-macros :require-macros :rename-macros
-                         :uses :requires :renames :imports]]
-                    (merge
-                      ns-info'
-                      (merge-with merge
-                        (select-keys ns-info' merge-keys)
-                        (select-keys ns-info merge-keys))))
-                  ns-info))
-              ns-info)]
+             :imports        imports}]
         (swap! env/*compiler* update-in [::namespaces name] merge ns-info)
         (merge {:op      :ns
                 :env     env
                 :form    form
-                :deps    @deps
+                :deps    (into [] (distinct @deps))
                 :reload  @reload
                 :reloads @reloads}
           (cond-> ns-info
@@ -2310,14 +2428,16 @@
 (defmethod parse 'ns*
   [_ env [_ quoted-specs :as form] _ opts]
   (when-let [not-quoted (->> (remove keyword? quoted-specs)
-                          (filter #(not= 'quote (first %)) )
+                          (remove #(and (seq? %) (= 'quote (first %))) )
                           first)]
     (throw (error env (str "Arguments to " (name (first quoted-specs))
                         " must be quoted. Offending spec: " not-quoted))))
   (when-not *allow-ns*
     (throw (error env (str "Calls to `" (name (first quoted-specs))
                         "` must appear at the top-level."))))
-  (let [specs        (canonicalize-specs quoted-specs)
+  (let [specs        (if (= :import (first quoted-specs))
+                       (canonicalize-import-specs quoted-specs)
+                       (canonicalize-specs quoted-specs))
         name         (-> env :ns :name)
         args         (desugar-ns-specs
                        #?(:clj  (list (process-rewrite-form
@@ -2327,7 +2447,7 @@
         core-renames (reduce (fn [m [original renamed]]
                                (assoc m renamed (symbol "cljs.core" (str original))))
                        {} core-renames)
-        deps         (atom #{})
+        deps         (atom [])
         aliases      (atom {:fns {} :macros {}})
         spec-parsers {:require        (partial parse-require-spec env false deps aliases)
                       :require-macros (partial parse-require-spec env true deps aliases)
@@ -2345,12 +2465,12 @@
           (fn [m [k & libs]]
             ;; check for spec type reloads
             (when-not (= :import k)
-              (when (some #{:reload} libs)
+              (when (some? (some #{:reload} libs))
                 (swap! reload assoc k :reload))
-              (when (some #{:reload-all} libs)
+              (when (some? (some #{:reload-all} libs))
                 (swap! reload assoc k :reload-all)))
             ;; check for individual ns reloads from REPL interactions
-            (when-let [xs (seq (filter #(-> % meta :reload) libs))]
+            (when-some [xs (seq (filter #(-> % meta :reload) libs))]
               (swap! reloads assoc k
                 (zipmap (map first xs) (map #(-> % meta :reload) xs))))
             (apply merge-with merge m
@@ -2376,6 +2496,7 @@
                      :uses :requires :renames :imports]]
                 (merge
                   ns-info'
+                  {:excludes excludes}
                   (merge-with merge
                     (select-keys ns-info' merge-keys)
                     (select-keys require-info merge-keys))))
@@ -2384,7 +2505,7 @@
       (merge {:op      :ns*
               :env     env
               :form    form
-              :deps    @deps
+              :deps    (into [] (distinct @deps))
               :reload  @reload
               :reloads @reloads}
         (cond-> require-info
@@ -2508,7 +2629,37 @@
         enve       (assoc env :context :expr)
         targetexpr (analyze enve target)
         form-meta  (meta form)
-        tag        (:tag form-meta)]
+        target-tag (:tag targetexpr)
+        prop       (or field method)
+        tag        (or (:tag form-meta)
+                       (and (js-tag? target-tag)
+                            (vary-meta (normalize-js-tag target-tag)
+                              update-in [:prefix] (fnil conj '[Object]) prop))
+                       nil)]
+    (when (not (string/starts-with? (str prop) "cljs$"))
+      ;; Adding to Object
+      (when (= 'Object (first (-> tag meta :prefix)))
+        (warning :infer-warning env
+          {:warn-type :object :form form :property prop}))
+      (when (not= 'js target-tag)
+        ;; Cannot determine type of the target
+        (when (or (nil? target-tag) ('#{any} target-tag))
+          (warning :infer-warning env
+            {:warn-type :target :form form}))
+        ;; Unresolveable property on existing extern
+        (let [[pre' pre] ((juxt butlast identity) (-> tag meta :prefix))]
+          (when (and (has-extern? pre') (not (has-extern? pre)))
+            (warning :infer-warning env
+              {:warn-type :property :form form
+               :type (symbol "js"
+                       (string/join "."
+                         (cond-> pre' (= 'prototype (last pre')) butlast)))
+               :property prop})))))
+    (when (js-tag? tag)
+      (let [pre (-> tag meta :prefix)]
+        (when-not (has-extern? pre)
+          (swap! env/*compiler* update-in
+            (into [::namespaces (-> env :ns :name) :externs] pre) merge {}))))
     (case dot-action
       ::access (let [children [targetexpr]]
                  {:op :dot
@@ -2517,7 +2668,9 @@
                   :target targetexpr
                   :field field
                   :children children
-                  :tag tag})
+                  :tag (if (js-tag? tag)
+                         (or (js-tag (-> tag meta :prefix) :tag) tag)
+                         tag)})
       ::call   (let [argexprs (map #(analyze enve %) args)
                      children (into [targetexpr] argexprs)]
                  {:op :dot
@@ -2527,16 +2680,17 @@
                   :method method
                   :args argexprs
                   :children children
-                  :tag tag}))))
+                  :tag (if (js-tag? tag)
+                         (or (js-tag (-> tag meta :prefix) :ret-tag) 'js)
+                         tag)}))))
 
 (defmethod parse '.
   [_ env [_ target & [field & member+] :as form] _ _]
   (disallowing-recur (analyze-dot env target field member+ form)))
 
 (defn get-js-tag [form]
-  (let [form-meta (meta form)
-        tag       (:tag form-meta)]
-    (if-not (nil? tag)
+  (let [form-meta (meta form)]
+    (if-some [tag (:tag form-meta)]
       tag
       (when (true? (:numeric form-meta))
         'number))))
@@ -2572,16 +2726,20 @@
   ;; when functions like first won't return nil, so variadic
   ;; numeric functions like cljs.core/< would produce a spurious
   ;; warning without this - David
-  (if (nil? t)
-    true
-    (if (and (symbol? t) (not (nil? (get NUMERIC_SET t))))
+  (cond
+    (nil? t) true
+    (= 'clj-nil t) true
+    (js-tag? t) true ;; TODO: revisit
+    :else
+    (if (and (symbol? t) (some? (get NUMERIC_SET t)))
       true
       (when #?(:clj  (set? t)
                :cljs (cljs-set? t))
         (or (contains? t 'number)
             (contains? t 'long)
             (contains? t 'double)
-            (contains? t 'any))))))
+            (contains? t 'any)
+            (contains? t 'js))))))
 
 (defn analyze-js-star* [env jsform args form]
   (let [enve      (assoc env :context :expr)
@@ -2614,7 +2772,7 @@
   [op env [_ jsform & args :as form] _ _]
   (when-not (string? jsform)
     (throw (error env "Invalid js* form")))
-  (if-not (nil? args)
+  (if (some? args)
     (analyze-js-star env jsform args form)
     (let [code      (apply str (js-star-interp env jsform))
           tag       (get-js-tag form)
@@ -2671,7 +2829,7 @@
       (when (and (boolean deprecated?)
                  (not (boolean no-warn?)))
         (warning :fn-deprecated env {:fexpr fexpr})))
-    (when-not (nil? (-> fexpr :info :type))
+    (when (some? (-> fexpr :info :type))
       (warning :invoke-ctor env {:fexpr fexpr}))
     (if (or (not (boolean *cljs-static-fns*))
             (not (symbol? f))
@@ -2706,9 +2864,8 @@
                  (assoc env :column column)
                  env)
           ret  {:env env :form sym}
-          lcls (:locals env)
-          lb   (get lcls sym)]
-      (if-not (nil? lb)
+          lcls (:locals env)]
+      (if-some [lb (get lcls sym)] 
         (assoc ret :op :var :info lb)
         (let [sym-meta (meta sym)
               sym-ns (namespace sym)
@@ -2734,22 +2891,20 @@
 (defn excluded?
   #?(:cljs {:tag boolean})
   [env sym]
-  (if-not (nil? (gets env :ns :excludes sym))
-    true
-    (not (nil? (gets @env/*compiler* ::namespaces (gets env :ns :name) :excludes sym)))))
+  (or (some? (gets env :ns :excludes sym))
+      (some? (gets @env/*compiler* ::namespaces (gets env :ns :name) :excludes sym))))
 
 (defn used?
   #?(:cljs {:tag boolean})
   [env sym]
-  (if-not (nil? (gets env :ns :use-macros sym))
-    true
-    (not (nil? (gets @env/*compiler* ::namespaces (gets env :ns :name) :use-macros sym)))))
+  (or (some? (gets env :ns :use-macros sym))
+      (some? (gets @env/*compiler* ::namespaces (gets env :ns :name) :use-macros sym))))
 
 (defn get-expander-ns [env ^String nstr]
   ;; first check for clojure.* -> cljs.* cases
   (let [res  (or (resolve-macro-ns-alias env nstr nil)
                  (resolve-ns-alias env nstr nil))
-        nstr (if res (str res) nstr)]
+        nstr (if (some? res) (str res) nstr)]
     (cond
      #?@(:clj  [(= "clojure.core" nstr) (find-ns 'cljs.core)]
          :cljs [(identical? "clojure.core" nstr) (find-macros-ns CLJS_CORE_MACROS_SYM)])
@@ -2761,16 +2916,16 @@
                                                                   :cljs find-macros-ns)))))
 
 (defn get-expander* [sym env]
-  (when-not (or (not (nil? (gets env :locals sym))) ; locals hide macros
+  (when-not (or (some? (gets env :locals sym)) ; locals hide macros
                 (and (excluded? env sym) (not (used? env sym))))
     (let [nstr (namespace sym)]
       (cond
-        (not (nil? nstr))
+        (some? nstr)
         (let [ns (get-expander-ns env nstr)]
-          (when-not (nil? ns)
+          (when (some? ns)
             (.findInternedVar ^clojure.lang.Namespace ns (symbol (name sym)))))
 
-        (not (nil? (gets env :ns :rename-macros sym)))
+        (some? (gets env :ns :rename-macros sym))
         (let [qualified-symbol (gets env :ns :rename-macros sym)
               nsym (symbol (namespace qualified-symbol))
               sym  (symbol (name qualified-symbol))]
@@ -2778,37 +2933,41 @@
             #?(:clj (find-ns nsym) :cljs (find-macros-ns nsym)) sym))
 
         :else
-        (let [nsym (gets env :ns :use-macros sym)]
-          (if-not (nil? nsym)
+          (if-some [nsym (gets env :ns :use-macros sym)]
             (.findInternedVar ^clojure.lang.Namespace
             #?(:clj (find-ns nsym) :cljs (find-macros-ns nsym)) sym)
             (.findInternedVar ^clojure.lang.Namespace
-            #?(:clj (find-ns 'cljs.core) :cljs (find-macros-ns CLJS_CORE_MACROS_SYM)) sym)))))))
+            #?(:clj (find-ns 'cljs.core) :cljs (find-macros-ns CLJS_CORE_MACROS_SYM)) sym))))))
 
 (defn get-expander
   "Given a sym, a symbol identifying a macro, and env, an analysis environment
    return the corresponding Clojure macroexpander."
   [sym env]
   (let [mvar (get-expander* sym env)]
-    (when (and (not (nil? mvar))
+    (when (and (some? mvar)
             #?(:clj  (.isMacro ^clojure.lang.Var mvar)
                :cljs ^boolean (.isMacro mvar)))
       mvar)))
 
+#?(:cljs
+   (let [cached-var (delay (get (ns-interns* 'cljs.spec) 'macroexpand-check))]
+     (defn get-macroexpand-check-var []
+       (when (some? (find-ns-obj 'cljs.spec))
+         @cached-var))))
+
 (defn macroexpand-1*
   [env form]
   (let [op (first form)]
-    (if-not (nil? (get specials op))
+    (if (contains? specials op)
       form
-      (let [mac-var (when (symbol? op) (get-expander op env))]
-        (if-not (nil? mac-var)
+      ;else
+        (if-some [mac-var (when (symbol? op) (get-expander op env))]
           (#?@(:clj [binding [*ns* (create-ns *cljs-ns*)]]
                :cljs [do])
             (let [mchk  #?(:clj  (some-> (find-ns 'clojure.spec)
                                    (ns-resolve 'macroexpand-check))
-                           :cljs (and ^::no-resolve cljs.spec
-                                      ^::no-resolve cljs.spec/macroexpand-check))
-                  _     (when mchk
+                           :cljs (get-macroexpand-check-var))
+                  _     (when (some? mchk)
                           (mchk mac-var (next form)))
                   form' (try
                           (apply @mac-var form env (rest form))
@@ -2819,7 +2978,7 @@
                       sym  (first form)]
                   (if #?(:clj  (= sym' 'js*)
                          :cljs (symbol-identical? sym' JS_STAR_SYM))
-                    (let [sym   (if (namespace sym)
+                    (let [sym   (if (some? (namespace sym))
                                   sym
                                   (symbol "cljs.core" (str sym)))
                           js-op {:js-op sym}
@@ -2852,7 +3011,7 @@
                   (meta form))
 
                 :else form))
-            form))))))
+            form)))))
 
 (defn macroexpand-1
   "Given a env, an analysis environment, and form, a ClojureScript form,
@@ -2863,7 +3022,7 @@
 (declare analyze-list)
 
 (defn analyze-seq* [op env form name opts]
-  (if-not (nil? (get specials op))
+  (if (contains? specials op)
     (parse op env form name opts)
     (parse-invoke env form)))
 
@@ -2872,7 +3031,10 @@
     (analyze-seq* op env form name opts)))
 
 (defn analyze-seq
-  ([env form name] (analyze-seq env form name nil))
+  ([env form name]
+   (analyze-seq env form name
+     (when env/*compiler*
+       (:options @env/*compiler*))))
   ([env form name opts]
    (if ^boolean (:quoted? env)
      (analyze-list env form)
@@ -2943,7 +3105,7 @@
 (defn analyze-wrap-meta [expr]
   (let [form (:form expr)
         m    (elide-reader-meta (meta form))]
-    (if (seq m)
+    (if (some? (seq m))
       (let [env (:env expr) ; take on expr's context ourselves
             expr (assoc-in expr [:env :context] :expr) ; change expr to :expr
             meta-expr (analyze-map (:env expr) m)]
@@ -2952,13 +3114,14 @@
       expr)))
 
 (defn infer-type [env ast _]
-  (let [tag (:tag ast)]
-    (if (nil? tag)
-      (let [tag (infer-tag env ast)]
-        (if-not (nil? tag)
+    (if (nil? (:tag ast))
+      (if-some [tag (infer-tag env ast)]
           (assoc ast :tag tag)
-          ast))
-      ast)))
+          ast)
+      ast))
+
+(defn- repl-self-require? [env deps]
+  (and (:repl-env env) (some #{*cljs-ns*} deps)))
 
 #?(:clj
    (defn ns-side-effects
@@ -2966,7 +3129,9 @@
      (if (#{:ns :ns*} op)
        (let [{:keys [name deps uses require-macros use-macros reload reloads]} ast]
          (when (and *analyze-deps* (seq deps))
-           (analyze-deps name deps env (dissoc opts :macros-ns)))
+           (analyze-deps
+             (if (repl-self-require? env deps) 'cljs.user name)
+             deps env (dissoc opts :macros-ns)))
          (if *load-macros*
            (do
              (load-core)
@@ -3029,7 +3194,7 @@
    (defn analyze-form [env form name opts]
      (cond
        (symbol? form) (analyze-symbol env form)
-       (and (cljs-seq? form) (seq form)) (analyze-seq env form name opts)
+       (and (cljs-seq? form) (some? (seq form))) (analyze-seq env form name opts)
        (cljs-map? form) (analyze-map env form)
        (cljs-vector? form) (analyze-vector env form)
        (cljs-set? form) (analyze-set env form)
@@ -3066,7 +3231,10 @@
   nested exprs, must have :children [exprs...] entry. This will
   facilitate code walking without knowing the details of the op set."
   ([env form] (analyze env form nil))
-  ([env form name] (analyze env form name nil))
+  ([env form name]
+   (analyze env form name
+     (when env/*compiler*
+       (:options @env/*compiler*))))
   ([env form name opts]
    (ensure
      (wrapping-errors env
@@ -3167,7 +3335,10 @@
       be used for *analyze-deps* and *load-macros* bindings respectively. This
       function does _not_ side-effect the ambient compilation environment unless
       requested via opts where :restore is false."
-     ([src] (parse-ns src nil nil))
+     ([src]
+      (parse-ns src nil
+        (when env/*compiler*
+          (:options @env/*compiler*))))
      ([src opts] (parse-ns src nil opts))
      ([src dest opts]
       (ensure
@@ -3204,7 +3375,7 @@
                                   :macros-ns    (:macros-ns opts)
                                   :requires     (cond-> #{'cljs.core}
                                                   (get-in @env/*compiler* [:options :emit-constants])
-                                                  (conj 'constants-table))}
+                                                  (conj constants-ns-sym))}
                                  (when (and dest (.exists ^File dest))
                                    {:lines (with-open [reader (io/reader dest)]
                                              (-> reader line-seq count))}))]
@@ -3226,7 +3397,7 @@
                                                  (set (vals deps))
                                                  (cond-> (conj (set (vals deps)) 'cljs.core)
                                                    (get-in @env/*compiler* [:options :emit-constants])
-                                                   (conj 'constants-table)))
+                                                   (conj constants-ns-sym)))
                                  :file         dest
                                  :source-file  (when rdr src)
                                  :source-forms (when-not rdr src)
@@ -3255,25 +3426,30 @@
           ijs)))))
 
 #?(:clj
+   (defn- cache-analysis-ext
+     ([] (cache-analysis-ext (get-in @env/*compiler* [:options :cache-analysis-format] :transit)))
+     ([format]
+      (if (and (= format :transit) @transit) "json" "edn"))))
+
+#?(:clj
    (defn cache-file
      "Given a ClojureScript source file returns the read/write path to the analysis
       cache file. Defaults to the read path which is usually also the write path."
      ([src] (cache-file src "out"))
      ([src output-dir] (cache-file src (parse-ns src) output-dir))
-     ([src ns-info output-dir] (cache-file src (parse-ns src) output-dir :read))
+     ([src ns-info output-dir]
+      (cache-file src (parse-ns src) output-dir :read))
      ([src ns-info output-dir mode]
       {:pre [(map? ns-info)]}
-      (if-let [core-cache
-               (and (= mode :read)
-                    (= (:ns ns-info) 'cljs.core)
-                    (or (and @transit (io/resource "cljs/core.cljs.cache.aot.json"))
-                        (io/resource "cljs/core.cljs.cache.aot.edn")))]
-        core-cache
-        (let [target-file (util/to-target-file output-dir ns-info
-                            (util/ext (:source-file ns-info)))]
-          (if @transit
-            (io/file (str target-file ".cache.json"))
-            (io/file (str target-file ".cache.edn"))))))))
+      (let [ext (cache-analysis-ext)]
+        (if-let [core-cache
+                 (and (= mode :read)
+                      (= (:ns ns-info) 'cljs.core)
+                      (io/resource (str "cljs/core.cljs.cache.aot." ext)))]
+          core-cache
+          (let [target-file (util/to-target-file output-dir ns-info
+                              (util/ext (:source-file ns-info)))]
+            (io/file (str target-file ".cache." ext))))))))
 
 #?(:clj
    (defn requires-analysis?
@@ -3324,6 +3500,28 @@
       (when src
         (.setLastModified ^File cache-file (util/last-modified src))))))
 
+(defn analyze-form-seq
+  ([forms]
+   (analyze-form-seq forms
+     (when env/*compiler*
+       (:options @env/*compiler*))))
+  ([forms opts]
+   (let [env (assoc (empty-env) :build-options opts)]
+     (binding [*file-defs* nil
+               #?@(:clj [*unchecked-if* false])
+               *cljs-ns* 'cljs.user
+               *cljs-file* nil
+               reader/*alias-map* (or reader/*alias-map* {})]
+       (loop [ns nil forms forms]
+         (if (some? forms)
+           (let [form (first forms)
+                 env  (assoc env :ns (get-namespace *cljs-ns*))
+                 ast  (analyze env form nil opts)]
+             (if (= (:op ast) :ns)
+               (recur (:name ast) (next forms))
+               (recur ns (next forms))))
+           ns))))))
+
 #?(:clj
    (defn analyze-file
      "Given a java.io.File, java.net.URL or a string identifying a resource on the
@@ -3335,12 +3533,15 @@
       \":output-dir/some/ns/foo.cljs.cache.edn\". This function does not return a
       meaningful value."
      ([f]
-      (analyze-file f nil))
+      (analyze-file f
+        (when env/*compiler*
+          (:options @env/*compiler*))))
      ([f opts]
       (analyze-file f false opts))
      ([f skip-cache opts]
-      (binding [*file-defs*    (atom #{})
-                *unchecked-if* false]
+      (binding [*file-defs*     (atom #{})
+                *unchecked-if*  false
+                *cljs-warnings* *cljs-warnings*]
         (let [output-dir (util/output-directory opts)
               res        (cond
                            (instance? File f) f
