@@ -23,22 +23,24 @@
         (geo/norm-crs (+ from step)))
     true to)))
 
-(defn equalize [carr gear param-fn param closer]
-  (letfn [(proc-fn [cr]
-                      (let [c @cr
-                             g (get c gear)
+(defn equalize [carr gear-key param-key param-fn closer-fn final-fn]
+  (letfn [(proc-fn [carr]
+                      (let [car @carr
+                             g (gear-key car)
                              target (:target g)
-                             step (* (:accel g) (:step g))]
-                        (if (calc/approx= (param c) target step)
-                            (do (param-fn cr target)
+                             step (* (:accel g) (:step g))
+                             param (param-key car)]
+                        (if (calc/approx= param target step)
+                            (do (param-fn carr target)
                                   false)
-                            (do (param-fn cr (closer (param c) target step))
+                            (do (param-fn carr (closer-fn param target step))
                                   true))))]
-  (vswap! carr assoc-in [gear :eqz-status] (volatile! "STOP"))
-  (let [g (get @carr gear)]
+  (vswap! carr assoc-in [gear-key :eqz-status] (volatile! "STOP"))
+  (let [g (gear-key @carr)]
     (asp/start-process (:eqz-status g) 
                                    #(proc-fn carr) 
-                                   (:time-out g)))))
+                                   (:time-out g)
+	           final-fn))))
 
 (defn check-diff-and-do [carr path1 path2 limit tio-pth final-fn]
   (letfn [(proc-fn [cr]
@@ -50,7 +52,8 @@
   (vswap! carr assoc :cdad-status (volatile! "STOP"))
   (asp/start-process (:cdad-status @carr) 
                                  #(proc-fn carr)
-                                 (get-in @carr tio-pth))))
+                                 (get-in @carr tio-pth)
+	         nil)))
 
 (defn bank [old-crs new-crs [right-bank min-arc small-arc big-arc factor]]
   (letfn [(turn-right? [from to]

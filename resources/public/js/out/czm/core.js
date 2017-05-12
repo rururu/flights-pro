@@ -6,7 +6,7 @@ goog.require('calc.geo');
 czm.core.TERR_PROV = (new Cesium.CesiumTerrainProvider(({"url": "//assets.agi.com/stk-terrain/world", "requestWaterMask": false, "requestVertexNormals": false})));
 czm.core.VIEWER = (new Cesium.Viewer("cesiumContainer",({"animation": false})));
 czm.core.CZM_SRC = (new Cesium.CzmlDataSource());
-czm.core.CAMERA = cljs.core.volatile_BANG_.call(null,new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"view","view",1247994814),"FORWARD",new cljs.core.Keyword(null,"pitch","pitch",1495126700),(-20),new cljs.core.Keyword(null,"roll","roll",11266999),(0)], null));
+czm.core.CAMERA = cljs.core.volatile_BANG_.call(null,new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"view","view",1247994814),"FORWARD",new cljs.core.Keyword(null,"pitch","pitch",1495126700),(-10),new cljs.core.Keyword(null,"roll","roll",11266999),(0)], null));
 czm.core.norm_crs = (function czm$core$norm_crs(x){
 if((x > (360))){
 return (x - (360));
@@ -37,12 +37,12 @@ var dest = Cesium.Cartesian3.fromDegrees(lon,lat,alt);
 return czm.core.VIEWER.camera.setView(({"destination": dest, "orientation": ({"heading": Cesium.Math.toRadians(hea), "pitch": Cesium.Math.toRadians(pit), "roll": Cesium.Math.toRadians(rol)})}));
 });
 czm.core.fly_to = (function czm$core$fly_to(lat,lon,alt,crs,per){
-var pitch = (function (){var pred__36654 = cljs.core._EQ_;
-var expr__36655 = new cljs.core.Keyword(null,"view","view",1247994814).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
-if(cljs.core.truth_(pred__36654.call(null,"UP",expr__36655))){
+var pitch = (function (){var pred__24644 = cljs.core._EQ_;
+var expr__24645 = new cljs.core.Keyword(null,"view","view",1247994814).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
+if(cljs.core.truth_(pred__24644.call(null,"UP",expr__24645))){
 return (90);
 } else {
-if(cljs.core.truth_(pred__36654.call(null,"DOWN",expr__36655))){
+if(cljs.core.truth_(pred__24644.call(null,"DOWN",expr__24645))){
 return (-90);
 } else {
 return new cljs.core.Keyword(null,"pitch","pitch",1495126700).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
@@ -50,27 +50,27 @@ return new cljs.core.Keyword(null,"pitch","pitch",1495126700).cljs$core$IFn$_inv
 }
 })();
 var roll = new cljs.core.Keyword(null,"roll","roll",11266999).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
-var head = calc.geo.norm_crs.call(null,(function (){var pred__36657 = cljs.core._EQ_;
-var expr__36658 = new cljs.core.Keyword(null,"view","view",1247994814).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
-if(cljs.core.truth_(pred__36657.call(null,"BACKWARD",expr__36658))){
+var head = calc.geo.norm_crs.call(null,(function (){var pred__24647 = cljs.core._EQ_;
+var expr__24648 = new cljs.core.Keyword(null,"view","view",1247994814).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
+if(cljs.core.truth_(pred__24647.call(null,"BACKWARD",expr__24648))){
 return (crs + (180));
 } else {
-if(cljs.core.truth_(pred__36657.call(null,"RIGHT",expr__36658))){
+if(cljs.core.truth_(pred__24647.call(null,"RIGHT",expr__24648))){
 return (crs + (90));
 } else {
-if(cljs.core.truth_(pred__36657.call(null,"LEFT",expr__36658))){
+if(cljs.core.truth_(pred__24647.call(null,"LEFT",expr__24648))){
 return (crs - (90));
 } else {
-if(cljs.core.truth_(pred__36657.call(null,"FORWARD-RIGHT",expr__36658))){
+if(cljs.core.truth_(pred__24647.call(null,"FORWARD-RIGHT",expr__24648))){
 return (crs + (45));
 } else {
-if(cljs.core.truth_(pred__36657.call(null,"FORWARD-LEFT",expr__36658))){
+if(cljs.core.truth_(pred__24647.call(null,"FORWARD-LEFT",expr__24648))){
 return (crs - (45));
 } else {
-if(cljs.core.truth_(pred__36657.call(null,"BACKWARD-RIGHT",expr__36658))){
+if(cljs.core.truth_(pred__24647.call(null,"BACKWARD-RIGHT",expr__24648))){
 return (crs + (135));
 } else {
-if(cljs.core.truth_(pred__36657.call(null,"BACKWARD-LEFT",expr__36658))){
+if(cljs.core.truth_(pred__24647.call(null,"BACKWARD-LEFT",expr__24648))){
 return (crs - (135));
 } else {
 return crs;
@@ -85,12 +85,12 @@ return crs;
 return czm.core.fly_control.call(null,lat,lon,alt,head,pitch,roll,per);
 });
 czm.core.move_to = (function czm$core$move_to(lat,lon,alt,crs){
-var pitch = (function (){var pred__36666 = cljs.core._EQ_;
-var expr__36667 = new cljs.core.Keyword(null,"view","view",1247994814).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
-if(cljs.core.truth_(pred__36666.call(null,"UP",expr__36667))){
+var pitch = (function (){var pred__24656 = cljs.core._EQ_;
+var expr__24657 = new cljs.core.Keyword(null,"view","view",1247994814).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
+if(cljs.core.truth_(pred__24656.call(null,"UP",expr__24657))){
 return (90);
 } else {
-if(cljs.core.truth_(pred__36666.call(null,"DOWN",expr__36667))){
+if(cljs.core.truth_(pred__24656.call(null,"DOWN",expr__24657))){
 return (-90);
 } else {
 return new cljs.core.Keyword(null,"pitch","pitch",1495126700).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
@@ -98,27 +98,27 @@ return new cljs.core.Keyword(null,"pitch","pitch",1495126700).cljs$core$IFn$_inv
 }
 })();
 var roll = new cljs.core.Keyword(null,"roll","roll",11266999).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
-var head = calc.geo.norm_crs.call(null,(function (){var pred__36669 = cljs.core._EQ_;
-var expr__36670 = new cljs.core.Keyword(null,"view","view",1247994814).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
-if(cljs.core.truth_(pred__36669.call(null,"BACKWARD",expr__36670))){
+var head = calc.geo.norm_crs.call(null,(function (){var pred__24659 = cljs.core._EQ_;
+var expr__24660 = new cljs.core.Keyword(null,"view","view",1247994814).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
+if(cljs.core.truth_(pred__24659.call(null,"BACKWARD",expr__24660))){
 return (crs + (180));
 } else {
-if(cljs.core.truth_(pred__36669.call(null,"RIGHT",expr__36670))){
+if(cljs.core.truth_(pred__24659.call(null,"RIGHT",expr__24660))){
 return (crs + (90));
 } else {
-if(cljs.core.truth_(pred__36669.call(null,"LEFT",expr__36670))){
+if(cljs.core.truth_(pred__24659.call(null,"LEFT",expr__24660))){
 return (crs - (90));
 } else {
-if(cljs.core.truth_(pred__36669.call(null,"FORWARD-RIGHT",expr__36670))){
+if(cljs.core.truth_(pred__24659.call(null,"FORWARD-RIGHT",expr__24660))){
 return (crs + (45));
 } else {
-if(cljs.core.truth_(pred__36669.call(null,"FORWARD-LEFT",expr__36670))){
+if(cljs.core.truth_(pred__24659.call(null,"FORWARD-LEFT",expr__24660))){
 return (crs - (45));
 } else {
-if(cljs.core.truth_(pred__36669.call(null,"BACKWARD-RIGHT",expr__36670))){
+if(cljs.core.truth_(pred__24659.call(null,"BACKWARD-RIGHT",expr__24660))){
 return (crs + (135));
 } else {
-if(cljs.core.truth_(pred__36669.call(null,"BACKWARD-LEFT",expr__36670))){
+if(cljs.core.truth_(pred__24659.call(null,"BACKWARD-LEFT",expr__24660))){
 return (crs - (135));
 } else {
 return crs;

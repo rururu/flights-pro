@@ -88,27 +88,29 @@
         (geo/norm-crs (+ from step)))
     true to)))
 
-(defn equalize [carr gear param-fn param closer]
-  (letfn [(proc-fn [cr]
-                      (let [c @cr
-                             g (get c gear)
+(defn equalize [carr gear-key param-key param-fn closer-fn final-fn]
+  (letfn [(proc-fn [carr]
+                      (let [car @carr
+                             g (gear-key car)
                              target (:target g)
-                             step (* (:accel g) (:step g))]
-                        (if (calc/approx= (param c) target step)
-                            (do (param-fn cr target)
+                             step (* (:accel g) (:step g))
+                             param (param-key car)]
+                        (if (calc/approx= param target step)
+                            (do (param-fn carr target)
                                   false)
-                            (do (param-fn cr (closer (param c) target step))
+                            (do (param-fn carr (closer-fn param target step))
                                   true))))]
-  (vswap! carr assoc-in [gear :eqz-status] (volatile! "STOP"))
-  (let [g (get @carr gear)]
+  (vswap! carr assoc-in [gear-key :eqz-status] (volatile! "STOP"))
+  (let [g (gear-key @carr)]
     (asp/start-process (:eqz-status g) 
                                    #(proc-fn carr) 
-                                   (:time-out g)))))
+                                   (:time-out g)
+	           final-fn))))
 
 (defn accel
   ([carr speed]
   (vswap! carr assoc-in [:propeller :target] speed)
-  (equalize carr :propeller set-speed :speed step-closer))
+  (equalize carr :propeller :speed set-speed step-closer nil))
 ([carr speed acl]
   (vswap! carr assoc-in [:propeller :accel] acl)
   (accel carr speed)))
@@ -116,18 +118,20 @@
 (defn elevate
   ([carr altitude]
   (vswap! carr assoc-in [:elevator :target] altitude)
-  (equalize carr :elevator set-altitude :altitude step-closer))
+  (equalize carr :elevator :altitude set-altitude step-closer nil))
 ([carr altitude accel]
   (vswap! carr assoc-in [:elevator :accel] accel)
   (elevate carr altitude)))
 
 (defn turn
   ([carr course]
+  (turn carr course nil))
+([carr course final-fn]
   (vswap! carr assoc-in [:rudder :target] course)
-  (equalize carr :rudder set-course :course course-closer))
-([carr course accel]
+  (equalize carr :rudder :course set-course course-closer final-fn))
+([carr course accel final-fn]
   (vswap! carr assoc-in [:rudder :accel] accel)
-  (turn carr course)))
+  (turn carr course final-fn)))
 
 (defn add-my-flight [id call coord crs spd alt]
   (let [carr (volatile! (assoc (merge {} @CARRIER)

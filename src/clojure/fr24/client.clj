@@ -120,7 +120,8 @@
   (println [:FLIGHTS-PROCESS 
   (asp/start-process STATUS 
                                #(do (flights-in-bbx) (process-fn FLIGHTS) true)
-                               (:time-out F24))]))
+                               (:time-out F24)
+	       nil)]))
 
 (defn stop []
   (asp/stop-process STATUS))

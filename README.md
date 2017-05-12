@@ -54,7 +54,7 @@ When longitude value changes, MANUAL flight turns on course to location, defined
 
 ## Programming
 
-You can Expert System, Clojure and ClojureScript programming and debugging in IDE based on Protege-3.5 during air traffic monitiring and simulation (see screencasts below).
+You can Expert System, Clojure and ClojureScript programming and debugging in IDE based on Protege-3.5 during air traffic monitoring and simulation (see screencasts below).
 
 ## Screencasts
 

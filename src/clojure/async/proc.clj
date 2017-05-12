@@ -12,13 +12,14 @@
            (func param)
            (<! (timeout time-out))))))
 
-(defn start-process [status proc-fn time-out]
+(defn start-process [status proc-fn time-out final-fun]
   (when (not= @status "RUN") 
   (vreset! status "RUN")
   (go (do 
           (while (and (= @status "RUN")
                             (proc-fn))
                 (<! (timeout time-out)))
+          (if (instance? clojure.lang.IFn final-fun) (final-fun))
           (vreset! status "STOP")))
   @status))
 

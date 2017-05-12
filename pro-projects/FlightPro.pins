@@ -1,11 +1,11 @@
-; Sun May 07 12:16:06 MSK 2017
+; Fri May 12 16:09:30 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
 
 ([FlightPro_Class0] of  CloVar
 
-	(source "(volatile! {:view \"FORWARD\"\n                        :pitch -20\n                        :roll 0})")
+	(source "(volatile! {:view \"FORWARD\"\n                        :pitch -10\n                        :roll 0})")
 	(title "CAMERA"))
 
 ([FlightPro_Class1] of  CloNamespace
@@ -132,7 +132,7 @@
 
 ([FlightPro_Class130001] of  CloFunction
 
-	(source "(let [[rb ma sa ba fa :as bps] (:bank-params @carr)\n       bnk (dyn/bank (:course @carr) course bps)\n       spd (:speed @carr)]\n  (if (or (< spd 100) (= bnk 0))\n    (mov/turn carr course 1)\n    (let [accel (if (> (calc/abs bnk) rb) 2 1)]\n      (czm/camera :roll bnk)\n      (mov/turn carr course accel)\n      (dyn/check-diff-and-do carr\n        [:rudder :target]\n        [:course]\n        (get-in @carr [:rudder :step])\n        [:rudder :time-out]\n        #(czm/camera :roll 0)))))")
+	(source "(let [[rb ma sa ba fa :as bps] (:bank-params @carr)\n       bnk (dyn/bank (:course @carr) course bps)\n       spd (:speed @carr)]\n  (if (or (< spd 100) (= bnk 0))\n    (mov/turn carr course 1 nil)\n    (let [accel (if (> (calc/abs bnk) rb) 2 1)]\n      (czm/camera :roll bnk)\n      (mov/turn carr course accel #(czm/camera :roll 0)))))")
 	(title "turn-and-bank [carr course]"))
 
 ([FlightPro_Class130003] of  CloFunction
@@ -142,7 +142,7 @@
 
 ([FlightPro_Class130004] of  CloFunction
 
-	(source "(letfn [(proc-fn [cr]\n             (let [c @cr]\n               (if (<= (calc/abs (- (get-in c path1)\n                                           (get-in c path2))) limit)\n                 (do (final-fn) false)\n                 true)))]\n  (vswap! carr assoc :cdad-status (volatile! \"STOP\"))\n  (asp/start-process (:cdad-status @carr) \n                                 #(proc-fn carr)\n                                 (get-in @carr tio-pth)))")
+	(source "(letfn [(proc-fn [cr]\n             (let [c @cr]\n               (if (<= (calc/abs (- (get-in c path1)\n                                           (get-in c path2))) limit)\n                 (do (final-fn) false)\n                 true)))]\n  (vswap! carr assoc :cdad-status (volatile! \"STOP\"))\n  (asp/start-process (:cdad-status @carr) \n                                 #(proc-fn carr)\n                                 (get-in @carr tio-pth)\n	         nil))")
 	(title "check-diff-and-do [carr path1 path2 limit tio-pth final-fn]"))
 
 ([FlightPro_Class140000] of  CloVar
@@ -233,7 +233,7 @@
 
 ([FlightPro_Class140027] of  CloFunction
 
-	(source "([carr altitude]\n  (vswap! carr assoc-in [:elevator :target] altitude)\n  (equalize carr :elevator set-altitude :altitude step-closer))\n([carr altitude accel]\n  (vswap! carr assoc-in [:elevator :accel] accel)\n  (elevate carr altitude))")
+	(source "([carr altitude]\n  (vswap! carr assoc-in [:elevator :target] altitude)\n  (equalize carr :elevator :altitude set-altitude step-closer nil))\n([carr altitude accel]\n  (vswap! carr assoc-in [:elevator :accel] accel)\n  (elevate carr altitude))")
 	(title "elevate"))
 
 ([FlightPro_Class150000] of  ClsRequired
@@ -342,7 +342,7 @@
 
 ([FlightPro_Class160004] of  CloFunction
 
-	(source "(delete-vehicle id)\n(let [ms (volatile! \"START\")\n       mp (assoc mp :marker (create-update-marker nil mp)\n                              :step-hrs (double (/ (:vehicles TIO) 3600000))\n	        :movst ms\n                              :mover (asp/start-process ms #(move-vehicle id) (:vehicles TIO)))\n         carr (volatile! mp)]\n    (mov/set-turn-point carr)\n    (vswap! VEHICLES assoc id carr))")
+	(source "(delete-vehicle id)\n(let [ms (volatile! \"START\")\n       mp (assoc mp :marker (create-update-marker nil mp)\n                              :step-hrs (double (/ (:vehicles TIO) 3600000))\n	        :movst ms\n                              :mover (asp/start-process ms #(move-vehicle id) (:vehicles TIO) nil))\n         carr (volatile! mp)]\n    (mov/set-turn-point carr)\n    (vswap! VEHICLES assoc id carr))")
 	(title "create-update-vehicle [id mp]"))
 
 ([FlightPro_Class160005] of  CloVar
@@ -512,7 +512,6 @@
 		[FlightPro_Class70008]
 		[FlightPro_Class50001]
 		[FlightPro_Class100023]
-		[FlightPro_Class230004]
 		[FlightPro_Class390002]
 		[FlightPro_Class30001]
 		[FlightPro_Class140001])
@@ -763,7 +762,7 @@
 
 ([FlightPro_Class210009] of  CloFunction
 
-	(source "(println [:FLIGHTS-PROCESS \n  (asp/start-process STATUS \n                               #(do (flights-in-bbx) (process-fn FLIGHTS) true)\n                               (:time-out F24))])")
+	(source "(println [:FLIGHTS-PROCESS \n  (asp/start-process STATUS \n                               #(do (flights-in-bbx) (process-fn FLIGHTS) true)\n                               (:time-out F24)\n	       nil)])")
 	(title "start [process-fn]"))
 
 ([FlightPro_Class210010] of  CloVar
@@ -1243,8 +1242,8 @@
 
 ([FlightPro_Class30000] of  CloFunction
 
-	(source "(letfn [(proc-fn [cr]\n                      (let [c @cr\n                             g (get c gear)\n                             target (:target g)\n                             step (* (:accel g) (:step g))]\n                        (if (calc/approx= (param c) target step)\n                            (do (param-fn cr target)\n                                  false)\n                            (do (param-fn cr (closer (param c) target step))\n                                  true))))]\n  (vswap! carr assoc-in [gear :eqz-status] (volatile! \"STOP\"))\n  (let [g (get @carr gear)]\n    (asp/start-process (:eqz-status g) \n                                   #(proc-fn carr) \n                                   (:time-out g))))")
-	(title "equalize [carr gear param-fn param closer]"))
+	(source "(letfn [(proc-fn [carr]\n                      (let [car @carr\n                             g (gear-key car)\n                             target (:target g)\n                             step (* (:accel g) (:step g))\n                             param (param-key car)]\n                        (if (calc/approx= param target step)\n                            (do (param-fn carr target)\n                                  false)\n                            (do (param-fn carr (closer-fn param target step))\n                                  true))))]\n  (vswap! carr assoc-in [gear-key :eqz-status] (volatile! \"STOP\"))\n  (let [g (gear-key @carr)]\n    (asp/start-process (:eqz-status g) \n                                   #(proc-fn carr) \n                                   (:time-out g)\n	           final-fn)))")
+	(title "equalize [carr gear-key param-key param-fn closer-fn final-fn]"))
 
 ([FlightPro_Class300000] of  CloFunction
 
@@ -1329,12 +1328,12 @@
 
 ([FlightPro_Class30026] of  CloFunction
 
-	(source "([carr course]\n  (vswap! carr assoc-in [:rudder :target] course)\n  (equalize carr :rudder set-course :course course-closer))\n([carr course accel]\n  (vswap! carr assoc-in [:rudder :accel] accel)\n  (turn carr course))")
+	(source "([carr course]\n  (turn carr course nil))\n([carr course final-fn]\n  (vswap! carr assoc-in [:rudder :target] course)\n  (equalize carr :rudder :course set-course course-closer final-fn))\n([carr course accel final-fn]\n  (vswap! carr assoc-in [:rudder :accel] accel)\n  (turn carr course final-fn))")
 	(title "turn"))
 
 ([FlightPro_Class30027] of  CloFunction
 
-	(source "([carr speed]\n  (vswap! carr assoc-in [:propeller :target] speed)\n  (equalize carr :propeller set-speed :speed step-closer))\n([carr speed acl]\n  (vswap! carr assoc-in [:propeller :accel] acl)\n  (accel carr speed))")
+	(source "([carr speed]\n  (vswap! carr assoc-in [:propeller :target] speed)\n  (equalize carr :propeller :speed set-speed step-closer nil))\n([carr speed acl]\n  (vswap! carr assoc-in [:propeller :accel] acl)\n  (accel carr speed))")
 	(title "accel"))
 
 ([FlightPro_Class310000] of  CloFunction
@@ -1654,7 +1653,7 @@
 
 ([FlightPro_Class390000] of  Rule
 
-	(lhs "(Onboard callsign ?cs1)\n(Flight callsign ?cs1 coord ?c1 course ?crs1 age \"NEW\")\n(Flight id ?id2 coord ?c2 altitude ?a2 age \"CURRENT\" point4d ?p2 callsign ?cs2)\n(Flight id ?id2 coord ?c3 altitude ?a3 age \"NEW\" point4d ?p3 course ?crs3 \n	(< (calc.geo/distance-nm ?c1 ?c3) 10)))")
+	(lhs "(Onboard callsign ?cs1)\n(Flight callsign ?cs1 coord ?c1 course ?crs1 age \"NEW\")\n(Flight id ?id2 coord ?c2 altitude ?a2 age \"CURRENT\" point4d ?p2 callsign ?cs2)\n(Flight id ?id2 coord ?c3 altitude ?a3 age \"NEW\" point4d ?p3 course ?crs3 \n	(< (calc.geo/distance-nm ?c1 ?c3) 20)))")
 	(rhs "(cesium.core/leg ?cs2\n	(if (calc.geo/following? ?crs1 ?crs3)\n	  (es/URL-ICO \"FOLLOWING\")\n	  (es/URL-ICO \"COUNTER\")) \n	(calc.core/smooth-tabfun (calc.geo/distance-nm ?c1 ?c3) [[0 1.0][20 0.1]])\n	?p2\n	?p3)")
 	(salience 0)
 	(title "af:CZML-LegGeneration"))
@@ -3325,8 +3324,8 @@
 
 ([FlightPro_Class70004] of  CloFunction
 
-	(source "(when (not= @status \"RUN\") \n  (vreset! status \"RUN\")\n  (go (do \n          (while (and (= @status \"RUN\")\n                            (proc-fn))\n                (<! (timeout time-out)))\n          (vreset! status \"STOP\")))\n  @status)")
-	(title "start-process [status proc-fn time-out]"))
+	(source "(when (not= @status \"RUN\") \n  (vreset! status \"RUN\")\n  (go (do \n          (while (and (= @status \"RUN\")\n                            (proc-fn))\n                (<! (timeout time-out)))\n          (if (instance? clojure.lang.IFn final-fun) (final-fun))\n          (vreset! status \"STOP\")))\n  @status)")
+	(title "start-process [status proc-fn time-out final-fun]"))
 
 ([FlightPro_Class70005] of  CloFunction
 
@@ -3402,7 +3401,7 @@
 
 ([FlightPro_Class730000] of  CloFunction
 
-	(source "(set-html! \"camera\" \"<h4>Camera</h4>\")\n(set-html! \"onboard\" \"Onboard:\")\n(set-html! \"onboard-fld\" \n  \"<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>\n   <option value='MANUAL'>MANUAL</option>\n   <option value='select'>select</option>\")\n(set-html! \"view\" \"View:\")\n(set-html! \"view-fld\" \n  \"<select onchange='javascript:view3d.client.view(this.value)' style='width:96px'>\n   <option value='FORWARD'>FORWARD</option>\n   <option value='BACKWARD'>BACKWARD</option>\n   <option value='RIGHT'>RIGHT</option>\n   <option value='LEFT'>LEFT</option>\n   <option value='UP'>UP</option>\n   <option value='DOWN'>DOWN</option>\n   <option value='FORWARD-RIGHT'>FORWARD-RIGHT</option>\n   <option value='FORWARD-LEFT'>FORWARD-LEFT</option>\n   <option value='BACKWARD-RIGHT'>BACKWARD-RIGHT</option>\n   <option value='BACKWARD-LEFT'>BACKWARD-LEFT</option>\n   </select>\")\n(set-html! \"pitch\" \"Pitch:\")\n(set-html! \"pitch-fld\" \n  \"<input value='-20' style='width:90px'\n               onchange='javascript:view3d.client.pitch(this.value)'>\")\n(set-html! \"roll\" \"Roll:\")\n(set-html! \"roll-fld\" \n  \"<input value='0' style='width:90px'\n               onchange='javascript:view3d.client.roll(this.value)'>\")")
+	(source "(set-html! \"camera\" \"<h4>Camera</h4>\")\n(set-html! \"onboard\" \"Onboard:\")\n(set-html! \"onboard-fld\" \n  \"<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>\n   <option value='MANUAL'>MANUAL</option>\n   <option value='select'>select</option>\")\n(set-html! \"view\" \"View:\")\n(set-html! \"view-fld\" \n  \"<select onchange='javascript:view3d.client.view(this.value)' style='width:96px'>\n   <option value='FORWARD'>FORWARD</option>\n   <option value='BACKWARD'>BACKWARD</option>\n   <option value='RIGHT'>RIGHT</option>\n   <option value='LEFT'>LEFT</option>\n   <option value='UP'>UP</option>\n   <option value='DOWN'>DOWN</option>\n   <option value='FORWARD-RIGHT'>FORWARD-RIGHT</option>\n   <option value='FORWARD-LEFT'>FORWARD-LEFT</option>\n   <option value='BACKWARD-RIGHT'>BACKWARD-RIGHT</option>\n   <option value='BACKWARD-LEFT'>BACKWARD-LEFT</option>\n   </select>\")\n(set-html! \"pitch\" \"Pitch:\")\n(set-html! \"pitch-fld\" \n  \"<input value='-10' style='width:90px'\n               onchange='javascript:view3d.client.pitch(this.value)'>\")\n(set-html! \"roll\" \"Roll:\")\n(set-html! \"roll-fld\" \n  \"<input value='0' style='width:90px'\n               onchange='javascript:view3d.client.roll(this.value)'>\")")
 	(title "left-controls []"))
 
 ([FlightPro_Class730001] of  CloFunction
@@ -3619,7 +3618,7 @@
 
 ([FlightPro_Class80003] of  CloFunction
 
-	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :callsigns (let [{:keys [list]} dir]\n	(ctl/callsigns list))\n    :vehicle (let [{:keys [vehicle period]} dir]\n	(camera-vehicle vehicle period)\n                        (bank-vehicle vehicle)\n	(ctl/show-flight-data vehicle))\n    (println (str \"Unknown directive: \" [directive dir]))))")
+	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :callsigns (let [{:keys [list]} dir]\n	(ctl/callsigns list))\n    :vehicle (let [{:keys [vehicle period]} dir]\n                        (bank-vehicle vehicle)\n	(camera-vehicle vehicle period)\n	(ctl/show-flight-data vehicle))\n    (println (str \"Unknown directive: \" [directive dir]))))")
 	(title "directives-handler [response]"))
 
 ([FlightPro_Class80004] of  CloFunction
@@ -4687,3 +4686,33 @@
 	(icao "KSFO")
 	(runways 0)
 	(title "San Francisco International Airport"))
+
+([FlightPro_Class980000] of  CloFuncall
+
+	(source "(rete.core/facts-with-slot-value 'FlightPlan 'callsign = \"R1\")"))
+
+([FlightPro_Class980001] of  CloFuncall
+
+	(source "(rete.core/facts-with-slot-value 'Flight 'callsign = \"R1\")"))
+
+([FlightPro_Class990000] of  CloFuncall
+
+	(source "(type #(+ %1 %2))"))
+
+([FlightPro_Class990001] of  CloFuncall
+
+	(source "(instance? clojure.lang.IFn #(+ %1 %2))"))
+
+([FlightPro_Class990002] of  CloFuncall
+
+	(source "(instance? clojure.lang.IFn nil)"))
+
+([FlightPro_Class990003] of  Airport
+
+	(altitude 600)
+	(coord 48.11027 16.56972)
+	(country "Austria")
+	(iata "VIE")
+	(icao "LOWW")
+	(runways 0)
+	(title "Vienna International Airport"))

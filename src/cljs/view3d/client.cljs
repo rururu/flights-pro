@@ -67,16 +67,10 @@
        bnk (dyn/bank (:course @carr) course bps)
        spd (:speed @carr)]
   (if (or (< spd 100) (= bnk 0))
-    (mov/turn carr course 1)
+    (mov/turn carr course 1 nil)
     (let [accel (if (> (calc/abs bnk) rb) 2 1)]
       (czm/camera :roll bnk)
-      (mov/turn carr course accel)
-      (dyn/check-diff-and-do carr
-        [:rudder :target]
-        [:course]
-        (get-in @carr [:rudder :step])
-        [:rudder :time-out]
-        #(czm/camera :roll 0))))))
+      (mov/turn carr course accel #(czm/camera :roll 0))))))
 
 (defn onboard [call]
   (if (= call "MANUAL")
@@ -172,8 +166,8 @@
     :callsigns (let [{:keys [list]} dir]
 	(ctl/callsigns list))
     :vehicle (let [{:keys [vehicle period]} dir]
-	(camera-vehicle vehicle period)
                         (bank-vehicle vehicle)
+	(camera-vehicle vehicle period)
 	(ctl/show-flight-data vehicle))
     (println (str "Unknown directive: " [directive dir])))))
 

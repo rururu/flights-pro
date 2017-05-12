@@ -111,7 +111,7 @@
        mp (assoc mp :marker (create-update-marker nil mp)
                               :step-hrs (double (/ (:vehicles TIO) 3600000))
 	        :movst ms
-                              :mover (asp/start-process ms #(move-vehicle id) (:vehicles TIO)))
+                              :mover (asp/start-process ms #(move-vehicle id) (:vehicles TIO) nil))
          carr (volatile! mp)]
     (mov/set-turn-point carr)
     (vswap! VEHICLES assoc id carr)))

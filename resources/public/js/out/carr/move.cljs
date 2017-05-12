@@ -74,16 +74,18 @@
 
 (defn turn
   ([carr course]
+  (turn carr course nil))
+([carr course final-fn]
   (vswap! carr assoc-in [:rudder :target] course)
-  (equalize carr :rudder set-course :course course-closer))
-([carr course accel]
+  (equalize carr :rudder :course set-course course-closer final-fn))
+([carr course accel final-fn]
   (vswap! carr assoc-in [:rudder :accel] accel)
-  (turn carr course)))
+  (turn carr course final-fn)))
 
 (defn accel
   ([carr speed]
   (vswap! carr assoc-in [:propeller :target] speed)
-  (equalize carr :propeller set-speed :speed step-closer))
+  (equalize carr :propeller :speed set-speed step-closer nil))
 ([carr speed acl]
   (vswap! carr assoc-in [:propeller :accel] acl)
   (accel carr speed)))
@@ -91,7 +93,7 @@
 (defn elevate
   ([carr altitude]
   (vswap! carr assoc-in [:elevator :target] altitude)
-  (equalize carr :elevator set-altitude :altitude step-closer))
+  (equalize carr :elevator :altitude set-altitude step-closer nil))
 ([carr altitude accel]
   (vswap! carr assoc-in [:elevator :accel] accel)
   (elevate carr altitude)))
