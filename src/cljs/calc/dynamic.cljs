@@ -55,7 +55,7 @@
                                  (get-in @carr tio-pth)
 	         nil)))
 
-(defn bank [old-crs new-crs [right-bank min-arc small-arc big-arc factor]]
+(defn bank [old-crs new-crs [mid-bank small-arc mid-arc big-arc factor]]
   (letfn [(turn-right? [from to]
 	(let [dif (- to from)]
 	  (cond
@@ -64,12 +64,12 @@
 	    (< dif 0) 
 	      (< dif -180))))]
   (let [arc (calc/abs (- old-crs new-crs))]
-    (if (<= arc min-arc)
+    (if (<= arc small-arc)
       0
       (let [bnk (cond
-	(< arc small-arc) (int (/ right-bank factor)) 
-	(> arc big-arc) (* right-bank factor)
-	true right-bank)]
+	(< arc mid-arc) (int (/ mid-bank factor)) 
+	(> arc big-arc) (* mid-bank factor)
+	true mid-bank)]
         (if (turn-right? old-crs new-crs)
             bnk
             (- bnk)))))))

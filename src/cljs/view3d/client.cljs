@@ -35,6 +35,7 @@
                :speed 160
                :course 270
                :step-hrs (double (/ (:carrier TIO) 3600000))
+               ;; [middle-bank small-arc middle-arc big-arc factor]
                :bank-params [12 2 16 64 2]
                :rudder {:target 0
                             :step 3
@@ -159,6 +160,22 @@
 	(:bank-params @CARRIER))
     0)))
 
+(defn dynamics [dm]
+  (let [bk (dm "bank")
+       bk [(bk "middle-bank")
+             (bk "small-arc")
+             (bk "middle-arc")
+             (bk "big-arc")
+             (bk "factor")]]
+  (vswap! CARRIER assoc :bank-params bk)
+  (vswap! CARRIER assoc-in [:propeller :step] (dm "propeller-step"))
+  (vswap! CARRIER assoc-in [:propeller :time-out] (dm "propeller-time-out"))
+  (vswap! CARRIER assoc-in [:elevator :step] (dm "elevator-step"))
+  (vswap! CARRIER assoc-in [:elevator :time-out] (dm "elevator-time-out"))
+  (vswap! CARRIER assoc-in [:rudder :step] (dm "rudder-step"))
+  (vswap! CARRIER assoc-in [:rudder :time-out] (dm "rudder-time-out")))
+(println :new-dynamics @CARRIER))
+
 (defn directives-handler [response]
   (doseq [{:keys [directive] :as dir} (read-transit response)]
   ;;(println [:DIRECTIVE dir])
@@ -169,6 +186,8 @@
                         (bank-vehicle vehicle)
 	(camera-vehicle vehicle period)
 	(ctl/show-flight-data vehicle))
+    :dynamics (let [{:keys [dynamo]} dir]
+	(dynamics dynamo))
     (println (str "Unknown directive: " [directive dir])))))
 
 (defn receive-directives []

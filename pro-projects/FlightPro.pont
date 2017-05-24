@@ -1,4 +1,4 @@
-; Fri May 12 16:09:30 MSK 2017
+; Wed May 24 22:25:52 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -11,6 +11,15 @@
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
+	(single-slot rudder-time-out
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot but-upd-dyn
+		(type STRING)
+		(default "Update Dynamics/pro.commands/update-dynamics")
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot age
 		(type STRING)
 ;+		(cardinality 0 1)
@@ -18,8 +27,16 @@
 	(multislot altitude-graph
 		(type STRING)
 		(create-accessor read-write))
+	(single-slot propeller-step
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(multislot speed-graph
 		(type STRING)
+		(create-accessor read-write))
+	(single-slot big-arc
+		(type INTEGER)
+;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot id
 		(type STRING)
@@ -27,6 +44,11 @@
 		(create-accessor read-write))
 	(single-slot predicate
 		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot bank
+		(type INSTANCE)
+;+		(allowed-classes Bank)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot takeoff
@@ -37,6 +59,10 @@
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
+	(single-slot middle-arc
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot point4d
 		(type STRING)
 ;+		(cardinality 0 1)
@@ -44,6 +70,10 @@
 	(single-slot cruise-plan
 		(type INSTANCE)
 ;+		(allowed-classes CruisePlan)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot propeller-time-out
+		(type INTEGER)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot butt-del-pois
@@ -86,6 +116,14 @@
 		(create-accessor read-write))
 	(single-slot cruise
 		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot rudder-step
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot small-arc
+		(type INTEGER)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot iata
@@ -143,6 +181,14 @@
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
+	(single-slot middle-bank
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot elevator-step
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot status
 		(type STRING)
 ;+		(cardinality 0 1)
@@ -165,8 +211,16 @@
 		(range 0 359)
 		(default 0)
 		(create-accessor read-write))
+	(single-slot factor
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot adjunct
 		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot elevator-time-out
+		(type INTEGER)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot speed
@@ -467,6 +521,68 @@
 		(create-accessor read-write))
 	(multislot altitude-graph
 		(type STRING)
+		(create-accessor read-write)))
+
+(defclass AirplaneDynamics
+	(is-a Flight+Plan+Ontology)
+	(role concrete)
+	(single-slot but-upd-dyn
+		(type STRING)
+		(default "Update Dynamics/pro.commands/update-dynamics")
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot rudder-step
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot elevator-time-out
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot propeller-time-out
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot bank
+		(type INSTANCE)
+;+		(allowed-classes Bank)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot rudder-time-out
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot elevator-step
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot propeller-step
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass Bank
+	(is-a Flight+Plan+Ontology)
+	(role concrete)
+	(single-slot factor
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot small-arc
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot middle-bank
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot middle-arc
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot big-arc
+		(type INTEGER)
+;+		(cardinality 0 1)
 		(create-accessor read-write)))
 
 (defclass Tree

@@ -383,3 +383,10 @@ TERRAIN)
     GROUND-ALT)
   GROUND-ALT))
 
+(defn update-dynamics [hm inst]
+  (let [mp (itm inst 1)]
+  (println :update-dynamics mp)
+  (asp/pump-in (:directives CHN)
+	{:directive :dynamics
+	 :dynamo mp})))
+

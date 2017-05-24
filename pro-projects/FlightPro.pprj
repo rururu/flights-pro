@@ -1,4 +1,4 @@
-; Fri May 12 16:09:30 MSK 2017
+; Wed May 24 22:25:52 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -21,10 +21,12 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[FlightPro_ProjectKB_Class1207]
-		[FlightPro_ProjectKB_Class1208]
-		[FlightPro_ProjectKB_Class1209]
-		[FlightPro_ProjectKB_Class1210]))
+		[FlightPro_ProjectKB_Class21925]
+		[FlightPro_ProjectKB_Class21926]
+		[FlightPro_ProjectKB_Class21927]
+		[FlightPro_ProjectKB_Class21928]
+		[FlightPro_ProjectKB_Class21929]
+		[FlightPro_ProjectKB_Class21930]))
 
 ([CLSES_TAB] of  Widget
 
@@ -95,305 +97,111 @@
 ([FlightPro_ProjectKB_Class1118] of  Property_List
 )
 
-([FlightPro_ProjectKB_Class11213] of  Map_Entry
-
-	(key "FlightPro_Class320015")
-	(key_class "edu.stanford.smi.protege.model.Frame")
-	(value "38 584 224 146")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11214] of  Map_Entry
-
-	(key "FlightPro_Class290004")
-	(key_class "edu.stanford.smi.protege.model.Frame")
-	(value "-5 521 224 146")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11215] of  Map_Entry
-
-	(key "FlightPro_Class290003")
-	(key_class "edu.stanford.smi.protege.model.Frame")
-	(value "-5 349 224 146")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11216] of  Map_Entry
-
-	(key "FlightPro_Class510004")
-	(key_class "edu.stanford.smi.protege.model.Frame")
-	(value "0 373 224 146")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11217] of  Map_Entry
-
-	(key "FlightPro_Class960023")
-	(key_class "edu.stanford.smi.protege.model.Frame")
-	(value "73 381 224 146")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11218] of  Map_Entry
-
-	(key "FlightPro_Class280183")
-	(key_class "edu.stanford.smi.protege.model.Frame")
-	(value "-2 466 224 146")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11219] of  Map_Entry
-
-	(key "InstanceDisplay.yellow_stickies")
-	(key_class "java.lang.String")
-	(value "FlightPro_ProjectKB_Class1211")
-	(value_class "java.util.Map"))
-
-([FlightPro_ProjectKB_Class11220] of  Map
-
-	(entries
-		[FlightPro_ProjectKB_Class11221]
-		[FlightPro_ProjectKB_Class11222]
-		[FlightPro_ProjectKB_Class11223]
-		[FlightPro_ProjectKB_Class11224]
-		[FlightPro_ProjectKB_Class11225]
-		[FlightPro_ProjectKB_Class11226]
-		[FlightPro_ProjectKB_Class11227]
-		[FlightPro_ProjectKB_Class11228]
-		[FlightPro_ProjectKB_Class11229]
-		[FlightPro_ProjectKB_Class11230]
-		[FlightPro_ProjectKB_Class11231]
-		[FlightPro_ProjectKB_Class11232]
-		[FlightPro_ProjectKB_Class11233]
-		[FlightPro_ProjectKB_Class11234]
-		[FlightPro_ProjectKB_Class11235]
-		[FlightPro_ProjectKB_Class11236]
-		[FlightPro_ProjectKB_Class11237]
-		[FlightPro_ProjectKB_Class11238]
-		[FlightPro_ProjectKB_Class11239]
-		[FlightPro_ProjectKB_Class11240]
-		[FlightPro_ProjectKB_Class11241]
-		[FlightPro_ProjectKB_Class11242]
-		[FlightPro_ProjectKB_Class11243]
-		[FlightPro_ProjectKB_Class11244]
-		[FlightPro_ProjectKB_Class11245]
-		[FlightPro_ProjectKB_Class11246]
-		[FlightPro_ProjectKB_Class11247]
-		[FlightPro_ProjectKB_Class11248]
-		[FlightPro_ProjectKB_Class11249]
-		[FlightPro_ProjectKB_Class11250]))
-
-([FlightPro_ProjectKB_Class11221] of  Map_Entry
-
-	(key "FlightPro_Class510041")
-	(key_class "java.lang.String")
-	(value "1120 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11222] of  Map_Entry
-
-	(key "FlightPro_Class510040")
-	(key_class "java.lang.String")
-	(value "1720 370 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11223] of  Map_Entry
-
-	(key "FlightPro_Class860002")
-	(key_class "java.lang.String")
-	(value "370 370 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11224] of  Map_Entry
-
-	(key "FlightPro_Class510029")
-	(key_class "java.lang.String")
-	(value "220 220 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11225] of  Map_Entry
-
-	(key "FlightPro_Class510028")
-	(key_class "java.lang.String")
-	(value "520 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11226] of  Map_Entry
-
-	(key "FlightPro_Class850020")
-	(key_class "java.lang.String")
-	(value "470 670 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11227] of  Map_Entry
-
-	(key "FlightPro_Class580132")
-	(key_class "java.lang.String")
-	(value "2320 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11228] of  Map_Entry
-
-	(key "FlightPro_Class510045")
-	(key_class "java.lang.String")
-	(value "1570 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11229] of  Map_Entry
-
-	(key "FlightPro_Class510044")
-	(key_class "java.lang.String")
-	(value "1420 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11230] of  Map_Entry
-
-	(key "FlightPro_Class510042")
-	(key_class "java.lang.String")
-	(value "1270 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11231] of  Map_Entry
-
-	(key "FlightPro_Class510049")
-	(key_class "java.lang.String")
-	(value "2170 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11232] of  Map_Entry
-
-	(key "FlightPro_Class510027")
-	(key_class "java.lang.String")
-	(value "370 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11233] of  Map_Entry
-
-	(key "FlightPro_Class510026")
-	(key_class "java.lang.String")
-	(value "520 370 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11234] of  Map_Entry
-
-	(key "FlightPro_Class510048")
-	(key_class "java.lang.String")
-	(value "2020 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11235] of  Map_Entry
-
-	(key "FlightPro_Class510047")
-	(key_class "java.lang.String")
-	(value "1870 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11236] of  Map_Entry
-
-	(key "FlightPro_Class510024")
-	(key_class "java.lang.String")
-	(value "520 220 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11237] of  Map_Entry
-
-	(key "FlightPro_Class510046")
-	(key_class "java.lang.String")
-	(value "1720 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11238] of  Map_Entry
-
-	(key "FlightPro_Class510030")
-	(key_class "java.lang.String")
-	(value "70 370 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11239] of  Map_Entry
-
-	(key "FlightPro_Class800000")
-	(key_class "java.lang.String")
-	(value "220 370 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11240] of  Map_Entry
-
-	(key "FlightPro_Class510039")
-	(key_class "java.lang.String")
-	(value "1870 370 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11241] of  Map_Entry
-
-	(key "FlightPro_Class510034")
-	(key_class "java.lang.String")
-	(value "1070 370 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11242] of  Map_Entry
-
-	(key "FlightPro_Class570000")
-	(key_class "java.lang.String")
-	(value "670 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11243] of  Map_Entry
-
-	(key "FlightPro_Class510033")
-	(key_class "java.lang.String")
-	(value "920 220 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11244] of  Map_Entry
-
-	(key "FlightPro_Class510032")
-	(key_class "java.lang.String")
-	(value "870 70 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11245] of  Map_Entry
-
-	(key "FlightPro_Class510038")
-	(key_class "java.lang.String")
-	(value "1720 220 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11246] of  Map_Entry
-
-	(key "FlightPro_Class510037")
-	(key_class "java.lang.String")
-	(value "970 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11247] of  Map_Entry
-
-	(key "FlightPro_Class510036")
-	(key_class "java.lang.String")
-	(value "820 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11248] of  Map_Entry
-
-	(key "FlightPro_Class790000")
-	(key_class "java.lang.String")
-	(value "170 670 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11249] of  Map_Entry
-
-	(key "FlightPro_Class510035")
-	(key_class "java.lang.String")
-	(value "920 370 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11250] of  Map_Entry
-
-	(key "FlightPro_Class790001")
-	(key_class "java.lang.String")
-	(value "320 670 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class11251] of  Map_Entry
-
-	(key "InstanceGraphWidget.FlightPro_Class510052.chart")
-	(key_class "java.lang.String")
-	(value "FlightPro_ProjectKB_Class11220")
-	(value_class "java.util.Map"))
+([FlightPro_ProjectKB_Class11252] of  Widget
+
+	(is_hidden FALSE)
+	(name "Bank")
+	(property_list [FlightPro_ProjectKB_Class11253])
+	(widget_class_name "edu.stanford.smi.protege.widget.FormWidget"))
+
+([FlightPro_ProjectKB_Class11253] of  Property_List
+
+	(properties
+		[FlightPro_ProjectKB_Class11254]
+		[FlightPro_ProjectKB_Class11255]
+		[FlightPro_ProjectKB_Class11257]
+		[FlightPro_ProjectKB_Class11259]
+		[FlightPro_ProjectKB_Class11261]
+		[FlightPro_ProjectKB_Class11263]
+		[FlightPro_ProjectKB_Class11265]))
+
+([FlightPro_ProjectKB_Class11254] of  Property_List
+
+	(name "layout properties"))
+
+([FlightPro_ProjectKB_Class11255] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "title")
+	(property_list [FlightPro_ProjectKB_Class11256])
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(width 220)
+	(x 0)
+	(y 0))
+
+([FlightPro_ProjectKB_Class11256] of  Property_List
+)
+
+([FlightPro_ProjectKB_Class11257] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "factor")
+	(property_list [FlightPro_ProjectKB_Class11258])
+	(widget_class_name "edu.stanford.smi.protege.widget.IntegerFieldWidget")
+	(width 110)
+	(x 110)
+	(y 120))
+
+([FlightPro_ProjectKB_Class11258] of  Property_List
+)
+
+([FlightPro_ProjectKB_Class11259] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "small-arc")
+	(property_list [FlightPro_ProjectKB_Class11260])
+	(widget_class_name "edu.stanford.smi.protege.widget.IntegerFieldWidget")
+	(width 110)
+	(x 0)
+	(y 60))
+
+([FlightPro_ProjectKB_Class11260] of  Property_List
+)
+
+([FlightPro_ProjectKB_Class11261] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "middle-bank")
+	(property_list [FlightPro_ProjectKB_Class11262])
+	(widget_class_name "edu.stanford.smi.protege.widget.IntegerFieldWidget")
+	(width 110)
+	(x 110)
+	(y 60))
+
+([FlightPro_ProjectKB_Class11262] of  Property_List
+)
+
+([FlightPro_ProjectKB_Class11263] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "middle-arc")
+	(property_list [FlightPro_ProjectKB_Class11264])
+	(widget_class_name "edu.stanford.smi.protege.widget.IntegerFieldWidget")
+	(width 110)
+	(x 0)
+	(y 120))
+
+([FlightPro_ProjectKB_Class11264] of  Property_List
+)
+
+([FlightPro_ProjectKB_Class11265] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "big-arc")
+	(property_list [FlightPro_ProjectKB_Class11266])
+	(widget_class_name "edu.stanford.smi.protege.widget.IntegerFieldWidget")
+	(width 110)
+	(x 0)
+	(y 180))
+
+([FlightPro_ProjectKB_Class11266] of  Property_List
+)
 
 ([FlightPro_ProjectKB_Class11290] of  Widget
 
@@ -1325,44 +1133,6 @@
 ([FlightPro_ProjectKB_Class11647] of  Property_List
 )
 
-([FlightPro_ProjectKB_Class1207] of  String
-
-	(name "Airport")
-	(string_value "title"))
-
-([FlightPro_ProjectKB_Class1208] of  String
-
-	(name "QuestionTree")
-	(string_value "name"))
-
-([FlightPro_ProjectKB_Class1209] of  String
-
-	(name "BBXWiki")
-	(string_value "bbx"))
-
-([FlightPro_ProjectKB_Class1210] of  String
-
-	(name "GeneralPlan")
-	(string_value "title"))
-
-([FlightPro_ProjectKB_Class1211] of  Map
-
-	(entries
-		[FlightPro_ProjectKB_Class1212]
-		[FlightPro_ProjectKB_Class11213]
-		[FlightPro_ProjectKB_Class11214]
-		[FlightPro_ProjectKB_Class11215]
-		[FlightPro_ProjectKB_Class11216]
-		[FlightPro_ProjectKB_Class11217]
-		[FlightPro_ProjectKB_Class11218]))
-
-([FlightPro_ProjectKB_Class1212] of  Map_Entry
-
-	(key "FlightPro_Class670004")
-	(key_class "edu.stanford.smi.protege.model.Frame")
-	(value "-2 441 224 146")
-	(value_class "java.awt.Rectangle"))
-
 ([FlightPro_ProjectKB_Class1213] of  Widget
 
 	(is_hidden FALSE)
@@ -1790,6 +1560,674 @@
 ([FlightPro_ProjectKB_Class1321] of  Property_List
 )
 
+([FlightPro_ProjectKB_Class21312] of  Widget
+
+	(is_hidden FALSE)
+	(name "AirplaneDynamics")
+	(property_list [FlightPro_ProjectKB_Class21313])
+	(widget_class_name "edu.stanford.smi.protege.widget.FormWidget"))
+
+([FlightPro_ProjectKB_Class21313] of  Property_List
+
+	(properties
+		[FlightPro_ProjectKB_Class21314]
+		[FlightPro_ProjectKB_Class21315]
+		[FlightPro_ProjectKB_Class21317]
+		[FlightPro_ProjectKB_Class21319]
+		[FlightPro_ProjectKB_Class21321]
+		[FlightPro_ProjectKB_Class21323]
+		[FlightPro_ProjectKB_Class21327]
+		[FlightPro_ProjectKB_Class21329]
+		[FlightPro_ProjectKB_Class21331]
+		[FlightPro_ProjectKB_Class21547]))
+
+([FlightPro_ProjectKB_Class21314] of  Property_List
+
+	(name "layout properties"))
+
+([FlightPro_ProjectKB_Class21315] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "rudder-step")
+	(property_list [FlightPro_ProjectKB_Class21316])
+	(widget_class_name "edu.stanford.smi.protege.widget.IntegerFieldWidget")
+	(width 120)
+	(x 0)
+	(y 180))
+
+([FlightPro_ProjectKB_Class21316] of  Property_List
+)
+
+([FlightPro_ProjectKB_Class21317] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "title")
+	(property_list [FlightPro_ProjectKB_Class21318])
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(width 270)
+	(x 0)
+	(y 0))
+
+([FlightPro_ProjectKB_Class21318] of  Property_List
+)
+
+([FlightPro_ProjectKB_Class21319] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "elevator-time-out")
+	(property_list [FlightPro_ProjectKB_Class21320])
+	(widget_class_name "edu.stanford.smi.protege.widget.IntegerFieldWidget")
+	(width 150)
+	(x 120)
+	(y 120))
+
+([FlightPro_ProjectKB_Class21320] of  Property_List
+)
+
+([FlightPro_ProjectKB_Class21321] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "propeller-time-out")
+	(property_list [FlightPro_ProjectKB_Class21322])
+	(widget_class_name "edu.stanford.smi.protege.widget.IntegerFieldWidget")
+	(width 150)
+	(x 120)
+	(y 60))
+
+([FlightPro_ProjectKB_Class21322] of  Property_List
+)
+
+([FlightPro_ProjectKB_Class21323] of  Widget
+
+	(height 310)
+	(is_hidden FALSE)
+	(label "Bank")
+	(name "bank")
+	(property_list [FlightPro_ProjectKB_Class21324])
+	(widget_class_name "edu.stanford.smi.protegex.widget.contains.ContainsWidget")
+	(width 270)
+	(x 0)
+	(y 240))
+
+([FlightPro_ProjectKB_Class21324] of  Property_List
+
+	(properties
+		[FlightPro_ProjectKB_Class21333]
+		[FlightPro_ProjectKB_Class21334]
+		[FlightPro_ProjectKB_Class21335]
+		[FlightPro_ProjectKB_Class21336]
+		[FlightPro_ProjectKB_Class21337]
+		[FlightPro_ProjectKB_Class21338]
+		[FlightPro_ProjectKB_Class21339]
+		[FlightPro_ProjectKB_Class21340]
+		[FlightPro_ProjectKB_Class21341]
+		[FlightPro_ProjectKB_Class21342]
+		[FlightPro_ProjectKB_Class21343]
+		[FlightPro_ProjectKB_Class21344]
+		[FlightPro_ProjectKB_Class21345]
+		[FlightPro_ProjectKB_Class21346]
+		[FlightPro_ProjectKB_Class21347]
+		[FlightPro_ProjectKB_Class21348]
+		[FlightPro_ProjectKB_Class21349]
+		[FlightPro_ProjectKB_Class21350]
+		[FlightPro_ProjectKB_Class21351]
+		[FlightPro_ProjectKB_Class21352]
+		[FlightPro_ProjectKB_Class21353]
+		[FlightPro_ProjectKB_Class21354]
+		[FlightPro_ProjectKB_Class21355]
+		[FlightPro_ProjectKB_Class21356]
+		[FlightPro_ProjectKB_Class21357]
+		[FlightPro_ProjectKB_Class21358]
+		[FlightPro_ProjectKB_Class21359]
+		[FlightPro_ProjectKB_Class21360]))
+
+([FlightPro_ProjectKB_Class21327] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "rudder-time-out")
+	(property_list [FlightPro_ProjectKB_Class21328])
+	(widget_class_name "edu.stanford.smi.protege.widget.IntegerFieldWidget")
+	(width 150)
+	(x 120)
+	(y 180))
+
+([FlightPro_ProjectKB_Class21328] of  Property_List
+)
+
+([FlightPro_ProjectKB_Class21329] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "elevator-step")
+	(property_list [FlightPro_ProjectKB_Class21330])
+	(widget_class_name "edu.stanford.smi.protege.widget.IntegerFieldWidget")
+	(width 120)
+	(x 0)
+	(y 120))
+
+([FlightPro_ProjectKB_Class21330] of  Property_List
+)
+
+([FlightPro_ProjectKB_Class21331] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "propeller-step")
+	(property_list [FlightPro_ProjectKB_Class21332])
+	(widget_class_name "edu.stanford.smi.protege.widget.IntegerFieldWidget")
+	(width 120)
+	(x 0)
+	(y 60))
+
+([FlightPro_ProjectKB_Class21332] of  Property_List
+)
+
+([FlightPro_ProjectKB_Class21333] of  String
+
+	(name "tooltip_text"))
+
+([FlightPro_ProjectKB_Class21334] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Insert:At:Current:Selection"))
+
+([FlightPro_ProjectKB_Class21335] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Select:New:Insertions"))
+
+([FlightPro_ProjectKB_Class21336] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Create:Form:For:New:Instances"))
+
+([FlightPro_ProjectKB_Class21337] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Subwidget:Selection:Enabled"))
+
+([FlightPro_ProjectKB_Class21338] of  Boolean
+
+	(boolean_value FALSE)
+	(name ":Display:Summary:Panel"))
+
+([FlightPro_ProjectKB_Class21339] of  Boolean
+
+	(boolean_value FALSE)
+	(name ":Display:Number:Of:Subordinates"))
+
+([FlightPro_ProjectKB_Class21340] of  Boolean
+
+	(boolean_value FALSE)
+	(name ":Display:Subordinate:Browser:Keys"))
+
+([FlightPro_ProjectKB_Class21341] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Use:Separators:Between:Subwidgets"))
+
+([FlightPro_ProjectKB_Class21342] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Comtain:In:Vertical:Direction"))
+
+([FlightPro_ProjectKB_Class21343] of  Integer
+
+	(integer_value 10)
+	(name ":Size:Of:Space:Between:Subwidgets"))
+
+([FlightPro_ProjectKB_Class21344] of  Integer
+
+	(integer_value 1)
+	(name ":Prototype:Depth"))
+
+([FlightPro_ProjectKB_Class21345] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Display:Create:Instance:Button"))
+
+([FlightPro_ProjectKB_Class21346] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Display:Add:Instance:Button"))
+
+([FlightPro_ProjectKB_Class21347] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Display:View:Instance:Button"))
+
+([FlightPro_ProjectKB_Class21348] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Display:Remove:Instance:Button"))
+
+([FlightPro_ProjectKB_Class21349] of  Boolean
+
+	(boolean_value FALSE)
+	(name ":Display:Delete:Instance:Button"))
+
+([FlightPro_ProjectKB_Class21350] of  Boolean
+
+	(boolean_value FALSE)
+	(name ":Display:Prototype:Button"))
+
+([FlightPro_ProjectKB_Class21351] of  Boolean
+
+	(boolean_value FALSE)
+	(name ":Display:Move:Instance:Buttons"))
+
+([FlightPro_ProjectKB_Class21352] of  String
+
+	(name ":Create:Instance:Button:Tooltip")
+	(string_value "Create a new instance"))
+
+([FlightPro_ProjectKB_Class21353] of  String
+
+	(name ":Add:Instance:Button:Tooltip")
+	(string_value "Select an already existing instance"))
+
+([FlightPro_ProjectKB_Class21354] of  String
+
+	(name ":View:Instance:Button:Tooltip")
+	(string_value "View the selected instance"))
+
+([FlightPro_ProjectKB_Class21355] of  String
+
+	(name ":Remove:Instance:Button:Tooltip")
+	(string_value "Remove the selected instance(s)"))
+
+([FlightPro_ProjectKB_Class21356] of  String
+
+	(name ":Delete:Instance:Button:Tooltip")
+	(string_value "Delete the selected instance(s) from the knowledge base"))
+
+([FlightPro_ProjectKB_Class21357] of  String
+
+	(name ":Prototype:Button:Tooltip")
+	(string_value "Create a new instance which is a duplicate of the selected instance"))
+
+([FlightPro_ProjectKB_Class21358] of  String
+
+	(name ":Move:Instance:Buttons:Tooltip")
+	(string_value "Move the selected instance"))
+
+([FlightPro_ProjectKB_Class21359] of  String
+
+	(name ":Create:Instance:Dialog:Title")
+	(string_value "Create a new instance"))
+
+([FlightPro_ProjectKB_Class21360] of  String
+
+	(name ":Add:Instance:Dialog:Title")
+	(string_value "Select an already existing instance"))
+
+([FlightPro_ProjectKB_Class21547] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "but-upd-dyn")
+	(property_list [FlightPro_ProjectKB_Class21548])
+	(widget_class_name "clojuretab.ClojureActionButton")
+	(width 210)
+	(x 60)
+	(y 550))
+
+([FlightPro_ProjectKB_Class21548] of  Property_List
+)
+
+([FlightPro_ProjectKB_Class21925] of  String
+
+	(name "Airport")
+	(string_value "title"))
+
+([FlightPro_ProjectKB_Class21926] of  String
+
+	(name "Bank")
+	(string_value "title"))
+
+([FlightPro_ProjectKB_Class21927] of  String
+
+	(name "QuestionTree")
+	(string_value "name"))
+
+([FlightPro_ProjectKB_Class21928] of  String
+
+	(name "BBXWiki")
+	(string_value "bbx"))
+
+([FlightPro_ProjectKB_Class21929] of  String
+
+	(name "GeneralPlan")
+	(string_value "title"))
+
+([FlightPro_ProjectKB_Class21930] of  String
+
+	(name "AirplaneDynamics")
+	(string_value "title"))
+
+([FlightPro_ProjectKB_Class21931] of  Map
+
+	(entries
+		[FlightPro_ProjectKB_Class21932]
+		[FlightPro_ProjectKB_Class21933]
+		[FlightPro_ProjectKB_Class21934]
+		[FlightPro_ProjectKB_Class21935]
+		[FlightPro_ProjectKB_Class21936]
+		[FlightPro_ProjectKB_Class21937]
+		[FlightPro_ProjectKB_Class21938]))
+
+([FlightPro_ProjectKB_Class21932] of  Map_Entry
+
+	(key "FlightPro_Class670004")
+	(key_class "edu.stanford.smi.protege.model.Frame")
+	(value "-2 441 224 146")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21933] of  Map_Entry
+
+	(key "FlightPro_Class320015")
+	(key_class "edu.stanford.smi.protege.model.Frame")
+	(value "38 584 224 146")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21934] of  Map_Entry
+
+	(key "FlightPro_Class290004")
+	(key_class "edu.stanford.smi.protege.model.Frame")
+	(value "-5 521 224 146")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21935] of  Map_Entry
+
+	(key "FlightPro_Class290003")
+	(key_class "edu.stanford.smi.protege.model.Frame")
+	(value "-5 349 224 146")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21936] of  Map_Entry
+
+	(key "FlightPro_Class510004")
+	(key_class "edu.stanford.smi.protege.model.Frame")
+	(value "0 373 224 146")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21937] of  Map_Entry
+
+	(key "FlightPro_Class960023")
+	(key_class "edu.stanford.smi.protege.model.Frame")
+	(value "73 381 224 146")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21938] of  Map_Entry
+
+	(key "FlightPro_Class280183")
+	(key_class "edu.stanford.smi.protege.model.Frame")
+	(value "-2 466 224 146")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21939] of  Map_Entry
+
+	(key "InstanceDisplay.yellow_stickies")
+	(key_class "java.lang.String")
+	(value "FlightPro_ProjectKB_Class21931")
+	(value_class "java.util.Map"))
+
+([FlightPro_ProjectKB_Class21940] of  Map
+
+	(entries
+		[FlightPro_ProjectKB_Class21941]
+		[FlightPro_ProjectKB_Class21942]
+		[FlightPro_ProjectKB_Class21943]
+		[FlightPro_ProjectKB_Class21944]
+		[FlightPro_ProjectKB_Class21945]
+		[FlightPro_ProjectKB_Class21946]
+		[FlightPro_ProjectKB_Class21947]
+		[FlightPro_ProjectKB_Class21948]
+		[FlightPro_ProjectKB_Class21949]
+		[FlightPro_ProjectKB_Class21950]
+		[FlightPro_ProjectKB_Class21951]
+		[FlightPro_ProjectKB_Class21952]
+		[FlightPro_ProjectKB_Class21953]
+		[FlightPro_ProjectKB_Class21954]
+		[FlightPro_ProjectKB_Class21955]
+		[FlightPro_ProjectKB_Class21956]
+		[FlightPro_ProjectKB_Class21957]
+		[FlightPro_ProjectKB_Class21958]
+		[FlightPro_ProjectKB_Class21959]
+		[FlightPro_ProjectKB_Class21960]
+		[FlightPro_ProjectKB_Class21961]
+		[FlightPro_ProjectKB_Class21962]
+		[FlightPro_ProjectKB_Class21963]
+		[FlightPro_ProjectKB_Class21964]
+		[FlightPro_ProjectKB_Class21965]
+		[FlightPro_ProjectKB_Class21966]
+		[FlightPro_ProjectKB_Class21967]
+		[FlightPro_ProjectKB_Class21968]
+		[FlightPro_ProjectKB_Class21969]
+		[FlightPro_ProjectKB_Class21970]))
+
+([FlightPro_ProjectKB_Class21941] of  Map_Entry
+
+	(key "FlightPro_Class510041")
+	(key_class "java.lang.String")
+	(value "1120 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21942] of  Map_Entry
+
+	(key "FlightPro_Class510040")
+	(key_class "java.lang.String")
+	(value "1720 370 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21943] of  Map_Entry
+
+	(key "FlightPro_Class860002")
+	(key_class "java.lang.String")
+	(value "370 370 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21944] of  Map_Entry
+
+	(key "FlightPro_Class510029")
+	(key_class "java.lang.String")
+	(value "220 220 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21945] of  Map_Entry
+
+	(key "FlightPro_Class510028")
+	(key_class "java.lang.String")
+	(value "520 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21946] of  Map_Entry
+
+	(key "FlightPro_Class850020")
+	(key_class "java.lang.String")
+	(value "470 670 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21947] of  Map_Entry
+
+	(key "FlightPro_Class580132")
+	(key_class "java.lang.String")
+	(value "2320 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21948] of  Map_Entry
+
+	(key "FlightPro_Class510045")
+	(key_class "java.lang.String")
+	(value "1570 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21949] of  Map_Entry
+
+	(key "FlightPro_Class510044")
+	(key_class "java.lang.String")
+	(value "1420 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21950] of  Map_Entry
+
+	(key "FlightPro_Class510042")
+	(key_class "java.lang.String")
+	(value "1270 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21951] of  Map_Entry
+
+	(key "FlightPro_Class510049")
+	(key_class "java.lang.String")
+	(value "2170 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21952] of  Map_Entry
+
+	(key "FlightPro_Class510027")
+	(key_class "java.lang.String")
+	(value "370 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21953] of  Map_Entry
+
+	(key "FlightPro_Class510026")
+	(key_class "java.lang.String")
+	(value "520 370 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21954] of  Map_Entry
+
+	(key "FlightPro_Class510048")
+	(key_class "java.lang.String")
+	(value "2020 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21955] of  Map_Entry
+
+	(key "FlightPro_Class510047")
+	(key_class "java.lang.String")
+	(value "1870 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21956] of  Map_Entry
+
+	(key "FlightPro_Class510024")
+	(key_class "java.lang.String")
+	(value "520 220 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21957] of  Map_Entry
+
+	(key "FlightPro_Class510046")
+	(key_class "java.lang.String")
+	(value "1720 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21958] of  Map_Entry
+
+	(key "FlightPro_Class510030")
+	(key_class "java.lang.String")
+	(value "70 370 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21959] of  Map_Entry
+
+	(key "FlightPro_Class800000")
+	(key_class "java.lang.String")
+	(value "220 370 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21960] of  Map_Entry
+
+	(key "FlightPro_Class510039")
+	(key_class "java.lang.String")
+	(value "1870 370 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21961] of  Map_Entry
+
+	(key "FlightPro_Class510034")
+	(key_class "java.lang.String")
+	(value "1070 370 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21962] of  Map_Entry
+
+	(key "FlightPro_Class570000")
+	(key_class "java.lang.String")
+	(value "670 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21963] of  Map_Entry
+
+	(key "FlightPro_Class510033")
+	(key_class "java.lang.String")
+	(value "920 220 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21964] of  Map_Entry
+
+	(key "FlightPro_Class510032")
+	(key_class "java.lang.String")
+	(value "870 70 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21965] of  Map_Entry
+
+	(key "FlightPro_Class510038")
+	(key_class "java.lang.String")
+	(value "1720 220 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21966] of  Map_Entry
+
+	(key "FlightPro_Class510037")
+	(key_class "java.lang.String")
+	(value "970 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21967] of  Map_Entry
+
+	(key "FlightPro_Class510036")
+	(key_class "java.lang.String")
+	(value "820 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21968] of  Map_Entry
+
+	(key "FlightPro_Class790000")
+	(key_class "java.lang.String")
+	(value "170 670 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21969] of  Map_Entry
+
+	(key "FlightPro_Class510035")
+	(key_class "java.lang.String")
+	(value "920 370 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21970] of  Map_Entry
+
+	(key "FlightPro_Class790001")
+	(key_class "java.lang.String")
+	(value "320 670 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class21971] of  Map_Entry
+
+	(key "InstanceGraphWidget.FlightPro_Class510052.chart")
+	(key_class "java.lang.String")
+	(value "FlightPro_ProjectKB_Class21940")
+	(value_class "java.util.Map"))
+
 ([FlightPro_ProjectKB_Class35] of  String
 
 	(name "SearchTab_Query"))
@@ -1982,11 +2420,11 @@
 ([KB_102576_Class1] of  Map
 
 	(entries
-		[FlightPro_ProjectKB_Class11219]
-		[FlightPro_ProjectKB_Class11251])
+		[FlightPro_ProjectKB_Class21939]
+		[FlightPro_ProjectKB_Class21971])
 	(referenced_maps
-		[FlightPro_ProjectKB_Class11220]
-		[FlightPro_ProjectKB_Class1211]))
+		[FlightPro_ProjectKB_Class21940]
+		[FlightPro_ProjectKB_Class21931]))
 
 ([KB_102576_Class11] of  Property_List
 
@@ -2229,6 +2667,54 @@
 	(boolean_value FALSE)
 	(name "ButtonDisplayed-Стереть Выделенный Экземпляр"))
 
+([KB_360713_Class1155] of  Map
+
+	(entries
+		[KB_360713_Class1156]
+		[KB_360713_Class1159]
+		[KB_360713_Class1160]
+		[KB_360713_Class1161])
+	(referenced_maps [KB_360713_Class1157]))
+
+([KB_360713_Class1156] of  Map_Entry
+
+	(key "suppress_instance_counting")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([KB_360713_Class1157] of  Map
+
+	(entries [KB_360713_Class1158]))
+
+([KB_360713_Class1158] of  Map_Entry
+
+	(key "WikipediaGIS_Class2")
+	(key_class "edu.stanford.smi.protege.model.Frame")
+	(value "12 479 212 124")
+	(value_class "java.awt.Rectangle"))
+
+([KB_360713_Class1159] of  Map_Entry
+
+	(key "InstanceDisplay.yellow_stickies")
+	(key_class "java.lang.String")
+	(value "KB_360713_Class1157")
+	(value_class "java.util.Map"))
+
+([KB_360713_Class1160] of  Map_Entry
+
+	(key "add_name_on_instance_form")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([KB_360713_Class1161] of  Map_Entry
+
+	(key "change_tracking_active")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
 ([KB_786132_Class212] of  Widget
 
 	(is_hidden FALSE)
@@ -2274,54 +2760,6 @@
 
 ([KB_786132_Class218] of  Property_List
 )
-
-([KB_865423_Class1155] of  Map
-
-	(entries
-		[KB_865423_Class1156]
-		[KB_865423_Class1159]
-		[KB_865423_Class1160]
-		[KB_865423_Class1161])
-	(referenced_maps [KB_865423_Class1157]))
-
-([KB_865423_Class1156] of  Map_Entry
-
-	(key "suppress_instance_counting")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([KB_865423_Class1157] of  Map
-
-	(entries [KB_865423_Class1158]))
-
-([KB_865423_Class1158] of  Map_Entry
-
-	(key "WikipediaGIS_Class2")
-	(key_class "edu.stanford.smi.protege.model.Frame")
-	(value "12 479 212 124")
-	(value_class "java.awt.Rectangle"))
-
-([KB_865423_Class1159] of  Map_Entry
-
-	(key "InstanceDisplay.yellow_stickies")
-	(key_class "java.lang.String")
-	(value "KB_865423_Class1157")
-	(value_class "java.util.Map"))
-
-([KB_865423_Class1160] of  Map_Entry
-
-	(key "add_name_on_instance_form")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([KB_865423_Class1161] of  Map_Entry
-
-	(key "change_tracking_active")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
 
 ([KB_913118_Class23] of  Widget
 
@@ -2518,6 +2956,7 @@
 		[INSTANCE_ANNOTATION_FORM_WIDGET]
 		[FlightPro_ProjectKB_Class11307]
 		[PAL_FORM_WIDGET]
+		[FlightPro_ProjectKB_Class11252]
 		[FlightPro_ProjectKB_Class1253]
 		[FlightPro_ProjectKB_Class11290]
 		[KB_199638_Class350]
@@ -2525,6 +2964,7 @@
 		[FlightPro_ProjectKB_Class1145]
 		[FlightPro_ProjectKB_Class11320]
 		[FlightPro_ProjectKB_Class11331]
+		[FlightPro_ProjectKB_Class21312]
 		[STANDARD_FACET_FORM_WIDGET]
 		[KB_786132_Class212]
 		[FlightPro_ProjectKB_Class1213])

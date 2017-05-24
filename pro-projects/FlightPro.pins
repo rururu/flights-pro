@@ -1,4 +1,4 @@
-; Fri May 12 16:09:30 MSK 2017
+; Wed May 24 22:25:52 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -42,6 +42,58 @@
 		[FlightPro_Class280000])
 	(title "FlightPro Programs"))
 
+([FlightPro_Class1000014] of  Bank
+
+	(big-arc 64)
+	(factor 2)
+	(middle-arc 16)
+	(middle-bank 12)
+	(small-arc 2)
+	(title "Basic Bank"))
+
+([FlightPro_Class1000017] of  CloFunction
+
+	(source "(let [mp (itm inst 1)]\n  (println :update-dynamics mp)\n  (asp/pump-in (:directives CHN)\n	{:directive :dynamics\n	 :dynamo mp}))")
+	(title "update-dynamics [hm inst]"))
+
+([FlightPro_Class1000020] of  AirplaneDynamics
+
+	(bank [FlightPro_Class1000014])
+	(but-upd-dyn "Update Dynamics/pro.commands/update-dynamics")
+	(elevator-step 4)
+	(elevator-time-out 997)
+	(propeller-step 1)
+	(propeller-time-out 2003)
+	(rudder-step 3)
+	(rudder-time-out 1017)
+	(title "Basic Dynamics"))
+
+([FlightPro_Class1000021] of  CloFunction
+
+	(source "(let [bk (dm \"bank\")\n       bk [(bk \"middle-bank\")\n             (bk \"small-arc\")\n             (bk \"middle-arc\")\n             (bk \"big-arc\")\n             (bk \"factor\")]]\n  (vswap! CARRIER assoc :bank-params bk)\n  (vswap! CARRIER assoc-in [:propeller :step] (dm \"propeller-step\"))\n  (vswap! CARRIER assoc-in [:propeller :time-out] (dm \"propeller-time-out\"))\n  (vswap! CARRIER assoc-in [:elevator :step] (dm \"elevator-step\"))\n  (vswap! CARRIER assoc-in [:elevator :time-out] (dm \"elevator-time-out\"))\n  (vswap! CARRIER assoc-in [:rudder :step] (dm \"rudder-step\"))\n  (vswap! CARRIER assoc-in [:rudder :time-out] (dm \"rudder-time-out\")))\n(println :new-dynamics @CARRIER)")
+	(title "dynamics [dm]"))
+
+([FlightPro_Class1000022] of  AirplaneDynamics
+
+	(bank [FlightPro_Class1000023])
+	(but-upd-dyn "Update Dynamics/pro.commands/update-dynamics")
+	(elevator-step 5)
+	(elevator-time-out 999)
+	(propeller-step 2)
+	(propeller-time-out 1004)
+	(rudder-step 2)
+	(rudder-time-out 988)
+	(title "Dynamics2"))
+
+([FlightPro_Class1000023] of  Bank
+
+	(big-arc 82)
+	(factor 3)
+	(middle-arc 20)
+	(middle-bank 9)
+	(small-arc 3)
+	(title "Bank2"))
+
 ([FlightPro_Class10001] of  CloFunction
 
 	(source "(let [pitch (condp = (:view @CAMERA)\n                \"UP\" 90\n                \"DOWN\" -90\n                (:pitch @CAMERA))\n        roll (:roll @CAMERA)\n        head (geo/norm-crs (condp = (:view @CAMERA)\n                         \"BACKWARD\" (+ crs 180)\n                         \"RIGHT\" (+ crs 90)\n                         \"LEFT\" (- crs 90)\n                         \"FORWARD-RIGHT\" (+ crs 45)\n                         \"FORWARD-LEFT\" (- crs 45)\n                         \"BACKWARD-RIGHT\" (+ crs 135)\n                         \"BACKWARD-LEFT\" (- crs 135)\n                         crs))]\n    (fly-control lat lon alt head pitch roll per))")
@@ -79,7 +131,7 @@
 
 ([FlightPro_Class100025] of  CloVar
 
-	(source "(volatile! {:mode \"MANUAL\"\n               :coord [60 30]\n               :altitude 4000\n               :speed 160\n               :course 270\n               :step-hrs (double (/ (:carrier TIO) 3600000))\n               :bank-params [12 2 16 64 2]\n               :rudder {:target 0\n                            :step 3\n	    :accel 1\n                            :time-out 1017}\n               :elevator {:target 0\n                            :step 4\n	    :accel 1\n                            :time-out 997}\n               :propeller {:target 0\n                            :step 1\n	    :accel 1\n                            :time-out 2003}})")
+	(source "(volatile! {:mode \"MANUAL\"\n               :coord [60 30]\n               :altitude 4000\n               :speed 160\n               :course 270\n               :step-hrs (double (/ (:carrier TIO) 3600000))\n               ;; [middle-bank small-arc middle-arc big-arc factor]\n               :bank-params [12 2 16 64 2]\n               :rudder {:target 0\n                            :step 3\n	    :accel 1\n                            :time-out 1017}\n               :elevator {:target 0\n                            :step 4\n	    :accel 1\n                            :time-out 997}\n               :propeller {:target 0\n                            :step 1\n	    :accel 1\n                            :time-out 2003}})")
 	(title "CARRIER"))
 
 ([FlightPro_Class100026] of  CloFunction
@@ -109,8 +161,8 @@
 
 ([FlightPro_Class110000] of  CloFunction
 
-	(source "(letfn [(turn-right? [from to]\n	(let [dif (- to from)]\n	  (cond\n	    (> dif 0)\n	      (<= dif 180)\n	    (< dif 0) \n	      (< dif -180))))]\n  (let [arc (calc/abs (- old-crs new-crs))]\n    (if (<= arc min-arc)\n      0\n      (let [bnk (cond\n	(< arc small-arc) (int (/ right-bank factor)) \n	(> arc big-arc) (* right-bank factor)\n	true right-bank)]\n        (if (turn-right? old-crs new-crs)\n            bnk\n            (- bnk))))))")
-	(title "bank [old-crs new-crs [right-bank min-arc small-arc big-arc factor]]"))
+	(source "(letfn [(turn-right? [from to]\n	(let [dif (- to from)]\n	  (cond\n	    (> dif 0)\n	      (<= dif 180)\n	    (< dif 0) \n	      (< dif -180))))]\n  (let [arc (calc/abs (- old-crs new-crs))]\n    (if (<= arc small-arc)\n      0\n      (let [bnk (cond\n	(< arc mid-arc) (int (/ mid-bank factor)) \n	(> arc big-arc) (* mid-bank factor)\n	true mid-bank)]\n        (if (turn-right? old-crs new-crs)\n            bnk\n            (- bnk))))))")
+	(title "bank [old-crs new-crs [mid-bank small-arc mid-arc big-arc factor]]"))
 
 ([FlightPro_Class120000] of  CSS
 
@@ -488,6 +540,7 @@
 		[FlightPro_Class290000]
 		[FlightPro_Class320000]
 		[FlightPro_Class280002]
+		[FlightPro_Class1000021]
 		[FlightPro_Class80003]
 		[FlightPro_Class80001]
 		[FlightPro_Class600003]
@@ -1725,7 +1778,8 @@
 		[FlightPro_Class660024]
 		[FlightPro_Class640001]
 		[FlightPro_Class830000]
-		[FlightPro_Class890000])
+		[FlightPro_Class890000]
+		[FlightPro_Class1000017])
 	(cloNamespace [FlightPro_Class400001])
 	(cloVars
 		[FlightPro_Class70000]
@@ -3618,7 +3672,7 @@
 
 ([FlightPro_Class80003] of  CloFunction
 
-	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :callsigns (let [{:keys [list]} dir]\n	(ctl/callsigns list))\n    :vehicle (let [{:keys [vehicle period]} dir]\n                        (bank-vehicle vehicle)\n	(camera-vehicle vehicle period)\n	(ctl/show-flight-data vehicle))\n    (println (str \"Unknown directive: \" [directive dir]))))")
+	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :callsigns (let [{:keys [list]} dir]\n	(ctl/callsigns list))\n    :vehicle (let [{:keys [vehicle period]} dir]\n                        (bank-vehicle vehicle)\n	(camera-vehicle vehicle period)\n	(ctl/show-flight-data vehicle))\n    :dynamics (let [{:keys [dynamo]} dir]\n	(dynamics dynamo))\n    (println (str \"Unknown directive: \" [directive dir]))))")
 	(title "directives-handler [response]"))
 
 ([FlightPro_Class80004] of  CloFunction
