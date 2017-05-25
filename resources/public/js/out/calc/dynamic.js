@@ -80,14 +80,14 @@ return csasync.proc.start_process.call(null,new cljs.core.Keyword(null,"cdad-sta
 return proc_fn.call(null,carr);
 }),cljs.core.get_in.call(null,cljs.core.deref.call(null,carr),tio_pth),null);
 });
-calc.dynamic.bank = (function calc$dynamic$bank(old_crs,new_crs,p__38613){
-var vec__38617 = p__38613;
-var mid_bank = cljs.core.nth.call(null,vec__38617,(0),null);
-var small_arc = cljs.core.nth.call(null,vec__38617,(1),null);
-var mid_arc = cljs.core.nth.call(null,vec__38617,(2),null);
-var big_arc = cljs.core.nth.call(null,vec__38617,(3),null);
-var factor = cljs.core.nth.call(null,vec__38617,(4),null);
-var turn_right_QMARK_ = ((function (vec__38617,mid_bank,small_arc,mid_arc,big_arc,factor){
+calc.dynamic.bank = (function calc$dynamic$bank(old_crs,new_crs,p__32746){
+var vec__32750 = p__32746;
+var mid_bank = cljs.core.nth.call(null,vec__32750,(0),null);
+var small_arc = cljs.core.nth.call(null,vec__32750,(1),null);
+var mid_arc = cljs.core.nth.call(null,vec__32750,(2),null);
+var big_arc = cljs.core.nth.call(null,vec__32750,(3),null);
+var factor = cljs.core.nth.call(null,vec__32750,(4),null);
+var turn_right_QMARK_ = ((function (vec__32750,mid_bank,small_arc,mid_arc,big_arc,factor){
 return (function calc$dynamic$bank_$_turn_right_QMARK_(from,to){
 var dif = (to - from);
 if((dif > (0))){
@@ -99,7 +99,7 @@ return (dif < (-180));
 return null;
 }
 }
-});})(vec__38617,mid_bank,small_arc,mid_arc,big_arc,factor))
+});})(vec__32750,mid_bank,small_arc,mid_arc,big_arc,factor))
 ;
 var arc = calc.core.abs.call(null,(old_crs - new_crs));
 if((arc <= small_arc)){

@@ -1,4 +1,4 @@
-; Wed May 24 22:25:52 MSK 2017
+; Thu May 25 17:11:13 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -41,6 +41,22 @@
 		[FlightPro_Class20000]
 		[FlightPro_Class280000])
 	(title "FlightPro Programs"))
+
+([FlightPro_Class1000000] of  CloFuncall
+
+	(source "(type #(+ 1 2))"))
+
+([FlightPro_Class1000001] of  CloFuncall
+
+	(source "(type #(- 1 2))"))
+
+([FlightPro_Class1000002] of  CloFuncall
+
+	(source "((instance? clojure.lang.IFn #(- 1 2))"))
+
+([FlightPro_Class1000003] of  CloFuncall
+
+	(source "(instance? clojure.lang.IFn #(- 1 2))"))
 
 ([FlightPro_Class1000014] of  Bank
 
@@ -184,7 +200,7 @@
 
 ([FlightPro_Class130001] of  CloFunction
 
-	(source "(let [[rb ma sa ba fa :as bps] (:bank-params @carr)\n       bnk (dyn/bank (:course @carr) course bps)\n       spd (:speed @carr)]\n  (if (or (< spd 100) (= bnk 0))\n    (mov/turn carr course 1 nil)\n    (let [accel (if (> (calc/abs bnk) rb) 2 1)]\n      (czm/camera :roll bnk)\n      (mov/turn carr course accel #(czm/camera :roll 0)))))")
+	(source "(let [[mb sa ma ba fa :as bps] (:bank-params @carr)\n       bnk (dyn/bank (:course @carr) course bps)\n       spd (:speed @carr)]\n  (if (or (< spd 100) (= bnk 0))\n    (mov/turn carr course 1 nil)\n    (let [accel (if (> (calc/abs bnk) mb) 2 1)]\n      (czm/camera :roll bnk)\n      (mov/turn carr course accel #(czm/camera :roll 0)))))")
 	(title "turn-and-bank [carr course]"))
 
 ([FlightPro_Class130003] of  CloFunction
@@ -3378,7 +3394,7 @@
 
 ([FlightPro_Class70004] of  CloFunction
 
-	(source "(when (not= @status \"RUN\") \n  (vreset! status \"RUN\")\n  (go (do \n          (while (and (= @status \"RUN\")\n                            (proc-fn))\n                (<! (timeout time-out)))\n          (if (instance? clojure.lang.IFn final-fun) (final-fun))\n          (vreset! status \"STOP\")))\n  @status)")
+	(source "(when (not= @status \"RUN\") \n  (vreset! status \"RUN\")\n  (go (do \n          (while (and (= @status \"RUN\")\n                            (proc-fn))\n                (<! (timeout time-out)))\n          (if (some? final-fun) (final-fun))\n          (vreset! status \"STOP\")))\n  @status)")
 	(title "start-process [status proc-fn time-out final-fun]"))
 
 ([FlightPro_Class70005] of  CloFunction

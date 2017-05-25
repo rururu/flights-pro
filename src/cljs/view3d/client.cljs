@@ -64,12 +64,12 @@
   (t/read (t/reader :json) x))
 
 (defn turn-and-bank [carr course]
-  (let [[rb ma sa ba fa :as bps] (:bank-params @carr)
+  (let [[mb sa ma ba fa :as bps] (:bank-params @carr)
        bnk (dyn/bank (:course @carr) course bps)
        spd (:speed @carr)]
   (if (or (< spd 100) (= bnk 0))
     (mov/turn carr course 1 nil)
-    (let [accel (if (> (calc/abs bnk) rb) 2 1)]
+    (let [accel (if (> (calc/abs bnk) mb) 2 1)]
       (czm/camera :roll bnk)
       (mov/turn carr course accel #(czm/camera :roll 0))))))
 
