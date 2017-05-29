@@ -19,7 +19,7 @@
           (while (and (= @status "RUN")
                             (proc-fn))
                 (<! (timeout time-out)))
-          (if (some? final-fun) (final-fun))
+          (if (instance? clojure.lang.IFn final-fun) (final-fun))
           (vreset! status "STOP")))
   @status))
 

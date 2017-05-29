@@ -1,4 +1,4 @@
-; Mon May 29 18:49:09 MSK 2017
+; Mon May 29 19:51:47 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -2518,6 +2518,54 @@
 	(name "instances_file_name")
 	(string_value "FlightPro.pins"))
 
+([KB_164445_Class1155] of  Map
+
+	(entries
+		[KB_164445_Class1156]
+		[KB_164445_Class1159]
+		[KB_164445_Class1160]
+		[KB_164445_Class1161])
+	(referenced_maps [KB_164445_Class1157]))
+
+([KB_164445_Class1156] of  Map_Entry
+
+	(key "suppress_instance_counting")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([KB_164445_Class1157] of  Map
+
+	(entries [KB_164445_Class1158]))
+
+([KB_164445_Class1158] of  Map_Entry
+
+	(key "WikipediaGIS_Class2")
+	(key_class "edu.stanford.smi.protege.model.Frame")
+	(value "12 479 212 124")
+	(value_class "java.awt.Rectangle"))
+
+([KB_164445_Class1159] of  Map_Entry
+
+	(key "InstanceDisplay.yellow_stickies")
+	(key_class "java.lang.String")
+	(value "KB_164445_Class1157")
+	(value_class "java.util.Map"))
+
+([KB_164445_Class1160] of  Map_Entry
+
+	(key "add_name_on_instance_form")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([KB_164445_Class1161] of  Map_Entry
+
+	(key "change_tracking_active")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
 ([KB_199638_Class350] of  Widget
 
 	(is_hidden FALSE)
@@ -2666,54 +2714,6 @@
 
 	(boolean_value FALSE)
 	(name "ButtonDisplayed-Стереть Выделенный Экземпляр"))
-
-([KB_468735_Class1155] of  Map
-
-	(entries
-		[KB_468735_Class1156]
-		[KB_468735_Class1159]
-		[KB_468735_Class1160]
-		[KB_468735_Class1161])
-	(referenced_maps [KB_468735_Class1157]))
-
-([KB_468735_Class1156] of  Map_Entry
-
-	(key "suppress_instance_counting")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([KB_468735_Class1157] of  Map
-
-	(entries [KB_468735_Class1158]))
-
-([KB_468735_Class1158] of  Map_Entry
-
-	(key "WikipediaGIS_Class2")
-	(key_class "edu.stanford.smi.protege.model.Frame")
-	(value "12 479 212 124")
-	(value_class "java.awt.Rectangle"))
-
-([KB_468735_Class1159] of  Map_Entry
-
-	(key "InstanceDisplay.yellow_stickies")
-	(key_class "java.lang.String")
-	(value "KB_468735_Class1157")
-	(value_class "java.util.Map"))
-
-([KB_468735_Class1160] of  Map_Entry
-
-	(key "add_name_on_instance_form")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([KB_468735_Class1161] of  Map_Entry
-
-	(key "change_tracking_active")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
 
 ([KB_786132_Class212] of  Widget
 

@@ -1,4 +1,4 @@
-; Mon May 29 18:49:09 MSK 2017
+; Mon May 29 19:51:47 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -174,6 +174,15 @@
 
 	(source "(if (= terra \"yes\")\n  (set! (.-terrainProvider VIEWER) TERR-PROV))\n(.add (.-dataSources VIEWER) CZM-SRC)\n(.addEventListener (js/EventSource. (str base-url \"czml/\")) \"czml\" cz-processor false)\n(println [:INIT-3D-VIEW :BASE base-url :TERRA terra])")
 	(title "init-3D-view [base-url terra]"))
+
+([FlightPro_Class1010000] of  CloFunction
+
+	(source "(when (not= @status \"RUN\") \n  (vreset! status \"RUN\")\n  (go (do \n          (while (and (= @status \"RUN\")\n                            (proc-fn))\n                (<! (timeout time-out)))\n          (if (some? final-fun) (final-fun))\n          (vreset! status \"STOP\")))\n  @status)")
+	(title "start-process [status proc-fn time-out final-fun]"))
+
+([FlightPro_Class1010001] of  CloFuncall
+
+	(source "clojure.lang.IFunction"))
 
 ([FlightPro_Class1010002] of  WikiArticle
 
@@ -1283,6 +1292,10 @@
 	(summary "Novy (; masculine), Novaya (; feminine), or Novoye (; neuter) is the name of several rural localities in Russia.  (...)")
 	(title "Novy (inhabited locality)")
 	(wikipediaUrl "http://en.wikipedia.org/wiki/Novy_%28inhabited_locality%29"))
+
+([FlightPro_Class1020002] of  CloFuncall
+
+	(source "(type (fn [x] (+ x 2)))"))
 
 ([FlightPro_Class110000] of  CloFunction
 
@@ -4503,7 +4516,7 @@
 
 ([FlightPro_Class70004] of  CloFunction
 
-	(source "(when (not= @status \"RUN\") \n  (vreset! status \"RUN\")\n  (go (do \n          (while (and (= @status \"RUN\")\n                            (proc-fn))\n                (<! (timeout time-out)))\n          (if (some? final-fun) (final-fun))\n          (vreset! status \"STOP\")))\n  @status)")
+	(source "(when (not= @status \"RUN\") \n  (vreset! status \"RUN\")\n  (go (do \n          (while (and (= @status \"RUN\")\n                            (proc-fn))\n                (<! (timeout time-out)))\n          (if (instance? clojure.lang.IFn final-fun) (final-fun))\n          (vreset! status \"STOP\")))\n  @status)")
 	(title "start-process [status proc-fn time-out final-fun]"))
 
 ([FlightPro_Class70005] of  CloFunction
@@ -4525,7 +4538,7 @@
 
 	(cloFunctions
 		[FlightPro_Class70007]
-		[FlightPro_Class70004]
+		[FlightPro_Class1010000]
 		[FlightPro_Class70005]
 		[FlightPro_Class70006]
 		[FlightPro_Class160018]
