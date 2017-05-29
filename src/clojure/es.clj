@@ -109,7 +109,7 @@
                      idx (int (rand (count rws)))]
                 (nth rws idx))
               0)]
-  (geo/norm-crs (+ rw 180))))
+  (geo/norm-crs rw)))
 
 (defn corr-alt-tab [atab elv]
   (letfn [(corr1 [[x y]]
