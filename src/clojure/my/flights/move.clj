@@ -90,8 +90,7 @@
     true to)))
 
 (defn equalize [carr gear-key param-key param-fn closer-fn final-fn]
-  (println :equalize [carr gear-key param-key param-fn closer-fn final-fn])
-(letfn [(proc-fn [carr]
+  (letfn [(proc-fn [carr]
                       (let [car @carr
                              g (gear-key car)
                              target (:target g)
@@ -104,7 +103,6 @@
                                   true))))]
   (vswap! carr assoc-in [gear-key :eqz-status] (volatile! "STOP"))
   (let [g (gear-key @carr)]
-    (println :eqz-start-proc :g g :fin-fun final-fn)
     (asp/start-process (:eqz-status g) 
                                    #(proc-fn carr) 
                                    (:time-out g)

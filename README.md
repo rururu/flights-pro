@@ -90,6 +90,14 @@ For example, to safely takeoff from Cochabamba you have to icrease and accelerat
 
 ![screenshot](screenshot2.jpeg)
 
+## Airplane dynamics
+
+You can change dynamics of your own airplanes (of manual flight and of scheduled flights). These dynamics described in the instances of "AirplaneDynamics" class. To change dynamics click on the button "Update Dynamics" on a corresponding instance.
+
+![screenshot](screenshot3.jpeg)
+
+You can easy create your on instance of "AirplaneDynamics" using the "Create Instance" button (with a shining diamond on it).
+
 Copyright and license
 ----
 
