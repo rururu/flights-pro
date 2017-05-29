@@ -1,4 +1,4 @@
-; Thu May 25 17:11:13 MSK 2017
+; Mon May 29 18:49:09 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -174,6 +174,1115 @@
 
 	(source "(if (= terra \"yes\")\n  (set! (.-terrainProvider VIEWER) TERR-PROV))\n(.add (.-dataSources VIEWER) CZM-SRC)\n(.addEventListener (js/EventSource. (str base-url \"czml/\")) \"czml\" cz-processor false)\n(println [:INIT-3D-VIEW :BASE base-url :TERRA terra])")
 	(title "init-3D-view [base-url terra]"))
+
+([FlightPro_Class1010002] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 19)
+	(feature "city")
+	(lang "en")
+	(lat 45.6169)
+	(lng 38.9453)
+	(rank 98)
+	(summary "Timashyovsk is a town and the administrative center of Timashyovsky District of Krasnodar Krai, Russia, located on the Kirpili River north of Krasnodar, the administrative center of the krai. As of the 2010 Census, its population was 53,924.  (...)")
+	(title "Timashyovsk")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Timashyovsk"))
+
+([FlightPro_Class1010004] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 33)
+	(lang "en")
+	(lat 45.4686)
+	(lng 39.4519)
+	(rank 98)
+	(summary "Korenovsk is a town and the administrative center of Korenovsky District of Krasnodar Krai, Russia, located on the Beysuzhyok Levy River (a tributary of the Beysug) northeast of Krasnodar. Population:  (...)")
+	(title "Korenovsk")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Korenovsk"))
+
+([FlightPro_Class1010009] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 22)
+	(lang "en")
+	(lat 45.6167)
+	(lng 38.9667)
+	(rank 97)
+	(summary "Timashyovsky District is an administrative district (raion), one of the thirty-eight in Krasnodar Krai, Russia.Reference Information #34.01-707/13-03 As a municipal division, it is incorporated as Timashyovsky Municipal District.Law #698-KZ It is located in the center of the krai (...)")
+	(title "Timashyovsky District")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Timashyovsky_District"))
+
+([FlightPro_Class1010010] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 28)
+	(lang "en")
+	(lat 45.0)
+	(lng 39.5)
+	(rank 96)
+	(summary "The Russo-Circassian War (1763–1864) refers to a series of battles and wars in Circassia, the northwestern part of the Caucasus, which were part of the Russian Empire's conquest of the Caucasus lasting approximately 101 years, starting under the reign of Tsar Peter the Great and being completed in (...)")
+	(title "Russo-Circassian War")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Russo-Circassian_War"))
+
+([FlightPro_Class1010011] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 30)
+	(lang "en")
+	(lat 45.1)
+	(lng 39.4692)
+	(rank 96)
+	(summary "The Belaya is a river in the Republic of Adygea and Krasnodar Krai of Russia. It is a tributary of the Kuban River, which it joins in the Krasnodar Reservoir. The river is long, with a drainage basin of . It has its sources at the main watershed of the Caucasus Mountains (...)")
+	(title "Belaya River (Kuban)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Belaya_River_%28Kuban%29"))
+
+([FlightPro_Class1010018] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 63)
+	(lang "en")
+	(lat 45.5806)
+	(lng 39.6572)
+	(rank 92)
+	(summary "Vyselki is a rural locality (a stanitsa) and the administrative center of Vyselkovsky District of Krasnodar Krai, Russia. Population:  (...)")
+	(title "Vyselki, Krasnodar Krai")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Vyselki%2C_Krasnodar_Krai"))
+
+([FlightPro_Class1010019] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 9)
+	(lang "en")
+	(lat 45.4856)
+	(lng 38.6594)
+	(rank 92)
+	(summary "Kalininskaya is a rural locality (a stanitsa) and the administrative center of Kalininsky District of Krasnodar Krai, Russia, located on the Beysug River. Population:  (...)")
+	(title "Kalininskaya, Krasnodar Krai")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kalininskaya%2C_Krasnodar_Krai"))
+
+([FlightPro_Class1010020] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 37)
+	(lang "en")
+	(lat 45.1417)
+	(lng 39.5792)
+	(rank 91)
+	(summary "Krasnogvardeyskoye is a rural locality (a selo) and the administrative center of Krasnogvardeysky District of the Republic of Adygea, Russia, located on the shores of Krasnodar Reservoir some northwest of Maykop. Population:  (...)")
+	(title "Krasnogvardeyskoye, Republic of Adygea")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Krasnogvardeyskoye%2C_Republic_of_Adygea"))
+
+([FlightPro_Class1010023] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 37)
+	(lang "en")
+	(lat 45.1167)
+	(lng 39.5667)
+	(rank 91)
+	(summary "Krasnogvardeysky District is an administrativeLaw #171 and a municipalLaw #281 district (raion), one of the seven in the Republic of Adygea, Russia. It is located in the northwest of the republic and borders with Ust-Labinsky District of Krasnodar Krai in the north, Shovgenovsky District in the (...)")
+	(title "Krasnogvardeysky District, Republic of Adygea")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Krasnogvardeysky_District%2C_Republic_of_Adygea"))
+
+([FlightPro_Class1010024] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 10)
+	(lang "en")
+	(lat 45.4897)
+	(lng 38.675)
+	(rank 90)
+	(summary "Kalininsky District is an administrative district (raion), one of the thirty-eight in Krasnodar Krai, Russia.Reference Information #34.01-707/13-03 As a municipal division, it is incorporated as Kalininsky Municipal District.Law #703-KZ It is located in the west of the krai (...)")
+	(title "Kalininsky District, Krasnodar Krai")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kalininsky_District%2C_Krasnodar_Krai"))
+
+([FlightPro_Class1010025] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 57)
+	(lang "en")
+	(lat 45.5783)
+	(lng 39.6581)
+	(rank 90)
+	(summary "Vyselkovsky District is an administrative district (raion), one of the thirty-eight in Krasnodar Krai, Russia.Reference Information #34.01-707/13-03 As a municipal division, it is incorporated as Vyselkovsky Municipal District.Law #715-KZ It is located in the center of the krai (...)")
+	(title "Vyselkovsky District")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Vyselkovsky_District"))
+
+([FlightPro_Class1010032] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 34)
+	(lang "en")
+	(lat 45.3958)
+	(lng 39.3847)
+	(rank 87)
+	(summary "Platnirovskaya is a rural locality (a stanitsa) in Korenovsky District of Krasnodar Krai, Russia. Population:  (...)")
+	(title "Platnirovskaya")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Platnirovskaya"))
+
+([FlightPro_Class1010034] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 20)
+	(lang "en")
+	(lat 45.4542)
+	(lng 39.0125)
+	(rank 84)
+	(summary "Medvedovskaya is a rural locality (a stanitsa) in Timashyovsky District of Krasnodar Krai, Russia. Population:  (...)")
+	(title "Medvedovskaya")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Medvedovskaya"))
+
+([FlightPro_Class1010038] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 61)
+	(lang "en")
+	(lat 44.9561)
+	(lng 39.5886)
+	(rank 81)
+	(summary "Ryazanskaya is a rural locality (a stanitsa) in Belorechensky District of Krasnodar Krai, Russia, located on the right bank of the Pshish River, northwest of Belorechensk. Population: Postal code: 352613. It was founded in 1863 as the stanitsa of Gabukayevskaya and was renamed Ryazanskaya in 1867.  (...)")
+	(title "Ryazanskaya (rural locality)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ryazanskaya_%28rural_locality%29"))
+
+([FlightPro_Class1010042] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 29)
+	(lang "en")
+	(lat 45.0333)
+	(lng 38.9667)
+	(rank 98)
+	(summary "Kuban is a geographic region of Southern Russia surrounding the Kuban River, on the Black Sea between the Don Steppe, the Volga Delta and the Caucasus, and separated from the Crimean Peninsula to the west by the Kerch Strait (...)")
+	(title "Kuban")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kuban"))
+
+([FlightPro_Class1010047] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 33)
+	(lang "en")
+	(lat 44.9172)
+	(lng 38.9961)
+	(rank 97)
+	(summary "Takhtamukaysky District is an administrativeLaw #171 and a municipalLaw #220 district (raion), one of the seven in the Republic of Adygea, Russia. It is located in the west of the republic and borders with Krasnoarmeysky District of Krasnodar Krai and with the territory of the City of Krasnodar in (...)")
+	(title "Takhtamukaysky District")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Takhtamukaysky_District"))
+
+([FlightPro_Class1010050] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 37)
+	(lang "en")
+	(lat 45.2)
+	(lng 39.2333)
+	(rank 95)
+	(summary "Dinskoy District is an administrative district (raion), one of the thirty-eight in Krasnodar Krai, Russia.Reference Information #34.01-707/13-03 As a municipal division, it is incorporated as Dinskoy Municipal District.Law #771-KZ It is located in the center of the krai. The area of the district is  (...)")
+	(title "Dinskoy District")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Dinskoy_District"))
+
+([FlightPro_Class1010051] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 24)
+	(feature "landmark")
+	(lang "en")
+	(lat 45.0253)
+	(lng 38.9994)
+	(rank 94)
+	(summary "Kuban Stadium is a multi-purpose stadium in Krasnodar, Russia. It is currently used mostly for football matches and is the home stadium of FC Kuban Krasnodar and FC Krasnodar. The stadium holds 35,200 people. The stadium was opened on 30 October 1960. When built, the stadium had a capacity of 20,000 (...)")
+	(title "Kuban Stadium")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kuban_Stadium"))
+
+([FlightPro_Class1010052] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 57)
+	(lang "en")
+	(lat 44.6333)
+	(lng 39.1333)
+	(rank 93)
+	(summary "Goryachy Klyuch (lit. hot spring) is a town and a balneological resort in Krasnodar Krai, Russia, located on the Psekups River (Kuban's tributary) south of Krasnodar, the administrative center of the krai. Population: 20,000 (1970).  (...)")
+	(title "Goryachy Klyuch, Krasnodar Krai")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Goryachy_Klyuch%2C_Krasnodar_Krai"))
+
+([FlightPro_Class1010053] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 23)
+	(lang "en")
+	(lat 44.9019)
+	(lng 38.8425)
+	(rank 93)
+	(summary "Afipsky is an urban locality (an urban-type settlement) in Seversky District of Krasnodar Krai, Russia, located on the left bank of the Afips River, from Krasnodar. Population: It was founded in 1865 as the stanitsa of Georgiyeafipskaya  (...)")
+	(title "Afipsky")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Afipsky"))
+
+([FlightPro_Class1010054] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 36)
+	(lang "en")
+	(lat 45.1972)
+	(lng 39.2333)
+	(rank 92)
+	(summary "Dinskaya is a rural locality (a stanitsa) and the administrative center of Dinskoy District in Krasnodar Krai, Russia. Population:  (...)")
+	(title "Dinskaya")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Dinskaya"))
+
+([FlightPro_Class1010055] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 29)
+	(feature "country")
+	(lang "en")
+	(lat 45.0333)
+	(lng 38.9667)
+	(rank 91)
+	(summary "The Kuban People's Republic was an anti-Bolshevik state that comprised the territory of the Kuban in the modern-day Russian Federation during the Russian Civil War. The republic was proclaimed by the Kuban Rada on January 28, 1918 and declared its independence on February 16 (...)")
+	(title "Kuban People's Republic")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kuban_People%27s_Republic"))
+
+([FlightPro_Class1010056] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 29)
+	(feature "adm1st")
+	(lang "en")
+	(lat 45.0333)
+	(lng 38.9667)
+	(rank 91)
+	(summary "The Kuban Oblast was an oblast (province) of the Russian Empire. It roughly corresponded to most of the Kuban and Circassia regions. It was created in 1860 out of Kuban Cossack territories that had once been part of the Crimean Khanate and the land of the Circassians (...)")
+	(title "Kuban Oblast")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kuban_Oblast"))
+
+([FlightPro_Class1010057] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 44)
+	(feature "city")
+	(lang "en")
+	(lat 44.85)
+	(lng 38.3833)
+	(rank 90)
+	(summary "Kholmskaya is a rural locality (a stanitsa) in Abinsky District of Krasnodar Krai, Russia, located on the shores of the Sukhoy Khabl River. Municipally, it is a part of Kholmskoye Rural Settlement in Abinsky Municipal District. Population: 17,271 (2002 Census) (...)")
+	(title "Kholmskaya")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kholmskaya"))
+
+([FlightPro_Class1010059] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 29)
+	(lang "en")
+	(lat 45.0333)
+	(lng 38.9667)
+	(rank 89)
+	(summary "The Russian First Division 2008 was the 17th edition of Russian First Division. There were 22 teams.  (...)")
+	(title "2008 Russian First Division")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/2008_Russian_First_Division"))
+
+([FlightPro_Class1010060] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 29)
+	(lang "en")
+	(lat 45.0333)
+	(lng 38.9667)
+	(rank 89)
+	(summary "The Kuban-Black Sea Soviet Republic (May 30 &ndash; July 6, 1918) was part of the Russian SFSR. Its capital was Yekaterinodar. It was created by merging the Black Sea Soviet Republic and Kuban Soviet Republic. Later, it was itself merged into the North Caucasian Soviet Republic (...)")
+	(title "Kuban-Black Sea Soviet Republic")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kuban-Black_Sea_Soviet_Republic"))
+
+([FlightPro_Class1010061] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 25)
+	(lang "en")
+	(lat 44.9264)
+	(lng 38.9081)
+	(rank 88)
+	(summary "Enem is an urban locality (an urban-type settlement) in Takhtamukaysky District of the Republic of Adygea, Russia, located on the Krasnodar–Novorossiysk auto route, northwest of Maykop, the capital of the republic. As of the 2010 Census, its population was 17,890.  (...)")
+	(title "Enem (urban-type settlement)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Enem_%28urban-type_settlement%29"))
+
+([FlightPro_Class1010062] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 17)
+	(lang "en")
+	(lat 44.985)
+	(lng 38.9444)
+	(rank 88)
+	(summary "Yablonovsky , informally called Yablonovka , is an urban locality (an urban-type settlement) in Takhtamukaysky District of the Republic of Adygea, Russia, located on the left bank of the Kuban River across Krasnodar in Krasnodar Krai, northwest of Maykop, the capital of the republic (...)")
+	(title "Yablonovsky, Republic of Adygea")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Yablonovsky%2C_Republic_of_Adygea"))
+
+([FlightPro_Class1010063] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 29)
+	(lang "en")
+	(lat 45.0333)
+	(lng 38.9667)
+	(rank 88)
+	(summary "The Kuban Soviet Republic (April 13 &ndash; May 30, 1918) was part of the Russian Soviet Federated Socialist Republic within the general territory of the Kuban.Evan Mawdsley (2008) The Russian Civil War. Edinburgh, Birlinn: 26-7 Its capital was Yekaterinodar (...)")
+	(title "Kuban Soviet Republic")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kuban_Soviet_Republic"))
+
+([FlightPro_Class1010065] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 31)
+	(feature "edu")
+	(lang "en")
+	(lat 45.0194)
+	(lng 39.0308)
+	(rank 85)
+	(summary "The Kuban State University (KubSU) is a university in the Kuban area of southern Russia. It was founded on September 19, 1920, and since then it has trained over 100,000 specialists, including over 1,000 foreign students.  (...)")
+	(title "Kuban State University")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kuban_State_University"))
+
+([FlightPro_Class1010066] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 24)
+	(feature "edu")
+	(lang "en")
+	(lat 45.0508)
+	(lng 39.0035)
+	(rank 83)
+	(summary "Kuban State Technological University (Russian: Кубанский государственный технологический университет), also referred to as the Kuban State University of Technology, located in Krasnodar, is one of the first higher educational institutions established in the southern region of Russia (...)")
+	(title "Kuban State Technological University")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kuban_State_Technological_University"))
+
+([FlightPro_Class1010067] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 29)
+	(lang "en")
+	(lat 45.0333)
+	(lng 38.9667)
+	(rank 83)
+	(summary "Following are the results of the 2004 Russian Premier League, the top division of Russian association football. Lokomotiv won their second Premier League title, while Krylya Sovetov finished in the top three for the first time, winning bronze (...)")
+	(title "2004 Russian Premier League")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/2004_Russian_Premier_League"))
+
+([FlightPro_Class1010068] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 22)
+	(lang "en")
+	(lat 44.9817)
+	(lng 39.0922)
+	(rank 83)
+	(summary "Tlyustenkhabl is an urban locality (an urban-type settlement) in Teuchezhsky District of the Republic of Adygea, Russia, located on the left bank of the Kuban River opposite of Krasnodar in Krasnodar Krai, on the shores of Krasnodar Reservoir, northwest of Maykop, the capital of the republic (...)")
+	(title "Tlyustenkhabl")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Tlyustenkhabl"))
+
+([FlightPro_Class1010069] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 27)
+	(feature "landmark")
+	(lang "en")
+	(lat 45.1175)
+	(lng 38.9814)
+	(rank 77)
+	(summary "Basket-Hall Krasnodar, or Baskethall-Krasnodar, is a multi-purpose indoor arena that is located in Krasnodar, Russia. The arena contains two basketball halls. The main hall seats 7,500, and the smaller hall, which is used for training, seats 500. The arena is mainly used to host basketball games (...)")
+	(title "Basket-Hall Krasnodar")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Basket-Hall_Krasnodar"))
+
+([FlightPro_Class1010070] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 12)
+	(feature "dam")
+	(lang "en")
+	(lat 44.9764)
+	(lng 38.8294)
+	(rank 74)
+	(summary "The Shapsug Reservoir, also known as the Shapsugskoye Reservoir is a deactivated reservoir in Takhtamukaysky District of the Republic of Adygea, Russia, located southwest of Krasnodar. It was built between 1940И. И. Алексеев, А. С. Коновалов. \"Очерки истории Краснодарской организации КПСС\" (...)")
+	(title "Shapsug Reservoir")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Shapsug_Reservoir"))
+
+([FlightPro_Class1010071] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 25)
+	(lang "en")
+	(lat 44.9044)
+	(lng 39.2675)
+	(rank 72)
+	(summary "Psekups River is a river of southwest Russia. It flows through the Republic of Adygea and is a tributary to the Kuban River")
+	(title "Psekups River")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Psekups_River"))
+
+([FlightPro_Class1010072] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 28)
+	(lang "en")
+	(lat 45.015)
+	(lng 38.975)
+	(rank 70)
+	(summary "Kuban State Medical University is one of the oldest medical schools in Russia. It is located in Krasnodar, the capital of Krasnodar Krai in South Russia.  (...)")
+	(title "Kuban State Medical University")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kuban_State_Medical_University"))
+
+([FlightPro_Class1010073] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 20)
+	(feature "landmark")
+	(lang "en")
+	(lat 44.9937)
+	(lng 38.9658)
+	(rank 68)
+	(summary "Krasnodar Stadium is a description of a football stadium under construction which being built in Krasnodar, Russia. It will host FC Krasnodar of the Russian Premier League, while Kuban Stadium will be renovated later for FC Kuban Krasnodar. It will have a capacity of 36,260 spectators.  (...)")
+	(title "Krasnodar Stadium")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Krasnodar_Stadium"))
+
+([FlightPro_Class1010074] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 42)
+	(lang "en")
+	(lat 44.9138)
+	(lng 39.3905)
+	(rank 66)
+	(summary "Kolos is a rural locality (a khutor) in Teuchezhsky District of the Republic of Adygea, Russia.")
+	(title "Kolos, Republic of Adygea")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kolos%2C_Republic_of_Adygea"))
+
+([FlightPro_Class1010075] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 40)
+	(feature "city")
+	(lang "en")
+	(lat 44.8725)
+	(lng 39.2831)
+	(rank 58)
+	(summary "Wachapchi is a rural locality (an aul) in the district of Teuchezhsky in the Republic of Adygea, Russia.http://wikimapia.org/9618535/ru/%D0%92%D0%BE%D1%87%D0%B5%D0%BF%D1%88%D0%B8%D0%B9 Via Wikimapia Wachapchi Located on the Psekups River which flows into the (Kuban's drainage basin) near Krasnodar (...)")
+	(title "Vochepshiy")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Vochepshiy"))
+
+([FlightPro_Class1010076] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 17)
+	(lang "en")
+	(lat 44.9547)
+	(lng 39.0289)
+	(rank 9)
+	(summary "Prikubansky (; masculine), Prikubanskaya (; feminine), or Prikubanskoye (; neuter) is the name of several rural localities in Russia: *Prikubansky, Republic of Adygea, a settlement in Takhtamukaysky District of the Republic of Adygea,Law #220Law #171 On the Administrative-Territorial Structure of (...)")
+	(title "Prikubansky (rural locality)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Prikubansky_%28rural_locality%29"))
+
+([FlightPro_Class1010077] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 33)
+	(lang "en")
+	(lat 44.9167)
+	(lng 39.4)
+	(rank 9)
+	(summary "Kolos is the name of several rural localities in Russia.  (...)")
+	(title "Kolos (rural locality)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kolos_%28rural_locality%29"))
+
+([FlightPro_Class1010078] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 73)
+	(lang "en")
+	(lat 44.85)
+	(lng 38.4833)
+	(rank 7)
+	(summary "Chernomorsky (; masculine), Chernomorskaya (; feminine), or Chernomorskoye (; neuter) is the name of several inhabited localities in Russia. ;Urban localities *Chernomorsky, Seversky District, Krasnodar Krai, an urban-type settlement under the administrative jurisdiction of Chernomorsky Settlement (...)")
+	(title "Chernomorsky")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Chernomorsky"))
+
+([FlightPro_Class1010079] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 27)
+	(lang "en")
+	(lat 45.0533)
+	(lng 39.0164)
+	(rank 2)
+	(summary "Prikubansky District is the name of several districts in Russia.  (...)")
+	(title "Prikubansky District")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Prikubansky_District"))
+
+([FlightPro_Class1010080] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 4)
+	(lang "en")
+	(lat 43.5853)
+	(lng 39.7203)
+	(rank 100)
+	(summary "Sochi is a city in Krasnodar Krai, Russia, located on the Black Sea coast near the border between Georgia/Abkhazia and Russia. The administrative area (urban okrug) or Greater Sochi, with a total area of , sprawls for along the shores of the Black Sea near the Caucasus Mountains, while the area of (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/38000/thumb-37240-100.jpg")
+	(title "Sochi")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Sochi"))
+
+([FlightPro_Class1010081] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 29)
+	(lang "en")
+	(lat 45.0333)
+	(lng 38.9667)
+	(rank 100)
+	(summary "Krasnodar is a city and the administrative center of Krasnodar Krai, Russia, located on the Kuban River about northeast of the Black Sea port of Novorossiysk. Population:  (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/18000/thumb-17121-100.jpg")
+	(title "Krasnodar")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Krasnodar"))
+
+([FlightPro_Class1010082] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "GE")
+	(elevation 27)
+	(lang "en")
+	(lat 45.0403)
+	(lng 38.9769)
+	(rank 100)
+	(summary "Krasnodar Krai is a federal subject of Russia (a krai), located in the Southern Federal District. Its administrative center is the city of Krasnodar. Population: 5,226,647 (2010 Census).  (...)")
+	(title "Krasnodar Krai")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Krasnodar_Krai"))
+
+([FlightPro_Class1010083] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 37)
+	(lang "en")
+	(lat 44.7167)
+	(lng 37.7667)
+	(rank 100)
+	(summary "Novorossiysk (; , Ts'emez) is a city in Krasnodar Krai, Russia. It is the country's main port on the Black Sea and the leading Russian port for exporting grain. It is one of the few cities honored with the title of the Hero City. Population:  (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/143000/thumb-142503-100.jpg")
+	(title "Novorossiysk")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Novorossiysk"))
+
+([FlightPro_Class1010084] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 291)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 44.5833)
+	(lng 40.0)
+	(rank 100)
+	(summary "The Republic of Adygea (; ; , Adıge Respublik) is a federal subject of Russia (a republic) enclaved within Krasnodar Krai. Its area is with a population of 439,996 (2010 Census). Maykop is its capital city.  (...)")
+	(title "Adygea")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Adygea"))
+
+([FlightPro_Class1010085] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 57)
+	(feature "city")
+	(lang "en")
+	(lat 44.1044)
+	(lng 39.0772)
+	(rank 100)
+	(summary "Tuapse is a town in Krasnodar Krai, Russia, situated on the northeast shore of the Black Sea, south of Gelendzhik and north of Sochi. Population: Tuapse is a sea port and the northern center of a resort zone which extends south to Sochi.  (...)")
+	(title "Tuapse")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Tuapse"))
+
+([FlightPro_Class1010086] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 2)
+	(lang "en")
+	(lat 44.5608)
+	(lng 38.0767)
+	(rank 100)
+	(summary "Gelendzhik is a resort town in Krasnodar Krai, Russia, situated on the Gelendzhik Bay of the Black Sea, between Novorossiysk (to the northwest) and Tuapse (to the southeast). Greater Gelendzhik sprawls for along the coastline and covers an area of , although only fall within the boundaries of (...)")
+	(title "Gelendzhik")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Gelendzhik"))
+
+([FlightPro_Class1010087] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 221)
+	(lang "en")
+	(lat 44.6057)
+	(lng 40.1005)
+	(rank 100)
+	(summary "Maykop (; , Myequape) is the capital city of the Republic of Adygea, Russia, located on the right bank of the Belaya River (a tributary of the Kuban). Population:  (...)")
+	(title "Maykop")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Maykop"))
+
+([FlightPro_Class1010088] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 24)
+	(feature "city")
+	(lang "en")
+	(lat 44.9233)
+	(lng 37.9806)
+	(rank 98)
+	(summary "Krymsk is a town in Krasnodar Krai, Russia. Population:  (...)")
+	(title "Krymsk")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Krymsk"))
+
+([FlightPro_Class1010089] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 35)
+	(lang "en")
+	(lat 44.8633)
+	(lng 38.1711)
+	(rank 98)
+	(summary "Abinsk is a town and the administrative center of Abinsky District of Krasnodar Krai, Russia, located southwest of Krasnodar, the administrative center of the krai. Population: 23,000 (1968).  (...)")
+	(title "Abinsk")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Abinsk"))
+
+([FlightPro_Class1010090] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 117)
+	(lang "en")
+	(lat 44.7686)
+	(lng 39.8733)
+	(rank 98)
+	(summary "Belorechensk is a town in Krasnodar Krai, Russia, located on the Belaya River, from which it takes its name. Population:  (...)")
+	(title "Belorechensk, Krasnodar Krai")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Belorechensk%2C_Krasnodar_Krai"))
+
+([FlightPro_Class1010091] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 208)
+	(lang "en")
+	(lat 44.4508)
+	(lng 39.7419)
+	(rank 97)
+	(summary "Apsheronsk is a town and the administrative center of Apsheronsky District of Krasnodar Krai, Russia, located on the Pshekha River (in the Kuban's basin). Population: 33,400 (1968).  (...)")
+	(title "Apsheronsk")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Apsheronsk"))
+
+([FlightPro_Class1010092] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 89)
+	(lang "en")
+	(lat 45.2178)
+	(lng 39.6894)
+	(rank 97)
+	(summary "Ust-Labinsk is a town and the administrative center of Ust-Labinsky District of Krasnodar Krai, Russia. Population:  (...)")
+	(title "Ust-Labinsk")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ust-Labinsk"))
+
+([FlightPro_Class1010093] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 23)
+	(feature "airport")
+	(lang "en")
+	(lat 43.4499)
+	(lng 39.9566)
+	(rank 97)
+	(summary "Sochi International Airport is an airport located in Adler District of the resort city of Sochi, on the coast of the Black Sea in the federal subject of Krasnodar Krai, Russia. The operator of the airport is JSC International, which is part of the aviation holding company Basic Element Aero (...)")
+	(title "Sochi International Airport")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Sochi_International_Airport"))
+
+([FlightPro_Class1010094] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 1444)
+	(lang "en")
+	(lat 44.0)
+	(lng 40.0)
+	(rank 97)
+	(summary "The Western Caucasus is a western region of the Caucasus in Southern Russia, extending from the Black Sea to Mount Elbrus.  (...)")
+	(title "Western Caucasus")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Western_Caucasus"))
+
+([FlightPro_Class1010095] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 276)
+	(lang "en")
+	(lat 44.5167)
+	(lng 40.1747)
+	(rank 97)
+	(summary "Maykopsky District is an administrativeLaw #171 and a municipalLaw #283 district (raion), one of the seven in the Republic of Adygea, Russia. It is located in the south of the republic and borders with Giaginsky District in the north, Mostovsky District of Krasnodar Krai in the east, the territory (...)")
+	(title "Maykopsky District")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Maykopsky_District"))
+
+([FlightPro_Class1010096] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 63)
+	(lang "en")
+	(lat 44.6333)
+	(lng 39.1411)
+	(rank 96)
+	(summary "Goryachy Klyuch (lit. hot spring) is a town and a balneological resort in Krasnodar Krai, Russia, located on the Psekups River (Kuban's tributary) south of Krasnodar. Population: 20,000 (1970).  (...)")
+	(title "Goryachy Klyuch")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Goryachy_Klyuch"))
+
+([FlightPro_Class1010097] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 26)
+	(lang "en")
+	(lat 44.9436)
+	(lng 37.9919)
+	(rank 96)
+	(summary "Krymsky District is an administrative district (raion), one of the thirty-eight in Krasnodar Krai, Russia.Reference Information #34.01-707/13-03 As a municipal division, it is incorporated as Krymsky Municipal District.Law #766-KZ It is located in the west of the krai. The area of the district is  (...)")
+	(title "Krymsky District")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Krymsky_District"))
+
+([FlightPro_Class1010098] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 205)
+	(lang "en")
+	(lat 44.4508)
+	(lng 39.7425)
+	(rank 96)
+	(summary "Apsheronsky District is an administrative district (raion), one of the thirty-eight in Krasnodar Krai, Russia.Reference Information #20-2969/11-03 As a municipal division, it is incorporated as Apsheronsky Municipal District.Law #747-KZ It is located in the south of the krai (...)")
+	(title "Apsheronsky District")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Apsheronsky_District"))
+
+([FlightPro_Class1010099] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 118)
+	(lang "en")
+	(lat 44.7667)
+	(lng 39.8667)
+	(rank 96)
+	(summary "Belorechensky District is an administrative district (raion), one of the thirty-eight in Krasnodar Krai, Russia.Reference Information #34.01-707/13-03 As a municipal division, it is incorporated as Belorechensky Municipal District.Law #767-KZ It is located in the southern central part of the krai (...)")
+	(title "Belorechensky District")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Belorechensky_District"))
+
+([FlightPro_Class1010100] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 10)
+	(lang "en")
+	(lat 44.1)
+	(lng 39.0833)
+	(rank 96)
+	(summary "Tuapsinsky District is an administrative district (raion), one of the thirty-eight in Krasnodar Krai, Russia.Reference Information #34.01-707/13-03 As a municipal division, it is incorporated as Tuapsinsky Municipal District.Law #745-KZ It is located in the south of the krai (...)")
+	(title "Tuapsinsky District")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Tuapsinsky_District"))
+
+([FlightPro_Class1010101] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 51)
+	(lang "en")
+	(lat 44.8556)
+	(lng 38.6794)
+	(rank 96)
+	(summary "Seversky District is an administrative district (raion), one of the thirty-eight in Krasnodar Krai, Russia.Reference Information #34.01-707/13-03 As a municipal division, it is incorporated as Seversky Municipal District.Law #677-KZ It is located in the west of the krai. The area of the district is  (...)")
+	(title "Seversky District")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Seversky_District"))
+
+([FlightPro_Class1010102] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 32)
+	(feature "city")
+	(lang "en")
+	(lat 44.3108)
+	(lng 38.7047)
+	(rank 95)
+	(summary "Dzhubga (Russian: Джубга) is a seaside resort situated 57 km west of Tuapse in Krasnodar Krai, Russia. Its estimated population as of 2008 is 5,295. The township was established in 1864 on the site of a former Shapsug village as the Cossack stanitsa of Dzhubgskaya (...)")
+	(title "Dzhubga")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Dzhubga"))
+
+([FlightPro_Class1010103] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 57)
+	(feature "city")
+	(lang "en")
+	(lat 45.2075)
+	(lng 39.6883)
+	(rank 95)
+	(summary "Ust-Labinsky District is an administrative district (raion), one of the thirty-eight in Krasnodar Krai, Russia.Reference Information #34.01-707/13-03 As a municipal division, it is incorporated as Ust-Labinsky Municipal District.Law #727-KZ It is located in the center of the krai (...)")
+	(title "Ust-Labinsky District")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ust-Labinsky_District"))
+
+([FlightPro_Class1010104] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 29)
+	(lang "en")
+	(lat 45.0333)
+	(lng 38.9667)
+	(rank 95)
+	(summary "2012–13 Eurocup Basketball was the 11th edition of Europe's second-tier level transnational competition for men's professional basketball clubs, the Eurocup. The Eurocup is the league level that is one level below the Euroleague (...)")
+	(title "2012–13 Eurocup Basketball")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/2012%E2%80%9313_Eurocup_Basketball"))
+
+([FlightPro_Class1010105] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 51)
+	(lang "en")
+	(lat 44.8556)
+	(lng 38.6794)
+	(rank 95)
+	(summary "Severskaya is a rural locality (a stanitsa) and the administrative center of Seversky District of Krasnodar Krai, Russia. Population:  (...)")
+	(title "Severskaya")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Severskaya"))
+
+([FlightPro_Class1010106] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 48)
+	(lang "en")
+	(lat 44.88)
+	(lng 39.19)
+	(rank 95)
+	(summary "Adygeysk (; , Adəgăqală) is a town in the Republic of Adygea, Russia, located near Krasnodar Reservoir, northwest of Maykop, the capital of the republic. Population:  (...)")
+	(title "Adygeysk")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Adygeysk"))
+
+([FlightPro_Class1010107] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 31)
+	(feature "airport")
+	(lang "en")
+	(lat 45.0344)
+	(lng 39.15)
+	(rank 95)
+	(summary "Krasnodar International Airport , also known as Pashkovsky Airport or 'Aviagorodok 5' in military parlance (IATA: KRR, ICAO: URKK) is the main airport serving the southern Russian city of Krasnodar. It is an international airport, and is located 12 km east of the centre of Krasnodar city (...)")
+	(title "Krasnodar International Airport")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Krasnodar_International_Airport"))
+
+([FlightPro_Class1010108] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 252)
+	(feature "waterbody")
+	(lang "en")
+	(lat 43.5833)
+	(lng 39.7147)
+	(rank 95)
+	(summary "The Sochi (Soči; Abkhaz Шәача Š°ača ; Adyghe Шъачэ; Ubykh Шьача) is a river in Krasnodar Krai, Russia. Originating at Bolshaya Shura Mountain in the Greater Caucasus Mountains, it flows 47km southwest and enters the Black Sea at Sochi, itself named for the river and site of the 2014 Winter Olympic (...)")
+	(title "Sochi River")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Sochi_River"))
+
+([FlightPro_Class1010109] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 126)
+	(lang "en")
+	(lat 44.8694)
+	(lng 40.0661)
+	(rank 95)
+	(summary "Giaginskaya (; , Džedže) is a rural locality (a stanitsa) and the administrative center of Giaginsky District of the Republic of Adygea, Russia, located from Maykop. Population: Giaginskaya is the most populous administrative center of a district in the republic, with its population accounting for (...)")
+	(title "Giaginskaya")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Giaginskaya"))
+
+([FlightPro_Class1010110] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 42)
+	(feature "city")
+	(lang "en")
+	(lat 44.8865)
+	(lng 39.383)
+	(rank 94)
+	(summary "Ponezhukay (; Peneźyqwaj) is a rural locality (an aul) and the administrative center of Teuchezhsky District of the Republic of Adygea, Russia, located on the Apchas River (Kuban's basin) near Krasnodar Reservoir, north of Maykop. Population: 3,456 (2010 Census); 3,388 (2002 Census) (...)")
+	(title "Ponezhukay")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ponezhukay"))
+
+([FlightPro_Class1010111] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 7)
+	(feature "city")
+	(lang "en")
+	(lat 43.4336)
+	(lng 39.9161)
+	(rank 94)
+	(summary "Adlersky City District is the southernmost of four city districts of the city of Sochi in Krasnodar Krai, Russia, lying along the Black Sea coast near the southern Russian border with Abkhazia. Population: The historical center of the district is Adler Microdistrict — formerly classified as a town, (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/138000/thumb-137934-100.jpg")
+	(title "Adlersky City District")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Adlersky_City_District"))
+
+([FlightPro_Class1010112] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 119)
+	(lang "en")
+	(lat 44.8833)
+	(lng 40.05)
+	(rank 94)
+	(summary "Giaginsky District is an administrativeLaw #171 and a municipalLaw #249 district (raion), one of the seven in the Republic of Adygea, Russia. It is located in the northern central portion of the republic and borders with Shovgenovsky District in the north, Koshekhablsky District in the east and (...)")
+	(title "Giaginsky District")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Giaginsky_District"))
+
+([FlightPro_Class1010113] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 35)
+	(lang "en")
+	(lat 44.8633)
+	(lng 38.1711)
+	(rank 94)
+	(summary "Abinsky District is an administrative district (raion), one of the thirty-eight in Krasnodar Krai, Russia.Reference Information #34.01-707/13-03 As a municipal division, it is incorporated as Abinsky Municipal District.Law #700-KZ It is located in the west of the krai. The area of the district is  (...)")
+	(title "Abinsky District")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Abinsky_District"))
+
+([FlightPro_Class1010114] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 40)
+	(lang "en")
+	(lat 44.885)
+	(lng 39.39)
+	(rank 93)
+	(summary "Teuchezhsky District is an administrativeLaw #171 and a municipalLaw #284 district (raion), one of the seven in the Republic of Adygea, Russia. It is located in the west of the republic and borders with the territory of the City of Krasnodar of Krasnodar Krai, Krasnodar Reservoir, and (...)")
+	(title "Teuchezhsky District")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Teuchezhsky_District"))
+
+([FlightPro_Class1010115] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 123)
+	(lang "en")
+	(lat 44.4183)
+	(lng 39.5389)
+	(rank 93)
+	(summary "Khadyzhensk is a town in Apsheronsky District of Krasnodar Krai, Russia, located on the Pshish River, southeast of Krasnodar. Population:  (...)")
+	(title "Khadyzhensk")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Khadyzhensk"))
+
+([FlightPro_Class1010116] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 0)
+	(lang "en")
+	(lat 44.6042)
+	(lng 37.8764)
+	(rank 93)
+	(summary "The SS Admiral Nakhimov , launched in March 1925 and originally named SS Berlin III, was a passenger liner of the German Weimar Republic later converted to a hospital ship, then a Soviet passenger ship. On 31 August 1986, Admiral Nakhimov collided with the large bulk carrier Pyotr Vasev in the (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/40000/thumb-39220-100.jpg")
+	(title "SS Admiral Nakhimov")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/SS_Admiral_Nakhimov"))
+
+([FlightPro_Class1010117] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "RU")
+	(elevation 33)
+	(lang "en")
+	(lat 44.9208)
+	(lng 38.9917)
+	(rank 93)
+	(summary "Takhtamukay (; , Teh̦utemyqwaj) is a rural locality (an aul) and the administrative center of Takhtamukaysky District of the Republic of Adygea, Russia, located northwest of Maykop. Population: Before 1990, it was called the settlement of Oktyabrsky  (...)")
+	(title "Takhtamukay")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Takhtamukay"))
+
+([FlightPro_Class1010118] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "FR")
+	(elevation 306)
+	(feature "landmark")
+	(lang "en")
+	(lat 44.2615)
+	(lng 39.2483)
+	(rank 92)
+	(summary "A spiral (sometimes called a spiral loop or just loop) is a technique employed by railways to ascend steep hills. A railway spiral rises on a steady curve until it has completed a loop, passing over itself as it gains height, allowing the railway to gain vertical elevation in a relatively short (...)")
+	(title "Spiral (railway)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Spiral_%28railway%29"))
+
+([FlightPro_Class1010119] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 118)
+	(lang "en")
+	(lat 44.9333)
+	(lng 40.1833)
+	(rank 92)
+	(summary "Novy (; masculine), Novaya (; feminine), or Novoye (; neuter) is the name of several rural localities in Russia.  (...)")
+	(title "Novy (inhabited locality)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Novy_%28inhabited_locality%29"))
 
 ([FlightPro_Class110000] of  CloFunction
 
@@ -2342,7 +3451,7 @@
 
 ([FlightPro_Class530000] of  CloFunction
 
-	(source "(let [rw (if-let [ins (fifos \"Airport\" \"iata\" iata)]\n              (let [rws (vec (svs ins \"runways\"))\n                     idx (int (rand (count rws)))]\n                (nth rws idx))\n              0)]\n  (if (> (rand 1) 0.5)\n    rw\n    (geo/norm-crs (+ rw 180))))")
+	(source "(let [rw (if-let [ins (fifos \"Airport\" \"iata\" iata)]\n              (let [rws (vec (svs ins \"runways\"))\n                     idx (int (rand (count rws)))]\n                (nth rws idx))\n              0)]\n  (geo/norm-crs (+ rw 180)))")
 	(title "runway [iata]"))
 
 ([FlightPro_Class540000] of  Rule
@@ -3116,46 +4225,46 @@
 	(language English-en)
 	(max-responses 40)
 	(responses
-		[FlightPro_Class950000]
-		[FlightPro_Class950001]
-		[FlightPro_Class950002]
-		[FlightPro_Class950003]
-		[FlightPro_Class950004]
-		[FlightPro_Class950005]
-		[FlightPro_Class950006]
-		[FlightPro_Class950007]
-		[FlightPro_Class950008]
-		[FlightPro_Class950009]
-		[FlightPro_Class950010]
-		[FlightPro_Class950011]
-		[FlightPro_Class950012]
-		[FlightPro_Class950013]
-		[FlightPro_Class950014]
-		[FlightPro_Class950015]
-		[FlightPro_Class950016]
-		[FlightPro_Class950017]
-		[FlightPro_Class950018]
-		[FlightPro_Class950019]
-		[FlightPro_Class950020]
-		[FlightPro_Class950021]
-		[FlightPro_Class950022]
-		[FlightPro_Class950023]
-		[FlightPro_Class950024]
-		[FlightPro_Class950025]
-		[FlightPro_Class950026]
-		[FlightPro_Class950027]
-		[FlightPro_Class950028]
-		[FlightPro_Class950029]
-		[FlightPro_Class950030]
-		[FlightPro_Class950031]
-		[FlightPro_Class950032]
-		[FlightPro_Class950033]
-		[FlightPro_Class950034]
-		[FlightPro_Class950035]
-		[FlightPro_Class950036]
-		[FlightPro_Class950037]
-		[FlightPro_Class950038]
-		[FlightPro_Class950039]))
+		[FlightPro_Class1010080]
+		[FlightPro_Class1010081]
+		[FlightPro_Class1010082]
+		[FlightPro_Class1010083]
+		[FlightPro_Class1010084]
+		[FlightPro_Class1010085]
+		[FlightPro_Class1010086]
+		[FlightPro_Class1010087]
+		[FlightPro_Class1010088]
+		[FlightPro_Class1010089]
+		[FlightPro_Class1010090]
+		[FlightPro_Class1010091]
+		[FlightPro_Class1010092]
+		[FlightPro_Class1010093]
+		[FlightPro_Class1010094]
+		[FlightPro_Class1010095]
+		[FlightPro_Class1010096]
+		[FlightPro_Class1010097]
+		[FlightPro_Class1010098]
+		[FlightPro_Class1010099]
+		[FlightPro_Class1010100]
+		[FlightPro_Class1010101]
+		[FlightPro_Class1010102]
+		[FlightPro_Class1010103]
+		[FlightPro_Class1010104]
+		[FlightPro_Class1010105]
+		[FlightPro_Class1010106]
+		[FlightPro_Class1010107]
+		[FlightPro_Class1010108]
+		[FlightPro_Class1010109]
+		[FlightPro_Class1010110]
+		[FlightPro_Class1010111]
+		[FlightPro_Class1010112]
+		[FlightPro_Class1010113]
+		[FlightPro_Class1010114]
+		[FlightPro_Class1010115]
+		[FlightPro_Class1010116]
+		[FlightPro_Class1010117]
+		[FlightPro_Class1010118]
+		[FlightPro_Class1010119]))
 
 ([FlightPro_Class660024] of  CloFunction
 
@@ -3224,7 +4333,7 @@
 ([FlightPro_Class670008] of  BBX
 
 	(title "Current")
-	(wsen -71.81763 44.50434 -61.984863 51.261913))
+	(wsen 37.729797 43.432976 40.18799 45.23815))
 
 ([FlightPro_Class670041] of  TypeName
 
