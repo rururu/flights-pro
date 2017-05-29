@@ -96,7 +96,7 @@ You can change dynamics of your own airplanes (of manual flight and of scheduled
 
 ![screenshot](screenshot3.jpeg)
 
-You can easy create your on instance of "AirplaneDynamics" using the "Create Instance" button (with a shining diamond on it).
+You can easy create your own instances of "AirplaneDynamics" using the "Create Instance" button (with a shining diamond on it).
 
 Copyright and license
 ----
