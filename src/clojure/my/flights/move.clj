@@ -19,6 +19,7 @@
                :altitude 4000
                :speed 160
                :course 270
+               :status "LEVEL"
                :step-hrs (double (/ (:carrier TIO) 3600000))
                ;; [middle-bank small-arc middle-arc big-arc factor]
                :bank-params [12 2 16 64 2]

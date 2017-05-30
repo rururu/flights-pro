@@ -1,11 +1,11 @@
-; Mon May 29 20:51:26 MSK 2017
+; Tue May 30 23:39:38 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
 
 ([FlightPro_Class0] of  CloVar
 
-	(source "(volatile! {:view \"FORWARD\"\n                        :pitch -10\n                        :roll 0})")
+	(source "(volatile! {:view \"FORWARD\"\n               :pitch -10\n               :roll 0})")
 	(title "CAMERA"))
 
 ([FlightPro_Class1] of  CloNamespace
@@ -41,22 +41,6 @@
 		[FlightPro_Class20000]
 		[FlightPro_Class280000])
 	(title "FlightPro Programs"))
-
-([FlightPro_Class1000000] of  CloFuncall
-
-	(source "(type #(+ 1 2))"))
-
-([FlightPro_Class1000001] of  CloFuncall
-
-	(source "(type #(- 1 2))"))
-
-([FlightPro_Class1000002] of  CloFuncall
-
-	(source "((instance? clojure.lang.IFn #(- 1 2))"))
-
-([FlightPro_Class1000003] of  CloFuncall
-
-	(source "(instance? clojure.lang.IFn #(- 1 2))"))
 
 ([FlightPro_Class1000014] of  Bank
 
@@ -133,7 +117,7 @@
 		[FlightPro_Class100028]
 		[FlightPro_Class30026]
 		[FlightPro_Class30027]
-		[FlightPro_Class140027])
+		[FlightPro_Class850004])
 	(cloNamespace [FlightPro_Class100024])
 	(cloVars
 		[FlightPro_Class100029]
@@ -147,7 +131,7 @@
 
 ([FlightPro_Class100025] of  CloVar
 
-	(source "(volatile! {:mode \"MANUAL\"\n               :coord [60 30]\n               :altitude 4000\n               :speed 160\n               :course 270\n               :step-hrs (double (/ (:carrier TIO) 3600000))\n               ;; [middle-bank small-arc middle-arc big-arc factor]\n               :bank-params [12 2 16 64 2]\n               :rudder {:target 0\n                            :step 3\n	    :accel 1\n                            :time-out 1017}\n               :elevator {:target 0\n                            :step 4\n	    :accel 1\n                            :time-out 997}\n               :propeller {:target 0\n                            :step 1\n	    :accel 1\n                            :time-out 2003}})")
+	(source "(volatile! {:mode \"MANUAL\"\n               :coord [60 30]\n               :altitude 4000\n               :speed 160\n               :course 270\n               :status \"LEVEL\"\n               :step-hrs (double (/ (:carrier TIO) 3600000))\n               ;; [middle-bank small-arc middle-arc big-arc factor]\n               :bank-params [12 2 16 64 2]\n               :rudder {:target 0\n                            :step 3\n	    :accel 1\n                            :time-out 1017}\n               :elevator {:target 0\n                            :step 4\n	    :accel 1\n                            :time-out 997}\n               :propeller {:target 0\n                            :step 1\n	    :accel 1\n                            :time-out 2003}})")
 	(title "CARRIER"))
 
 ([FlightPro_Class100026] of  CloFunction
@@ -180,1122 +164,22 @@
 	(source "(when (not= @status \"RUN\") \n  (vreset! status \"RUN\")\n  (go (do \n          (while (and (= @status \"RUN\")\n                            (proc-fn))\n                (<! (timeout time-out)))\n          (if (some? final-fun) (final-fun))\n          (vreset! status \"STOP\")))\n  @status)")
 	(title "start-process [status proc-fn time-out final-fun]"))
 
-([FlightPro_Class1010001] of  CloFuncall
+([FlightPro_Class1020000] of  Rule
 
-	(source "clojure.lang.IFunction"))
+	(lhs "(Onboard callsign ?cs)\n(Flight age \"NEW\" \n	callsign ?cs\n	status ?sts)")
+	(rhs "(es/onboard-status ?sts)")
+	(salience -1)
+	(title "af:OnboardStatus"))
 
-([FlightPro_Class1010002] of  WikiArticle
+([FlightPro_Class1020001] of  CloFunction
 
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 19)
-	(feature "city")
-	(lang "en")
-	(lat 45.6169)
-	(lng 38.9453)
-	(rank 98)
-	(summary "Timashyovsk is a town and the administrative center of Timashyovsky District of Krasnodar Krai, Russia, located on the Kirpili River north of Krasnodar, the administrative center of the krai. As of the 2010 Census, its population was 53,924.  (...)")
-	(title "Timashyovsk")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Timashyovsk"))
+	(source "(asp/pump-in (:directives  cmd/CHN)\n	{:directive :onboard-status\n	 :status sts})")
+	(title "onboard-status [sts]"))
 
-([FlightPro_Class1010004] of  WikiArticle
+([FlightPro_Class1030002] of  CloFunction
 
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 33)
-	(lang "en")
-	(lat 45.4686)
-	(lng 39.4519)
-	(rank 98)
-	(summary "Korenovsk is a town and the administrative center of Korenovsky District of Krasnodar Krai, Russia, located on the Beysuzhyok Levy River (a tributary of the Beysug) northeast of Krasnodar. Population:  (...)")
-	(title "Korenovsk")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Korenovsk"))
-
-([FlightPro_Class1010009] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 22)
-	(lang "en")
-	(lat 45.6167)
-	(lng 38.9667)
-	(rank 97)
-	(summary "Timashyovsky District is an administrative district (raion), one of the thirty-eight in Krasnodar Krai, Russia.Reference Information #34.01-707/13-03 As a municipal division, it is incorporated as Timashyovsky Municipal District.Law #698-KZ It is located in the center of the krai (...)")
-	(title "Timashyovsky District")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Timashyovsky_District"))
-
-([FlightPro_Class1010010] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(elevation 28)
-	(lang "en")
-	(lat 45.0)
-	(lng 39.5)
-	(rank 96)
-	(summary "The Russo-Circassian War (1763–1864) refers to a series of battles and wars in Circassia, the northwestern part of the Caucasus, which were part of the Russian Empire's conquest of the Caucasus lasting approximately 101 years, starting under the reign of Tsar Peter the Great and being completed in (...)")
-	(title "Russo-Circassian War")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Russo-Circassian_War"))
-
-([FlightPro_Class1010011] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(elevation 30)
-	(lang "en")
-	(lat 45.1)
-	(lng 39.4692)
-	(rank 96)
-	(summary "The Belaya is a river in the Republic of Adygea and Krasnodar Krai of Russia. It is a tributary of the Kuban River, which it joins in the Krasnodar Reservoir. The river is long, with a drainage basin of . It has its sources at the main watershed of the Caucasus Mountains (...)")
-	(title "Belaya River (Kuban)")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Belaya_River_%28Kuban%29"))
-
-([FlightPro_Class1010018] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 63)
-	(lang "en")
-	(lat 45.5806)
-	(lng 39.6572)
-	(rank 92)
-	(summary "Vyselki is a rural locality (a stanitsa) and the administrative center of Vyselkovsky District of Krasnodar Krai, Russia. Population:  (...)")
-	(title "Vyselki, Krasnodar Krai")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Vyselki%2C_Krasnodar_Krai"))
-
-([FlightPro_Class1010019] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 9)
-	(lang "en")
-	(lat 45.4856)
-	(lng 38.6594)
-	(rank 92)
-	(summary "Kalininskaya is a rural locality (a stanitsa) and the administrative center of Kalininsky District of Krasnodar Krai, Russia, located on the Beysug River. Population:  (...)")
-	(title "Kalininskaya, Krasnodar Krai")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Kalininskaya%2C_Krasnodar_Krai"))
-
-([FlightPro_Class1010020] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 37)
-	(lang "en")
-	(lat 45.1417)
-	(lng 39.5792)
-	(rank 91)
-	(summary "Krasnogvardeyskoye is a rural locality (a selo) and the administrative center of Krasnogvardeysky District of the Republic of Adygea, Russia, located on the shores of Krasnodar Reservoir some northwest of Maykop. Population:  (...)")
-	(title "Krasnogvardeyskoye, Republic of Adygea")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Krasnogvardeyskoye%2C_Republic_of_Adygea"))
-
-([FlightPro_Class1010023] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 37)
-	(lang "en")
-	(lat 45.1167)
-	(lng 39.5667)
-	(rank 91)
-	(summary "Krasnogvardeysky District is an administrativeLaw #171 and a municipalLaw #281 district (raion), one of the seven in the Republic of Adygea, Russia. It is located in the northwest of the republic and borders with Ust-Labinsky District of Krasnodar Krai in the north, Shovgenovsky District in the (...)")
-	(title "Krasnogvardeysky District, Republic of Adygea")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Krasnogvardeysky_District%2C_Republic_of_Adygea"))
-
-([FlightPro_Class1010024] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 10)
-	(lang "en")
-	(lat 45.4897)
-	(lng 38.675)
-	(rank 90)
-	(summary "Kalininsky District is an administrative district (raion), one of the thirty-eight in Krasnodar Krai, Russia.Reference Information #34.01-707/13-03 As a municipal division, it is incorporated as Kalininsky Municipal District.Law #703-KZ It is located in the west of the krai (...)")
-	(title "Kalininsky District, Krasnodar Krai")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Kalininsky_District%2C_Krasnodar_Krai"))
-
-([FlightPro_Class1010025] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 57)
-	(lang "en")
-	(lat 45.5783)
-	(lng 39.6581)
-	(rank 90)
-	(summary "Vyselkovsky District is an administrative district (raion), one of the thirty-eight in Krasnodar Krai, Russia.Reference Information #34.01-707/13-03 As a municipal division, it is incorporated as Vyselkovsky Municipal District.Law #715-KZ It is located in the center of the krai (...)")
-	(title "Vyselkovsky District")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Vyselkovsky_District"))
-
-([FlightPro_Class1010032] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 34)
-	(lang "en")
-	(lat 45.3958)
-	(lng 39.3847)
-	(rank 87)
-	(summary "Platnirovskaya is a rural locality (a stanitsa) in Korenovsky District of Krasnodar Krai, Russia. Population:  (...)")
-	(title "Platnirovskaya")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Platnirovskaya"))
-
-([FlightPro_Class1010034] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 20)
-	(lang "en")
-	(lat 45.4542)
-	(lng 39.0125)
-	(rank 84)
-	(summary "Medvedovskaya is a rural locality (a stanitsa) in Timashyovsky District of Krasnodar Krai, Russia. Population:  (...)")
-	(title "Medvedovskaya")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Medvedovskaya"))
-
-([FlightPro_Class1010038] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 61)
-	(lang "en")
-	(lat 44.9561)
-	(lng 39.5886)
-	(rank 81)
-	(summary "Ryazanskaya is a rural locality (a stanitsa) in Belorechensky District of Krasnodar Krai, Russia, located on the right bank of the Pshish River, northwest of Belorechensk. Population: Postal code: 352613. It was founded in 1863 as the stanitsa of Gabukayevskaya and was renamed Ryazanskaya in 1867.  (...)")
-	(title "Ryazanskaya (rural locality)")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Ryazanskaya_%28rural_locality%29"))
-
-([FlightPro_Class1010042] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 29)
-	(lang "en")
-	(lat 45.0333)
-	(lng 38.9667)
-	(rank 98)
-	(summary "Kuban is a geographic region of Southern Russia surrounding the Kuban River, on the Black Sea between the Don Steppe, the Volga Delta and the Caucasus, and separated from the Crimean Peninsula to the west by the Kerch Strait (...)")
-	(title "Kuban")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Kuban"))
-
-([FlightPro_Class1010047] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 33)
-	(lang "en")
-	(lat 44.9172)
-	(lng 38.9961)
-	(rank 97)
-	(summary "Takhtamukaysky District is an administrativeLaw #171 and a municipalLaw #220 district (raion), one of the seven in the Republic of Adygea, Russia. It is located in the west of the republic and borders with Krasnoarmeysky District of Krasnodar Krai and with the territory of the City of Krasnodar in (...)")
-	(title "Takhtamukaysky District")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Takhtamukaysky_District"))
-
-([FlightPro_Class1010050] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 37)
-	(lang "en")
-	(lat 45.2)
-	(lng 39.2333)
-	(rank 95)
-	(summary "Dinskoy District is an administrative district (raion), one of the thirty-eight in Krasnodar Krai, Russia.Reference Information #34.01-707/13-03 As a municipal division, it is incorporated as Dinskoy Municipal District.Law #771-KZ It is located in the center of the krai. The area of the district is  (...)")
-	(title "Dinskoy District")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Dinskoy_District"))
-
-([FlightPro_Class1010051] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 24)
-	(feature "landmark")
-	(lang "en")
-	(lat 45.0253)
-	(lng 38.9994)
-	(rank 94)
-	(summary "Kuban Stadium is a multi-purpose stadium in Krasnodar, Russia. It is currently used mostly for football matches and is the home stadium of FC Kuban Krasnodar and FC Krasnodar. The stadium holds 35,200 people. The stadium was opened on 30 October 1960. When built, the stadium had a capacity of 20,000 (...)")
-	(title "Kuban Stadium")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Kuban_Stadium"))
-
-([FlightPro_Class1010052] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 57)
-	(lang "en")
-	(lat 44.6333)
-	(lng 39.1333)
-	(rank 93)
-	(summary "Goryachy Klyuch (lit. hot spring) is a town and a balneological resort in Krasnodar Krai, Russia, located on the Psekups River (Kuban's tributary) south of Krasnodar, the administrative center of the krai. Population: 20,000 (1970).  (...)")
-	(title "Goryachy Klyuch, Krasnodar Krai")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Goryachy_Klyuch%2C_Krasnodar_Krai"))
-
-([FlightPro_Class1010053] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 23)
-	(lang "en")
-	(lat 44.9019)
-	(lng 38.8425)
-	(rank 93)
-	(summary "Afipsky is an urban locality (an urban-type settlement) in Seversky District of Krasnodar Krai, Russia, located on the left bank of the Afips River, from Krasnodar. Population: It was founded in 1865 as the stanitsa of Georgiyeafipskaya  (...)")
-	(title "Afipsky")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Afipsky"))
-
-([FlightPro_Class1010054] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 36)
-	(lang "en")
-	(lat 45.1972)
-	(lng 39.2333)
-	(rank 92)
-	(summary "Dinskaya is a rural locality (a stanitsa) and the administrative center of Dinskoy District in Krasnodar Krai, Russia. Population:  (...)")
-	(title "Dinskaya")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Dinskaya"))
-
-([FlightPro_Class1010055] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(elevation 29)
-	(feature "country")
-	(lang "en")
-	(lat 45.0333)
-	(lng 38.9667)
-	(rank 91)
-	(summary "The Kuban People's Republic was an anti-Bolshevik state that comprised the territory of the Kuban in the modern-day Russian Federation during the Russian Civil War. The republic was proclaimed by the Kuban Rada on January 28, 1918 and declared its independence on February 16 (...)")
-	(title "Kuban People's Republic")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Kuban_People%27s_Republic"))
-
-([FlightPro_Class1010056] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 29)
-	(feature "adm1st")
-	(lang "en")
-	(lat 45.0333)
-	(lng 38.9667)
-	(rank 91)
-	(summary "The Kuban Oblast was an oblast (province) of the Russian Empire. It roughly corresponded to most of the Kuban and Circassia regions. It was created in 1860 out of Kuban Cossack territories that had once been part of the Crimean Khanate and the land of the Circassians (...)")
-	(title "Kuban Oblast")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Kuban_Oblast"))
-
-([FlightPro_Class1010057] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 44)
-	(feature "city")
-	(lang "en")
-	(lat 44.85)
-	(lng 38.3833)
-	(rank 90)
-	(summary "Kholmskaya is a rural locality (a stanitsa) in Abinsky District of Krasnodar Krai, Russia, located on the shores of the Sukhoy Khabl River. Municipally, it is a part of Kholmskoye Rural Settlement in Abinsky Municipal District. Population: 17,271 (2002 Census) (...)")
-	(title "Kholmskaya")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Kholmskaya"))
-
-([FlightPro_Class1010059] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 29)
-	(lang "en")
-	(lat 45.0333)
-	(lng 38.9667)
-	(rank 89)
-	(summary "The Russian First Division 2008 was the 17th edition of Russian First Division. There were 22 teams.  (...)")
-	(title "2008 Russian First Division")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/2008_Russian_First_Division"))
-
-([FlightPro_Class1010060] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 29)
-	(lang "en")
-	(lat 45.0333)
-	(lng 38.9667)
-	(rank 89)
-	(summary "The Kuban-Black Sea Soviet Republic (May 30 &ndash; July 6, 1918) was part of the Russian SFSR. Its capital was Yekaterinodar. It was created by merging the Black Sea Soviet Republic and Kuban Soviet Republic. Later, it was itself merged into the North Caucasian Soviet Republic (...)")
-	(title "Kuban-Black Sea Soviet Republic")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Kuban-Black_Sea_Soviet_Republic"))
-
-([FlightPro_Class1010061] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 25)
-	(lang "en")
-	(lat 44.9264)
-	(lng 38.9081)
-	(rank 88)
-	(summary "Enem is an urban locality (an urban-type settlement) in Takhtamukaysky District of the Republic of Adygea, Russia, located on the Krasnodar–Novorossiysk auto route, northwest of Maykop, the capital of the republic. As of the 2010 Census, its population was 17,890.  (...)")
-	(title "Enem (urban-type settlement)")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Enem_%28urban-type_settlement%29"))
-
-([FlightPro_Class1010062] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 17)
-	(lang "en")
-	(lat 44.985)
-	(lng 38.9444)
-	(rank 88)
-	(summary "Yablonovsky , informally called Yablonovka , is an urban locality (an urban-type settlement) in Takhtamukaysky District of the Republic of Adygea, Russia, located on the left bank of the Kuban River across Krasnodar in Krasnodar Krai, northwest of Maykop, the capital of the republic (...)")
-	(title "Yablonovsky, Republic of Adygea")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Yablonovsky%2C_Republic_of_Adygea"))
-
-([FlightPro_Class1010063] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 29)
-	(lang "en")
-	(lat 45.0333)
-	(lng 38.9667)
-	(rank 88)
-	(summary "The Kuban Soviet Republic (April 13 &ndash; May 30, 1918) was part of the Russian Soviet Federated Socialist Republic within the general territory of the Kuban.Evan Mawdsley (2008) The Russian Civil War. Edinburgh, Birlinn: 26-7 Its capital was Yekaterinodar (...)")
-	(title "Kuban Soviet Republic")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Kuban_Soviet_Republic"))
-
-([FlightPro_Class1010065] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 31)
-	(feature "edu")
-	(lang "en")
-	(lat 45.0194)
-	(lng 39.0308)
-	(rank 85)
-	(summary "The Kuban State University (KubSU) is a university in the Kuban area of southern Russia. It was founded on September 19, 1920, and since then it has trained over 100,000 specialists, including over 1,000 foreign students.  (...)")
-	(title "Kuban State University")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Kuban_State_University"))
-
-([FlightPro_Class1010066] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 24)
-	(feature "edu")
-	(lang "en")
-	(lat 45.0508)
-	(lng 39.0035)
-	(rank 83)
-	(summary "Kuban State Technological University (Russian: Кубанский государственный технологический университет), also referred to as the Kuban State University of Technology, located in Krasnodar, is one of the first higher educational institutions established in the southern region of Russia (...)")
-	(title "Kuban State Technological University")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Kuban_State_Technological_University"))
-
-([FlightPro_Class1010067] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(elevation 29)
-	(lang "en")
-	(lat 45.0333)
-	(lng 38.9667)
-	(rank 83)
-	(summary "Following are the results of the 2004 Russian Premier League, the top division of Russian association football. Lokomotiv won their second Premier League title, while Krylya Sovetov finished in the top three for the first time, winning bronze (...)")
-	(title "2004 Russian Premier League")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/2004_Russian_Premier_League"))
-
-([FlightPro_Class1010068] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 22)
-	(lang "en")
-	(lat 44.9817)
-	(lng 39.0922)
-	(rank 83)
-	(summary "Tlyustenkhabl is an urban locality (an urban-type settlement) in Teuchezhsky District of the Republic of Adygea, Russia, located on the left bank of the Kuban River opposite of Krasnodar in Krasnodar Krai, on the shores of Krasnodar Reservoir, northwest of Maykop, the capital of the republic (...)")
-	(title "Tlyustenkhabl")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Tlyustenkhabl"))
-
-([FlightPro_Class1010069] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 27)
-	(feature "landmark")
-	(lang "en")
-	(lat 45.1175)
-	(lng 38.9814)
-	(rank 77)
-	(summary "Basket-Hall Krasnodar, or Baskethall-Krasnodar, is a multi-purpose indoor arena that is located in Krasnodar, Russia. The arena contains two basketball halls. The main hall seats 7,500, and the smaller hall, which is used for training, seats 500. The arena is mainly used to host basketball games (...)")
-	(title "Basket-Hall Krasnodar")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Basket-Hall_Krasnodar"))
-
-([FlightPro_Class1010070] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 12)
-	(feature "dam")
-	(lang "en")
-	(lat 44.9764)
-	(lng 38.8294)
-	(rank 74)
-	(summary "The Shapsug Reservoir, also known as the Shapsugskoye Reservoir is a deactivated reservoir in Takhtamukaysky District of the Republic of Adygea, Russia, located southwest of Krasnodar. It was built between 1940И. И. Алексеев, А. С. Коновалов. \"Очерки истории Краснодарской организации КПСС\" (...)")
-	(title "Shapsug Reservoir")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Shapsug_Reservoir"))
-
-([FlightPro_Class1010071] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 25)
-	(lang "en")
-	(lat 44.9044)
-	(lng 39.2675)
-	(rank 72)
-	(summary "Psekups River is a river of southwest Russia. It flows through the Republic of Adygea and is a tributary to the Kuban River")
-	(title "Psekups River")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Psekups_River"))
-
-([FlightPro_Class1010072] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 28)
-	(lang "en")
-	(lat 45.015)
-	(lng 38.975)
-	(rank 70)
-	(summary "Kuban State Medical University is one of the oldest medical schools in Russia. It is located in Krasnodar, the capital of Krasnodar Krai in South Russia.  (...)")
-	(title "Kuban State Medical University")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Kuban_State_Medical_University"))
-
-([FlightPro_Class1010073] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 20)
-	(feature "landmark")
-	(lang "en")
-	(lat 44.9937)
-	(lng 38.9658)
-	(rank 68)
-	(summary "Krasnodar Stadium is a description of a football stadium under construction which being built in Krasnodar, Russia. It will host FC Krasnodar of the Russian Premier League, while Kuban Stadium will be renovated later for FC Kuban Krasnodar. It will have a capacity of 36,260 spectators.  (...)")
-	(title "Krasnodar Stadium")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Krasnodar_Stadium"))
-
-([FlightPro_Class1010074] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 42)
-	(lang "en")
-	(lat 44.9138)
-	(lng 39.3905)
-	(rank 66)
-	(summary "Kolos is a rural locality (a khutor) in Teuchezhsky District of the Republic of Adygea, Russia.")
-	(title "Kolos, Republic of Adygea")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Kolos%2C_Republic_of_Adygea"))
-
-([FlightPro_Class1010075] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 40)
-	(feature "city")
-	(lang "en")
-	(lat 44.8725)
-	(lng 39.2831)
-	(rank 58)
-	(summary "Wachapchi is a rural locality (an aul) in the district of Teuchezhsky in the Republic of Adygea, Russia.http://wikimapia.org/9618535/ru/%D0%92%D0%BE%D1%87%D0%B5%D0%BF%D1%88%D0%B8%D0%B9 Via Wikimapia Wachapchi Located on the Psekups River which flows into the (Kuban's drainage basin) near Krasnodar (...)")
-	(title "Vochepshiy")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Vochepshiy"))
-
-([FlightPro_Class1010076] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(elevation 17)
-	(lang "en")
-	(lat 44.9547)
-	(lng 39.0289)
-	(rank 9)
-	(summary "Prikubansky (; masculine), Prikubanskaya (; feminine), or Prikubanskoye (; neuter) is the name of several rural localities in Russia: *Prikubansky, Republic of Adygea, a settlement in Takhtamukaysky District of the Republic of Adygea,Law #220Law #171 On the Administrative-Territorial Structure of (...)")
-	(title "Prikubansky (rural locality)")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Prikubansky_%28rural_locality%29"))
-
-([FlightPro_Class1010077] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(elevation 33)
-	(lang "en")
-	(lat 44.9167)
-	(lng 39.4)
-	(rank 9)
-	(summary "Kolos is the name of several rural localities in Russia.  (...)")
-	(title "Kolos (rural locality)")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Kolos_%28rural_locality%29"))
-
-([FlightPro_Class1010078] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 73)
-	(lang "en")
-	(lat 44.85)
-	(lng 38.4833)
-	(rank 7)
-	(summary "Chernomorsky (; masculine), Chernomorskaya (; feminine), or Chernomorskoye (; neuter) is the name of several inhabited localities in Russia. ;Urban localities *Chernomorsky, Seversky District, Krasnodar Krai, an urban-type settlement under the administrative jurisdiction of Chernomorsky Settlement (...)")
-	(title "Chernomorsky")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Chernomorsky"))
-
-([FlightPro_Class1010079] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 27)
-	(lang "en")
-	(lat 45.0533)
-	(lng 39.0164)
-	(rank 2)
-	(summary "Prikubansky District is the name of several districts in Russia.  (...)")
-	(title "Prikubansky District")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Prikubansky_District"))
-
-([FlightPro_Class1010080] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 4)
-	(lang "en")
-	(lat 43.5853)
-	(lng 39.7203)
-	(rank 100)
-	(summary "Sochi is a city in Krasnodar Krai, Russia, located on the Black Sea coast near the border between Georgia/Abkhazia and Russia. The administrative area (urban okrug) or Greater Sochi, with a total area of , sprawls for along the shores of the Black Sea near the Caucasus Mountains, while the area of (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/38000/thumb-37240-100.jpg")
-	(title "Sochi")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Sochi"))
-
-([FlightPro_Class1010081] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 29)
-	(lang "en")
-	(lat 45.0333)
-	(lng 38.9667)
-	(rank 100)
-	(summary "Krasnodar is a city and the administrative center of Krasnodar Krai, Russia, located on the Kuban River about northeast of the Black Sea port of Novorossiysk. Population:  (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/18000/thumb-17121-100.jpg")
-	(title "Krasnodar")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Krasnodar"))
-
-([FlightPro_Class1010082] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "GE")
-	(elevation 27)
-	(lang "en")
-	(lat 45.0403)
-	(lng 38.9769)
-	(rank 100)
-	(summary "Krasnodar Krai is a federal subject of Russia (a krai), located in the Southern Federal District. Its administrative center is the city of Krasnodar. Population: 5,226,647 (2010 Census).  (...)")
-	(title "Krasnodar Krai")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Krasnodar_Krai"))
-
-([FlightPro_Class1010083] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 37)
-	(lang "en")
-	(lat 44.7167)
-	(lng 37.7667)
-	(rank 100)
-	(summary "Novorossiysk (; , Ts'emez) is a city in Krasnodar Krai, Russia. It is the country's main port on the Black Sea and the leading Russian port for exporting grain. It is one of the few cities honored with the title of the Hero City. Population:  (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/143000/thumb-142503-100.jpg")
-	(title "Novorossiysk")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Novorossiysk"))
-
-([FlightPro_Class1010084] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 291)
-	(feature "adm2nd")
-	(lang "en")
-	(lat 44.5833)
-	(lng 40.0)
-	(rank 100)
-	(summary "The Republic of Adygea (; ; , Adıge Respublik) is a federal subject of Russia (a republic) enclaved within Krasnodar Krai. Its area is with a population of 439,996 (2010 Census). Maykop is its capital city.  (...)")
-	(title "Adygea")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Adygea"))
-
-([FlightPro_Class1010085] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 57)
-	(feature "city")
-	(lang "en")
-	(lat 44.1044)
-	(lng 39.0772)
-	(rank 100)
-	(summary "Tuapse is a town in Krasnodar Krai, Russia, situated on the northeast shore of the Black Sea, south of Gelendzhik and north of Sochi. Population: Tuapse is a sea port and the northern center of a resort zone which extends south to Sochi.  (...)")
-	(title "Tuapse")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Tuapse"))
-
-([FlightPro_Class1010086] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 2)
-	(lang "en")
-	(lat 44.5608)
-	(lng 38.0767)
-	(rank 100)
-	(summary "Gelendzhik is a resort town in Krasnodar Krai, Russia, situated on the Gelendzhik Bay of the Black Sea, between Novorossiysk (to the northwest) and Tuapse (to the southeast). Greater Gelendzhik sprawls for along the coastline and covers an area of , although only fall within the boundaries of (...)")
-	(title "Gelendzhik")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Gelendzhik"))
-
-([FlightPro_Class1010087] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 221)
-	(lang "en")
-	(lat 44.6057)
-	(lng 40.1005)
-	(rank 100)
-	(summary "Maykop (; , Myequape) is the capital city of the Republic of Adygea, Russia, located on the right bank of the Belaya River (a tributary of the Kuban). Population:  (...)")
-	(title "Maykop")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Maykop"))
-
-([FlightPro_Class1010088] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 24)
-	(feature "city")
-	(lang "en")
-	(lat 44.9233)
-	(lng 37.9806)
-	(rank 98)
-	(summary "Krymsk is a town in Krasnodar Krai, Russia. Population:  (...)")
-	(title "Krymsk")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Krymsk"))
-
-([FlightPro_Class1010089] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 35)
-	(lang "en")
-	(lat 44.8633)
-	(lng 38.1711)
-	(rank 98)
-	(summary "Abinsk is a town and the administrative center of Abinsky District of Krasnodar Krai, Russia, located southwest of Krasnodar, the administrative center of the krai. Population: 23,000 (1968).  (...)")
-	(title "Abinsk")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Abinsk"))
-
-([FlightPro_Class1010090] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 117)
-	(lang "en")
-	(lat 44.7686)
-	(lng 39.8733)
-	(rank 98)
-	(summary "Belorechensk is a town in Krasnodar Krai, Russia, located on the Belaya River, from which it takes its name. Population:  (...)")
-	(title "Belorechensk, Krasnodar Krai")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Belorechensk%2C_Krasnodar_Krai"))
-
-([FlightPro_Class1010091] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 208)
-	(lang "en")
-	(lat 44.4508)
-	(lng 39.7419)
-	(rank 97)
-	(summary "Apsheronsk is a town and the administrative center of Apsheronsky District of Krasnodar Krai, Russia, located on the Pshekha River (in the Kuban's basin). Population: 33,400 (1968).  (...)")
-	(title "Apsheronsk")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Apsheronsk"))
-
-([FlightPro_Class1010092] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 89)
-	(lang "en")
-	(lat 45.2178)
-	(lng 39.6894)
-	(rank 97)
-	(summary "Ust-Labinsk is a town and the administrative center of Ust-Labinsky District of Krasnodar Krai, Russia. Population:  (...)")
-	(title "Ust-Labinsk")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Ust-Labinsk"))
-
-([FlightPro_Class1010093] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 23)
-	(feature "airport")
-	(lang "en")
-	(lat 43.4499)
-	(lng 39.9566)
-	(rank 97)
-	(summary "Sochi International Airport is an airport located in Adler District of the resort city of Sochi, on the coast of the Black Sea in the federal subject of Krasnodar Krai, Russia. The operator of the airport is JSC International, which is part of the aviation holding company Basic Element Aero (...)")
-	(title "Sochi International Airport")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Sochi_International_Airport"))
-
-([FlightPro_Class1010094] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(elevation 1444)
-	(lang "en")
-	(lat 44.0)
-	(lng 40.0)
-	(rank 97)
-	(summary "The Western Caucasus is a western region of the Caucasus in Southern Russia, extending from the Black Sea to Mount Elbrus.  (...)")
-	(title "Western Caucasus")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Western_Caucasus"))
-
-([FlightPro_Class1010095] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 276)
-	(lang "en")
-	(lat 44.5167)
-	(lng 40.1747)
-	(rank 97)
-	(summary "Maykopsky District is an administrativeLaw #171 and a municipalLaw #283 district (raion), one of the seven in the Republic of Adygea, Russia. It is located in the south of the republic and borders with Giaginsky District in the north, Mostovsky District of Krasnodar Krai in the east, the territory (...)")
-	(title "Maykopsky District")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Maykopsky_District"))
-
-([FlightPro_Class1010096] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 63)
-	(lang "en")
-	(lat 44.6333)
-	(lng 39.1411)
-	(rank 96)
-	(summary "Goryachy Klyuch (lit. hot spring) is a town and a balneological resort in Krasnodar Krai, Russia, located on the Psekups River (Kuban's tributary) south of Krasnodar. Population: 20,000 (1970).  (...)")
-	(title "Goryachy Klyuch")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Goryachy_Klyuch"))
-
-([FlightPro_Class1010097] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 26)
-	(lang "en")
-	(lat 44.9436)
-	(lng 37.9919)
-	(rank 96)
-	(summary "Krymsky District is an administrative district (raion), one of the thirty-eight in Krasnodar Krai, Russia.Reference Information #34.01-707/13-03 As a municipal division, it is incorporated as Krymsky Municipal District.Law #766-KZ It is located in the west of the krai. The area of the district is  (...)")
-	(title "Krymsky District")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Krymsky_District"))
-
-([FlightPro_Class1010098] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 205)
-	(lang "en")
-	(lat 44.4508)
-	(lng 39.7425)
-	(rank 96)
-	(summary "Apsheronsky District is an administrative district (raion), one of the thirty-eight in Krasnodar Krai, Russia.Reference Information #20-2969/11-03 As a municipal division, it is incorporated as Apsheronsky Municipal District.Law #747-KZ It is located in the south of the krai (...)")
-	(title "Apsheronsky District")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Apsheronsky_District"))
-
-([FlightPro_Class1010099] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 118)
-	(lang "en")
-	(lat 44.7667)
-	(lng 39.8667)
-	(rank 96)
-	(summary "Belorechensky District is an administrative district (raion), one of the thirty-eight in Krasnodar Krai, Russia.Reference Information #34.01-707/13-03 As a municipal division, it is incorporated as Belorechensky Municipal District.Law #767-KZ It is located in the southern central part of the krai (...)")
-	(title "Belorechensky District")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Belorechensky_District"))
-
-([FlightPro_Class1010100] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 10)
-	(lang "en")
-	(lat 44.1)
-	(lng 39.0833)
-	(rank 96)
-	(summary "Tuapsinsky District is an administrative district (raion), one of the thirty-eight in Krasnodar Krai, Russia.Reference Information #34.01-707/13-03 As a municipal division, it is incorporated as Tuapsinsky Municipal District.Law #745-KZ It is located in the south of the krai (...)")
-	(title "Tuapsinsky District")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Tuapsinsky_District"))
-
-([FlightPro_Class1010101] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 51)
-	(lang "en")
-	(lat 44.8556)
-	(lng 38.6794)
-	(rank 96)
-	(summary "Seversky District is an administrative district (raion), one of the thirty-eight in Krasnodar Krai, Russia.Reference Information #34.01-707/13-03 As a municipal division, it is incorporated as Seversky Municipal District.Law #677-KZ It is located in the west of the krai. The area of the district is  (...)")
-	(title "Seversky District")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Seversky_District"))
-
-([FlightPro_Class1010102] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 32)
-	(feature "city")
-	(lang "en")
-	(lat 44.3108)
-	(lng 38.7047)
-	(rank 95)
-	(summary "Dzhubga (Russian: Джубга) is a seaside resort situated 57 km west of Tuapse in Krasnodar Krai, Russia. Its estimated population as of 2008 is 5,295. The township was established in 1864 on the site of a former Shapsug village as the Cossack stanitsa of Dzhubgskaya (...)")
-	(title "Dzhubga")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Dzhubga"))
-
-([FlightPro_Class1010103] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 57)
-	(feature "city")
-	(lang "en")
-	(lat 45.2075)
-	(lng 39.6883)
-	(rank 95)
-	(summary "Ust-Labinsky District is an administrative district (raion), one of the thirty-eight in Krasnodar Krai, Russia.Reference Information #34.01-707/13-03 As a municipal division, it is incorporated as Ust-Labinsky Municipal District.Law #727-KZ It is located in the center of the krai (...)")
-	(title "Ust-Labinsky District")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Ust-Labinsky_District"))
-
-([FlightPro_Class1010104] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(elevation 29)
-	(lang "en")
-	(lat 45.0333)
-	(lng 38.9667)
-	(rank 95)
-	(summary "2012–13 Eurocup Basketball was the 11th edition of Europe's second-tier level transnational competition for men's professional basketball clubs, the Eurocup. The Eurocup is the league level that is one level below the Euroleague (...)")
-	(title "2012–13 Eurocup Basketball")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/2012%E2%80%9313_Eurocup_Basketball"))
-
-([FlightPro_Class1010105] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 51)
-	(lang "en")
-	(lat 44.8556)
-	(lng 38.6794)
-	(rank 95)
-	(summary "Severskaya is a rural locality (a stanitsa) and the administrative center of Seversky District of Krasnodar Krai, Russia. Population:  (...)")
-	(title "Severskaya")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Severskaya"))
-
-([FlightPro_Class1010106] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 48)
-	(lang "en")
-	(lat 44.88)
-	(lng 39.19)
-	(rank 95)
-	(summary "Adygeysk (; , Adəgăqală) is a town in the Republic of Adygea, Russia, located near Krasnodar Reservoir, northwest of Maykop, the capital of the republic. Population:  (...)")
-	(title "Adygeysk")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Adygeysk"))
-
-([FlightPro_Class1010107] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 31)
-	(feature "airport")
-	(lang "en")
-	(lat 45.0344)
-	(lng 39.15)
-	(rank 95)
-	(summary "Krasnodar International Airport , also known as Pashkovsky Airport or 'Aviagorodok 5' in military parlance (IATA: KRR, ICAO: URKK) is the main airport serving the southern Russian city of Krasnodar. It is an international airport, and is located 12 km east of the centre of Krasnodar city (...)")
-	(title "Krasnodar International Airport")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Krasnodar_International_Airport"))
-
-([FlightPro_Class1010108] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 252)
-	(feature "waterbody")
-	(lang "en")
-	(lat 43.5833)
-	(lng 39.7147)
-	(rank 95)
-	(summary "The Sochi (Soči; Abkhaz Шәача Š°ača ; Adyghe Шъачэ; Ubykh Шьача) is a river in Krasnodar Krai, Russia. Originating at Bolshaya Shura Mountain in the Greater Caucasus Mountains, it flows 47km southwest and enters the Black Sea at Sochi, itself named for the river and site of the 2014 Winter Olympic (...)")
-	(title "Sochi River")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Sochi_River"))
-
-([FlightPro_Class1010109] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 126)
-	(lang "en")
-	(lat 44.8694)
-	(lng 40.0661)
-	(rank 95)
-	(summary "Giaginskaya (; , Džedže) is a rural locality (a stanitsa) and the administrative center of Giaginsky District of the Republic of Adygea, Russia, located from Maykop. Population: Giaginskaya is the most populous administrative center of a district in the republic, with its population accounting for (...)")
-	(title "Giaginskaya")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Giaginskaya"))
-
-([FlightPro_Class1010110] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 42)
-	(feature "city")
-	(lang "en")
-	(lat 44.8865)
-	(lng 39.383)
-	(rank 94)
-	(summary "Ponezhukay (; Peneźyqwaj) is a rural locality (an aul) and the administrative center of Teuchezhsky District of the Republic of Adygea, Russia, located on the Apchas River (Kuban's basin) near Krasnodar Reservoir, north of Maykop. Population: 3,456 (2010 Census); 3,388 (2002 Census) (...)")
-	(title "Ponezhukay")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Ponezhukay"))
-
-([FlightPro_Class1010111] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 7)
-	(feature "city")
-	(lang "en")
-	(lat 43.4336)
-	(lng 39.9161)
-	(rank 94)
-	(summary "Adlersky City District is the southernmost of four city districts of the city of Sochi in Krasnodar Krai, Russia, lying along the Black Sea coast near the southern Russian border with Abkhazia. Population: The historical center of the district is Adler Microdistrict — formerly classified as a town, (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/138000/thumb-137934-100.jpg")
-	(title "Adlersky City District")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Adlersky_City_District"))
-
-([FlightPro_Class1010112] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 119)
-	(lang "en")
-	(lat 44.8833)
-	(lng 40.05)
-	(rank 94)
-	(summary "Giaginsky District is an administrativeLaw #171 and a municipalLaw #249 district (raion), one of the seven in the Republic of Adygea, Russia. It is located in the northern central portion of the republic and borders with Shovgenovsky District in the north, Koshekhablsky District in the east and (...)")
-	(title "Giaginsky District")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Giaginsky_District"))
-
-([FlightPro_Class1010113] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 35)
-	(lang "en")
-	(lat 44.8633)
-	(lng 38.1711)
-	(rank 94)
-	(summary "Abinsky District is an administrative district (raion), one of the thirty-eight in Krasnodar Krai, Russia.Reference Information #34.01-707/13-03 As a municipal division, it is incorporated as Abinsky Municipal District.Law #700-KZ It is located in the west of the krai. The area of the district is  (...)")
-	(title "Abinsky District")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Abinsky_District"))
-
-([FlightPro_Class1010114] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 40)
-	(lang "en")
-	(lat 44.885)
-	(lng 39.39)
-	(rank 93)
-	(summary "Teuchezhsky District is an administrativeLaw #171 and a municipalLaw #284 district (raion), one of the seven in the Republic of Adygea, Russia. It is located in the west of the republic and borders with the territory of the City of Krasnodar of Krasnodar Krai, Krasnodar Reservoir, and (...)")
-	(title "Teuchezhsky District")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Teuchezhsky_District"))
-
-([FlightPro_Class1010115] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 123)
-	(lang "en")
-	(lat 44.4183)
-	(lng 39.5389)
-	(rank 93)
-	(summary "Khadyzhensk is a town in Apsheronsky District of Krasnodar Krai, Russia, located on the Pshish River, southeast of Krasnodar. Population:  (...)")
-	(title "Khadyzhensk")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Khadyzhensk"))
-
-([FlightPro_Class1010116] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(elevation 0)
-	(lang "en")
-	(lat 44.6042)
-	(lng 37.8764)
-	(rank 93)
-	(summary "The SS Admiral Nakhimov , launched in March 1925 and originally named SS Berlin III, was a passenger liner of the German Weimar Republic later converted to a hospital ship, then a Soviet passenger ship. On 31 August 1986, Admiral Nakhimov collided with the large bulk carrier Pyotr Vasev in the (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/40000/thumb-39220-100.jpg")
-	(title "SS Admiral Nakhimov")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/SS_Admiral_Nakhimov"))
-
-([FlightPro_Class1010117] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "RU")
-	(elevation 33)
-	(lang "en")
-	(lat 44.9208)
-	(lng 38.9917)
-	(rank 93)
-	(summary "Takhtamukay (; , Teh̦utemyqwaj) is a rural locality (an aul) and the administrative center of Takhtamukaysky District of the Republic of Adygea, Russia, located northwest of Maykop. Population: Before 1990, it was called the settlement of Oktyabrsky  (...)")
-	(title "Takhtamukay")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Takhtamukay"))
-
-([FlightPro_Class1010118] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "FR")
-	(elevation 306)
-	(feature "landmark")
-	(lang "en")
-	(lat 44.2615)
-	(lng 39.2483)
-	(rank 92)
-	(summary "A spiral (sometimes called a spiral loop or just loop) is a technique employed by railways to ascend steep hills. A railway spiral rises on a steady curve until it has completed a loop, passing over itself as it gains height, allowing the railway to gain vertical elevation in a relatively short (...)")
-	(title "Spiral (railway)")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Spiral_%28railway%29"))
-
-([FlightPro_Class1010119] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(elevation 118)
-	(lang "en")
-	(lat 44.9333)
-	(lng 40.1833)
-	(rank 92)
-	(summary "Novy (; masculine), Novaya (; feminine), or Novoye (; neuter) is the name of several rural localities in Russia.  (...)")
-	(title "Novy (inhabited locality)")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Novy_%28inhabited_locality%29"))
-
-([FlightPro_Class1020002] of  CloFuncall
-
-	(source "(type (fn [x] (+ x 2)))"))
+	(source "(let [osts (:status @CARRIER)\n       fptc (num-val (ctl/get-value \"pitch-val\"))]\n  (cond\n    (and (not= osts \"LEVEL\") (= nsts \"GROUND\")) (czm/camera :pitch fptc)\n    (and (not= osts \"LEVEL\") (= nsts \"LEVEL\")) (czm/camera :pitch fptc)\n    (and (not= osts \"CLIMB\") (= nsts \"CLIMB\")) (czm/camera :pitch (+ fptc 8))\n    (and (not= osts \"DESCEND\") (= nsts \"DESCEND\")) (czm/camera :pitch (- fptc 8)))\n  (vswap! CARRIER assoc :status nsts))")
+	(title "adjust-pitch [nsts]"))
 
 ([FlightPro_Class110000] of  CloFunction
 
@@ -1421,11 +305,6 @@
 	(source "(if (= (:mode @CARRIER) \"MANUAL\")\n  (mov/elevate CARRIER (num-val alt)))")
 	(title "altitude [alt]"))
 
-([FlightPro_Class140027] of  CloFunction
-
-	(source "([carr altitude]\n  (vswap! carr assoc-in [:elevator :target] altitude)\n  (equalize carr :elevator :altitude set-altitude step-closer nil))\n([carr altitude accel]\n  (vswap! carr assoc-in [:elevator :accel] accel)\n  (elevate carr altitude))")
-	(title "elevate"))
-
 ([FlightPro_Class150000] of  ClsRequired
 
 	(cloFunctions
@@ -1532,7 +411,7 @@
 
 ([FlightPro_Class160004] of  CloFunction
 
-	(source "(delete-vehicle id)\n(let [ms (volatile! \"START\")\n       mp (assoc mp :marker (create-update-marker nil mp)\n                              :step-hrs (double (/ (:vehicles TIO) 3600000))\n	        :movst ms\n                              :mover (asp/start-process ms #(move-vehicle id) (:vehicles TIO) nil))\n         carr (volatile! mp)]\n    (mov/set-turn-point carr)\n    (vswap! VEHICLES assoc id carr))")
+	(source "(delete-vehicle id)\n(let [ms (volatile! \"START\")\n       mp (assoc mp :marker (create-update-marker nil mp)\n                              :step-hrs (double (/ (:vehicles TIO) 3600000))\n	      :movst ms\n                              :mover (asp/start-process ms #(move-vehicle id) (:vehicles TIO) nil))\n         carr (volatile! mp)]\n    (mov/set-turn-point carr)\n    (vswap! VEHICLES assoc id carr))")
 	(title "create-update-vehicle [id mp]"))
 
 ([FlightPro_Class160005] of  CloVar
@@ -1669,6 +548,7 @@
 		[FlightPro_Class140023]
 		[FlightPro_Class140019]
 		[FlightPro_Class140024]
+		[FlightPro_Class230000]
 		[FlightPro_Class140025]
 		[FlightPro_Class90001]
 		[FlightPro_Class90002]
@@ -1679,6 +559,7 @@
 		[FlightPro_Class320000]
 		[FlightPro_Class280002]
 		[FlightPro_Class1000021]
+		[FlightPro_Class1030002]
 		[FlightPro_Class80003]
 		[FlightPro_Class80001]
 		[FlightPro_Class600003]
@@ -1984,7 +865,7 @@
 ([FlightPro_Class220001] of  Rule
 
 	(lhs "?ob1 (Onboard)\n?ob2 (Onboard callsign ?cs time 0)\n(Flight age \"NEW\"\n	callsign ?cs\n	id ?id\n	coord ?crd\n	course ?crs\n	speed ?spd\n	altitude ?alt)")
-	(rhs "(pro.commands/def-ground-alt (pro.commands/destination-alt ?id))\n(es/fly-onboard-to ?cs ?crd ?crs ?crs ?spd ?alt -1)\n(retract ?ob1)\n(if (= ?cs \"MANUAL\")\n  (retract ?ob2)\n  (modify ?ob2 time 1))")
+	(rhs "(pro.commands/def-ground-alt (pro.commands/destination-alt ?id))\n(es/fly-onboard-to ?cs ?crd ?crs ?crs ?spd ?alt -1)\n(retract ?ob1)\n(modify ?ob2 time 1)")
 	(salience 1)
 	(title "af:SwitchOnboard"))
 
@@ -2013,9 +894,10 @@
 	(source "([]\n  (watch-visible @fr24/BBX))\n([params]\n  (println [:CMD-WATCH-VISIBLE params])\n  (fr24/set-bbx (reduce-kv #(assoc %1 %2 (read-string %3)) {} params))\n  (if (not= @fr24/STATUS \"RUN\")\n    (fr24/start process-flights))\n  \"\")")
 	(title "watch-visible"))
 
-([FlightPro_Class230000] of  CloFuncall
+([FlightPro_Class230000] of  CloFunction
 
-	(source "(ru.rules/pp :all)"))
+	(source "(czm/camera :pitch (ctl/get-value \"pitch-val\"))")
+	(title "level-view []"))
 
 ([FlightPro_Class230001] of  CloFunction
 
@@ -2200,7 +1082,8 @@
 		[FlightPro_Class690004]
 		[FlightPro_Class690009]
 		[FlightPro_Class690010]
-		[FlightPro_Class850007])
+		[FlightPro_Class850007]
+		[FlightPro_Class1020001])
 	(cloNamespace [FlightPro_Class280001])
 	(cloVars
 		[FlightPro_Class70000]
@@ -2583,7 +1466,8 @@
 		[FlightPro_Class350001]
 		[FlightPro_Class230003]
 		[FlightPro_Class250010]
-		[FlightPro_Class390000])
+		[FlightPro_Class390000]
+		[FlightPro_Class1020000])
 	(templates
 		[Flight]
 		[Onboard]
@@ -3117,7 +2001,7 @@
 		[FlightPro_Class30011]
 		[FlightPro_Class30000]
 		[FlightPro_Class30027]
-		[FlightPro_Class140027]
+		[FlightPro_Class850004]
 		[FlightPro_Class30026]
 		[FlightPro_Class470002]
 		[FlightPro_Class470003]
@@ -4222,62 +3106,13 @@
 	(source "(let [[n s w e] (:visible @COMM)\n       [lat lon] (our-center n s w e)\n       [n0 s0 w0 e0] (:wiki-bbx @COMM)]\n  (if (or (> s0 lat)\n           (< n0 lat)\n           (< e0 lon)\n           (> w0 lon))\n     (invoke-later\n       (let [bbi (foc \"BBX\" \"title\" \"Current\")\n              rqi (fainst (cls-instances \"BBXWiki\") \"Current BBXWiki Request\")]\n         (if (and bbi rqi)\n           (do\n             (ssvs bbi \"wsen\" (vec (map float [w s e n])))\n             (ssv rqi \"bbx\" bbi)\n             (ssvs rqi \"responses\" [])\n             (wig/submit-bbx (itm rqi 0) rqi)\n             (let [rr (svs rqi \"responses\")\n                    chn (:ins-chn @COMM)]\n               (when (seq rr)\n	(asp/pump-in chn {:instruct :clear-placemarks})\n	(doseq [r rr]\n	  (point-out-place {:instance r})\n	  (asp/pump-in chn (placemark-instruct {:instance r})))\n	(vswap! COMM assoc :wiki-bbx [n s w e]))))\n           (println \"Instance of \\\"Current BBXWiki Request\\\" not found!\"))))))")
 	(title "pump-wiki []"))
 
-([FlightPro_Class660001] of  CloFuncall
-
-	(source "(pro.command/go-initial-airport)"))
-
-([FlightPro_Class660002] of  CloFuncall
-
-	(source "(pro.commands/go-initial-airport)"))
-
 ([FlightPro_Class660006] of  BBXWiki
 
 	(bbx [FlightPro_Class670008])
 	(button-bbx "submit/wiki.gis/submit-bbx")
 	(button-clear-articles "Clear Articles/wiki.gis/clear-articles")
 	(language English-en)
-	(max-responses 40)
-	(responses
-		[FlightPro_Class1010080]
-		[FlightPro_Class1010081]
-		[FlightPro_Class1010082]
-		[FlightPro_Class1010083]
-		[FlightPro_Class1010084]
-		[FlightPro_Class1010085]
-		[FlightPro_Class1010086]
-		[FlightPro_Class1010087]
-		[FlightPro_Class1010088]
-		[FlightPro_Class1010089]
-		[FlightPro_Class1010090]
-		[FlightPro_Class1010091]
-		[FlightPro_Class1010092]
-		[FlightPro_Class1010093]
-		[FlightPro_Class1010094]
-		[FlightPro_Class1010095]
-		[FlightPro_Class1010096]
-		[FlightPro_Class1010097]
-		[FlightPro_Class1010098]
-		[FlightPro_Class1010099]
-		[FlightPro_Class1010100]
-		[FlightPro_Class1010101]
-		[FlightPro_Class1010102]
-		[FlightPro_Class1010103]
-		[FlightPro_Class1010104]
-		[FlightPro_Class1010105]
-		[FlightPro_Class1010106]
-		[FlightPro_Class1010107]
-		[FlightPro_Class1010108]
-		[FlightPro_Class1010109]
-		[FlightPro_Class1010110]
-		[FlightPro_Class1010111]
-		[FlightPro_Class1010112]
-		[FlightPro_Class1010113]
-		[FlightPro_Class1010114]
-		[FlightPro_Class1010115]
-		[FlightPro_Class1010116]
-		[FlightPro_Class1010117]
-		[FlightPro_Class1010118]
-		[FlightPro_Class1010119]))
+	(max-responses 40))
 
 ([FlightPro_Class660024] of  CloFunction
 
@@ -4593,7 +3428,7 @@
 
 ([FlightPro_Class730000] of  CloFunction
 
-	(source "(set-html! \"camera\" \"<h4>Camera</h4>\")\n(set-html! \"onboard\" \"Onboard:\")\n(set-html! \"onboard-fld\" \n  \"<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>\n   <option value='MANUAL'>MANUAL</option>\n   <option value='select'>select</option>\")\n(set-html! \"view\" \"View:\")\n(set-html! \"view-fld\" \n  \"<select onchange='javascript:view3d.client.view(this.value)' style='width:96px'>\n   <option value='FORWARD'>FORWARD</option>\n   <option value='BACKWARD'>BACKWARD</option>\n   <option value='RIGHT'>RIGHT</option>\n   <option value='LEFT'>LEFT</option>\n   <option value='UP'>UP</option>\n   <option value='DOWN'>DOWN</option>\n   <option value='FORWARD-RIGHT'>FORWARD-RIGHT</option>\n   <option value='FORWARD-LEFT'>FORWARD-LEFT</option>\n   <option value='BACKWARD-RIGHT'>BACKWARD-RIGHT</option>\n   <option value='BACKWARD-LEFT'>BACKWARD-LEFT</option>\n   </select>\")\n(set-html! \"pitch\" \"Pitch:\")\n(set-html! \"pitch-fld\" \n  \"<input value='-10' style='width:90px'\n               onchange='javascript:view3d.client.pitch(this.value)'>\")\n(set-html! \"roll\" \"Roll:\")\n(set-html! \"roll-fld\" \n  \"<input value='0' style='width:90px'\n               onchange='javascript:view3d.client.roll(this.value)'>\")")
+	(source "(set-html! \"camera\" \"<h4>Camera</h4>\")\n(set-html! \"onboard\" \"Onboard:\")\n(set-html! \"onboard-fld\" \n  \"<select onchange='javascript:view3d.client.onboard(this.value)' style='width:96px'>\n   <option value='MANUAL'>MANUAL</option>\n   <option value='select'>select</option>\")\n(set-html! \"view\" \"View:\")\n(set-html! \"view-fld\" \n  \"<select onchange='javascript:view3d.client.view(this.value)' style='width:96px'>\n   <option value='FORWARD'>FORWARD</option>\n   <option value='BACKWARD'>BACKWARD</option>\n   <option value='RIGHT'>RIGHT</option>\n   <option value='LEFT'>LEFT</option>\n   <option value='UP'>UP</option>\n   <option value='DOWN'>DOWN</option>\n   <option value='FORWARD-RIGHT'>FORWARD-RIGHT</option>\n   <option value='FORWARD-LEFT'>FORWARD-LEFT</option>\n   <option value='BACKWARD-RIGHT'>BACKWARD-RIGHT</option>\n   <option value='BACKWARD-LEFT'>BACKWARD-LEFT</option>\n   </select>\")\n(set-html! \"pitch\" \"Pitch:\")\n(set-html! \"pitch-fld\" \n  \"<input value='-10' style='width:90px' id='pitch-val'\n               onchange='javascript:view3d.client.pitch(this.value)'>\")\n(set-html! \"roll\" \"Roll:\")\n(set-html! \"roll-fld\" \n  \"<input value='0' style='width:90px'\n               onchange='javascript:view3d.client.roll(this.value)'>\")")
 	(title "left-controls []"))
 
 ([FlightPro_Class730001] of  CloFunction
@@ -4810,7 +3645,7 @@
 
 ([FlightPro_Class80003] of  CloFunction
 
-	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :callsigns (let [{:keys [list]} dir]\n	(ctl/callsigns list))\n    :vehicle (let [{:keys [vehicle period]} dir]\n                        (bank-vehicle vehicle)\n	(camera-vehicle vehicle period)\n	(ctl/show-flight-data vehicle))\n    :dynamics (let [{:keys [dynamo]} dir]\n	(dynamics dynamo))\n    (println (str \"Unknown directive: \" [directive dir]))))")
+	(source "(doseq [{:keys [directive] :as dir} (read-transit response)]\n  ;;(println [:DIRECTIVE dir])\n  (condp = directive\n    :callsigns (let [{:keys [list]} dir]\n	(ctl/callsigns list))\n    :vehicle (let [{:keys [vehicle period]} dir]\n                        (bank-vehicle vehicle)\n	(camera-vehicle vehicle period)\n	(ctl/show-flight-data vehicle))\n    :dynamics (let [{:keys [dynamo]} dir]\n	(dynamics dynamo))\n    :onboard-status (let [{:keys [status]} dir]\n	(adjust-pitch status))\n    (println (str \"Unknown directive: \" [directive dir]))))")
 	(title "directives-handler [response]"))
 
 ([FlightPro_Class80004] of  CloFunction
@@ -4937,9 +3772,14 @@
 	(source "(or (> (Math/abs (- lat1 lat2)) 0.02)\n     (> (Math/abs (- lon1 lon2)) 0.02))")
 	(title "obsolete [[lat1 lon1] [lat2 lon2]]"))
 
-([FlightPro_Class850000] of  CloFuncall
+([FlightPro_Class850001] of  CloFuncall
 
-	(source "ext.data/COMM"))
+	(source "(ru.rules/pp 'FlightPlan)"))
+
+([FlightPro_Class850004] of  CloFunction
+
+	(source "([carr altitude]\n  (vswap! carr assoc-in [:elevator :target] altitude)\n  (equalize carr :elevator :altitude set-altitude step-closer nil))\n([carr altitude accel]\n  (vswap! carr assoc-in [:elevator :accel] accel)\n  (elevate carr altitude))")
+	(title "elevate"))
 
 ([FlightPro_Class850005] of  Rule
 
@@ -4962,21 +3802,9 @@
 
 	(name "on level"))
 
-([FlightPro_Class860000] of  CloFuncall
-
-	(source "(rete.core/facts-with-slot-value 'Flight 'age = \"CURRENT\")"))
-
 ([FlightPro_Class860002] of  QuestionTree
 
 	(name "local city"))
-
-([FlightPro_Class870000] of  CloFuncall
-
-	(source "pro.command/GROUND-ALT"))
-
-([FlightPro_Class870001] of  CloFuncall
-
-	(source "pro.commands/GROUND-ALT"))
 
 ([FlightPro_Class870008] of  Rule
 
@@ -5071,18 +3899,6 @@
 
 	(source "(ru.rules/sp :all)"))
 
-([FlightPro_Class880001] of  CloFuncall
-
-	(source "(ru.rules/pp 'Onboard)"))
-
-([FlightPro_Class880002] of  CloFuncall
-
-	(source "(ru.rules/dr)"))
-
-([FlightPro_Class880003] of  CloFuncall
-
-	(source "(rete.core/facts-with-slot-value 'Flight 'callsign = \"MANUAL\")"))
-
 ([FlightPro_Class890000] of  CloFunction
 
 	(source "(if-let [inf (or (get @MY-INFOS id) (fr24/fl-info id))]\n  (or (get-in inf [\"airport\" \"destination\" \"position\" \"altitude\"])\n    GROUND-ALT)\n  GROUND-ALT)")
@@ -5158,608 +3974,10 @@
 	(runways 0)
 	(title "Chicago Midway International Airport"))
 
-([FlightPro_Class920000] of  CloFuncall
-
-	(source "fr24.client/STATUS"))
-
-([FlightPro_Class920001] of  CloFuncall
-
-	(source "(fr24.client/stop)"))
-
-([FlightPro_Class930000] of  CloFuncall
-
-	(source "my.flights.move/CARRIERS"))
-
-([FlightPro_Class930001] of  CloFuncall
-
-	(source "fr24.client/MANUAL-DATA"))
-
-([FlightPro_Class930002] of  CloFuncall
-
-	(source "(pro.commands/destination-alt nil)"))
-
-([FlightPro_Class930003] of  CloFuncall
-
-	(source "(or (get @pro.commands/MY-INFOS id) (fr24.client/fl-info id))"))
-
-([FlightPro_Class930004] of  CloFuncall
-
-	(source "(or (get @pro.commands/MY-INFOS nil) (fr24.client/fl-info nil))"))
-
 ([FlightPro_Class940000] of  CloVar
 
 	(source "(volatile! {:mode \"MANUAL\"\n               :coord [60 30]\n               :altitude 4000\n               :speed 160\n               :course 270})")
 	(title "VEHICLE"))
-
-([FlightPro_Class950000] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(elevation 12)
-	(feature "adm1st")
-	(lang "en")
-	(lat 45.9576)
-	(lng -66.6444)
-	(rank 100)
-	(summary "New Brunswick (; , Quebec French pronunciation:) is one of Canada's three Maritime provinces and is the only constitutionally bilingual (English–French) province.Section Sixteen of the Canadian Charter of Rights and Freedoms (...)")
-	(title "New Brunswick")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/New_Brunswick"))
-
-([FlightPro_Class950001] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation 188)
-	(feature "adm1st")
-	(lang "en")
-	(lat 45.5)
-	(lng -69.0)
-	(rank 100)
-	(summary "Maine is a New England state in the northeastern region of the United States. Maine is the 39th most extensive and the 42nd most populous of the 50 U.S. states. It is bordered by New Hampshire to the west, the Atlantic Ocean to the east, and the Canadian provinces of Quebec and New Brunswick to the (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/123000/thumb-122917-100.jpg")
-	(title "Maine")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Maine"))
-
-([FlightPro_Class950002] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(elevation 13)
-	(feature "adm1st")
-	(lang "en")
-	(lat 46.2354)
-	(lng -63.1265)
-	(rank 100)
-	(summary "Prince Edward Island (PEI or P.E.I.;) is a province of Canada consisting of the island of the same name, as well as several much smaller islands. It is one of the three Maritime Provinces and is the smallest province in both land area and population (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/143000/thumb-142178-100.png")
-	(title "Prince Edward Island")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Prince_Edward_Island"))
-
-([FlightPro_Class950003] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(elevation 36)
-	(feature "city")
-	(lang "en")
-	(lat 46.8127)
-	(lng -71.2199)
-	(rank 100)
-	(summary "Quebec , also Québec, City of Québec, Quebec City, or Québec City ,The city's name is not on a federally legislated list of , as is the case with the province of Quebec/Québec. Quebec is a common exception to the practice of retaining accented letters from French in the English versions of place (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/62000/thumb-61020-100.jpg")
-	(title "Quebec City")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Quebec_City"))
-
-([FlightPro_Class950004] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(elevation 83)
-	(feature "adm1st")
-	(lang "en")
-	(lat 46.8091)
-	(lng -71.2135)
-	(rank 100)
-	(summary "Quebec (or ;)According to the Canadian government, Québec (with the acute accent) is the official name in French and Quebec (without the accent) is the province's official name in English; the name is . In this system, the official name of the capital is Québec in both official languages (...)")
-	(title "Quebec")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Quebec"))
-
-([FlightPro_Class950005] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(elevation 81)
-	(feature "city")
-	(lang "en")
-	(lat 47.6653)
-	(lng -65.7542)
-	(rank 100)
-	(summary "Acadia was a colony of New France in northeastern North America that included parts of eastern Quebec, the Maritime provinces, and modern-day Maine to the Kennebec River.William Williamson. The history of the state of Maine. Vol. 2. 1832. p. 27; p. 266 (La Corne declares such to Lawrence in 1750); p (...)")
-	(title "Acadia")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Acadia"))
-
-([FlightPro_Class950006] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(elevation 16)
-	(feature "city")
-	(lang "en")
-	(lat 46.0944)
-	(lng -64.7754)
-	(rank 100)
-	(summary "Moncton is a Canadian city located in Westmorland County in southeastern New Brunswick. Situated in the Petitcodiac River Valley, Moncton lies at the geographic centre of the Maritime Provinces. The city has earned the nickname \"Hub City\" due to its central location and history as a railway and land (...)")
-	(title "Moncton")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Moncton"))
-
-([FlightPro_Class950007] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(elevation 228)
-	(feature "adm1st")
-	(lang "en")
-	(lat 45.2167)
-	(lng -62.7)
-	(rank 100)
-	(summary "Nova Scotia (Latin for \"New Scotland\", pronounced in English as) (French: Nouvelle-Écosse; ;) is one of Canada's three Maritime provinces, and one of the four provinces which form Atlantic Canada. Its provincial capital is Halifax (...)")
-	(title "Nova Scotia")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Nova_Scotia"))
-
-([FlightPro_Class950008] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(elevation 12)
-	(feature "city")
-	(lang "en")
-	(lat 45.9576)
-	(lng -66.6444)
-	(rank 100)
-	(summary "Fredericton is the capital of the Canadian province of New Brunswick. The city is situated in the west-central portion of the province along the Saint John River, which flows west to east as it bisects the city; it is the dominant natural feature of the area (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/51000/thumb-50792-100.jpg")
-	(title "Fredericton")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Fredericton"))
-
-([FlightPro_Class950009] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(elevation 14)
-	(lang "en")
-	(lat 45.273)
-	(lng -66.0635)
-	(rank 100)
-	(summary "Saint John is the largest city in New Brunswick and the second largest city in the maritime provinces. It is known as the Fundy City due to its location on the north shore of the Bay of Fundy at the mouth of the Saint John River, as well as being the only city on the bay (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/11000/thumb-10143-100.jpg")
-	(title "Saint John, New Brunswick")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Saint_John%2C_New_Brunswick"))
-
-([FlightPro_Class950010] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(elevation 17)
-	(feature "city")
-	(lang "en")
-	(lat 44.6479)
-	(lng -63.5716)
-	(rank 100)
-	(summary "Halifax , legally the Halifax Regional Municipality (HRM), is the capital of the province of Nova Scotia, Canada. The metropolitan area had a population of 414,400 in 2014 with 297,943 in the urban area centred on Halifax Harbour (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/93000/thumb-92456-100.jpg")
-	(title "Halifax, Nova Scotia")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Halifax%2C_Nova_Scotia"))
-
-([FlightPro_Class950011] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(elevation 13)
-	(feature "city")
-	(lang "en")
-	(lat 46.2354)
-	(lng -63.1265)
-	(rank 100)
-	(summary "Charlottetown is a Canadian city. It is both the largest city on and the provincial capital of Prince Edward Island, and the county seat of Queens County. Named after Charlotte of Mecklenburg-Strelitz, queen consort of the United Kingdom, Charlottetown was originally an unincorporated town that (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/86000/thumb-85011-100.jpg")
-	(title "Charlottetown")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Charlottetown"))
-
-([FlightPro_Class950012] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(elevation 87)
-	(lang "en")
-	(lat 48.4167)
-	(lng -71.0667)
-	(rank 100)
-	(summary "Saguenay (or ;) is a city in the Saguenay–Lac-Saint-Jean region of Quebec, Canada, on the Saguenay River, about north of Quebec City by overland route. It is about upriver and northwest of Tadoussac, located at the confluence with the St. Lawrence River (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/134000/thumb-133312-100.jpg")
-	(title "Saguenay, Quebec")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Saguenay%2C_Quebec"))
-
-([FlightPro_Class950013] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation 41)
-	(feature "city")
-	(lang "en")
-	(lat 44.8108)
-	(lng -68.7831)
-	(rank 100)
-	(summary "Bangor is a city in the U.S. state of Maine. The city proper has a population of 33,039, while the metropolitan Bangor metropolitan area has a population of 153,746. Modern Bangor was established in the mid-1800s with the lumber and shipbuilding industries (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/3000/thumb-2233-100.jpg")
-	(title "Bangor, Maine")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Bangor%2C_Maine"))
-
-([FlightPro_Class950014] of  WikiArticleDetails
-
-	(butt-del-pois "Delete POIs/ext.data/delete-pois")
-	(butt-return "Return to Flight/ext.data/ret-to-flight")
-	(butt-show-pois "Show on Map/ext.data/show-on-map")
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(elevation 25)
-	(feature "city")
-	(lang "en")
-	(lat 48.4494)
-	(lng -68.525)
-	(max-rows 50)
-	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
-	(radius 1.0)
-	(rank 100)
-	(summary "Rimouski is a Canadian city located in the Bas-Saint-Laurent (Quebec) region at the mouth of the Rimouski River. It has a population of 46,860 (as of 2011) and many tourist, cultural and industrial attractions. Rimouski is the site of Université du Québec à Rimouski (UQAR), the Cégep de Rimouski (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/18000/thumb-17864-100.jpg")
-	(title "Rimouski")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Rimouski"))
-
-([FlightPro_Class950015] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(lang "en")
-	(lat 45.0)
-	(lng -65.68)
-	(rank 100)
-	(summary "The Bay of Fundy is a bay on the Atlantic coast of North America, on the northeast end of the Gulf of Maine between the Canadian provinces of New Brunswick and Nova Scotia, with a small portion touching the U.S. state of Maine (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/52000/thumb-51441-100.jpg")
-	(title "Bay of Fundy")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Bay_of_Fundy"))
-
-([FlightPro_Class950016] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(elevation 90)
-	(lang "en")
-	(lat 46.8033)
-	(lng -71.1778)
-	(rank 100)
-	(summary "Lévis is a city in eastern Quebec, Canada. It is located on the south shore of the St. Lawrence River, opposite Quebec City. A ferry links Old Quebec with Old Lévis, and two bridges, the Quebec Bridge and the Pierre Laporte Bridge, connect western Lévis with Quebec City (...)")
-	(title "Lévis, Quebec")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/L%C3%A9vis%2C_Quebec"))
-
-([FlightPro_Class950017] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(elevation 400)
-	(lang "en")
-	(lat 49.8667)
-	(lng -71.75)
-	(rank 100)
-	(summary "Saguenay–Lac-Saint-Jean is a region in Quebec, Canada. It contains the Saguenay Fjord, the estuary of the Saguenay River, stretching through much of the region. It is also known as Sagamie in French, from the first part of \"Saguenay\" and the last part of \"Piekouagami\", the Innu name (meaning \"flat (...)")
-	(title "Saguenay–Lac-Saint-Jean")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Saguenay%E2%80%93Lac-Saint-Jean"))
-
-([FlightPro_Class950018] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(elevation 0)
-	(feature "landmark")
-	(lang "en")
-	(lat 44.6692)
-	(lng -63.5964)
-	(rank 100)
-	(summary "The Halifax Explosion was a maritime disaster in Halifax, Nova Scotia, Canada, on the morning of 6 December 1917. SS Mont-Blanc, a French cargo ship laden with high explosives, collided with the Norwegian vessel SS Imo in the Narrows, a strait connecting the upper Halifax Harbour to Bedford Basin (...)")
-	(title "Halifax Explosion")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Halifax_Explosion"))
-
-([FlightPro_Class950019] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation 244)
-	(feature "adm2nd")
-	(lang "en")
-	(lat 46.65)
-	(lng -68.59)
-	(rank 100)
-	(summary "Aroostook County is a county located in the U.S. state of Maine. As of the 2010 census, the population was 71,870. Its seat is Houlton. Known locally in Maine simply as \"The County,\" it is the largest American county by land area east of the Rocky Mountains (St (...)")
-	(title "Aroostook County, Maine")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Aroostook_County%2C_Maine"))
-
-([FlightPro_Class950020] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(elevation 90)
-	(lang "en")
-	(lat 46.803)
-	(lng -71.215)
-	(rank 100)
-	(summary "The Battle of the Plains of Abraham, also known as the Battle of Quebec, (Bataille des Plaines d'Abraham or Première bataille de Québec in French) was a pivotal battle in the Seven Years' War (referred to as the French and Indian War in the United States) (...)")
-	(title "Battle of the Plains of Abraham")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Battle_of_the_Plains_of_Abraham"))
-
-([FlightPro_Class950021] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation 284)
-	(feature "adm2nd")
-	(lang "en")
-	(lat 45.84)
-	(lng -69.3)
-	(rank 100)
-	(summary "Piscataquis County is a county located in the U.S. state of Maine. As of the 2010 census, its population was 17,535, making it Maine's least-populous county. Its county seat is Dover-Foxcroft. The county was incorporated on 23 March 1838, taken from the western part of Penobscot County and the (...)")
-	(title "Piscataquis County, Maine")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Piscataquis_County%2C_Maine"))
-
-([FlightPro_Class950022] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation 297)
-	(feature "city")
-	(lang "en")
-	(lat 48.6587)
-	(lng -67.4681)
-	(rank 100)
-	(summary "The Bas-Saint-Laurent (Lower Saint-Lawrence) region is located along the south shore of the lower Saint Lawrence River in Quebec. The river widens at this place and became farther a bay who discharges itself in the sea and is often nicknamed \"Bas-du-Fleuve\" (Lower-River) (...)")
-	(title "Bas-Saint-Laurent")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Bas-Saint-Laurent"))
-
-([FlightPro_Class950023] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(elevation 184)
-	(feature "landmark")
-	(lang "en")
-	(lat 49.5001)
-	(lng -62.9986)
-	(rank 100)
-	(summary "Anticosti Island (French, Île d'Anticosti) is an island in the Canadian province of Quebec, at the outlet of the Saint Lawrence River into the Gulf of Saint Lawrence, between 49° and 50° N., and between 61° 40' and 64° 30' W (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/133000/thumb-132932-100.jpg")
-	(title "Anticosti Island")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Anticosti_Island"))
-
-([FlightPro_Class950024] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation 474)
-	(feature "landmark")
-	(lang "en")
-	(lat 44.991)
-	(lng -70.7139)
-	(rank 100)
-	(summary "Wilhelm Reich (24 March 1897 – 3 November 1957) was an Austrian psychoanalyst. Author of several influential books – most notably Character Analysis (1933), The Mass Psychology of Fascism (1933) and The Sexual Revolution (1936) – Reich became known as one of the most radical practitioners of (...)")
-	(title "Wilhelm Reich")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Wilhelm_Reich"))
-
-([FlightPro_Class950025] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(feature "river")
-	(lang "en")
-	(lat 45.8584)
-	(lng -64.5668)
-	(rank 100)
-	(summary "The Petitcodiac River , known informally as the Chocolate River, is a Canadian river in south-eastern New Brunswick. The river has a meander length of and is located in Westmorland, Albert, and Kings counties, draining a watershed area of about  (...)")
-	(title "Petitcodiac River")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Petitcodiac_River"))
-
-([FlightPro_Class950026] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(elevation 89)
-	(feature "edu")
-	(lang "en")
-	(lat 46.78)
-	(lng -71.2747)
-	(rank 100)
-	(summary "Laval University is the oldest centre of education in Canada (2nd oldest in North America), and was the first institution in North America to offer higher education in French. Its main campus is located on the outskirts of the historic city in Quebec City, the capital of the province of Quebec (...)")
-	(title "Laval University")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Laval_University"))
-
-([FlightPro_Class950027] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(elevation 56)
-	(feature "edu")
-	(lang "en")
-	(lat 44.6369)
-	(lng -63.5917)
-	(rank 100)
-	(summary "Dalhousie University (commonly known as Dal) is a public research university in Nova Scotia, Canada, with three campuses in Halifax, and a fourth in Bible Hill. Dalhousie offers more than 4,000 courses and 180 degree programs in twelve undergraduate, graduate, and professional faculties (...)")
-	(title "Dalhousie University")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Dalhousie_University"))
-
-([FlightPro_Class950028] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(elevation 7)
-	(lang "en")
-	(lat 47.6175)
-	(lng -65.6491)
-	(rank 100)
-	(summary "Bathurst (2011 population; UA 12,275; CA population 13,424) is the County seat for Gloucester County, New Brunswick, and is at the estuary of the Nepisiguit River.  (...)")
-	(title "Bathurst, New Brunswick")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Bathurst%2C_New_Brunswick"))
-
-([FlightPro_Class950029] of  WikiArticleDetails
-
-	(butt-del-pois "Delete POIs/ext.data/delete-pois")
-	(butt-return "Return to Flight/ext.data/ret-to-flight")
-	(butt-show-pois "Show on Map/ext.data/show-on-map")
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(elevation 480)
-	(feature "landmark")
-	(lang "en")
-	(lat 48.658)
-	(lng -65.7528)
-	(max-rows 50)
-	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
-	(radius 1.0)
-	(rank 100)
-	(summary "The Gaspésie (official name), or Gaspé Peninsula, the Gaspé or Gaspesia, is a peninsula along the south shore of the Saint Lawrence River to the east of the Matapédia Valley in Quebec, Canada, that extends into the Gulf of Saint Lawrence (...)")
-	(thumbnailImg "http://www.geonames.org/img/wikipedia/39000/thumb-38292-100.jpg")
-	(title "Gaspé Peninsula")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Gasp%C3%A9_Peninsula"))
-
-([FlightPro_Class950030] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(elevation 150)
-	(feature "city")
-	(lang "en")
-	(lat 47.369)
-	(lng -68.3239)
-	(rank 100)
-	(summary "Edmundston is a Canadian city in Madawaska County, New Brunswick.  (...)")
-	(title "Edmundston")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Edmundston"))
-
-([FlightPro_Class950031] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation 559)
-	(feature "adm2nd")
-	(lang "en")
-	(lat 44.69)
-	(lng -71.3)
-	(rank 100)
-	(summary "Coös County (with two syllables), frequently spelled Coos County, is a county in the U.S. state of New Hampshire. As of the 2010 census, the population was 33,055, the least of any New Hampshire county. The county seat is Lancaster (...)")
-	(title "Coös County, New Hampshire")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Co%C3%B6s_County%2C_New_Hampshire"))
-
-([FlightPro_Class950032] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(elevation 16)
-	(feature "city")
-	(lang "en")
-	(lat 47.794)
-	(lng -64.9386)
-	(rank 100)
-	(summary "Caraquet (API : /kaʁakɛt/) is a Canadian town in Gloucester County, New Brunswick. Situated on the shore of Chaleur Bay in the Acadian Peninsula, its name is derived from the Mi'kmaq term for meeting of two rivers. The Caraquet River and Rivière du Nord flow into the Caraquet Bay west of the town.  (...)")
-	(title "Caraquet")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Caraquet"))
-
-([FlightPro_Class950033] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(elevation 20)
-	(lang "en")
-	(lat 46.0989)
-	(lng -64.7242)
-	(rank 100)
-	(summary "Dieppe is a Canadian city in Westmorland County, New Brunswick. It is New Brunswick's fourth most populous city with a history and identity that goes back to the eighteenth century. It was first incorporated as a town in 1952 and designated as a city in 2003 (...)")
-	(title "Dieppe, New Brunswick")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Dieppe%2C_New_Brunswick"))
-
-([FlightPro_Class950034] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(elevation 7)
-	(lang "en")
-	(lat 47.028)
-	(lng -65.4696)
-	(rank 100)
-	(summary "Miramichi is the largest city in northern New Brunswick, Canada. It is situated at the mouth of the Miramichi River where it enters Miramichi Bay. The Miramichi River valley is the second longest valley in New Brunswick, after the Saint John River Valley.  (...)")
-	(title "Miramichi, New Brunswick")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Miramichi%2C_New_Brunswick"))
-
-([FlightPro_Class950035] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation 32)
-	(feature "adm2nd")
-	(lang "en")
-	(lat 44.97)
-	(lng -67.61)
-	(rank 100)
-	(summary "Washington County is a county located in the U.S. state of Maine. As of the 2010 census, its population was 32,856, making it the third-least populous county in Maine. Its county seat is Machias. The county was established on June 25, 1789. It borders the Canadian province of New Brunswick (...)")
-	(title "Washington County, Maine")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Washington_County%2C_Maine"))
-
-([FlightPro_Class950036] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(elevation 113)
-	(lang "en")
-	(lat 48.5456)
-	(lng -71.6477)
-	(rank 100)
-	(summary "Alma (2011 Town population: 30,904; CA Population 33,018; UA Population 26,016) is a town in the Canadian province of Quebec.  (...)")
-	(title "Alma, Quebec")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Alma%2C_Quebec"))
-
-([FlightPro_Class950037] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation 415)
-	(feature "adm2nd")
-	(lang "en")
-	(lat 45.51)
-	(lng -69.95)
-	(rank 100)
-	(summary "Somerset County is a county located in the U.S. state of Maine. As of the 2010 census, the population was 52,228. Its county seat is Skowhegan.  (...)")
-	(title "Somerset County, Maine")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Somerset_County%2C_Maine"))
-
-([FlightPro_Class950038] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "US")
-	(elevation 27)
-	(feature "adm2nd")
-	(lang "en")
-	(lat 44.57)
-	(lng -68.37)
-	(rank 100)
-	(summary "Hancock County is a county located in the U.S. state of Maine. As of the 2010 census, the population was 54,418. Its county seat is Ellsworth. The county was incorporated on June 25, 1789 and named for John Hancock, the first governor of the Commonwealth of Massachusetts (...)")
-	(title "Hancock County, Maine")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Hancock_County%2C_Maine"))
-
-([FlightPro_Class950039] of  WikiArticle
-
-	(button-open-site "Open Site/wiki.gis/open-site")
-	(countryCode "CA")
-	(elevation 23)
-	(feature "city")
-	(lang "en")
-	(lat 48.831)
-	(lng -64.4844)
-	(rank 100)
-	(summary "Gaspé is a city at the tip of the Gaspé Peninsula in the Gaspésie–Îles-de-la-Madeleine region of eastern Quebec, Canada. It is known for its large snow falls during winter and high gusts of wind year-round. Gaspé is located about 650 kilometres northeast of Quebec City, and 350 kilometres east of (...)")
-	(title "Gaspé, Quebec")
-	(wikipediaUrl "http://en.wikipedia.org/wiki/Gasp%C3%A9%2C_Quebec"))
 
 ([FlightPro_Class950040] of  Airport
 
@@ -5843,22 +4061,6 @@
 	(source "(if (string? s)\n  (read-string (str \"[\" s \"]\"))\n  (vec (map as-vec s)))")
 	(title "as-vec [s]"))
 
-([FlightPro_Class960031] of  CloFuncall
-
-	(source "(ru.rules/pp 'FlightPlan)"))
-
-([FlightPro_Class960032] of  CloFuncall
-
-	(source "(rete.core/facts-with-slot-value 'FlightPlan 'callsign = \"RU44\")"))
-
-([FlightPro_Class960033] of  CloFuncall
-
-	(source "(rete.core/facts-with-slot-value 'Flight 'callsign = \"UZ343\")"))
-
-([FlightPro_Class960119] of  CloFuncall
-
-	(source "(rete.core/facts-with-slot-value 'Flight 'callsign = \"RU17\")"))
-
 ([FlightPro_Class970000] of  Airport
 
 	(altitude 4)
@@ -5878,26 +4080,6 @@
 	(icao "KSFO")
 	(runways 0)
 	(title "San Francisco International Airport"))
-
-([FlightPro_Class980000] of  CloFuncall
-
-	(source "(rete.core/facts-with-slot-value 'FlightPlan 'callsign = \"R1\")"))
-
-([FlightPro_Class980001] of  CloFuncall
-
-	(source "(rete.core/facts-with-slot-value 'Flight 'callsign = \"R1\")"))
-
-([FlightPro_Class990000] of  CloFuncall
-
-	(source "(type #(+ %1 %2))"))
-
-([FlightPro_Class990001] of  CloFuncall
-
-	(source "(instance? clojure.lang.IFn #(+ %1 %2))"))
-
-([FlightPro_Class990002] of  CloFuncall
-
-	(source "(instance? clojure.lang.IFn nil)"))
 
 ([FlightPro_Class990003] of  Airport
 

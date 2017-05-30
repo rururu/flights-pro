@@ -40,21 +40,21 @@ The command "Clear" removes flights from the screen.
 
 #### Camera
 
-"Onboard" selector gives possibility to select flight to get on board, or get on board MANUAL, flight that you control yourself through "Autopilot". If you see some flight on the chart and don't see it in the "Onboard" selector, click "select" once more. This updates list of flight callsigns in sight.
+"Onboard" selector gives possibility to select flight to get on board, or get on board a MANUAL, flight that you control yourself through "Autopilot". If you see some flight on the chart and don't see it in the "Onboard" selector, click "select" once more. This updates list of flight callsigns in sight.
 
-When you stay on board of the regular flight and switch on MANUAL flight, it continues this regular flight strictly forward until you begin to maneuver yourself.
+When you stay on board of the regular flight and switch on the MANUAL flight, it continues this regular flight strictly forward until you begin to maneuver yourself.
 
 Through "View" selector and "Pitch" and "Roll" fields you control direction of the camera's view.
 
 #### Autopilot
 
-"Autopilot" controls gives you possibility to set target values of course, speed and altitude of MANUAL flight. Values would be changing gradually. You can accelerate change of the corresponding value by "accel" selector.
+"Autopilot" controls gives you possibility to set target values of course, speed and altitude of the MANUAL flight. Values would be changing gradually. You can accelerate change of the corresponding value by "accel" selector.
 
-When longitude value changes, MANUAL flight turns on course to location, defined by latitude and longitude values. So, set needed latitude before longitude.
+When a longitude value changes, the MANUAL flight turns on course to a location, defined by a latitude and the longitude values. So, set the needed latitude before the longitude.
 
 ## Programming
 
-You can Expert System, Clojure and ClojureScript programming and debugging in IDE based on Protege-3.5 during air traffic monitoring and simulation (see screencasts below).
+You can do Expert System, Clojure and ClojureScript programming and debugging in IDE based on Protege-3.5 during air traffic monitoring and simulation (see screencasts below).
 
 ## Screencasts
 

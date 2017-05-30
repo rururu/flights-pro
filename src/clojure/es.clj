@@ -251,3 +251,8 @@
        cc (map #(rt/slot-value 'callsign %) ff)]
   (sort (set cc))))
 
+(defn onboard-status [sts]
+  (asp/pump-in (:directives  cmd/CHN)
+	{:directive :onboard-status
+	 :status sts}))
+

@@ -41,7 +41,7 @@
    </select>")
 (set-html! "pitch" "Pitch:")
 (set-html! "pitch-fld" 
-  "<input value='-10' style='width:90px'
+  "<input value='-10' style='width:90px' id='pitch-val'
                onchange='javascript:view3d.client.pitch(this.value)'>")
 (set-html! "roll" "Roll:")
 (set-html! "roll-fld" 

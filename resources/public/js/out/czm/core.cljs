@@ -12,8 +12,8 @@
   #js{:animation false}))
 (def CZM-SRC (js/Cesium.CzmlDataSource.))
 (def CAMERA (volatile! {:view "FORWARD"
-                        :pitch -10
-                        :roll 0}))
+               :pitch -10
+               :roll 0}))
 (defn norm-crs [x]
   (cond
    (> x 360) (- x 360)

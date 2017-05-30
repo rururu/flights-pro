@@ -34,6 +34,7 @@
                :altitude 4000
                :speed 160
                :course 270
+               :status "LEVEL"
                :step-hrs (double (/ (:carrier TIO) 3600000))
                ;; [middle-bank small-arc middle-arc big-arc factor]
                :bank-params [12 2 16 64 2]
@@ -104,6 +105,9 @@
 (defn speed [spd]
   (if (= (:mode @CARRIER) "MANUAL")
   (mov/accel CARRIER (num-val spd))))
+
+(defn level-view []
+  (czm/camera :pitch (ctl/get-value "pitch-val")))
 
 (defn altitude [alt]
   (if (= (:mode @CARRIER) "MANUAL")
@@ -176,6 +180,16 @@
   (vswap! CARRIER assoc-in [:rudder :time-out] (dm "rudder-time-out")))
 (println :new-dynamics @CARRIER))
 
+(defn adjust-pitch [nsts]
+  (let [osts (:status @CARRIER)
+       fptc (num-val (ctl/get-value "pitch-val"))]
+  (cond
+    (and (not= osts "LEVEL") (= nsts "GROUND")) (czm/camera :pitch fptc)
+    (and (not= osts "LEVEL") (= nsts "LEVEL")) (czm/camera :pitch fptc)
+    (and (not= osts "CLIMB") (= nsts "CLIMB")) (czm/camera :pitch (+ fptc 8))
+    (and (not= osts "DESCEND") (= nsts "DESCEND")) (czm/camera :pitch (- fptc 8)))
+  (vswap! CARRIER assoc :status nsts)))
+
 (defn directives-handler [response]
   (doseq [{:keys [directive] :as dir} (read-transit response)]
   ;;(println [:DIRECTIVE dir])
@@ -188,6 +202,8 @@
 	(ctl/show-flight-data vehicle))
     :dynamics (let [{:keys [dynamo]} dir]
 	(dynamics dynamo))
+    :onboard-status (let [{:keys [status]} dir]
+	(adjust-pitch status))
     (println (str "Unknown directive: " [directive dir])))))
 
 (defn receive-directives []
