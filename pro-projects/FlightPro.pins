@@ -1,4 +1,4 @@
-; Tue May 30 23:39:38 MSK 2017
+; Wed May 31 12:08:57 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -178,7 +178,7 @@
 
 ([FlightPro_Class1030002] of  CloFunction
 
-	(source "(let [osts (:status @CARRIER)\n       fptc (num-val (ctl/get-value \"pitch-val\"))]\n  (cond\n    (and (not= osts \"LEVEL\") (= nsts \"GROUND\")) (czm/camera :pitch fptc)\n    (and (not= osts \"LEVEL\") (= nsts \"LEVEL\")) (czm/camera :pitch fptc)\n    (and (not= osts \"CLIMB\") (= nsts \"CLIMB\")) (czm/camera :pitch (+ fptc 8))\n    (and (not= osts \"DESCEND\") (= nsts \"DESCEND\")) (czm/camera :pitch (- fptc 8)))\n  (vswap! CARRIER assoc :status nsts))")
+	(source "(let [osts (:status @CARRIER)\n       fptc (num-val (ctl/get-value \"pitch-val\"))]\n  (cond\n    (and (not= osts \"LEVEL\") (= nsts \"GROUND\")) (czm/camera :pitch fptc)\n    (and (not= osts \"LEVEL\") (= nsts \"LEVEL\")) (czm/camera :pitch fptc)\n    (and (not= osts \"CLIMB\") (= nsts \"CLIMB\"))\n	(cond \n	  (= (:view @czm/CAMERA) \"FORWARD\")  (czm/camera :pitch (+ fptc 6))\n	  (= (:view @czm/CAMERA) \"BACKWARD\") (czm/camera :pitch  (- fptc 6)))\n    (and (not= osts \"DESCEND\") (= nsts \"DESCEND\"))\n	(cond \n	  (= (:view @czm/CAMERA) \"FORWARD\")  (czm/camera :pitch (- fptc 6))\n	  (= (:view @czm/CAMERA) \"BACKWARD\") (czm/camera :pitch  (+ fptc 6))))\n  (vswap! CARRIER assoc :status nsts))")
 	(title "adjust-pitch [nsts]"))
 
 ([FlightPro_Class110000] of  CloFunction
@@ -2881,7 +2881,7 @@
 
 ([FlightPro_Class640001] of  CloFunction
 
-	(source "(if-let [api (fainst (cls-instances \"Airport\") nil)]\n  (move-to {:country (sv api \"country\")\n	:airport (sv api \"title\")})\n  (println \"Annotated Initial Airport not found!\"))")
+	(source "(if-let [api (fainst (cls-instances \"Airport\") nil)]\n  (move-to {:country (sv api \"country\")\n                   :airport (sv api \"title\")})\n  (println \"Annotated Initial Airport not found!\"))")
 	(title "go-initial-airport []"))
 
 ([FlightPro_Class640008] of  CloFunction
@@ -3802,9 +3802,33 @@
 
 	(name "on level"))
 
+([FlightPro_Class860000] of  CloFuncall
+
+	(source "(ru.rules/pp 'Onboard)"))
+
 ([FlightPro_Class860002] of  QuestionTree
 
 	(name "local city"))
+
+([FlightPro_Class870001] of  Airport
+
+	(altitude 21)
+	(coord 35.55225 139.7796)
+	(country "Japan")
+	(iata "HND")
+	(icao "RJTT")
+	(runways 0)
+	(title "Tokyo Haneda International Airport"))
+
+([FlightPro_Class870002] of  Airport
+
+	(altitude 135)
+	(coord 35.76472 140.3863)
+	(country "Japan")
+	(iata "NRT")
+	(icao "RJAA")
+	(runways 0)
+	(title "Tokyo Narita International Airport"))
 
 ([FlightPro_Class870008] of  Rule
 

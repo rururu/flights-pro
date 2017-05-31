@@ -186,8 +186,14 @@
   (cond
     (and (not= osts "LEVEL") (= nsts "GROUND")) (czm/camera :pitch fptc)
     (and (not= osts "LEVEL") (= nsts "LEVEL")) (czm/camera :pitch fptc)
-    (and (not= osts "CLIMB") (= nsts "CLIMB")) (czm/camera :pitch (+ fptc 8))
-    (and (not= osts "DESCEND") (= nsts "DESCEND")) (czm/camera :pitch (- fptc 8)))
+    (and (not= osts "CLIMB") (= nsts "CLIMB"))
+	(cond 
+	  (= (:view @czm/CAMERA) "FORWARD")  (czm/camera :pitch (+ fptc 6))
+	  (= (:view @czm/CAMERA) "BACKWARD") (czm/camera :pitch  (- fptc 6)))
+    (and (not= osts "DESCEND") (= nsts "DESCEND"))
+	(cond 
+	  (= (:view @czm/CAMERA) "FORWARD")  (czm/camera :pitch (- fptc 6))
+	  (= (:view @czm/CAMERA) "BACKWARD") (czm/camera :pitch  (+ fptc 6))))
   (vswap! CARRIER assoc :status nsts)))
 
 (defn directives-handler [response]

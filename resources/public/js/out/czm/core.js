@@ -37,12 +37,12 @@ var dest = Cesium.Cartesian3.fromDegrees(lon,lat,alt);
 return czm.core.VIEWER.camera.setView(({"destination": dest, "orientation": ({"heading": Cesium.Math.toRadians(hea), "pitch": Cesium.Math.toRadians(pit), "roll": Cesium.Math.toRadians(rol)})}));
 });
 czm.core.fly_to = (function czm$core$fly_to(lat,lon,alt,crs,per){
-var pitch = (function (){var pred__26274 = cljs.core._EQ_;
-var expr__26275 = new cljs.core.Keyword(null,"view","view",1247994814).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
-if(cljs.core.truth_(pred__26274.call(null,"UP",expr__26275))){
+var pitch = (function (){var pred__26840 = cljs.core._EQ_;
+var expr__26841 = new cljs.core.Keyword(null,"view","view",1247994814).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
+if(cljs.core.truth_(pred__26840.call(null,"UP",expr__26841))){
 return (90);
 } else {
-if(cljs.core.truth_(pred__26274.call(null,"DOWN",expr__26275))){
+if(cljs.core.truth_(pred__26840.call(null,"DOWN",expr__26841))){
 return (-90);
 } else {
 return new cljs.core.Keyword(null,"pitch","pitch",1495126700).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
@@ -50,27 +50,27 @@ return new cljs.core.Keyword(null,"pitch","pitch",1495126700).cljs$core$IFn$_inv
 }
 })();
 var roll = new cljs.core.Keyword(null,"roll","roll",11266999).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
-var head = calc.geo.norm_crs.call(null,(function (){var pred__26277 = cljs.core._EQ_;
-var expr__26278 = new cljs.core.Keyword(null,"view","view",1247994814).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
-if(cljs.core.truth_(pred__26277.call(null,"BACKWARD",expr__26278))){
+var head = calc.geo.norm_crs.call(null,(function (){var pred__26843 = cljs.core._EQ_;
+var expr__26844 = new cljs.core.Keyword(null,"view","view",1247994814).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
+if(cljs.core.truth_(pred__26843.call(null,"BACKWARD",expr__26844))){
 return (crs + (180));
 } else {
-if(cljs.core.truth_(pred__26277.call(null,"RIGHT",expr__26278))){
+if(cljs.core.truth_(pred__26843.call(null,"RIGHT",expr__26844))){
 return (crs + (90));
 } else {
-if(cljs.core.truth_(pred__26277.call(null,"LEFT",expr__26278))){
+if(cljs.core.truth_(pred__26843.call(null,"LEFT",expr__26844))){
 return (crs - (90));
 } else {
-if(cljs.core.truth_(pred__26277.call(null,"FORWARD-RIGHT",expr__26278))){
+if(cljs.core.truth_(pred__26843.call(null,"FORWARD-RIGHT",expr__26844))){
 return (crs + (45));
 } else {
-if(cljs.core.truth_(pred__26277.call(null,"FORWARD-LEFT",expr__26278))){
+if(cljs.core.truth_(pred__26843.call(null,"FORWARD-LEFT",expr__26844))){
 return (crs - (45));
 } else {
-if(cljs.core.truth_(pred__26277.call(null,"BACKWARD-RIGHT",expr__26278))){
+if(cljs.core.truth_(pred__26843.call(null,"BACKWARD-RIGHT",expr__26844))){
 return (crs + (135));
 } else {
-if(cljs.core.truth_(pred__26277.call(null,"BACKWARD-LEFT",expr__26278))){
+if(cljs.core.truth_(pred__26843.call(null,"BACKWARD-LEFT",expr__26844))){
 return (crs - (135));
 } else {
 return crs;
@@ -85,12 +85,12 @@ return crs;
 return czm.core.fly_control.call(null,lat,lon,alt,head,pitch,roll,per);
 });
 czm.core.move_to = (function czm$core$move_to(lat,lon,alt,crs){
-var pitch = (function (){var pred__26286 = cljs.core._EQ_;
-var expr__26287 = new cljs.core.Keyword(null,"view","view",1247994814).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
-if(cljs.core.truth_(pred__26286.call(null,"UP",expr__26287))){
+var pitch = (function (){var pred__26852 = cljs.core._EQ_;
+var expr__26853 = new cljs.core.Keyword(null,"view","view",1247994814).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
+if(cljs.core.truth_(pred__26852.call(null,"UP",expr__26853))){
 return (90);
 } else {
-if(cljs.core.truth_(pred__26286.call(null,"DOWN",expr__26287))){
+if(cljs.core.truth_(pred__26852.call(null,"DOWN",expr__26853))){
 return (-90);
 } else {
 return new cljs.core.Keyword(null,"pitch","pitch",1495126700).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
@@ -98,27 +98,27 @@ return new cljs.core.Keyword(null,"pitch","pitch",1495126700).cljs$core$IFn$_inv
 }
 })();
 var roll = new cljs.core.Keyword(null,"roll","roll",11266999).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
-var head = calc.geo.norm_crs.call(null,(function (){var pred__26289 = cljs.core._EQ_;
-var expr__26290 = new cljs.core.Keyword(null,"view","view",1247994814).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
-if(cljs.core.truth_(pred__26289.call(null,"BACKWARD",expr__26290))){
+var head = calc.geo.norm_crs.call(null,(function (){var pred__26855 = cljs.core._EQ_;
+var expr__26856 = new cljs.core.Keyword(null,"view","view",1247994814).cljs$core$IFn$_invoke$arity$1(cljs.core.deref.call(null,czm.core.CAMERA));
+if(cljs.core.truth_(pred__26855.call(null,"BACKWARD",expr__26856))){
 return (crs + (180));
 } else {
-if(cljs.core.truth_(pred__26289.call(null,"RIGHT",expr__26290))){
+if(cljs.core.truth_(pred__26855.call(null,"RIGHT",expr__26856))){
 return (crs + (90));
 } else {
-if(cljs.core.truth_(pred__26289.call(null,"LEFT",expr__26290))){
+if(cljs.core.truth_(pred__26855.call(null,"LEFT",expr__26856))){
 return (crs - (90));
 } else {
-if(cljs.core.truth_(pred__26289.call(null,"FORWARD-RIGHT",expr__26290))){
+if(cljs.core.truth_(pred__26855.call(null,"FORWARD-RIGHT",expr__26856))){
 return (crs + (45));
 } else {
-if(cljs.core.truth_(pred__26289.call(null,"FORWARD-LEFT",expr__26290))){
+if(cljs.core.truth_(pred__26855.call(null,"FORWARD-LEFT",expr__26856))){
 return (crs - (45));
 } else {
-if(cljs.core.truth_(pred__26289.call(null,"BACKWARD-RIGHT",expr__26290))){
+if(cljs.core.truth_(pred__26855.call(null,"BACKWARD-RIGHT",expr__26856))){
 return (crs + (135));
 } else {
-if(cljs.core.truth_(pred__26289.call(null,"BACKWARD-LEFT",expr__26290))){
+if(cljs.core.truth_(pred__26855.call(null,"BACKWARD-LEFT",expr__26856))){
 return (crs - (135));
 } else {
 return crs;

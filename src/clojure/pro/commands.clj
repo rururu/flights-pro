@@ -369,7 +369,7 @@ TERRAIN)
 (defn go-initial-airport []
   (if-let [api (fainst (cls-instances "Airport") nil)]
   (move-to {:country (sv api "country")
-	:airport (sv api "title")})
+                   :airport (sv api "title")})
   (println "Annotated Initial Airport not found!")))
 
 (defn new-czml-doc [params]
