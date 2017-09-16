@@ -94,11 +94,26 @@
 #latitude-fld {
   position:fixed;
   bottom:90px;
-  right:20px;
+  right:48px;
   padding:5px;
   z-index:100;
 }
+#instant {
+  position:fixed;
+  bottom:90px;
+  right:20px;
+  padding:5px;
+  z-index:100;
+  color:yellow
+}
 #longitude-fld {
+  position:fixed;
+  bottom:70px;
+  right:48px;
+  padding:5px;
+  z-index:100;
+}
+#instant-rdo {
   position:fixed;
   bottom:70px;
   right:20px;

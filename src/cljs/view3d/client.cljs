@@ -128,8 +128,13 @@
   (if (= (:mode @CARRIER) "MANUAL")
   (let [lon (num-val lon)
          lat (num-val (ctl/get-value "input-lat"))
-         bea (mov/bear-deg-js (:coord @CARRIER) [lat lon])]
-    (course (int bea)))))
+         bea (mov/bear-deg-js (:coord @CARRIER) [lat lon])
+         ins (.-checked (ctl/by-id "input-instant"))]
+    (if ins
+      (do
+        (mov/set-turn-point CARRIER [lat lon] (@CARRIER :course) (@CARRIER :speed))
+        (GET (str (:command URL) "goto?lat=" lat "&lon=" lon)))
+      (course (int bea))))))
 
 (defn camera-vehicle [vehicle per]
   (let [[lat lon] (:coord vehicle)]

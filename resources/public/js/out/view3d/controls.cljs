@@ -75,12 +75,15 @@
                            (str "<option value='" n "'>" n "</option>")))))
 (set-html! "lat" "Latitude: 00.0000")
 (set-html! "latitude-fld" 
-  "<input value='40.8' style='width:84px' id='input-lat'
+  "<input value='40.8' style='width:56px' id='input-lat'
                onchange='javascript:view3d.client.latitude(this.value)'>")
+(set-html! "instant" "ins")
 (set-html! "lon" "Longitude: 00.0000")
 (set-html! "longitude-fld" 
-  "<input value='-74.0' style='width:84px' id='input-lon'
-               onchange='javascript:view3d.client.longitude(this.value)'>"))
+  "<input value='-74.0' style='width:56px' id='input-lon'
+               onchange='javascript:view3d.client.longitude(this.value)'>")
+(set-html! "instant-rdo" 
+  "<input type='checkbox' id='input-instant'>"))
 
 (defn show-controls []
   (left-controls)

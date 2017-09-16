@@ -1,4 +1,4 @@
-; Wed May 31 12:08:57 MSK 2017
+; Sat Sep 16 22:49:57 MSK 2017
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -188,7 +188,7 @@
 
 ([FlightPro_Class120000] of  CSS
 
-	(source "#autopilot {\n  position:fixed;\n  bottom:160px;\n  right:40px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#accel {\n  position:fixed;\n  bottom:150px;\n  right:24px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#course {\n  position:fixed;\n  bottom:150px;\n  right:114px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#speed {\n  position:fixed;\n  bottom:130px;\n  right:114px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#altitude {\n  position:fixed;\n  bottom:110px;\n  right:114px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#lat {\n  position:fixed;\n  bottom:90px;\n  right:114px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#lon {\n  position:fixed;\n  bottom:70px;\n  right:114px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#course-fld {\n  position:fixed;\n  bottom:150px;\n  right:66px;\n  padding:5px;\n  z-index:100;\n}\n#speed-fld {\n  position:fixed;\n  bottom:130px;\n  right:66px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#altitude-fld {\n  position:fixed;\n  bottom:110px;\n  right:66px;\n  padding:5px;\n  z-index:100;\n}\n#speed-acl {\n  position:fixed;\n  bottom:130px;\n  right:20px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#altitude-acl {\n  position:fixed;\n  bottom:110px;\n  right:20px;\n  padding:5px;\n  z-index:100;\n}\n#latitude-fld {\n  position:fixed;\n  bottom:90px;\n  right:20px;\n  padding:5px;\n  z-index:100;\n}\n#longitude-fld {\n  position:fixed;\n  bottom:70px;\n  right:20px;\n  padding:5px;\n  z-index:100;\n}\n#camera {\n  position:fixed;\n  bottom:140px;\n  left:60px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#onboard {\n  position:fixed;\n  bottom:130px;\n  left:20px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#onboard-fld {\n  position:fixed;\n  bottom:130px;\n  left:84px;\n  padding:5px;\n  z-index:100;\n}\n#view {\n  position:fixed;\n  bottom:110px;\n  left:42px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#view-fld {\n  position:fixed;\n  bottom:110px;\n  left:84px;\n  padding:5px;\n  z-index:100;\n}\n#pitch {\n  position:fixed;\n  bottom:90px;\n  left:42px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#pitch-fld {\n  position:fixed;\n  bottom:90px;\n  left:84px;\n  padding:5px;\n  z-index:100;\n}\n#roll {\n  position:fixed;\n  bottom:70px;\n  left:48px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#roll-fld {\n  position:fixed;\n  bottom:70px;\n  left:84px;\n  padding:5px;\n  z-index:100;\n}")
+	(source "#autopilot {\n  position:fixed;\n  bottom:160px;\n  right:40px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#accel {\n  position:fixed;\n  bottom:150px;\n  right:24px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#course {\n  position:fixed;\n  bottom:150px;\n  right:114px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#speed {\n  position:fixed;\n  bottom:130px;\n  right:114px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#altitude {\n  position:fixed;\n  bottom:110px;\n  right:114px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#lat {\n  position:fixed;\n  bottom:90px;\n  right:114px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#lon {\n  position:fixed;\n  bottom:70px;\n  right:114px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#course-fld {\n  position:fixed;\n  bottom:150px;\n  right:66px;\n  padding:5px;\n  z-index:100;\n}\n#speed-fld {\n  position:fixed;\n  bottom:130px;\n  right:66px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#altitude-fld {\n  position:fixed;\n  bottom:110px;\n  right:66px;\n  padding:5px;\n  z-index:100;\n}\n#speed-acl {\n  position:fixed;\n  bottom:130px;\n  right:20px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#altitude-acl {\n  position:fixed;\n  bottom:110px;\n  right:20px;\n  padding:5px;\n  z-index:100;\n}\n#latitude-fld {\n  position:fixed;\n  bottom:90px;\n  right:48px;\n  padding:5px;\n  z-index:100;\n}\n#instant {\n  position:fixed;\n  bottom:90px;\n  right:20px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#longitude-fld {\n  position:fixed;\n  bottom:70px;\n  right:48px;\n  padding:5px;\n  z-index:100;\n}\n#instant-rdo {\n  position:fixed;\n  bottom:70px;\n  right:20px;\n  padding:5px;\n  z-index:100;\n}\n#camera {\n  position:fixed;\n  bottom:140px;\n  left:60px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#onboard {\n  position:fixed;\n  bottom:130px;\n  left:20px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#onboard-fld {\n  position:fixed;\n  bottom:130px;\n  left:84px;\n  padding:5px;\n  z-index:100;\n}\n#view {\n  position:fixed;\n  bottom:110px;\n  left:42px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#view-fld {\n  position:fixed;\n  bottom:110px;\n  left:84px;\n  padding:5px;\n  z-index:100;\n}\n#pitch {\n  position:fixed;\n  bottom:90px;\n  left:42px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#pitch-fld {\n  position:fixed;\n  bottom:90px;\n  left:84px;\n  padding:5px;\n  z-index:100;\n}\n#roll {\n  position:fixed;\n  bottom:70px;\n  left:48px;\n  padding:5px;\n  z-index:100;\n  color:yellow\n}\n#roll-fld {\n  position:fixed;\n  bottom:70px;\n  left:84px;\n  padding:5px;\n  z-index:100;\n}")
 	(store-in "resources/public/css")
 	(title "cesium"))
 
@@ -247,7 +247,7 @@
 
 ([FlightPro_Class140003] of  CloFunction
 
-	(source "(set-html! \"autopilot\" \"<h4>Autopilot</h4>\")\n(set-html! \"accel\" \"accel\")\n(set-html! \"course\" \"Course: 000\")\n(set-html! \"course-fld\" \n  \"<input value='180' style='width:38px' id='input-crs'\n                     onchange='javascript:view3d.client.course(this.value)'>\")\n(set-html! \"speed\" \"Speed: 000\")\n(set-html! \"speed-fld\" \n  \"<input value='210' style='width:38px' id='input-spd'\n               onchange='javascript:view3d.client.speed(this.value)'>\")\n(set-html! \"speed-acl\" \n  (str \"<select style='width:44px'\n                onchange='javascript:view3d.client.accel_speed(this.value)'>\"\n         (apply str (for [n (range 1 11)]\n                           (str \"<option value='\" n \"'>\" n \"</option>\")))))\n(set-html! \"altitude\" \"Altitude: 00000\")\n(set-html! \"altitude-fld\" \n  \"<input value='4000' style='width:38px' id='input-alt'\n               onchange='javascript:view3d.client.altitude(this.value)'>\")\n(set-html! \"altitude-acl\" \n  (str \"<select style='width:44px'\n                onchange='javascript:view3d.client.accel_altitude(this.value)'>\"\n         (apply str (for [n (range 1 11)]\n                           (str \"<option value='\" n \"'>\" n \"</option>\")))))\n(set-html! \"lat\" \"Latitude: 00.0000\")\n(set-html! \"latitude-fld\" \n  \"<input value='40.8' style='width:84px' id='input-lat'\n               onchange='javascript:view3d.client.latitude(this.value)'>\")\n(set-html! \"lon\" \"Longitude: 00.0000\")\n(set-html! \"longitude-fld\" \n  \"<input value='-74.0' style='width:84px' id='input-lon'\n               onchange='javascript:view3d.client.longitude(this.value)'>\")")
+	(source "(set-html! \"autopilot\" \"<h4>Autopilot</h4>\")\n(set-html! \"accel\" \"accel\")\n(set-html! \"course\" \"Course: 000\")\n(set-html! \"course-fld\" \n  \"<input value='180' style='width:38px' id='input-crs'\n                     onchange='javascript:view3d.client.course(this.value)'>\")\n(set-html! \"speed\" \"Speed: 000\")\n(set-html! \"speed-fld\" \n  \"<input value='210' style='width:38px' id='input-spd'\n               onchange='javascript:view3d.client.speed(this.value)'>\")\n(set-html! \"speed-acl\" \n  (str \"<select style='width:44px'\n                onchange='javascript:view3d.client.accel_speed(this.value)'>\"\n         (apply str (for [n (range 1 11)]\n                           (str \"<option value='\" n \"'>\" n \"</option>\")))))\n(set-html! \"altitude\" \"Altitude: 00000\")\n(set-html! \"altitude-fld\" \n  \"<input value='4000' style='width:38px' id='input-alt'\n               onchange='javascript:view3d.client.altitude(this.value)'>\")\n(set-html! \"altitude-acl\" \n  (str \"<select style='width:44px'\n                onchange='javascript:view3d.client.accel_altitude(this.value)'>\"\n         (apply str (for [n (range 1 11)]\n                           (str \"<option value='\" n \"'>\" n \"</option>\")))))\n(set-html! \"lat\" \"Latitude: 00.0000\")\n(set-html! \"latitude-fld\" \n  \"<input value='40.8' style='width:56px' id='input-lat'\n               onchange='javascript:view3d.client.latitude(this.value)'>\")\n(set-html! \"instant\" \"ins\")\n(set-html! \"lon\" \"Longitude: 00.0000\")\n(set-html! \"longitude-fld\" \n  \"<input value='-74.0' style='width:56px' id='input-lon'\n               onchange='javascript:view3d.client.longitude(this.value)'>\")\n(set-html! \"instant-rdo\" \n  \"<input type='checkbox' id='input-instant'>\")")
 	(title "right-controls []"))
 
 ([FlightPro_Class140004] of  CloFunction
@@ -1447,7 +1447,7 @@
 
 ([FlightPro_Class320001] of  CloFunction
 
-	(source "(if (= (:mode @CARRIER) \"MANUAL\")\n  (let [lon (num-val lon)\n         lat (num-val (ctl/get-value \"input-lat\"))\n         bea (mov/bear-deg-js (:coord @CARRIER) [lat lon])]\n    (course (int bea))))")
+	(source "(if (= (:mode @CARRIER) \"MANUAL\")\n  (let [lon (num-val lon)\n         lat (num-val (ctl/get-value \"input-lat\"))\n         bea (mov/bear-deg-js (:coord @CARRIER) [lat lon])\n         ins (.-checked (ctl/by-id \"input-instant\"))]\n    (if ins\n      (do\n        (mov/set-turn-point CARRIER [lat lon] (@CARRIER :course) (@CARRIER :speed))\n        (GET (str (:command URL) \"goto?lat=\" lat \"&lon=\" lon)))\n      (course (int bea)))))")
 	(title "longitude [lon]"))
 
 ([FlightPro_Class320010] of  RuleSet
@@ -1762,7 +1762,7 @@
 
 ([FlightPro_Class40000] of  HTML
 
-	(source "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <title>Cockpit View</title>\n    <link rel=\"stylesheet\" href=\"css/cesium.css\" />\n    <script src=\"Cesium/Cesium.js\"></script>\n    <style>\n      @import url(Cesium/Widgets/widgets.css);\n      #cesiumContainer {\n        position: absolute;\n        top: 0;\n        left: 0;\n        height: 100%;\n        width: 100%;\n        margin: 0;\n        overflow: hidden;\n        padding: 0;\n        font-family: sans-serif;\n      }\n      html {\n        height: 100%;\n      }\n      body {\n        padding: 0;\n        margin: 0;\n        overflow: hidden;\n        height: 100%;\n      }\n    </style>\n  </head>\n  <body>\n    <div id=\"cesiumContainer\"></div>\n    <div id=\"autopilot\"></div>\n    <div id=\"course\"></div><div id=\"course-fld\"></div><div id=\"accel\"></div>\n    <div id=\"speed\"></div><div id=\"speed-fld\"></div><div id=\"speed-acl\"></div>\n    <div id=\"altitude\"></div><div id=\"altitude-fld\"></div><div id=\"altitude-acl\"></div>\n    <div id=\"lat\"></div></div><div id=\"latitude-fld\"></div>\n    <div id=\"lon\"></div></div><div id=\"longitude-fld\"></div>\n    <div id=\"camera\"></div>\n    <div id=\"onboard\"></div><div id=\"onboard-fld\"></div>\n    <div id=\"view\"></div><div id=\"view-fld\"></div>\n    <div id=\"pitch\"></div><div id=\"pitch-fld\"></div>\n    <div id=\"roll\"></div><div id=\"roll-fld\"></div>\n    <script>\n      Cesium.BingMapsApi.defaultKey = 'Au5mRx6ODcM1h4EAWNyK8wWoyaTjeLuvGkacr7WRZgmAt4QtmyV03OrN1TYb-cr7';\n    </script>\n    <script type=\"text/javascript\" src=\"js/main.js\"></script>\n  </body>\n</html>")
+	(source "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <title>Cockpit View</title>\n    <link rel=\"stylesheet\" href=\"css/cesium.css\" />\n    <script src=\"Cesium/Cesium.js\"></script>\n    <style>\n      @import url(Cesium/Widgets/widgets.css);\n      #cesiumContainer {\n        position: absolute;\n        top: 0;\n        left: 0;\n        height: 100%;\n        width: 100%;\n        margin: 0;\n        overflow: hidden;\n        padding: 0;\n        font-family: sans-serif;\n      }\n      html {\n        height: 100%;\n      }\n      body {\n        padding: 0;\n        margin: 0;\n        overflow: hidden;\n        height: 100%;\n      }\n    </style>\n  </head>\n  <body>\n    <div id=\"cesiumContainer\"></div>\n    <div id=\"autopilot\"></div>\n    <div id=\"course\"></div><div id=\"course-fld\"></div><div id=\"accel\"></div>\n    <div id=\"speed\"></div><div id=\"speed-fld\"></div><div id=\"speed-acl\"></div>\n    <div id=\"altitude\"></div><div id=\"altitude-fld\"></div><div id=\"altitude-acl\"></div>\n    <div id=\"lat\"></div></div><div id=\"latitude-fld\"></div><div id=\"instant\"></div>\n    <div id=\"lon\"></div></div><div id=\"longitude-fld\"></div></div><div id=\"instant-rdo\"></div>\n    <div id=\"camera\"></div>\n    <div id=\"onboard\"></div><div id=\"onboard-fld\"></div>\n    <div id=\"view\"></div><div id=\"view-fld\"></div>\n    <div id=\"pitch\"></div><div id=\"pitch-fld\"></div>\n    <div id=\"roll\"></div><div id=\"roll-fld\"></div>\n    <script>\n      Cesium.BingMapsApi.defaultKey = 'Au5mRx6ODcM1h4EAWNyK8wWoyaTjeLuvGkacr7WRZgmAt4QtmyV03OrN1TYb-cr7';\n    </script>\n    <script type=\"text/javascript\" src=\"js/main.js\"></script>\n  </body>\n</html>")
 	(store-in "resources/public")
 	(title "cezium"))
 
@@ -1801,7 +1801,8 @@
 		[FlightPro_Class640001]
 		[FlightPro_Class830000]
 		[FlightPro_Class890000]
-		[FlightPro_Class1000017])
+		[FlightPro_Class1000017]
+		[FlightPro_Class850000])
 	(cloNamespace [FlightPro_Class400001])
 	(cloVars
 		[FlightPro_Class70000]
@@ -3772,9 +3773,10 @@
 	(source "(or (> (Math/abs (- lat1 lat2)) 0.02)\n     (> (Math/abs (- lon1 lon2)) 0.02))")
 	(title "obsolete [[lat1 lon1] [lat2 lon2]]"))
 
-([FlightPro_Class850001] of  CloFuncall
+([FlightPro_Class850000] of  CloFunction
 
-	(source "(ru.rules/pp 'FlightPlan)"))
+	(source "(println :GOTO params)\n(let [{:keys [lat lon]} params]\n  (set-map-view [lat lon]))\n\"\"")
+	(title "goto [params]"))
 
 ([FlightPro_Class850004] of  CloFunction
 
@@ -3801,10 +3803,6 @@
 ([FlightPro_Class850020] of  QuestionTree
 
 	(name "on level"))
-
-([FlightPro_Class860000] of  CloFuncall
-
-	(source "(ru.rules/pp 'Onboard)"))
 
 ([FlightPro_Class860002] of  QuestionTree
 

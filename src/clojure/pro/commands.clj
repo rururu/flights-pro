@@ -390,3 +390,9 @@ TERRAIN)
 	{:directive :dynamics
 	 :dynamo mp})))
 
+(defn goto [params]
+  (println :GOTO params)
+(let [{:keys [lat lon]} params]
+  (set-map-view [lat lon]))
+"")
+

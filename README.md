@@ -50,7 +50,7 @@ Through "View" selector and "Pitch" and "Roll" fields you control direction of t
 
 "Autopilot" controls gives you possibility to set target values of course, speed and altitude of the MANUAL flight. Values would be changing gradually. You can accelerate change of the corresponding value by "accel" selector.
 
-When a longitude value changes, the MANUAL flight turns on course to a location, defined by a latitude and the longitude values. So, set the needed latitude before the longitude.
+When a longitude value changes, the MANUAL flight turns on course to a location, defined by a latitude and the longitude values, if "ins" checkbox is off. So, set the needed latitude before the longitude. If "ins" checkbox is on, that means "instantly", and thus you go to corresponding location at once.
 
 ## Programming
 
