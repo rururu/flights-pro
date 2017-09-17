@@ -124,6 +124,9 @@
 (defn latitude [lat]
 )
 
+(defn instantly-to [lat lon]
+  (mov/set-turn-point CARRIER [lat lon] (@CARRIER :course) (@CARRIER :speed)))
+
 (defn longitude [lon]
   (if (= (:mode @CARRIER) "MANUAL")
   (let [lon (num-val lon)
@@ -132,7 +135,7 @@
          ins (.-checked (ctl/by-id "input-instant"))]
     (if ins
       (do
-        (mov/set-turn-point CARRIER [lat lon] (@CARRIER :course) (@CARRIER :speed))
+        (instantly-to lat lon)
         (GET (str (:command URL) "goto?lat=" lat "&lon=" lon)))
       (course (int bea))))))
 
@@ -215,6 +218,8 @@
 	(dynamics dynamo))
     :onboard-status (let [{:keys [status]} dir]
 	(adjust-pitch status))
+    :instantly-to (let [{:keys [lat lon]} dir]
+	(instantly-to lat lon))
     (println (str "Unknown directive: " [directive dir])))))
 
 (defn receive-directives []

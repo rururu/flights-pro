@@ -55,6 +55,7 @@
     (println (str "AJAX ERROR: " status " " status-text)))))
 (def no-handler {:handler (fn [response])
  :error-handler error-handler})
+(def ONBOARD "MANUAL")
 (defn read-transit [x]
   (t/read (t/reader :json) x))
 
@@ -110,7 +111,7 @@
 (let [ms (volatile! "START")
        mp (assoc mp :marker (create-update-marker nil mp)
                               :step-hrs (double (/ (:vehicles TIO) 3600000))
-	        :movst ms
+	      :movst ms
                               :mover (asp/start-process ms #(move-vehicle id) (:vehicles TIO) nil))
          carr (volatile! mp)]
     (mov/set-turn-point carr)
@@ -297,6 +298,8 @@
 	(condp = question
 	  "city" (select-city param)
 	  "airport" (select-airport)))
+    :onboard (let [{:keys [callsign]} ins]
+	(def ONBOARD callsign))
     (println (str "Unknown instruction: " [instruct ins])))))
 
 (defn receive-instructions []
@@ -416,6 +419,16 @@
   (GET (str (:command URL) cmd) no-handler))
 (ctl/show-chart-controls))
 
+(defn mouse-click [lat lng]
+  (let [htm (if (= ONBOARD "MANUAL")
+                (str "MANUAL instantly goes to this location?<br><br>"
+	"<input type='button' 
+	 value='Go!'
+	 style='color:blue;display:block;margin:auto;'
+	 onclick='chart.client.mangoinst(" lat "," lng ")' >")
+                (str "Now on board " ONBOARD))]
+  (popup lat lng htm 8000 240 100)))
+
 (defn init-chart []
   (println :INIT-CHART)
 (let [m (-> js/L
@@ -451,9 +464,11 @@
       (catch js/Error e (println e)))
     (.addTo ctrl m)
     (.on m "mousemove"
-         (fn [e] (ctl/mouse-move (.. e -latlng -lat) (.. e -latlng -lng))))
+      (fn [e] (ctl/mouse-move (.. e -latlng -lat) (.. e -latlng -lng))))
     (.on m "zoomend"
-         (fn [e] (ctl/display-zoom (.getZoom m))))
+      (fn [e] (ctl/display-zoom (.getZoom m))))
+    (.on m "click"
+      (fn [e] (mouse-click (.. e -latlng -lat) (.. e -latlng -lng))))
     (ctl/display-zoom (.getZoom m))
     (vreset! CHART m)))
 
@@ -477,6 +492,9 @@
   (GET (str (:command URL) "trail?id=" id)
   {:handler (fn [response])
    :error-handler error-handler}))
+
+(defn mangoinst [lat lon]
+  (GET (str (:command URL) "goto?lat=" lat "&lon=" lon "&from=CHART")))
 
 
 (set! (.-onload js/window) (on-load-chart))

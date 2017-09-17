@@ -52,6 +52,8 @@ Through "View" selector and "Pitch" and "Roll" fields you control direction of t
 
 When a longitude value changes, the MANUAL flight turns on course to a location, defined by a latitude and the longitude values, if "ins" checkbox is off. So, set the needed latitude before the longitude. If "ins" checkbox is on, that means "instantly", and thus you go to corresponding location at once.
 
+Alternatively, you can go instantly to some location while in MANUAL mode by clicking chart view in this location.
+
 ## Programming
 
 You can do Expert System, Clojure and ClojureScript programming and debugging in IDE based on Protege-3.5 during air traffic monitoring and simulation (see screencasts below).

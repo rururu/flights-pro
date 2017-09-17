@@ -192,7 +192,10 @@
       (asp/pump-in (:directives CHN)
 	{:directive :callsigns
 	 :list lst}))
-    (rete/assert-frame ['Onboard 'callsign cls 'time 0])))
+    (do (asp/pump-in (:instructions CHN)
+	{:instruct :onboard 
+	 :callsign cls})
+      (rete/assert-frame ['Onboard 'callsign cls 'time 0]))))
 "")
 
 (defn terrain [params]
@@ -393,6 +396,11 @@ TERRAIN)
 (defn goto [params]
   (println :GOTO params)
 (let [{:keys [lat lon]} params]
-  (set-map-view [lat lon]))
+  (set-map-view [lat lon])
+  (if (= (:from params) "CHART")
+    (asp/pump-in (:directives CHN)
+	 {:directive :instantly-to
+	  :lat lat
+	  :lon lon})))
 "")
 
