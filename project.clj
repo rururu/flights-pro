@@ -23,6 +23,6 @@
                  [http-kit "2.2.0"]
                  [clj-json "0.5.3"]]
   :javac-options ["-target" "1.7" "-source" "1.7" "-Xlint:-options"]
-  :repositories {"local" ~(str (.toURI (java.io.File. "repo")))}
+  :repositories {"local" {:url ~(str (.toURI (java.io.File. "repo"))) :checksum :warn}}
   :profiles {:uberjar {:aot :all}}
   :main fligts-pro.core)
