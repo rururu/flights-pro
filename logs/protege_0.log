@@ -1969,3 +1969,53 @@ Was expecting one of:
 2017.09.17 11:47:23.636 MSK INFO: *** SYSTEM START ***
 2017.09.17 11:47:24.844 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
 2017.09.17 11:47:39.398 MSK INFO: Load time for file:/Users/ru/clojure/fligts-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 4 sec (ui) -- ProjectManager$3.run()
+2017.09.18 15:15:16.304 MSK INFO: *** SYSTEM START ***
+2017.09.18 15:15:17.043 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.09.18 15:15:36.122 MSK INFO: Project load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj: 0 sec -- ProjectChooser.loadProject()
+2017.09.18 15:15:40.521 MSK INFO: UI display time = 4 sec -- ProjectManager$2.run()
+2017.09.20 23:27:20.922 MSK INFO: *** SYSTEM START ***
+2017.09.20 23:27:22.190 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.09.20 23:27:31.068 MSK INFO: Load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 1 sec (project) + 4 sec (ui) -- ProjectManager$3.run()
+2017.09.30 14:04:19.431 MSK INFO: *** SYSTEM START ***
+2017.09.30 14:04:22.575 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.09.30 14:04:32.866 MSK INFO: Load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 4 sec (ui) -- ProjectManager$3.run()
+2017.11.05 16:34:48.943 MSK INFO: *** SYSTEM START ***
+2017.11.05 16:34:50.643 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.11.05 16:35:07.259 MSK INFO: Load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 5 sec (ui) -- ProjectManager$3.run()
+2017.11.27 18:52:01.154 MSK INFO: *** SYSTEM START ***
+2017.11.27 18:52:02.638 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.11.27 18:52:12.749 MSK INFO: Load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 1 sec (project) + 4 sec (ui) -- ProjectManager$3.run()
+2017.11.28 11:44:36.937 MSK INFO: *** SYSTEM START ***
+2017.11.28 11:44:41.634 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.12.02 06:27:24.503 MSK INFO: *** SYSTEM START ***
+2017.12.02 06:27:27.090 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.12.02 06:27:40.909 MSK INFO: Load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 1 sec (project) + 7 sec (ui) -- ProjectManager$3.run()
+2017.12.26 21:10:08.126 MSK INFO: *** SYSTEM START ***
+2017.12.26 21:10:09.921 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2017.12.26 21:10:26.256 MSK INFO: Load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 1 sec (project) + 6 sec (ui) -- ProjectManager$3.run()
+2018.01.18 19:30:48.132 MSK INFO: *** SYSTEM START ***
+2018.01.18 19:30:49.953 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2018.01.18 19:31:10.738 MSK INFO: Load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 4 sec (ui) -- ProjectManager$3.run()
+2018.01.30 16:13:38.669 MSK INFO: *** SYSTEM START ***
+2018.01.30 16:13:40.377 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2018.01.30 16:14:12.864 MSK INFO: Project load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj: 0 sec -- ProjectChooser.loadProject()
+2018.01.30 16:14:16.974 MSK INFO: UI display time = 4 sec -- ProjectManager$2.run()
+2018.01.31 11:27:33.518 MSK INFO: *** SYSTEM START ***
+2018.01.31 11:27:34.534 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2018.01.31 11:27:44.098 MSK INFO: Load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 4 sec (ui) -- ProjectManager$3.run()
+2018.02.01 11:29:02.401 MSK INFO: *** SYSTEM START ***
+2018.02.01 11:29:03.685 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2018.02.01 11:29:11.833 MSK INFO: Load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 1 sec (project) + 4 sec (ui) -- ProjectManager$3.run()
+2018.02.01 12:11:59.587 MSK INFO: Project load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj: 0 sec -- ProjectChooser.loadProject()
+2018.02.01 12:11:59.931 MSK INFO: UI display time = 0 sec -- ProjectManager$2.run()
+2018.02.02 11:17:08.489 MSK INFO: *** SYSTEM START ***
+2018.02.02 11:17:14.748 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2018.02.10 11:40:39.209 MSK INFO: *** SYSTEM START ***
+2018.02.10 11:40:41.359 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2018.02.10 11:40:50.695 MSK INFO: Load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 1 sec (project) + 4 sec (ui) -- ProjectManager$3.run()
+2018.02.10 11:51:27.691 MSK INFO: *** SYSTEM START ***
+2018.02.10 11:51:29.198 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2018.02.10 11:51:35.461 MSK INFO: Load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 2 sec (ui) -- ProjectManager$3.run()
+2018.02.10 12:25:04.162 MSK INFO: *** SYSTEM START ***
+2018.02.10 12:25:06.151 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2018.02.10 12:25:15.900 MSK INFO: Load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 2 sec (ui) -- ProjectManager$3.run()

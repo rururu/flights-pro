@@ -136,7 +136,7 @@
     (if ins
       (do
         (instantly-to lat lon)
-        (GET (str (:command URL) "goto?lat=" lat "&lon=" lon)))
+        (GET (str (:command URL) "goto?lat=" lat "&lon=" lon "&from=COCKPIT")))
       (course (int bea))))))
 
 (defn camera-vehicle [vehicle per]
