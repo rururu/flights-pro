@@ -1,4 +1,4 @@
-; Sat Feb 10 12:20:52 MSK 2018
+; Sat Mar 31 22:26:15 MSK 2018
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -1315,7 +1315,7 @@
 
 ([FlightPro_Class3] of  CloVar
 
-	(source "(js/Cesium.CesiumTerrainProvider.\n  #js{:url \"//assets.agi.com/stk-terrain/world\"\n        :requestWaterMask false\n        :requestVertexNormals false})")
+	(source "(js/Cesium.createWorldTerrain)")
 	(title "TERR-PROV"))
 
 ([FlightPro_Class30000] of  CloFunction
@@ -3822,6 +3822,16 @@
 
 	(name "local city"))
 
+([FlightPro_Class870000] of  Airport
+
+	(altitude 28)
+	(coord 22.30888 113.9147)
+	(country "Hong Kong")
+	(iata "HKG")
+	(icao "VHHH")
+	(runways 0)
+	(title "Hong Kong International Airport"))
+
 ([FlightPro_Class870001] of  Airport
 
 	(altitude 21)
@@ -3977,7 +3987,7 @@
 
 ([FlightPro_Class900003] of  CloVar
 
-	(source "{:terrain 120 ;; feet\n :cabin 60}")
+	(source "{:terrain 30 ;; feet\n :cabin 20}")
 	(title "GROUND-DELTA"))
 
 ([FlightPro_Class900004] of  CloFunction

@@ -2019,3 +2019,39 @@ Was expecting one of:
 2018.02.10 12:25:04.162 MSK INFO: *** SYSTEM START ***
 2018.02.10 12:25:06.151 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
 2018.02.10 12:25:15.900 MSK INFO: Load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 2 sec (ui) -- ProjectManager$3.run()
+2018.02.10 17:36:19.383 MSK INFO: *** SYSTEM START ***
+2018.02.10 17:36:20.779 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2018.02.10 17:36:31.664 MSK INFO: Load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 4 sec (ui) -- ProjectManager$3.run()
+2018.02.10 18:44:16.162 MSK INFO: *** SYSTEM START ***
+2018.02.10 18:44:17.845 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2018.02.10 18:44:24.799 MSK INFO: Load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 3 sec (ui) -- ProjectManager$3.run()
+2018.02.24 21:36:16.128 MSK INFO: *** SYSTEM START ***
+2018.02.24 21:36:20.808 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2018.02.24 21:36:33.758 MSK INFO: Load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 1 sec (project) + 6 sec (ui) -- ProjectManager$3.run()
+2018.02.24 21:40:42.684 MSK INFO: *** SYSTEM START ***
+2018.02.24 21:40:44.299 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2018.02.24 21:40:51.952 MSK INFO: Load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 3 sec (ui) -- ProjectManager$3.run()
+2018.02.25 11:02:45.758 MSK INFO: *** SYSTEM START ***
+2018.02.25 11:02:48.258 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2018.02.25 11:02:59.733 MSK INFO: Load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 1 sec (project) + 5 sec (ui) -- ProjectManager$3.run()
+2018.02.25 17:02:16.212 MSK INFO: *** SYSTEM START ***
+2018.02.25 17:02:18.726 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2018.02.25 17:02:25.702 MSK INFO: Load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 2 sec (ui) -- ProjectManager$3.run()
+2018.02.28 13:24:40.400 MSK INFO: *** SYSTEM START ***
+2018.02.28 13:24:42.012 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2018.02.28 13:24:50.398 MSK INFO: Load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 4 sec (ui) -- ProjectManager$3.run()
+2018.03.16 15:05:14.582 MSK INFO: *** SYSTEM START ***
+2018.03.16 15:05:20.330 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2018.03.16 15:05:46.294 MSK INFO: Load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 1 sec (project) + 6 sec (ui) -- ProjectManager$3.run()
+2018.03.18 11:22:59.478 MSK INFO: *** SYSTEM START ***
+2018.03.18 11:23:03.270 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2018.03.18 11:23:19.204 MSK INFO: Load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 6 sec (ui) -- ProjectManager$3.run()
+2018.03.31 21:25:42.248 MSK INFO: *** SYSTEM START ***
+2018.03.31 21:25:43.824 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2018.03.31 21:25:53.650 MSK INFO: Load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 1 sec (project) + 4 sec (ui) -- ProjectManager$3.run()
+2018.03.31 22:05:20.612 MSK INFO: *** SYSTEM START ***
+2018.03.31 22:05:23.386 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2018.03.31 22:05:31.177 MSK INFO: Load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 3 sec (ui) -- ProjectManager$3.run()
+2018.03.31 22:21:31.718 MSK INFO: *** SYSTEM START ***
+2018.03.31 22:21:33.657 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2018.03.31 22:21:43.256 MSK INFO: Load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 3 sec (ui) -- ProjectManager$3.run()

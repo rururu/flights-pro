@@ -3,10 +3,7 @@
   [calc.dynamic :as dyn]
   [calc.geo :as geo]))
 
-(def TERR-PROV (js/Cesium.CesiumTerrainProvider.
-  #js{:url "//assets.agi.com/stk-terrain/world"
-        :requestWaterMask false
-        :requestVertexNormals false}))
+(def TERR-PROV (js/Cesium.createWorldTerrain))
 (def VIEWER (js/Cesium.Viewer. 
   "cesiumContainer" 
   #js{:animation false}))
