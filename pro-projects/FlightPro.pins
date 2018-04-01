@@ -1,4 +1,4 @@
-; Sat Mar 31 22:26:15 MSK 2018
+; Sun Apr 01 22:23:45 MSK 2018
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -3987,7 +3987,7 @@
 
 ([FlightPro_Class900003] of  CloVar
 
-	(source "{:terrain 30 ;; feet\n :cabin 20}")
+	(source "{:terrain 60 ;; feet\n :cabin 40}")
 	(title "GROUND-DELTA"))
 
 ([FlightPro_Class900004] of  CloFunction
