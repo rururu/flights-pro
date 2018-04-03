@@ -68,9 +68,7 @@
 	 :period per
 	 :vehicle {
 	   :coord crd2
-	   :altitude (if (< alt2 cmd/GROUND-ALT) 
-		cmd/GROUND-ALT 
-		alt2)
+	   :altitude alt2
 	   :speed spd2
 	   :course crs2
 	   :old-course crs1}})))

@@ -36,10 +36,8 @@
                "scheduled" {"arrival" "unk"}}
 
    "airline" {"short" "Ru Airlines"}}}))
-(def TERRAIN "yes")
-(def GROUND-DELTA {:terrain 40 ;; feet
- :cabin 30})
-(def GROUND-ALT 0)
+(def TERRAIN {:terra "yes"
+ :cockpit-height 20})
 (defn write-transit [x]
   (let [baos (ByteArrayOutputStream.)
         w    (t/writer baos :json)
@@ -57,9 +55,6 @@
   (println "t:" crt "flights:" (count fls))
   (doseq [[k v] fls]
     (let [alt (fr24/altitude v)
-           alt (if (< alt GROUND-ALT) 
-	GROUND-ALT 
-	alt)
            [lat lon :as crd] (fr24/coord v)]
       (rete/assert-frame 
 	['Flight
@@ -72,7 +67,7 @@
 	'time crt
 	'point4d [lat lon (int (/ alt 3.28084)) (czs/iso8601curt)]
 	'age "NEW"
-	'status (if (> alt GROUND-ALT)
+	'status (if (> alt 0)
                                      "LEVEL"
                                      "GROUND")])))
   (rete/fire)
@@ -201,7 +196,7 @@
 (defn terrain [params]
   (println [:CMD-TERRAIN params])
 (println "Terrain: " TERRAIN)
-TERRAIN)
+(write-transit TERRAIN))
 
 (defn follow [params]
   (println [:CMD-FOLLOW params])
@@ -293,14 +288,6 @@ TERRAIN)
 	          (float (apt "lon"))]))))
 ))
 
-(defn def-ground-alt [alt]
-  (def GROUND-ALT 
-  (if (= TERRAIN "yes")
-    (+ alt 
-      (GROUND-DELTA :terrain)
-      (GROUND-DELTA :cabin))
-    (GROUND-DELTA :cabin))))
-
 (defn move-to [params]
   (println [:CMD-MOVE-TO params])
 (let [{:keys [country airport]} params]
@@ -309,7 +296,6 @@ TERRAIN)
            alt (apt "alt")
            crd [(apt "lat") (apt "lon")]]
       (foc-apt-ins apt)
-      (def-ground-alt alt)
       (set-map-view crd)
       (println :Airport country airport iata crd alt))))
 "")
@@ -379,12 +365,6 @@ TERRAIN)
   (println [:CMD-NEW-CZML-DOC params])
 (czs/new-doc)
 "")
-
-(defn destination-alt [id]
-  (if-let [inf (or (get @MY-INFOS id) (fr24/fl-info id))]
-  (or (get-in inf ["airport" "destination" "position" "altitude"])
-    GROUND-ALT)
-  GROUND-ALT))
 
 (defn update-dynamics [hm inst]
   (let [mp (itm inst 1)]

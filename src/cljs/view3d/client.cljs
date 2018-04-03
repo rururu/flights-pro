@@ -140,14 +140,15 @@
       (course (int bea))))))
 
 (defn camera-vehicle [vehicle per]
-  (let [[lat lon] (:coord vehicle)]
+  (let [[lat lon] (:coord vehicle)
+       alt (:altitude vehicle)]
   (vswap! VEHICLE merge vehicle)
   (if (<= per 0)
     (czm/move-to lat lon 
-	(int (/ (:altitude vehicle) 3.28084)) 
+	(int (/ alt 3.28084)) 
 	(:course vehicle))
     (czm/fly-to lat lon 
-	(int (/ (:altitude vehicle) 3.28084)) 
+	(int (/ alt 3.28084)) 
 	(:course vehicle) 
 	per))))
 
@@ -246,7 +247,7 @@
   (enable-console-print!)
 (GET (str (:command URL) "terrain")
 	{:handler (fn [response]
-		(czm/init-3D-view (:base URL) response))
+		(czm/init-3D-view (:base URL) (read-transit response)))
 	 :error-handler error-handler})
 (GET (str (:command URL) "new-czml-doc")
 	{:handler (fn [response])

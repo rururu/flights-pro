@@ -11,6 +11,8 @@
 (def CAMERA (volatile! {:view "FORWARD"
                :pitch -10
                :roll 0}))
+(def FLY-CTL [0 0 0 0 0 0 0])
+(def COCKPIT-HEIGHT 2)
 (defn norm-crs [x]
   (cond
    (> x 360) (- x 360)
@@ -43,6 +45,13 @@
                                            :pitch   (js/Cesium.Math.toRadians pit)
                                            :roll    (js/Cesium.Math.toRadians rol)}})))
 
+(defn terraHeightResponse [pos]
+  (let [[lat lon alt head pitch roll per] FLY-CTL
+       th (.-height (first pos))
+       aat (+ COCKPIT-HEIGHT alt th)]
+  (println :TERRAIN-HEIGHT th :COCKPIT-HEIGHT COCKPIT-HEIGHT)
+  (fly-control lat lon aat head pitch roll per)))
+
 (defn fly-to [lat lon alt crs per]
   (let [pitch (condp = (:view @CAMERA)
                 "UP" 90
@@ -58,7 +67,10 @@
                          "BACKWARD-RIGHT" (+ crs 135)
                          "BACKWARD-LEFT" (- crs 135)
                          crs))]
-    (fly-control lat lon alt head pitch roll per)))
+  (if (> alt 0)
+    (fly-control lat lon alt head pitch roll per)
+    (do (def FLY-CTL [lat lon alt head pitch roll per])
+      (js/terraHeightRequest TERR-PROV lat lon terraHeightResponse)))))
 
 (defn move-to [lat lon alt crs]
   (let [pitch (condp = (:view @CAMERA)
@@ -80,10 +92,11 @@
 (defn camera [key val]
   (vswap! CAMERA assoc key val))
 
-(defn init-3D-view [base-url terra]
-  (if (= terra "yes")
+(defn init-3D-view [base-url terresp]
+  (if (= (:terra terresp) "yes")
   (set! (.-terrainProvider VIEWER) TERR-PROV))
+(def COCKPIT-HEIGHT (:cockpit-height terresp))
 (.add (.-dataSources VIEWER) CZM-SRC)
 (.addEventListener (js/EventSource. (str base-url "czml/")) "czml" cz-processor false)
-(println [:INIT-3D-VIEW :BASE base-url :TERRA terra]))
+(println [:INIT-3D-VIEW :BASE base-url :TERRAIN terresp]))
 

@@ -102,6 +102,7 @@
                ", "
                alt2
                "]}}")]
+    ;;(println :CZML p)
     (send-event "czml" p)))
 
 (defn point-out [txt [lat lon] dist max-dist]

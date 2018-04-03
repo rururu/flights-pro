@@ -1,3 +1,11 @@
+(af:OnboardStatus -1
+(Onboard callsign ?cs)
+(Flight age "NEW" 
+	callsign ?cs
+	status ?sts)
+=>
+(es/onboard-status ?sts))
+
 (af:SwitchOnboard 1
 ?ob1 (Onboard)
 ?ob2 (Onboard callsign ?cs time 0)
@@ -12,9 +20,7 @@
 (pro.commands/def-ground-alt (pro.commands/destination-alt ?id))
 (es/fly-onboard-to ?cs ?crd ?crs ?crs ?spd ?alt -1)
 (retract ?ob1)
-(if (= ?cs "MANUAL")
-  (retract ?ob2)
-  (modify ?ob2 time 1)))
+(modify ?ob2 time 1))
 
 (af:StartOnboard 0
 ?ob (Onboard callsign ?cs time 0)
@@ -161,7 +167,7 @@
 	to ?to)
 =>
 (if-let [stm (es/start-time ?tim)]
-  (let [spp (es/specific-plan es/GENPLAN ?frm ?to)]
+  (let [spp (es/specific-plan ?frm ?to)]
      (my.flights.move/add-my-flight 
 	?csn ?csn (:start-crd spp) (:start-run spp) 0 (:start-alt spp))
      (asser FlightPlan id ?csn
@@ -206,7 +212,7 @@
 (Flight callsign ?cs1 coord ?c1 course ?crs1 age "NEW")
 (Flight id ?id2 coord ?c2 altitude ?a2 age "CURRENT" point4d ?p2 callsign ?cs2)
 (Flight id ?id2 coord ?c3 altitude ?a3 age "NEW" point4d ?p3 course ?crs3 
-	(< (calc.geo/distance-nm ?c1 ?c3) 10)))
+	(< (calc.geo/distance-nm ?c1 ?c3) 20)))
 =>
 (cesium.core/leg ?cs2
 	(if (calc.geo/following? ?crs1 ?crs3)
@@ -360,7 +366,7 @@
        dist (calc.geo/distance-nm ?crd fcrd)
        bear (int (calc.geo/bear-deg ?crd fcrd))
        alt (int (calc.core/smooth-tabfun dist (:altitude-graph ?lnd)))
-       spd (int (calc.core/smooth-tabfun dist (:spdeed-graph ?lnd)))]
+       spd (int (calc.core/smooth-tabfun dist (:speed-graph ?lnd)))]
    (my.flights.move/control ?id my.flights.move/turn [bear 2])
    (my.flights.move/control ?id my.flights.move/elevate [alt 8])
    (my.flights.move/control ?id my.flights.move/accel [spd 10])))
