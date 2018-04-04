@@ -27,6 +27,7 @@
  :instructions 979
  :vehicles 200
  :display 831
+ :new-czml-doc 4000
  :manual-data 6000
  :ext-data-popup 60000})
 (def CARRIER (volatile! {:mode "MANUAL"
@@ -243,14 +244,16 @@
   (if (= (:mode car) "MANUAL")
     (ctl/show-flight-data car))))
 
+(defn new-czml-doc []
+  (GET (str (:command URL) "new-czml-doc")
+	{:handler (fn [response])
+	 :error-handler error-handler}))
+
 (defn on-load []
   (enable-console-print!)
 (GET (str (:command URL) "terrain")
 	{:handler (fn [response]
 		(czm/init-3D-view (:base URL) (read-transit response)))
-	 :error-handler error-handler})
-(GET (str (:command URL) "new-czml-doc")
-	{:handler (fn [response])
 	 :error-handler error-handler})
 (mov/set-turn-point CARRIER)
 (asp/repeater mov/move CARRIER (:carrier TIO))
@@ -258,6 +261,7 @@
 (asp/repeater camera-manual CARRIER (:camera TIO))
 (asp/repeater receive-directives (:directives TIO))
 (asp/repeater send-manual-data (:manual-data TIO))
+(asp/repeater new-czml-doc (:new-czml-doc TIO))
 (ctl/show-controls))
 
 

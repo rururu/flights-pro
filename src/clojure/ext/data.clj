@@ -17,6 +17,7 @@
  :instructions 979
  :vehicles 200
  :display 831
+ :new-czml-doc 4000
  :manual-data 6000
  :ext-data-popup 60000})
 (def WEATHER2-API "http://www.myweather2.com/developer/forecast.ashx?uac=Pyih5WakI3&output=json&query=")

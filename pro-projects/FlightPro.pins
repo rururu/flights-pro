@@ -1,4 +1,4 @@
-; Tue Apr 03 14:17:59 MSK 2018
+; Wed Apr 04 18:31:20 MSK 2018
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -41,6 +41,21 @@
 		[FlightPro_Class20000]
 		[FlightPro_Class280000])
 	(title "FlightPro Programs"))
+
+([FlightPro_Class1000000] of  Airport
+
+	(altitude 116)
+	(coord 40.08011 116.5845)
+	(country "China")
+	(iata "PEK")
+	(icao "ZBAA")
+	(runways 0)
+	(title "Beijing Capital International Airport"))
+
+([FlightPro_Class1000001] of  CloFunction
+
+	(source "(GET (str (:command URL) \"new-czml-doc\")\n	{:handler (fn [response])\n	 :error-handler error-handler})")
+	(title "new-czml-doc []"))
 
 ([FlightPro_Class1000014] of  Bank
 
@@ -568,6 +583,7 @@
 		[FlightPro_Class80001]
 		[FlightPro_Class600003]
 		[FlightPro_Class260001]
+		[FlightPro_Class1000001]
 		[FlightPro_Class70001])
 	(cloNamespace [FlightPro_Class60001])
 	(cloVars
@@ -808,7 +824,7 @@
 
 ([FlightPro_Class20036] of  CloFunction
 
-	(source "(when DOC-SND\n    (send-event \"czml\" (doc))\n    (def DOC-SND false))\n  (let [p (str \"{\\\"id\\\":\\\"\"\n               label\n               \"\\\",\\\"label\\\":{\\\"scale\\\":\"\n               (/ scale 2)\n               \",\\\"pixelOffset\\\":{\\\"cartesian2\\\":[8, -8]},\\\"text\\\":\\\"\"\n               label\n               \"\\\"},\\\"billboard\\\":{\\\"scale\\\":\"\n               scale\n               \",\\\"image\\\":\\\"\"\n               img-url\n               \"\\\"},\\\"position\\\":{\\\"cartographicDegrees\\\":[\\\"\"\n               tim1\n               \"\\\", \"\n               lon1\n               \", \"\n               lat1\n               \", \"\n               alt1\n               \",\\\"\"\n               tim2\n               \"\\\", \"\n               lon2\n               \", \"\n               lat2\n               \", \"\n               alt2\n               \"]}}\")]\n    ;;(println :CZML p)\n    (send-event \"czml\" p))")
+	(source "(when DOC-SND\n    (send-event \"czml\" (doc))\n    (def DOC-SND false))\n  (let [p (str \"{\\\"id\\\":\\\"\"\n               label\n               \"\\\",\\\"label\\\":{\\\"scale\\\":\"\n               (/ scale 2)\n               \",\\\"pixelOffset\\\":{\\\"cartesian2\\\":[8, -8]},\\\"text\\\":\\\"\"\n               label\n               \"\\\"},\\\"billboard\\\":{\\\"scale\\\":\"\n               scale\n               \",\\\"image\\\":\\\"\"\n               img-url\n               \"\\\"},\\\"position\\\":{\\\"cartographicDegrees\\\":[\\\"\"\n               tim1\n               \"\\\", \"\n               lon1\n               \", \"\n               lat1\n               \", \"\n               alt1\n               \",\\\"\"\n               tim2\n               \"\\\", \"\n               lon2\n               \", \"\n               lat2\n               \", \"\n               alt2\n               \"]}}\")]\n    ;; (println :CZML p)\n    (send-event \"czml\" p))")
 	(title "leg [label img-url scale [lat1 lon1 alt1 tim1] [lat2 lon2 alt2 tim2]]"))
 
 ([FlightPro_Class20037] of  CloFunction
@@ -1549,7 +1565,7 @@
 
 ([FlightPro_Class330004] of  CloVar
 
-	(source "{:carrier 1000\n :camera 3030\n :directives 911\n :instructions 979\n :vehicles 200\n :display 831\n :manual-data 6000\n :ext-data-popup 60000}")
+	(source "{:carrier 1000\n :camera 3030\n :directives 911\n :instructions 979\n :vehicles 200\n :display 831\n :new-czml-doc 4000\n :manual-data 6000\n :ext-data-popup 60000}")
 	(title "TIO"))
 
 ([FlightPro_Class330005] of  CloFunction
@@ -1731,8 +1747,8 @@
 
 ([FlightPro_Class390000] of  Rule
 
-	(lhs "(Onboard callsign ?cs1)\n(Flight callsign ?cs1 coord ?c1 course ?crs1 age \"NEW\")\n(Flight id ?id2 coord ?c2 altitude ?a2 age \"CURRENT\" point4d ?p2 callsign ?cs2)\n(Flight id ?id2 coord ?c3 altitude ?a3 age \"NEW\" point4d ?p3 course ?crs3 \n	(< (calc.geo/distance-nm ?c1 ?c3) 20)))")
-	(rhs "(cesium.core/leg ?cs2\n	(if (calc.geo/following? ?crs1 ?crs3)\n	  (es/URL-ICO \"FOLLOWING\")\n	  (es/URL-ICO \"COUNTER\")) \n	(calc.core/smooth-tabfun (calc.geo/distance-nm ?c1 ?c3) [[0 1.0][20 0.1]])\n	?p2\n	?p3)")
+	(lhs "(Onboard callsign ?cs1)\n(Flight callsign ?cs1 coord ?c1 course ?crs1 age \"NEW\")\n(Flight id ?id2 coord ?c2 altitude ?a2 age \"CURRENT\" point4d ?p2 callsign ?cs2)\n(Flight id ?id2 coord ?c3 altitude ?a3 age \"NEW\" point4d ?p3 course ?crs3 \n	(< (calc.geo/distance-nm ?c1 ?c3) 24)))")
+	(rhs "(cesium.core/leg ?cs2\n	(if (calc.geo/following? ?crs1 ?crs3)\n	  (es/URL-ICO \"FOLLOWING\")\n	  (es/URL-ICO \"COUNTER\")) \n	(calc.core/smooth-tabfun (calc.geo/distance-nm ?c1 ?c3) [[0 1.0][24 0.1]])\n	?p2\n	?p3)")
 	(salience 0)
 	(title "af:CZML-LegGeneration"))
 
@@ -1795,13 +1811,13 @@
 		[FlightPro_Class460001]
 		[FlightPro_Class420000]
 		[FlightPro_Class640008]
+		[FlightPro_Class830000]
 		[FlightPro_Class420021]
 		[FlightPro_Class460002]
 		[FlightPro_Class510000]
 		[FlightPro_Class590000]
 		[FlightPro_Class660024]
 		[FlightPro_Class640001]
-		[FlightPro_Class830000]
 		[FlightPro_Class1000017]
 		[FlightPro_Class850000])
 	(cloNamespace [FlightPro_Class400001])
@@ -1914,7 +1930,7 @@
 
 ([FlightPro_Class420021] of  CloFunction
 
-	(source "(println [:CMD-MOVE-TO params])\n(let [{:keys [country airport]} params]\n  (if-let [apt (get-in (fr24/airports-by-country) [country airport])]\n    (let [iata (apt \"iata\")\n           alt (apt \"alt\")\n           crd [(apt \"lat\") (apt \"lon\")]]\n      (foc-apt-ins apt)\n      (set-map-view crd)\n      (println :Airport country airport iata crd alt))))\n\"\"")
+	(source "(println [:CMD-MOVE-TO params])\n(let [{:keys [country airport]} params]\n  (if-let [apt (get-in (fr24/airports-by-country) [country airport])]\n    (let [iata (apt \"iata\")\n           alt (apt \"alt\")\n           crd [(apt \"lat\") (apt \"lon\")]]\n      (foc-apt-ins apt)\n      (set-map-view crd)\n      (println :Airport country airport iata crd alt)\n      (new-czml-doc {}))))\n\"\"")
 	(title "move-to [params]"))
 
 ([FlightPro_Class430000] of  CloFunction
@@ -2541,7 +2557,7 @@
 
 ([FlightPro_Class610000] of  CloVar
 
-	(source "{:terra \"yes\"\n :cockpit-height 20}")
+	(source "{:terra \"yes\"\n :cockpit-height 24}")
 	(title "TERRAIN"))
 
 ([FlightPro_Class610001] of  CloFunction
@@ -3327,7 +3343,7 @@
 
 ([FlightPro_Class70001] of  CloFunction
 
-	(source "(enable-console-print!)\n(GET (str (:command URL) \"terrain\")\n	{:handler (fn [response]\n		(czm/init-3D-view (:base URL) (read-transit response)))\n	 :error-handler error-handler})\n(GET (str (:command URL) \"new-czml-doc\")\n	{:handler (fn [response])\n	 :error-handler error-handler})\n(mov/set-turn-point CARRIER)\n(asp/repeater mov/move CARRIER (:carrier TIO))\n(asp/repeater flight-data-manual CARRIER (:display TIO))\n(asp/repeater camera-manual CARRIER (:camera TIO))\n(asp/repeater receive-directives (:directives TIO))\n(asp/repeater send-manual-data (:manual-data TIO))\n(ctl/show-controls)")
+	(source "(enable-console-print!)\n(GET (str (:command URL) \"terrain\")\n	{:handler (fn [response]\n		(czm/init-3D-view (:base URL) (read-transit response)))\n	 :error-handler error-handler})\n(mov/set-turn-point CARRIER)\n(asp/repeater mov/move CARRIER (:carrier TIO))\n(asp/repeater flight-data-manual CARRIER (:display TIO))\n(asp/repeater camera-manual CARRIER (:camera TIO))\n(asp/repeater receive-directives (:directives TIO))\n(asp/repeater send-manual-data (:manual-data TIO))\n(asp/repeater new-czml-doc (:new-czml-doc TIO))\n(ctl/show-controls)")
 	(title "on-load []"))
 
 ([FlightPro_Class70002] of  CloProgram
@@ -3729,7 +3745,7 @@
 
 ([FlightPro_Class830000] of  CloFunction
 
-	(source "(println [:CMD-NEW-CZML-DOC params])\n(czs/new-doc)\n\"\"")
+	(source ";;(println [:CMD-NEW-CZML-DOC params])\n(czs/new-doc)\n\"\"")
 	(title "new-czml-doc [params]"))
 
 ([FlightPro_Class830001] of  CloFunction
@@ -4155,6 +4171,36 @@
 	(icao "KSFO")
 	(runways 0)
 	(title "San Francisco International Airport"))
+
+([FlightPro_Class980000] of  Airport
+
+	(altitude 215)
+	(coord 57.20194 -2.19777)
+	(country "United Kingdom")
+	(iata "ABZ")
+	(icao "EGPD")
+	(runways 0)
+	(title "Aberdeen International Airport"))
+
+([FlightPro_Class990000] of  Airport
+
+	(altitude 135)
+	(coord 55.95 -3.3725)
+	(country "United Kingdom")
+	(iata "EDI")
+	(icao "EGPH")
+	(runways 0)
+	(title "Edinburgh Airport"))
+
+([FlightPro_Class990001] of  Airport
+
+	(altitude 217)
+	(coord 48.9588 2.4336)
+	(country "France")
+	(iata "LBG")
+	(icao "LFPB")
+	(runways 0)
+	(title "Paris Le Bourget Airport"))
 
 ([FlightPro_Class990003] of  Airport
 

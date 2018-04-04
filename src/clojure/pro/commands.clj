@@ -37,7 +37,7 @@
 
    "airline" {"short" "Ru Airlines"}}}))
 (def TERRAIN {:terra "yes"
- :cockpit-height 20})
+ :cockpit-height 24})
 (defn write-transit [x]
   (let [baos (ByteArrayOutputStream.)
         w    (t/writer baos :json)
@@ -288,6 +288,11 @@
 	          (float (apt "lon"))]))))
 ))
 
+(defn new-czml-doc [params]
+  ;;(println [:CMD-NEW-CZML-DOC params])
+(czs/new-doc)
+"")
+
 (defn move-to [params]
   (println [:CMD-MOVE-TO params])
 (let [{:keys [country airport]} params]
@@ -297,7 +302,8 @@
            crd [(apt "lat") (apt "lon")]]
       (foc-apt-ins apt)
       (set-map-view crd)
-      (println :Airport country airport iata crd alt))))
+      (println :Airport country airport iata crd alt)
+      (new-czml-doc {}))))
 "")
 
 (defn schedule [params]
@@ -360,11 +366,6 @@
   (move-to {:country (sv api "country")
                    :airport (sv api "title")})
   (println "Annotated Initial Airport not found!")))
-
-(defn new-czml-doc [params]
-  (println [:CMD-NEW-CZML-DOC params])
-(czs/new-doc)
-"")
 
 (defn update-dynamics [hm inst]
   (let [mp (itm inst 1)]
