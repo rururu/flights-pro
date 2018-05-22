@@ -25,4 +25,5 @@
   :javac-options ["-target" "1.7" "-source" "1.7" "-Xlint:-options"]
   :repositories {"local" {:url ~(str (.toURI (java.io.File. "repo"))) :checksum :warn}}
   :profiles {:uberjar {:aot :all}}
+  :jvm-opts ["--add-modules" "java.xml.bind"]
   :main fligts-pro.core)
