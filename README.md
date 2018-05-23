@@ -16,6 +16,13 @@ $ lein run
 In a Protege GUI open a project FlightPro.pprj from a folder <..>/flights-pro/pro-projects and execute a menu item Edit -> Clojure Work.
 When the Pro server starts, open two browser windows, one on the address: http://localhost:4444 (Cockpit view), second on the address: http://localhost:4444/chart (Chart view).
 
+```diff
+- WARNING! Uncomment this line for Java 9 and Java 10 in project.clj file:
+```
+```Clojure
+;; :jvm-opts ["--add-modules" "java.xml.bind"]
+```
+
 ## Usage
 
 ### Chart view
