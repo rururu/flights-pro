@@ -2153,3 +2153,8 @@ Was expecting one of:
 2018.05.23 12:34:03.627 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
 2018.05.23 12:34:49.656 MSK INFO: Project load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj: 0 sec -- ProjectChooser.loadProject()
 2018.05.23 12:34:54.359 MSK INFO: UI display time = 4 sec -- ProjectManager$2.run()
+2018.10.02 12:11:18.092 MSK INFO: *** SYSTEM START ***
+2018.10.02 12:11:19.733 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2018.10.02 12:11:58.239 MSK INFO: *** SYSTEM START ***
+2018.10.02 12:11:59.092 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2018.10.02 12:12:07.089 MSK INFO: Load time for file:/Users/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 3 sec (ui) -- ProjectManager$3.run()
