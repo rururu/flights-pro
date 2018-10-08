@@ -26,5 +26,5 @@
   :repositories {"local" {:url ~(str (.toURI (java.io.File. "repo"))) :checksum :warn}}
   :profiles {:uberjar {:aot :all}}
   ;; Uncomment next line for Java 9 and Java 10
-  ;; :jvm-opts ["--add-modules" "java.xml.bind"]
+  :jvm-opts ["--add-modules" "java.xml.bind"]
   :main fligts-pro.core)

@@ -6,7 +6,7 @@ It uses [Flightradar24](http://www.flightradar24.com) web service, [Leaflet](htt
 ![screenshot](screenshot1.jpeg)
 
 ```diff
-- WARNING! Uncomment this line for Java 9 and Java 10 in project.clj file before the start:
+- WARNING! Uncomment this line for Java 9 and above in project.clj file before the start:
 ;; :jvm-opts ["--add-modules" "java.xml.bind"]
 ```
 
