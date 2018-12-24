@@ -1,4 +1,4 @@
-; Tue Oct 02 12:15:57 MSK 2018
+; Mon Dec 24 14:56:41 MSK 2018
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -191,10 +191,1306 @@
 	(source "(asp/pump-in (:directives  cmd/CHN)\n	{:directive :onboard-status\n	 :status sts})")
 	(title "onboard-status [sts]"))
 
+([FlightPro_Class1030000] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 11)
+	(feature "city")
+	(lang "en")
+	(lat 56.0458)
+	(lng 12.6944)
+	(rank 100)
+	(summary "Helsingborg is a town and the seat of Helsingborg Municipality, Scania, Sweden. It had 97,122 inhabitants in 2010. Helsingborg is the centre of the northern part of western Scania. There is no formal metropolitan area, but the municipality of Helsingborg City and its neighbouring five municipalities (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/99000/thumb-98583-100.jpg")
+	(title "Helsingborg")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Helsingborg"))
+
+([FlightPro_Class1030001] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 106)
+	(feature "adm1st")
+	(lang "en")
+	(lat 55.9953)
+	(lng 13.4418)
+	(rank 100)
+	(summary "Scania, also known by its local name Skåne (in Swedish and in Scanian), is the southernmost province (landskap) of Sweden which consists of a peninsula on the southern tip of the Scandinavian Peninsula and some islands close to it. Scania is roughly equivalent to the modern Skåne County (Skåne län) (...)")
+	(title "Scania")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Scania"))
+
 ([FlightPro_Class1030002] of  CloFunction
 
 	(source "(let [osts (:status @CARRIER)\n       fptc (num-val (ctl/get-value \"pitch-val\"))]\n  (cond\n    (and (not= osts \"LEVEL\") (= nsts \"GROUND\")) (czm/camera :pitch fptc)\n    (and (not= osts \"LEVEL\") (= nsts \"LEVEL\")) (czm/camera :pitch fptc)\n    (and (not= osts \"CLIMB\") (= nsts \"CLIMB\"))\n	(cond \n	  (= (:view @czm/CAMERA) \"FORWARD\")  (czm/camera :pitch (+ fptc 6))\n	  (= (:view @czm/CAMERA) \"BACKWARD\") (czm/camera :pitch  (- fptc 6)))\n    (and (not= osts \"DESCEND\") (= nsts \"DESCEND\"))\n	(cond \n	  (= (:view @czm/CAMERA) \"FORWARD\")  (czm/camera :pitch (- fptc 6))\n	  (= (:view @czm/CAMERA) \"BACKWARD\") (czm/camera :pitch  (+ fptc 6))))\n  (vswap! CARRIER assoc :status nsts))")
 	(title "adjust-pitch [nsts]"))
+
+([FlightPro_Class1040002] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 1)
+	(feature "city")
+	(lang "en")
+	(lat 55.8667)
+	(lng 12.8333)
+	(rank 100)
+	(summary "Landskrona is a late medieval town located at the shores of Øresund, founded at the location of the former Danish fishing village Sønder Sæby in the province of Scania by king Erik VII of Pomerania early in the 15th century. In 1720 the town, like its province, became a formal part of Sweden (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/79000/thumb-78301-100.jpg")
+	(title "Landskrona")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Landskrona"))
+
+([FlightPro_Class1040003] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 68)
+	(feature "city")
+	(lang "en")
+	(lat 55.8392)
+	(lng 13.3039)
+	(rank 100)
+	(summary "Eslöv is a town and the seat of Eslöv Municipality, Skåne County, Sweden with 17,748 inhabitants in 2010. Eslöv is part of the Øresund Region and is today largely serving as a suburb of Lund and Malmö.  (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/101000/thumb-100135-100.jpg")
+	(title "Eslöv")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Esl%C3%B6v"))
+
+([FlightPro_Class1040004] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "DK")
+	(elevation 41)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 56.05)
+	(lng 12.7167)
+	(rank 100)
+	(summary "Helsingborg Municipality (Helsingborgs kommun) is a municipality in Skåne County in Sweden. Its seat is located in the city of Helsingborg, which is Sweden's eighth largest city. The municipality had a population of 132,011 on January 1, 2013, and the population is increasing with roughly 1500 (...)")
+	(title "Helsingborg Municipality")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Helsingborg_Municipality"))
+
+([FlightPro_Class1040005] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 10)
+	(feature "city")
+	(lang "en")
+	(lat 56.2458)
+	(lng 12.8667)
+	(rank 100)
+	(summary "Ängelholm is a locality and the seat of Ängelholm Municipality in Skåne County, Sweden with 39,612 inhabitants in 2010.  (...)")
+	(title "Ängelholm")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/%C3%84ngelholm"))
+
+([FlightPro_Class1040006] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 106)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 55.9953)
+	(lng 13.4418)
+	(rank 100)
+	(summary "Skåne County , sometimes referred to as \"Scania County\" in English, is the southernmost county or län, of Sweden, basically corresponding to the traditional province Skåne. It borders the counties of Halland, Kronoberg and Blekinge. The seat of residence for the Skåne Governor is the town of Malmö (...)")
+	(title "Skåne County")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Sk%C3%A5ne_County"))
+
+([FlightPro_Class1040007] of  WikiArticleDetails
+
+	(butt-del-pois "Delete POIs/ext.data/delete-pois")
+	(butt-return "Return to Flight/ext.data/ret-to-flight")
+	(butt-show-pois "Show on Map/ext.data/show-on-map")
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "DK")
+	(elevation 3)
+	(lang "en")
+	(lat 56.0333)
+	(lng 12.6167)
+	(max-rows 50)
+	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
+	(radius 1.0)
+	(rank 100)
+	(summary "Helsingør , known in English as Elsinore, is a city in eastern Denmark. Helsingør had a population of 46,492 on 1 January 2015. database from Statistics Denmark It is the largest city and main shopping destination in North Zealand, with over a million visitors a year (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/120000/thumb-119897-100.jpg")
+	(title "Helsingør")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Helsing%C3%B8r"))
+
+([FlightPro_Class1040008] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(feature "waterbody")
+	(lang "en")
+	(lat 55.7897)
+	(lng 12.7508)
+	(rank 100)
+	(summary "Øresund is a strait separating Denmark from southern Sweden which is wide at its narrowest point between Helsingør in Denmark and Helsingborg in Sweden. The Øresund Region has 3.8 million inhabitants on the Danish and Swedish sides.Danish side province areas - http://www.dst (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/43000/thumb-42179-100.png")
+	(title "Øresund")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/%C3%98resund"))
+
+([FlightPro_Class1040009] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "DK")
+	(elevation 38)
+	(feature "adm1st")
+	(lang "en")
+	(lat 55.88)
+	(lng 12.31)
+	(rank 100)
+	(summary "The Capital Region of Denmark is the easternmost administrative region of Denmark, established on January 1, 2007 as part of the 2007 Danish Municipal Reform, which replaced the traditional counties (Danish plural: amter, singular: amt) with five larger regions (...)")
+	(title "Capital Region of Denmark")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Capital_Region_of_Denmark"))
+
+([FlightPro_Class1040010] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "DK")
+	(elevation 40)
+	(feature "landmark")
+	(lang "en")
+	(lat 55.9292)
+	(lng 12.3081)
+	(rank 100)
+	(summary "Hillerød is a Danish town with a population of 31,505 (1 January 2015) database from Statistics Denmark located in North Zealand. Hillerød is the administrative centre of Region Hovedstaden (Capital Region of Denmark), one of the five regions in Denmark, and is also the third-largest town in this (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/8000/thumb-7202-100.jpg")
+	(title "Hillerød")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Hiller%C3%B8d"))
+
+([FlightPro_Class1040011] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 22)
+	(feature "city")
+	(lang "en")
+	(lat 56.5167)
+	(lng 13.0333)
+	(rank 100)
+	(summary "Laholm is a locality and the seat of Laholm Municipality, Halland County, Sweden, with 6,150 inhabitants in 2010. Laholm is, despite its small population, for historical reasons often still referred to as a city (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/147000/thumb-146399-100.jpg")
+	(title "Laholm")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Laholm"))
+
+([FlightPro_Class1040012] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 25)
+	(feature "city")
+	(lang "en")
+	(lat 56.4333)
+	(lng 12.8333)
+	(rank 98)
+	(summary "Båstad is a locality and the seat of Båstad Municipality, Skåne County, Sweden with 4,961 inhabitants in 2010.  (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/73000/thumb-72435-100.jpg")
+	(title "Båstad")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/B%C3%A5stad"))
+
+([FlightPro_Class1040013] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 63)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 55.8333)
+	(lng 13.3)
+	(rank 98)
+	(summary "Eslöv Municipality (Eslövs kommun) is one of 290 municipalities of Sweden, situated in Skåne County in southern Sweden. Its seat is located in the city of Eslöv. The present municipality was created in 1971, when the former City of Eslöv was amalgamated with a number of surrounding municipalities, (...)")
+	(title "Eslöv Municipality")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Esl%C3%B6v_Municipality"))
+
+([FlightPro_Class1040014] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "DK")
+	(elevation 16)
+	(feature "landmark")
+	(lang "en")
+	(lat 56.039)
+	(lng 12.6218)
+	(rank 98)
+	(summary "Kronborg is a castle and stronghold in the town of Helsingør, Denmark. Immortalized as Elsinore in William Shakespeare's play Hamlet, Kronborg is one of the most important Renaissance castles in Northern Europe and has been added to UNESCO's World Heritage Sites list (2000) (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/83000/thumb-82312-100.jpg")
+	(title "Kronborg")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kronborg"))
+
+([FlightPro_Class1040015] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 15)
+	(feature "city")
+	(lang "en")
+	(lat 55.7939)
+	(lng 13.1133)
+	(rank 98)
+	(summary "Kävlinge is a locality and the seat of Kävlinge Municipality, Skåne County, Sweden with 9,049 inhabitants in 2010. In 1996, a train containing large amounts of ammonia derailed and around 9,000 people had to be evacuated from the area. This was the biggest evacuation operation in Swedish history (...)")
+	(title "Kävlinge")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/K%C3%A4vlinge"))
+
+([FlightPro_Class1040016] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "DE")
+	(elevation 11)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 56.25)
+	(lng 12.85)
+	(rank 97)
+	(summary "Ängelholm Municipality (Ängelholms kommun) is a municipality in Skåne County in southern Sweden. Its seat is located in the city Ängelholm. In 1971 the City of Ängelholm was amalgamated with the rural municipalities Ausås, Barkåkra, Hjärnarp and Munka-Ljungby, thus creating a municipality of unitary (...)")
+	(title "Ängelholm Municipality")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/%C3%84ngelholm_Municipality"))
+
+([FlightPro_Class1040017] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "DK")
+	(elevation 35)
+	(feature "landmark")
+	(lang "en")
+	(lat 55.9344)
+	(lng 12.3006)
+	(rank 97)
+	(summary "Frederiksborg Castle is a palatial complex in Hillerød, Denmark. It was built as a royal residence for King Christian IV of Denmark-Norway in the early 17th century, replacing an older castle acquired by Frederick II and becoming the largest Renaissance residence in Scandinavia (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/118000/thumb-117200-100.jpg")
+	(title "Frederiksborg Castle")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Frederiksborg_Castle"))
+
+([FlightPro_Class1040018] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "PL")
+	(elevation 61)
+	(feature "city")
+	(lang "en")
+	(lat 55.9111)
+	(lng 13.1083)
+	(rank 97)
+	(summary "Svalöv is a locality and the seat of Svalöv Municipality, Skåne County, Sweden with 3,633 inhabitants in 2010. It is around north of Malmö.  (...)")
+	(title "Svalöv")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Sval%C3%B6v"))
+
+([FlightPro_Class1040019] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 22)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 56.5167)
+	(lng 13.0333)
+	(rank 97)
+	(summary "Laholm Municipality (Laholms kommun) is a municipality in Halland County in southwest Sweden. The seat is located in Laholm. The amalgamation process during the local government reform in the 1970s took place in two steps (...)")
+	(title "Laholm Municipality")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Laholm_Municipality"))
+
+([FlightPro_Class1040020] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "DK")
+	(elevation 28)
+	(lang "en")
+	(lat 55.811)
+	(lng 12.4737)
+	(rank 97)
+	(summary "Rudersdal Municipality (Danish: Rudersdal Kommune) is a part suburban, part rural municipality (Danish, kommune) located on the northern outskirts of Copenhagen, Denmark. It covers an area of 73 km² and has a population of 55,080 (1 April 2014) (...)")
+	(title "Rudersdal Municipality")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Rudersdal_Municipality"))
+
+([FlightPro_Class1040021] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 1)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 55.8667)
+	(lng 12.8333)
+	(rank 97)
+	(summary "Landskrona Municipality (Landskrona kommun) is a municipality in Skåne County in Sweden. Its seat is located in the city of Landskrona. The island of Ven was added to the City of Landskrona in 1959. The amalgamations leading to the present municipality took place in 1967, 1969 and 1974 (...)")
+	(title "Landskrona Municipality")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Landskrona_Municipality"))
+
+([FlightPro_Class1040022] of  WikiArticleDetails
+
+	(butt-del-pois "Delete POIs/ext.data/delete-pois")
+	(butt-return "Return to Flight/ext.data/ret-to-flight")
+	(butt-show-pois "Show on Map/ext.data/show-on-map")
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 40)
+	(feature "isle")
+	(lang "en")
+	(lat 55.9075)
+	(lng 12.7002)
+	(max-rows 50)
+	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
+	(radius 1.0)
+	(rank 97)
+	(summary "Ven (Danish and older Swedish spelling Hven) is a small Swedish island in the Øresund strait, between Scania and Zealand (Denmark). It is part of Landskrona Municipality, Skåne County. The island has 371 inhabitants and an area of  (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/53000/thumb-52711-100.jpg")
+	(title "Ven (Sweden)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ven_%28Sweden%29"))
+
+([FlightPro_Class1040023] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "DK")
+	(elevation 8)
+	(feature "city")
+	(lang "en")
+	(lat 56.1236)
+	(lng 12.3014)
+	(rank 97)
+	(summary "Gilleleje is one of the main towns of the Gribskov municipality in Region Hovedstaden in Denmark. The town is at the northernmost point of Sjælland in Denmark. As of 1 January 2015, it has a population of 6,494. database from Statistics Denmark  (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/140000/thumb-139478-100.jpg")
+	(title "Gilleleje")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Gilleleje"))
+
+([FlightPro_Class1040024] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "DE")
+	(elevation 9)
+	(feature "city")
+	(lang "en")
+	(lat 56.2819)
+	(lng 12.4958)
+	(rank 97)
+	(summary "Mölle is a locality situated in Höganäs Municipality, Skåne County, Sweden with 715 inhabitants in 2010. It is best known for its scenic harbour and its location adjacent to the Kullaberg Nature Reserve. Its harbour, situated on the Kattegat Strait, provides services for marine fishing, watersports (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/145000/thumb-144473-100.jpg")
+	(title "Mölle")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/M%C3%B6lle"))
+
+([FlightPro_Class1040025] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "DK")
+	(elevation 32)
+	(feature "city")
+	(lang "en")
+	(lat 55.8803)
+	(lng 12.5081)
+	(rank 97)
+	(summary "Hørsholm is an affluent city on the Øresund coast approximately north of Copenhagen, Denmark. It covers most of Hørsholm Municipality and straddles the borders neighbouring Fredensborg-Humlebæk and Rudersdal Municipalities (...)")
+	(title "Hørsholm")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/H%C3%B8rsholm"))
+
+([FlightPro_Class1040026] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 7)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 56.2)
+	(lng 12.5667)
+	(rank 97)
+	(summary "Höganäs Municipality (Höganäs kommun) is one of 290 municipalities of Sweden, in Skåne County in the southern part of the country. Its seat is located in the city of Höganäs. The rural municipality Höganäs, in which the first municipalsamhälle (a kind of borough managing matters of urban character) (...)")
+	(title "Höganäs Municipality")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/H%C3%B6gan%C3%A4s_Municipality"))
+
+([FlightPro_Class1040027] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 15)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 55.8)
+	(lng 13.1167)
+	(rank 96)
+	(summary "Kävlinge Municipality (Kävlinge kommun) is a municipality in Skåne County in southern Sweden. Its seat is located in the town of Kävlinge.  (...)")
+	(title "Kävlinge Municipality")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/K%C3%A4vlinge_Municipality"))
+
+([FlightPro_Class1040028] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 39)
+	(feature "city")
+	(lang "en")
+	(lat 56.05)
+	(lng 12.9667)
+	(rank 96)
+	(summary "Billesholm is a locality situated in Bjuv Municipality, Skåne County, Sweden with 2,910 inhabitants in 2010.  (...)")
+	(title "Billesholm")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Billesholm"))
+
+([FlightPro_Class1040029] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 25)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 56.4333)
+	(lng 12.8333)
+	(rank 96)
+	(summary "Båstad Municipality (Båstads kommun) is a municipality in Skåne County in southern Sweden. Its seat is located in the town of Båstad. The present municipality was established in 1971 when the market town (köping) Båstad was amalgamated with the surrounding rural municipalities (...)")
+	(title "Båstad Municipality")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/B%C3%A5stad_Municipality"))
+
+([FlightPro_Class1040030] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 59)
+	(lang "en")
+	(lat 56.3)
+	(lng 12.4667)
+	(rank 96)
+	(summary "Kullaberg is a nature reserve situated on a peninsula of land protruding into the Kattegat in Höganäs Municipality near the town of Mölle in southwest Sweden. The site in the province of Skåne is an area of considerable biodiversity supporting a number of rare species and has been designated as an (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/51000/thumb-50483-100.jpg")
+	(title "Kullaberg")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Kullaberg"))
+
+([FlightPro_Class1040031] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 34)
+	(lang "en")
+	(lat 56.1311)
+	(lng 13.1275)
+	(rank 96)
+	(summary "Klippan (literally the Cliff) is a locality and the seat of Klippan Municipality, Skåne County, Sweden with 8,116 inhabitants in 2010.  (...)")
+	(title "Klippan, Scania")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Klippan%2C_Scania"))
+
+([FlightPro_Class1040032] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "SE")
+	(elevation 33)
+	(feature "city")
+	(lang "en")
+	(lat 56.1347)
+	(lng 12.9472)
+	(rank 96)
+	(summary "Åstorp is a bimunicipal locality and the seat of Åstorp Municipality in Skåne County, Sweden with 9,488 inhabitants in 2010. It is also partly located in Ängelholm Municipality.  (...)")
+	(title "Åstorp")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/%C3%85storp"))
+
+([FlightPro_Class1040033] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 39)
+	(feature "landmark")
+	(lang "en")
+	(lat 56.0494)
+	(lng 12.7069)
+	(rank 95)
+	(summary "Olympia, sometimes referred to as Olympiastadion , is a football stadium in Helsingborg, Sweden. It was opened in 1898, but has been rebuilt both 1993 and 1997, and has a capacity of 17,200 (9,673 seated and about 7,500 ground attendance stands) (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/56000/thumb-55851-100.jpg")
+	(title "Olympia (Helsingborg)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Olympia_%28Helsingborg%29"))
+
+([FlightPro_Class1040034] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 64)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 55.9167)
+	(lng 13.1167)
+	(rank 95)
+	(summary "Svalöv Municipality (Svalövs kommun) is a municipality in Skåne County in southern Sweden. Its seat is located in the town Svalöv. The local government reform of 1952 grouped the 15 original entities into six larger municipalities (...)")
+	(title "Svalöv Municipality")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Sval%C3%B6v_Municipality"))
+
+([FlightPro_Class1040035] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "DK")
+	(elevation 52)
+	(feature "city")
+	(lang "en")
+	(lat 55.8667)
+	(lng 12.3667)
+	(rank 95)
+	(summary "Allerød Kommune is a municipality (Danish, kommune) on the island of Zealand (Sjælland) in eastern Denmark. The municipality covers an area of 67 km², and has a population of 24,201 (1 April 2014). Its mayor is Jørgen Johansen, a member of the Conservative People's Party (Det Konservative (...)")
+	(title "Allerød Municipality")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Aller%C3%B8d_Municipality"))
+
+([FlightPro_Class1040036] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 80)
+	(lang "en")
+	(lat 55.9983)
+	(lng 12.9779)
+	(rank 95)
+	(summary "There are 72 listed buildings (Swedish: byggnadsminne) in Skåne County.  (...)")
+	(title "Listed buildings in Skåne County")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Listed_buildings_in_Sk%C3%A5ne_County"))
+
+([FlightPro_Class1040037] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 37)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 56.1333)
+	(lng 13.1333)
+	(rank 94)
+	(summary "Klippan Municipality (Klippans kommun) is a municipality in Skåne County in southern Sweden. Its seat is located in the town of Klippan. The municipality was created in 1974 through the amalgamation of the market town Klippan (itself instituted in 1945) with the rural municipality of Riseberga and (...)")
+	(title "Klippan Municipality")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Klippan_Municipality"))
+
+([FlightPro_Class1040038] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "DK")
+	(elevation 25)
+	(lang "en")
+	(lat 55.7697)
+	(lng 12.5019)
+	(rank 94)
+	(summary "Lyngby-Taarbæk Kommune (the spelling Lyngby-Tårbæk Kommune is occasionally used) is a municipality (Danish, kommune) in Region Hovedstaden near Copenhagen on the east coast of the island of Zealand (Sjælland) in eastern Denmark (...)")
+	(title "Lyngby-Taarbæk Municipality")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Lyngby-Taarb%C3%A6k_Municipality"))
+
+([FlightPro_Class1040039] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 23)
+	(feature "adm2nd")
+	(lang "en")
+	(lat 56.0833)
+	(lng 12.9167)
+	(rank 94)
+	(summary "Bjuv Municipality (Bjuvs kommun) is a municipality in Skåne County in southern Sweden. Its seat is located in the town of Bjuv. The amalgamations connected to the 1971 local government reform in Sweden took place in this area in 1974, when \"old\" Bjuv (a market town (köping) since 1946) was (...)")
+	(title "Bjuv Municipality")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Bjuv_Municipality"))
+
+([FlightPro_Class1050029] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "PT")
+	(elevation 143)
+	(feature "city")
+	(lang "en")
+	(lat 32.7642)
+	(lng -16.8283)
+	(rank 88)
+	(summary "Porto da Cruz (is a civil parish in the municipality of Machico in the northeastern corner of Madeira. The population in 2011 was 2,597, in an area of 25.22 km².  (...)")
+	(title "Porto da Cruz")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Porto_da_Cruz"))
+
+([FlightPro_Class1050030] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "ES")
+	(elevation 9)
+	(feature "isle")
+	(lang "en")
+	(lat 29.311)
+	(lng -13.527)
+	(rank 88)
+	(summary "Roque del Oeste (; Spanish for \"rock of the west\"), also referred to as Roque del Infierno, is an uninhabited islet located 0,6 km northeast of the island of Montaña Clara, in the northeasternmost part of the Canary Islands, the Chinijo Archipelago (...)")
+	(title "Roque del Oeste")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Roque_del_Oeste"))
+
+([FlightPro_Class1050031] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "ES")
+	(elevation 8)
+	(feature "isle")
+	(lang "en")
+	(lat 29.2761)
+	(lng -13.3381)
+	(rank 87)
+	(summary "Roque del Este (Spanish for \"rock of the east\") is a small uninhabited island in the Canary Islands, located 11 km northeast of the island of Lanzarote. The island is part of the Chinijo Archipelago, which is administratively part of the municipality of Teguise (...)")
+	(title "Roque del Este")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Roque_del_Este"))
+
+([FlightPro_Class1050032] of  WikiArticleDetails
+
+	(butt-del-pois "Delete POIs/ext.data/delete-pois")
+	(butt-return "Return to Flight/ext.data/ret-to-flight")
+	(butt-show-pois "Show on Map/ext.data/show-on-map")
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 53)
+	(feature "city")
+	(lang "en")
+	(lat 33.067)
+	(lng -16.333)
+	(max-rows 50)
+	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
+	(radius 1.0)
+	(rank 87)
+	(summary "Vila Baleira is the main settlement in Porto Santo Municipality.")
+	(title "Vila Baleira")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Vila_Baleira"))
+
+([FlightPro_Class1050033] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "PT")
+	(elevation 109)
+	(lang "en")
+	(lat 32.8231)
+	(lng -16.9934)
+	(rank 87)
+	(summary "Ponta Delgada is a parish in the municipality of São Vicente in the island of Madeira. The population in 2011 was 1,363, in an area of 9.39 km². Ponta Delgada is located on the north coast, 2 km west of Boa Ventura and 6 km east of São Vicente.  (...)")
+	(title "Ponta Delgada, São Vicente")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ponta_Delgada%2C_S%C3%A3o_Vicente"))
+
+([FlightPro_Class1050034] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "MZ")
+	(elevation 73)
+	(feature "city")
+	(lang "en")
+	(lat 32.8167)
+	(lng -16.9)
+	(rank 87)
+	(summary "São Jorge is a civil parish in the municipality of Santana, in the island of Madeira. The population in 2011 was 1,473, in an area of 19.34 km².  (...)")
+	(title "São Jorge (Santana)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/S%C3%A3o_Jorge_%28Santana%29"))
+
+([FlightPro_Class1050035] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "PT")
+	(elevation 350)
+	(feature "city")
+	(lang "en")
+	(lat 32.6667)
+	(lng -16.9)
+	(rank 87)
+	(summary "Monte is a civil parish in the municipality and a suburb of Funchal in the Portuguese archipelago of Madeira. Locally, the parish is also known as Nossa Senhora do Monte . The population in 2011 was 6,701, in an area of 18.59 km². Monte is located a few kilometres east of Funchal.  (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/127000/thumb-126799-100.jpg")
+	(title "Monte (Funchal)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Monte_%28Funchal%29"))
+
+([FlightPro_Class1050036] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "PT")
+	(elevation 447)
+	(feature "city")
+	(lang "en")
+	(lat 32.8119)
+	(lng -17.2494)
+	(rank 86)
+	(summary "Ponta do Pargo is a civil parish in the municipality of Calheta in the Portuguese archipelago of Madeira. The population in 2011 was 909, in an area of 24.71 km². It is located west of the municipal seat of Calheta, and southwest of the municipality of Porto Moniz.  (...)")
+	(title "Ponta do Pargo")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ponta_do_Pargo"))
+
+([FlightPro_Class1050037] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "PT")
+	(elevation 12)
+	(feature "city")
+	(lang "en")
+	(lat 32.7542)
+	(lng -17.2267)
+	(rank 86)
+	(summary "Paul do Mar is a civil parish in the municipality of Calheta, in the Portuguese archipelago of Madeira. The population in 2011 was 871, in an area of 1.40 km².  (...)")
+	(title "Paul do Mar")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Paul_do_Mar"))
+
+([FlightPro_Class1050038] of  WikiArticleDetails
+
+	(butt-del-pois "Delete POIs/ext.data/delete-pois")
+	(butt-return "Return to Flight/ext.data/ret-to-flight")
+	(butt-show-pois "Show on Map/ext.data/show-on-map")
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "ES")
+	(elevation 126)
+	(feature "isle")
+	(lang "en")
+	(lat 30.1463)
+	(lng -15.8644)
+	(max-rows 50)
+	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
+	(radius 1.0)
+	(rank 86)
+	(summary "The Selvagem Grande Island (lit. Big Wild/Savage Island) is part of the Savage Islands, which themselves are part of the Portuguese Madeira archipelago in the North Atlantic Ocean. The island (size: 2 x 1.7 km) belongs to the Northeast Group of the Savage Islands, which comprises in addition three (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/36000/thumb-35296-100.jpg")
+	(title "Selvagem Grande Island")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Selvagem_Grande_Island"))
+
+([FlightPro_Class1050039] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "PT")
+	(elevation 275)
+	(lang "en")
+	(lat 32.5229)
+	(lng -16.5094)
+	(rank 86)
+	(summary "The Deserta Grande Island is the main island of the Desertas Islands archipelago, a small chain of three islands in the Portuguese Madeira Islands Archipelago of Macaronesia. It is located southeast of Madeira Island, off the western coast of North Africa in the Atlantic Ocean.  (...)")
+	(title "Deserta Grande Island")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Deserta_Grande_Island"))
+
+([FlightPro_Class1050040] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "ES")
+	(elevation 410)
+	(feature "isle")
+	(lang "en")
+	(lat 29.035)
+	(lng -13.633)
+	(rank 100)
+	(summary "Lanzarote , a Spanish island, is the easternmost of the autonomous Canary Islands, in the Atlantic Ocean, approximately off the coast of Africa and from the Iberian Peninsula. Covering , it is the fourth largest of the islands (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/41000/thumb-40877-100.jpg")
+	(title "Lanzarote")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Lanzarote"))
+
+([FlightPro_Class1050041] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "ES")
+	(elevation 1078)
+	(feature "isle")
+	(lang "en")
+	(lat 32.75)
+	(lng -16.9685)
+	(rank 100)
+	(summary "Madeira (or ; or) is a Portuguese archipelago located in the north Atlantic Ocean, west and slightly south of Portugal. Its total population was estimated in 2011 at 267,785. The capital of Madeira is Funchal on the main island's south coast. It is just under north of Tenerife, Canary Islands (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/12000/thumb-11946-100.jpg")
+	(title "Madeira")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Madeira"))
+
+([FlightPro_Class1050042] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "JE")
+	(elevation 44)
+	(feature "city")
+	(lang "en")
+	(lat 32.651)
+	(lng -16.9096)
+	(rank 100)
+	(summary "Funchal (In European Portuguese. The Brazilian Portuguese pronunciation is) is the largest city, the municipal seat and the capital of Portugal's Autonomous Region of Madeira. The city has a population of 111,892, Nuno Pires Soares, Instituto Geográfico Português (Geographic Institute of Portugal) (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/82000/thumb-81519-100.jpg")
+	(title "Funchal")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Funchal"))
+
+([FlightPro_Class1050043] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "PT")
+	(elevation 88)
+	(feature "landmark")
+	(lang "en")
+	(lat 32.6903)
+	(lng -17.049)
+	(rank 98)
+	(summary "Clube de Futebol União, commonly known as União da Madeira, is a Portuguese football club from Funchal, Madeira. The club was founded on 1 November 1913, thus being one of the oldest football clubs in Portugal. The club's home ground is the Estádio do Centro Desportivo da Madeira, located in Ribeira (...)")
+	(title "C.F. União")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/C.F._Uni%C3%A3o"))
+
+([FlightPro_Class1050044] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "PT")
+	(elevation 54)
+	(feature "airport")
+	(lang "en")
+	(lat 32.6979)
+	(lng -16.7745)
+	(rank 98)
+	(summary "Madeira Airport , formerly known as Santa Catarina Airport and informally known as Funchal Airport, is an international airport in the civil parish of Santa Catarina, municipality of Santa Cruz, in the Portuguese archipelago of Madeira (...)")
+	(title "Madeira Airport")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Madeira_Airport"))
+
+([FlightPro_Class1050045] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "ES")
+	(elevation 11)
+	(feature "airport")
+	(lang "en")
+	(lat 28.9456)
+	(lng -13.6053)
+	(rank 98)
+	(summary "Lanzarote Airport , also known as Arrecife Airport, is the airport serving the island of Lanzarote in the Canary Islands. The airport is located in San Bartolomé, Las Palmas, southwest of the town of Arrecife. It handles flights to many European airports, with hundreds of thousands of tourists each (...)")
+	(title "Lanzarote Airport")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Lanzarote_Airport"))
+
+([FlightPro_Class1050046] of  WikiArticleDetails
+
+	(butt-del-pois "Delete POIs/ext.data/delete-pois")
+	(butt-return "Return to Flight/ext.data/ret-to-flight")
+	(butt-show-pois "Show on Map/ext.data/show-on-map")
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "ES")
+	(feature "isle")
+	(lang "en")
+	(lat 30.0833)
+	(lng -15.9167)
+	(max-rows 50)
+	(poi-req-butt "Get Points Of Interest/osm.data/poi-request")
+	(radius 1.0)
+	(rank 98)
+	(summary "The Savage Islands are a small Portuguese archipelago in the North Atlantic, nearly midway between Madeira and the Canary Islands.Luís Carvalho; Nuno Leitão (2005) The archipelago comprises two major islands and several islets of varying sizes, in two areas: Selvagem Grande and Selvagem Pequena (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/118000/thumb-117154-100.jpg")
+	(title "Savage Islands")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Savage_Islands"))
+
+([FlightPro_Class1050047] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "ES")
+	(elevation 9)
+	(lang "en")
+	(lat 28.9625)
+	(lng -13.5506)
+	(rank 97)
+	(summary "Arrecife is a city and municipality in the Canary Islands (Spain) situated in the centre-east of the island of Lanzarote, of which it has been the capital since 1852. The city owes its name to the rock reef ('Arrecife' is Spanish for 'reef') which covers the beach located in the city (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/31000/thumb-30466-100.jpg")
+	(title "Arrecife")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Arrecife"))
+
+([FlightPro_Class1050048] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(elevation 793)
+	(feature "landmark")
+	(lang "en")
+	(lat 32.7667)
+	(lng -17.0)
+	(rank 97)
+	(summary "Laurel forest, also called laurisilva or laurissilva, is a type of subtropical forest found in areas with high humidity and relatively stable, mild temperatures. The forest is characterized by broadleaf tree species with evergreen, glossy and leaves, known as \"laurophyll\" or \"lauroid\" (...)")
+	(title "Laurel forest")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Laurel_forest"))
+
+([FlightPro_Class1050049] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "PT")
+	(elevation 1051)
+	(feature "city")
+	(lang "en")
+	(lat 32.6953)
+	(lng -16.9781)
+	(population 35666)
+	(rank 97)
+	(summary "Câmara de Lobos (; literally) is a municipality, parish and city in the south-central coast of the island of Madeira. Technically a suburb of the much larger capital city of Funchal, it is one of the larger population centres and an extension of the Funchal economy.  (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/156000/thumb-155720-100.jpg")
+	(title "Câmara de Lobos")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/C%C3%A2mara_de_Lobos"))
+
+([FlightPro_Class1050050] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "ES")
+	(elevation 307)
+	(lang "en")
+	(lat 29.0611)
+	(lng -13.5597)
+	(rank 97)
+	(summary "Teguise is a municipality in the central part of the island of Lanzarote in the Las Palmas province in the Canary Islands. The population is 21,152 (2013), and the area is 263.98 km². It is located north of Arrecife and south of Haría. The seat of the municipality is the town of Teguise (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/33000/thumb-32850-100.jpg")
+	(title "Teguise (municipality)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Teguise_%28municipality%29"))
+
+([FlightPro_Class1050051] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "PT")
+	(elevation 20)
+	(feature "city")
+	(lang "en")
+	(lat 32.7167)
+	(lng -16.7667)
+	(rank 96)
+	(summary "Machico is a city and municipality in the southeast part of the island of Madeira, in the Autonomous Region of Madeira. The easternmost municipality on the island, it is also the third most populous area; its population was 21,828 (in 2011). The town, proper, had a population of 10,894 in 2001 (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/43000/thumb-42101-100.jpg")
+	(title "Machico")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Machico"))
+
+([FlightPro_Class1050052] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "PT")
+	(elevation 114)
+	(feature "landmark")
+	(lang "en")
+	(lat 32.6456)
+	(lng -16.9283)
+	(rank 96)
+	(summary "Estádio dos Barreiros or Estádio do Marítimo is a multi-purpose stadium in Funchal, Portugal. It is currently used mostly for football matches. It is the home stadium of Club Sport Marítimo and although much larger in its hey-day, the stadium can now hold 8,922 people (...)")
+	(title "Estádio dos Barreiros")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Est%C3%A1dio_dos_Barreiros"))
+
+([FlightPro_Class1050053] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "PT")
+	(lang "en")
+	(lat 32.7164)
+	(lng -17.1831)
+	(rank 96)
+	(summary "Calheta is a municipality on the southwest coast of Madeira, Portugal. The population in 2011 was 11,521, in an area of 111.50 km².  (...)")
+	(title "Calheta, Madeira")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Calheta%2C_Madeira"))
+
+([FlightPro_Class1050054] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "PT")
+	(elevation 110)
+	(lang "en")
+	(lat 32.6833)
+	(lng -16.8)
+	(rank 95)
+	(summary "Santa Cruz (\"Holy Cross\") is a municipality, a parish and a city in the eastern part of the island of Madeira. It is the second most populous municipality, behind Funchal. The population in 2011 was 43,005, in an area of 81.50 km².  (...)")
+	(title "Santa Cruz, Madeira")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Santa_Cruz%2C_Madeira"))
+
+([FlightPro_Class1050055] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "MZ")
+	(elevation 512)
+	(lang "en")
+	(lat 32.7925)
+	(lng -16.8758)
+	(rank 95)
+	(summary "Santana (; from Portuguese Santa Ana, meaning Saint Anne) is a municipality along the northern coast of the island of Madeira. The population in 2011 was 7,719, in an area of 95.56 km².  (...)")
+	(title "Santana, Madeira")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Santana%2C_Madeira"))
+
+([FlightPro_Class1050056] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(lang "en")
+	(lat 32.483)
+	(lng -16.483)
+	(rank 94)
+	(summary "The Desertas Islands (\"Deserted Islands\") are a small archipelago, in the Macaronesia region of the Atlantic Ocean. They are within the Portuguese Autonomous Region of Madeira, and part of the larger Madeira Archipelago (...)")
+	(title "Desertas Islands")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Desertas_Islands"))
+
+([FlightPro_Class1050057] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "ES")
+	(elevation 17)
+	(lang "en")
+	(lat 29.1333)
+	(lng -13.4667)
+	(rank 94)
+	(summary "Haría is a municipality on the island of Lanzarote in the Canary Islands, the northernmost and easternmost Canarian municipality. Surrounded on three sides by the Atlantic Ocean, the municipality is bordered to the south by the municipality of Teguise. It forms part of Las Palmas Province (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/89000/thumb-88881-100.jpg")
+	(title "Haría (municipality)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Har%C3%ADa_%28municipality%29"))
+
+([FlightPro_Class1050058] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "ES")
+	(elevation 187)
+	(lang "en")
+	(lat 29.252)
+	(lng -13.508)
+	(rank 94)
+	(summary "Graciosa Island or commonly La Graciosa (; Spanish for \"graceful\") is a volcanic island in the Canary Islands of Spain, located north of the island of Lanzarote across the strait named El Río. It was formed by the Canary hotspot (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/57000/thumb-56012-100.jpg")
+	(title "Graciosa, Canary Islands")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Graciosa%2C_Canary_Islands"))
+
+([FlightPro_Class1050059] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "CV")
+	(elevation 37)
+	(lang "en")
+	(lat 32.6806)
+	(lng -17.1042)
+	(rank 94)
+	(summary "Ponta do Sol is a municipality in the southwestern coast of the island of Madeira, in the archipelago of Madeira. The population in 2011 was 8,862, in an area of 46.19 km².  (...)")
+	(title "Ponta do Sol, Madeira")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ponta_do_Sol%2C_Madeira"))
+
+([FlightPro_Class1050060] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "ES")
+	(elevation 227)
+	(lang "en")
+	(lat 28.95)
+	(lng -13.7667)
+	(rank 93)
+	(summary "Yaiza is a municipality on the island of Lanzarote in the Canary Islands, Spain. It lies in the southwest of the island and forms part of the province of Las Palmas. The municipality is bounded by the Atlantic Ocean to the west, south and east. In the west is the lagoon of Charco Verde (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/70000/thumb-69574-100.jpg")
+	(title "Yaiza (municipality)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Yaiza_%28municipality%29"))
+
+([FlightPro_Class1050061] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "PT")
+	(elevation 19)
+	(lang "en")
+	(lat 32.6722)
+	(lng -17.0639)
+	(rank 93)
+	(summary "Ribeira Brava is a municipality on the island of Madeira, in the Portuguese Autonomous Region of Madeira. It is located along the southern coast (approximately center), and is west of Câmara de Lobos and the regional capital Funchal, and south of São Vicente The population in 2011 was 13,375, in an (...)")
+	(title "Ribeira Brava, Madeira")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Ribeira_Brava%2C_Madeira"))
+
+([FlightPro_Class1050062] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "PT")
+	(elevation 111)
+	(lang "en")
+	(lat 32.7967)
+	(lng -17.0433)
+	(rank 93)
+	(summary "São Vicente is a municipality along the north-west coast of the island of Madeira.  (...)")
+	(title "São Vicente, Madeira")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/S%C3%A3o_Vicente%2C_Madeira"))
+
+([FlightPro_Class1050063] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "PT")
+	(elevation 30)
+	(feature "city")
+	(lang "en")
+	(lat 32.7389)
+	(lng -16.7364)
+	(rank 93)
+	(summary "Caniçal is a civil parish in the municipality of Machico in the Portuguese island of Madeira. The population in 2011 was 3,924, in an area of 11.85 km². Equidistant from Funchal and Santana (20 km), the community is connected to these centres by the Regional 109 roadway (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/49000/thumb-48029-100.jpg")
+	(title "Caniçal")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Cani%C3%A7al"))
+
+([FlightPro_Class1050064] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "PT")
+	(elevation 66)
+	(lang "en")
+	(lat 32.8667)
+	(lng -17.1736)
+	(rank 93)
+	(summary "Porto Moniz is a municipality in the northwest corner of the island of Madeira. It is located west of Santana and Machico, and northwest of Funchal. The population in 2011 was 2,711, in an area of 82.93 km². The municipality features a natural complex of lava pools that are popular with locals and (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/22000/thumb-21365-100.jpg")
+	(title "Porto Moniz")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Porto_Moniz"))
+
+([FlightPro_Class1050065] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "PT")
+	(elevation 687)
+	(feature "landmark")
+	(lang "en")
+	(lat 32.6708)
+	(lng -16.8833)
+	(rank 93)
+	(summary "Estádio da Madeira, formerly named Estadio Eng. Rui Alves and informally known as Estádio da Choupana is a football stadium in Funchal, Madeira, Portugal. It is currently used mostly for the home matches of C.D (...)")
+	(title "Estádio da Madeira")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Est%C3%A1dio_da_Madeira"))
+
+([FlightPro_Class1050066] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "ES")
+	(lang "en")
+	(lat 28.8167)
+	(lng -17.7667)
+	(rank 93)
+	(summary "Barlovento (Spanish for windward) is a municipality in the northern part of the island of La Palma, one of the Canary Islands, and a part of the province of Santa Cruz de Tenerife. Barlovento is on the main highway which encircles the island (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/132000/thumb-131522-100.jpg")
+	(title "Barlovento, Santa Cruz de Tenerife")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Barlovento%2C_Santa_Cruz_de_Tenerife"))
+
+([FlightPro_Class1050067] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "ES")
+	(elevation 268)
+	(feature "city")
+	(lang "en")
+	(lat 28.8056)
+	(lng -17.775)
+	(population 4473)
+	(rank 92)
+	(summary "San Andrés y Sauces is a municipality on the island of La Palma, Province of Santa Cruz de Tenerife, Canary Islands, Spain. It is situated in the northeastern part of the island. The population of the municipality is 4,473 (2013) and the area is 42.75 km² (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/38000/thumb-37635-100.jpg")
+	(title "San Andrés y Sauces")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/San_Andr%C3%A9s_y_Sauces"))
+
+([FlightPro_Class1050068] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "ES")
+	(elevation 196)
+	(feature "city")
+	(lang "en")
+	(lat 29.0675)
+	(lng -13.6758)
+	(rank 92)
+	(summary "Tinajo is a municipality in the western part of the island of Lanzarote in the Province of Las Palmas in the Canary Islands, Spain. The population is 5,783 (2013), and the area is 135.28 km². It is located near the north coast, northwest of the island capital Arrecife (...)")
+	(title "Tinajo (municipality)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Tinajo_%28municipality%29"))
+
+([FlightPro_Class1050069] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "ES")
+	(elevation 345)
+	(lang "en")
+	(lat 29.0056)
+	(lng -13.753)
+	(rank 92)
+	(summary "Timanfaya National Park is a Spanish national park in the southwestern part of the island of Lanzarote, Canary Islands. It covers parts of the municipalities Tinajo and Yaiza. The area is . The parkland is entirely made up of volcanic soil. The statue \"El Diablo\" by César Manrique is its symbol.  (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/7000/thumb-6925-100.jpg")
+	(title "Timanfaya National Park")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Timanfaya_National_Park"))
+
+([FlightPro_Class1050070] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "ES")
+	(elevation 207)
+	(lang "en")
+	(lat 28.9527)
+	(lng -13.6533)
+	(rank 92)
+	(summary "Tías is a town and a municipality in the southern part of the island of Lanzarote, province of Las Palmas, autonomous community of the Canary Islands, Spain. The town Tías is situated 4 km from the south coast and 10 km west of the island capital Arrecife (...)")
+	(title "Tías, Las Palmas")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/T%C3%ADas%2C_Las_Palmas"))
+
+([FlightPro_Class1050071] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "ES")
+	(elevation 60)
+	(feature "isle")
+	(lang "en")
+	(lat 29.399)
+	(lng -13.511)
+	(rank 92)
+	(summary "Alegranza is an island in the Atlantic Ocean, located off the coast of Africa and is in the province of Las Palmas in the Canary Islands, Spain. It is the northernmost point in the Canary Islands, and part of the Chinijo Archipelago. The island is part of the municipality of Teguise on Lanzarote.  (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/1000/thumb-774-100.png")
+	(title "Alegranza")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Alegranza"))
+
+([FlightPro_Class1050072] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "PT")
+	(elevation 1819)
+	(lang "en")
+	(lat 32.7586)
+	(lng -16.9422)
+	(rank 91)
+	(summary "Pico Ruivo is the highest peak on the Madeira Islands. It can be reached only by foot, usually either from Pico do Arieiro (3rd highest) after a strenuous hike, or from Achada do Teixeira with a shorter, easier trail. There is an additional trail leading west to Encumeada (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/55000/thumb-54675-100.jpg")
+	(title "Pico Ruivo")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Pico_Ruivo"))
+
+([FlightPro_Class1050073] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "ES")
+	(elevation 274)
+	(feature "city")
+	(lang "en")
+	(lat 29.0009)
+	(lng -13.6122)
+	(rank 91)
+	(summary "San Bartolomé (Spanish meaning Saint Bartholomew) is a village and ayuntamiento (county) in the Canary Islands (Spain), belonging to the Province of Las Palmas. It is situated in the center of the island of Lanzarote. The county of San Bartolomé stretches to the southern coast of the island (...)")
+	(title "San Bartolomé, Las Palmas")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/San_Bartolom%C3%A9%2C_Las_Palmas"))
+
+([FlightPro_Class1050074] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "ES")
+	(elevation 215)
+	(feature "isle")
+	(lang "en")
+	(lat 29.2986)
+	(lng -13.5346)
+	(population 0)
+	(rank 90)
+	(summary "Montaña Clara (Spanish meaning \"light-colored mountain\") is a small uninhabited islet belonging to the so-called Chinijo Archipelago, in the northeastern part of the Canary Islands, only a short distance (about 2 km) northwest of La Graciosa. The islet area is only 1.33 km² (...)")
+	(title "Montaña Clara")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Monta%C3%B1a_Clara"))
+
+([FlightPro_Class1050075] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "PT")
+	(elevation 336)
+	(feature "city")
+	(lang "en")
+	(lat 32.7)
+	(lng -16.9667)
+	(rank 90)
+	(summary "Curral das Freiras is a civil parish in the municipality of Câmara de Lobos in the Portuguese archipelago of Madeira. The population in 2011 was 2,001, in an area of 25.03 km². It is situated in the mountainous interior of the island (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/71000/thumb-70179-100.jpg")
+	(title "Curral das Freiras")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Curral_das_Freiras"))
+
+([FlightPro_Class1050076] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "ES")
+	(feature "isle")
+	(lang "en")
+	(lat 29.3333)
+	(lng -13.5)
+	(rank 90)
+	(summary "The Chinijo archipelago is an archipelago located in the northeastern part of the Canary Islands, north of the island of Lanzarote. The archipelago includes the islands of Montaña Clara, Alegranza, Graciosa, Roque del Este and Roque del Oeste. The archipelago belongs to the municipality of Teguise (...)")
+	(title "Chinijo Archipelago")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Chinijo_Archipelago"))
+
+([FlightPro_Class1050077] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "ES")
+	(elevation 58)
+	(feature "landmark")
+	(lang "en")
+	(lat 29.161)
+	(lng -13.4388)
+	(rank 90)
+	(summary "Cueva de los Verdes (Spanish for \"Verdes' cave\", from the \"Verdes\" family) is a lava tube and tourist attraction of the Haria municipality on the island of Lanzarote in the Canary Islands (Spain). The cave lies within the Monumento Natural del Malpaís de La Corona, a protected area of the Canary (...)")
+	(thumbnailImg "http://www.geonames.org/img/wikipedia/127000/thumb-126724-100.jpg")
+	(title "Cueva de los Verdes")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Cueva_de_los_Verdes"))
+
+([FlightPro_Class1050078] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "PT")
+	(elevation 256)
+	(feature "city")
+	(lang "en")
+	(lat 32.6429)
+	(lng -16.9395)
+	(rank 89)
+	(summary "São Martinho is a civil parish in the municipality of Funchal, in the archipelago of Madeira. The population in 2011 was 26,482, in an area of 7.95 km².  (...)")
+	(title "São Martinho (Funchal)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/S%C3%A3o_Martinho_%28Funchal%29"))
+
+([FlightPro_Class1050079] of  WikiArticle
+
+	(button-open-site "Open Site/wiki.gis/open-site")
+	(countryCode "PT")
+	(elevation 177)
+	(lang "en")
+	(lat 32.647)
+	(lng -16.84)
+	(rank 88)
+	(summary "Caniço is a parish in the municipality of Santa Cruz in the Madeira Islands. It was elevated to city status in 2005. The population in 2011 was 23,368, in an area of 11.99 km². Caniço is connected to the urban sprawl of Funchal and is larger than the seat of the municipality (...)")
+	(title "Caniço (Santa Cruz)")
+	(wikipediaUrl "http://en.wikipedia.org/wiki/Cani%C3%A7o_%28Santa_Cruz%29"))
 
 ([FlightPro_Class110000] of  CloFunction
 
@@ -794,7 +2090,7 @@
 
 ([FlightPro_Class20029] of  CloFunction
 
-	(source ";;(println [:CZ-EVT typ dat])\n(asp/pump-in CZ-CHAN [typ (.trim dat)])")
+	(source ";; (println [:CZ-EVT typ dat])\n(asp/pump-in CZ-CHAN [typ (.trim dat)])")
 	(title "send-event [typ dat]"))
 
 ([FlightPro_Class20031] of  CloFunction
@@ -3130,7 +4426,48 @@
 	(button-bbx "submit/wiki.gis/submit-bbx")
 	(button-clear-articles "Clear Articles/wiki.gis/clear-articles")
 	(language English-en)
-	(max-responses 40))
+	(max-responses 40)
+	(responses
+		[FlightPro_Class1050040]
+		[FlightPro_Class1050041]
+		[FlightPro_Class1050042]
+		[FlightPro_Class1050043]
+		[FlightPro_Class1050044]
+		[FlightPro_Class1050045]
+		[FlightPro_Class1050046]
+		[FlightPro_Class1050047]
+		[FlightPro_Class1050048]
+		[FlightPro_Class1050049]
+		[FlightPro_Class1050050]
+		[FlightPro_Class1050051]
+		[FlightPro_Class1050052]
+		[FlightPro_Class1050053]
+		[FlightPro_Class1050054]
+		[FlightPro_Class1050055]
+		[FlightPro_Class1050056]
+		[FlightPro_Class1050057]
+		[FlightPro_Class1050058]
+		[FlightPro_Class1050059]
+		[FlightPro_Class1050060]
+		[FlightPro_Class1050061]
+		[FlightPro_Class1050062]
+		[FlightPro_Class1050063]
+		[FlightPro_Class1050064]
+		[FlightPro_Class1050065]
+		[FlightPro_Class1050066]
+		[FlightPro_Class1050067]
+		[FlightPro_Class1050068]
+		[FlightPro_Class1050069]
+		[FlightPro_Class1050070]
+		[FlightPro_Class1050071]
+		[FlightPro_Class1050072]
+		[FlightPro_Class1050073]
+		[FlightPro_Class1050074]
+		[FlightPro_Class1050075]
+		[FlightPro_Class1050076]
+		[FlightPro_Class1050077]
+		[FlightPro_Class1050078]
+		[FlightPro_Class1050079]))
 
 ([FlightPro_Class660024] of  CloFunction
 
@@ -3199,7 +4536,7 @@
 ([FlightPro_Class670008] of  BBX
 
 	(title "Current")
-	(wsen 37.729797 43.432976 40.18799 45.23815))
+	(wsen -17.891235 28.806173 -12.804565 33.591743))
 
 ([FlightPro_Class670041] of  TypeName
 

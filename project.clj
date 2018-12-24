@@ -20,11 +20,10 @@
                  [com.cognitect/transit-clj "0.8.300"]
                  [cljs-ajax "0.5.9"]
                  [com.cognitect/transit-cljs "0.8.239"]
-                 [http-kit "2.2.0"]
-                 [clj-json "0.5.3"]]
+                 [http-kit "2.3.0"]
+                 [clj-json "0.5.3"]
+                 [javax.xml.bind/jaxb-api "2.3.0"]]
   :javac-options ["-target" "1.7" "-source" "1.7" "-Xlint:-options"]
   :repositories {"local" {:url ~(str (.toURI (java.io.File. "repo"))) :checksum :warn}}
   :profiles {:uberjar {:aot :all}}
-  ;; Uncomment next line for Java 9 and Java 10
-  :jvm-opts ["--add-modules" "java.xml.bind"]
   :main fligts-pro.core)
