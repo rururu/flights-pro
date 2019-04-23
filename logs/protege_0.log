@@ -1,0 +1,24 @@
+2019.04.23 07:11:34.564 MSK INFO: *** SYSTEM START ***
+2019.04.23 07:11:34.593 MSK WARNING: Look and feel not found: com.apple.laf.AquaLookAndFeel -- SystemUtilities.setLookAndFeel()
+2019.04.23 07:11:34.628 MSK INFO: Exception caught -- java.lang.NullPointerException
+	at javax.swing.MultiUIDefaults.getUIError(MultiUIDefaults.java:130)
+	at javax.swing.UIDefaults.getUI(UIDefaults.java:761)
+	at javax.swing.UIManager.getUI(UIManager.java:1016)
+	at javax.swing.JPanel.updateUI(JPanel.java:126)
+	at javax.swing.JPanel.<init>(JPanel.java:86)
+	at javax.swing.JPanel.<init>(JPanel.java:109)
+	at javax.swing.JPanel.<init>(JPanel.java:117)
+	at javax.swing.JRootPane.createGlassPane(JRootPane.java:546)
+	at javax.swing.JRootPane.<init>(JRootPane.java:366)
+	at javax.swing.JWindow.createRootPane(JWindow.java:276)
+	at javax.swing.JWindow.windowInit(JWindow.java:266)
+	at javax.swing.JWindow.<init>(JWindow.java:193)
+	at javax.swing.JWindow.<init>(JWindow.java:139)
+	at edu.stanford.smi.protege.ui.SplashScreen.<init>(Unknown Source)
+	at edu.stanford.smi.protege.Application.realmain(Unknown Source)
+	at edu.stanford.smi.protege.Application$3.run(Unknown Source)
+
+2019.04.23 07:12:46.730 MSK INFO: *** SYSTEM START ***
+2019.04.23 07:12:47.521 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2019.04.23 07:13:22.921 MSK INFO: Project load time for file:/home/ru/clojure/flights-pro/pro-projects/FlightPro.pprj: 2 sec -- ProjectChooser.loadProject()
+2019.04.23 07:13:33.036 MSK INFO: UI display time = 10 sec -- ProjectManager$2.run()
