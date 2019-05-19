@@ -20,7 +20,7 @@
                  [com.cognitect/transit-clj "0.8.300"]
                  [cljs-ajax "0.5.9"]
                  [com.cognitect/transit-cljs "0.8.239"]
-                 [http-kit "2.3.0"]
+                 [http-kit "2.4.0-alpha3"]
                  [clj-json "0.5.3"]
                  [javax.xml.bind/jaxb-api "2.3.0"]]
   :javac-options ["-target" "1.7" "-source" "1.7" "-Xlint:-options"]
