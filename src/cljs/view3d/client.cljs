@@ -8,8 +8,7 @@
   [calc.dynamic :as dyn]
   [cognitect.transit :as t]
   [ajax.core :refer (GET)]
-  [cljs.reader :as rdr]
-  [nightlight.repl-server]))
+  [cljs.reader :as rdr]))
 
 (def HOST "http://localhost:")
 (def PORT 4444)
@@ -84,18 +83,23 @@
   {:handler (fn [response])
    :error-handler error-handler}))
 
-(defn view [dir]
-  (czm/camera :view dir))
+(defn view [deg]
+  (let [deg (num-val deg)]
+  (when (<= -180 deg 180)
+    (czm/camera :view deg)
+    (ctl/set-html! "view-fld" deg))))
 
 (defn pitch [deg]
   (let [deg (num-val deg)]
-  (if (<= -180 deg 180)
-    (czm/camera :pitch deg))))
+  (when (<= -180 deg 180)
+    (czm/camera :pitch deg)
+    (ctl/set-html! "pitch-fld" deg))))
 
 (defn roll [deg]
   (let [deg (num-val deg)]
-  (if (<= -180 deg 180)
-    (czm/camera :roll deg))))
+  (when (<= -180 deg 180)
+    (czm/camera :roll deg)
+    (ctl/set-html! "roll-fld" deg))))
 
 (defn course [crs]
   (if (= (:mode @CARRIER) "MANUAL")

@@ -1,4 +1,4 @@
-// Compiled by ClojureScript 1.9.521 {}
+// Compiled by ClojureScript 1.10.439 {}
 goog.provide('calc.core');
 goog.require('cljs.core');
 calc.core.abs = (function calc$core$abs(x){
@@ -20,21 +20,21 @@ return true;
 }
 }
 });
-calc.core.linint = (function calc$core$linint(x,p__10084,p__10085){
-var vec__10092 = p__10084;
-var x1 = cljs.core.nth.call(null,vec__10092,(0),null);
-var y1 = cljs.core.nth.call(null,vec__10092,(1),null);
-var vec__10095 = p__10085;
-var x2 = cljs.core.nth.call(null,vec__10095,(0),null);
-var y2 = cljs.core.nth.call(null,vec__10095,(1),null);
+calc.core.linint = (function calc$core$linint(x,p__29781,p__29782){
+var vec__29783 = p__29781;
+var x1 = cljs.core.nth.call(null,vec__29783,(0),null);
+var y1 = cljs.core.nth.call(null,vec__29783,(1),null);
+var vec__29786 = p__29782;
+var x2 = cljs.core.nth.call(null,vec__29786,(0),null);
+var y2 = cljs.core.nth.call(null,vec__29786,(1),null);
 return (y1 + (((y2 - y1) * (x - x1)) / (x2 - x1)));
 });
 calc.core.tabfun = (function calc$core$tabfun(x,table){
-var vec__10102 = cljs.core.split_with.call(null,(function (p1__10098_SHARP_){
-return (cljs.core.first.call(null,p1__10098_SHARP_) < x);
+var vec__29790 = cljs.core.split_with.call(null,(function (p1__29789_SHARP_){
+return (cljs.core.first.call(null,p1__29789_SHARP_) < x);
 }),table);
-var lo = cljs.core.nth.call(null,vec__10102,(0),null);
-var hi = cljs.core.nth.call(null,vec__10102,(1),null);
+var lo = cljs.core.nth.call(null,vec__29790,(0),null);
+var hi = cljs.core.nth.call(null,vec__29790,(1),null);
 if(cljs.core.seq.call(null,lo)){
 if(cljs.core.seq.call(null,hi)){
 return calc.core.linint.call(null,x,cljs.core.last.call(null,lo),cljs.core.first.call(null,hi));
@@ -46,8 +46,8 @@ return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMP
 }
 });
 calc.core.i_mono_tabfun = (function calc$core$i_mono_tabfun(y,table){
-return calc.core.tabfun.call(null,y,cljs.core.map.call(null,(function (p1__10105_SHARP_){
-return (new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[cljs.core.second.call(null,p1__10105_SHARP_),cljs.core.first.call(null,p1__10105_SHARP_)],null));
+return calc.core.tabfun.call(null,y,cljs.core.map.call(null,(function (p1__29793_SHARP_){
+return (new cljs.core.PersistentVector(null,2,(5),cljs.core.PersistentVector.EMPTY_NODE,[cljs.core.second.call(null,p1__29793_SHARP_),cljs.core.first.call(null,p1__29793_SHARP_)],null));
 }),table));
 });
 calc.core.smooth_tabfun = (function calc$core$smooth_tabfun(x,table){

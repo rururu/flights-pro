@@ -26,27 +26,23 @@
    <option value='MANUAL'>MANUAL</option>
    <option value='select'>select</option>")
 (set-html! "view" "View:")
-(set-html! "view-fld" 
-  "<select onchange='javascript:view3d.client.view(this.value)' style='width:96px'>
-   <option value='FORWARD'>FORWARD</option>
-   <option value='BACKWARD'>BACKWARD</option>
-   <option value='RIGHT'>RIGHT</option>
-   <option value='LEFT'>LEFT</option>
-   <option value='UP'>UP</option>
-   <option value='DOWN'>DOWN</option>
-   <option value='FORWARD-RIGHT'>FORWARD-RIGHT</option>
-   <option value='FORWARD-LEFT'>FORWARD-LEFT</option>
-   <option value='BACKWARD-RIGHT'>BACKWARD-RIGHT</option>
-   <option value='BACKWARD-LEFT'>BACKWARD-LEFT</option>
-   </select>")
+(set-html! "view-fld" 0)
+(set-html! "view-sld" 
+  "<input type='range' style='width:150px' id='roll-vals'
+               min='-180' value='0' max='180'
+               oninput='javascript:view3d.client.view(this.value)'>")
 (set-html! "pitch" "Pitch:")
-(set-html! "pitch-fld" 
-  "<input value='-10' style='width:90px' id='pitch-val'
-               onchange='javascript:view3d.client.pitch(this.value)'>")
+(set-html! "pitch-fld" 0)
+(set-html! "pitch-sld" 
+  "<input type='range' style='width:150px' id='pitch-vals'
+               min='-90' value='0' max='90'
+               oninput='javascript:view3d.client.pitch(this.value)'>")
 (set-html! "roll" "Roll:")
-(set-html! "roll-fld" 
-  "<input value='0' style='width:90px'
-               onchange='javascript:view3d.client.roll(this.value)'>"))
+(set-html! "roll-fld" 0)
+(set-html! "roll-sld" 
+  "<input type='range' style='width:150px' id='roll-vals'
+               min='-180' value='0' max='180'
+               oninput='javascript:view3d.client.roll(this.value)'>"))
 
 (defn right-controls []
   (set-html! "autopilot" "<h4>Autopilot</h4>")

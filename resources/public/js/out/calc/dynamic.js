@@ -1,4 +1,4 @@
-// Compiled by ClojureScript 1.9.521 {}
+// Compiled by ClojureScript 1.10.439 {}
 goog.provide('calc.dynamic');
 goog.require('cljs.core');
 goog.require('csasync.proc');
@@ -44,7 +44,7 @@ var g = gear_key.call(null,car);
 var target = new cljs.core.Keyword(null,"target","target",253001721).cljs$core$IFn$_invoke$arity$1(g);
 var step = (new cljs.core.Keyword(null,"accel","accel",-2118422974).cljs$core$IFn$_invoke$arity$1(g) * new cljs.core.Keyword(null,"step","step",1288888124).cljs$core$IFn$_invoke$arity$1(g));
 var param = param_key.call(null,car);
-if(cljs.core.truth_(calc.core.approx_EQ_.call(null,param,target,step))){
+if(calc.core.approx_EQ_.call(null,param,target,step)){
 param_fn.call(null,carr__$1,target);
 
 return false;
@@ -80,14 +80,14 @@ return csasync.proc.start_process.call(null,new cljs.core.Keyword(null,"cdad-sta
 return proc_fn.call(null,carr);
 }),cljs.core.get_in.call(null,cljs.core.deref.call(null,carr),tio_pth),null);
 });
-calc.dynamic.bank = (function calc$dynamic$bank(old_crs,new_crs,p__11635){
-var vec__11639 = p__11635;
-var mid_bank = cljs.core.nth.call(null,vec__11639,(0),null);
-var small_arc = cljs.core.nth.call(null,vec__11639,(1),null);
-var mid_arc = cljs.core.nth.call(null,vec__11639,(2),null);
-var big_arc = cljs.core.nth.call(null,vec__11639,(3),null);
-var factor = cljs.core.nth.call(null,vec__11639,(4),null);
-var turn_right_QMARK_ = ((function (vec__11639,mid_bank,small_arc,mid_arc,big_arc,factor){
+calc.dynamic.bank = (function calc$dynamic$bank(old_crs,new_crs,p__29951){
+var vec__29952 = p__29951;
+var mid_bank = cljs.core.nth.call(null,vec__29952,(0),null);
+var small_arc = cljs.core.nth.call(null,vec__29952,(1),null);
+var mid_arc = cljs.core.nth.call(null,vec__29952,(2),null);
+var big_arc = cljs.core.nth.call(null,vec__29952,(3),null);
+var factor = cljs.core.nth.call(null,vec__29952,(4),null);
+var turn_right_QMARK_ = ((function (vec__29952,mid_bank,small_arc,mid_arc,big_arc,factor){
 return (function calc$dynamic$bank_$_turn_right_QMARK_(from,to){
 var dif = (to - from);
 if((dif > (0))){
@@ -99,7 +99,7 @@ return (dif < (-180));
 return null;
 }
 }
-});})(vec__11639,mid_bank,small_arc,mid_arc,big_arc,factor))
+});})(vec__29952,mid_bank,small_arc,mid_arc,big_arc,factor))
 ;
 var arc = calc.core.abs.call(null,(old_crs - new_crs));
 if((arc <= small_arc)){

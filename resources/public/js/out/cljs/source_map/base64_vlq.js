@@ -27,20 +27,20 @@ return shifted;
 cljs.source_map.base64_vlq.encode_val = (function cljs$source_map$base64_vlq$encode_val(n){
 var sb = (new goog.string.StringBuffer());
 var vlq = cljs.source_map.base64_vlq.to_vlq_signed.call(null,n);
-var digit_13146 = (vlq & cljs.source_map.base64_vlq.vlq_base_mask);
-var vlq_13147__$1 = (vlq >>> cljs.source_map.base64_vlq.vlq_base_shift);
+var digit_18779 = (vlq & cljs.source_map.base64_vlq.vlq_base_mask);
+var vlq_18780__$1 = (vlq >>> cljs.source_map.base64_vlq.vlq_base_shift);
 while(true){
-if((vlq_13147__$1 > (0))){
-var digit_13148__$1 = (digit_13146 | cljs.source_map.base64_vlq.vlq_continuation_bit);
-sb.append(cljs.source_map.base64.encode.call(null,digit_13148__$1));
+if((vlq_18780__$1 > (0))){
+var digit_18781__$1 = (digit_18779 | cljs.source_map.base64_vlq.vlq_continuation_bit);
+sb.append(cljs.source_map.base64.encode.call(null,digit_18781__$1));
 
-var G__13149 = (vlq_13147__$1 & cljs.source_map.base64_vlq.vlq_base_mask);
-var G__13150 = (vlq_13147__$1 >>> cljs.source_map.base64_vlq.vlq_base_shift);
-digit_13146 = G__13149;
-vlq_13147__$1 = G__13150;
+var G__18782 = (vlq_18780__$1 & cljs.source_map.base64_vlq.vlq_base_mask);
+var G__18783 = (vlq_18780__$1 >>> cljs.source_map.base64_vlq.vlq_base_shift);
+digit_18779 = G__18782;
+vlq_18780__$1 = G__18783;
 continue;
 } else {
-sb.append(cljs.source_map.base64.encode.call(null,digit_13146));
+sb.append(cljs.source_map.base64.encode.call(null,digit_18779));
 }
 break;
 }
@@ -68,12 +68,12 @@ var digit__$1 = (digit & cljs.source_map.base64_vlq.vlq_base_mask);
 var result__$1 = (result + (digit__$1 << shift));
 var shift__$1 = (shift + cljs.source_map.base64_vlq.vlq_base_shift);
 if(continuation_QMARK_){
-var G__13151 = i__$1;
-var G__13152 = result__$1;
-var G__13153 = shift__$1;
-i = G__13151;
-result = G__13152;
-shift = G__13153;
+var G__18784 = i__$1;
+var G__18785 = result__$1;
+var G__18786 = shift__$1;
+i = G__18784;
+result = G__18785;
+shift = G__18786;
 continue;
 } else {
 return (new cljs.core.LazySeq(null,((function (i,result,shift,i__$1,continuation_QMARK_,digit__$1,result__$1,shift__$1,digit,l){

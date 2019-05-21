@@ -1,0 +1,1 @@
+{:output-to "resources/public/js/main.js", :output-dir "resources/public/js/out", :asset-path "js/out", :main "view3d.client", :verbose false}

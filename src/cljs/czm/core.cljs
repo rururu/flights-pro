@@ -10,8 +10,8 @@
         :terrainProvider (js/Cesium.createWorldTerrain)
         :animation false}))
 (def CZM-SRC (js/Cesium.CzmlDataSource.))
-(def CAMERA (volatile! {:view "FORWARD"
-               :pitch -10
+(def CAMERA (volatile! {:view 0
+               :pitch 0
                :roll 0}))
 (def FLY-CTL [0 0 0 0 0 0 0])
 (def COCKPIT-HEIGHT 2)
@@ -24,7 +24,7 @@
 (defn cz-processor [e]
   (let [data (.-data e)
        data (js/JSON.parse data)]
-  (println [:CZML data])
+  ;;(println [:CZML data])
   (.process CZM-SRC data)))
 
 (defn fly-control [lat lon alt hea pit rol per]
@@ -55,20 +55,9 @@
   (fly-control lat lon aat head pitch roll per)))
 
 (defn fly-to [lat lon alt crs per]
-  (let [pitch (condp = (:view @CAMERA)
-                "UP" 90
-                "DOWN" -90
-                (:pitch @CAMERA))
-        roll (:roll @CAMERA)
-        head (geo/norm-crs (condp = (:view @CAMERA)
-                         "BACKWARD" (+ crs 180)
-                         "RIGHT" (+ crs 90)
-                         "LEFT" (- crs 90)
-                         "FORWARD-RIGHT" (+ crs 45)
-                         "FORWARD-LEFT" (- crs 45)
-                         "BACKWARD-RIGHT" (+ crs 135)
-                         "BACKWARD-LEFT" (- crs 135)
-                         crs))]
+  (let [pitch (:pitch @CAMERA)
+       roll (:roll @CAMERA)
+       head (norm-crs (+ crs (:view @CAMERA)))]
   (if (> alt 0)
     (fly-control lat lon alt head pitch roll per)
     (do (def FLY-CTL [lat lon alt head pitch roll per])

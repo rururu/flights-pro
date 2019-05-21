@@ -16,7 +16,9 @@ It uses [Flightradar24](http://www.flightradar24.com) web service, [Leaflet](htt
 $ cd <..>
 $ git clone https://github.com/rururu/flights-pro.git
 $ cd flights-pro
-$ lein run
+$ clj
+Clojure 1.10.0
+user=> (edu.stanford.smi.protege.Application/main (into-array String []))
 ```
 In a Protege GUI open a project FlightPro.pprj from a folder <..>/flights-pro/pro-projects and execute a menu item Edit -> Clojure Work.
 When the Pro server starts, open two browser windows, one on the address: http://localhost:4444 (Cockpit view), second on the address: http://localhost:4444/chart (Chart view).

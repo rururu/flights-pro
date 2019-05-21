@@ -7,7 +7,7 @@
               [cljs.core.async.impl.dispatch :as dispatch]
               [cljs.core.async.impl.ioc-helpers :as helpers])
     (:require-macros [cljs.core.async.impl.ioc-macros :as ioc]
-                     [cljs.core.async.macros :refer [go go-loop]]))
+                     [cljs.core.async :refer [go go-loop]]))
 
 (defn- fn-handler
   ([f] (fn-handler f true))
@@ -113,10 +113,10 @@
   (throw (js/Error. ">! used not in (go ...) block")))
 
 (defn put!
-  "Asynchronously puts a val into port, calling fn0 (if supplied) when
+  "Asynchronously puts a val into port, calling fn1 (if supplied) when
    complete. nil values are not allowed. Will throw if closed. If
    on-caller? (default true) is true, and the put is immediately
-   accepted, will call fn0 on calling thread.  Returns nil."
+   accepted, will call fn1 on calling thread.  Returns nil."
   ([port val]
      (if-let [ret (impl/put! port val fhnop)]
        @ret
