@@ -86,7 +86,8 @@ goog.labs.userAgent.util.getUserAgent = function() {
 
 /**
  * @param {string} str
- * @return {boolean} Whether the user agent contains the given string.
+ * @return {boolean} Whether the user agent contains the given string, ignoring
+ *     case.
  */
 goog.labs.userAgent.util.matchUserAgent = function(str) {
   var userAgent = goog.labs.userAgent.util.getUserAgent();
@@ -96,8 +97,7 @@ goog.labs.userAgent.util.matchUserAgent = function(str) {
 
 /**
  * @param {string} str
- * @return {boolean} Whether the user agent contains the given string, ignoring
- *     case.
+ * @return {boolean} Whether the user agent contains the given string.
  */
 goog.labs.userAgent.util.matchUserAgentIgnoreCase = function(str) {
   var userAgent = goog.labs.userAgent.util.getUserAgent();

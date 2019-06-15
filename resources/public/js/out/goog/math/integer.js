@@ -566,7 +566,6 @@ goog.math.Integer.carry16_ = function(bits, index) {
   while ((bits[index] & 0xFFFF) != bits[index]) {
     bits[index + 1] += bits[index] >>> 16;
     bits[index] &= 0xFFFF;
-    index++;
   }
 };
 

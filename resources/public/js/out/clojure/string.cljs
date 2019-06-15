@@ -26,12 +26,7 @@
 
 (defn- replace-all
   [s re replacement]
-  (let [r (js/RegExp. (.-source re)
-                      (cond-> "g"
-                        (.-ignoreCase re) (str "i")
-                        (.-multiline re) (str "m")
-                        (.-unicode re) (str "u")))]
-    (.replace s r replacement)))
+  (.replace s (js/RegExp. (.-source re) "g") replacement))
 
 (defn- replace-with
   [f]
@@ -43,24 +38,10 @@
 
 (defn replace
   "Replaces all instance of match with replacement in s.
-
    match/replacement can be:
 
    string / string
-   pattern / (string or function of match).
-
-   See also replace-first.
-
-   The replacement is literal (i.e. none of its characters are treated
-   specially) for all cases above except pattern / string.
-
-   For pattern / string, $1, $2, etc. in the replacement string are
-   substituted with the string that matched the corresponding
-   parenthesized group in the pattern.
-
-   Example:
-   (clojure.string/replace \"Almost Pig Latin\" #\"\\b(\\w)(\\w+)\\b\" \"$2$1ay\")
-   -> \"lmostAay igPay atinLay\""
+   pattern / (string or function of match)."
   [s match replacement]
   (cond
     (string? match)
@@ -75,25 +56,10 @@
 
 (defn replace-first
   "Replaces the first instance of match with replacement in s.
-
    match/replacement can be:
 
    string / string
-   pattern / (string or function of match).
-
-   See also replace.
-
-   The replacement is literal (i.e. none of its characters are treated
-   specially) for all cases above except pattern / string.
-
-   For pattern / string, $1, $2, etc. in the replacement string are
-   substituted with the string that matched the corresponding
-   parenthesized group in the pattern.
-
-   Example:
-   (clojure.string/replace-first \"swap first two words\"
-                                 #\"(\\w+)(\\s+)(\\w+)\" \"$3$2$1\")
-   -> \"first swap two words\""
+   pattern / (string or function of match)."
   [s match replacement]
   (.replace s match replacement))
 
@@ -130,7 +96,10 @@
   "Converts first character of the string to upper-case, all other
   characters to lower-case."
   [s]
-  (gstring/capitalize s))
+  (if (< (count s) 2)
+    (upper-case s)
+    (str (upper-case (subs s 0 1))
+         (lower-case (subs s 1)))))
 
 ;; The JavaScript split function takes a limit argument but the return
 ;; value is not the same as the Java split function.
@@ -189,7 +158,7 @@
                    (conj parts s))))))))))
 
 (defn split-lines
-  "Splits s on \\n or \\r\\n."
+  "Splits s on \n or \r\n."
   [s]
   (split s #"\n|\r\n"))
 

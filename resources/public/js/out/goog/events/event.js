@@ -99,6 +99,8 @@ goog.events.Event = function(type, opt_target) {
    * Return value for in internal capture/bubble processing for IE.
    * @type {boolean}
    * @public
+   * @suppress {underscore|visibility} Technically public, but referencing this
+   *     outside this package is strongly discouraged.
    */
   this.returnValue_ = true;
 };

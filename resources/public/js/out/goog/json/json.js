@@ -26,21 +26,11 @@ goog.provide('goog.json.Serializer');
 
 /**
  * @define {boolean} If true, use the native JSON parsing API.
- * NOTE: The default {@code goog.json.parse} implementation is able to handle
- * invalid JSON. JSPB used to produce invalid JSON which is not the case
- * anymore so this is safe to enable for parsing JSPB. Using native JSON is
- * faster and safer than the default implementation using {@code eval}.
+ * NOTE(ruilopes): EXPERIMENTAL, handle with care.  Setting this to true might
+ * break your code.  The default {@code goog.json.parse} implementation is able
+ * to handle invalid JSON, such as JSPB.
  */
 goog.define('goog.json.USE_NATIVE_JSON', false);
-
-/**
- * @define {boolean} If true, try the native JSON parsing API first. If it
- * fails, log an error and use {@code eval} instead. This is useful when
- * transitioning to {@code goog.json.USE_NATIVE_JSON}. The error logger needs to
- * be set by {@code goog.json.setErrorLogger}. If it is not set then the error
- * is ignored.
- */
-goog.define('goog.json.TRY_NATIVE_JSON', false);
 
 
 /**
@@ -92,31 +82,13 @@ goog.json.isValid = function(s) {
           .replace(openBracketsRe, ''));
 };
 
-/**
- * Logs a parsing error in {@code JSON.parse} solvable by using {@code eval}
- * if {@code goog.json.TRY_NATIVE_JSON} is enabled.
- * @private {function(string, !Error)} The first parameter is the error message,
- *     the second is the exception thrown by {@code JSON.parse}.
- */
-goog.json.errorLogger_ = goog.nullFunction;
-
-
-/**
- * Sets an error logger to use if there's a recoverable parsing error and {@code
- * goog.json.TRY_NATIVE_JSON} is enabled.
- * @param {function(string, !Error)} errorLogger The first parameter is the
- *     error message, the second is the exception thrown by {@code JSON.parse}.
- */
-goog.json.setErrorLogger = function(errorLogger) {
-  goog.json.errorLogger_ = errorLogger;
-};
-
 
 /**
  * Parses a JSON string and returns the result. This throws an exception if
  * the string is an invalid JSON string.
  *
- * Note that this is very slow on large strings. Use JSON.parse if possible.
+ * Note that this is very slow on large strings. If you trust the source of
+ * the string then you should use unsafeParse instead.
  *
  * @param {*} s The JSON string to parse.
  * @throws Error if s is invalid JSON.
@@ -124,29 +96,19 @@ goog.json.setErrorLogger = function(errorLogger) {
  */
 goog.json.parse = goog.json.USE_NATIVE_JSON ?
     /** @type {function(*):Object} */ (goog.global['JSON']['parse']) :
-    function(s) {
-      var error;
-      if (goog.json.TRY_NATIVE_JSON) {
-        try {
-          return goog.global['JSON']['parse'](s);
-        } catch (ex) {
-          error = ex;
-        }
-      }
-      var o = String(s);
-      if (goog.json.isValid(o)) {
-
-        try {
-          var result = /** @type {?Object} */ (eval('(' + o + ')'));
-          if (error) {
-            goog.json.errorLogger_('Invalid JSON: ' + o, error);
-          }
-          return result;
-        } catch (ex) {
-        }
-      }
-      throw Error('Invalid JSON string: ' + o);
-    };
+                                      function(s) {
+                                        var o = String(s);
+                                        if (goog.json.isValid(o)) {
+                                          /** @preserveTry */
+                                          try {
+                                            return /** @type {Object} */ (
+                                                eval('(' + o + ')'));
+                                          } catch (ex) {
+                                          }
+                                        }
+                                        throw Error(
+                                            'Invalid JSON string: ' + o);
+                                      };
 
 
 /**
@@ -155,25 +117,13 @@ goog.json.parse = goog.json.USE_NATIVE_JSON ?
  *
  * @param {string} s The JSON string to parse.
  * @return {Object} The object generated from the JSON string.
- * @deprecated Use JSON.parse if possible or goog.json.parse.
  */
 goog.json.unsafeParse = goog.json.USE_NATIVE_JSON ?
     /** @type {function(string):Object} */ (goog.global['JSON']['parse']) :
-    function(s) {
-      var error;
-      if (goog.json.TRY_NATIVE_JSON) {
-        try {
-          return goog.global['JSON']['parse'](s);
-        } catch (ex) {
-          error = ex;
-        }
-      }
-      var result = /** @type {?Object} */ (eval('(' + s + ')'));
-      if (error) {
-        goog.json.errorLogger_('Invalid JSON: ' + s, error);
-      }
-      return result;
-    };
+                                           function(s) {
+                                             return /** @type {Object} */ (
+                                                 eval('(' + s + ')'));
+                                           };
 
 
 /**
@@ -277,7 +227,7 @@ goog.json.Serializer.prototype.serializeInternal = function(object, sb) {
       object = object.valueOf();
       // Fall through to switch below.
     } else {
-      this.serializeObject_(/** @type {!Object} */ (object), sb);
+      this.serializeObject_(/** @type {Object} */ (object), sb);
       return;
     }
   }
@@ -392,7 +342,7 @@ goog.json.Serializer.prototype.serializeArray = function(arr, sb) {
 /**
  * Serializes an object to a JSON string
  * @private
- * @param {!Object} obj The object to serialize.
+ * @param {Object} obj The object to serialize.
  * @param {Array<string>} sb Array used as a string builder.
  */
 goog.json.Serializer.prototype.serializeObject_ = function(obj, sb) {
