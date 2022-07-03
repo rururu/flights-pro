@@ -1,0 +1,6 @@
+2021.10.11 16:31:54.533 MSK INFO: *** SYSTEM START ***
+2021.10.11 16:31:54.655 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2021.10.11 16:32:00.590 MSK INFO: Load time for file:/home/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 2 sec (ui) -- ProjectManager$3.run()
+2021.10.21 18:37:41.224 MSK INFO: *** SYSTEM START ***
+2021.10.21 18:37:41.512 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2021.10.21 18:37:49.057 MSK INFO: Load time for file:/home/ru/clojure/flights-pro/pro-projects/FlightPro.pprj = 0 sec (project) + 2 sec (ui) -- ProjectManager$3.run()

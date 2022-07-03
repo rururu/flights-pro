@@ -9,3 +9,4 @@
 (clojure.walk/postwalk #(if (number? %) %) f)
 (clojure.walk/postwalk #(if (number? %) (+ 4 %) %) f)
 (exit)
+lein run

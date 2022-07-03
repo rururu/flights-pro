@@ -1,4 +1,4 @@
-; Tue May 21 14:54:30 MSK 2019
+; Thu May 13 18:03:49 MSK 2021
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -21,12 +21,12 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[FlightPro_ProjectKB_Class31739]
-		[FlightPro_ProjectKB_Class31740]
-		[FlightPro_ProjectKB_Class31741]
-		[FlightPro_ProjectKB_Class31742]
-		[FlightPro_ProjectKB_Class31743]
-		[FlightPro_ProjectKB_Class31744]))
+		[FlightPro_ProjectKB_Class1165]
+		[FlightPro_ProjectKB_Class1166]
+		[FlightPro_ProjectKB_Class1167]
+		[FlightPro_ProjectKB_Class1168]
+		[FlightPro_ProjectKB_Class1169]
+		[FlightPro_ProjectKB_Class1170]))
 
 ([CLSES_TAB] of  Widget
 
@@ -1063,6 +1063,12 @@
 ([FlightPro_ProjectKB_Class11573] of  Property_List
 )
 
+([FlightPro_ProjectKB_Class1163] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [FlightPro_ProjectKB_Class1164])
+	(widget_class_name "ru.igis.omtab.OpenMapTab"))
+
 ([FlightPro_ProjectKB_Class11636] of  Widget
 
 	(height 60)
@@ -1089,6 +1095,9 @@
 	(y 0))
 
 ([FlightPro_ProjectKB_Class11639] of  Property_List
+)
+
+([FlightPro_ProjectKB_Class1164] of  Property_List
 )
 
 ([FlightPro_ProjectKB_Class11640] of  Widget
@@ -1132,6 +1141,362 @@
 
 ([FlightPro_ProjectKB_Class11647] of  Property_List
 )
+
+([FlightPro_ProjectKB_Class1165] of  String
+
+	(name "Airport")
+	(string_value "title"))
+
+([FlightPro_ProjectKB_Class1166] of  String
+
+	(name "Bank")
+	(string_value "title"))
+
+([FlightPro_ProjectKB_Class1167] of  String
+
+	(name "QuestionTree")
+	(string_value "name"))
+
+([FlightPro_ProjectKB_Class1168] of  String
+
+	(name "BBXWiki")
+	(string_value "bbx"))
+
+([FlightPro_ProjectKB_Class1169] of  String
+
+	(name "GeneralPlan")
+	(string_value "title"))
+
+([FlightPro_ProjectKB_Class1170] of  String
+
+	(name "AirplaneDynamics")
+	(string_value "title"))
+
+([FlightPro_ProjectKB_Class1171] of  Map
+
+	(entries
+		[FlightPro_ProjectKB_Class1172]
+		[FlightPro_ProjectKB_Class1173]
+		[FlightPro_ProjectKB_Class1174]
+		[FlightPro_ProjectKB_Class1175]
+		[FlightPro_ProjectKB_Class1176]
+		[FlightPro_ProjectKB_Class1177]
+		[FlightPro_ProjectKB_Class1178]
+		[FlightPro_ProjectKB_Class1179]))
+
+([FlightPro_ProjectKB_Class1172] of  Map_Entry
+
+	(key "FlightPro_Class670004")
+	(key_class "edu.stanford.smi.protege.model.Frame")
+	(value "-2 441 224 146")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1173] of  Map_Entry
+
+	(key "FlightPro_Class320015")
+	(key_class "edu.stanford.smi.protege.model.Frame")
+	(value "38 584 224 146")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1174] of  Map_Entry
+
+	(key "FlightPro_Class640000")
+	(key_class "edu.stanford.smi.protege.model.Frame")
+	(value "63 350 224 146")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1175] of  Map_Entry
+
+	(key "FlightPro_Class290004")
+	(key_class "edu.stanford.smi.protege.model.Frame")
+	(value "-5 521 224 146")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1176] of  Map_Entry
+
+	(key "FlightPro_Class290003")
+	(key_class "edu.stanford.smi.protege.model.Frame")
+	(value "-5 349 224 146")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1177] of  Map_Entry
+
+	(key "FlightPro_Class510004")
+	(key_class "edu.stanford.smi.protege.model.Frame")
+	(value "0 373 224 146")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1178] of  Map_Entry
+
+	(key "FlightPro_Class960023")
+	(key_class "edu.stanford.smi.protege.model.Frame")
+	(value "73 381 224 146")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1179] of  Map_Entry
+
+	(key "FlightPro_Class280183")
+	(key_class "edu.stanford.smi.protege.model.Frame")
+	(value "-2 466 224 146")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1180] of  Map_Entry
+
+	(key "InstanceDisplay.yellow_stickies")
+	(key_class "java.lang.String")
+	(value "FlightPro_ProjectKB_Class1171")
+	(value_class "java.util.Map"))
+
+([FlightPro_ProjectKB_Class1181] of  Map
+
+	(entries
+		[FlightPro_ProjectKB_Class1182]
+		[FlightPro_ProjectKB_Class1183]
+		[FlightPro_ProjectKB_Class1184]
+		[FlightPro_ProjectKB_Class1185]
+		[FlightPro_ProjectKB_Class1186]
+		[FlightPro_ProjectKB_Class1187]
+		[FlightPro_ProjectKB_Class1188]
+		[FlightPro_ProjectKB_Class1189]
+		[FlightPro_ProjectKB_Class1190]
+		[FlightPro_ProjectKB_Class1191]
+		[FlightPro_ProjectKB_Class1192]
+		[FlightPro_ProjectKB_Class1193]
+		[FlightPro_ProjectKB_Class1194]
+		[FlightPro_ProjectKB_Class1195]
+		[FlightPro_ProjectKB_Class1196]
+		[FlightPro_ProjectKB_Class1197]
+		[FlightPro_ProjectKB_Class1198]
+		[FlightPro_ProjectKB_Class1199]
+		[FlightPro_ProjectKB_Class1200]
+		[FlightPro_ProjectKB_Class1201]
+		[FlightPro_ProjectKB_Class1202]
+		[FlightPro_ProjectKB_Class1203]
+		[FlightPro_ProjectKB_Class1204]
+		[FlightPro_ProjectKB_Class1205]
+		[FlightPro_ProjectKB_Class1206]
+		[FlightPro_ProjectKB_Class1207]
+		[FlightPro_ProjectKB_Class1208]
+		[FlightPro_ProjectKB_Class1209]
+		[FlightPro_ProjectKB_Class1210]
+		[FlightPro_ProjectKB_Class1211]))
+
+([FlightPro_ProjectKB_Class1182] of  Map_Entry
+
+	(key "FlightPro_Class510041")
+	(key_class "java.lang.String")
+	(value "1120 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1183] of  Map_Entry
+
+	(key "FlightPro_Class510040")
+	(key_class "java.lang.String")
+	(value "1720 370 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1184] of  Map_Entry
+
+	(key "FlightPro_Class860002")
+	(key_class "java.lang.String")
+	(value "370 370 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1185] of  Map_Entry
+
+	(key "FlightPro_Class510029")
+	(key_class "java.lang.String")
+	(value "220 220 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1186] of  Map_Entry
+
+	(key "FlightPro_Class510028")
+	(key_class "java.lang.String")
+	(value "520 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1187] of  Map_Entry
+
+	(key "FlightPro_Class850020")
+	(key_class "java.lang.String")
+	(value "470 670 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1188] of  Map_Entry
+
+	(key "FlightPro_Class580132")
+	(key_class "java.lang.String")
+	(value "2320 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1189] of  Map_Entry
+
+	(key "FlightPro_Class510045")
+	(key_class "java.lang.String")
+	(value "1570 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1190] of  Map_Entry
+
+	(key "FlightPro_Class510044")
+	(key_class "java.lang.String")
+	(value "1420 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1191] of  Map_Entry
+
+	(key "FlightPro_Class510042")
+	(key_class "java.lang.String")
+	(value "1270 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1192] of  Map_Entry
+
+	(key "FlightPro_Class510049")
+	(key_class "java.lang.String")
+	(value "2170 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1193] of  Map_Entry
+
+	(key "FlightPro_Class510027")
+	(key_class "java.lang.String")
+	(value "370 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1194] of  Map_Entry
+
+	(key "FlightPro_Class510026")
+	(key_class "java.lang.String")
+	(value "520 370 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1195] of  Map_Entry
+
+	(key "FlightPro_Class510048")
+	(key_class "java.lang.String")
+	(value "2020 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1196] of  Map_Entry
+
+	(key "FlightPro_Class510047")
+	(key_class "java.lang.String")
+	(value "1870 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1197] of  Map_Entry
+
+	(key "FlightPro_Class510024")
+	(key_class "java.lang.String")
+	(value "520 220 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1198] of  Map_Entry
+
+	(key "FlightPro_Class510046")
+	(key_class "java.lang.String")
+	(value "1720 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1199] of  Map_Entry
+
+	(key "FlightPro_Class510030")
+	(key_class "java.lang.String")
+	(value "70 370 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1200] of  Map_Entry
+
+	(key "FlightPro_Class800000")
+	(key_class "java.lang.String")
+	(value "220 370 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1201] of  Map_Entry
+
+	(key "FlightPro_Class510039")
+	(key_class "java.lang.String")
+	(value "1870 370 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1202] of  Map_Entry
+
+	(key "FlightPro_Class510034")
+	(key_class "java.lang.String")
+	(value "1070 370 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1203] of  Map_Entry
+
+	(key "FlightPro_Class570000")
+	(key_class "java.lang.String")
+	(value "670 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1204] of  Map_Entry
+
+	(key "FlightPro_Class510033")
+	(key_class "java.lang.String")
+	(value "920 220 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1205] of  Map_Entry
+
+	(key "FlightPro_Class510032")
+	(key_class "java.lang.String")
+	(value "870 70 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1206] of  Map_Entry
+
+	(key "FlightPro_Class510038")
+	(key_class "java.lang.String")
+	(value "1720 220 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1207] of  Map_Entry
+
+	(key "FlightPro_Class510037")
+	(key_class "java.lang.String")
+	(value "970 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1208] of  Map_Entry
+
+	(key "FlightPro_Class510036")
+	(key_class "java.lang.String")
+	(value "820 520 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1209] of  Map_Entry
+
+	(key "FlightPro_Class790000")
+	(key_class "java.lang.String")
+	(value "170 670 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1210] of  Map_Entry
+
+	(key "FlightPro_Class510035")
+	(key_class "java.lang.String")
+	(value "920 370 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1211] of  Map_Entry
+
+	(key "FlightPro_Class790001")
+	(key_class "java.lang.String")
+	(value "320 670 60 60")
+	(value_class "java.awt.Rectangle"))
+
+([FlightPro_ProjectKB_Class1212] of  Map_Entry
+
+	(key "InstanceGraphWidget.FlightPro_Class510052.chart")
+	(key_class "java.lang.String")
+	(value "FlightPro_ProjectKB_Class1181")
+	(value_class "java.util.Map"))
 
 ([FlightPro_ProjectKB_Class1213] of  Widget
 
@@ -1880,362 +2245,6 @@
 ([FlightPro_ProjectKB_Class21548] of  Property_List
 )
 
-([FlightPro_ProjectKB_Class31739] of  String
-
-	(name "Airport")
-	(string_value "title"))
-
-([FlightPro_ProjectKB_Class31740] of  String
-
-	(name "Bank")
-	(string_value "title"))
-
-([FlightPro_ProjectKB_Class31741] of  String
-
-	(name "QuestionTree")
-	(string_value "name"))
-
-([FlightPro_ProjectKB_Class31742] of  String
-
-	(name "BBXWiki")
-	(string_value "bbx"))
-
-([FlightPro_ProjectKB_Class31743] of  String
-
-	(name "GeneralPlan")
-	(string_value "title"))
-
-([FlightPro_ProjectKB_Class31744] of  String
-
-	(name "AirplaneDynamics")
-	(string_value "title"))
-
-([FlightPro_ProjectKB_Class31745] of  Map
-
-	(entries
-		[FlightPro_ProjectKB_Class31746]
-		[FlightPro_ProjectKB_Class31747]
-		[FlightPro_ProjectKB_Class31748]
-		[FlightPro_ProjectKB_Class31749]
-		[FlightPro_ProjectKB_Class31750]
-		[FlightPro_ProjectKB_Class31751]
-		[FlightPro_ProjectKB_Class31752]
-		[FlightPro_ProjectKB_Class31753]))
-
-([FlightPro_ProjectKB_Class31746] of  Map_Entry
-
-	(key "FlightPro_Class670004")
-	(key_class "edu.stanford.smi.protege.model.Frame")
-	(value "-2 441 224 146")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31747] of  Map_Entry
-
-	(key "FlightPro_Class320015")
-	(key_class "edu.stanford.smi.protege.model.Frame")
-	(value "38 584 224 146")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31748] of  Map_Entry
-
-	(key "FlightPro_Class640000")
-	(key_class "edu.stanford.smi.protege.model.Frame")
-	(value "63 350 224 146")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31749] of  Map_Entry
-
-	(key "FlightPro_Class290004")
-	(key_class "edu.stanford.smi.protege.model.Frame")
-	(value "-5 521 224 146")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31750] of  Map_Entry
-
-	(key "FlightPro_Class290003")
-	(key_class "edu.stanford.smi.protege.model.Frame")
-	(value "-5 349 224 146")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31751] of  Map_Entry
-
-	(key "FlightPro_Class510004")
-	(key_class "edu.stanford.smi.protege.model.Frame")
-	(value "0 373 224 146")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31752] of  Map_Entry
-
-	(key "FlightPro_Class960023")
-	(key_class "edu.stanford.smi.protege.model.Frame")
-	(value "73 381 224 146")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31753] of  Map_Entry
-
-	(key "FlightPro_Class280183")
-	(key_class "edu.stanford.smi.protege.model.Frame")
-	(value "-2 466 224 146")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31754] of  Map_Entry
-
-	(key "InstanceDisplay.yellow_stickies")
-	(key_class "java.lang.String")
-	(value "FlightPro_ProjectKB_Class31745")
-	(value_class "java.util.Map"))
-
-([FlightPro_ProjectKB_Class31755] of  Map
-
-	(entries
-		[FlightPro_ProjectKB_Class31756]
-		[FlightPro_ProjectKB_Class31757]
-		[FlightPro_ProjectKB_Class31758]
-		[FlightPro_ProjectKB_Class31759]
-		[FlightPro_ProjectKB_Class31760]
-		[FlightPro_ProjectKB_Class31761]
-		[FlightPro_ProjectKB_Class31762]
-		[FlightPro_ProjectKB_Class31763]
-		[FlightPro_ProjectKB_Class31764]
-		[FlightPro_ProjectKB_Class31765]
-		[FlightPro_ProjectKB_Class31766]
-		[FlightPro_ProjectKB_Class31767]
-		[FlightPro_ProjectKB_Class31768]
-		[FlightPro_ProjectKB_Class31769]
-		[FlightPro_ProjectKB_Class31770]
-		[FlightPro_ProjectKB_Class31771]
-		[FlightPro_ProjectKB_Class31772]
-		[FlightPro_ProjectKB_Class31773]
-		[FlightPro_ProjectKB_Class31774]
-		[FlightPro_ProjectKB_Class31775]
-		[FlightPro_ProjectKB_Class31776]
-		[FlightPro_ProjectKB_Class31777]
-		[FlightPro_ProjectKB_Class31778]
-		[FlightPro_ProjectKB_Class31779]
-		[FlightPro_ProjectKB_Class31780]
-		[FlightPro_ProjectKB_Class31781]
-		[FlightPro_ProjectKB_Class31782]
-		[FlightPro_ProjectKB_Class31783]
-		[FlightPro_ProjectKB_Class31784]
-		[FlightPro_ProjectKB_Class31785]))
-
-([FlightPro_ProjectKB_Class31756] of  Map_Entry
-
-	(key "FlightPro_Class510041")
-	(key_class "java.lang.String")
-	(value "1120 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31757] of  Map_Entry
-
-	(key "FlightPro_Class510040")
-	(key_class "java.lang.String")
-	(value "1720 370 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31758] of  Map_Entry
-
-	(key "FlightPro_Class860002")
-	(key_class "java.lang.String")
-	(value "370 370 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31759] of  Map_Entry
-
-	(key "FlightPro_Class510029")
-	(key_class "java.lang.String")
-	(value "220 220 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31760] of  Map_Entry
-
-	(key "FlightPro_Class510028")
-	(key_class "java.lang.String")
-	(value "520 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31761] of  Map_Entry
-
-	(key "FlightPro_Class850020")
-	(key_class "java.lang.String")
-	(value "470 670 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31762] of  Map_Entry
-
-	(key "FlightPro_Class580132")
-	(key_class "java.lang.String")
-	(value "2320 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31763] of  Map_Entry
-
-	(key "FlightPro_Class510045")
-	(key_class "java.lang.String")
-	(value "1570 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31764] of  Map_Entry
-
-	(key "FlightPro_Class510044")
-	(key_class "java.lang.String")
-	(value "1420 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31765] of  Map_Entry
-
-	(key "FlightPro_Class510042")
-	(key_class "java.lang.String")
-	(value "1270 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31766] of  Map_Entry
-
-	(key "FlightPro_Class510049")
-	(key_class "java.lang.String")
-	(value "2170 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31767] of  Map_Entry
-
-	(key "FlightPro_Class510027")
-	(key_class "java.lang.String")
-	(value "370 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31768] of  Map_Entry
-
-	(key "FlightPro_Class510026")
-	(key_class "java.lang.String")
-	(value "520 370 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31769] of  Map_Entry
-
-	(key "FlightPro_Class510048")
-	(key_class "java.lang.String")
-	(value "2020 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31770] of  Map_Entry
-
-	(key "FlightPro_Class510047")
-	(key_class "java.lang.String")
-	(value "1870 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31771] of  Map_Entry
-
-	(key "FlightPro_Class510024")
-	(key_class "java.lang.String")
-	(value "520 220 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31772] of  Map_Entry
-
-	(key "FlightPro_Class510046")
-	(key_class "java.lang.String")
-	(value "1720 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31773] of  Map_Entry
-
-	(key "FlightPro_Class510030")
-	(key_class "java.lang.String")
-	(value "70 370 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31774] of  Map_Entry
-
-	(key "FlightPro_Class800000")
-	(key_class "java.lang.String")
-	(value "220 370 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31775] of  Map_Entry
-
-	(key "FlightPro_Class510039")
-	(key_class "java.lang.String")
-	(value "1870 370 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31776] of  Map_Entry
-
-	(key "FlightPro_Class510034")
-	(key_class "java.lang.String")
-	(value "1070 370 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31777] of  Map_Entry
-
-	(key "FlightPro_Class570000")
-	(key_class "java.lang.String")
-	(value "670 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31778] of  Map_Entry
-
-	(key "FlightPro_Class510033")
-	(key_class "java.lang.String")
-	(value "920 220 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31779] of  Map_Entry
-
-	(key "FlightPro_Class510032")
-	(key_class "java.lang.String")
-	(value "870 70 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31780] of  Map_Entry
-
-	(key "FlightPro_Class510038")
-	(key_class "java.lang.String")
-	(value "1720 220 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31781] of  Map_Entry
-
-	(key "FlightPro_Class510037")
-	(key_class "java.lang.String")
-	(value "970 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31782] of  Map_Entry
-
-	(key "FlightPro_Class510036")
-	(key_class "java.lang.String")
-	(value "820 520 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31783] of  Map_Entry
-
-	(key "FlightPro_Class790000")
-	(key_class "java.lang.String")
-	(value "170 670 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31784] of  Map_Entry
-
-	(key "FlightPro_Class510035")
-	(key_class "java.lang.String")
-	(value "920 370 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31785] of  Map_Entry
-
-	(key "FlightPro_Class790001")
-	(key_class "java.lang.String")
-	(value "320 670 60 60")
-	(value_class "java.awt.Rectangle"))
-
-([FlightPro_ProjectKB_Class31786] of  Map_Entry
-
-	(key "InstanceGraphWidget.FlightPro_Class510052.chart")
-	(key_class "java.lang.String")
-	(value "FlightPro_ProjectKB_Class31755")
-	(value_class "java.util.Map"))
-
 ([FlightPro_ProjectKB_Class35] of  String
 
 	(name "SearchTab_Query"))
@@ -2428,11 +2437,11 @@
 ([KB_102576_Class1] of  Map
 
 	(entries
-		[FlightPro_ProjectKB_Class31754]
-		[FlightPro_ProjectKB_Class31786])
+		[FlightPro_ProjectKB_Class1180]
+		[FlightPro_ProjectKB_Class1212])
 	(referenced_maps
-		[FlightPro_ProjectKB_Class31755]
-		[FlightPro_ProjectKB_Class31745]))
+		[FlightPro_ProjectKB_Class1181]
+		[FlightPro_ProjectKB_Class1171]))
 
 ([KB_102576_Class11] of  Property_List
 
@@ -2675,48 +2684,48 @@
 	(boolean_value FALSE)
 	(name "ButtonDisplayed-Стереть Выделенный Экземпляр"))
 
-([KB_560864_Class1156] of  Map
+([KB_507797_Class1156] of  Map
 
 	(entries
-		[KB_560864_Class1157]
-		[KB_560864_Class1160]
-		[KB_560864_Class1161]
-		[KB_560864_Class1162])
-	(referenced_maps [KB_560864_Class1158]))
+		[KB_507797_Class1157]
+		[KB_507797_Class1160]
+		[KB_507797_Class1161]
+		[KB_507797_Class1162])
+	(referenced_maps [KB_507797_Class1158]))
 
-([KB_560864_Class1157] of  Map_Entry
+([KB_507797_Class1157] of  Map_Entry
 
 	(key "suppress_instance_counting")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_560864_Class1158] of  Map
+([KB_507797_Class1158] of  Map
 
-	(entries [KB_560864_Class1159]))
+	(entries [KB_507797_Class1159]))
 
-([KB_560864_Class1159] of  Map_Entry
+([KB_507797_Class1159] of  Map_Entry
 
 	(key "WikipediaGIS_Class2")
 	(key_class "edu.stanford.smi.protege.model.Frame")
 	(value "12 479 212 124")
 	(value_class "java.awt.Rectangle"))
 
-([KB_560864_Class1160] of  Map_Entry
+([KB_507797_Class1160] of  Map_Entry
 
 	(key "InstanceDisplay.yellow_stickies")
 	(key_class "java.lang.String")
-	(value "KB_560864_Class1158")
+	(value "KB_507797_Class1158")
 	(value_class "java.util.Map"))
 
-([KB_560864_Class1161] of  Map_Entry
+([KB_507797_Class1161] of  Map_Entry
 
 	(key "add_name_on_instance_form")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_560864_Class1162] of  Map_Entry
+([KB_507797_Class1162] of  Map_Entry
 
 	(key "change_tracking_active")
 	(key_class "java.lang.String")
